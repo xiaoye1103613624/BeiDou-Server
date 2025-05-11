@@ -83,7 +83,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     final int snCS = p.readInt();
                     ModifiedCashItemDO cItem = CashItemFactory.getItem(snCS);
                     if (!canBuy(chr, cItem, cs.getCash(useNX))) {
-                        log.error("Denied to sell cash item with SN {}", snCS); // preventing NPE here thanks to MedicOP
+                        log.error("被拒绝出售现金物品 SN {}", snCS); // preventing NPE here thanks to MedicOP
                         c.enableCSActions();
                         return;
                     }

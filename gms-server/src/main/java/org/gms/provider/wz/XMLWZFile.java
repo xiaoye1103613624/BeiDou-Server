@@ -21,11 +21,11 @@
 */
 package org.gms.provider.wz;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.provider.Data;
 import org.gms.provider.DataDirectoryEntry;
 import org.gms.provider.DataProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,8 +35,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class XMLWZFile implements DataProvider {
-	private static final Logger log = LoggerFactory.getLogger(DataProvider.class);
-	private final Path root;
+    private static final Logger log = LoggerFactory.getLogger(DataProvider.class);
+    private final Path root;
     private final WZDirectoryEntry rootForNavigation;
 
     public XMLWZFile(Path fileIn) {
@@ -67,7 +67,9 @@ public class XMLWZFile implements DataProvider {
     public synchronized Data getData(String path) {
         Path dataFile = root.resolve(path + ".xml");
         Path imageDataDir = root.resolve(path);
-        if (!Files.exists(dataFile)) {
+        boolean dataFileExists = Files.exists(dataFile);
+        if (!dataFileExists) {
+            log.info("xml[{}]文件,不存在", dataFile);
             return null;
         }
         final XMLDomMapleData domMapleData;
@@ -82,8 +84,8 @@ public class XMLWZFile implements DataProvider {
         return domMapleData;
     }
 
-	@Override
-	public DataDirectoryEntry getRoot() {
-		return rootForNavigation;
-	}
+    @Override
+    public DataDirectoryEntry getRoot() {
+        return rootForNavigation;
+    }
 }

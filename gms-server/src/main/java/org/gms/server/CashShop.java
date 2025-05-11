@@ -51,13 +51,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -134,7 +128,11 @@ public class CashShop {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, ModifiedCashItemDO> loadedItems = new HashMap<>();
-            for (Data item : etc.getData("Commodity.img").getChildren()) {
+            Data loadData = etc.getData("Commodity.img.xml");
+            if (loadData == null) {
+                return;
+            }
+            for (Data item : loadData.getChildren()) {
                 int sn = DataTool.getIntConvert("SN", item);
                 int itemId = DataTool.getIntConvert("ItemId", item);
                 int price = DataTool.getIntConvert("Price", item, 0);
@@ -224,7 +222,7 @@ public class CashShop {
 
         public static ModifiedCashItemDO getItem(int sn) {
             ModifiedCashItemDO cashItemDO = items.get(sn);
-            if(cashItemDO == null) {
+            if (cashItemDO == null) {
                 return null;
             }
             ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);

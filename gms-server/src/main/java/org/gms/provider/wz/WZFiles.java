@@ -1,11 +1,13 @@
 package org.gms.provider.wz;
 
+import lombok.extern.slf4j.Slf4j;
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Slf4j
 public enum WZFiles {
     QUEST("Quest"),
     ETC("Etc"),
@@ -30,11 +32,12 @@ public enum WZFiles {
 
     public Path getFile() {
         // 优先取语言文件夹，没有则取wz
-        Path wzPath = Path.of(DIRECTORY, fileName);
+        ;
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
         Path langPath = Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
-
-        return Files.exists(langPath) ? langPath : wzPath;
+        boolean dirExists = Files.exists(langPath);
+        log.info("wz 国际化[{}]目录是否存在:{}", langPath, dirExists);
+        return dirExists ? langPath : Path.of(DIRECTORY, fileName);
     }
 
     public String getFilePath() {
