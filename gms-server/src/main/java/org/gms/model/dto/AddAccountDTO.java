@@ -6,6 +6,10 @@ import lombok.Data;
 import java.io.Serializable;
 import java.sql.Date;
 
+/**
+ * 注册账户dto
+ * @author XiaoYe
+ */
 @Data
 public class AddAccountDTO implements Serializable {
     private String name;

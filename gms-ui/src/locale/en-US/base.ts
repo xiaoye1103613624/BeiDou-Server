@@ -1,5 +1,5 @@
 export default {
-  'title': 'BeiDou',
+  'title': 'XiaoYe',
   'operation': 'Operation',
 
   'button.load': 'Load',

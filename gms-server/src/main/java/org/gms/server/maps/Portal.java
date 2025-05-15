@@ -19,29 +19,48 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.server.maps;
 
 import org.gms.client.Client;
 
 import java.awt.*;
 
+/**
+ * 传送门 对象
+ *
+ * @author XiaoYe
+ */
 public interface Portal {
     int TELEPORT_PORTAL = 1;
     int MAP_PORTAL = 2;
     int DOOR_PORTAL = 6;
     boolean OPEN = true;
     boolean CLOSED = false;
+
     int getType();
+
     int getId();
+
     Point getPosition();
+
     String getName();
+
     String getTarget();
+
     String getScriptName();
+
     void setScriptName(String newName);
+
     void setPortalStatus(boolean newStatus);
+
     boolean getPortalStatus();
+
     int getTargetMapId();
+
     void enterPortal(Client c);
+
     void setPortalState(boolean state);
+
     boolean getPortalState();
 }

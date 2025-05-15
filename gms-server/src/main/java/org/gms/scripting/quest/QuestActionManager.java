@@ -29,10 +29,15 @@ import org.gms.server.quest.actions.ExpAction;
 import org.gms.server.quest.actions.MesoAction;
 
 /**
+ * 任务操作管理器，用于处理任务开始和结束时的操作。
  * @author RMZero213
  */
 public class QuestActionManager extends NPCConversationManager {
-    private final boolean start; // this is if the script in question is start or end
+    /**
+     * this is if the script in question is start or end
+     * 这是如果所讨论的脚本是开始或结束
+     */
+    private final boolean start;
     private final int quest;
 
     public QuestActionManager(Client c, int quest, int npc, boolean start) {

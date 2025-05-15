@@ -19,6 +19,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.scripting.npc;
 
 import lombok.Getter;
@@ -31,7 +32,6 @@ import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.game.NextLevelType;
 import org.gms.constants.id.MapId;
-import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.string.LanguageConstants;
 import org.gms.manager.ServerManager;
@@ -57,8 +57,6 @@ import org.gms.server.SkillbookInformationProvider.SkillBookEntry;
 import org.gms.server.events.gm.Event;
 import org.gms.server.expeditions.Expedition;
 import org.gms.server.expeditions.ExpeditionType;
-import org.gms.server.gachapon.Gachapon;
-import org.gms.server.gachapon.Gachapon.GachaponItem;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.maps.MapManager;
@@ -79,6 +77,8 @@ import java.util.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * NPC 对话管理器
+ *
  * @author Matze
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
@@ -90,7 +90,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     private String getText;
     private boolean itemScript;
     private List<PartyCharacter> otherParty;
-    private static final GachaponService gachaponService = ServerManager.getApplicationContext().getBean(GachaponService.class);
+    private static final GachaponService gachaponService =
+            ServerManager.getApplicationContext().getBean(GachaponService.class);
 
     private final Map<Integer, String> npcDefaultTalks = new HashMap<>();
     @Getter
@@ -112,7 +113,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public NPCConversationManager(Client c, int npc, List<PartyCharacter> otherParty, boolean test) {
         super(c);
-        this.c = c;
+        this.client = c;
         this.npc = npc;
         this.otherParty = otherParty;
     }
@@ -244,15 +245,17 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, ""));
     }
-    public void sendGetNumber(String text, int def, int min, int max,byte speaker) {
+
+    public void sendGetNumber(String text, int def, int min, int max, byte speaker) {
         nextLevelContext.clear();
-        getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max,speaker));
+        getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max, speaker));
     }
 
-    public void sendGetText(String text,byte speaker) {
+    public void sendGetText(String text, byte speaker) {
         nextLevelContext.clear();
-        getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "",speaker));
+        getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "", speaker));
     }
+
     /*
      * 0 = ariant colliseum
      * 1 = Dojo
@@ -354,11 +357,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public boolean canSpawnPlayerNpc(int mapid) {
         Character chr = getPlayer();
-        return !GameConfig.getServerBoolean("playernpc_auto_deploy") && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
+        return !GameConfig.getServerBoolean("playernpc_auto_deploy") && chr.getLevel() >= chr.getMaxClassLevel() &&
+                !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
     }
 
     public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
-        for (MapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC))) {
+        for (MapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY,
+                Arrays.asList(MapObjectType.PLAYER_NPC))) {
             PlayerNPC pn = (PlayerNPC) pnpcObj;
 
             if (pn.getScriptId() == scriptId) {
@@ -419,10 +424,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         Shop shop = ShopFactory.getInstance().getShop(id);
 
         if (shop != null) {
-            shop.sendShop(c);
+            shop.sendShop(client);
         } else {    // check for missing shopids thanks to resinate
             log.warn("Shop ID: {} is missing from database.", id);
-            ShopFactory.getInstance().getShop(11000).sendShop(c);
+            ShopFactory.getInstance().getShop(11000).sendShop(client);
         }
     }
 
@@ -465,13 +470,17 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     // }
 
     public void upgradeAlliance() {
-        Alliance alliance = Server.getInstance().getAlliance(c.getPlayer().getGuild().getAllianceId());
+        Alliance alliance = Server.getInstance().getAlliance(client.getPlayer().getGuild().getAllianceId());
         alliance.increaseCapacity(1);
 
-        Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, c.getWorld()), -1, -1);
-        Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.allianceNotice(alliance.getId(), alliance.getNotice()), -1, -1);
+        Server.getInstance()
+                .allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, client.getWorld()), -1, -1);
+        Server.getInstance()
+                .allianceMessage(alliance.getId(), GuildPackets.allianceNotice(alliance.getId(), alliance.getNotice()),
+                        -1, -1);
 
-        c.sendPacket(GuildPackets.updateAllianceInfo(alliance, c.getWorld()));  // thanks Vcoc for finding an alliance update to leader issue
+        client.sendPacket(GuildPackets.updateAllianceInfo(alliance,
+                client.getWorld()));  // thanks Vcoc for finding an alliance update to leader issue
     }
 
     public void disbandAlliance(Client c, int allianceId) {
@@ -507,7 +516,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void showFredrick() {
-        c.sendPacket(PacketCreator.getFredrick(getPlayer()));
+        client.sendPacket(PacketCreator.getFredrick(getPlayer()));
     }
 
     public int partyMembersInMap() {
@@ -521,7 +530,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public Event getEvent() {
-        return c.getChannelServer().getEvent();
+        return client.getChannelServer().getEvent();
     }
 
     public void divideTeams() {
@@ -531,7 +540,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public Character getMapleCharacter(String player) {
-        Character target = Server.getInstance().getWorld(c.getWorld()).getChannel(c.getChannel()).getPlayerStorage().getCharacterByName(player);
+        Character target = Server.getInstance().getWorld(client.getWorld()).getChannel(client.getChannel()).getPlayerStorage()
+                .getCharacterByName(player);
         return target;
     }
 
@@ -543,7 +553,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         PyramidMode mod = PyramidMode.valueOf(mode);
 
         Party partyz = getPlayer().getParty();
-        MapManager mapManager = c.getChannelServer().getMapFactory();
+        MapManager mapManager = client.getChannelServer().getMapFactory();
 
         MapleMap map = null;
         int mapid = MapId.NETTS_PYRAMID_SOLO_BASE;
@@ -649,7 +659,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public int cpqCalcAvgLvl(int map) {
         int num = 0;
         int avg = 0;
-        for (MapObject mmo : c.getChannelServer().getMapFactory().getMap(map).getAllPlayer()) {
+        for (MapObject mmo : client.getChannelServer().getMapFactory().getMap(map).getAllPlayer()) {
             avg += ((Character) mmo).getLevel();
             num++;
         }
@@ -663,7 +673,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         for (int i = 0; i < 6; i++) {
             if (fieldTaken(i)) {
                 if (fieldLobbied(i)) {
-                    msg += "#b#L" + i + "#Carnival Field " + (i + 1) + " (Level: "  // "Carnival field" GMS-like improvement thanks to Jayd (jaydenseah)
+                    msg += "#b#L" + i + "#Carnival Field " + (i + 1) + " (Level: "
+                            // "Carnival field" GMS-like improvement thanks to Jayd (jaydenseah)
                             + cpqCalcAvgLvl(980000100 + i * 100) + " / "
                             + getPlayerCount(980000100 + i * 100) + "x"
                             + getPlayerCount(980000100 + i * 100) + ")  #l\r\n";
@@ -686,39 +697,41 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public boolean fieldTaken(int field) {
-        if (!c.getChannelServer().canInitMonsterCarnival(true, field)) {
+        if (!client.getChannelServer().canInitMonsterCarnival(true, field)) {
             return true;
         }
-        if (!c.getChannelServer().getMapFactory().getMap(980000100 + field * 100).getAllPlayer().isEmpty()) {
+        if (!client.getChannelServer().getMapFactory().getMap(980000100 + field * 100).getAllPlayer().isEmpty()) {
             return true;
         }
-        if (!c.getChannelServer().getMapFactory().getMap(980000101 + field * 100).getAllPlayer().isEmpty()) {
+        if (!client.getChannelServer().getMapFactory().getMap(980000101 + field * 100).getAllPlayer().isEmpty()) {
             return true;
         }
-        return !c.getChannelServer().getMapFactory().getMap(980000102 + field * 100).getAllPlayer().isEmpty();
+        return !client.getChannelServer().getMapFactory().getMap(980000102 + field * 100).getAllPlayer().isEmpty();
     }
 
     public boolean fieldLobbied(int field) {
-        return !c.getChannelServer().getMapFactory().getMap(980000100 + field * 100).getAllPlayer().isEmpty();
+        return !client.getChannelServer().getMapFactory().getMap(980000100 + field * 100).getAllPlayer().isEmpty();
     }
 
     public void cpqLobby(int field) {
         try {
             final MapleMap map, mapExit;
-            Channel cs = c.getChannelServer();
+            Channel cs = client.getChannelServer();
 
             map = cs.getMapFactory().getMap(980000100 + 100 * field);
             mapExit = cs.getMapFactory().getMap(980000000);
-            for (PartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
+            for (PartyCharacter mpc : client.getPlayer().getParty().getMembers()) {
                 final Character mc = mpc.getPlayer();
                 if (mc != null) {
                     mc.setChallenged(false);
                     mc.changeMap(map, map.getPortal(0));
-                    mc.sendPacket(PacketCreator.serverNotice(6, LanguageConstants.getMessage(mc, LanguageConstants.CPQEntryLobby)));
+                    mc.sendPacket(PacketCreator.serverNotice(6,
+                            LanguageConstants.getMessage(mc, LanguageConstants.CPQEntryLobby)));
                     TimerManager tMan = TimerManager.getInstance();
                     tMan.schedule(() -> mapClock((int) MINUTES.toSeconds(3)), 1500);
 
-                    mc.setCpqTimer(TimerManager.getInstance().schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), MINUTES.toMillis(3)));
+                    mc.setCpqTimer(TimerManager.getInstance()
+                            .schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), MINUTES.toMillis(3)));
                 }
             }
         } catch (Exception ex) {
@@ -727,11 +740,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public Character getChrById(int id) {
-        return c.getChannelServer().getPlayerStorage().getCharacterById(id);
+        return client.getChannelServer().getPlayerStorage().getCharacterById(id);
     }
 
     public void cancelCPQLobby() {
-        for (PartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
+        for (PartyCharacter mpc : client.getPlayer().getParty().getMembers()) {
             Character mc = mpc.getPlayer();
             if (mc != null) {
                 mc.clearCpqTimer();
@@ -740,7 +753,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     private void warpoutCPQLobby(MapleMap lobbyMap) {
-        MapleMap out = lobbyMap.getChannelServer().getMapFactory().getMap((lobbyMap.getId() < 980030000) ? 980000000 : 980030000);
+        MapleMap out = lobbyMap.getChannelServer().getMapFactory()
+                .getMap((lobbyMap.getId() < 980030000) ? 980000000 : 980030000);
         for (Character mc : lobbyMap.getAllPlayers()) {
             mc.resetCP();
             mc.setTeam(-1);
@@ -814,7 +828,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     }
                 }
             }
-            final int mapid = c.getPlayer().getMapId() + 1;
+            final int mapid = client.getPlayer().getMapId() + 1;
             TimerManager tMan = TimerManager.getInstance();
             tMan.schedule(() -> {
                 try {
@@ -866,7 +880,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     }
                 }
             }
-            final int mapid = c.getPlayer().getMapId() + 100;
+            final int mapid = client.getPlayer().getMapId() + 100;
             TimerManager tMan = TimerManager.getInstance();
             tMan.schedule(() -> {
                 try {
@@ -906,7 +920,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         for (int i = 0; i < 3; i++) {
             if (fieldTaken2(i)) {
                 if (fieldLobbied2(i)) {
-                    msg += "#b#L" + i + "#Carnival Field " + (i + 1) + " (Level: "  // "Carnival field" GMS-like improvement thanks to Jayd
+                    msg += "#b#L" + i + "#Carnival Field " + (i + 1) + " (Level: "
+                            // "Carnival field" GMS-like improvement thanks to Jayd
                             + cpqCalcAvgLvl(980031000 + i * 1000) + " / "
                             + getPlayerCount(980031000 + i * 1000) + "x"
                             + getPlayerCount(980031000 + i * 1000) + ")  #l\r\n";
@@ -929,39 +944,41 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public boolean fieldTaken2(int field) {
-        if (!c.getChannelServer().canInitMonsterCarnival(false, field)) {
+        if (!client.getChannelServer().canInitMonsterCarnival(false, field)) {
             return true;
         }
-        if (!c.getChannelServer().getMapFactory().getMap(980031000 + field * 1000).getAllPlayer().isEmpty()) {
+        if (!client.getChannelServer().getMapFactory().getMap(980031000 + field * 1000).getAllPlayer().isEmpty()) {
             return true;
         }
-        if (!c.getChannelServer().getMapFactory().getMap(980031100 + field * 1000).getAllPlayer().isEmpty()) {
+        if (!client.getChannelServer().getMapFactory().getMap(980031100 + field * 1000).getAllPlayer().isEmpty()) {
             return true;
         }
-        return !c.getChannelServer().getMapFactory().getMap(980031200 + field * 1000).getAllPlayer().isEmpty();
+        return !client.getChannelServer().getMapFactory().getMap(980031200 + field * 1000).getAllPlayer().isEmpty();
     }
 
     public boolean fieldLobbied2(int field) {
-        return !c.getChannelServer().getMapFactory().getMap(980031000 + field * 1000).getAllPlayer().isEmpty();
+        return !client.getChannelServer().getMapFactory().getMap(980031000 + field * 1000).getAllPlayer().isEmpty();
     }
 
     public void cpqLobby2(int field) {
         try {
             final MapleMap map, mapExit;
-            Channel cs = c.getChannelServer();
+            Channel cs = client.getChannelServer();
 
             mapExit = cs.getMapFactory().getMap(980030000);
             map = cs.getMapFactory().getMap(980031000 + 1000 * field);
-            for (PartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
+            for (PartyCharacter mpc : client.getPlayer().getParty().getMembers()) {
                 final Character mc = mpc.getPlayer();
                 if (mc != null) {
                     mc.setChallenged(false);
                     mc.changeMap(map, map.getPortal(0));
-                    mc.sendPacket(PacketCreator.serverNotice(6, LanguageConstants.getMessage(mc, LanguageConstants.CPQEntryLobby)));
+                    mc.sendPacket(PacketCreator.serverNotice(6,
+                            LanguageConstants.getMessage(mc, LanguageConstants.CPQEntryLobby)));
                     TimerManager tMan = TimerManager.getInstance();
                     tMan.schedule(() -> mapClock((int) MINUTES.toSeconds(3)), 1500);
 
-                    mc.setCpqTimer(TimerManager.getInstance().schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), MINUTES.toMillis(3)));
+                    mc.setCpqTimer(TimerManager.getInstance()
+                            .schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), MINUTES.toMillis(3)));
                 }
             }
         } catch (Exception ex) {
@@ -978,16 +995,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         cpqLeaders.add(leaderid);
         cpqLeaders.add(getPlayer().getId());
 
-        return c.getWorldServer().getMatchCheckerCoordinator().createMatchConfirmation(MatchCheckerType.CPQ_CHALLENGE, c.getWorld(), getPlayer().getId(), cpqLeaders, cpqType);
+        return client.getWorldServer().getMatchCheckerCoordinator()
+                .createMatchConfirmation(MatchCheckerType.CPQ_CHALLENGE, client.getWorld(), getPlayer().getId(), cpqLeaders,
+                        cpqType);
     }
 
     public void answerCPQChallenge(boolean accept) {
-        c.getWorldServer().getMatchCheckerCoordinator().answerMatchConfirmation(getPlayer().getId(), accept);
+        client.getWorldServer().getMatchCheckerCoordinator().answerMatchConfirmation(getPlayer().getId(), accept);
     }
 
     public void challengeParty2(int field) {
         Character leader = null;
-        MapleMap map = c.getChannelServer().getMapFactory().getMap(980031000 + 1000 * field);
+        MapleMap map = client.getChannelServer().getMapFactory().getMap(980031000 + 1000 * field);
         for (MapObject mmo : map.getAllPlayer()) {
             Character mc = (Character) mmo;
             if (mc.getParty() == null) {
@@ -1014,7 +1033,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void challengeParty(int field) {
         Character leader = null;
-        MapleMap map = c.getChannelServer().getMapFactory().getMap(980000100 + 100 * field);
+        MapleMap map = client.getChannelServer().getMapFactory().getMap(980000100 + 100 * field);
         if (map.getAllPlayer().size() != getPlayer().getParty().getMembers().size()) {
             sendOk("An unexpected error regarding the other party has occurred.");
             return;
@@ -1067,7 +1086,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
         int playersSize = players.size();
         if (!(playersSize >= exped.getMinSize() && playersSize <= exped.getMaxSize())) {
-            return "Make sure there are between #r" + exped.getMinSize() + " ~ " + exped.getMaxSize() + " players#k in this room to start the battle.";
+            return "Make sure there are between #r" + exped.getMinSize() + " ~ " + exped.getMaxSize() +
+                    " players#k in this room to start the battle.";
         }
 
         MapleMap leaderMap = this.getMap();
@@ -1101,17 +1121,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             Character chr = marriage.getPlayerById(cid);
             if (chr != null) {
                 if (chr.getId() == player.getId()) {
-                    player.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xA, marriage.getWishlistItems(groom), marriage.getGiftItems(player.getClient(), groom)));
+                    player.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xA, marriage.getWishlistItems(groom),
+                            marriage.getGiftItems(player.getClient(), groom)));
                 } else {
                     marriage.setIntProperty("wishlistSelection", groom ? 0 : 1);
-                    player.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0x09, marriage.getWishlistItems(groom), marriage.getGiftItems(player.getClient(), groom)));
+                    player.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0x09, marriage.getWishlistItems(groom),
+                            marriage.getGiftItems(player.getClient(), groom)));
                 }
             }
         }
     }
 
     public void sendMarriageGifts(List<Item> gifts) {
-        this.getPlayer().sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xA, Collections.singletonList(""), gifts));
+        this.getPlayer()
+                .sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xA, Collections.singletonList(""), gifts));
     }
 
     public boolean createMarriageWishlist() {
@@ -1141,7 +1164,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendNext
      *
      * @param nextLevel 下一步方法
-     * @param text      对话内容
+     * @param text 对话内容
      */
     public void sendNextLevel(String nextLevel, String text) {
         sendNext(text);
@@ -1154,7 +1177,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendPrev
      *
      * @param lastLevel 上一步方法
-     * @param text      对话内容
+     * @param text 对话内容
      */
     public void sendLastLevel(String lastLevel, String text) {
         sendPrev(text);
@@ -1168,7 +1191,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param lastLevel 上一步方法
      * @param nextLevel 下一步方法
-     * @param text      对话内容
+     * @param text 对话内容
      */
     public void sendLastNextLevel(String lastLevel, String nextLevel, String text) {
         sendNextPrev(text);
@@ -1182,7 +1205,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendOk
      *
      * @param nextLevel 点击ok的下一步方法
-     * @param text      对话内容
+     * @param text 对话内容
      */
     public void sendOkLevel(String nextLevel, String text) {
         sendOk(text);
@@ -1205,7 +1228,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendSimple
      *
      * @param prefix 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
-     * @param text   对话内容
+     * @param text 对话内容
      */
     public void sendSelectLevel(String prefix, String text) {
         sendSimple(text);
@@ -1218,7 +1241,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendSimple
      *
      * @param nextLevel 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
-     * @param text   对话内容
+     * @param text 对话内容
      */
     public void sendNextSelectLevel(String nextLevel, String text) {
         sendSimple(text);
@@ -1231,10 +1254,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendGetNumber
      *
      * @param nextLevel 下一步方法
-     * @param text      对话内容
-     * @param def       默认值
-     * @param min       最小值
-     * @param max       最大值
+     * @param text 对话内容
+     * @param def 默认值
+     * @param min 最小值
+     * @param max 最大值
      */
     public void getInputNumberLevel(String nextLevel, String text, int def, int min, int max) {
         sendGetNumber(text, def, min, max);
@@ -1247,7 +1270,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendGetText
      *
      * @param nextLevel 下一步方法
-     * @param text      对话内容
+     * @param text 对话内容
      */
     public void getInputTextLevel(String nextLevel, String text) {
         sendGetText(text);
@@ -1260,8 +1283,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendAcceptDecline
      *
      * @param decLineLevel 拒绝方法
-     * @param acceptLevel  接受方法
-     * @param text         对话内容
+     * @param acceptLevel 接受方法
+     * @param text 对话内容
      */
     public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text) {
         sendAcceptDecline(text);
@@ -1274,9 +1297,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 有是和否的对话
      * 对应sendYesNo
      *
-     * @param noLevel  否方法
+     * @param noLevel 否方法
      * @param yesLevel 是方法
-     * @param text     对话内容
+     * @param text 对话内容
      */
     public void sendYesNoLevel(String noLevel, String yesLevel, String text) {
         sendYesNo(text);
@@ -1290,8 +1313,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendNext
      *
      * @param nextLevel 下一步方法
-     * @param text      对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendNextLevel(String nextLevel, String text, byte speaker) {
         sendNext(text, speaker);
@@ -1304,8 +1327,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendPrev
      *
      * @param lastLevel 上一步方法
-     * @param text      对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendLastLevel(String lastLevel, String text, byte speaker) {
         sendPrev(text, speaker);
@@ -1319,8 +1342,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param lastLevel 上一步方法
      * @param nextLevel 下一步方法
-     * @param text      对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendLastNextLevel(String lastLevel, String nextLevel, String text, byte speaker) {
         sendNextPrev(text, speaker);
@@ -1334,8 +1357,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendOk
      *
      * @param nextLevel 点击ok的下一步方法
-     * @param text      对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendOkLevel(String nextLevel, String text, byte speaker) {
         sendOk(text, speaker);
@@ -1348,7 +1371,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendSimple
      *
      * @param text 对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendSelectLevel(String text, byte speaker) {
         sendSelectLevel("", text, speaker);
@@ -1359,8 +1382,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendSimple
      *
      * @param prefix 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
-     * @param text   对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendSelectLevel(String prefix, String text, byte speaker) {
         sendSimple(text, speaker);
@@ -1373,8 +1396,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendSimple
      *
      * @param nextLevel 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
-     * @param text   对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendNextSelectLevel(String nextLevel, String text, byte speaker) {
         sendSimple(text, speaker);
@@ -1387,14 +1410,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendGetNumber
      *
      * @param nextLevel 下一步方法
-     * @param text      对话内容
-     * @param def       默认值
-     * @param min       最小值
-     * @param max       最大值
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param def 默认值
+     * @param min 最小值
+     * @param max 最大值
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void getPnpcInputNumberLevel(String nextLevel, String text, int def, int min, int max, byte speaker) {
-        sendGetNumber(text, def, min, max,speaker);
+        sendGetNumber(text, def, min, max, speaker);
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_NUMBER);
         nextLevelContext.setNextLevel(nextLevel);
     }
@@ -1404,8 +1427,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendGetText
      *
      * @param nextLevel 下一步方法
-     * @param text      对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void getPnpcInputTextLevel(String nextLevel, String text, byte speaker) {
         sendGetText(text, speaker);
@@ -1418,9 +1441,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendAcceptDecline
      *
      * @param decLineLevel 拒绝方法
-     * @param acceptLevel  接受方法
-     * @param text         对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param acceptLevel 接受方法
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text, byte speaker) {
         sendAcceptDecline(text, speaker);
@@ -1433,10 +1456,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 有是和否的对话
      * 对应sendYesNo
      *
-     * @param noLevel  否方法
+     * @param noLevel 否方法
      * @param yesLevel 是方法
-     * @param text     对话内容
-     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     * @param text 对话内容
+     * @param speaker 说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
     public void sendYesNoLevel(String noLevel, String yesLevel, String text, byte speaker) {
         sendYesNo(text, speaker);

@@ -1,5 +1,5 @@
 /*
-    This file is part of the BeiDou MapleStory Server
+    This file is part of the XiaoYe MapleStory Server
     Copyright (C) 2025 Magical-H <@Magical-H>
 
     This program is free software: you can redistribute it and/or modify

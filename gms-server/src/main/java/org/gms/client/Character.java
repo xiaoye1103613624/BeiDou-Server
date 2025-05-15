@@ -105,16 +105,24 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
-
+/**
+ * 玩家实体
+ */
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
     @Getter
     @Setter
     private int world;
+    /**
+     * 玩家id
+     */
     @Getter
     @Setter
     private int id;
+    /**
+     * 账户id
+     */
     @Getter
     @Setter
     private int accountId;
@@ -133,6 +141,9 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private int jobRankMove;
+    /**
+     * 性别
+     */
     @Setter
     @Getter
     private int gender;
@@ -142,6 +153,9 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int face;
+    /**
+     * 人气
+     */
     @Setter
     @Getter
     private int fame;
@@ -181,6 +195,9 @@ public class Character extends AbstractCharacterObject {
     private int gmLevel;
     @Getter
     private int ci = 0;
+    /**
+     * 家族
+     */
     @Getter
     private FamilyEntry familyEntry;
     @Setter
@@ -212,11 +229,23 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private int vanquisherKills;
+    /**
+     * 经验倍率
+     */
     private float expRate = 1;
+    /**
+     * 金币倍数
+     */
     @Getter
     private float mesoRate = 1;
+    /**
+     * 掉落倍率
+     */
     @Getter
     private float dropRate = 1;
+    /**
+     * 占比 折扣
+     */
     private int expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
     @Getter
     @Setter

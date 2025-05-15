@@ -23,7 +23,7 @@
 /**
  * @description 拍卖行中心脚本
  */
-var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
+var OldTitle ="\t\t\t\t\t#e欢迎来到#rXiaoYe#k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
 function start() {
@@ -32,6 +32,7 @@ function start() {
 
 function action(mode, type, selection) {
     if (mode === 1) {
+        // 第一次进来
         status++;
     } else if (mode === -1) {
         status--;

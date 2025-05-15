@@ -19,6 +19,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.net.server.world;
 
 import com.mybatisflex.core.query.QueryWrapper;
@@ -114,6 +115,7 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 import static org.gms.dao.entity.table.PlayernpcsFieldDOTableDef.PLAYERNPCS_FIELD_D_O;
 
 /**
@@ -127,14 +129,26 @@ public class World {
     private final int id;
     @Getter
     private int flag;
+    /**
+     * 经验倍率
+     */
     @Getter
     private float expRate;
+    /**
+     * 掉落倍率
+     */
     @Getter
     private float dropRate;
     // boss rate concept thanks to Lapeiro
+    /**
+     * boss 倍率
+     */
     @Setter
     @Getter
     private float bossDropRate;
+    /**
+     * 金币倍率
+     */
     @Getter
     private float mesoRate;
     @Setter
@@ -220,7 +234,8 @@ public class World {
     private ScheduledFuture<?> timeoutSchedule;
     private ScheduledFuture<?> hpDecSchedule;
 
-    public World(int world, int flag, String eventmsg, float expRate, float dropRate, float bossDropRate, float mesoRate,
+    public World(int world, int flag, String eventmsg, float expRate, float dropRate, float bossDropRate,
+                 float mesoRate,
                  float questRate, float travelRate, float fishingRate) {
         this.id = world;
         this.flag = flag;
@@ -232,7 +247,8 @@ public class World {
         this.questRate = questRate;
         this.travelRate = travelRate;
         this.fishingRate = fishingRate;
-        runningPartyId.set(1000000001); // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
+        runningPartyId.set(
+                1000000001); // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
         runningMessengerId.set(1);
 
         ReadWriteLock channelLock = new ReentrantReadWriteLock(true);
@@ -254,15 +270,20 @@ public class World {
         petsSchedule = tman.register(new PetFullnessTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
         srvMessagesSchedule = tman.register(new ServerMessageTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         mountsSchedule = tman.register(new MountTirednessTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
-        merchantSchedule = tman.register(new HiredMerchantTask(this), 10 * MINUTES.toMillis(1), 10 * MINUTES.toMillis(1));
+        merchantSchedule =
+                tman.register(new HiredMerchantTask(this), 10 * MINUTES.toMillis(1), 10 * MINUTES.toMillis(1));
         timedMapObjectsSchedule = tman.register(new TimedMapObjectTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
         charactersSchedule = tman.register(new CharacterAutosaverTask(this), HOURS.toMillis(1), HOURS.toMillis(1));
-        marriagesSchedule = tman.register(new WeddingReservationTask(this), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")));
+        marriagesSchedule = tman.register(new WeddingReservationTask(this),
+                MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")),
+                MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")));
         mapOwnershipSchedule = tman.register(new MapOwnershipTask(this), SECONDS.toMillis(20), SECONDS.toMillis(20));
         fishingSchedule = tman.register(new FishingTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         partySearchSchedule = tman.register(new PartySearchTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         timeoutSchedule = tman.register(new TimeoutTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
-        hpDecSchedule = tman.register(new CharacterHpDecreaseTask(this), GameConfig.getServerLong("map_damage_overtime_interval"), GameConfig.getServerLong("map_damage_overtime_interval"));
+        hpDecSchedule = tman.register(new CharacterHpDecreaseTask(this),
+                GameConfig.getServerLong("map_damage_overtime_interval"),
+                GameConfig.getServerLong("map_damage_overtime_interval"));
 
         if (GameConfig.getServerBoolean("use_family_system")) {
             long timeLeft = Server.getTimeLeftForNextDay();
@@ -508,7 +529,8 @@ public class World {
         return accountStorages.get(accountId);
     }
 
-    private static List<Entry<Integer, SortedMap<Integer, Character>>> getSortedAccountCharacterView(Map<Integer, SortedMap<Integer, Character>> map) {
+    private static List<Entry<Integer, SortedMap<Integer, Character>>> getSortedAccountCharacterView(
+            Map<Integer, SortedMap<Integer, Character>> map) {
         List<Entry<Integer, SortedMap<Integer, Character>>> list = new ArrayList<>(map.size());
         list.addAll(map.entrySet());
 
@@ -695,7 +717,8 @@ public class World {
 
     public void setOfflineGuildStatus(int guildid, int guildrank, int cid) {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = ?, guildrank = ? WHERE id = ?")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "UPDATE characters SET guildid = ?, guildrank = ? WHERE id = ?")) {
             ps.setInt(1, guildid);
             ps.setInt(2, guildrank);
             ps.setInt(3, cid);
@@ -739,7 +762,9 @@ public class World {
 
     public void changeEmblem(int gid, List<Integer> affectedPlayers, GuildSummary mgs) {
         updateGuildSummary(gid, mgs);
-        sendPacket(affectedPlayers, GuildPackets.guildEmblemChange(gid, mgs.getLogoBG(), mgs.getLogoBGColor(), mgs.getLogo(), mgs.getLogoColor()), -1);
+        sendPacket(affectedPlayers,
+                GuildPackets.guildEmblemChange(gid, mgs.getLogoBG(), mgs.getLogoBGColor(), mgs.getLogo(),
+                        mgs.getLogoColor()), -1);
         setGuildAndRank(affectedPlayers, -1, -1, -1);    //respawn player
     }
 
@@ -927,7 +952,8 @@ public class World {
         }
     }
 
-    private void updateCharacterParty(Party party, PartyOperation operation, PartyCharacter target, Collection<PartyCharacter> partyMembers) {
+    private void updateCharacterParty(Party party, PartyOperation operation, PartyCharacter target,
+                                      Collection<PartyCharacter> partyMembers) {
         switch (operation) {
             case JOIN:
                 registerCharacterParty(target.getId(), party.getId());
@@ -1123,16 +1149,19 @@ public class World {
                 if (messenger == null) {
                     Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
                     if (from != null) {
-                        if (InviteCoordinator.createInvite(InviteType.MESSENGER, from, messengerid, targetChr.getId())) {
+                        if (InviteCoordinator.createInvite(InviteType.MESSENGER, from, messengerid,
+                                targetChr.getId())) {
                             targetChr.sendPacket(PacketCreator.messengerInvite(sender, messengerid));
                             from.sendPacket(PacketCreator.messengerNote(target, 4, 1));
                         } else {
-                            from.sendPacket(PacketCreator.messengerChat(sender + " : " + target + " is already managing a Maple Messenger invitation"));
+                            from.sendPacket(PacketCreator.messengerChat(
+                                    sender + " : " + target + " is already managing a Maple Messenger invitation"));
                         }
                     }
                 } else {
                     Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
-                    from.sendPacket(PacketCreator.messengerChat(sender + " : " + target + " is already using Maple Messenger"));
+                    from.sendPacket(
+                            PacketCreator.messengerChat(sender + " : " + target + " is already using Maple Messenger"));
                 }
             }
         }
@@ -1147,7 +1176,8 @@ public class World {
             if (!messengerchar.getName().equals(namefrom)) {
                 Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(namefrom);
                 chr.sendPacket(PacketCreator.addMessengerPlayer(namefrom, from, position, (byte) (fromchannel - 1)));
-                from.sendPacket(PacketCreator.addMessengerPlayer(chr.getName(), chr, messengerchar.getPosition(), (byte) (messengerchar.getChannel() - 1)));
+                from.sendPacket(PacketCreator.addMessengerPlayer(chr.getName(), chr, messengerchar.getPosition(),
+                        (byte) (messengerchar.getChannel() - 1)));
             } else {
                 chr.sendPacket(PacketCreator.joinMessenger(messengerchar.getPosition()));
             }
@@ -1188,7 +1218,8 @@ public class World {
         if (isConnected(sender)) {
             Character senderChr = getPlayerStorage().getCharacterByName(sender);
             if (senderChr != null && senderChr.getMessenger() != null) {
-                if (InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), senderChr.getMessenger().getId(), false).result == InviteResultType.DENIED) {
+                if (InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(),
+                        senderChr.getMessenger().getId(), false).result == InviteResultType.DENIED) {
                     senderChr.sendPacket(PacketCreator.messengerNote(player.getName(), 5, 0));
                 }
             }
@@ -1207,7 +1238,9 @@ public class World {
             if (!(messengerchar.getName().equals(namefrom))) {
                 Character chr = ch.getPlayerStorage().getCharacterByName(messengerchar.getName());
                 if (chr != null) {
-                    chr.sendPacket(PacketCreator.updateMessengerPlayer(namefrom, getChannel(fromchannel).getPlayerStorage().getCharacterByName(namefrom), position, (byte) (fromchannel - 1)));
+                    chr.sendPacket(PacketCreator.updateMessengerPlayer(namefrom,
+                            getChannel(fromchannel).getPlayerStorage().getCharacterByName(namefrom), position,
+                            (byte) (fromchannel - 1)));
                 }
             }
         }
@@ -1278,7 +1311,8 @@ public class World {
                     break;
                 case DELETED:
                     if (buddylist.contains(cidFrom)) {
-                        buddylist.put(new BuddylistEntry(name, "Default Group", cidFrom, (byte) -1, buddylist.get(cidFrom).isVisible()));
+                        buddylist.put(new BuddylistEntry(name, "Default Group", cidFrom, (byte) -1,
+                                buddylist.get(cidFrom).isVisible()));
                         addChar.sendPacket(PacketCreator.updateBuddyChannel(cidFrom, (byte) -1));
                     }
                     break;
@@ -1443,7 +1477,8 @@ public class World {
     }
 
     public void registerPetHunger(Character chr, byte petSlot) {
-        if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
+        if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") ||
+                GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
         }
 
@@ -1508,7 +1543,8 @@ public class World {
     }
 
     public void registerMountHunger(Character chr) {
-        if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
+        if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") ||
+                GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
         }
 
@@ -1823,8 +1859,10 @@ public class World {
         setPlayerNpcMapData(mapid, step, podium, true);
     }
 
-    private static void executePlayerNpcMapDataUpdate(boolean isPodium, Map<Integer, ?> pnpcData, int value, int worldId, int mapId) {
-        PlayernpcsFieldMapper playernpcsFieldMapper = ServerManager.getApplicationContext().getBean(PlayernpcsFieldMapper.class);
+    private static void executePlayerNpcMapDataUpdate(boolean isPodium, Map<Integer, ?> pnpcData, int value,
+                                                      int worldId, int mapId) {
+        PlayernpcsFieldMapper playernpcsFieldMapper =
+                ServerManager.getApplicationContext().getBean(PlayernpcsFieldMapper.class);
         PlayernpcsFieldDO playernpcsFieldDO = new PlayernpcsFieldDO();
         if (isPodium) {
             playernpcsFieldDO.setPodium(value);
@@ -1999,7 +2037,8 @@ public class World {
 
     private static int addRelationshipToDb(int groomId, int brideId) {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO marriages (husbandid, wifeid) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = con.prepareStatement("INSERT INTO marriages (husbandid, wifeid) VALUES (?, ?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, groomId);
             ps.setInt(2, brideId);
             ps.executeUpdate();

@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 80030
  Source Host           : 192.168.3.5:3307
- Source Schema         : beidou
+ Source Schema         : XiaoYe
 
  Target Server Type    : MySQL
  Target Server Version : 80030

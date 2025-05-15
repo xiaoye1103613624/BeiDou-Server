@@ -18,9 +18,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.server.life;
 
 /**
+ * 怪物 全局掉落入口类
+ *
  * @author LightPepsi
  */
 public class MonsterGlobalDropEntry {

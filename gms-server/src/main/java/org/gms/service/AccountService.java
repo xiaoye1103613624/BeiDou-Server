@@ -33,6 +33,9 @@ import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 
+/**
+ * 账号业务类
+ */
 @Service
 @AllArgsConstructor
 public class AccountService {
@@ -64,15 +67,31 @@ public class AccountService {
                                            String createdAtStart,
                                            String createdAtEnd) {
         QueryWrapper queryWrapper = new QueryWrapper();
-        if (id != null) queryWrapper.eq("id", id);
-        if (name != null) queryWrapper.like("name", name);
-        if (lastLoginStart != null) queryWrapper.ge(AccountsDO::getLastlogin, lastLoginStart);
-        if (lastLoginEnd != null) queryWrapper.le(AccountsDO::getLastlogin, lastLoginEnd);
-        if (createdAtStart != null) queryWrapper.ge(AccountsDO::getCreatedat, createdAtStart);
-        if (createdAtEnd != null) queryWrapper.le(AccountsDO::getCreatedat, createdAtEnd);
+        if (id != null) {
+            queryWrapper.eq("id", id);
+        }
+        if (name != null) {
+            queryWrapper.like("name", name);
+        }
+        if (lastLoginStart != null) {
+            queryWrapper.ge(AccountsDO::getLastlogin, lastLoginStart);
+        }
+        if (lastLoginEnd != null) {
+            queryWrapper.le(AccountsDO::getLastlogin, lastLoginEnd);
+        }
+        if (createdAtStart != null) {
+            queryWrapper.ge(AccountsDO::getCreatedat, createdAtStart);
+        }
+        if (createdAtEnd != null) {
+            queryWrapper.le(AccountsDO::getCreatedat, createdAtEnd);
+        }
 
-        if (page == null) page = 1;
-        if (size == null) size = Integer.MAX_VALUE;
+        if (page == null) {
+            page = 1;
+        }
+        if (size == null) {
+            size = Integer.MAX_VALUE;
+        }
         return accountsMapper.paginateWithRelations(page, size, queryWrapper);
     }
 
@@ -80,10 +99,17 @@ public class AccountService {
         accountsMapper.update(condition);
     }
 
+    /**
+     * 添加账户信息
+     *
+     * @param submitData 包含账户信息的DTO对象
+     * @throws NoSuchAlgorithmException 如果加密算法未找到
+     */
     public void addAccount(AddAccountDTO submitData) throws NoSuchAlgorithmException {
         // 防止swagger调用，后续的语言路由都受影响
         RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
-        RequireUtil.requireNull(findByName(submitData.getName()), I18nUtil.getExceptionMessage("AccountService.addAccount.exception1"));
+        RequireUtil.requireNull(findByName(submitData.getName()),
+                I18nUtil.getExceptionMessage("AccountService.addAccount.exception1"));
         AccountsDO account = AccountsDO.builder()
                 .name(submitData.getName())
                 .password(encryptPassword(submitData.getPassword()))
@@ -98,7 +124,8 @@ public class AccountService {
 
     public void updateAccountByUser(UpdateAccountByUserDTO submitData) throws NoSuchAlgorithmException {
         AccountsDO account = getCurrentUser();
-        RequireUtil.requireTrue(checkPassword(submitData.getOldPwd(), account), I18nUtil.getExceptionMessage("AccountService.updateAccountByUser.oldPassword"));
+        RequireUtil.requireTrue(checkPassword(submitData.getOldPwd(), account),
+                I18nUtil.getExceptionMessage("AccountService.updateAccountByUser.oldPassword"));
         // 防止swagger调用，后续的语言路由都受影响
         RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
 
@@ -122,7 +149,8 @@ public class AccountService {
         RequireUtil.requireNotNull(account, I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
         // 防止swagger调用，后续的语言路由都受影响
         RequireUtil.requireNotNull(account.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
-        RequireUtil.requireFalse(account.getLoggedin() == LOGIN_LOGGEDIN, I18nUtil.getExceptionMessage("AccountService.isOnline"));
+        RequireUtil.requireFalse(account.getLoggedin() == LOGIN_LOGGEDIN,
+                I18nUtil.getExceptionMessage("AccountService.isOnline"));
         if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
             account.setPassword(encryptPassword(submitData.getNewPwd()));
         }
@@ -151,7 +179,8 @@ public class AccountService {
     }
 
     public String encryptPassword(String password) throws NoSuchAlgorithmException {
-        return GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(password, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(password);
+        return GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(password, BCrypt.gensalt(12)) :
+                BCrypt.hashpwSHA512(password);
     }
 
     public boolean checkPassword(String pwd, AccountsDO accountsDO) {
@@ -192,7 +221,8 @@ public class AccountService {
         account.setBanreason(reason);
         accountsMapper.update(account);
         // 遍历账号下的角色，如果在线，追封客户端/Mac/IP
-        List<CharactersDO> characterList = charactersMapper.selectIdAndWorldListByAccountId(accountId); // 仅查询角色ID和所在world
+        List<CharactersDO> characterList =
+                charactersMapper.selectIdAndWorldListByAccountId(accountId); // 仅查询角色ID和所在world
         for (CharactersDO chr : characterList) {
             Character player = Server.getInstance()
                     .getWorlds()
@@ -252,7 +282,8 @@ public class AccountService {
                 accountId = accountsDO.getId();
             }
         } else {
-            List<CharactersDO> charactersDOS = charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(str)));
+            List<CharactersDO> charactersDOS =
+                    charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(str)));
             if (!charactersDOS.isEmpty()) {
                 accountId = charactersDOS.getFirst().getAccountid();
             }

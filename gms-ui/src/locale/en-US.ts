@@ -28,7 +28,7 @@ export default {
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
   'menu.arco': 'UI Doc',
-  'menu.beiDou': 'About BeiDou',
+  'menu.beiDou': 'About XiaoYe',
   'message.success': 'Success',
   'message.switch.success': 'Switch to English',
   'message.login.success': 'Welcome',

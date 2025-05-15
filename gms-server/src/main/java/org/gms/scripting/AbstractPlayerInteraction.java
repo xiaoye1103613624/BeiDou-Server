@@ -19,6 +19,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.scripting;
 
 import org.gms.client.Character;
@@ -64,26 +65,37 @@ import java.util.*;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
+/**
+ * 玩家互动 抽象类
+ * @author XiaoYe
+ */
 public class AbstractPlayerInteraction {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractPlayerInteraction.class);
+    /**
+     * 客户端对象，用于获取玩家信息等。
+     */
+    public Client client;
 
-    public Client c;
-
-    public AbstractPlayerInteraction(Client c) {
-        this.c = c;
+    public AbstractPlayerInteraction(Client client) {
+        this.client = client;
     }
 
     public Client getClient() {
-        return c;
+        return client;
     }
 
+    /**
+     * 获取当前玩家角色。
+     *
+     * @return 返回当前玩家角色对象。
+     */
     public Character getPlayer() {
-        return c.getPlayer();
+        return client.getPlayer();
     }
 
     public Character getChar() {
-        return c.getPlayer();
+        return client.getPlayer();
     }
 
     public int getJobId() {
@@ -99,7 +111,7 @@ public class AbstractPlayerInteraction {
     }
 
     public MapleMap getMap() {
-        return c.getPlayer().getMap();
+        return client.getPlayer().getMap();
     }
 
     public int getHourOfDay() {
@@ -111,7 +123,8 @@ public class AbstractPlayerInteraction {
     }
 
     private int getMarketPortalId(MapleMap map) {
-        return (map.findMarketPortal() != null) ? map.findMarketPortal().getId() : map.getRandomPlayerSpawnpoint().getId();
+        return (map.findMarketPortal() != null) ? map.findMarketPortal().getId() :
+                map.getRandomPlayerSpawnpoint().getId();
     }
 
     public void warp(int mapid) {
@@ -142,7 +155,7 @@ public class AbstractPlayerInteraction {
     public void warpParty(int map, String portalName) {
 
         int mapid = getMapId();
-        var warpMap = c.getChannelServer().getMapFactory().getMap(map);
+        var warpMap = client.getChannelServer().getMapFactory().getMap(map);
 
         var portal = warpMap.getPortal(portalName);
 
@@ -243,7 +256,8 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean canHold(int itemid, int quantity, int removeItemid, int removeQuantity) {
-        return canHoldAllAfterRemoving(Collections.singletonList(itemid), Collections.singletonList(quantity), Collections.singletonList(removeItemid), Collections.singletonList(removeQuantity));
+        return canHoldAllAfterRemoving(Collections.singletonList(itemid), Collections.singletonList(quantity),
+                Collections.singletonList(removeItemid), Collections.singletonList(removeQuantity));
     }
 
     private List<Integer> convertToIntegerList(List<Object> objects) {
@@ -280,7 +294,7 @@ public class AbstractPlayerInteraction {
             addedItems.add(new Pair<>(it, ItemConstants.getInventoryType(itemids.get(i))));
         }
 
-        return Inventory.checkSpots(c.getPlayer(), addedItems);
+        return Inventory.checkSpots(client.getPlayer(), addedItems);
     }
 
     private List<Pair<Item, InventoryType>> prepareProofInventoryItems(List<Pair<Integer, Integer>> items) {
@@ -309,9 +323,11 @@ public class AbstractPlayerInteraction {
         return invList;
     }
 
-    public boolean canHoldAllAfterRemoving(List<Integer> toAddItemids, List<Integer> toAddQuantity, List<Integer> toRemoveItemids, List<Integer> toRemoveQuantity) {
+    public boolean canHoldAllAfterRemoving(List<Integer> toAddItemids, List<Integer> toAddQuantity,
+                                           List<Integer> toRemoveItemids, List<Integer> toRemoveQuantity) {
         List<List<Pair<Integer, Integer>>> toAddItemList = prepareInventoryItemList(toAddItemids, toAddQuantity);
-        List<List<Pair<Integer, Integer>>> toRemoveItemList = prepareInventoryItemList(toRemoveItemids, toRemoveQuantity);
+        List<List<Pair<Integer, Integer>>> toRemoveItemList =
+                prepareInventoryItemList(toRemoveItemids, toRemoveQuantity);
 
         InventoryProof prfInv = (InventoryProof) this.getInventory(InventoryType.CANHOLD);
         prfInv.lockInventory();
@@ -326,12 +342,13 @@ public class AbstractPlayerInteraction {
                     prfInv.cloneContents(inv);
 
                     for (Pair<Integer, Integer> p : toRemove) {
-                        InventoryManipulator.removeById(c, InventoryType.CANHOLD, p.getLeft(), p.getRight(), false, false);
+                        InventoryManipulator.removeById(client, InventoryType.CANHOLD, p.getLeft(), p.getRight(), false,
+                                false);
                     }
 
                     List<Pair<Item, InventoryType>> addItems = prepareProofInventoryItems(toAdd);
 
-                    boolean canHold = Inventory.checkSpots(c.getPlayer(), addItems, true);
+                    boolean canHold = Inventory.checkSpots(client.getPlayer(), addItems, true);
                     if (!canHold) {
                         return false;
                     }
@@ -348,11 +365,11 @@ public class AbstractPlayerInteraction {
     //---- \/ \/ \/ \/ \/ \/ \/  NOT TESTED  \/ \/ \/ \/ \/ \/ \/ \/ \/ ----
 
     public final QuestStatus getQuestRecord(final int id) {
-        return c.getPlayer().getQuestNAdd(Quest.getInstance(id));
+        return client.getPlayer().getQuestNAdd(Quest.getInstance(id));
     }
 
     public final QuestStatus getQuestNoRecord(final int id) {
-        return c.getPlayer().getQuestNoAdd(Quest.getInstance(id));
+        return client.getPlayer().getQuestNoAdd(Quest.getInstance(id));
     }
 
     //---- /\ /\ /\ /\ /\ /\ /\  NOT TESTED  /\ /\ /\ /\ /\ /\ /\ /\ /\ ----
@@ -362,21 +379,21 @@ public class AbstractPlayerInteraction {
     }
 
     public void openNpc(int npcid, String script) {
-        if (c.getCM() != null) {
+        if (client.getCM() != null) {
             return;
         }
 
-        c.removeClickedNPC();
-        NPCScriptManager.getInstance().dispose(c);
-        NPCScriptManager.getInstance().start(c, npcid, script, null);
+        client.removeClickedNPC();
+        NPCScriptManager.getInstance().dispose(client);
+        NPCScriptManager.getInstance().start(client, npcid, script, null);
     }
 
     public int getQuestStatus(int id) {
-        return c.getPlayer().getQuest(Quest.getInstance(id)).getStatus().getId();
+        return client.getPlayer().getQuest(Quest.getInstance(id)).getStatus().getId();
     }
 
     private QuestStatus.Status getQuestStat(int id) {
-        return c.getPlayer().getQuest(Quest.getInstance(id)).getStatus();
+        return client.getPlayer().getQuest(Quest.getInstance(id)).getStatus();
     }
 
     public boolean isQuestCompleted(int id) {
@@ -414,7 +431,7 @@ public class AbstractPlayerInteraction {
     }
 
     public void setQuestProgress(int id, int infoNumber, String progress) {
-        c.getPlayer().setQuestProgress(id, infoNumber, progress);
+        client.getPlayer().setQuestProgress(id, infoNumber, progress);
     }
 
     public String getQuestProgress(int id) {
@@ -532,7 +549,6 @@ public class AbstractPlayerInteraction {
 
         long period = DAYS.toMillis(90);    //refreshes expiration date: 90 days
 
-
         target = getPlayer().getPet(slot);
         if (target == null) {
             getPlayer().message("Pet could not be evolved...");
@@ -562,7 +578,7 @@ public class AbstractPlayerInteraction {
             chr.getClient().getWorldServer().registerPetHunger(chr, chr.getPetIndex(evolved));
             */
 
-        InventoryManipulator.removeFromSlot(c, InventoryType.CASH, target.getPosition(), (short) 1, false);
+        InventoryManipulator.removeFromSlot(client, InventoryType.CASH, target.getPosition(), (short) 1, false);
 
         return evolved;
     }
@@ -610,7 +626,9 @@ public class AbstractPlayerInteraction {
                     evolved.setStance(0);
                     evolved.setSummoned(true);
 
-                    evolved.setName(from.getName().compareTo(ItemInformationProvider.getInstance().getName(from.getItemId())) != 0 ? from.getName() : ItemInformationProvider.getInstance().getName(id));
+                    evolved.setName(
+                            from.getName().compareTo(ItemInformationProvider.getInstance().getName(from.getItemId())) !=
+                                    0 ? from.getName() : ItemInformationProvider.getInstance().getName(id));
                     evolved.setTameness(from.getTameness());
                     evolved.setFullness(from.getFullness());
                     evolved.setLevel(from.getLevel());
@@ -632,12 +650,14 @@ public class AbstractPlayerInteraction {
                         it.setUpgradeSlots(3);
                     }
 
-                    if (GameConfig.getServerBoolean("use_enhanced_crafting") && c.getPlayer().isUseCS()) {
+                    if (GameConfig.getServerBoolean("use_enhanced_crafting") && client.getPlayer().isUseCS()) {
                         Equip eqp = (Equip) item;
-                        if (!(c.getPlayer().isGM() && GameConfig.getServerBoolean("use_perfect_gm_scroll"))) {
+                        if (!(client.getPlayer().isGM() && GameConfig.getServerBoolean("use_perfect_gm_scroll"))) {
                             eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));
                         }
-                        item = ItemInformationProvider.getInstance().scrollEquipWithId(item, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60, c.getPlayer().isGM());
+                        item = ItemInformationProvider.getInstance()
+                                .scrollEquipWithId(item, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60,
+                                        client.getPlayer().isGM());
                     }
                 }
             } else {
@@ -648,24 +668,25 @@ public class AbstractPlayerInteraction {
                 item.setExpiration(System.currentTimeMillis() + expires);
             }
 
-            if (!InventoryManipulator.checkSpace(c, id, quantity, "")) {
-                c.getPlayer().dropMessage(1, "Your inventory is full. Please remove an item from your " + ItemConstants.getInventoryType(id).name() + " inventory.");
+            if (!InventoryManipulator.checkSpace(client, id, quantity, "")) {
+                client.getPlayer().dropMessage(1, "Your inventory is full. Please remove an item from your " +
+                        ItemConstants.getInventoryType(id).name() + " inventory.");
                 return null;
             }
             if (ItemConstants.getInventoryType(id) == InventoryType.EQUIP) {
                 if (randomStats) {
-                    InventoryManipulator.addFromDrop(c, ii.randomizeStats((Equip) item), false, petId);
+                    InventoryManipulator.addFromDrop(client, ii.randomizeStats((Equip) item), false, petId);
                 } else {
-                    InventoryManipulator.addFromDrop(c, item, false, petId);
+                    InventoryManipulator.addFromDrop(client, item, false, petId);
                 }
             } else {
-                InventoryManipulator.addFromDrop(c, item, false, petId);
+                InventoryManipulator.addFromDrop(client, item, false, petId);
             }
         } else {
-            InventoryManipulator.removeById(c, ItemConstants.getInventoryType(id), id, -quantity, true, false);
+            InventoryManipulator.removeById(client, ItemConstants.getInventoryType(id), id, -quantity, true, false);
         }
         if (showMessage) {
-            c.sendPacket(PacketCreator.getShowItemGain(id, quantity, true));
+            client.sendPacket(PacketCreator.getShowItemGain(id, quantity, true));
         }
 
         return item;
@@ -680,7 +701,7 @@ public class AbstractPlayerInteraction {
     }
 
     public void playerMessage(int type, String message) {
-        c.sendPacket(PacketCreator.serverNotice(type, message));
+        client.sendPacket(PacketCreator.serverNotice(type, message));
     }
 
     public void message(String message) {
@@ -696,23 +717,23 @@ public class AbstractPlayerInteraction {
     }
 
     public void mapEffect(String path) {
-        c.sendPacket(PacketCreator.mapEffect(path));
+        client.sendPacket(PacketCreator.mapEffect(path));
     }
 
     public void mapSound(String path) {
-        c.sendPacket(PacketCreator.mapSound(path));
+        client.sendPacket(PacketCreator.mapSound(path));
     }
 
     public void displayAranIntro() {
-        String intro = switch (c.getPlayer().getMapId()) {
+        String intro = switch (client.getPlayer().getMapId()) {
             case MapId.ARAN_TUTO_1 -> "Effect/Direction1.img/aranTutorial/Scene0";
             case MapId.ARAN_TUTO_2 ->
-                    "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+                    "Effect/Direction1.img/aranTutorial/Scene1" + (client.getPlayer().getGender() == 0 ? "0" : "1");
             case MapId.ARAN_TUTO_3 ->
-                    "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+                    "Effect/Direction1.img/aranTutorial/Scene2" + (client.getPlayer().getGender() == 0 ? "0" : "1");
             case MapId.ARAN_TUTO_4 -> "Effect/Direction1.img/aranTutorial/Scene3";
-            case MapId.ARAN_POLEARM ->
-                    "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_POLEARM -> "Effect/Direction1.img/aranTutorial/HandedPoleArm" +
+                    (client.getPlayer().getGender() == 0 ? "0" : "1");
             case MapId.ARAN_MAHA -> "Effect/Direction1.img/aranTutorial/Maha";
             default -> "";
         };
@@ -720,12 +741,12 @@ public class AbstractPlayerInteraction {
     }
 
     public void showIntro(String path) {
-        c.sendPacket(PacketCreator.showIntro(path));
+        client.sendPacket(PacketCreator.showIntro(path));
     }
 
     public void showInfo(String path) {
-        c.sendPacket(PacketCreator.showInfo(path));
-        c.sendPacket(PacketCreator.enableActions());
+        client.sendPacket(PacketCreator.showInfo(path));
+        client.sendPacket(PacketCreator.enableActions());
     }
 
     public void guildMessage(int type, String message) {
@@ -781,7 +802,8 @@ public class AbstractPlayerInteraction {
 
     public void removeHPQItems() {
         int[] items = {ItemId.GREEN_PRIMROSE_SEED, ItemId.PURPLE_PRIMROSE_SEED, ItemId.PINK_PRIMROSE_SEED,
-                ItemId.BROWN_PRIMROSE_SEED, ItemId.YELLOW_PRIMROSE_SEED, ItemId.BLUE_PRIMROSE_SEED, ItemId.MOON_BUNNYS_RICE_CAKE};
+                ItemId.BROWN_PRIMROSE_SEED, ItemId.YELLOW_PRIMROSE_SEED, ItemId.BLUE_PRIMROSE_SEED,
+                ItemId.MOON_BUNNYS_RICE_CAKE};
         for (int item : items) {
             removePartyItems(item);
         }
@@ -869,14 +891,14 @@ public class AbstractPlayerInteraction {
             Inventory iv = chr.getInventory(type);
             int possesed = iv.countById(id);
             if (possesed > 0) {
-                InventoryManipulator.removeById(c, ItemConstants.getInventoryType(id), id, possesed, true, false);
+                InventoryManipulator.removeById(client, ItemConstants.getInventoryType(id), id, possesed, true, false);
                 chr.sendPacket(PacketCreator.getShowItemGain(id, (short) -possesed, true));
             }
         }
     }
 
     public void removeAll(int id) {
-        removeAll(id, c);
+        removeAll(id, client);
     }
 
     public void removeAll(int id, Client cl) {
@@ -898,7 +920,7 @@ public class AbstractPlayerInteraction {
     public void removeAllByInventory(int invType) {
         Inventory inv = getInventory(invType);
         for (Item item : new ArrayList<>(inv.list())) {
-            InventoryManipulator.removeFromSlot(c, inv.getType(), item.getPosition(), item.getQuantity(), false);
+            InventoryManipulator.removeFromSlot(client, inv.getType(), item.getPosition(), item.getQuantity(), false);
         }
     }
 
@@ -906,43 +928,46 @@ public class AbstractPlayerInteraction {
         Inventory inv = getInventory(invType);
         Item item = inv.getItem(slot);
         if (item != null) {
-            InventoryManipulator.removeFromSlot(c, inv.getType(), item.getPosition(), item.getQuantity(), false);
+            InventoryManipulator.removeFromSlot(client, inv.getType(), item.getPosition(), item.getQuantity(), false);
         }
     }
 
     public int getMapId() {
-        return c.getPlayer().getMap().getId();
+        return client.getPlayer().getMap().getId();
     }
 
     public int getPlayerCount(int mapid) {
-        return c.getChannelServer().getMapFactory().getMap(mapid).getCharacters().size();
+        return client.getChannelServer().getMapFactory().getMap(mapid).getCharacters().size();
     }
 
     public void showInstruction(String msg, int width, int height) {
-        c.sendPacket(PacketCreator.sendHint(msg, width, height));
-        c.sendPacket(PacketCreator.enableActions());
+        client.sendPacket(PacketCreator.sendHint(msg, width, height));
+        client.sendPacket(PacketCreator.enableActions());
     }
 
     public void disableMinimap() {
-        c.sendPacket(PacketCreator.disableMinimap());
+        client.sendPacket(PacketCreator.disableMinimap());
     }
 
     public boolean isAllReactorState(final int reactorId, final int state) {
-        return c.getPlayer().getMap().isAllReactorState(reactorId, state);
+        return client.getPlayer().getMap().isAllReactorState(reactorId, state);
     }
 
     public void resetMap(int mapid) {
         getMap(mapid).resetReactors();
         getMap(mapid).killAllMonsters();
-        for (MapObject i : getMap(mapid).getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.ITEM))) {
+        for (MapObject i : getMap(mapid).getMapObjectsInRange(client.getPlayer().getPosition(),
+                Double.POSITIVE_INFINITY,
+                Arrays.asList(MapObjectType.ITEM))) {
             getMap(mapid).removeMapObject(i);
-            getMap(mapid).broadcastMessage(PacketCreator.removeItemFromMap(i.getObjectId(), 0, c.getPlayer().getId()));
+            getMap(mapid).broadcastMessage(
+                    PacketCreator.removeItemFromMap(i.getObjectId(), 0, client.getPlayer().getId()));
         }
     }
 
     public void useItem(int id) {
-        ItemInformationProvider.getInstance().getItemEffect(id).applyTo(c.getPlayer());
-        c.sendPacket(PacketCreator.getItemMessage(id));//Useful shet :3
+        ItemInformationProvider.getInstance().getItemEffect(id).applyTo(client.getPlayer());
+        client.sendPacket(PacketCreator.getItemMessage(id));//Useful shet :3
     }
 
     public void cancelItem(final int id) {
@@ -958,30 +983,33 @@ public class AbstractPlayerInteraction {
         SkillEntry skillEntry = getPlayer().getSkills().get(skill);
         if (skillEntry != null) {
             if (!force && level > -1) {
-                getPlayer().changeSkillLevel(skill, (byte) Math.max(skillEntry.skillLevel, level), Math.max(skillEntry.masterLevel, masterLevel), expiration == -1 ? -1 : Math.max(skillEntry.expiration, expiration));
+                getPlayer().changeSkillLevel(skill, (byte) Math.max(skillEntry.skillLevel, level),
+                        Math.max(skillEntry.masterLevel, masterLevel),
+                        expiration == -1 ? -1 : Math.max(skillEntry.expiration, expiration));
                 return;
             }
         } else if (GameConstants.isAranSkills(skillid)) {
-            c.sendPacket(PacketCreator.showInfo("Effect/BasicEff.img/AranGetSkill"));
+            client.sendPacket(PacketCreator.showInfo("Effect/BasicEff.img/AranGetSkill"));
         }
 
         getPlayer().changeSkillLevel(skill, level, masterLevel, expiration);
     }
 
     public void removeEquipFromSlot(short slot) {
-        Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
-        InventoryManipulator.removeFromSlot(c, InventoryType.EQUIPPED, slot, tempItem.getQuantity(), false, false);
+        Item tempItem = client.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
+        InventoryManipulator.removeFromSlot(client, InventoryType.EQUIPPED, slot, tempItem.getQuantity(), false, false);
     }
 
     public void gainAndEquip(int itemid, short slot) {
-        final Item old = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
+        final Item old = client.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
         if (old != null) {
-            InventoryManipulator.removeFromSlot(c, InventoryType.EQUIPPED, slot, old.getQuantity(), false, false);
+            InventoryManipulator.removeFromSlot(client, InventoryType.EQUIPPED, slot, old.getQuantity(), false, false);
         }
         final Item newItem = ItemInformationProvider.getInstance().getEquipById(itemid);
         newItem.setPosition(slot);
-        c.getPlayer().getInventory(InventoryType.EQUIPPED).addItemFromDB(newItem);
-        c.sendPacket(PacketCreator.modifyInventory(false, Collections.singletonList(new ModifyInventory(0, newItem))));
+        client.getPlayer().getInventory(InventoryType.EQUIPPED).addItemFromDB(newItem);
+        client.sendPacket(
+                PacketCreator.modifyInventory(false, Collections.singletonList(new ModifyInventory(0, newItem))));
     }
 
     public void spawnNpc(int npcId, Point pos, MapleMap map) {
@@ -1008,80 +1036,80 @@ public class AbstractPlayerInteraction {
     }
 
     public void spawnGuide() {
-        c.sendPacket(PacketCreator.spawnGuide(true));
+        client.sendPacket(PacketCreator.spawnGuide(true));
     }
 
     public void removeGuide() {
-        c.sendPacket(PacketCreator.spawnGuide(false));
+        client.sendPacket(PacketCreator.spawnGuide(false));
     }
 
     public void displayGuide(int num) {
-        c.sendPacket(PacketCreator.showInfo("UI/tutorial.img/" + num));
+        client.sendPacket(PacketCreator.showInfo("UI/tutorial.img/" + num));
     }
 
     public void goDojoUp() {
-        c.sendPacket(PacketCreator.dojoWarpUp());
+        client.sendPacket(PacketCreator.dojoWarpUp());
     }
 
     public void resetDojoEnergy() {
-        c.getPlayer().setDojoEnergy(0);
+        client.getPlayer().setDojoEnergy(0);
     }
 
     public void resetPartyDojoEnergy() {
-        for (Character pchr : c.getPlayer().getPartyMembersOnSameMap()) {
+        for (Character pchr : client.getPlayer().getPartyMembersOnSameMap()) {
             pchr.setDojoEnergy(0);
         }
     }
 
     public void enableActions() {
-        c.sendPacket(PacketCreator.enableActions());
+        client.sendPacket(PacketCreator.enableActions());
     }
 
     public void showEffect(String effect) {
-        c.sendPacket(PacketCreator.showEffect(effect));
+        client.sendPacket(PacketCreator.showEffect(effect));
     }
 
     public void dojoEnergy() {
-        c.sendPacket(PacketCreator.getEnergy("energy", getPlayer().getDojoEnergy()));
+        client.sendPacket(PacketCreator.getEnergy("energy", getPlayer().getDojoEnergy()));
     }
 
     public void talkGuide(String message) {
-        c.sendPacket(PacketCreator.talkGuide(message));
+        client.sendPacket(PacketCreator.talkGuide(message));
     }
 
     public void guideHint(int hint) {
-        c.sendPacket(PacketCreator.guideHint(hint));
+        client.sendPacket(PacketCreator.guideHint(hint));
     }
 
     public void updateAreaInfo(Short area, String info) {
-        c.getPlayer().updateAreaInfo(area, info);
-        c.sendPacket(PacketCreator.enableActions());//idk, nexon does the same :P
+        client.getPlayer().updateAreaInfo(area, info);
+        client.sendPacket(PacketCreator.enableActions());//idk, nexon does the same :P
     }
 
     public boolean containsAreaInfo(short area, String info) {
-        return c.getPlayer().containsAreaInfo(area, info);
+        return client.getPlayer().containsAreaInfo(area, info);
     }
 
     public void earnTitle(String msg) {
-        c.sendPacket(PacketCreator.earnTitleMessage(msg));
+        client.sendPacket(PacketCreator.earnTitleMessage(msg));
     }
 
     public void showInfoText(String msg) {
-        c.sendPacket(PacketCreator.showInfoText(msg));
+        client.sendPacket(PacketCreator.showInfoText(msg));
     }
 
     public void openUI(byte ui) {
-        c.sendPacket(PacketCreator.openUI(ui));
+        client.sendPacket(PacketCreator.openUI(ui));
     }
 
     public void lockUI() {
-        c.sendPacket(PacketCreator.disableUI(true));
-        c.sendPacket(PacketCreator.lockUI(true));
+        client.sendPacket(PacketCreator.disableUI(true));
+        client.sendPacket(PacketCreator.lockUI(true));
     }
 
     public void unlockUI() {
-        c.sendPacket(PacketCreator.disableUI(false));
-        c.sendPacket(PacketCreator.lockUI(false));
+        client.sendPacket(PacketCreator.disableUI(false));
+        client.sendPacket(PacketCreator.lockUI(false));
     }
 
     public void playSound(String sound) {
@@ -1109,7 +1137,8 @@ public class AbstractPlayerInteraction {
         Expedition exped = new Expedition(player, type, silent, minPlayers, maxPlayers);
 
         int channel = player.getMap().getChannelServer().getId();
-        if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, exped, false)) {    // thanks Conrad for noticing missing expeditions entry limit
+        if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, exped,
+                false)) {    // thanks Conrad for noticing missing expeditions entry limit
             return 1;
         }
 
@@ -1168,7 +1197,7 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean startDungeonInstance(int dungeonid) {
-        return c.getChannelServer().addMiniDungeon(dungeonid);
+        return client.getChannelServer().addMiniDungeon(dungeonid);
     }
 
     public boolean canGetFirstJob(int jobType) {
@@ -1217,7 +1246,7 @@ public class AbstractPlayerInteraction {
     }
 
     public void npcTalk(int npcid, String message) {
-        c.sendPacket(PacketCreator.getNPCTalk(npcid, (byte) 0, message, "00 00", (byte) 0));
+        client.sendPacket(PacketCreator.getNPCTalk(npcid, (byte) 0, message, "00 00", (byte) 0));
     }
 
     public long getCurrentTime() {
@@ -1225,7 +1254,7 @@ public class AbstractPlayerInteraction {
     }
 
     public void weakenAreaBoss(int monsterId, String message) {
-        MapleMap map = c.getPlayer().getMap();
+        MapleMap map = client.getPlayer().getMap();
         Monster monster = map.getMonsterById(monsterId);
         if (monster == null) {
             return;
@@ -1259,7 +1288,9 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getCharacterExtendValue(String extendName) {
-        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName);
+        ExtendValueDO extendValueDO =
+                ExtendUtil.getExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(),
+                        extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
@@ -1267,7 +1298,7 @@ public class AbstractPlayerInteraction {
      * 获取每日/每周角色扩展表某字段的值
      *
      * @param extendName 扩展字段名
-     * @param isDaily    是否是每日，否则为每周
+     * @param isDaily 是否是每日，否则为每周
      * @return 扩展字段值
      */
     public String getCharacterExtendValue(String extendName, boolean isDaily) {
@@ -1284,7 +1315,8 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getAccountExtendValue(String extendName) {
-        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountId()), ExtendType.ACCOUNT_EXTEND.getType(), extendName);
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountId()),
+                ExtendType.ACCOUNT_EXTEND.getType(), extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
@@ -1292,7 +1324,7 @@ public class AbstractPlayerInteraction {
      * 获取每日/每周账号扩展表某字段的值
      *
      * @param extendName 扩展字段名
-     * @param isDaily    是否是每日，否则为每周
+     * @param isDaily 是否是每日，否则为每周
      * @return 扩展字段值
      */
     public String getAccountExtendValue(String extendName, boolean isDaily) {
@@ -1309,7 +1341,8 @@ public class AbstractPlayerInteraction {
      * @param extendValue
      */
     public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue) {
-        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName, extendValue);
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(),
+                extendName, extendValue);
     }
 
     /***
@@ -1319,16 +1352,19 @@ public class AbstractPlayerInteraction {
      * @param isDaily 是否为每日刷新，否则为周刷新
      */
     public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue, boolean isDaily) {
-        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()),
+                isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
     }
 
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue) {
-        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()), ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()),
+                ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
     }
 
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue, boolean isDaily) {
-        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()),
+                isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
     }
 
@@ -1344,13 +1380,8 @@ public class AbstractPlayerInteraction {
      * 获取账户在线时间
      * @return 返回当前账户角色在线时间，单位分钟
      */
-    public int getOnlineTime()
-    {
+    public int getOnlineTime() {
         return getPlayer().getCurrentOnlineTime();
     }
-
-
-
-
 
 }

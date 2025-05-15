@@ -25,6 +25,7 @@ import org.gms.client.Client;
 import org.gms.scripting.AbstractPlayerInteraction;
 
 /**
+ * 项目脚本方法
  * @author kevintjuh93
  */
 public class ItemScriptMethods extends AbstractPlayerInteraction {

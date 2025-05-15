@@ -18,6 +18,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.server.life;
 
 import org.gms.config.GameConfig;
@@ -46,6 +47,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 怪物信息提供者
+ */
 public class MonsterInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(MonsterInformationProvider.class);
     // Author : LightPepsi
@@ -57,10 +61,13 @@ public class MonsterInformationProvider {
     }
 
     private final Map<Integer, List<MonsterDropEntry>> drops = new HashMap<>();
+    /**
+     * 全局 怪物掉落列表
+     */
     private final List<MonsterGlobalDropEntry> globaldrops = new ArrayList<>();
     private final Map<Integer, List<MonsterGlobalDropEntry>> continentdrops = new HashMap<>();
 
-    private final Map<Integer, List<Integer>> dropsChancePool = new HashMap<>();    // thanks to ronan
+    private final Map<Integer, List<Integer>> dropsChancePool = new HashMap<>();
     private final Set<Integer> hasNoMultiEquipDrops = new HashSet<>();
     private final Map<Integer, List<MonsterDropEntry>> extraMultiEquipDrops = new HashMap<>();
 
@@ -72,15 +79,25 @@ public class MonsterInformationProvider {
     private final Map<Integer, Boolean> mobBossCache = new HashMap<>();
     private final Map<Integer, String> mobNameCache = new HashMap<>();
 
+    /**
+     * 构造函数，受保护的，防止外部直接实例化。
+     * 初始化时调用retrieveGlobal方法以获取全局的怪物信息。
+     */
     protected MonsterInformationProvider() {
         retrieveGlobal();
     }
 
+    /**
+     * 根据地图ID获取相关的全局掉落物列表。
+     *
+     * @param mapid 地图ID
+     * @return 与地图ID相关的全局掉落物列表
+     */
     public final List<MonsterGlobalDropEntry> getRelevantGlobalDrops(int mapid) {
         int continentid = mapid / 100000000;
 
         List<MonsterGlobalDropEntry> contiItems = continentdrops.get(continentid);
-        if (contiItems == null) {   // continent separated global drops found thanks to marcuswoon
+        if (contiItems == null) {
             contiItems = new ArrayList<>();
 
             for (MonsterGlobalDropEntry e : globaldrops) {
@@ -95,6 +112,10 @@ public class MonsterInformationProvider {
         return contiItems;
     }
 
+    /**
+     * 从数据库中检索全局掉落信息
+     * 从数据库中查询所有掉落几率大于0的全局掉落信息，并将它们添加到全局掉落列表中。
+     */
     private void retrieveGlobal() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0");
@@ -113,11 +134,19 @@ public class MonsterInformationProvider {
         }
     }
 
+    /**
+     * 获取指定怪物的有效掉落物列表
+     *
+     * @param monsterId 怪物的ID
+     * @return 包含有效掉落物的列表
+     */
     public List<MonsterDropEntry> retrieveEffectiveDrop(final int monsterId) {
-        // this reads the drop entries searching for multi-equip, properly processing them
+        // 这将读取搜索 multi-equip 的 掉落条目，并正确处理它们
 
         List<MonsterDropEntry> list = retrieveDrop(monsterId);
-        if (hasNoMultiEquipDrops.contains(monsterId) || !GameConfig.getServerBoolean("use_multiple_same_equip_drop")) {
+        if (hasNoMultiEquipDrops.contains(monsterId) ||
+                // 同一装备能否掉落多份
+                !GameConfig.getServerBoolean("use_multiple_same_equip_drop")) {
             return list;
         }
 
@@ -131,7 +160,8 @@ public class MonsterInformationProvider {
 
                     int rnd = Randomizer.rand(mde.Minimum, mde.Maximum);
                     for (int i = 0; i < rnd - 1; i++) {
-                        extra.add(mde);   // this passes copies of the equips' MDE with min/max quantity > 1, but idc on equips they are unused anyways
+                        extra.add(
+                                mde);   // this passes copies of the equips' MDE with min/max quantity > 1, but idc on equips they are unused anyways
                     }
                 }
             }
@@ -163,12 +193,14 @@ public class MonsterInformationProvider {
         final List<MonsterDropEntry> ret = new LinkedList<>();
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT itemid, chance, minimum_quantity, maximum_quantity, questid FROM drop_data WHERE dropperid = ?")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT itemid, chance, minimum_quantity, maximum_quantity, questid FROM drop_data WHERE dropperid = ?")) {
             ps.setInt(1, monsterId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ret.add(new MonsterDropEntry(rs.getInt("itemid"), rs.getInt("chance"), rs.getInt("minimum_quantity"), rs.getInt("maximum_quantity"), rs.getShort("questid")));
+                    ret.add(new MonsterDropEntry(rs.getInt("itemid"), rs.getInt("chance"),
+                            rs.getInt("minimum_quantity"), rs.getInt("maximum_quantity"), rs.getShort("questid")));
                 }
             }
         } catch (SQLException e) {
@@ -193,8 +225,8 @@ public class MonsterInformationProvider {
         int accProp = 0;
         for (MonsterDropEntry mde : dropList) {
             if (
-                  GameConfig.getServerBoolean("allow_steal_quest_item") ||
-                  !ii.isQuestItem(mde.itemId) && !ii.isPartyQuestItem(mde.itemId)
+                    GameConfig.getServerBoolean("allow_steal_quest_item") ||
+                            !ii.isQuestItem(mde.itemId) && !ii.isPartyQuestItem(mde.itemId)
             ) {
                 accProp += mde.chance;
             }

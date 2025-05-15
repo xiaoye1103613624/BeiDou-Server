@@ -6,18 +6,31 @@ import org.gms.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * 玩家 监听器，用于处理角色相关事件。
+ */
 public class CharacterListener implements AbstractCharacterListener {
     private final Character character;
     public CharacterListener(Character character) {
         this.character = character;
     }
 
+    /**
+     * 当角色生命值发生变化时触发的方法
+     *
+     * @param oldHp 角色变化前的生命值
+     */
     @Override
     public void onHpChanged(int oldHp) {
         character.hpChangeAction(oldHp);
     }
 
+    /**
+     * 当生命值和魔法值池更新时调用此方法。
+     *
+     * <p>重新计算角色的本地属性并更新角色的生命值和魔法值。
+     * 如果角色的生命值或魔法值超过了本地最大值，则将其设置为本地最大值，并更新角色的属性更新映射。
+     */
     @Override
     public void onHpMpPoolUpdate() {
         List<Pair<Stat, Integer>> hpmpupdate = character.recalcLocalStats();

@@ -19,6 +19,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.scripting.portal;
 
 import org.gms.client.Client;
@@ -33,23 +34,44 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 传送门玩家互动脚本。
+ */
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
+    /**
+     * 传送门
+     */
     private final Portal portal;
 
-    public PortalPlayerInteraction(Client c, Portal portal) {
-        super(c);
+    public PortalPlayerInteraction(Client client, Portal portal) {
+        super(client);
         this.portal = portal;
     }
 
+    /**
+     * 获取门户对象
+     *
+     * @return 返回门户对象
+     */
     public Portal getPortal() {
         return portal;
     }
 
+    /**
+     * 运行地图脚本
+     * 该方法首先获取 MapScriptManager 的实例，然后调用其 runMapScript 方法来执行特定的地图脚本。
+     */
     public void runMapScript() {
         MapScriptManager msm = MapScriptManager.getInstance();
-        msm.runMapScript(c, "onUserEnter/" + portal.getScriptName(), false);
+        msm.runMapScript(client, "onUserEnter/" + portal.getScriptName(), false);
     }
 
+    /**
+     * 检查玩家是否拥有等级达到30的角色
+     *
+     * @return 如果玩家有等级达到30的角色，返回true；否则返回false
+     * @throws SQLException 如果数据库操作出现异常，则抛出SQLException异常
+     */
     public boolean hasLevel30Character() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT `level` FROM `characters` WHERE accountid = ?")) {
@@ -69,15 +91,28 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
         return getPlayer().getLevel() >= 30;
     }
 
+    /**
+     * 阻塞指定的传送门
+     *
+     * <p>通过调用此方法，可以阻塞指定的传送门，使其不可通过。</p>
+     */
     public void blockPortal() {
-        c.getPlayer().blockPortal(getPortal().getScriptName());
+        client.getPlayer().blockPortal(getPortal().getScriptName());
     }
 
+    /**
+     * 解锁传送门
+     * 调用客户端的玩家的解锁传送门方法，解锁与当前传送门对应的传送门
+     */
     public void unblockPortal() {
-        c.getPlayer().unblockPortal(getPortal().getScriptName());
+        client.getPlayer().unblockPortal(getPortal().getScriptName());
     }
 
+    /**
+     * 播放传送门音效
+     * 发送一个数据包给客户端，使客户端播放传送门音效。
+     */
     public void playPortalSound() {
-        c.sendPacket(PacketCreator.playPortalSound());
+        client.sendPacket(PacketCreator.playPortalSound());
     }
 }
