@@ -19,6 +19,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.net.server;
 
 import lombok.Getter;
@@ -29,20 +30,18 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
-import org.gms.config.GameConfig;
-import org.gms.dao.entity.CharactersDO;
-import org.gms.dao.entity.PlayernpcsFieldDO;
-import org.gms.model.dto.ServerShutdownDTO;
-import org.gms.property.ServiceProperty;
-import org.gms.util.*;
-import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
+import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.NxcouponsDO;
+import org.gms.dao.entity.PlayernpcsFieldDO;
 import org.gms.manager.ServerManager;
+import org.gms.model.dto.ServerShutdownDTO;
+import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
 import org.gms.net.netty.LoginServer;
@@ -55,6 +54,7 @@ import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildCharacter;
 import org.gms.net.server.task.*;
 import org.gms.net.server.world.World;
+import org.gms.property.ServiceProperty;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.SkillbookInformationProvider;
 import org.gms.server.ThreadManager;
@@ -63,6 +63,7 @@ import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.quest.Quest;
 import org.gms.service.*;
+import org.gms.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +78,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.HOURS;
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -84,11 +89,14 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
-import static java.util.concurrent.TimeUnit.*;
-
+/**
+ * 服务端对象
+ */
 public class Server {
     static {
-        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
+        // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
+        System.setProperty("polyglot.engine.WarnInterpreterOnly",
+                "false");
     }
 
     private static final Logger log = LoggerFactory.getLogger(Server.class);
@@ -97,8 +105,7 @@ public class Server {
     public static Server getInstance() {
         if (instance == null) {
             instance = new Server();
-        }
-        return instance;
+        } return instance;
     }
 
     private static final Set<Integer> activeFly = new HashSet<>();
@@ -147,25 +154,33 @@ public class Server {
     private long nextTime;
 
     private static final NpcService npcService = ServerManager.getApplicationContext().getBean(NpcService.class);
-    private static final NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
-    private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
-    private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
-    private static final NxCodeService nxCodeService = ServerManager.getApplicationContext().getBean(NxCodeService.class);
-    private static final NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
-    private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
-    private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
-    private static final FamilyService familyService = ServerManager.getApplicationContext().getBean(FamilyService.class);
+    private static final NxCouponService nxCouponService =
+            ServerManager.getApplicationContext().getBean(NxCouponService.class);
+    private static final CharacterService characterService =
+            ServerManager.getApplicationContext().getBean(CharacterService.class);
+    private static final AccountService accountService =
+            ServerManager.getApplicationContext().getBean(AccountService.class);
+    private static final NxCodeService nxCodeService =
+            ServerManager.getApplicationContext().getBean(NxCodeService.class);
+    private static final NewYearCardService newYearCardService =
+            ServerManager.getApplicationContext().getBean(NewYearCardService.class);
+    private static final NameChangeService nameChangeService =
+            ServerManager.getApplicationContext().getBean(NameChangeService.class);
+    private static final WorldTransferService worldTransferService =
+            ServerManager.getApplicationContext().getBean(WorldTransferService.class);
+    private static final FamilyService familyService =
+            ServerManager.getApplicationContext().getBean(FamilyService.class);
     private static final NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
-    private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
-    private static final ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+    private static final HpMpAlertService hpMpAlertService =
+            ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    private static final ServiceProperty serviceProperty =
+            ServerManager.getApplicationContext().getBean(ServiceProperty.class);
 
     private Server() {
-        ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
-        this.wldRLock = worldLock.readLock();
+        ReadWriteLock worldLock = new ReentrantReadWriteLock(true); this.wldRLock = worldLock.readLock();
         this.wldWLock = worldLock.writeLock();
 
-        ReadWriteLock loginLock = new ReentrantReadWriteLock(true);
-        this.lgnRLock = loginLock.readLock();
+        ReadWriteLock loginLock = new ReentrantReadWriteLock(true); this.lgnRLock = loginLock.readLock();
         this.lgnWLock = loginLock.writeLock();
     }
 
@@ -182,9 +197,7 @@ public class Server {
     }
 
     public long forceUpdateCurrentTime() {
-        long timeNow = System.currentTimeMillis();
-        serverCurrentTime = timeNow;
-        currentTime.set(timeNow);
+        long timeNow = System.currentTimeMillis(); serverCurrentTime = timeNow; currentTime.set(timeNow);
 
         return timeNow;
     }
@@ -216,14 +229,15 @@ public class Server {
     private void loadPlayerNpcMapStepFromDb() {
         List<PlayernpcsFieldDO> playernpcsFieldDOList = npcService.getPlayerNpcFields(new PlayernpcsFieldDO());
         playernpcsFieldDOList.forEach(playernpcsFieldDO -> {
-            World world = getWorld(playernpcsFieldDO.getWorld());
-            if (world != null) world.setPlayerNpcMapData(playernpcsFieldDO.getMap(), playernpcsFieldDO.getStep(), playernpcsFieldDO.getPodium());
+            World world = getWorld(playernpcsFieldDO.getWorld()); if (world != null) {
+                world.setPlayerNpcMapData(playernpcsFieldDO.getMap(), playernpcsFieldDO.getStep(),
+                        playernpcsFieldDO.getPodium());
+            }
         });
     }
 
     public World getWorld(int id) {
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             try {
                 return worlds.get(id);
             } catch (IndexOutOfBoundsException e) {
@@ -235,8 +249,7 @@ public class Server {
     }
 
     public List<World> getWorlds() {
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             return Collections.unmodifiableList(worlds);
         } finally {
             wldRLock.unlock();
@@ -244,8 +257,7 @@ public class Server {
     }
 
     public int getWorldsSize() {
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             return worlds.size();
         } finally {
             wldRLock.unlock();
@@ -270,19 +282,16 @@ public class Server {
 
     public List<Channel> getAllChannels() {
         try {
-            List<Channel> channelz = new ArrayList<>();
-            for (World world : this.getWorlds()) {
+            List<Channel> channelz = new ArrayList<>(); for (World world : this.getWorlds()) {
                 channelz.addAll(world.getChannels());
-            }
-            return channelz;
+            } return channelz;
         } catch (NullPointerException npe) {
             return new ArrayList<>(0);
         }
     }
 
     public Set<Integer> getOpenChannels(int world) {
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             return new HashSet<>(channels.get(world).keySet());
         } finally {
             wldRLock.unlock();
@@ -290,8 +299,7 @@ public class Server {
     }
 
     private String getIP(int world, int channel) {
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             return channels.get(world).get(channel);
         } finally {
             wldRLock.unlock();
@@ -301,8 +309,7 @@ public class Server {
     public String[] getInetSocket(Client client, int world, int channel) {
         String remoteIp = client.getRemoteAddress();
 
-        String[] hostAddress = getIP(world, channel).split(":");
-        if (IpAddresses.isLocalAddress(remoteIp)) {
+        String[] hostAddress = getIP(world, channel).split(":"); if (IpAddresses.isLocalAddress(remoteIp)) {
             hostAddress[0] = serviceProperty.getLocalhost();
         } else if (IpAddresses.isLanAddress(remoteIp)) {
             hostAddress[0] = serviceProperty.getLanHost();
@@ -316,28 +323,22 @@ public class Server {
     }
 
     public int addChannel(int worldid) {
-        World world;
-        Map<Integer, String> channelInfo;
-        int channelid;
+        World world; Map<Integer, String> channelInfo; int channelid;
 
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             if (worldid >= worlds.size()) {
                 return -3;
             }
 
-            channelInfo = channels.get(worldid);
-            if (channelInfo == null) {
+            channelInfo = channels.get(worldid); if (channelInfo == null) {
                 return -3;
             }
 
-            channelid = channelInfo.size();
-            if (channelid >= GameConfig.getServerInt("max_channel_size")) {
+            channelid = channelInfo.size(); if (channelid >= GameConfig.getServerInt("max_channel_size")) {
                 return -2;
             }
 
-            channelid++;
-            world = this.getWorld(worldid);
+            channelid++; world = this.getWorld(worldid);
         } finally {
             wldRLock.unlock();
         }
@@ -346,8 +347,7 @@ public class Server {
         channel.setServerMessage(GameConfig.getWorldString(worldid, "recommend_message"));
 
         if (world.addChannel(channel)) {
-            wldWLock.lock();
-            try {
+            wldWLock.lock(); try {
                 channelInfo.put(channelid, channel.getIP());
             } finally {
                 wldWLock.unlock();
@@ -358,13 +358,10 @@ public class Server {
     }
 
     public int addWorld() {
-        int newWorld = initWorld();
-        if (newWorld > -1) {
+        int newWorld = initWorld(); if (newWorld > -1) {
             reloadWorldsPlayerRanking();
 
-            Set<Integer> accounts;
-            lgnRLock.lock();
-            try {
+            Set<Integer> accounts; lgnRLock.lock(); try {
                 accounts = new HashSet<>(accountChars.keySet());
             } finally {
                 lgnRLock.unlock();
@@ -381,8 +378,7 @@ public class Server {
     private int initWorld() {
         int i;
 
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             i = worlds.size();
 
             if (i >= GameConfig.getServerInt("max_world_size")) {
@@ -406,26 +402,23 @@ public class Server {
         String event_message = GameConfig.getWorldString(i, "event_message");
         String recommend_message = GameConfig.getWorldString(i, "recommend_message");
 
-        World world = new World(i, flag, event_message, expRate, dropRate, bossDropRate, mesoRate, questRate,
-                travelRate, fishingRate);
+        World world =
+                new World(i, flag, event_message, expRate, dropRate, bossDropRate, mesoRate, questRate, travelRate,
+                        fishingRate);
 
-        Map<Integer, String> channelInfo = new HashMap<>();
-        long bootTime = getCurrentTime();
+        Map<Integer, String> channelInfo = new HashMap<>(); long bootTime = getCurrentTime();
         for (int j = 1; j <= GameConfig.getWorldInt(i, "channel_size"); j++) {
             Channel channel = new Channel(i, j, bootTime);
 
-            world.addChannel(channel);
-            channelInfo.put(j, channel.getIP());
+            world.addChannel(channel); channelInfo.put(j, channel.getIP());
         }
 
         boolean canDeploy;
 
         wldWLock.lock();    // thanks Ashen for noticing a deadlock issue when trying to deploy a channel
         try {
-            canDeploy = world.getId() == worlds.size();
-            if (canDeploy) {
-                worldRecommendedList.add(new Pair<>(i, recommend_message));
-                worlds.add(world);
+            canDeploy = world.getId() == worlds.size(); if (canDeploy) {
+                worldRecommendedList.add(new Pair<>(i, recommend_message)); worlds.add(world);
                 channels.add(i, channelInfo);
             }
         } finally {
@@ -435,34 +428,26 @@ public class Server {
         if (canDeploy) {
             world.setServerMessage(GameConfig.getWorldString(i, "server_message"));
 
-            log.info(I18nUtil.getLogMessage("Server.initWorld.info2"), i);
-            return i;
+            log.info(I18nUtil.getLogMessage("Server.initWorld.info2"), i); return i;
         } else {
-            log.error(I18nUtil.getLogMessage("Server.initWorld.error1"), i);
-            world.shutdown();
-            return -2;
+            log.error(I18nUtil.getLogMessage("Server.initWorld.error1"), i); world.shutdown(); return -2;
         }
     }
 
     public boolean removeChannel(int worldid) {   //lol don't!
         World world;
 
-        wldRLock.lock();
-        try {
+        wldRLock.lock(); try {
             if (worldid >= worlds.size()) {
                 return false;
-            }
-            world = worlds.get(worldid);
+            } world = worlds.get(worldid);
         } finally {
             wldRLock.unlock();
         }
 
         if (world != null) {
-            int channel = world.removeChannel();
-            wldWLock.lock();
-            try {
-                Map<Integer, String> m = channels.get(worldid);
-                if (m != null) {
+            int channel = world.removeChannel(); wldWLock.lock(); try {
+                Map<Integer, String> m = channels.get(worldid); if (m != null) {
                     m.remove(channel);
                 }
             } finally {
@@ -476,13 +461,10 @@ public class Server {
     }
 
     public boolean removeWorld() {   //lol don't!
-        World w;
-        int worldid;
+        World w; int worldid;
 
-        wldRLock.lock();
-        try {
-            worldid = worlds.size() - 1;
-            if (worldid < 0) {
+        wldRLock.lock(); try {
+            worldid = worlds.size() - 1; if (worldid < 0) {
                 return false;
             }
 
@@ -497,14 +479,10 @@ public class Server {
 
         w.shutdown();
 
-        wldWLock.lock();
-        try {
+        wldWLock.lock(); try {
             if (worldid == worlds.size() - 1) {
-                worlds.remove(worldid);
-                channels.remove(worldid);
-                worldRecommendedList.remove(worldid);
-            }
-            reloadWorldsPlayerRanking();
+                worlds.remove(worldid); channels.remove(worldid); worldRecommendedList.remove(worldid);
+            } reloadWorldsPlayerRanking();
         } finally {
             wldWLock.unlock();
         }
@@ -513,31 +491,23 @@ public class Server {
     }
 
     private void resetServerWorlds() {  // thanks maple006 for noticing proprietary lists assigned to null
-        wldWLock.lock();
-        try {
-            worlds.clear();
-            channels.clear();
-            worldRecommendedList.clear();
+        wldWLock.lock(); try {
+            worlds.clear(); channels.clear(); worldRecommendedList.clear();
         } finally {
             wldWLock.unlock();
         }
     }
 
     private static long getTimeLeftForNextHour() {
-        Calendar nextHour = Calendar.getInstance();
-        nextHour.add(Calendar.HOUR, 1);
-        nextHour.set(Calendar.MINUTE, 0);
+        Calendar nextHour = Calendar.getInstance(); nextHour.add(Calendar.HOUR, 1); nextHour.set(Calendar.MINUTE, 0);
         nextHour.set(Calendar.SECOND, 0);
 
         return Math.max(0, nextHour.getTimeInMillis() - System.currentTimeMillis());
     }
 
     public static long getTimeLeftForNextDay() {
-        Calendar nextDay = Calendar.getInstance();
-        nextDay.add(Calendar.DAY_OF_MONTH, 1);
-        nextDay.set(Calendar.HOUR_OF_DAY, 0);
-        nextDay.set(Calendar.MINUTE, 0);
-        nextDay.set(Calendar.SECOND, 0);
+        Calendar nextDay = Calendar.getInstance(); nextDay.add(Calendar.DAY_OF_MONTH, 1);
+        nextDay.set(Calendar.HOUR_OF_DAY, 0); nextDay.set(Calendar.MINUTE, 0); nextDay.set(Calendar.SECOND, 0);
 
         return Math.max(0, nextDay.getTimeInMillis() - System.currentTimeMillis());
     }
@@ -580,19 +550,14 @@ public class Server {
 
     public void updateActiveCoupons() {
         synchronized (activeCoupons) {
-            activeCoupons.clear();
-            Calendar c = Calendar.getInstance();
-            int weekDay = c.get(Calendar.DAY_OF_WEEK);
-            int hourDay = c.get(Calendar.HOUR_OF_DAY);
-            int weekdayMask = (1 << weekDay);
+            activeCoupons.clear(); Calendar c = Calendar.getInstance(); int weekDay = c.get(Calendar.DAY_OF_WEEK);
+            int hourDay = c.get(Calendar.HOUR_OF_DAY); int weekdayMask = (1 << weekDay);
             activeCoupons.addAll(nxCouponService.selectActiveCouponIds(weekdayMask, hourDay));
         }
     }
 
     public void runAnnouncePlayerDiseasesSchedule() {
-        List<Client> processDiseaseAnnounceClients;
-        disLock.lock();
-        try {
+        List<Client> processDiseaseAnnounceClients; disLock.lock(); try {
             processDiseaseAnnounceClients = new LinkedList<>(processDiseaseAnnouncePlayers);
             processDiseaseAnnouncePlayers.clear();
         } finally {
@@ -600,20 +565,16 @@ public class Server {
         }
 
         while (!processDiseaseAnnounceClients.isEmpty()) {
-            Client c = processDiseaseAnnounceClients.remove(0);
-            Character player = c.getPlayer();
+            Client c = processDiseaseAnnounceClients.remove(0); Character player = c.getPlayer();
             if (player != null && player.isLoggedInWorld()) {
-                player.announceDiseases();
-                player.collectDiseases();
+                player.announceDiseases(); player.collectDiseases();
             }
         }
 
-        disLock.lock();
-        try {
+        disLock.lock(); try {
             // this is to force the system to wait for at least one complete tick before releasing disease info for the registered clients
             while (!registeredDiseaseAnnouncePlayers.isEmpty()) {
-                Client c = registeredDiseaseAnnouncePlayers.remove(0);
-                processDiseaseAnnouncePlayers.add(c);
+                Client c = registeredDiseaseAnnouncePlayers.remove(0); processDiseaseAnnouncePlayers.add(c);
             }
         } finally {
             disLock.unlock();
@@ -621,8 +582,7 @@ public class Server {
     }
 
     public void registerAnnouncePlayerDiseases(Client c) {
-        disLock.lock();
-        try {
+        disLock.lock(); try {
             registeredDiseaseAnnouncePlayers.add(c);
         } finally {
             disLock.unlock();
@@ -630,9 +590,9 @@ public class Server {
     }
 
     public List<Pair<String, Integer>> getWorldPlayerRanking(int worldid) {
-        wldRLock.lock();
-        try {
-            return new ArrayList<>(playerRanking.get(!GameConfig.getServerBoolean("use_whole_server_ranking") ? worldid : 0));
+        wldRLock.lock(); try {
+            return new ArrayList<>(
+                    playerRanking.get(!GameConfig.getServerBoolean("use_whole_server_ranking") ? worldid : 0));
         } finally {
             wldRLock.unlock();
         }
@@ -642,11 +602,9 @@ public class Server {
         List<List<CharactersDO>> rankPlayers = characterService.getWorldsRankPlayers(getWorldsSize());
         if (rankPlayers.isEmpty()) {
             return;
-        }
-        wldWLock.lock();
-        try {
-            playerRanking.clear();
-            rankPlayers.forEach(rankPlayer -> playerRanking.add(rankPlayer.stream().map(c -> new Pair<>(c.getName(), c.getLevel())).collect(Collectors.toList())));
+        } wldWLock.lock(); try {
+            playerRanking.clear(); rankPlayers.forEach(rankPlayer -> playerRanking.add(
+                    rankPlayer.stream().map(c -> new Pair<>(c.getName(), c.getLevel())).collect(Collectors.toList())));
         } finally {
             wldWLock.unlock();
         }
@@ -672,32 +630,26 @@ public class Server {
             // Wait on all async tasks to complete
             for (Future<?> future : futures) {
                 future.get();
-            }
-            initExecutor.shutdown();
+            } initExecutor.shutdown();
         } catch (Exception e) {
-            log.error(I18nUtil.getLogMessage("Server.init.error1"), e);
-            throw new IllegalStateException(e);
-        }
-        log.info(I18nUtil.getLogMessage("Server.init.info3"));
+            log.error(I18nUtil.getLogMessage("Server.init.error1"), e); throw new IllegalStateException(e);
+        } log.info(I18nUtil.getLogMessage("Server.init.info3"));
 
         TimeZone.setDefault(TimeZone.getTimeZone(GameConfig.getServerString("timezone")));
 
-        log.info(I18nUtil.getLogMessage("Server.init.info4"));
-        final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, GameConfig.getConfig().getJSONObject("world").size());
+        log.info(I18nUtil.getLogMessage("Server.init.info4")); final int worldCount =
+                Math.min(GameConstants.WORLD_NAMES.length, GameConfig.getConfig().getJSONObject("world").size());
 
         // 重置登录状态和雇佣商店状态
-        accountService.resetAllLoggedIn();
-        characterService.resetMerchant();
+        accountService.resetAllLoggedIn(); characterService.resetMerchant();
 
         // 清空失效的现金物品
         nxCodeService.clearExpirations();
 
         // 重载倍率卡
-        List<NxcouponsDO> nxcouponsDOList = nxCouponService.getNxCoupons(new NxcouponsDO());
-        couponRates.clear();
+        List<NxcouponsDO> nxcouponsDOList = nxCouponService.getNxCoupons(new NxcouponsDO()); couponRates.clear();
         nxcouponsDOList.forEach(nxcouponsDO -> couponRates.put(nxcouponsDO.getCouponid(), nxcouponsDO.getRate()));
-        updateActiveCoupons();
-        newYearCardService.startPendingNewYearCardRequests();
+        updateActiveCoupons(); newYearCardService.startPendingNewYearCardRequests();
         CashIdGenerator.loadExistentCashIdsFromDb();
 
         // 接受未完成的改名
@@ -710,9 +662,7 @@ public class Server {
         PlayerNPC.loadRunningRankData(worldCount);
 
         // 主动清理每日零点需要清理的数据
-        new BossLogTask().run();
-        new ExtendValueTask().run();
-        log.info(I18nUtil.getLogMessage("Server.init.info5"));
+        new BossLogTask().run(); new ExtendValueTask().run(); log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
@@ -722,8 +672,7 @@ public class Server {
                 initWorld();
             }
             // world初始化后需要加载的
-            reloadWorldsPlayerRanking();
-            loadPlayerNpcMapStepFromDb();
+            reloadWorldsPlayerRanking(); loadPlayerNpcMapStepFromDb();
             if (GameConfig.getServerBoolean("use_family_system")) {
                 familyService.loadAllFamilies();
             }
@@ -735,15 +684,11 @@ public class Server {
         loginServer = initLoginServer(serviceProperty.getLoginPort());
         log.info(I18nUtil.getLogMessage("Server.init.info6"), serviceProperty.getLoginPort());
 
-        OpcodeConstants.generateOpcodeNames();
-        CommandsExecutor.getInstance().loadCommandsExecutor();
+        OpcodeConstants.generateOpcodeNames(); CommandsExecutor.getInstance().loadCommandsExecutor();
 
-        log.info(I18nUtil.getLogMessage("Server.init.info7"));
-        for (Channel ch : this.getAllChannels()) {
+        log.info(I18nUtil.getLogMessage("Server.init.info7")); for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
-        }
-        log.info(I18nUtil.getLogMessage("Server.init.info8"));
-        online = true;
+        } log.info(I18nUtil.getLogMessage("Server.init.info8")); online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
         log.info(I18nUtil.getLogMessage("Server.init.info9"), initDuration.toMillis() / 1000.0);
     }
@@ -756,19 +701,17 @@ public class Server {
     }
 
     private LoginServer initLoginServer(int port) {
-        LoginServer loginServer = new LoginServer(port);
-        loginServer.start();
-        return loginServer;
+        LoginServer loginServer = new LoginServer(port); loginServer.start(); return loginServer;
     }
 
     private void initializeTimelyTasks() {
-        TimerManager tMan = TimerManager.getInstance();
-        tMan.start();
+        TimerManager tMan = TimerManager.getInstance(); tMan.start();
         tMan.register(tMan.purge(), MINUTES.toMillis(5));//Purging ftw...
         disconnectIdlesOnLoginTask();
 
         long timeLeft = getTimeLeftForNextHour();
-        tMan.register(new CharacterDiseaseTask(), GameConfig.getServerLong("update_interval"), GameConfig.getServerLong("update_interval"));
+        tMan.register(new CharacterDiseaseTask(), GameConfig.getServerLong("update_interval"),
+                GameConfig.getServerLong("update_interval"));
         tMan.register(new CouponTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), HOURS.toMillis(1), timeLeft);
@@ -777,11 +720,10 @@ public class Server {
         tMan.register(new LoginStorageTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
         tMan.register(new DueyFredrickTask(channelDependencies.fredrickProcessor()), HOURS.toMillis(1), timeLeft);
         tMan.register(new InvitationTask(), SECONDS.toMillis(30), SECONDS.toMillis(30));
-        tMan.register(new RespawnTask(), GameConfig.getServerLong("respawn_interval"), GameConfig.getServerLong("respawn_interval"));
-        tMan.register(new OnlineTimeTask(), 5000, 5000);
+        tMan.register(new RespawnTask(), GameConfig.getServerLong("respawn_interval"),
+                GameConfig.getServerLong("respawn_interval")); tMan.register(new OnlineTimeTask(), 5000, 5000);
 
-        timeLeft = getTimeLeftForNextDay();
-        ExpeditionBossLog.resetBossLogTable();
+        timeLeft = getTimeLeftForNextDay(); ExpeditionBossLog.resetBossLogTable();
         tMan.register(new BossLogTask(), DAYS.toMillis(1), timeLeft);
         tMan.register(new ExtendValueTask(), DAYS.toMillis(1), timeLeft);
     }
@@ -790,8 +732,7 @@ public class Server {
         synchronized (alliances) {
             if (alliances.containsKey(id)) {
                 return alliances.get(id);
-            }
-            return null;
+            } return null;
         }
     }
 
@@ -805,25 +746,20 @@ public class Server {
 
     public void disbandAlliance(int id) {
         synchronized (alliances) {
-            Alliance alliance = alliances.get(id);
-            if (alliance != null) {
+            Alliance alliance = alliances.get(id); if (alliance != null) {
                 for (Integer gid : alliance.getGuilds()) {
                     guilds.get(gid).setAllianceId(0);
-                }
-                alliances.remove(id);
+                } alliances.remove(id);
             }
         }
     }
 
     public void allianceMessage(int id, Packet packet, int exception, int guildex) {
-        Alliance alliance = alliances.get(id);
-        if (alliance != null) {
+        Alliance alliance = alliances.get(id); if (alliance != null) {
             for (Integer gid : alliance.getGuilds()) {
                 if (guildex == gid) {
                     continue;
-                }
-                Guild guild = guilds.get(gid);
-                if (guild != null) {
+                } Guild guild = guilds.get(gid); if (guild != null) {
                     guild.broadcast(packet, exception);
                 }
             }
@@ -831,50 +767,33 @@ public class Server {
     }
 
     public boolean addGuildtoAlliance(int aId, int guildId) {
-        Alliance alliance = alliances.get(aId);
-        if (alliance != null) {
-            alliance.addGuild(guildId);
-            guilds.get(guildId).setAllianceId(aId);
-            return true;
-        }
-        return false;
+        Alliance alliance = alliances.get(aId); if (alliance != null) {
+            alliance.addGuild(guildId); guilds.get(guildId).setAllianceId(aId); return true;
+        } return false;
     }
 
     public boolean removeGuildFromAlliance(int aId, int guildId) {
-        Alliance alliance = alliances.get(aId);
-        if (alliance != null) {
-            alliance.removeGuild(guildId);
-            guilds.get(guildId).setAllianceId(0);
-            return true;
-        }
-        return false;
+        Alliance alliance = alliances.get(aId); if (alliance != null) {
+            alliance.removeGuild(guildId); guilds.get(guildId).setAllianceId(0); return true;
+        } return false;
     }
 
     public boolean setAllianceRanks(int aId, String[] ranks) {
-        Alliance alliance = alliances.get(aId);
-        if (alliance != null) {
-            alliance.setRankTitle(ranks);
-            return true;
-        }
-        return false;
+        Alliance alliance = alliances.get(aId); if (alliance != null) {
+            alliance.setRankTitle(ranks); return true;
+        } return false;
     }
 
     public boolean setAllianceNotice(int aId, String notice) {
-        Alliance alliance = alliances.get(aId);
-        if (alliance != null) {
-            alliance.setNotice(notice);
-            return true;
-        }
-        return false;
+        Alliance alliance = alliances.get(aId); if (alliance != null) {
+            alliance.setNotice(notice); return true;
+        } return false;
     }
 
     public boolean increaseAllianceCapacity(int aId, int inc) {
-        Alliance alliance = alliances.get(aId);
-        if (alliance != null) {
-            alliance.increaseCapacity(inc);
-            return true;
-        }
-        return false;
+        Alliance alliance = alliances.get(aId); if (alliance != null) {
+            alliance.increaseCapacity(inc); return true;
+        } return false;
     }
 
     public int createGuild(int leaderId, String name) {
@@ -909,21 +828,17 @@ public class Server {
 
     public Guild getGuild(int id, int world, Character mc) {
         synchronized (guilds) {
-            Guild g = guilds.get(id);
-            if (g != null) {
+            Guild g = guilds.get(id); if (g != null) {
                 return g;
             }
 
-            g = new Guild(id, world);
-            if (g.getId() == -1) {
+            g = new Guild(id, world); if (g.getId() == -1) {
                 return null;
             }
 
             if (mc != null) {
-                GuildCharacter mgc = g.getMGC(mc.getId());
-                if (mgc != null) {
-                    mc.setMGC(mgc);
-                    mgc.setCharacter(mc);
+                GuildCharacter mgc = g.getMGC(mc.getId()); if (mgc != null) {
+                    mc.setMGC(mgc); mgc.setCharacter(mc);
                 } else {
                     log.error("Could not find chr {} when loading guild {}", mc.getName(), id);
                 }
@@ -931,31 +846,24 @@ public class Server {
                 g.setOnline(mc.getId(), true, mc.getClient().getChannel());
             }
 
-            guilds.put(id, g);
-            return g;
+            guilds.put(id, g); return g;
         }
     }
 
     public void setGuildMemberOnline(Character mc, boolean bOnline, int channel) {
-        Guild g = getGuild(mc.getGuildId(), mc.getWorld(), mc);
-        g.setOnline(mc.getId(), bOnline, channel);
+        Guild g = getGuild(mc.getGuildId(), mc.getWorld(), mc); g.setOnline(mc.getId(), bOnline, channel);
     }
 
     public int addGuildMember(GuildCharacter mgc, Character chr) {
-        Guild g = guilds.get(mgc.getGuildId());
-        if (g != null) {
+        Guild g = guilds.get(mgc.getGuildId()); if (g != null) {
             return g.addGuildMember(mgc, chr);
-        }
-        return 0;
+        } return 0;
     }
 
     public boolean setGuildAllianceId(int gId, int aId) {
-        Guild guild = guilds.get(gId);
-        if (guild != null) {
-            guild.setAllianceId(aId);
-            return true;
-        }
-        return false;
+        Guild guild = guilds.get(gId); if (guild != null) {
+            guild.setAllianceId(aId); return true;
+        } return false;
     }
 
     public void resetAllianceGuildPlayersRank(int gId) {
@@ -963,80 +871,67 @@ public class Server {
     }
 
     public void leaveGuild(GuildCharacter mgc) {
-        Guild g = guilds.get(mgc.getGuildId());
-        if (g != null) {
+        Guild g = guilds.get(mgc.getGuildId()); if (g != null) {
             g.leaveGuild(mgc);
         }
     }
 
     public void guildChat(int gid, String name, int cid, String msg) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.guildChat(name, cid, msg);
         }
     }
 
     public void changeRank(int gid, int cid, int newRank) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.changeRank(cid, newRank);
         }
     }
 
     public void expelMember(GuildCharacter initiator, String name, int cid) {
-        Guild g = guilds.get(initiator.getGuildId());
-        if (g != null) {
+        Guild g = guilds.get(initiator.getGuildId()); if (g != null) {
             g.expelMember(initiator, name, cid, channelDependencies.noteService());
         }
     }
 
     public void setGuildNotice(int gid, String notice) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.setGuildNotice(notice);
         }
     }
 
     public void memberLevelJobUpdate(GuildCharacter mgc) {
-        Guild g = guilds.get(mgc.getGuildId());
-        if (g != null) {
+        Guild g = guilds.get(mgc.getGuildId()); if (g != null) {
             g.memberLevelJobUpdate(mgc);
         }
     }
 
     public void changeRankTitle(int gid, String[] ranks) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.changeRankTitle(ranks);
         }
     }
 
     public void setGuildEmblem(int gid, short bg, byte bgcolor, short logo, byte logocolor) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.setGuildEmblem(bg, bgcolor, logo, logocolor);
         }
     }
 
     public void disbandGuild(int gid) {
         synchronized (guilds) {
-            Guild g = guilds.get(gid);
-            g.disbandGuild();
-            guilds.remove(gid);
+            Guild g = guilds.get(gid); g.disbandGuild(); guilds.remove(gid);
         }
     }
 
     public boolean increaseGuildCapacity(int gid) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             return g.increaseCapacity();
-        }
-        return false;
+        } return false;
     }
 
     public void gainGP(int gid, int amount) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.gainGP(amount);
         }
     }
@@ -1046,8 +941,7 @@ public class Server {
     }
 
     public void guildMessage(int gid, Packet packet, int exception) {
-        Guild g = guilds.get(gid);
-        if (g != null) {
+        Guild g = guilds.get(gid); if (g != null) {
             g.broadcast(packet, exception);
         }
     }
@@ -1057,8 +951,7 @@ public class Server {
     }
 
     public void deleteGuildCharacter(Character mc) {
-        setGuildMemberOnline(mc, false, (byte) -1);
-        if (mc.getMGC().getGuildRank() > 1) {
+        setGuildMemberOnline(mc, false, (byte) -1); if (mc.getMGC().getGuildRank() > 1) {
             leaveGuild(mc.getMGC());
         } else {
             disbandGuild(mc.getMGC().getGuildId());
@@ -1068,8 +961,7 @@ public class Server {
     public void deleteGuildCharacter(GuildCharacter mgc) {
         if (mgc.getCharacter() != null) {
             setGuildMemberOnline(mgc.getCharacter(), false, (byte) -1);
-        }
-        if (mgc.getGuildRank() > 1) {
+        } if (mgc.getGuildRank() > 1) {
             leaveGuild(mgc);
         } else {
             disbandGuild(mgc.getGuildId());
@@ -1077,14 +969,11 @@ public class Server {
     }
 
     public void reloadGuildCharacters(int world) {
-        World worlda = getWorld(world);
-        for (Character mc : worlda.getPlayerStorage().getAllCharacters()) {
+        World worlda = getWorld(world); for (Character mc : worlda.getPlayerStorage().getAllCharacters()) {
             if (mc.getGuildId() > 0) {
-                setGuildMemberOnline(mc, true, worlda.getId());
-                memberLevelJobUpdate(mc.getMGC());
+                setGuildMemberOnline(mc, true, worlda.getId()); memberLevelJobUpdate(mc.getMGC());
             }
-        }
-        worlda.reloadGuildSummary();
+        } worlda.reloadGuildSummary();
     }
 
     public void broadcastMessage(int world, Packet packet) {
@@ -1106,8 +995,7 @@ public class Server {
                     return true;
                 }
             }
-        }
-        return false;
+        } return false;
     }
 
     public void changeFly(Integer accountid, boolean canFly) {
@@ -1123,28 +1011,23 @@ public class Server {
     }
 
     public int getCharacterWorld(Integer chrid) {
-        lgnRLock.lock();
-        try {
-            Integer worldid = worldChars.get(chrid);
-            return worldid != null ? worldid : -1;
+        lgnRLock.lock(); try {
+            Integer worldid = worldChars.get(chrid); return worldid != null ? worldid : -1;
         } finally {
             lgnRLock.unlock();
         }
     }
 
     public boolean haveCharacterEntry(Integer accountid, Integer chrid) {
-        lgnRLock.lock();
-        try {
-            Set<Integer> accChars = accountChars.get(accountid);
-            return accChars.contains(chrid);
+        lgnRLock.lock(); try {
+            Set<Integer> accChars = accountChars.get(accountid); return accChars.contains(chrid);
         } finally {
             lgnRLock.unlock();
         }
     }
 
     public short getAccountCharacterCount(Integer accountid) {
-        lgnRLock.lock();
-        try {
+        lgnRLock.lock(); try {
             return accountCharacterCount.get(accountid);
         } finally {
             lgnRLock.unlock();
@@ -1152,8 +1035,7 @@ public class Server {
     }
 
     public short getAccountWorldCharacterCount(Integer accountid, Integer worldid) {
-        lgnRLock.lock();
-        try {
+        lgnRLock.lock(); try {
             short count = 0;
 
             for (Integer chr : accountChars.get(accountid)) {
@@ -1169,8 +1051,7 @@ public class Server {
     }
 
     private Set<Integer> getAccountCharacterEntries(Integer accountid) {
-        lgnRLock.lock();
-        try {
+        lgnRLock.lock(); try {
             return new HashSet<>(accountChars.get(accountid));
         } finally {
             lgnRLock.unlock();
@@ -1180,10 +1061,8 @@ public class Server {
     public void updateCharacterEntry(Character chr) {
         Character chrView = chr.generateCharacterEntry();
 
-        lgnWLock.lock();
-        try {
-            World wserv = this.getWorld(chrView.getWorld());
-            if (wserv != null) {
+        lgnWLock.lock(); try {
+            World wserv = this.getWorld(chrView.getWorld()); if (wserv != null) {
                 wserv.registerAccountCharacterView(chrView.getAccountId(), chrView);
             }
         } finally {
@@ -1194,19 +1073,16 @@ public class Server {
     public void createCharacterEntry(Character chr) {
         Integer accountid = chr.getAccountId(), chrid = chr.getId(), world = chr.getWorld();
 
-        lgnWLock.lock();
-        try {
+        lgnWLock.lock(); try {
             accountCharacterCount.put(accountid, (short) (accountCharacterCount.get(accountid) + 1));
 
-            Set<Integer> accChars = accountChars.get(accountid);
-            accChars.add(chrid);
+            Set<Integer> accChars = accountChars.get(accountid); accChars.add(chrid);
 
             worldChars.put(chrid, world);
 
             Character chrView = chr.generateCharacterEntry();
 
-            World wserv = this.getWorld(chrView.getWorld());
-            if (wserv != null) {
+            World wserv = this.getWorld(chrView.getWorld()); if (wserv != null) {
                 wserv.registerAccountCharacterView(chrView.getAccountId(), chrView);
             }
         } finally {
@@ -1215,17 +1091,13 @@ public class Server {
     }
 
     public void deleteCharacterEntry(Integer accountid, Integer chrid) {
-        lgnWLock.lock();
-        try {
+        lgnWLock.lock(); try {
             accountCharacterCount.put(accountid, (short) (accountCharacterCount.get(accountid) - 1));
 
-            Set<Integer> accChars = accountChars.get(accountid);
-            accChars.remove(chrid);
+            Set<Integer> accChars = accountChars.get(accountid); accChars.remove(chrid);
 
-            Integer world = worldChars.remove(chrid);
-            if (world != null) {
-                World wserv = this.getWorld(world);
-                if (wserv != null) {
+            Integer world = worldChars.remove(chrid); if (world != null) {
+                World wserv = this.getWorld(world); if (wserv != null) {
                     wserv.unregisterAccountCharacterView(accountid, chrid);
                 }
             }
@@ -1234,13 +1106,12 @@ public class Server {
         }
     }
 
-    public void transferWorldCharacterEntry(Character chr, Integer toWorld) { // used before setting the new worldid on the character object
-        lgnWLock.lock();
-        try {
+    public void transferWorldCharacterEntry(Character chr,
+                                            Integer toWorld) { // used before setting the new worldid on the character object
+        lgnWLock.lock(); try {
             Integer chrid = chr.getId(), accountid = chr.getAccountId(), world = worldChars.get(chr.getId());
             if (world != null) {
-                World wserv = this.getWorld(world);
-                if (wserv != null) {
+                World wserv = this.getWorld(world); if (wserv != null) {
                     wserv.unregisterAccountCharacterView(accountid, chrid);
                 }
             }
@@ -1249,8 +1120,7 @@ public class Server {
 
             Character chrView = chr.generateCharacterEntry();
 
-            World wserv = this.getWorld(toWorld);
-            if (wserv != null) {
+            World wserv = this.getWorld(toWorld); if (wserv != null) {
                 wserv.registerAccountCharacterView(chrView.getAccountId(), chrView);
             }
         } finally {
@@ -1276,22 +1146,18 @@ public class Server {
     */
 
     public SortedMap<Integer, List<Character>> loadAccountCharlist(int accountId, int visibleWorlds) {
-        List<World> worlds = this.getWorlds();
-        if (worlds.size() > visibleWorlds) {
+        List<World> worlds = this.getWorlds(); if (worlds.size() > visibleWorlds) {
             worlds = worlds.subList(0, visibleWorlds);
         }
 
-        SortedMap<Integer, List<Character>> worldChrs = new TreeMap<>();
-        int chrTotal = 0;
+        SortedMap<Integer, List<Character>> worldChrs = new TreeMap<>(); int chrTotal = 0;
 
-        lgnRLock.lock();
-        try {
+        lgnRLock.lock(); try {
             for (World world : worlds) {
-                List<Character> chrs = world.getAccountCharactersView(accountId);
-                if (chrs == null) {
+                List<Character> chrs = world.getAccountCharactersView(accountId); if (chrs == null) {
                     if (!accountChars.containsKey(accountId)) {
-                        accountCharacterCount.put(accountId, (short) 0);
-                        accountChars.put(accountId, new HashSet<>());    // not advisable at all to write on the map on a read-protected environment
+                        accountCharacterCount.put(accountId, (short) 0); accountChars.put(accountId,
+                                new HashSet<>());    // not advisable at all to write on the map on a read-protected environment
                     }                                                           // yet it's known there's no problem since no other point in the source does
                 } else if (!chrs.isEmpty()) {                                  // this action.
                     worldChrs.put(world.getId(), chrs);
@@ -1305,46 +1171,36 @@ public class Server {
     }
 
     private static Pair<Short, List<List<Character>>> loadAccountCharactersViewFromDb(int accId, int wlen) {
-        short characterCount = 0;
-        List<List<Character>> wchars = new ArrayList<>(wlen);
-        for (int i = 0; i < wlen; i++) {
+        short characterCount = 0; List<List<Character>> wchars = new ArrayList<>(wlen); for (int i = 0; i < wlen; i++) {
             wchars.add(i, new LinkedList<>());
         }
 
-        List<Character> chars = new LinkedList<>();
-        int curWorld = 0;
-        try {
+        List<Character> chars = new LinkedList<>(); int curWorld = 0; try {
             List<Pair<Item, Integer>> accEquips = ItemFactory.loadEquippedItems(accId, true, true);
             Map<Integer, List<Item>> accPlayerEquips = new HashMap<>();
 
             for (Pair<Item, Integer> ae : accEquips) {
-                List<Item> playerEquips = accPlayerEquips.get(ae.getRight());
-                if (playerEquips == null) {
-                    playerEquips = new LinkedList<>();
-                    accPlayerEquips.put(ae.getRight(), playerEquips);
+                List<Item> playerEquips = accPlayerEquips.get(ae.getRight()); if (playerEquips == null) {
+                    playerEquips = new LinkedList<>(); accPlayerEquips.put(ae.getRight(), playerEquips);
                 }
 
                 playerEquips.add(ae.getLeft());
             }
 
-
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("SELECT * FROM characters WHERE accountid = ? ORDER BY world, id")) {
-                ps.setInt(1, accId);
-                try (ResultSet rs = ps.executeQuery()) {
+            try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(
+                    "SELECT * FROM characters WHERE accountid = ? ORDER BY world, id")) {
+                ps.setInt(1, accId); try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         characterCount++;
 
-                        int cworld = rs.getByte("world");
-                        if (cworld >= wlen) {
+                        int cworld = rs.getByte("world"); if (cworld >= wlen) {
                             continue;
                         }
 
                         if (cworld > curWorld) {
                             wchars.add(curWorld, chars);
 
-                            curWorld = cworld;
-                            chars = new LinkedList<>();
+                            curWorld = cworld; chars = new LinkedList<>();
                         }
 
                         Integer cid = rs.getInt("id");
@@ -1363,12 +1219,10 @@ public class Server {
 
     public void loadAllAccountsCharactersView() {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT id FROM accounts");
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = con.prepareStatement("SELECT id FROM accounts"); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                int accountId = rs.getInt("id");
-                if (isFirstAccountLogin(accountId)) {
+                int accountId = rs.getInt("id"); if (isFirstAccountLogin(accountId)) {
                     loadAccountCharactersView(accountId, 0, 0);
                 }
             }
@@ -1378,8 +1232,7 @@ public class Server {
     }
 
     private boolean isFirstAccountLogin(Integer accId) {
-        lgnRLock.lock();
-        try {
+        lgnRLock.lock(); try {
             return !accountChars.containsKey(accId);
         } finally {
             lgnRLock.unlock();
@@ -1387,12 +1240,10 @@ public class Server {
     }
 
     public void loadAccountCharacters(Client c) {
-        Integer accId = c.getAccID();
-        if (!isFirstAccountLogin(accId)) {
+        Integer accId = c.getAccID(); if (!isFirstAccountLogin(accId)) {
             Set<Integer> accWorlds = new HashSet<>();
 
-            lgnRLock.lock();
-            try {
+            lgnRLock.lock(); try {
                 for (Integer chrid : getAccountCharacterEntries(accId)) {
                     accWorlds.add(worldChars.get(chrid));
                 }
@@ -1400,8 +1251,7 @@ public class Server {
                 lgnRLock.unlock();
             }
 
-            int gmLevel = 0;
-            for (Integer aw : accWorlds) {
+            int gmLevel = 0; for (Integer aw : accWorlds) {
                 World wserv = this.getWorld(aw);
 
                 if (wserv != null) {
@@ -1413,41 +1263,35 @@ public class Server {
                 }
             }
 
-            c.setGMLevel(gmLevel);
-            return;
+            c.setGMLevel(gmLevel); return;
         }
 
-        int gmLevel = loadAccountCharactersView(c.getAccID(), 0, 0);
-        c.setGMLevel(gmLevel);
+        int gmLevel = loadAccountCharactersView(c.getAccID(), 0, 0); c.setGMLevel(gmLevel);
     }
 
-    private int loadAccountCharactersView(Integer accId, int gmLevel, int fromWorldid) {    // returns the maximum gmLevel found
+    private int loadAccountCharactersView(Integer accId, int gmLevel,
+                                          int fromWorldid) {    // returns the maximum gmLevel found
         List<World> wlist = this.getWorlds();
         Pair<Short, List<List<Character>>> accCharacters = loadAccountCharactersViewFromDb(accId, wlist.size());
 
-        lgnWLock.lock();
-        try {
+        lgnWLock.lock(); try {
             List<List<Character>> accChars = accCharacters.getRight();
             accountCharacterCount.put(accId, accCharacters.getLeft());
 
-            Set<Integer> chars = accountChars.get(accId);
-            if (chars == null) {
+            Set<Integer> chars = accountChars.get(accId); if (chars == null) {
                 chars = new HashSet<>(5);
             }
 
             for (int wid = fromWorldid; wid < wlist.size(); wid++) {
-                World w = wlist.get(wid);
-                List<Character> wchars = accChars.get(wid);
+                World w = wlist.get(wid); List<Character> wchars = accChars.get(wid);
                 w.loadAccountCharactersView(accId, wchars);
 
                 for (Character chr : wchars) {
-                    int cid = chr.getId();
-                    if (gmLevel < chr.gmLevel()) {
+                    int cid = chr.getId(); if (gmLevel < chr.gmLevel()) {
                         gmLevel = chr.gmLevel();
                     }
 
-                    chars.add(cid);
-                    worldChars.put(cid, wid);
+                    chars.add(cid); worldChars.put(cid, wid);
                 }
             }
 
@@ -1460,15 +1304,11 @@ public class Server {
     }
 
     public void loadAccountStorages(Client c) {
-        int accountId = c.getAccID();
-        Set<Integer> accWorlds = new HashSet<>();
-        lgnWLock.lock();
-        try {
+        int accountId = c.getAccID(); Set<Integer> accWorlds = new HashSet<>(); lgnWLock.lock(); try {
             Set<Integer> chars = accountChars.get(accountId);
 
             for (Integer cid : chars) {
-                Integer worldid = worldChars.get(cid);
-                if (worldid != null) {
+                Integer worldid = worldChars.get(cid); if (worldid != null) {
                     accWorlds.add(worldid);
                 }
             }
@@ -1476,11 +1316,9 @@ public class Server {
             lgnWLock.unlock();
         }
 
-        List<World> worldList = this.getWorlds();
-        for (Integer worldid : accWorlds) {
+        List<World> worldList = this.getWorlds(); for (Integer worldid : accWorlds) {
             if (worldid < worldList.size()) {
-                World wserv = worldList.get(worldid);
-                wserv.loadAccountStorage(accountId);
+                World wserv = worldList.get(worldid); wserv.loadAccountStorage(accountId);
             }
         }
     }
@@ -1492,8 +1330,7 @@ public class Server {
     public void setCharacteridInTransition(Client client, int charId) {
         String remoteIp = getRemoteHost(client);
 
-        lgnWLock.lock();
-        try {
+        lgnWLock.lock(); try {
             transitioningChars.put(remoteIp, charId);
         } finally {
             lgnWLock.unlock();
@@ -1507,10 +1344,8 @@ public class Server {
 
         String remoteIp = getRemoteHost(client);
 
-        lgnWLock.lock();
-        try {
-            Integer cid = transitioningChars.remove(remoteIp);
-            return cid != null && cid.equals(charId);
+        lgnWLock.lock(); try {
+            Integer cid = transitioningChars.remove(remoteIp); return cid != null && cid.equals(charId);
         } finally {
             lgnWLock.unlock();
         }
@@ -1523,8 +1358,7 @@ public class Server {
 
         String remoteIp = getRemoteHost(client);
 
-        lgnWLock.lock();
-        try {
+        lgnWLock.lock(); try {
             return transitioningChars.remove(remoteIp);
         } finally {
             lgnWLock.unlock();
@@ -1538,8 +1372,7 @@ public class Server {
 
         String remoteIp = getRemoteHost(client);
 
-        lgnRLock.lock();
-        try {
+        lgnRLock.lock(); try {
             return transitioningChars.containsKey(remoteIp);
         } finally {
             lgnRLock.unlock();
@@ -1547,8 +1380,7 @@ public class Server {
     }
 
     public void registerLoginState(Client c) {
-        srvLock.lock();
-        try {
+        srvLock.lock(); try {
             inLoginState.put(c, System.currentTimeMillis() + 600000);
         } finally {
             srvLock.unlock();
@@ -1556,8 +1388,7 @@ public class Server {
     }
 
     public void unregisterLoginState(Client c) {
-        srvLock.lock();
-        try {
+        srvLock.lock(); try {
             inLoginState.remove(c);
         } finally {
             srvLock.unlock();
@@ -1567,8 +1398,7 @@ public class Server {
     private void disconnectIdlesOnLoginState() {
         List<Client> toDisconnect = new LinkedList<>();
 
-        srvLock.lock();
-        try {
+        srvLock.lock(); try {
             long timeNow = System.currentTimeMillis();
 
             for (Entry<Client, Long> mc : inLoginState.entrySet()) {
@@ -1602,17 +1432,15 @@ public class Server {
     }
 
     public synchronized void shutdownInternal(boolean restart) {
-        log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info1"), restart ?
-                I18nUtil.getLogMessage("Server.shutdownInternal.info2") : I18nUtil.getLogMessage("Server.shutdownInternal.info3"));
-        if (getWorlds() == null) {
+        log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info1"),
+                restart ? I18nUtil.getLogMessage("Server.shutdownInternal.info2") :
+                        I18nUtil.getLogMessage("Server.shutdownInternal.info3")); if (getWorlds() == null) {
             return;//already shutdown
-        }
-        for (World w : getWorlds()) {
+        } for (World w : getWorlds()) {
             w.shutdown();
         }
 
-        hpMpAlertService.saveAll();
-        hpMpAlertService.clear();
+        hpMpAlertService.saveAll(); hpMpAlertService.clear();
 
         for (Channel ch : getAllChannels()) {
             while (!ch.finishedShutdown()) {
@@ -1626,35 +1454,21 @@ public class Server {
 
         resetServerWorlds();
 
-        ThreadManager.getInstance().stop();
-        TimerManager.getInstance().purge();
-        TimerManager.getInstance().stop();
-        loginServer.stop();
-        online = false;
-        log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info4"));
+        ThreadManager.getInstance().stop(); TimerManager.getInstance().purge(); TimerManager.getInstance().stop();
+        loginServer.stop(); online = false; log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info4"));
         if (restart) {
-            log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info5"));
-            instance = null;
-            getInstance().init();
+            log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info5")); instance = null; getInstance().init();
         }
     }
 
     public boolean isNextTime() {
         if (nextTime == 0) {
-            Random random = new Random();
-            int base = 1;
-            int ran = random.nextInt(4);
-            nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
+            Random random = new Random(); int base = 1; int ran = random.nextInt(4);
+            nextTime = System.currentTimeMillis() + 86400000 * (base + ran); return false;
+        } if (nextTime > System.currentTimeMillis()) {
             return false;
-        }
-        if (nextTime > System.currentTimeMillis()) {
-            return false;
-        }
-        Random random = new Random();
-        int base = 1;
-        int ran = random.nextInt(4);
-        nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
-        return true;
+        } Random random = new Random(); int base = 1; int ran = random.nextInt(4);
+        nextTime = System.currentTimeMillis() + 86400000 * (base + ran); return true;
     }
 
     public synchronized void shutdownWithMsgAndInternal(ServerShutdownDTO serverShutdownDTO) {
@@ -1667,20 +1481,15 @@ public class Server {
 
         if (time > 1) {
             int seconds = (time / (int) SECONDS.toMillis(1)) % 60;
-            int minutes = (time / (int) MINUTES.toMillis(1)) % 60;
-            int hours = (time / (int) HOURS.toMillis(1)) % 24;
+            int minutes = (time / (int) MINUTES.toMillis(1)) % 60; int hours = (time / (int) HOURS.toMillis(1)) % 24;
             int days = (time / (int) DAYS.toMillis(1));
 
-            String strTime = "";
-            if (days > 0) {
+            String strTime = ""; if (days > 0) {
                 strTime += I18nUtil.getMessage("ShutdownCommand.message3", days);
-            }
-            if (hours > 0) {
+            } if (hours > 0) {
                 strTime += I18nUtil.getMessage("ShutdownCommand.message4", hours);
-            }
-            strTime += I18nUtil.getMessage("ShutdownCommand.message5", minutes);
+            } strTime += I18nUtil.getMessage("ShutdownCommand.message5", minutes);
             strTime += I18nUtil.getMessage("ShutdownCommand.message6", seconds);
-
 
             String shutDownMsg = I18nUtil.getMessage("ShutdownCommand.message7", strTime);
 
@@ -1694,20 +1503,16 @@ public class Server {
                         // 屏幕中央提示消息 (火红玫瑰)
                         chr.startMapEffect(shutDownMsg, 5121009);
                     }
-                }
-                if (serverShutdownDTO.getShowServerMsg()) {
+                } if (serverShutdownDTO.getShowServerMsg()) {
                     // 添加滚动消息到顶部，因为是固定时间停服，所以短暂的通知部分玩家可能看不到。
                     w.setServerMessage(shutDownMsg);
-                }
-                if (serverShutdownDTO.getShowChatMsg()) {
+                } if (serverShutdownDTO.getShowChatMsg()) {
                     // 玩家聊天框蓝色GM消息
                     w.broadcastPacket(PacketCreator.serverNotice(6, shutDownMsg));
                 }
 
             }
-        }
-        TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
+        } TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
     }
-
 
 }

@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.server;
 
 import org.gms.client.Character;
@@ -30,10 +31,10 @@ import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,6 +44,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+/**
+ * 商店 与 NPC 对应类 附带商品信息
+ * `shops` (`shopid`, `npcid`)
+ */
 
 /**
  * @author Matze
@@ -50,9 +55,17 @@ import java.util.Set;
 public class Shop {
     private static final Logger log = LoggerFactory.getLogger(Shop.class);
     private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
-
+    /**
+     * 商店id
+     */
     private final int id;
+    /**
+     * npcId
+     */
     private final int npcId;
+    /**
+     * 商品列表
+     */
     private final List<ShopItem> items;
     private final int tokenvalue = 1000000000;
     private final int token = ItemId.GOLDEN_MAPLE_LEAF;
@@ -62,14 +75,22 @@ public class Shop {
             rechargeableItems.add(throwingStarId);
         }
         rechargeableItems.add(ItemId.BLAZE_CAPSULE);
+
         rechargeableItems.add(ItemId.GLAZE_CAPSULE);
         rechargeableItems.add(ItemId.BALANCED_FURY);
-        rechargeableItems.remove(ItemId.DEVIL_RAIN_THROWING_STAR); // doesn't exist
+        // doesn't exist
+        rechargeableItems.remove(ItemId.DEVIL_RAIN_THROWING_STAR);
         for (int bulletId : ItemId.allBulletIds()) {
             rechargeableItems.add(bulletId);
         }
     }
 
+    /**
+     * 私有的构造函数，用于创建Shop对象。
+     *
+     * @param id Shop的唯一标识符
+     * @param npcId 与Shop关联的NPC的唯一标识符
+     */
     private Shop(int id, int npcId) {
         this.id = id;
         this.npcId = npcId;
@@ -80,6 +101,11 @@ public class Shop {
         items.add(item);
     }
 
+    /**
+     * 将商店发送给客户端
+     *
+     * @param c 客户端对象
+     */
     public void sendShop(Client c) {
         c.getPlayer().setShop(this);
         c.sendPacket(PacketCreator.getNPCShop(c, getNpcId(), items));
@@ -129,12 +155,14 @@ public class Shop {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                         if (!ItemConstants.isRechargeable(itemId)) {
                             InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                            InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
+                            InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false,
+                                    false);
                         } else {
                             short slotMax = ii.getSlotMax(c, item.getItemId());
                             quantity = slotMax;
                             InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                            InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
+                            InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false,
+                                    false);
                         }
                         c.sendPacket(PacketCreator.shopTransaction((byte) 0));
                     } else {
@@ -264,8 +292,16 @@ public class Shop {
         return items.get(slot);
     }
 
+    /**
+     * 从数据库中查询并 创建商店对象
+     *
+     * @param id 数据库中的ID;商店id或者npcid
+     * @param isShopId 是否为店铺ID
+     * @return 创建的Shop对象，如果找不到则返回null
+     */
     public static Shop createFromDB(int id, boolean isShopId) {
-        Shop ret = null;
+        // 商店对象
+        Shop shop = null;
         int shopId;
         try (Connection con = DatabaseConnection.getConnection()) {
             final String query;
@@ -281,38 +317,43 @@ public class Shop {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         shopId = rs.getInt("shopid");
-                        ret = new Shop(shopId, rs.getInt("npcid"));
+                        shop = new Shop(shopId, rs.getInt("npcid"));
                     } else {
+                        // 库中没有
                         return null;
                     }
                 }
             }
+            // 添加商店中的商品信息
 
-            try (PreparedStatement ps = con.prepareStatement("SELECT itemid, price, pitch FROM shopitems WHERE shopid = ? ORDER BY position DESC")) {
+            try (PreparedStatement ps = con.prepareStatement(
+                    "SELECT itemid, price, pitch FROM shopitems WHERE shopid = ? ORDER BY position DESC")) {
                 ps.setInt(1, shopId);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     List<Integer> recharges = new ArrayList<>(rechargeableItems);
                     while (rs.next()) {
                         if (ItemConstants.isRechargeable(rs.getInt("itemid"))) {
-                            ShopItem starItem = new ShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
-                            ret.addItem(starItem);
+                            ShopItem starItem = new ShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"),
+                                    rs.getInt("pitch"));
+                            shop.addItem(starItem);
                             if (rechargeableItems.contains(starItem.getItemId())) {
                                 recharges.remove(Integer.valueOf(starItem.getItemId()));
                             }
                         } else {
-                            ret.addItem(new ShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
+                            shop.addItem(new ShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"),
+                                    rs.getInt("pitch")));
                         }
                     }
                     for (Integer recharge : recharges) {
-                        ret.addItem(new ShopItem((short) 1000, recharge, 0, 0));
+                        shop.addItem(new ShopItem((short) 1000, recharge, 0, 0));
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return ret;
+        return shop;
     }
 
     public int getNpcId() {

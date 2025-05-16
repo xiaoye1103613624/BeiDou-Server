@@ -23,8 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.scripting.npc;
 
 import lombok.Getter;
-import org.gms.client.Character;
 import org.gms.client.*;
+import org.gms.client.Character;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.Pet;
@@ -44,10 +44,6 @@ import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
-import org.gms.service.GachaponService;
-import org.gms.util.packets.WeddingPackets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.provider.Data;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
@@ -67,13 +63,16 @@ import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.Pyramid;
 import org.gms.server.partyquest.Pyramid.PyramidMode;
+import org.gms.service.GachaponService;
 import org.gms.util.PacketCreator;
+import org.gms.util.packets.WeddingPackets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.*;
-
+import java.util.List;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
@@ -86,13 +85,21 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     private final int npc;
     private int npcOid;
+    /**
+     * 脚本名称
+     */
     private String scriptName;
+    /**
+     * 文本框内容
+     */
     private String getText;
     private boolean itemScript;
     private List<PartyCharacter> otherParty;
     private static final GachaponService gachaponService =
             ServerManager.getApplicationContext().getBean(GachaponService.class);
-
+    /**
+     * npc 默认对话
+     */
     private final Map<Integer, String> npcDefaultTalks = new HashMap<>();
     @Getter
     private final NextLevelContext nextLevelContext = new NextLevelContext();
@@ -146,27 +153,45 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.itemScript = false;
     }
 
+    /**
+     * 释放当前对象占用的资源。
+     *
+     * <p>该方法将清空下一级上下文（nextLevelContext），并从NPC脚本管理器（NPCScriptManager）中释放当前对象，
+     * 然后通过客户端发送一个启用动作的包（PacketCreator.enableActions()）。
+     */
     public void dispose() {
         nextLevelContext.clear();
         NPCScriptManager.getInstance().dispose(this);
         getClient().sendPacket(PacketCreator.enableActions());
     }
 
+    /**
+     * 提示一个对话框 并附带下一步按钮
+     */
     public void sendNext(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", (byte) 0));
     }
 
+    /**
+     * 提示一个对话框并附带上一步按鈕。
+     */
     public void sendPrev(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", (byte) 0));
     }
 
+    /**
+     * 提示一个对话窗口并附带下一步和上一步按鈕。
+     */
     public void sendNextPrev(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", (byte) 0));
     }
 
+    /**
+     * 提示一个对话窗口并附带确定按鈕
+     */
     public void sendOk(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", (byte) 0));
@@ -176,11 +201,17 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendOk(getDefaultTalk(npc));
     }
 
+    /**
+     * 提示一个对话窗口并附带是和否按鈕
+     */
     public void sendYesNo(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", (byte) 0));
     }
 
+    /**
+     * 提示一个对话窗口并附带接受和拒絕按鈕
+     */
     public void sendAcceptDecline(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", (byte) 0));
@@ -221,6 +252,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", speaker));
     }
 
+    /**
+     * 提示一个对话框 不含按钮
+     */
     public void sendSimple(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", speaker));
@@ -236,16 +270,31 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 提示一个窗口让玩家选择一个介于最小和最大数量之间的数字
+     */
     public void sendGetNumber(String text, int def, int min, int max) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max));
     }
 
+    /**
+     * 提示一个输入对话框让玩家可以输入文字
+     */
     public void sendGetText(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, ""));
     }
 
+    /**
+     * 提示一个窗口让玩家选择一个介于最小和最大数量之间的数字。
+     *
+     * @param text 发送的消息内容
+     * @param def 默认的数字值
+     * @param min 允许的最小数字值
+     * @param max 允许的最大数字值
+     * @param speaker 发言者标识
+     */
     public void sendGetNumber(String text, int def, int min, int max, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max, speaker));
@@ -274,6 +323,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.getText = text;
     }
 
+    /**
+     * 获取玩家输入的文字内容
+     */
     public String getText() {
         return this.getText;
     }
@@ -540,8 +592,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public Character getMapleCharacter(String player) {
-        Character target = Server.getInstance().getWorld(client.getWorld()).getChannel(client.getChannel()).getPlayerStorage()
-                .getCharacterByName(player);
+        Character target =
+                Server.getInstance().getWorld(client.getWorld()).getChannel(client.getChannel()).getPlayerStorage()
+                        .getCharacterByName(player);
         return target;
     }
 
@@ -996,7 +1049,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         cpqLeaders.add(getPlayer().getId());
 
         return client.getWorldServer().getMatchCheckerCoordinator()
-                .createMatchConfirmation(MatchCheckerType.CPQ_CHALLENGE, client.getWorld(), getPlayer().getId(), cpqLeaders,
+                .createMatchConfirmation(MatchCheckerType.CPQ_CHALLENGE, client.getWorld(), getPlayer().getId(),
+                        cpqLeaders,
                         cpqType);
     }
 

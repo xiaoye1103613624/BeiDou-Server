@@ -19,25 +19,45 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.server;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 商店工厂
+ *
  * @author Matze
  */
 public class ShopFactory {
-    private static final ShopFactory instance = new ShopFactory();
+    /**
+     * 商店工厂实例 饿汉式
+     */
+    private static final ShopFactory INSTANCE = new ShopFactory();
 
     public static ShopFactory getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
+    /**
+     * 商店id 与商店对象映射
+     */
     private final Map<Integer, Shop> shops = new HashMap<>();
+    /**
+     * NPCid 与商店对象映射
+     */
     private final Map<Integer, Shop> npcShops = new HashMap<>();
 
+    /**
+     * 根据商店ID或NPC ID加载商店信息
+     *
+     * @param id 商店ID或NPC ID
+     * @param isShopId 是否为商店ID（true为商店ID，false为NPC ID）
+     * @return 返回加载的商店信息，如果未找到则返回null
+     */
     private Shop loadShop(int id, boolean isShopId) {
+        // 从数据库加载商店信息
         Shop ret = Shop.createFromDB(id, isShopId);
         if (ret != null) {
             shops.put(ret.getId(), ret);
@@ -49,6 +69,7 @@ public class ShopFactory {
         }
         return ret;
     }
+
 
     public Shop getShop(int shopId) {
         if (shops.containsKey(shopId)) {
