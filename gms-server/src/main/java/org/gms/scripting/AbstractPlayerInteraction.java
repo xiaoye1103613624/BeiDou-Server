@@ -22,8 +22,8 @@
 
 package org.gms.scripting;
 
-import org.gms.client.Character;
 import org.gms.client.*;
+import org.gms.client.Character;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
@@ -60,9 +60,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.List;
 import java.util.*;
-
+import java.util.List;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
@@ -384,8 +383,8 @@ public class AbstractPlayerInteraction {
         }
 
         client.removeClickedNPC();
-        NPCScriptManager.getInstance().dispose(client);
-        NPCScriptManager.getInstance().start(client, npcid, script, null);
+        NPCScriptManager.getNpcInstance().dispose(client);
+        NPCScriptManager.getNpcInstance().start(client, npcid, script, null);
     }
 
     public int getQuestStatus(int id) {

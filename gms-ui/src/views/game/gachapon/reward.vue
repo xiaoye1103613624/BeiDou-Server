@@ -25,13 +25,13 @@
           title="#"
           data-index="index"
           align="center"
-          :width=50
+          :width="50"
           cell-class="td-nowrap"
         />
         <a-table-column
           title=" ID "
           data-index="id"
-          :width=80
+          :width="80"
           align="center"
           cell-class="td-nowrap"
         />
@@ -114,17 +114,14 @@
 </template>
 
 <script lang="ts" setup>
-  import useLoading from '@/hooks/loading';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
-  import { ref } from 'vue';
-  import {
-    GachaponPoolState,
-    GachaponRewardState,
-  } from '@/store/modules/gachapon/type';
-  import { deleteReward, getRewards, updateReward } from '@/api/gachapon';
-  import { Message } from '@arco-design/web-vue';
+import useLoading from '@/hooks/loading';
+import {getIconUrl} from '@/utils/mapleStoryAPI';
+import {ref} from 'vue';
+import {GachaponPoolState, GachaponRewardState,} from '@/store/modules/gachapon/type';
+import {deleteReward, getRewards, updateReward} from '@/api/gachapon';
+import {Message} from '@arco-design/web-vue';
 
-  const { setLoading, loading } = useLoading(false);
+const { setLoading, loading } = useLoading(false);
   const visible = ref<boolean>(false);
   const title = ref<string>('奖品列表');
 

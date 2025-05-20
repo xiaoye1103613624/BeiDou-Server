@@ -27,8 +27,8 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
-import org.gms.util.PacketCreator;
 import org.gms.util.I18nUtil;
+import org.gms.util.PacketCreator;
 
 public class DisposeCommand extends Command {
     {
@@ -37,7 +37,7 @@ public class DisposeCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        NPCScriptManager.getInstance().dispose(c);
+        NPCScriptManager.getNpcInstance().dispose(c);
         QuestScriptManager.getInstance().dispose(c);
         c.sendPacket(PacketCreator.enableActions());
         c.removeClickedNPC();

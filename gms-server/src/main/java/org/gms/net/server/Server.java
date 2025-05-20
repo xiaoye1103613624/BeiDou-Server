@@ -115,6 +115,9 @@ public class Server {
 
     private LoginServer loginServer;
     private final List<Map<Integer, String>> channels = new LinkedList<>();
+    /**
+     * 大区
+     */
     private final List<World> worlds = new ArrayList<>();
     @Getter
     private final Properties subnetInfo = new Properties();
@@ -248,6 +251,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取所有大区列表
+     *
+     * @return 返回不可修改的World对象列表
+     */
     public List<World> getWorlds() {
         wldRLock.lock(); try {
             return Collections.unmodifiableList(worlds);
@@ -1337,6 +1345,15 @@ public class Server {
         }
     }
 
+
+    /**
+     * 验证在过渡中的角色ID是否有效。
+     *  use_ip_validation:在登录时启用IP检查
+     *
+     * @param client 客户端对象
+     * @param charId 角色ID
+     * @return 如果角色ID有效则返回true，否则返回false
+     */
     public boolean validateCharacteridInTransition(Client client, int charId) {
         if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return true;
@@ -1351,6 +1368,12 @@ public class Server {
         }
     }
 
+    /**
+     * 从转换中的字符ID集合中移除指定客户端的远程IP地址对应的字符ID。
+     *
+     * @param client 客户端对象
+     * @return 转换中的字符ID，如果不存在则返回null
+     */
     public Integer freeCharacteridInTransition(Client client) {
         if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return null;

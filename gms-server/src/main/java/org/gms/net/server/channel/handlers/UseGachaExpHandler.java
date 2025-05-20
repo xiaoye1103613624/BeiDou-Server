@@ -41,7 +41,7 @@ public class UseGachaExpHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {
             try {
                 if (c.getPlayer().getGachaExp() <= 0) {
-                    AutobanFactory.GACHA_EXP.autoban(c.getPlayer(), "Player tried to redeem GachaEXP, but had none to redeem.");
+                    AutobanFactory.GACHA_EXP.autoBan(c.getPlayer(), "Player tried to redeem GachaEXP, but had none to redeem.");
                 }
                 c.getPlayer().gainGachaExp();
             } finally {

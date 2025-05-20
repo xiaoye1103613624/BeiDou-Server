@@ -83,18 +83,24 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public class NPCConversationManager extends AbstractPlayerInteraction {
     private static final Logger log = LoggerFactory.getLogger(NPCConversationManager.class);
 
+    @Getter
     private final int npc;
     private int npcOid;
     /**
      * 脚本名称
      */
+    @Getter
     private String scriptName;
     /**
      * 文本框内容
      */
     private String getText;
+    @Getter
     private boolean itemScript;
     private List<PartyCharacter> otherParty;
+    /**
+     * 抽奖服务
+     */
     private static final GachaponService gachaponService =
             ServerManager.getApplicationContext().getBean(GachaponService.class);
     /**
@@ -161,7 +167,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      */
     public void dispose() {
         nextLevelContext.clear();
-        NPCScriptManager.getInstance().dispose(this);
+        NPCScriptManager.getNpcInstance().dispose(this);
         getClient().sendPacket(PacketCreator.enableActions());
     }
 
@@ -380,7 +386,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void showEffect(String effect) {
         getPlayer().getMap().broadcastMessage(PacketCreator.environmentChange(effect, 3));
     }
-
+    /**
+     * 设置玩家的发型。
+     *
+     * @param hair 发型id。
+     */
     public void setHair(int hair) {
         getPlayer().setHair(hair);
         getPlayer().updateSingleStat(Stat.HAIR, hair);

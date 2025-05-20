@@ -29,7 +29,7 @@ export default {
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
   'menu.arco': 'UI 开发文档',
-  'menu.beiDou': '关于北斗',
+  'menu.beiDou': '关于XiaoYe',
   // 提示信息
   'message.success': '操作成功',
   'message.switch.success': '切换为中文',

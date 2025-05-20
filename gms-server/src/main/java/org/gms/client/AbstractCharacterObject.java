@@ -17,6 +17,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.client;
 
 import lombok.Getter;
@@ -45,24 +46,50 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     protected int attrDex;
     protected int attrLuk;
     protected int attrInt;
+    /**
+     * HP
+     */
     protected int hp;
+    /**
+     * 最大 HP 值
+     */
     protected int maxHp;
+    /**
+     * MP
+     */
     protected int mp;
+    /**
+     * 最大 MP 值
+     */
     protected int maxMp;
     @Setter
     protected int hpMpApUsed;
+    /**
+     * 剩余 AP 点
+     */
     @Setter
     protected int remainingAp;
+    /**
+     * 剩余 SP
+     */
     protected int[] remainingSp = new int[10];
+    /**
+     * 客户端最大 HP 值
+     */
     @Getter
     protected transient int clientMaxHp;
+    /**
+     * 客户端最大 MP 值
+     */
     @Getter
     protected transient int clientMaxMp;
     protected transient int localMaxHp = 50;
     protected transient int localMaxMp = 5;
     protected float transientHp = Float.NEGATIVE_INFINITY;
     protected float transientMp = Float.NEGATIVE_INFINITY;
-
+    /**
+     * 人物监听器
+     */
     private AbstractCharacterListener listener = null;
     protected Map<Stat, Integer> statUpdates = new HashMap<>();
 
@@ -637,7 +664,8 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     }
 
     public boolean assignStrDexIntLuk(int deltaStr, int deltaDex, int deltaInt, int deltaLuk) {
-        return assignStrDexIntLuk(Integer.valueOf(deltaStr), Integer.valueOf(deltaDex), Integer.valueOf(deltaInt), Integer.valueOf(deltaLuk));
+        return assignStrDexIntLuk(Integer.valueOf(deltaStr), Integer.valueOf(deltaDex), Integer.valueOf(deltaInt),
+                Integer.valueOf(deltaLuk));
     }
 
     private boolean assignStrDexIntLuk(Integer deltaStr, Integer deltaDex, Integer deltaInt, Integer deltaLuk) {
@@ -718,18 +746,21 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         changeStrDexIntLuk(str, dex, int_, luk, remainingAp, false);
     }
 
-    private void changeStrDexIntLuk(Integer str, Integer dex, Integer int_, Integer luk, int remainingAp, boolean silent) {
+    private void changeStrDexIntLuk(Integer str, Integer dex, Integer int_, Integer luk, int remainingAp,
+                                    boolean silent) {
         long strDexIntLuk = calcStatPoolLong(str, dex, int_, luk);
         changeStatPool(null, strDexIntLuk, null, remainingAp, silent);
     }
 
-    private void changeStrDexIntLukSp(Integer str, Integer dex, Integer int_, Integer luk, int remainingAp, int remainingSp, int skillbook, boolean silent) {
+    private void changeStrDexIntLukSp(Integer str, Integer dex, Integer int_, Integer luk, int remainingAp,
+                                      int remainingSp, int skillbook, boolean silent) {
         long strDexIntLuk = calcStatPoolLong(str, dex, int_, luk);
         long sp = calcStatPoolLong(0, 0, remainingSp, skillbook);
         changeStatPool(null, strDexIntLuk, sp, remainingAp, silent);
     }
 
-    protected void updateStrDexIntLukSp(int str, int dex, int int_, int luk, int remainingAp, int remainingSp, int skillbook) {
+    protected void updateStrDexIntLukSp(int str, int dex, int int_, int luk, int remainingAp, int remainingSp,
+                                        int skillbook) {
         changeStrDexIntLukSp(str, dex, int_, luk, remainingAp, remainingSp, skillbook, false);
     }
 

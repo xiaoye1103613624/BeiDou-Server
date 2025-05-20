@@ -91,12 +91,12 @@ public class ItemId {
         return IntStream.range(BULLET_MIN, BULLET_MAX + 1).toArray();
     }
 
-    // Starter
+    // Starter 新手
     public static final int BEGINNERS_GUIDE = 4161001;
     public static final int LEGENDS_GUIDE = 4161048;
     public static final int NOBLESSE_GUIDE = 4161047;
 
-    // Warrior
+    // Warrior 战士
     public static final int RED_HWARANG_SHIRT = 1040021;
     public static final int BLACK_MARTIAL_ARTS_PANTS = 1060016;
     public static final int MITHRIL_BATTLE_GRIEVES = 1072039;
@@ -106,7 +106,7 @@ public class ItemId {
     public static final int FIREMANS_AXE = 1312005;
     public static final int DARK_ENGRIT = 1051010;
 
-    // Bowman
+    // Bowman 弓箭手
     public static final int GREEN_HUNTERS_ARMOR = 1040067;
     public static final int GREEN_HUNTRESS_ARMOR = 1041054;
     public static final int GREEN_HUNTERS_PANTS = 1060056;
@@ -115,7 +115,7 @@ public class ItemId {
     public static final int RYDEN = 1452005;
     public static final int MOUNTAIN_CROSSBOW = 1462000;
 
-    // Magician
+    // Magician 魔法师
     public static final int BLUE_WIZARD_ROBE = 1050003;
     public static final int PURPLE_FAIRY_TOP = 1041041;
     public static final int PURPLE_FAIRY_SKIRT = 1061034;
@@ -123,7 +123,7 @@ public class ItemId {
     public static final int MITHRIL_WAND = 1372003;
     public static final int CIRCLE_WINDED_STAFF = 1382017;
 
-    // Thief
+    // Thief 飞侠
     public static final int DARK_BROWN_STEALER = 1040057;
     public static final int RED_STEAL = 1041047;
     public static final int DARK_BROWN_STEALER_PANTS = 1060043;
@@ -132,7 +132,7 @@ public class ItemId {
     public static final int STEEL_GUARDS = 1472008;
     public static final int REEF_CLAW = 1332012;
 
-    // Pirate
+    // Pirate 海盗
     public static final int BROWN_PAULIE_BOOTS = 1072294;
     public static final int PRIME_HANDS = 1482004;
     public static final int COLD_MIND = 1492004;
@@ -160,7 +160,7 @@ public class ItemId {
     public static final int DRAGON_STONE_SCROLL = 2041200;
     public static final int BELT_STR_100_SCROLL = 2041300;
 
-    // Cure debuff
+    // Cure debuff 治愈负面状态
     public static final int ALL_CURE_POTION = 2050004;
     public static final int EYEDROP = 2050001;
     public static final int TONIC = 2050002;
@@ -170,6 +170,9 @@ public class ItemId {
     private static final int CARNIVAL_PARTY_ALL_CURE = 2022163;
     public static final int WHITE_ELIXIR = 2022544;
 
+    /**
+     * 是否为组队治愈
+     */
     public static boolean isPartyAllCure(int itemId) {
         return itemId == DOJO_PARTY_ALL_CURE || itemId == CARNIVAL_PARTY_ALL_CURE;
     }
@@ -189,6 +192,12 @@ public class ItemId {
     public static final int ITEM_POUCH = 1812001;
     public static final int ITEM_IGNORE = 1812007;
 
+    /**
+     * 判断给定的物品ID是否表示宠物。
+     *
+     * @param itemId 物品ID
+     * @return 如果物品ID以5000000开头，则返回true，表示这是一个宠物；否则返回false。
+     */
     public static boolean isPet(int itemId) {
         return itemId / 1000 == 5000;
     }
@@ -196,14 +205,14 @@ public class ItemId {
     // Expirable pet
     public static final int PET_SNAIL = 5000054;
 
-    // Permanent pet
+    // 永久宠物 Permanent pet
     private static final int PERMA_PINK_BEAN = 5000060;
     private static final int PERMA_KINO = 5000100;
     private static final int PERMA_WHITE_TIGER = 5000101;
     private static final int PERMA_MINI_YETI = 5000102;
 
     public static int[] getPermaPets() {
-        return new int[]{PERMA_PINK_BEAN, PERMA_KINO, PERMA_WHITE_TIGER, PERMA_MINI_YETI};
+        return new int[] {PERMA_PINK_BEAN, PERMA_KINO, PERMA_WHITE_TIGER, PERMA_MINI_YETI};
     }
 
     // Maker
@@ -341,7 +350,7 @@ public class ItemId {
     private static final int GLOVES_ATT_60_SCROLL = 2040804;
 
     public static int[] getOwlItems() {
-        return new int[]{WORK_GLOVES, STEELY_THROWING_KNIVES, ILBI_THROWING_STARS, OWL_BALL_MASK, PINK_ADVENTURER_CAPE,
+        return new int[] {WORK_GLOVES, STEELY_THROWING_KNIVES, ILBI_THROWING_STARS, OWL_BALL_MASK, PINK_ADVENTURER_CAPE,
                 CLAW_30_SCROLL, WHITE_SCROLL, HELMET_60_ACC_SCROLL, MAPLE_SHIELD, GLOVES_ATT_60_SCROLL};
     }
 
@@ -404,15 +413,14 @@ public class ItemId {
     public static final int BLUE_CARZEN_BOOTS = 1072154;
     public static final int MITHRIL_PLATINE = 1040103;
 
-
     /**
      * 判断装备的性别要求。
      *
      * @param {int} itemId - 装备的ID。
      * @returns {int} - 返回装备的性别要求：
-     *                  0 - 仅限男性使用
-     *                  1 - 仅限女性使用
-     *                  2 - 无性别要求
+     * 0 - 仅限男性使用
+     * 1 - 仅限女性使用
+     * 2 - 无性别要求
      */
     public static int getGender(int itemId) {
         if (itemId / 1000000 != 1) {

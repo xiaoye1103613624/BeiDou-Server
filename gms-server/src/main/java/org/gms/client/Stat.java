@@ -19,28 +19,92 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.client;
 
+/**
+ * 常见属性
+ */
 public enum Stat {
+    /**
+     * 皮肤
+     */
     SKIN(0x1),
+    /**
+     * 面部
+     */
     FACE(0x2),
+    /**
+     * 发型
+     */
     HAIR(0x4),
+    /**
+     * 等级
+     */
     LEVEL(0x10),
+    /**
+     * 职业 32
+     */
     JOB(0x20),
+    /**
+     * 力量 64
+     */
     STR(0x40),
+    /**
+     * 敏捷 128
+     */
     DEX(0x80),
+    /**
+     * 智力 256
+     */
     INT(0x100),
+    /**
+     * 运气 512
+     */
     LUK(0x200),
+    /**
+     * 当前HP
+     */
     HP(0x400),
+    /**
+     * 最大HP
+     */
     MAXHP(0x800),
+    /**
+     * 当前MP
+     */
     MP(0x1000),
+    /**
+     * 最大MP
+     */
     MAXMP(0x2000),
+    /**
+     *
+     */
     AVAILABLEAP(0x4000),
+    /**
+     *
+     */
     AVAILABLESP(0x8000),
+    /**
+     * 经验
+     */
     EXP(0x10000),
+    /**
+     * 人气
+     */
     FAME(0x20000),
+    /**
+     * 金币
+     */
     MESO(0x40000),
+    /**
+     * 宠物
+     */
     PET(0x180008),
+    /**
+     * 金币抽奖经验值
+     */
     GACHAEXP(0x200000);
     private final int i;
 
@@ -61,22 +125,24 @@ public enum Stat {
         return null;
     }
 
+    /**
+     * 根据5字节编码值获取对应的Stat对象。
+     *
+     * @param encoded 5字节编码值
+     * @return 对应编码值的Stat对象，如果不存在则返回null
+     */
     public static Stat getBy5ByteEncoding(int encoded) {
-        switch (encoded) {
-            case 64:
-                return STR;
-            case 128:
-                return DEX;
-            case 256:
-                return INT;
-            case 512:
-                return LUK;
-        }
-        return null;
+        return switch (encoded) {
+            case 64 -> STR;
+            case 128 -> DEX;
+            case 256 -> INT;
+            case 512 -> LUK;
+            default -> null;
+        };
     }
 
     public static Stat getByString(String type) {
-    	for (Stat stat : Stat.values()) {
+        for (Stat stat : Stat.values()) {
             if (stat.name().equals(type)) {
                 return stat;
             }

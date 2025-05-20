@@ -19,11 +19,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.net;
 
 import org.gms.client.Client;
 import org.gms.net.server.Server;
 
+/**
+ * 数据包处理器 抽象类
+ */
 public abstract class AbstractPacketHandler implements PacketHandler {
     @Override
     public boolean validateState(Client c) {

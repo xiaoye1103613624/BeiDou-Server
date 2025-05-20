@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
@@ -28,22 +29,32 @@ import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
-import org.gms.util.I18nUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.server.life.NPC;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.maps.MapObject;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * NPC 交互 处理器
+ */
 public final class NPCTalkHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NPCTalkHandler.class);
 
+    /**
+     * 处理传入的数据包
+     *
+     * @param p 收到的数据包
+     * @param c 客户端连接
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (c.getPlayer().getMapId() == MapId.JAIL) {   //监狱地图不可使用脚本
-            c.getPlayer().dropMessage(1,I18nUtil.getMessage("ActionHandler.map.message1"));
+        //监狱地图不可使用脚本
+        if (c.getPlayer().getMapId() == MapId.JAIL) {
+            c.getPlayer().dropMessage(1, I18nUtil.getMessage("ActionHandler.map.message1"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         } else if (!c.getPlayer().isAlive()) {
@@ -51,7 +62,8 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
             return;
         }
 
-        if (currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
+        if (currentServerTime() - c.getPlayer().getNpcCooldown() <
+                GameConfig.getServerInt("block_npc_race_condition")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
@@ -73,13 +85,14 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
 
                 // Custom handling to reduce the amount of scripts needed.
                 if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {
-                    NPCScriptManager.getInstance().start(c, npc.getId(), "gachapon", null);
+                    NPCScriptManager.getNpcInstance().start(c, npc.getId(), "gachapon", null);
                 } else if (npc.getName().endsWith("Maple TV")) {
-                    NPCScriptManager.getInstance().start(c, npc.getId(), "mapleTV", null);
-                } else if (GameConfig.getServerBoolean("use_rebirth_system") && npc.getId() == GameConfig.getServerInt("rebirth_npc_id")) {
-                    NPCScriptManager.getInstance().start(c, npc.getId(), "rebirth", null);
+                    NPCScriptManager.getNpcInstance().start(c, npc.getId(), "mapleTV", null);
+                } else if (GameConfig.getServerBoolean("use_rebirth_system") &&
+                        npc.getId() == GameConfig.getServerInt("rebirth_npc_id")) {
+                    NPCScriptManager.getNpcInstance().start(c, npc.getId(), "rebirth", null);
                 } else {
-                    boolean hasNpcScript = NPCScriptManager.getInstance().start(c, npc.getId(), oid, null);
+                    boolean hasNpcScript = NPCScriptManager.getNpcInstance().start(c, npc.getId(), oid, null);
                     if (!hasNpcScript) {
                         if (!npc.hasShop()) {
                             log.warn("NPC {} ({}) is not coded", npc.getName(), npc.getId());
@@ -94,7 +107,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                 }
             }
         } else if (obj instanceof PlayerNPC pnpc) {
-            NPCScriptManager nsm = NPCScriptManager.getInstance();
+            NPCScriptManager nsm = NPCScriptManager.getNpcInstance();
 
             if (pnpc.getScriptId() < NpcId.CUSTOM_DEV && !nsm.isNpcScriptAvailable(c, "" + pnpc.getScriptId())) {
                 nsm.start(c, pnpc.getScriptId(), "rank_user", null);

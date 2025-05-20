@@ -76,9 +76,9 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
 
     private void cmRouting(Client c, byte action, byte lastMsg, int selection) {
         if (c.getCM().getNextLevelContext().getLevelType() == null) {
-            NPCScriptManager.getInstance().action(c, action, lastMsg, selection);
+            NPCScriptManager.getNpcInstance().action(c, action, lastMsg, selection);
         } else {
-            NPCScriptManager.getInstance().nextLevel(c, action, lastMsg, selection);
+            NPCScriptManager.getNpcInstance().nextLevel(c, action, lastMsg, selection);
         }
     }
 }

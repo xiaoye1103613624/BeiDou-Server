@@ -18,39 +18,20 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.util;
 
 import com.mybatisflex.annotation.Column;
-import org.gms.client.BuddylistEntry;
-import org.gms.client.BuffStat;
+import org.gms.client.*;
 import org.gms.client.Character;
-import org.gms.client.Client;
-import org.gms.client.Disease;
-import org.gms.client.FamilyEntitlement;
-import org.gms.client.FamilyEntry;
-import org.gms.client.MonsterBook;
-import org.gms.client.Mount;
-import org.gms.client.QuestStatus;
-import org.gms.client.Ring;
-import org.gms.client.Skill;
-import org.gms.client.SkillMacro;
-import org.gms.client.Stat;
-import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.*;
 import org.gms.client.inventory.Equip.ScrollResult;
-import org.gms.client.inventory.Inventory;
-import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
-import org.gms.client.inventory.ItemFactory;
-import org.gms.client.inventory.ModifyInventory;
-import org.gms.client.inventory.Pet;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
-import org.gms.constants.game.CommodityFlag;
-import org.gms.dao.entity.ModifiedCashItemDO;
-import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
+import org.gms.constants.game.CommodityFlag;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -60,6 +41,8 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.skills.Buccaneer;
 import org.gms.constants.skills.Corsair;
 import org.gms.constants.skills.ThunderBreaker;
+import org.gms.dao.entity.ModifiedCashItemDO;
+import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.model.pojo.SkillEntry;
 import org.gms.net.encryption.InitializationVector;
 import org.gms.net.opcodes.SendOpcode;
@@ -83,25 +66,9 @@ import org.gms.net.server.world.World;
 import org.gms.server.*;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.events.gm.Snowball;
-import org.gms.server.life.MobSkill;
-import org.gms.server.life.MobSkillId;
-import org.gms.server.life.Monster;
-import org.gms.server.life.NPC;
-import org.gms.server.life.PlayerNPC;
-import org.gms.server.maps.AbstractMapObject;
-import org.gms.server.maps.Door;
-import org.gms.server.maps.DoorObject;
-import org.gms.server.maps.Dragon;
-import org.gms.server.maps.HiredMerchant;
-import org.gms.server.maps.MapItem;
-import org.gms.server.maps.MapleMap;
-import org.gms.server.maps.MiniGame;
+import org.gms.server.life.*;
+import org.gms.server.maps.*;
 import org.gms.server.maps.MiniGame.MiniGameResult;
-import org.gms.server.maps.Mist;
-import org.gms.server.maps.PlayerShop;
-import org.gms.server.maps.PlayerShopItem;
-import org.gms.server.maps.Reactor;
-import org.gms.server.maps.Summon;
 import org.gms.server.movement.LifeMovementFragment;
 
 import java.awt.*;
@@ -119,7 +86,9 @@ import java.util.stream.Collectors;
 public class PacketCreator {
 
     public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
-    private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
+    private final static long FT_UT_OFFSET =
+            116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis()));
+    // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
     private final static long PERMANENT = 150841440000000000L; // 00 C0 9B 90 7D E5 17 02
@@ -338,7 +307,8 @@ public class PacketCreator {
         if (!viewall) {
             p.writeByte(0);
         }
-        if (chr.isGM() || chr.isGmJob()) {  // thanks Daddy Egg (Ubaware), resinate for noticing GM jobs crashing on non-GM players account
+        if (chr.isGM() ||
+                chr.isGmJob()) {  // thanks Daddy Egg (Ubaware), resinate for noticing GM jobs crashing on non-GM players account
             p.writeByte(0);
             return;
         }
@@ -435,7 +405,7 @@ public class PacketCreator {
 
             if (ItemConstants.isRechargeable(item.getItemId())) {
                 p.writeInt(2);
-                p.writeBytes(new byte[]{(byte) 0x54, 0, 0, (byte) 0x34});
+                p.writeBytes(new byte[] {(byte) 0x54, 0, 0, (byte) 0x34});
             }
             return;
         }
@@ -466,7 +436,8 @@ public class PacketCreator {
         } else {
             int itemLevel = equip.getItemLevel();
 
-            long expNibble = (ExpTable.getExpNeededForLevel(ii.getEquipLevelReq(item.getItemId())) * equip.getItemExp());
+            long expNibble =
+                    (ExpTable.getExpNeededForLevel(ii.getEquipLevelReq(item.getItemId())) * equip.getItemExp());
             expNibble /= ExpTable.getEquipExpNeededForLevel(itemLevel);
 
             p.writeByte(0);
@@ -582,8 +553,8 @@ public class PacketCreator {
      * Sends a hello packet.
      *
      * @param mapleVersion The maple client version.
-     * @param sendIv       the IV in use by the server for sending
-     * @param recvIv       the IV in use by the server for receiving
+     * @param sendIv the IV in use by the server for sending
+     * @param recvIv the IV in use by the server for receiving
      * @return
      */
     public static Packet getHello(short mapleVersion, InitializationVector sendIv, InitializationVector recvIv) {
@@ -687,7 +658,8 @@ public class PacketCreator {
         p.writeByte(0);
         p.writeInt(0);
         p.writeByte(reason);
-        p.writeLong(getTime(timestampTill)); // Tempban date is handled as a 64-bit long, number of 100NS intervals since 1/1/1601. Lulz.
+        p.writeLong(
+                getTime(timestampTill)); // Tempban date is handled as a 64-bit long, number of 100NS intervals since 1/1/1601. Lulz.
         return p;
     }
 
@@ -698,7 +670,8 @@ public class PacketCreator {
      * @return the successful authentication packet
      */
     public static Packet getAuthSuccess(Client c) {
-        Server.getInstance().loadAccountCharacters(c);    // locks the login session until data is recovered from the cache or the DB.
+        Server.getInstance().loadAccountCharacters(
+                c);    // locks the login session until data is recovered from the cache or the DB.
         Server.getInstance().loadAccountStorages(c);
 
         final OutPacket p = OutPacket.create(SendOpcode.LOGIN_STATUS);
@@ -708,8 +681,11 @@ public class PacketCreator {
         p.writeByte(c.getGender());
 
         boolean canFly = Server.getInstance().canFly(c.getAccID());
-        p.writeBool((GameConfig.getServerBoolean("use_enforce_admin_account") || canFly) && c.getGMLevel() > 1);    // thanks Steve(kaito1410) for pointing the GM account boolean here
-        p.writeByte(((GameConfig.getServerBoolean("use_enforce_admin_account") || canFly) && c.getGMLevel() > 1) ? 0x80 : 0);  // Admin Byte. 0x80,0x40,0x20.. Rubbish.
+        p.writeBool((GameConfig.getServerBoolean("use_enforce_admin_account") || canFly) &&
+                c.getGMLevel() > 1);    // thanks Steve(kaito1410) for pointing the GM account boolean here
+        p.writeByte(
+                ((GameConfig.getServerBoolean("use_enforce_admin_account") || canFly) && c.getGMLevel() > 1) ? 0x80 :
+                        0);  // Admin Byte. 0x80,0x40,0x20.. Rubbish.
         p.writeByte(0); // Country Code.
 
         p.writeString(c.getAccountName());
@@ -721,8 +697,11 @@ public class PacketCreator {
 
         p.writeInt(1); // 1: Remove the "Select the world you want to play in"
 
-        p.writeByte(GameConfig.getServerBoolean("enable_pin") && !c.canBypassPin() ? 0 : 1); // 0 = Pin-System Enabled, 1 = Disabled
-        p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2); // 0 = Register PIC, 1 = Ask for PIC, 2 = Disabled
+        p.writeByte(GameConfig.getServerBoolean("enable_pin") && !c.canBypassPin() ? 0 :
+                1); // 0 = Pin-System Enabled, 1 = Disabled
+        p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ?
+                (c.getPic() == null || c.getPic().equals("") ? 0 : 1) :
+                2); // 0 = Register PIC, 1 = Ask for PIC, 2 = Disabled
 
         return p;
     }
@@ -775,13 +754,14 @@ public class PacketCreator {
      * Gets a packet detailing a server and its channels.
      *
      * @param serverId
-     * @param serverName  The name of the server.
+     * @param serverName The name of the server.
      * @param flag
      * @param eventmsg
      * @param channelLoad Load of the channel - 1200 seems to be max.
      * @return The server info packet.
      */
-    public static Packet getServerList(int serverId, String serverName, int flag, String eventmsg, List<Channel> channelLoad) {
+    public static Packet getServerList(int serverId, String serverName, int flag, String eventmsg,
+                                       List<Channel> channelLoad) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERLIST);
         p.writeByte(serverId);
         p.writeString(serverName);
@@ -836,7 +816,7 @@ public class PacketCreator {
      * Gets a packet telling the client the IP of the channel server.
      *
      * @param inetAddr The InetAddress of the requested channel server.
-     * @param port     The port the channel is on.
+     * @param port The port the channel is on.
      * @param clientId The ID of the client.
      * @return The server IP packet.
      */
@@ -847,7 +827,7 @@ public class PacketCreator {
         p.writeBytes(addr);
         p.writeShort(port);
         p.writeInt(clientId);
-        p.writeBytes(new byte[]{0, 0, 0, 0, 0});
+        p.writeBytes(new byte[] {0, 0, 0, 0, 0});
         return p;
     }
 
@@ -855,7 +835,7 @@ public class PacketCreator {
      * Gets a packet telling the client the IP of the new channel.
      *
      * @param inetAddr The InetAddress of the requested channel server.
-     * @param port     The port the channel is on.
+     * @param port The port the channel is on.
      * @return The server IP packet.
      */
     public static Packet getChannelChange(InetAddress inetAddr, int port) {
@@ -870,9 +850,9 @@ public class PacketCreator {
     /**
      * Gets a packet with a list of characters.
      *
-     * @param c        The Client to load characters of.
+     * @param c The Client to load characters of.
      * @param serverId The ID of the server requested.
-     * @param status   The charlist request result.
+     * @param status The charlist request result.
      * @return The character list packet.
      * <p>
      * Possible values for <code>status</code>:
@@ -899,8 +879,10 @@ public class PacketCreator {
             addCharEntry(p, chr, false);
         }
 
-        p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2);
-        p.writeInt(GameConfig.getServerBoolean("collective_chr_slot") ? chars.size() + c.getAvailableCharacterSlots() : c.getCharacterSlots());
+        p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ?
+                (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2);
+        p.writeInt(GameConfig.getServerBoolean("collective_chr_slot") ? chars.size() + c.getAvailableCharacterSlots() :
+                c.getCharacterSlots());
         return p;
     }
 
@@ -923,10 +905,10 @@ public class PacketCreator {
     /**
      * Sends MapleTV
      *
-     * @param chr      The character shown in TV
+     * @param chr The character shown in TV
      * @param messages The message sent with the TV
-     * @param type     The type of TV
-     * @param partner  The partner shown with chr
+     * @param type The type of TV
+     * @param partner The partner shown with chr
      * @return the SEND_TV packet
      */
     public static Packet sendTV(Character chr, List<String> messages, int type, Character partner) {
@@ -986,9 +968,9 @@ public class PacketCreator {
     /**
      * Gets an update for specified stats.
      *
-     * @param stats         The list of stats to update.
+     * @param stats The list of stats to update.
      * @param enableActions Allows actions after the update.
-     * @param chr           The update target.
+     * @param chr The update target.
      * @return The stat update packet.
      */
     public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
@@ -1036,9 +1018,9 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client to change maps.
      *
-     * @param to         The <code>MapleMap</code> to warp to.
+     * @param to The <code>MapleMap</code> to warp to.
      * @param spawnPoint The spawn portal number to spawn at.
-     * @param chr        The character warping to <code>to</code>
+     * @param chr The character warping to <code>to</code>
      * @return The map change packet.
      */
     public static Packet getWarpToMap(MapleMap to, int spawnPoint, Character chr) {
@@ -1077,9 +1059,9 @@ public class PacketCreator {
     /**
      * Gets a packet to spawn a portal.
      *
-     * @param townId   The ID of the town the portal goes to.
+     * @param townId The ID of the town the portal goes to.
      * @param targetId The ID of the target.
-     * @param pos      Where to put the portal.
+     * @param pos Where to put the portal.
      * @return The portal spawn packet.
      */
     public static Packet spawnPortal(int townId, int targetId, Point pos) {
@@ -1093,8 +1075,8 @@ public class PacketCreator {
     /**
      * Gets a packet to spawn a door.
      *
-     * @param ownerid  The door's owner ID.
-     * @param pos      The position of the door.
+     * @param ownerid The door's owner ID.
+     * @param pos The position of the door.
      * @param launched Already deployed the door.
      * @return The remove door packet.
      */
@@ -1144,7 +1126,8 @@ public class PacketCreator {
         p.writePos(summon.getPosition());
         p.writeByte(summon.getStance());    //bMoveAction & foothold, found thanks to Rien dev team
         p.writeShort(0);
-        p.writeByte(summon.getMovementType().getValue()); // 0 = don't move, 1 = follow (4th mage summons?), 2/4 = only tele follow, 3 = bird follow
+        p.writeByte(summon.getMovementType()
+                .getValue()); // 0 = don't move, 1 = follow (4th mage summons?), 2/4 = only tele follow, 3 = bird follow
         p.writeBool(!summon.isPuppet()); // 0 and the summon can't attack - but puppets don't attack with 1 either ^.-
         p.writeBool(!animated);
         return p;
@@ -1215,7 +1198,7 @@ public class PacketCreator {
      * 2: Megaphone<br> 3: Super Megaphone<br> 4: Scrolling message at top<br>
      * 5: Pink Text<br> 6: Lightblue Text
      *
-     * @param type    The type of the notice.
+     * @param type The type of the notice.
      * @param message The message to convey.
      * @return The server notice packet.
      */
@@ -1230,7 +1213,7 @@ public class PacketCreator {
      * 2: Megaphone<br> 3: Super Megaphone<br> 4: Scrolling message at top<br>
      * 5: Pink Text<br> 6: Lightblue Text
      *
-     * @param type    The type of the notice.
+     * @param type The type of the notice.
      * @param message The message to convey.
      * @return The server notice packet.
      */
@@ -1253,13 +1236,14 @@ public class PacketCreator {
      * 2: Megaphone<br> 3: Super Megaphone<br> 4: Scrolling message at top<br>
      * 5: Pink Text<br> 6: Lightblue Text<br> 7: BroadCasting NPC
      *
-     * @param type          The type of the notice.
-     * @param channel       The channel this notice was sent on.
-     * @param message       The message to convey.
+     * @param type The type of the notice.
+     * @param channel The channel this notice was sent on.
+     * @param message The message to convey.
      * @param servermessage Is this a scrolling ticker?
      * @return The server notice packet.
      */
-    private static Packet serverMessage(int type, int channel, String message, boolean servermessage, boolean megaEar, int npc) {
+    private static Packet serverMessage(int type, int channel, String message, boolean servermessage, boolean megaEar,
+                                        int npc) {
         OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
         p.writeByte(type);
         if (servermessage) {
@@ -1280,15 +1264,16 @@ public class PacketCreator {
     /**
      * Sends a Avatar Super Megaphone packet.
      *
-     * @param chr     The character name.
-     * @param medal   The medal text.
+     * @param chr The character name.
+     * @param medal The medal text.
      * @param channel Which channel.
-     * @param itemId  Which item used.
+     * @param itemId Which item used.
      * @param message The message sent.
-     * @param ear     Whether or not the ear is shown for whisper.
+     * @param ear Whether or not the ear is shown for whisper.
      * @return
      */
-    public static Packet getAvatarMega(Character chr, String medal, int channel, int itemId, List<String> message, boolean ear) {
+    public static Packet getAvatarMega(Character chr, String medal, int channel, int itemId, List<String> message,
+                                       boolean ear) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_AVATAR_MEGAPHONE);
         p.writeInt(itemId);
         p.writeString(medal + chr.getName());
@@ -1361,7 +1346,7 @@ public class PacketCreator {
     /**
      * Gets a spawn monster packet.
      *
-     * @param life     The monster to spawn.
+     * @param life The monster to spawn.
      * @param newSpawn Is it a new spawn?
      * @return The spawn monster packet.
      */
@@ -1372,9 +1357,9 @@ public class PacketCreator {
     /**
      * Gets a spawn monster packet.
      *
-     * @param life     The monster to spawn.
+     * @param life The monster to spawn.
      * @param newSpawn Is it a new spawn?
-     * @param effect   The spawn effect.
+     * @param effect The spawn effect.
      * @return The spawn monster packet.
      */
     public static Packet spawnMonster(Monster life, boolean newSpawn, int effect) {
@@ -1384,9 +1369,9 @@ public class PacketCreator {
     /**
      * Gets a control monster packet.
      *
-     * @param life     The monster to give control to.
+     * @param life The monster to give control to.
      * @param newSpawn Is it a new spawn?
-     * @param aggro    Aggressive monster?
+     * @param aggro Aggressive monster?
      * @return The monster control packet.
      */
     public static Packet controlMonster(Monster life, boolean newSpawn, boolean aggro) {
@@ -1474,14 +1459,15 @@ public class PacketCreator {
     /**
      * Internal function to handler monster spawning and controlling.
      *
-     * @param life              The mob to perform operations with.
+     * @param life The mob to perform operations with.
      * @param requestController Requesting control of mob?
-     * @param newSpawn          New spawn (fade in?)
-     * @param aggro             Aggressive mob?
-     * @param effect            The spawn effect to use.
+     * @param newSpawn New spawn (fade in?)
+     * @param aggro Aggressive mob?
+     * @param effect The spawn effect to use.
      * @return The spawn/control packet.
      */
-    private static Packet spawnMonsterInternal(Monster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
+    private static Packet spawnMonsterInternal(Monster life, boolean requestController, boolean newSpawn, boolean aggro,
+                                               int effect, boolean makeInvis) {
         if (makeInvis) {
             OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
             p.writeByte(0);
@@ -1512,7 +1498,6 @@ public class PacketCreator {
         p.writeShort(0); //Origin FH //life.getStartFh()
         p.writeShort(life.getFh());
 
-
         /**
          * -4: Fake -3: Appear after linked mob is dead -2: Fade in 1: Smoke 3:
          * King Slime spawn 4: Summoning rock thing, used for 3rd job? 6:
@@ -1541,7 +1526,7 @@ public class PacketCreator {
     /**
      * Handles monsters not being targettable, such as Zakum's first body.
      *
-     * @param life   The mob to spawn as non-targettable.
+     * @param life The mob to spawn as non-targettable.
      * @param effect The effect to show when spawning.
      * @return The packet to spawn the mob as non-targettable.
      */
@@ -1604,8 +1589,8 @@ public class PacketCreator {
     /**
      * Gets a response to a move monster packet.
      *
-     * @param objectid  The ObjectID of the monster being moved.
-     * @param moveid    The movement ID.
+     * @param objectid The ObjectID of the monster being moved.
+     * @param moveid The movement ID.
      * @param currentMp The current MP of the monster.
      * @param useSkills Can the monster use skills?
      * @return The move response packet.
@@ -1617,16 +1602,17 @@ public class PacketCreator {
     /**
      * Gets a response to a move monster packet.
      *
-     * @param objectid   The ObjectID of the monster being moved.
-     * @param moveid     The movement ID.
-     * @param currentMp  The current MP of the monster.
-     * @param useSkills  Can the monster use skills?
-     * @param skillId    The skill ID for the monster to use.
+     * @param objectid The ObjectID of the monster being moved.
+     * @param moveid The movement ID.
+     * @param currentMp The current MP of the monster.
+     * @param useSkills Can the monster use skills?
+     * @param skillId The skill ID for the monster to use.
      * @param skillLevel The level of the skill to use.
      * @return The move response packet.
      */
 
-    public static Packet moveMonsterResponse(int objectid, short moveid, int currentMp, boolean useSkills, int skillId, int skillLevel) {
+    public static Packet moveMonsterResponse(int objectid, short moveid, int currentMp, boolean useSkills, int skillId,
+                                             int skillLevel) {
         OutPacket p = OutPacket.create(SendOpcode.MOVE_MONSTER_RESPONSE);
         p.writeInt(objectid);
         p.writeShort(moveid);
@@ -1641,7 +1627,7 @@ public class PacketCreator {
      * Gets a general chat packet.
      *
      * @param cidfrom The character ID who sent the chat.
-     * @param text    The text of the chat.
+     * @param text The text of the chat.
      * @param show
      * @return The general chat packet.
      */
@@ -1657,9 +1643,9 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client to show an EXP increase.
      *
-     * @param gain   The amount of EXP gained.
+     * @param gain The amount of EXP gained.
      * @param inChat In the chat box?
-     * @param white  White text or yellow?
+     * @param white White text or yellow?
      * @return The exp gained packet.
      */
     public static Packet getShowExpGain(int gain, int equip, int party, boolean inChat, boolean white) {
@@ -1710,7 +1696,7 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client to show a meso gain.
      *
-     * @param gain   How many mesos gained.
+     * @param gain How many mesos gained.
      * @param inChat Show in the chat window?
      * @return The meso gain packet.
      */
@@ -1730,7 +1716,7 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client to show a item gain.
      *
-     * @param itemId   The ID of the item gained.
+     * @param itemId The ID of the item gained.
      * @param quantity How many items gained.
      * @return The item gain packet.
      */
@@ -1741,9 +1727,9 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client to show an item gain.
      *
-     * @param itemId   The ID of the item gained.
+     * @param itemId The ID of the item gained.
      * @param quantity The number of items gained.
-     * @param inChat   Show in the chat window?
+     * @param inChat Show in the chat window?
      * @return The item gain packet.
      */
     public static Packet getShowItemGain(int itemId, short quantity, boolean inChat) {
@@ -1772,7 +1758,7 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client that a monster was killed.
      *
-     * @param objId     The objectID of the killed monster.
+     * @param objId The objectID of the killed monster.
      * @param animation 0 = dissapear, 1 = fade out, 2+ = special
      * @return The kill monster packet.
      */
@@ -1814,7 +1800,8 @@ public class PacketCreator {
         p.writeBool(drop.getMeso() > 0); // 1 mesos, 0 item, 2 and above all item meso bag,
         p.writeInt(drop.getItemId()); // drop object ID
         p.writeInt(drop.getClientsideOwnerId()); // owner charid/partyid :)
-        p.writeByte(dropType); // 0 = timeout for non-owner, 1 = timeout for non-owner's party, 2 = FFA, 3 = explosive/FFA
+        p.writeByte(
+                dropType); // 0 = timeout for non-owner, 1 = timeout for non-owner's party, 2 = FFA, 3 = explosive/FFA
         p.writePos(dropto);
         p.writeInt(drop.getDropper().getObjectId()); // dropper oid, found thanks to Li Jixue
 
@@ -1841,7 +1828,8 @@ public class PacketCreator {
         }
         long buffmask = 0;
         Integer buffvalue = null;
-        if ((chr.getBuffedValue(BuffStat.DARKSIGHT) != null || chr.getBuffedValue(BuffStat.WIND_WALK) != null) && !chr.isHidden()) {
+        if ((chr.getBuffedValue(BuffStat.DARKSIGHT) != null || chr.getBuffedValue(BuffStat.WIND_WALK) != null) &&
+                !chr.isHidden()) {
             buffmask |= BuffStat.DARKSIGHT.getValue();
         }
         if (chr.getBuffedValue(BuffStat.COMBO) != null) {
@@ -1919,8 +1907,8 @@ public class PacketCreator {
     /**
      * Gets a packet spawning a player as a mapobject to other clients.
      *
-     * @param target        The client receiving this packet.
-     * @param chr           The character to spawn to other clients.
+     * @param target The client receiving this packet.
+     * @param chr The character to spawn to other clients.
      * @param enteringField Whether the character to spawn is not yet present in the map or already is.
      * @return The spawn player packet.
      */
@@ -2166,8 +2154,8 @@ public class PacketCreator {
     /**
      * Adds an announcement box to an existing OutPacket.
      *
-     * @param p    The OutPacket to add an announcement box
-     *             to.
+     * @param p The OutPacket to add an announcement box
+     * to.
      * @param shop The shop to announce.
      */
     private static void addAnnounceBox(final OutPacket p, PlayerShop shop, int availability) {
@@ -2266,7 +2254,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet moveSummon(int cid, int oid, Point startPos, InPacket movementPacket, long movementDataLength) {
+    public static Packet moveSummon(int cid, int oid, Point startPos, InPacket movementPacket,
+                                    long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_SUMMON);
         p.writeInt(cid);
         p.writeInt(oid);
@@ -2275,7 +2264,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet moveMonster(int oid, boolean skillPossible, int skill, int skillId, int skillLevel, int pOption,
+    public static Packet moveMonster(int oid, boolean skillPossible, int skill, int skillId, int skillLevel,
+                                     int pOption,
                                      Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_MONSTER);
         p.writeInt(oid);
@@ -2326,20 +2316,27 @@ public class PacketCreator {
         }
         */
 
-    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance,
+                                          int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed,
+                                          int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.CLOSE_RANGE_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         return p;
     }
 
-    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage,
+                                      int projectile, Map<Integer, List<Integer>> damage, int speed, int direction,
+                                      int display) {
         final OutPacket p = OutPacket.create(SendOpcode.RANGED_ATTACK);
-        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction, display);
+        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction,
+                display);
         p.writeInt(0);
         return p;
     }
 
-    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
+    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage,
+                                     Map<Integer, List<Integer>> damage, int charge, int speed, int direction,
+                                     int display) {
         final OutPacket p = OutPacket.create(SendOpcode.MAGIC_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         if (charge != -1) {
@@ -2348,7 +2345,9 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance,
+                                      int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage,
+                                      int speed, int direction, int display) {
         p.writeInt(chr.getId());
         p.writeByte(numAttackedAndDamage);
         p.writeByte(0x5B);//?
@@ -2377,7 +2376,8 @@ public class PacketCreator {
         }
     }
 
-    public static Packet throwGrenade(int cid, Point pos, int keyDown, int skillId, int skillLevel) { // packets found thanks to GabrielSin
+    public static Packet throwGrenade(int cid, Point pos, int keyDown, int skillId,
+                                      int skillLevel) { // packets found thanks to GabrielSin
         OutPacket p = OutPacket.create(SendOpcode.THROW_GRENADE);
         p.writeInt(cid);
         p.writeInt(pos.x);
@@ -2441,6 +2441,13 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 修改游戏角色的库存。
+     *
+     * @param updateTick 是否需要更新滴答计数
+     * @param mods 包含要执行的库存修改操作的列表
+     * @return 封装了修改操作结果的Packet对象
+     */
     public static Packet modifyInventory(boolean updateTick, final List<ModifyInventory> mods) {
         OutPacket p = OutPacket.create(SendOpcode.INVENTORY_OPERATION);
         p.writeBool(updateTick);
@@ -2482,7 +2489,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getScrollEffect(int chr, ScrollResult scrollSuccess, boolean legendarySpirit, boolean whiteScroll) {   // thanks to Rien dev team
+    public static Packet getScrollEffect(int chr, ScrollResult scrollSuccess, boolean legendarySpirit,
+                                         boolean whiteScroll) {   // thanks to Rien dev team
         OutPacket p = OutPacket.create(SendOpcode.SHOW_SCROLL_EFFECT);
         p.writeInt(chr);
         p.writeBool(scrollSuccess == ScrollResult.SUCCESS);
@@ -2508,7 +2516,8 @@ public class PacketCreator {
 
     public static Packet showAllCharacter(int totalWorlds, int totalChrs) {
         OutPacket p = OutPacket.create(SendOpcode.VIEW_ALL_CHAR);
-        p.writeByte(totalChrs > 0 ? 1 : 5); // 2: already connected to server, 3 : unk error (view-all-characters), 5 : cannot find any
+        p.writeByte(totalChrs > 0 ? 1 :
+                5); // 2: already connected to server, 3 : unk error (view-all-characters), 5 : cannot find any
         p.writeInt(totalWorlds);
         p.writeInt(totalChrs);
         return p;
@@ -2594,7 +2603,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet damagePlayer(int skill, int monsteridfrom, int cid, int damage, int fake, int direction, boolean pgmr, int pgmr_1, boolean is_pg, int oid, int pos_x, int pos_y) {
+    public static Packet damagePlayer(int skill, int monsteridfrom, int cid, int damage, int fake, int direction,
+                                      boolean pgmr, int pgmr_1, boolean is_pg, int oid, int pos_x, int pos_y) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_PLAYER);
         p.writeInt(cid);
         p.writeByte(skill);
@@ -2746,7 +2756,9 @@ public class PacketCreator {
         p.writeByte(0); //end of pets
 
         Item mount;     //mounts can potentially crash the client if the player's level is not properly checked
-        if (chr.getMapleMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && ItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
+        if (chr.getMapleMount() != null &&
+                (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null &&
+                ItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
             Mount mmount = chr.getMapleMount();
             p.writeByte(mmount.getId()); //mount
             p.writeInt(mmount.getLevel()); //level
@@ -2765,7 +2777,8 @@ public class PacketCreator {
         p.writeInt(book.getNormalCard());
         p.writeInt(book.getSpecialCard());
         p.writeInt(book.getTotalCards());
-        p.writeInt(chr.getMonsterBookCover() > 0 ? ItemInformationProvider.getInstance().getCardMobId(chr.getMonsterBookCover()) : 0);
+        p.writeInt(chr.getMonsterBookCover() > 0 ?
+                ItemInformationProvider.getInstance().getCardMobId(chr.getMonsterBookCover()) : 0);
         Item medal = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -49);
         if (medal != null) {
             p.writeInt(medal.getItemId());
@@ -3180,7 +3193,7 @@ public class PacketCreator {
         p.writeByte(PlayerInteractionHandler.Action.INVITE.getCode());
         p.writeByte(3);
         p.writeString(chr.getName());
-        p.writeBytes(new byte[]{(byte) 0xB7, (byte) 0x50, 0, 0});
+        p.writeBytes(new byte[] {(byte) 0xB7, (byte) 0x50, 0, 0});
         return p;
     }
 
@@ -3322,7 +3335,7 @@ public class PacketCreator {
      * 1: Npc talking (right)<br> 2: Player talking (left)<br> 3: Player talking
      * (left)<br>
      *
-     * @param npc      Npcid
+     * @param npc Npcid
      * @param msgType
      * @param talk
      * @param endBytes
@@ -3351,6 +3364,14 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 获取NPC对话风格的数据包
+     *
+     * @param npc NPC的ID
+     * @param talk 对话内容
+     * @param styles 对话风格的数组
+     * @return 返回配置好的数据包
+     */
     public static Packet getNPCTalkStyle(int npc, String talk, int[] styles) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
@@ -3365,6 +3386,16 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 获取NPC对话编号的Packet对象
+     *
+     * @param npc NPC的编号
+     * @param talk NPC的对话内容
+     * @param def 对话的基础值
+     * @param min 对话的最小值
+     * @param max 对话的最大值
+     * @return 返回一个包含NPC对话编号的Packet对象
+     */
     public static Packet getNPCTalkNum(int npc, String talk, int def, int min, int max) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
@@ -3379,6 +3410,14 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 获取NPC对话文本并封装为OutPacket对象。
+     *
+     * @param npc NPC的标识符，用于标识对话的NPC。
+     * @param talk 对话文本内容。
+     * @param def 对话默认文本内容。
+     * @return 封装了NPC对话文本的OutPacket对象。
+     */
     public static Packet getNPCTalkText(int npc, String talk, String def) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // Doesn't matter
@@ -3390,7 +3429,19 @@ public class PacketCreator {
         p.writeInt(0);
         return p;
     }
-    public static Packet getNPCTalkNum(int npc, String talk, int def, int min, int max,byte speaker) {
+
+    /**
+     * 获取与NPC对话的编号包
+     *
+     * @param npc NPC的编号
+     * @param talk 与NPC的对话内容
+     * @param def 定义值，具体含义待明确
+     * @param min 最小值，具体含义待明确
+     * @param max 最大值，具体含义待明确
+     * @param speaker 发言者的字节表示，具体含义待明确
+     * @return 返回包含NPC对话信息的Packet对象
+     */
+    public static Packet getNPCTalkNum(int npc, String talk, int def, int min, int max, byte speaker) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
         p.writeInt(npc);
@@ -3404,7 +3455,16 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getNPCTalkText(int npc, String talk, String def,byte speaker) {
+    /**
+     * 获取与NPC对话的文本数据包
+     *
+     * @param npc NPC编号
+     * @param talk 对话内容
+     * @param def 默认回复
+     * @param speaker 说话人（0表示NPC，1表示玩家）
+     * @return 返回包含NPC对话文本的数据包
+     */
+    public static Packet getNPCTalkText(int npc, String talk, String def, byte speaker) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // Doesn't matter
         p.writeInt(npc);
@@ -3415,8 +3475,25 @@ public class PacketCreator {
         p.writeInt(0);
         return p;
     }
+
+    /**
+     * 创建一个 NPC 对话包，用于发送问答活动数据。
+     *
+     * @param nSpeakerTypeID 说话者的类型 ID
+     * @param nSpeakerTemplateID 说话者的模板 ID
+     * @param nResCode 结果代码，用于指示不同的操作或状态
+     * @param sTitle 问答活动的标题
+     * @param sProblemText 问答的问题文本
+     * @param sHintText 问答的提示文本
+     * @param nMinInput 用户输入的最小值
+     * @param nMaxInput 用户输入的最大值
+     * @param tRemainInitialQuiz 剩余的初始问答时间
+     * @return 构造好的 NPC 对话包
+     */
     // NPC Quiz packets thanks to Eric
-    public static Packet OnAskQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, String sTitle, String sProblemText, String sHintText, int nMinInput, int nMaxInput, int tRemainInitialQuiz) {
+    public static Packet OnAskQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, String sTitle,
+                                   String sProblemText, String sHintText, int nMinInput, int nMaxInput,
+                                   int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
         p.writeInt(nSpeakerTemplateID);
@@ -3434,7 +3511,21 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet OnAskSpeedQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, int nType, int dwAnswer, int nCorrect, int nRemain, int tRemainInitialQuiz) {
+    /**
+     * 处理速度测试问题的请求
+     *
+     * @param nSpeakerTypeID NPC类型ID
+     * @param nSpeakerTemplateID NPC模板ID
+     * @param nResCode 响应代码，用于指示测试的结果（例如，是否通过）
+     * @param nType 测试类型
+     * @param dwAnswer 用户给出的答案
+     * @param nCorrect 正确答案的数量
+     * @param nRemain 剩余测试次数
+     * @param tRemainInitialQuiz 初始剩余测试时间
+     * @return 返回构建的Packet对象，包含与NPC对话的响应数据
+     */
+    public static Packet OnAskSpeedQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, int nType,
+                                        int dwAnswer, int nCorrect, int nRemain, int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
         p.writeInt(nSpeakerTemplateID);
@@ -3451,10 +3542,27 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示角色身上的增益效果。
+     *
+     * @param chrId 角色ID，用于标识哪个角色将显示增益效果。
+     * @param skillId 技能ID，用于标识产生增益效果的技能。
+     * @param effectId 效果ID，用于标识具体的增益效果。
+     * @return 返回一个包含增益效果显示信息的Packet对象。
+     */
     public static Packet showBuffEffect(int chrId, int skillId, int effectId) {
         return showBuffEffect(chrId, skillId, effectId, (byte) 3);
     }
 
+    /**
+     * 显示角色身上的buff效果
+     *
+     * @param chrId 角色ID
+     * @param skillId 技能ID
+     * @param effectId 效果ID（buff等级）
+     * @param direction 方向
+     * @return 返回包含buff效果的Packet对象
+     */
     public static Packet showBuffEffect(int chrId, int skillId, int effectId, byte direction) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chrId);
@@ -3466,7 +3574,18 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showBuffEffect(int chrId, int skillId, int skillLv, int effectId, byte direction) {   // updated packet structure found thanks to Rien dev team
+    /**
+     * 显示角色身上的技能效果。
+     *
+     * @param chrId 角色ID，表示要显示效果的角色。
+     * @param skillId 技能ID，表示要显示效果的技能。
+     * @param skillLv 技能等级，表示技能的具体等级。
+     * @param effectId 效果ID，表示要显示的具体效果。
+     * @param direction 方向，表示效果的方向。
+     * @return 返回一个Packet对象，包含了要发送的数据包。
+     */
+    public static Packet showBuffEffect(int chrId, int skillId, int skillLv, int effectId,
+                                        byte direction) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chrId);
         p.writeByte(effectId);
@@ -3477,6 +3596,13 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示自己的增益效果
+     *
+     * @param skillId 技能ID
+     * @param effectId 效果ID
+     * @return 包含增益效果信息的Packet对象
+     */
     public static Packet showOwnBuffEffect(int skillId, int effectId) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
         p.writeByte(effectId);
@@ -3486,16 +3612,31 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showOwnBerserk(int skilllevel, boolean Berserk) {
+    /**
+     * 显示自身狂暴状态。
+     *
+     * @param skillLevel 技能等级，一个整数。
+     * @param berserk 是否处于狂暴状态，一个布尔值。
+     * @return 返回配置好的 OutPacket 对象。
+     */
+    public static Packet showOwnBerserk(int skillLevel, boolean berserk) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
         p.writeByte(1);
         p.writeInt(1320006);
         p.writeByte(0xA9);
-        p.writeByte(skilllevel);
-        p.writeByte(Berserk ? 1 : 0);
+        p.writeByte(skillLevel);
+        p.writeByte(berserk ? 1 : 0);
         return p;
     }
 
+    /**
+     * 显示狂暴状态的效果。
+     *
+     * @param chrId 角色ID
+     * @param skillLv 技能等级
+     * @param berserk 狂暴状态，true 表示狂暴，false 表示非狂暴
+     * @return 返回包含显示狂暴状态所需数据的 Packet 对象
+     */
     public static Packet showBerserk(int chrId, int skillLv, boolean berserk) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chrId);
@@ -3507,24 +3648,46 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateSkill(int skillId, int level, int masterlevel, long expiration) {
+    /**
+     * 更新技能信息
+     *
+     * @param skillId 技能ID
+     * @param level 技能等级
+     * @param masterLevel 熟练度等级
+     * @param expiration 技能过期时间（毫秒）
+     * @return 更新后的Packet对象
+     */
+    public static Packet updateSkill(int skillId, int level, int masterLevel, long expiration) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_SKILLS);
         p.writeByte(1);
         p.writeShort(1);
         p.writeInt(skillId);
         p.writeInt(level);
-        p.writeInt(masterlevel);
+        p.writeInt(masterLevel);
         addExpirationTime(p, expiration);
         p.writeByte(4);
         return p;
     }
 
+    /**
+     * 获取展示任务完成情况的包
+     *
+     * @param id 任务ID
+     * @return 包含任务完成情况的包
+     */
     public static Packet getShowQuestCompletion(int id) {
         final OutPacket p = OutPacket.create(SendOpcode.QUEST_CLEAR);
         p.writeShort(id);
         return p;
     }
 
+    /**
+     * 根据给定的键绑定映射生成一个包含键映射信息的Packet对象。
+     *
+     * @param keybindings 一个映射，其中键是整数（通常表示按键代码），值是KeyBinding对象，表示该按键的绑定信息。
+     * @return 一个包含键映射信息的Packet对象。该Packet对象使用SendOpcode.KEYMAP作为操作码，并依次写入每个键的绑定信息。
+     * 如果某个键没有绑定信息，则对应位置将写入0作为类型和动作。
+     */
     public static Packet getKeymap(Map<Integer, KeyBinding> keybindings) {
         final OutPacket p = OutPacket.create(SendOpcode.KEYMAP);
         p.writeByte(0);
@@ -3541,12 +3704,23 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet QuickslotMappedInit(QuickslotBinding pQuickslot) {
+    /**
+     * 根据给定的快速槽绑定初始化并返回一个Packet对象。
+     *
+     * @param pQuickSlot 快速槽绑定对象，包含快速槽的配置信息。
+     * @return 初始化后的Packet对象，包含快速槽的初始化信息。
+     */
+    public static Packet quickSlotMappedInit(QuickslotBinding pQuickSlot) {
         OutPacket p = OutPacket.create(SendOpcode.QUICKSLOT_INIT);
-        pQuickslot.encode(p);
+        pQuickSlot.encode(p);
         return p;
     }
 
+    /**
+     * 获取库存已满状态的Packet对象。
+     *
+     * @return 返回库存已满状态的Packet对象。
+     */
     public static Packet getInventoryFull() {
         return modifyInventory(true, Collections.emptyList());
     }
@@ -3598,6 +3772,13 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 创建一个用于存储金币的OutPacket对象
+     *
+     * @param slots  存储位置的槽位数量
+     * @param meso   要存储的金币数量
+     * @return       包含存储信息的Packet对象
+     */
     public static Packet mesoStorage(byte slots, int meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x13);
@@ -3976,7 +4157,8 @@ public class PacketCreator {
         p.writeInt(secondmask);
     }
 
-    public static Packet applyMonsterStatus(final int oid, final MonsterStatusEffect mse, final List<Integer> reflection) {
+    public static Packet applyMonsterStatus(final int oid, final MonsterStatusEffect mse,
+                                            final List<Integer> reflection) {
         Map<MonsterStatus, Integer> stati = mse.getStati();
         final OutPacket p = OutPacket.create(SendOpcode.APPLY_MONSTER_STATUS);
         p.writeInt(oid);
@@ -4017,7 +4199,8 @@ public class PacketCreator {
     // 修复如果使用旅行倍率会出现小数的情况
     public static Packet getClock(Number time) { // time in seconds
         OutPacket p = OutPacket.create(SendOpcode.CLOCK);
-        p.writeByte(2); // clock type. if you send 3 here you have to send another byte (which does not matter at all) before the timestamp
+        p.writeByte(
+                2); // clock type. if you send 3 here you have to send another byte (which does not matter at all) before the timestamp
         p.writeInt(time.intValue());
         return p;
     }
@@ -4044,7 +4227,8 @@ public class PacketCreator {
     public static Packet spawnMist(int objId, int ownerId, int skill, int level, Mist mist) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MIST);
         p.writeInt(objId);
-        p.writeInt(mist.isMobMist() ? 0 : mist.isPoisonMist() ? 1 : mist.isRecoveryMist() ? 4 : 2); // mob mist = 0, player poison = 1, smokescreen = 2, unknown = 3, recovery = 4
+        p.writeInt(mist.isMobMist() ? 0 : mist.isPoisonMist() ? 1 : mist.isRecoveryMist() ? 4 :
+                2); // mob mist = 0, player poison = 1, smokescreen = 2, unknown = 3, recovery = 4
         p.writeInt(ownerId);
         p.writeInt(skill);
         p.writeByte(level);
@@ -4299,7 +4483,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet catchMonster(int mobOid, byte success) {   // updated packet structure found thanks to Rien dev team
+    public static Packet catchMonster(int mobOid,
+                                      byte success) {   // updated packet structure found thanks to Rien dev team
         final OutPacket p = OutPacket.create(SendOpcode.CATCH_MONSTER);
         p.writeInt(mobOid);
         p.writeByte(success);
@@ -4317,8 +4502,8 @@ public class PacketCreator {
     /**
      * Sends a player hint.
      *
-     * @param hint   The hint it's going to send.
-     * @param width  How tall the box is going to be.
+     * @param hint The hint it's going to send.
+     * @param width How tall the box is going to be.
      * @param height How long the box is going to be.
      * @return The player hint packet.
      */
@@ -4516,7 +4701,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet loadExceptionList(final int cid, final int petId, final byte petIdx, final List<Integer> data) {
+    public static Packet loadExceptionList(final int cid, final int petId, final byte petIdx,
+                                           final List<Integer> data) {
         final OutPacket p = OutPacket.create(SendOpcode.PET_EXCEPTION_LIST);
         p.writeInt(cid);
         p.writeByte(petIdx);
@@ -4835,7 +5021,8 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.EXIT.getCode());
         p.writeBool(visitor);
-        p.writeByte(type); /* 2 : CRASH 3 : The room has been closed 4 : You have left the room 5 : You have been expelled  */
+        p.writeByte(
+                type); /* 2 : CRASH 3 : The room has been closed 4 : You have left the room 5 : You have been expelled  */
         return p;
     }
 
@@ -5064,7 +5251,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<PlayerShopItem, AbstractMapObject>> hmsAvailable) {
+    public static Packet owlOfMinerva(Client c, int itemId,
+                                      List<Pair<PlayerShopItem, AbstractMapObject>> hmsAvailable) {
         byte itemType = ItemConstants.getInventoryType(itemId).getType();
 
         OutPacket p = OutPacket.create(SendOpcode.SHOP_SCANNER_RESULT);
@@ -5265,7 +5453,7 @@ public class PacketCreator {
 
     /**
      * @param pastVisitors Merchant visitors. The first 10 names will be shown,
-     *                     everything beyond will layered over each other at the top of the window.
+     * everything beyond will layered over each other at the top of the window.
      */
     public static Packet viewMerchantVisitorHistory(List<HiredMerchant.PastVisitor> pastVisitors) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
@@ -5312,7 +5500,7 @@ public class PacketCreator {
         p.writeInt(hm.getObjectId());
         p.writeString(hm.getDescription());
         p.writeByte(hm.getItemId() % 100);
-        p.writeBytes(new byte[]{1, 4});
+        p.writeBytes(new byte[] {1, 4});
         return p;
     }
 
@@ -5403,7 +5591,8 @@ public class PacketCreator {
 
     public static Packet givePirateBuff(List<Pair<BuffStat, Integer>> statups, int buffid, int duration) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
-        boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION || buffid == Corsair.SPEED_INFUSION;
+        boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION ||
+                buffid == Corsair.SPEED_INFUSION;
         writeLongMask(p, statups);
         p.writeShort(0);
         for (Pair<BuffStat, Integer> stat : statups) {
@@ -5418,7 +5607,8 @@ public class PacketCreator {
 
     public static Packet giveForeignPirateBuff(int cid, int buffid, int time, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
-        boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION || buffid == Corsair.SPEED_INFUSION;
+        boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION ||
+                buffid == Corsair.SPEED_INFUSION;
         p.writeInt(cid);
         writeLongMask(p, statups);
         p.writeShort(0);
@@ -5677,11 +5867,12 @@ public class PacketCreator {
             }
         }
         p.writeByte(0xD0 + items.size());
-        p.writeBytes(new byte[]{-1, -1, -1, 0});
+        p.writeBytes(new byte[] {-1, -1, -1, 0});
         return p;
     }
 
-    public static Packet showCouponRedeemedItems(int accountId, int maplePoints, int mesos, List<Item> cashItems, List<Pair<Integer, Integer>> items) {
+    public static Packet showCouponRedeemedItems(int accountId, int maplePoints, int mesos, List<Item> cashItems,
+                                                 List<Pair<Integer, Integer>> items) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
         p.writeByte(0x59);
         p.writeByte((byte) cashItems.size());
@@ -5726,10 +5917,10 @@ public class PacketCreator {
      * User for /find, buddy find and /c (chase)
      * CField::OnWhisper
      *
-     * @param target         Name String from the command parameter
-     * @param type           Location of the target
+     * @param target Name String from the command parameter
+     * @param type Location of the target
      * @param fieldOrChannel If true & chr is not null, shows different channel message
-     * @param flag           LOCATION or LOCATION_FRIEND
+     * @param flag LOCATION or LOCATION_FRIEND
      * @return packet structure
      */
     public static Packet getFindResult(Character target, byte type, int fieldOrChannel, byte flag) {
@@ -5934,7 +6125,8 @@ public class PacketCreator {
             }
         }
         //write entries
-        boolean missingEntries = entryCount == 2; //pedigree requires at least 3 entries to show leader, might only have 2 if leader's juniors leave
+        boolean missingEntries = entryCount ==
+                2; //pedigree requires at least 3 entries to show leader, might only have 2 if leader's juniors leave
         if (missingEntries) {
             entryCount++;
         }
@@ -5996,7 +6188,8 @@ public class PacketCreator {
         p.writeInt(entry.getTotalReputation()); //total rep
         p.writeInt(entry.getRepsToSenior()); //reps recorded to senior
         p.writeInt(entry.getTodaysRep());
-        p.writeInt(isOnline ? ((chr.isAwayFromWorld() || chr.getCashShop().isOpened()) ? -1 : chr.getClient().getChannel() - 1) : 0);
+        p.writeInt(isOnline ?
+                ((chr.isAwayFromWorld() || chr.getCashShop().isOpened()) ? -1 : chr.getClient().getChannel() - 1) : 0);
         p.writeInt(isOnline ? (int) (chr.getLoggedInTime() / 60000) : 0); //time online in minutes
         p.writeString(entry.getName()); //name
     }
@@ -6052,7 +6245,7 @@ public class PacketCreator {
 
     public static Packet aranGodlyStats() {
         OutPacket p = OutPacket.create(SendOpcode.FORCED_STAT_SET);
-        p.writeBytes(new byte[]{
+        p.writeBytes(new byte[] {
                 (byte) 0x1F, (byte) 0x0F, 0, 0,
                 (byte) 0xE7, 3, (byte) 0xE7, 3,
                 (byte) 0xE7, 3, (byte) 0xE7, 3,
@@ -6294,7 +6487,9 @@ public class PacketCreator {
     }
 
     // MAKER_RESULT packets thanks to Arnah (Vertisy)
-    public static Packet makerResult(boolean success, int itemMade, int itemCount, int mesos, List<Pair<Integer, Integer>> itemsLost, int catalystID, List<Integer> INCBuffGems) {
+    public static Packet makerResult(boolean success, int itemMade, int itemCount, int mesos,
+                                     List<Pair<Integer, Integer>> itemsLost, int catalystID,
+                                     List<Integer> INCBuffGems) {
         final OutPacket p = OutPacket.create(SendOpcode.MAKER_RESULT);
         p.writeInt(success ? 0 : 1); // 0 = success, 1 = fail
         p.writeInt(1); // 1 or 2 doesn't matter, same methods
@@ -6506,7 +6701,8 @@ public class PacketCreator {
     }
 
     public static Packet sendMesoLimit() {
-        final OutPacket p = OutPacket.create(SendOpcode.TRADE_MONEY_LIMIT); //Players under level 15 can only trade 1m per day
+        final OutPacket p =
+                OutPacket.create(SendOpcode.TRADE_MONEY_LIMIT); //Players under level 15 can only trade 1m per day
         return p;
     }
 
@@ -6589,7 +6785,7 @@ public class PacketCreator {
     public static Packet getDojoInfo(String info) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(10);
-        p.writeBytes(new byte[]{(byte) 0xB7, 4});//QUEST ID f5
+        p.writeBytes(new byte[] {(byte) 0xB7, 4});//QUEST ID f5
         p.writeString(info);
         return p;
     }
@@ -6642,8 +6838,9 @@ public class PacketCreator {
     public static Packet updateDojoStats(Character chr, int belt) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(10);
-        p.writeBytes(new byte[]{(byte) 0xB7, 4}); //?
-        p.writeString("pt=" + chr.getDojoPoints() + ";belt=" + belt + ";tuto=" + (chr.isFinishedDojoTutorial() ? "1" : "0"));
+        p.writeBytes(new byte[] {(byte) 0xB7, 4}); //?
+        p.writeString(
+                "pt=" + chr.getDojoPoints() + ";belt=" + belt + ";tuto=" + (chr.isFinishedDojoTutorial() ? "1" : "0"));
         return p;
     }
 
@@ -6702,7 +6899,7 @@ public class PacketCreator {
     }
 
     /**
-     * @param type  - (0:Light&Long 1:Heavy&Short)
+     * @param type - (0:Light&Long 1:Heavy&Short)
      * @param delay - seconds
      * @return
      */
@@ -6797,8 +6994,10 @@ public class PacketCreator {
                 p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
                 p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
             }
-            p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
-            p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(
+                    chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(
+                    chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
         } else {
             p.writeShort(0);
         }
@@ -6927,7 +7126,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.TALK_GUIDE);
         p.writeByte(0);
         p.writeString(talk);
-        p.writeBytes(new byte[]{(byte) 0xC8, 0, 0, 0, (byte) 0xA0, (byte) 0x0F, 0, 0});
+        p.writeBytes(new byte[] {(byte) 0xC8, 0, 0, 0, (byte) 0xA0, (byte) 0x0F, 0, 0});
         return p;
     }
 
@@ -7182,7 +7381,7 @@ public class PacketCreator {
 
         p.writeString(c.getAccountName());
         if (mts) {
-            p.writeBytes(new byte[]{(byte) 0x88, 19, 0, 0,
+            p.writeBytes(new byte[] {(byte) 0x88, 19, 0, 0,
                     7, 0, 0, 0,
                     (byte) 0xF4, 1, 0, 0,
                     (byte) 0x18, 0, 0, 0,
@@ -7251,7 +7450,8 @@ public class PacketCreator {
         if (writeList.isEmpty()) {
             return;
         }
-        writeList.add(CommodityFlag.FLAG.getSort(), new Pair<>(CommodityFlag.FLAG, writeList.stream().mapToLong(pair -> pair.getLeft().getFlag()).sum()));
+        writeList.add(CommodityFlag.FLAG.getSort(),
+                new Pair<>(CommodityFlag.FLAG, writeList.stream().mapToLong(pair -> pair.getLeft().getFlag()).sum()));
         writeList.forEach(w -> {
             CommodityFlag commodityFlag = w.getLeft();
             Number fieldVal = w.getRight();
@@ -7358,7 +7558,8 @@ public class PacketCreator {
     }
     // f2
 
-    public static Packet pyramidScore(byte score, int exp) {//Type cannot be higher than 4 (Rank D), otherwise you'll crash
+    public static Packet pyramidScore(byte score,
+                                      int exp) {//Type cannot be higher than 4 (Rank D), otherwise you'll crash
         OutPacket p = OutPacket.create(SendOpcode.PYRAMID_SCORE);
         p.writeByte(score);
         p.writeInt(exp);
@@ -7403,8 +7604,8 @@ public class PacketCreator {
      * Data is still missing, so this is pretty binary at the moment in how it
      * behaves.
      *
-     * @param remove     whether or not the remove or add the specified layer.
-     * @param layer      the targeted layer for removal or addition.
+     * @param remove whether or not the remove or add the specified layer.
+     * @param layer the targeted layer for removal or addition.
      * @param transition the time it takes to transition the effect.
      * @return a packet to change the background effect of a specified layer.
      */
@@ -7444,7 +7645,6 @@ public class PacketCreator {
         p.writeInt(nIncExp);
         return p;
     }
-
 
     private static Packet Tournament__Tournament(byte nState, byte nSubState) {
         final OutPacket p = OutPacket.create(SendOpcode.TOURNAMENT);
@@ -7500,13 +7700,11 @@ public class PacketCreator {
         return p;
     }
 
-
-
     public static Packet cancelFamilyBuff() {
         return familyBuff(0, 0, 0, 0);
     }
 
-    public static Packet UseTreasureBox(int type){
+    public static Packet UseTreasureBox(int type) {
         OutPacket p = OutPacket.create(SendOpcode.SUCCESS_IN_USE_GACHAPON_BOX);
         p.writeInt(type);
         return p;

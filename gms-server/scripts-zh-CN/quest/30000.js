@@ -30,7 +30,7 @@ function start(mode, type, selection)
 	    if (status == 0)
 	    {
 			//第一层对话
-			qm.sendNext("哦，尊贵的冒险者#r#h ##k，欢迎莅临#b《北斗冒险岛》#k这方被神秘与奇迹所笼罩的奇幻之地！吾乃您的引导者，#r小睡#k，一个集智慧与优雅于一身的存在，特此恭候您的到来。")
+			qm.sendNext("哦，尊贵的冒险者#r#h ##k，欢迎莅临#b《XiaoYe冒险岛》#k这方被神秘与奇迹所笼罩的奇幻之地！吾乃您的引导者，#r小睡#k，一个集智慧与优雅于一身的存在，特此恭候您的到来。")
 	    }
 		else if (status == 1 )
 		{
@@ -61,7 +61,7 @@ function start(mode, type, selection)
 			}
 			else
 			{
-			    qm.sendOk("请跟你面前的昨日酣睡对话吧！祝您游戏开心。");
+			    qm.sendOk("请跟你面前的萧曵对话吧！祝您游戏开心。");
 			    qm.forceStartQuest();
                 qm.dispose();				
 			}
@@ -72,7 +72,7 @@ function start(mode, type, selection)
 			if (qm.getJobId() == 0)
 			{
 			    qm.warp(4);
-			    qm.sendOk("请跟你面前的昨日酣睡对话吧！祝您游戏开心。");
+			    qm.sendOk("请跟你面前的萧曵对话吧！祝您游戏开心。");
 			    qm.forceStartQuest();			
 			    qm.dispose();				
 			}
@@ -97,7 +97,7 @@ function end(mode, type, selection)
 	    if (status == 0)
 	    {
 			//第一层对话
-            qm.sendOk("看来你已经见过小睡了，欢迎来到北斗，这是给你的启动资金，希望对您的冒险有所帮助\r\n\r\n#fUI/CashShop.img/CSDiscount/bonus# 金币: 100000");
+            qm.sendOk("看来你已经见过小睡了，欢迎来到XiaoYe，这是给你的启动资金，希望对您的冒险有所帮助\r\n\r\n#fUI/CashShop.img/CSDiscount/bonus# 金币: 100000");
             qm.gainMeso(100000);			
 			qm.forceCompleteQuest();
             qm.dispose();			

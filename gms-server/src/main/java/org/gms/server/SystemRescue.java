@@ -2,10 +2,10 @@
  * 名称：系统救援
  * 作者：Magical-H
  * 功能：通过检测异常信息并尝试进行解救，如卡地图解救（已完成）
- *      发型、脸型异常解救（未开发）
+ * 发型、脸型异常解救（未开发）
  */
-package org.gms.server;
 
+package org.gms.server;
 
 import lombok.Getter;
 import org.gms.client.Character;
@@ -23,7 +23,8 @@ import java.util.Random;
 public class SystemRescue {
     private final Character player;
     private static final Logger log = LoggerFactory.getLogger(SystemRescue.class);
-    private static final List<Integer> MapIdList = Arrays.asList(100000000, 101000000, 102000000, 103000000, 104000000);   //射手村，魔法密林，勇士部落，废弃都市，明珠港
+    private static final List<Integer> MapIdList = Arrays.asList(100000000, 101000000, 102000000, 103000000, 104000000);
+    //射手村，魔法密林，勇士部落，废弃都市，明珠港
     private static final String Lebel = I18nUtil.getLogMessage("SystemRescue.info.map.label") + " ";
 
     private static final String key_mapError_sysmsg = "系统救援_卡地图_系统通知";
@@ -37,12 +38,14 @@ public class SystemRescue {
      * 卡地图救援，将某个倒霉蛋解救到其它地图。
      */
     public void setMapChange() {
-        if (player == null) return;   // 预防空指针
-        int MapId = GameConfig.getServerInt("system_rescue_maperror_changeid");    // 该参数为控制台配置，设置地图ID大于0则启用。设置不存在的ID则改为随机传送到金银岛某个城镇。
-        if (MapId <= 0 && !player.isChangingMaps()) return;  // 如果 MapId 不大于0 且 玩家角色非切换地图状态，直接返回
+        // 预防空指针
+        if (player == null) return;
+        // 该参数为控制台配置，设置地图ID大于0则启用。设置不存在的ID则改为随机传送到金银岛某个城镇。
+        int MapId = GameConfig.getServerInt("system_rescue_maperror_changeid");
+        // 如果 MapId 不大于0 且 玩家角色非切换地图状态，直接返回
+        if (MapId <= 0 && !player.isChangingMaps()) return;
 
-        int MapId_error = -1;
-        String MapName_error = I18nUtil.getLogMessage("SystemRescue.info.map.message1");
+        int MapId_error = -1; String MapName_error = I18nUtil.getLogMessage("SystemRescue.info.map.message1");
         boolean Map_exists = false;
 
         try {
@@ -64,8 +67,7 @@ public class SystemRescue {
             filteredList.remove(Integer.valueOf(MapId)); // 移除当前的MapId
             if (!filteredList.isEmpty()) {
                 log.warn(Lebel + I18nUtil.getLogMessage("SystemRescue.warn.map.message3"), MapId);
-                Random random = new Random();
-                MapId = filteredList.get(random.nextInt(filteredList.size()));
+                Random random = new Random(); MapId = filteredList.get(random.nextInt(filteredList.size()));
             }
         }
         //考虑到可能会出现地图文件改错改坏造成的闪退，因此不判定地图是否存在再进行转移。
@@ -73,7 +75,8 @@ public class SystemRescue {
         String MapName = player.getMap().getMapName();
         String Message_system = I18nUtil.getMessage("SystemRescue.map.message1", MapName_error, MapName);
         player.getAbstractPlayerInteraction().saveOrUpdateCharacterExtendValue(key_mapError_sysmsg, Message_system);
-        log.info(Lebel + I18nUtil.getLogMessage("SystemRescue.info.map.message2"), player.getName(), MapName_error, MapId_error, MapName, MapId);
+        log.info(Lebel + I18nUtil.getLogMessage("SystemRescue.info.map.message2"), player.getName(), MapName_error,
+                MapId_error, MapName, MapId);
     }
 
     /**
@@ -84,8 +87,7 @@ public class SystemRescue {
             if (player == null) return;   //预防空指针
             //聊天窗口红色提示
             if (dropMessage(key_mapError_sysmsg, 5)) {
-                String Message = I18nUtil.getMessage("SystemRescue.map.message2");
-                if (!Message.isEmpty()) {
+                String Message = I18nUtil.getMessage("SystemRescue.map.message2"); if (!Message.isEmpty()) {
                     //卡地图救援提示判断，弹窗
                     player.dropMessage(1, Message);
                 }
@@ -109,7 +111,6 @@ public class SystemRescue {
             player.dropMessage(type, Message);       //给指定玩家发送消息
             player.getAbstractPlayerInteraction().saveOrUpdateCharacterExtendValue(keyname, "");      //设置指定键值为空
             return true;
-        }
-        return false;
+        } return false;
     }
 }

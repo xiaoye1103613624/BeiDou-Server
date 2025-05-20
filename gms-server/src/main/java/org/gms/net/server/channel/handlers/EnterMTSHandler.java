@@ -280,6 +280,6 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
      * @param c 客户端
      */
     private void openCenterScript(Client c) {
-        NPCScriptManager.getInstance().start(c, NpcId.BEI_DOU_NPC_BASE, null);
+        NPCScriptManager.getNpcInstance().start(c, NpcId.BEI_DOU_NPC_BASE, null);
     }
 }

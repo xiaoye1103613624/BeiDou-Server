@@ -21,6 +21,12 @@
 */
 package org.gms.client;
 
+import lombok.Getter;
+
+/**
+ * 肤色
+ */
+@Getter
 public enum SkinColor {
     NORMAL(0),
     DARK(1),
@@ -35,10 +41,6 @@ public enum SkinColor {
 
     SkinColor(int id) {
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public static SkinColor getById(int id) {

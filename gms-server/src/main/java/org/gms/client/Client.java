@@ -19,16 +19,17 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.client;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.Getter;
 import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.handler.timeout.IdleStateEvent;
 import org.gms.net.PacketHandler;
 import org.gms.net.PacketProcessor;
 import org.gms.net.netty.InvalidPacketHeaderException;
@@ -45,15 +46,7 @@ import org.gms.net.server.coordinator.session.SessionCoordinator.AntiMulticlient
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildCharacter;
 import org.gms.net.server.guild.GuildPackets;
-import org.gms.net.server.world.MessengerCharacter;
-import org.gms.net.server.world.Party;
-import org.gms.net.server.world.PartyCharacter;
-import org.gms.net.server.world.PartyOperation;
-import org.gms.net.server.world.World;
-import org.gms.server.SystemRescue;
-import org.gms.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.gms.net.server.world.*;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.scripting.event.EventManager;
@@ -62,42 +55,31 @@ import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestActionManager;
 import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.server.MapleLeafLogger;
+import org.gms.server.SystemRescue;
 import org.gms.server.ThreadManager;
 import org.gms.server.TimerManager;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeonInfo;
+import org.gms.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.script.ScriptEngine;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
+import java.sql.*;
+import java.util.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Semaphore;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
+import javax.script.ScriptEngine;
 
 public class Client extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(Client.class);
@@ -123,17 +105,42 @@ public class Client extends ChannelInboundHandlerAdapter {
     private Calendar birthday = null;
     private String accountName = null;
     private int world;
+    /**
+     * 最后回应时间
+     */
     private volatile long lastPong;
-    private int gmlevel;
+    /**
+     * gm等级
+     */
+    private int gmLevel;
+    /**
+     * 金币列表
+     */
     private Set<String> macs = new HashSet<>();
+    /**
+     * path路径 和 脚本引擎映射
+     */
     private Map<String, ScriptEngine> engines = new HashMap<>();
+    /**
+     * 角色槽
+     */
     private byte characterSlots = 3;
-    private byte loginattempt = 0;
+    /**
+     * 尝试登录次数
+     */
+    private byte loginAttempt = 0;
+    @Getter
     private String pin = "";
-    private int pinattempt = 0;
+    /**
+     * pin尝试 次数
+     */
+    private int pinAttempt = 0;
     private String pic = "";
-    private int picattempt = 0;
-    private byte csattempt = 0;
+    /**
+     * pic尝试
+     */
+    private int picAttempt = 0;
+    private byte csAttempt = 0;
     private byte gender = -1;
     private boolean disconnecting = false;
     private final Semaphore actionsSemaphore = new Semaphore(7);
@@ -157,7 +164,8 @@ public class Client extends ChannelInboundHandlerAdapter {
         CHANNEL
     }
 
-    public Client(Type type, long sessionId, String remoteAddress, PacketProcessor packetProcessor, int world, int channel) {
+    public Client(Type type, long sessionId, String remoteAddress, PacketProcessor packetProcessor, int world,
+                  int channel) {
         this.type = type;
         this.sessionId = sessionId;
         this.remoteAddress = remoteAddress;
@@ -224,7 +232,8 @@ public class Client extends ChannelInboundHandlerAdapter {
                 handler.handlePacket(packet, this);
             } catch (final Throwable t) {
                 final String chrInfo = player != null ? player.getName() + " on map " + player.getMapId() : "?";
-                log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", handler.getClass().getSimpleName(),
+                log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}",
+                        handler.getClass().getSimpleName(),
                         chrInfo, getAccountName(), packet, t);
                 enableActions();//解除客户端假死
             } finally {
@@ -245,8 +254,10 @@ public class Client extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (player != null) {
-            String MapName = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
-            log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName , player.getMapId(), cause);
+            String MapName =
+                    player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") :
+                            player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
+            log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName, player.getMapId(), cause);
             sysRescue.setMapChange();   // 尝试解救那些卡地图的倒霉蛋。
         }
 
@@ -322,6 +333,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     /**
      * 设置角色
+     *
      * @param player
      */
     public void setPlayer(Character player) {
@@ -360,7 +372,8 @@ public class Client extends ChannelInboundHandlerAdapter {
     private List<CharNameAndId> loadCharactersInternal(int worldId) {
         List<CharNameAndId> chars = new ArrayList<>(15);
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT id, name FROM characters WHERE accountid = ? AND world = ?")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT id, name FROM characters WHERE accountid = ? AND world = ?")) {
             ps.setInt(1, this.getAccID());
             ps.setInt(2, worldId);
 
@@ -402,7 +415,8 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT date FROM bit_votingrecords WHERE UPPER(account) = UPPER(?)")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT date FROM bit_votingrecords WHERE UPPER(account) = UPPER(?)")) {
             ps.setString(1, accountName);
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {
@@ -572,7 +586,8 @@ public class Client extends ChannelInboundHandlerAdapter {
     public int finishLogin() {
         encoderLock.lock();
         try {
-            if (getLoginState() > LOGIN_NOTLOGGEDIN) { // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
+            if (getLoginState() >
+                    LOGIN_NOTLOGGEDIN) { // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
                 loggedIn = false;
                 return 7;
             }
@@ -596,21 +611,23 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
     }
 
-    public String getPin() {
-        return pin;
-    }
-
+    /**
+     * 检查PIN码是否匹配
+     *
+     * @param other 要比较的PIN码字符串
+     * @return 如果PIN码匹配或用户可以绕过PIN码检查，则返回true；否则返回false
+     */
     public boolean checkPin(String other) {
         if (!(GameConfig.getServerBoolean("enable_pin") && !canBypassPin())) {
             return true;
         }
 
-        pinattempt++;
-        if (pinattempt > 5) {
+        pinAttempt++;
+        if (pinAttempt > 5) {
             SessionCoordinator.getInstance().closeSession(this, false);
         }
         if (pin.equals(other)) {
-            pinattempt = 0;
+            pinAttempt = 0;
             LoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, false);
             return true;
         }
@@ -633,35 +650,55 @@ public class Client extends ChannelInboundHandlerAdapter {
         return pic;
     }
 
+    /**
+     * 检查给定的字符串是否与特定图片的标识符匹配。
+     *
+     * @param other 要检查的字符串
+     * @return 如果匹配成功或满足特定条件，返回 true；否则返回 false
+     */
     public boolean checkPic(String other) {
         if (!(GameConfig.getServerBoolean("enable_pic") && !canBypassPic())) {
             return true;
         }
 
-        picattempt++;
-        if (picattempt > 5) {
+        picAttempt++;
+        if (picAttempt > 5) {
             SessionCoordinator.getInstance().closeSession(this, false);
         }
-        if (pic.equals(other)) {    // thanks ryantpayton (HeavenClient) for noticing null pics being checked here
-            picattempt = 0;
+        // thanks ryantpayton (HeavenClient) for noticing null pics being checked here
+        if (pic.equals(other)) {
+            picAttempt = 0;
             LoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, true);
             return true;
         }
         return false;
     }
 
+    /**
+     * 登录方法
+     *
+     * @param login 用户名
+     * @param pwd 密码
+     * @param hwid 硬件ID
+     * @return 登录结果状态码
+     *
+     * 该方法实现了用户的登录逻辑，包括尝试连接数据库、验证用户名和密码、检查账户状态等步骤。
+     * 登录成功或失败时，会返回不同的状态码。
+     */
     public int login(String login, String pwd, Hwid hwid) {
         int loginok = 5;
 
-        loginattempt++;
-        if (loginattempt > 4) {
+        loginAttempt++;
+        if (loginAttempt > 4) {
             loggedIn = false;
             SessionCoordinator.getInstance().closeSession(this, false);
-            return 6;   // thanks Survival_Project for finding out an issue with AUTOMATIC_REGISTER here
+            // thanks Survival_Project for finding out an issue with AUTOMATIC_REGISTER here
+            return 6;
         }
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT id, password, gender, banned, pin, pic, characterslots, tos, language FROM accounts WHERE name = ?")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT id, password, gender, banned, pin, pic, characterslots, tos, language FROM accounts WHERE name = ?")) {
             ps.setString(1, login);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -674,7 +711,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     }
 
                     boolean banned = (rs.getByte("banned") == 1);
-                    gmlevel = 0;
+                    gmLevel = 0;
                     pin = rs.getString("pin");
                     pic = rs.getString("pic");
                     gender = rs.getByte("gender");
@@ -692,11 +729,14 @@ public class Client extends ChannelInboundHandlerAdapter {
                         loginok = 7;
                     } else if (GameConfig.getServerBoolean("use_debug") && GameConfig.getServerBoolean("no_password")) {
                         return 0;
-                    } else if (passhash.charAt(0) == '$' && passhash.charAt(1) == '2' && BCrypt.checkpw(pwd, passhash)) {
+                    } else if (passhash.charAt(0) == '$' && passhash.charAt(1) == '2' &&
+                            BCrypt.checkpw(pwd, passhash)) {
                         loginok = (tos == 0) ? 23 : 0;
-                    } else if (pwd.equals(passhash) || checkHash(passhash, "SHA-1", pwd) || checkHash(passhash, "SHA-512", pwd)) {
+                    } else if (pwd.equals(passhash) || checkHash(passhash, "SHA-1", pwd) ||
+                            checkHash(passhash, "SHA-512", pwd)) {
                         // thanks GabrielSin for detecting some no-bcrypt inconsistencies here
-                        loginok = (tos == 0) ? (!GameConfig.getServerBoolean("bcrypt_migration") ? 23 : -23) : (!GameConfig.getServerBoolean("bcrypt_migration") ? 0 : -10); // migrate to bcrypt
+                        loginok = (tos == 0) ? (!GameConfig.getServerBoolean("bcrypt_migration") ? 23 : -23) :
+                                (!GameConfig.getServerBoolean("bcrypt_migration") ? 0 : -10); // migrate to bcrypt
                     } else {
                         loggedIn = false;
                         loginok = 4;
@@ -710,12 +750,13 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
+            AntiMulticlientResult res =
+                    SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
 
             return switch (res) {
                 case SUCCESS -> {
                     if (loginok == 0) {
-                        loginattempt = 0;
+                        loginAttempt = 0;
                     }
                     yield loginok;
                 }
@@ -830,7 +871,8 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = ?, lastlogin = ? WHERE id = ?")) {
+             PreparedStatement ps = con.prepareStatement(
+                     "UPDATE accounts SET loggedin = ?, lastlogin = ? WHERE id = ?")) {
             // using sql currenttime here could potentially break the login, thanks Arnah for pointing this out
 
             ps.setInt(1, newState);
@@ -854,7 +896,8 @@ public class Client extends ChannelInboundHandlerAdapter {
     public int getLoginState() {  // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
         try (Connection con = DatabaseConnection.getConnection()) {
             int state;
-            try (PreparedStatement ps = con.prepareStatement("SELECT loggedin, lastlogin, birthday FROM accounts WHERE id = ?")) {
+            try (PreparedStatement ps = con.prepareStatement(
+                    "SELECT loggedin, lastlogin, birthday FROM accounts WHERE id = ?")) {
                 ps.setInt(1, getAccID());
 
                 try (ResultSet rs = ps.executeQuery()) {
@@ -875,7 +918,8 @@ public class Client extends ChannelInboundHandlerAdapter {
                         if (lastlogin == null || lastlogin.getTime() + 30000 < Server.getInstance().getCurrentTime()) {
                             int accountId = accId;
                             state = LOGIN_NOTLOGGEDIN;
-                            updateLoginState(Client.LOGIN_NOTLOGGEDIN);   // ACCID = 0, issue found thanks to Tochi & K u ssss o & Thora & Omo Oppa
+                            updateLoginState(
+                                    Client.LOGIN_NOTLOGGEDIN);   // ACCID = 0, issue found thanks to Tochi & K u ssss o & Thora & Omo Oppa
                             this.setAccID(accountId);
                         }
                     }
@@ -900,7 +944,9 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean checkBirthDate(Calendar date) {
-        return date.get(Calendar.YEAR) == birthday.get(Calendar.YEAR) && date.get(Calendar.MONTH) == birthday.get(Calendar.MONTH) && date.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH);
+        return date.get(Calendar.YEAR) == birthday.get(Calendar.YEAR) &&
+                date.get(Calendar.MONTH) == birthday.get(Calendar.MONTH) &&
+                date.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH);
     }
 
     private void removePartyPlayer(World wserv) {
@@ -915,7 +961,8 @@ public class Client extends ChannelInboundHandlerAdapter {
             if (party.getLeader().getId() == idz && map != null) {
                 PartyCharacter lchr = null;
                 for (PartyCharacter pchr : party.getMembers()) {
-                    if (pchr != null && pchr.getId() != idz && (lchr == null || lchr.getLevel() <= pchr.getLevel()) && map.getCharacterById(pchr.getId()) != null) {
+                    if (pchr != null && pchr.getId() != idz && (lchr == null || lchr.getLevel() <= pchr.getLevel()) &&
+                            map.getCharacterById(pchr.getId()) != null) {
                         lchr = pchr;
                     }
                 }
@@ -959,7 +1006,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 if (MapId.isDojo(mapId)) {
                     this.getChannelServer().freeDojoSectionIfEmpty(mapId);
                 }
-                
+
                 if (player.getMap().getHPDec() > 0) {
                     getWorldServer().removePlayerHpDecrease(player);
                 }
@@ -1029,13 +1076,15 @@ public class Client extends ChannelInboundHandlerAdapter {
                                 player.sendPacket(GuildPackets.showGuildInfo(player));
                             }
                             if (bl != null) {
-                                wserv.loggedOff(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
+                                wserv.loggedOff(player.getName(), player.getId(), channel,
+                                        player.getBuddylist().getBuddyIds());
                             }
                         }
                     } else {
                         if (!this.serverTransition) { // if dc inside of cash shop.
                             if (bl != null) {
-                                wserv.loggedOff(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
+                                wserv.loggedOff(player.getName(), player.getId(), channel,
+                                        player.getBuddylist().getBuddyIds());
                             }
                         }
                     }
@@ -1189,16 +1238,21 @@ public class Client extends ChannelInboundHandlerAdapter {
         }, SECONDS.toMillis(15));
     }
 
+    /**
+     * 获取 金币集合。
+     *
+     * @return 一个不可修改的集合。
+     */
     public Set<String> getMacs() {
         return Collections.unmodifiableSet(macs);
     }
 
     public int getGMLevel() {
-        return gmlevel;
+        return gmLevel;
     }
 
     public void setGMLevel(int level) {
-        gmlevel = level;
+        gmLevel = level;
     }
 
     public void setScriptEngine(String name, ScriptEngine e) {
@@ -1214,7 +1268,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public NPCConversationManager getCM() {
-        return NPCScriptManager.getInstance().getCM(this);
+        return NPCScriptManager.getNpcInstance().getCM(this);
     }
 
     public QuestActionManager getQM() {
@@ -1258,7 +1312,8 @@ public class Client extends ChannelInboundHandlerAdapter {
         for (World w : Server.getInstance().getWorlds()) {
             for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                 if (accid == chr.getAccountId()) {
-                    log.warn("Chr {} has been removed from world {}. Possible Dupe attempt.", chr.getName(), GameConstants.WORLD_NAMES[w.getId()]);
+                    log.warn("Chr {} has been removed from world {}. Possible Dupe attempt.", chr.getName(),
+                            GameConstants.WORLD_NAMES[w.getId()]);
                     chr.getClient().forceDisconnect();
                     w.getPlayerStorage().removePlayer(chr.getId());
                 }
@@ -1496,14 +1551,16 @@ public class Client extends ChannelInboundHandlerAdapter {
             enableActions();
             return;
         } else if (MiniDungeonInfo.isDungeonMap(player.getMapId())) {
-            sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
+            sendPacket(PacketCreator.serverNotice(5,
+                    "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
             enableActions();
             return;
         }
 
         String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
-            sendPacket(PacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
+            sendPacket(PacketCreator.serverNotice(1,
+                    "Channel " + channel + " is currently disabled. Try another channel."));
             enableActions();
             return;
         }
@@ -1588,22 +1645,22 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     public void closePlayerScriptInteractions() {
         this.removeClickedNPC();
-        NPCScriptManager.getInstance().dispose(this);
+        NPCScriptManager.getNpcInstance().dispose(this);
         QuestScriptManager.getInstance().dispose(this);
     }
 
     public boolean attemptCsCoupon() {
-        if (csattempt > 2) {
+        if (csAttempt > 2) {
             resetCsCoupon();
             return false;
         }
 
-        csattempt++;
+        csAttempt++;
         return true;
     }
 
     public void resetCsCoupon() {
-        csattempt = 0;
+        csAttempt = 0;
     }
 
     public void enableCSActions() {

@@ -32,11 +32,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 自动封禁
+ *
  * @author kevintjuh93
  */
 public enum AutobanFactory {
@@ -61,10 +62,16 @@ public enum AutobanFactory {
     MPCON(25, SECONDS.toMillis(30));
 
     private static final Logger log = LoggerFactory.getLogger(AutobanFactory.class);
-    private static final Set<Integer> ignoredChrIds = new HashSet<>();
+    /**
+     * 忽略的玩家ID集合
+     */
+    private static final Set<Integer> IGNORED_CHR_IDS = new HashSet<>();
 
     private final int points;
-    private final long expiretime;
+    /**
+     * 过期时间，单位毫秒
+     */
+    private final long expireTime;
 
     AutobanFactory() {
         this(1, -1);
@@ -72,12 +79,12 @@ public enum AutobanFactory {
 
     AutobanFactory(int points) {
         this.points = points;
-        this.expiretime = -1;
+        this.expireTime = -1;
     }
 
     AutobanFactory(int points, long expire) {
         this.points = points;
-        this.expiretime = expire;
+        this.expireTime = expire;
     }
 
     public int getMaximum() {
@@ -85,7 +92,7 @@ public enum AutobanFactory {
     }
 
     public long getExpire() {
-        return expiretime;
+        return expireTime;
     }
 
     public void addPoint(AutobanManager ban, String reason) {
@@ -93,19 +100,23 @@ public enum AutobanFactory {
     }
 
     public void alert(Character chr, String reason) {
+        // 开启自动封禁
         if (GameConfig.getServerBoolean("use_auto_ban")) {
             if (chr != null && isIgnored(chr.getId())) {
                 return;
             }
-            Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
+            Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip(
+                    (chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " +
+                            reason));
         }
+        // 自动封禁日志
         if (GameConfig.getServerBoolean("use_auto_ban_log")) {
             final String chrName = chr != null ? Character.makeMapleReadable(chr.getName()) : "";
-            log.info("Autoban alert - chr {} caused {}-{}", chrName, this.name(), reason);
+            log.info("自动封禁提示 - 玩家 [{}] 因 [{}-{}]", chrName, this.name(), reason);
         }
     }
 
-    public void autoban(Character chr, String value) {
+    public void autoBan(Character chr, String value) {
         if (GameConfig.getServerBoolean("use_auto_ban")) {
             chr.autoBan("Autobanned for (" + this.name() + ": " + value + ")");
             //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");
@@ -113,26 +124,26 @@ public enum AutobanFactory {
     }
 
     /**
-     * Toggle ignored status for a character id.
-     * An ignored character will not trigger GM alerts.
+     * 切换玩家 ID 的忽略状态.
+     * 被忽略的玩家ID 不会触发警报.
      *
      * @return new status. true if the chrId is now ignored, otherwise false.
      */
     public static boolean toggleIgnored(int chrId) {
-        if (ignoredChrIds.contains(chrId)) {
-            ignoredChrIds.remove(chrId);
+        if (IGNORED_CHR_IDS.contains(chrId)) {
+            IGNORED_CHR_IDS.remove(chrId);
             return false;
         } else {
-            ignoredChrIds.add(chrId);
+            IGNORED_CHR_IDS.add(chrId);
             return true;
         }
     }
 
     private static boolean isIgnored(int chrId) {
-        return ignoredChrIds.contains(chrId);
+        return IGNORED_CHR_IDS.contains(chrId);
     }
 
     public static Collection<Integer> getIgnoredChrIds() {
-        return ignoredChrIds;
+        return IGNORED_CHR_IDS;
     }
 }

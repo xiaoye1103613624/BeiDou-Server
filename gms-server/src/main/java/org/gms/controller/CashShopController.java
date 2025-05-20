@@ -36,6 +36,13 @@ public class CashShopController {
         return ResultBody.success(cashShopService.getCommodityByCategory(request.getData()));
     }
 
+    /**
+     * 根据sn查询商品明细接口
+     * 通过传入的商品sn，查询并返回对应的商品明细信息
+     *
+     * @param sn 商品sn，用于查询的唯一标识
+     * @return ResultBody<CashShopSearchRtnDTO> 包含商品明细信息的ResultBody对象
+     */
     @Tag(name = "/cashShop/" + ApiConstant.LATEST)
     @Operation(summary = "根据sn查询商品明细")
     @GetMapping("/" + ApiConstant.LATEST + "/getCommodityBySn/{sn}")

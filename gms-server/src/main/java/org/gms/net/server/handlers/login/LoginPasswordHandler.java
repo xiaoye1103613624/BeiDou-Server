@@ -19,6 +19,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.net.server.handlers.login;
 
 import org.gms.client.Client;
@@ -48,24 +49,29 @@ public final class LoginPasswordHandler implements PacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         String remoteHost = c.getRemoteAddress();
         if (remoteHost.contentEquals("null")) {
-            c.sendPacket(PacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
+            // thanks Alchemist for noting remoteHost could be null
+            c.sendPacket(PacketCreator.getLoginFailed(14));
             return;
         }
 
         String login = p.readString();
         String pwd = p.readString();
         c.setAccountName(login);
-
-        p.skip(6);   // localhost masked the initial part with zeroes...
+        // localhost 用零掩码初始部分 localhost masked the initial part with zeroes...
+        p.skip(6);
         byte[] hwidNibbles = p.readBytes(4);
         Hwid hwid = new Hwid(HexTool.toCompactHexString(hwidNibbles));
         int loginok = c.login(login, pwd, hwid);
 
         if (GameConfig.getServerBoolean("automatic_register") && loginok == 5) {
             try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS)) { //Jayd: Added birthday, tempban
+                 PreparedStatement ps = con.prepareStatement(
+                         "INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);",
+                         Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, login);
-                ps.setString(2, GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(pwd));
+                ps.setString(2,
+                        GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) :
+                                BCrypt.hashpwSHA512(pwd));
                 ps.setDate(3, Date.valueOf(DefaultDates.getBirthday()));
                 ps.setTimestamp(4, Timestamp.valueOf(DefaultDates.getTempban()));
                 ps.executeUpdate();
@@ -82,7 +88,9 @@ public final class LoginPasswordHandler implements PacketHandler {
             }
         }
 
-        if (GameConfig.getServerBoolean("bcrypt_migration") && (loginok <= -10)) { // -10 means migration to bcrypt, -23 means TOS wasn't accepted
+        if (GameConfig.getServerBoolean("bcrypt_migration") &&
+                // -10表示迁移到bcrypt， -23表示不接受TOS ;  -10 means migration to bcrypt, -23 means TOS wasn't accepted
+                (loginok <= -10)) {
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("UPDATE accounts SET password = ? WHERE name = ?;")) {
                 ps.setString(1, BCrypt.hashpw(pwd, BCrypt.gensalt(12)));

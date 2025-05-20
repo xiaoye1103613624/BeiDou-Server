@@ -93,10 +93,19 @@ public class CashShopService {
                 .page();
     }
 
+    /**
+     * 根据商品编号查询商品信息
+     *
+     * @param sn 商品编号
+     * @return 返回商品查询结果DTO
+     * @throws IllegalArgumentException 如果传入的商品编号为空或无效，则抛出此异常
+     */
     public CashShopSearchRtnDTO getCommodityBySn(Integer sn) {
         RequireUtil.requireNotNull(sn, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
         String snStr = String.valueOf(sn);
+        // 一类
         int id = Integer.parseInt(snStr.substring(0, 1));
+        // 二类
         int subId = Integer.parseInt(snStr.substring(1, 3));
         CashCategory cashCategory = getCategory(id, subId);
         ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getWzItem(sn);
@@ -145,6 +154,14 @@ public class CashShopService {
         CashShop.CashItemFactory.loadAllModifiedCashItems();
     }
 
+    /**
+     * 根据一级商品分类ID和子ID获取商品分类
+     *
+     * @param id 现金商品分类ID
+     * @param subId 现金商品分类子ID
+     * @return 符合条件的现金商品分类
+     * @throws BizException 当未找到符合条件的现金商品分类时抛出异常
+     */
     private CashCategory getCategory(Integer id, Integer subId) {
         return CashShop.CashItemFactory.getCashCategories().stream()
                 .filter(cc -> Objects.equals(cc.getId(), id) && Objects.equals(cc.getSubId(), subId))

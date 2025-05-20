@@ -31,6 +31,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 百宝箱服务类
+ */
 @Slf4j
 @Service
 public class GachaponService {
@@ -38,59 +41,84 @@ public class GachaponService {
     private GachaponRewardPoolMapper gachaponRewardPoolMapper;
     @Autowired
     private GachaponRewardMapper gachaponRewardMapper;
-
-
+    /**
+     * 抽奖物品列表映射缓存，key为奖池id, value为奖池内物品列表
+     */
     private static final HashMap<Integer, List<GachaponRewardDO>> poolRewardsCache = new HashMap<>();
+    // 读写锁，用于并发控制缓存的更新和读取操作
     private static final ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private static final Lock rLock = lock.readLock();
     private static final Lock wLock = lock.writeLock();
 
-
-    public void updatePool(GachaponRewardPoolDO submit) {
+    /**
+     * 更新扭蛋奖励池信息。
+     *
+     * @param gachaponRewardPoolDO 扭蛋奖励池对象
+     */
+    public void updatePool(GachaponRewardPoolDO gachaponRewardPoolDO) {
         wLock.lock();
         try {
-            RequireUtil.requireNotNull(submit.getStartTime(), "生效时间不能为空");
-            if (submit.getIsPublic()) {
-                submit.setGachaponId(-1);
-                submit.setWeight(0);
-                RequireUtil.requireNotNull(submit.getProb(), "公共奖池中奖率不能为空");
+            RequireUtil.requireNotNull(gachaponRewardPoolDO.getStartTime(), "生效时间不能为空");
+            if (gachaponRewardPoolDO.getIsPublic()) {
+                gachaponRewardPoolDO.setGachaponId(-1);
+                gachaponRewardPoolDO.setWeight(0);
+                RequireUtil.requireNotNull(gachaponRewardPoolDO.getProb(), "公共奖池中奖率不能为空");
             } else {
-                submit.setProb(0);
-                RequireUtil.requireNotNull(submit.getGachaponId(), "百宝箱ID不能为空");
-                RequireUtil.requireNotNull(submit.getWeight(), "奖池权重不能为空");
+                gachaponRewardPoolDO.setProb(0);
+                RequireUtil.requireNotNull(gachaponRewardPoolDO.getGachaponId(), "百宝箱ID不能为空");
+                RequireUtil.requireNotNull(gachaponRewardPoolDO.getWeight(), "奖池权重不能为空");
             }
-            // 校验城镇概率和是否大于100%
-            gachaponRewardPoolMapper.insertOrUpdate(submit);
-            poolRewardsCache.remove(submit.getId());
+            gachaponRewardPoolMapper.insertOrUpdate(gachaponRewardPoolDO);
+            // 删除该奖池的缓存
+            poolRewardsCache.remove(gachaponRewardPoolDO.getId());
         } finally {
             wLock.unlock();
         }
     }
 
+    /**
+     * 删除与给定ID关联的池及其相关记录。
+     *
+     * @param poolId 要删除的池的ID。
+     */
     @Transactional
-    public void deletePool(Integer id) {
+    public void deletePool(Integer poolId) {
         wLock.lock();
         try {
-            gachaponRewardPoolMapper.deleteById(id);
-            gachaponRewardMapper.deleteByQuery(QueryWrapper.create().where("pool_id=?", id));
-            poolRewardsCache.remove(id);
+            // 删除奖励池
+            gachaponRewardPoolMapper.deleteById(poolId);
+            // 删除奖励池内的所有奖品记录
+            gachaponRewardMapper.deleteByQuery(QueryWrapper.create(GachaponRewardDO.class)
+                    .eq(GachaponRewardDO::getPoolId, poolId));
+            // gachaponRewardMapper.deleteByQuery(QueryWrapper.create().where("pool_id=?", poolId))
+            // 删除奖励池缓存信息
+            poolRewardsCache.remove(poolId);
         } finally {
             wLock.unlock();
         }
     }
 
+    /**
+     * 获取扭蛋池分页列表
+     *
+     * @param condition 查询条件
+     * @return 包含扭蛋池信息的分页对象
+     */
     public Page<GachaponPoolSearchRtnDTO> getPools(GachaponPoolSearchReqDTO condition) {
         rLock.lock();
         try {
             // 数据查询
-            QueryWrapper qw = new QueryWrapper().orderBy(GachaponRewardPoolDO::getIsPublic, false);
+            QueryWrapper qw = QueryWrapper.create().from(GachaponRewardPoolDO.class)
+                    .orderBy(GachaponRewardPoolDO::getIsPublic, false);
             if (condition.getGachaponId() != null) {
-                qw.eq("gachapon_id", condition.getGachaponId()).or("is_public=1");
+                qw.eq(GachaponRewardPoolDO::getGachaponId, condition.getGachaponId())
+                        .or(e -> {
+                            e.eq(GachaponRewardPoolDO::getIsPublic, true);
+                        });
+                //qw.eq("gachapon_id", condition.getGachaponId()).or("is_public=1");
             }
-            Page<GachaponRewardPoolDO> paginate = gachaponRewardPoolMapper.paginate(
-                    condition.getPageNo(),
-                    condition.getPageSize(),
-                    qw);
+            Page<GachaponRewardPoolDO> paginate =
+                    gachaponRewardPoolMapper.paginate(condition.getPageNo(), condition.getPageSize(), qw);
 
             // 类型转换
             List<GachaponPoolSearchRtnDTO> records = new ArrayList<>();
@@ -130,9 +158,10 @@ public class GachaponService {
     public List<GachaponRewardDO> getRewards(Integer poolId) {
         rLock.lock();
         try {
-            List<GachaponRewardDO> records = gachaponRewardMapper.selectListByQuery(QueryWrapper.create()
-                    .eq("pool_id", poolId)
-                    .orderBy(GachaponRewardDO::getItemId, true));
+            List<GachaponRewardDO> records =
+                    gachaponRewardMapper.selectListByQuery(QueryWrapper.create().from(GachaponRewardDO.class)
+                            .eq(GachaponRewardDO::getPoolId, poolId)
+                            .orderBy(GachaponRewardDO::getItemId, true));
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (GachaponRewardDO record : records) {
                 record.setItemName(ii.getName(record.getItemId()));
@@ -166,29 +195,50 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 设置抽奖池的真实概率
+     *
+     * @param pools 抽奖池列表
+     */
     private void setRealProb(List<GachaponPoolSearchRtnDTO> pools) {
-        int probTotal = pools.stream().mapToInt(GachaponPoolSearchRtnDTO::getProb).sum();
-        int probPoint = 100 * probTotal;
-        int weightPoint = 1000000 - probPoint;
+        // 公共奖池概率总和
+        int probTotal = pools.stream()
+                .mapToInt(GachaponPoolSearchRtnDTO::getProb)
+                .sum();
+        // 总权重
+        int totalWeight = pools.stream()
+                .mapToInt(GachaponPoolSearchRtnDTO::getWeight)
+                .sum();
 
-        int totalWeight = pools.stream().mapToInt(GachaponPoolSearchRtnDTO::getWeight).sum(); // 总权重
+        // int probPoint = 100 * probTotal;
+        // 总概率越高, 权重概率越小
+        int weightPoint = 1000000 - 100 * probTotal;
         for (GachaponPoolSearchRtnDTO pool : pools) {
+            // 公共奖池
             if (pool.getIsPublic()) {
                 pool.setRealProb(pool.getProb() * 100);
             } else {
+                // 非公共奖池, 计算权重概率
                 pool.setRealProb(Math.round((float) weightPoint * pool.getWeight() / totalWeight));
             }
         }
     }
 
+    /**
+     * 获取当前有效的抽奖池列表
+     *
+     * @param gachaponId 抽奖活动的ID
+     * @return 返回当前有效的抽奖池列表
+     */
     private List<GachaponRewardPoolDO> getActivePools(Integer gachaponId) {
         rLock.lock();
         try {
             // pools 存在有效期，不能缓存
             Timestamp now = new Timestamp(System.currentTimeMillis());
-
             return gachaponRewardPoolMapper.selectListByQuery(QueryWrapper.create()
+                    // 抽奖id相等 或者 公共奖池
                     .where("(gachapon_id=? or is_public=1)", gachaponId)
+                    // 当前时间在有效期内
                     .where("(start_time is null or start_time<=?)", now)
                     .where("(end_time is null or end_time>=?)", now)
                     .orderBy("id")
@@ -198,25 +248,40 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 执行扭蛋机抽奖操作
+     *
+     * @param player 参与抽奖的玩家对象
+     * @param gachaponId 扭蛋机的ID
+     */
     public void doGachapon(Character player, int gachaponId) {
         rLock.lock();
         try {
-            List<GachaponRewardPoolDO> pools = getActivePools(gachaponId); // 已按ID排序
+            // 已按ID排序
+            List<GachaponRewardPoolDO> pools = getActivePools(gachaponId);
             if (pools.isEmpty()) {
                 player.message("百宝箱为空，请联系管理员，百宝箱id: " + gachaponId);
                 log.error("百宝箱奖池为空，百宝箱id:{} 抽奖人:[{}] {}", gachaponId, player.getId(), player.getName());
                 return;
             }
+            // 积分
+            int point;
+            // 累计积分
+            int pointTotal = 0;
 
-            int point; // 积分
-            int pointTotal = 0; // 累计积分
-
-            int probTotal = pools.stream().mapToInt(GachaponRewardPoolDO::getProb).sum();
-            int probPoint = 100 * probTotal; // 公共奖池积分总额
-            int weightPoint = 1000000 - probPoint; // 非公共奖池积分总额
-
-            int totalWeight = pools.stream().mapToInt(GachaponRewardPoolDO::getWeight).sum(); // 总权重
-            int random = Randomizer.nextInt(1000000); // 随机数
+            int probTotal = pools.stream()
+                    .mapToInt(GachaponRewardPoolDO::getProb)
+                    .sum();
+            // 公共奖池积分总额
+            int probPoint = 100 * probTotal;
+            // 非公共奖池积分总额
+            int weightPoint = 1000000 - probPoint;
+            // 总权重
+            int totalWeight = pools.stream()
+                    .mapToInt(GachaponRewardPoolDO::getWeight)
+                    .sum();
+            // 随机数
+            int random = Randomizer.nextInt(1000000);
             GachaponRewardPoolDO target = null;
             for (GachaponRewardPoolDO pool : pools) {
                 // 按权重分配积分
@@ -260,13 +325,17 @@ public class GachaponService {
         int random = Randomizer.nextInt(poolRewards.size());
         GachaponRewardDO reward = poolRewards.get(random);
 
-        Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
-        String gachaponMessage = I18nUtil.getMessage("GachaMessage.message1",player.getMap().getMapName(),reward.getQuantity(),ItemInformationProvider.getInstance().getName(reward.getItemId()));
+        Item itemGained =
+                player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
+        String gachaponMessage =
+                I18nUtil.getMessage("GachaMessage.message1", player.getMap().getMapName(), reward.getQuantity(),
+                        ItemInformationProvider.getInstance().getName(reward.getItemId()));
         player.dropMessage(gachaponMessage);
         Gachapon.log(player, reward.getItemId(), player.getMap().getMapName());
 
         if (pool.getNotification()) {
-            Server.getInstance().broadcastMessage(player.getWorld(), PacketCreator.gachaponMessage(itemGained, player.getMap().getMapName(), player));
+            Server.getInstance().broadcastMessage(player.getWorld(),
+                    PacketCreator.gachaponMessage(itemGained, player.getMap().getMapName(), player));
         }
     }
 
@@ -274,7 +343,8 @@ public class GachaponService {
         if (poolRewardsCache.containsKey(poolId)) {
             return poolRewardsCache.get(poolId);
         } else {
-            List<GachaponRewardDO> poolRewards = gachaponRewardMapper.selectListByQuery(QueryWrapper.create().where("pool_id=?", poolId));
+            List<GachaponRewardDO> poolRewards =
+                    gachaponRewardMapper.selectListByQuery(QueryWrapper.create().where("pool_id=?", poolId));
             poolRewardsCache.put(poolId, poolRewards);
             return poolRewards;
         }

@@ -21,11 +21,8 @@
  */
 package org.gms.net.server.channel.handlers;
 
-import org.gms.client.BuffStat;
+import org.gms.client.*;
 import org.gms.client.Character;
-import org.gms.client.Job;
-import org.gms.client.Skill;
-import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
@@ -34,66 +31,14 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
-import org.gms.constants.skills.Aran;
-import org.gms.constants.skills.Assassin;
-import org.gms.constants.skills.Bandit;
-import org.gms.constants.skills.Beginner;
-import org.gms.constants.skills.Bishop;
-import org.gms.constants.skills.BlazeWizard;
-import org.gms.constants.skills.Bowmaster;
-import org.gms.constants.skills.Brawler;
-import org.gms.constants.skills.Buccaneer;
-import org.gms.constants.skills.ChiefBandit;
-import org.gms.constants.skills.Cleric;
-import org.gms.constants.skills.Corsair;
-import org.gms.constants.skills.Crossbowman;
-import org.gms.constants.skills.Crusader;
-import org.gms.constants.skills.DawnWarrior;
-import org.gms.constants.skills.DragonKnight;
-import org.gms.constants.skills.Evan;
-import org.gms.constants.skills.FPArchMage;
-import org.gms.constants.skills.FPMage;
-import org.gms.constants.skills.FPWizard;
-import org.gms.constants.skills.Fighter;
-import org.gms.constants.skills.Gunslinger;
-import org.gms.constants.skills.Hermit;
-import org.gms.constants.skills.Hero;
-import org.gms.constants.skills.Hunter;
-import org.gms.constants.skills.ILArchMage;
-import org.gms.constants.skills.ILMage;
-import org.gms.constants.skills.Legend;
-import org.gms.constants.skills.Marauder;
-import org.gms.constants.skills.Marksman;
-import org.gms.constants.skills.NightLord;
-import org.gms.constants.skills.NightWalker;
-import org.gms.constants.skills.Noblesse;
-import org.gms.constants.skills.Outlaw;
-import org.gms.constants.skills.Page;
-import org.gms.constants.skills.Paladin;
-import org.gms.constants.skills.Ranger;
-import org.gms.constants.skills.Rogue;
-import org.gms.constants.skills.Shadower;
-import org.gms.constants.skills.Sniper;
-import org.gms.constants.skills.Spearman;
-import org.gms.constants.skills.SuperGM;
-import org.gms.constants.skills.ThunderBreaker;
-import org.gms.constants.skills.WhiteKnight;
-import org.gms.constants.skills.WindArcher;
+import org.gms.constants.skills.*;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
-import org.gms.server.life.Element;
-import org.gms.server.life.ElementalEffectiveness;
-import org.gms.server.life.MobSkill;
-import org.gms.server.life.MobSkillFactory;
-import org.gms.server.life.MobSkillId;
-import org.gms.server.life.MobSkillType;
-import org.gms.server.life.Monster;
-import org.gms.server.life.MonsterDropEntry;
-import org.gms.server.life.MonsterInformationProvider;
+import org.gms.server.life.*;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
@@ -102,13 +47,8 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -138,7 +78,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             }
             if (display > 80) { //Hmm
                 if (!mySkill.getAction()) {
-                    AutobanFactory.FAST_ATTACK.autoban(chr, "WZ Edit; adding action to a skill: " + display);
+                    AutobanFactory.FAST_ATTACK.autoBan(chr, "WZ Edit; adding action to a skill: " + display);
                     return null;
                 }
             }
@@ -199,7 +139,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 if (attack.numAttacked > mobCount) {
-                    AutobanFactory.MOB_COUNT.autoban(player, "Skill: " + attack.skill + "; Count: " + attack.numAttacked + " Max: " + attackEffect.getMobCount());
+                    AutobanFactory.MOB_COUNT.autoBan(player, "Skill: " + attack.skill + "; Count: " + attack.numAttacked + " Max: " + attackEffect.getMobCount());
                     return;
                 }
             }
@@ -493,7 +433,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     if (attack.skill != 0) {
                         if (attackEffect.getFixDamage() != -1) {
                             if (totDamageToOneMonster != attackEffect.getFixDamage() && totDamageToOneMonster != 0) {
-                                AutobanFactory.FIX_DAMAGE.autoban(player, totDamageToOneMonster + " damage");
+                                AutobanFactory.FIX_DAMAGE.autoBan(player, totDamageToOneMonster + " damage");
                             }
 
                             int threeSnailsId = player.getJobType() * 10000000 + 1000;

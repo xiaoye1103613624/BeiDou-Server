@@ -44,13 +44,13 @@
           <a-popover placement="top">
             <template #content>
               <span>{{
-                record.itemId === 2430033 ? '北斗卫星指导书' : record.itemName
+                record.itemId === 2430033 ? 'XiaoYe卫星指导书' : record.itemName
               }}</span>
             </template>
             <img
               v-if="record.itemId === 2430033"
               :src="beidouBook"
-              alt="北斗卫星指导书"
+              alt="XiaoYe卫星指导书"
             />
             <img v-else :src="getIconUrl('item', record.itemId)" />
           </a-popover>
@@ -157,21 +157,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import {
-    deleteInventory,
-    getInventoryList,
-    InventoryCondition,
-    updateInventory,
-  } from '@/api/inventory';
-  import useLoading from '@/hooks/loading';
-  import { InventoryState } from '@/store/modules/inventory/type';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
-  import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
-  import { timestampToChineseTime } from '@/utils/stringUtils';
-  import beidouBook from '@/assets/2430033.png';
+import {ref} from 'vue';
+import {deleteInventory, getInventoryList, InventoryCondition, updateInventory,} from '@/api/inventory';
+import useLoading from '@/hooks/loading';
+import {InventoryState} from '@/store/modules/inventory/type';
+import {getIconUrl} from '@/utils/mapleStoryAPI';
+import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
+import {timestampToChineseTime} from '@/utils/stringUtils';
+import beidouBook from '@/assets/2430033.png';
 
-  const { setLoading, loading } = useLoading(false);
+const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
 
   const props = defineProps<{

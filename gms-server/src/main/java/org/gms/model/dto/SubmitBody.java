@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 请求体 封装类
+ * @author XiaoYe
  */
 @Data
 @Builder
