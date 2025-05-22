@@ -72,6 +72,7 @@ public class CashShop {
     private int nxCredit;
     private int maplePoint;
     private int nxPrepaid;
+    @Getter
     private boolean opened;
     private ItemFactory factory;
     /**
@@ -81,6 +82,7 @@ public class CashShop {
     /**
      * 心愿单
      */
+    @Getter
     private final List<Integer> wishList = new ArrayList<>();
     private int notes = 0;
     private final Lock lock = new ReentrantLock();
@@ -130,6 +132,10 @@ public class CashShop {
          */
         @Getter
         private static final List<CashCategory> cashCategories = new ArrayList<>();
+        /**
+         * 变更的现金清单
+         * key sn;
+         */
         @Getter
         private static final Map<Integer, ModifiedCashItemDO> modifiedCashItems = new HashMap<>();
 
@@ -144,10 +150,12 @@ public class CashShop {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, ModifiedCashItemDO> loadedItems = new HashMap<>();
-            Data loadData = etc.getData("Commodity.img.xml"); if (loadData == null) {
+            Data loadData = etc.getData("Commodity.img.xml");
+            if (loadData == null) {
                 return;
             } for (Data item : loadData.getChildren()) {
-                int sn = DataTool.getIntConvert("SN", item); int itemId = DataTool.getIntConvert("ItemId", item);
+                int sn = DataTool.getIntConvert("SN", item);
+                int itemId = DataTool.getIntConvert("ItemId", item);
                 int price = DataTool.getIntConvert("Price", item, 0);
                 long period = DataTool.getIntConvert("Period", item, 1);
                 short count = (short) DataTool.getIntConvert("Count", item, 1);
@@ -170,7 +178,8 @@ public class CashShop {
                                 .forPremiumUser(forPremiumUser).commodityGender(gender).onSale(onSale).clz(clz)
 //                        .limit(limit)
                                 .pbCash(pbCash).pbPoint(pbPoint).pbGift(pbGift).packageSn(packageSN).build());
-            } CashItemFactory.items = loadedItems;
+            }
+            CashItemFactory.items = loadedItems;
 
             Map<Integer, List<Integer>> loadedPackages = new HashMap<>();
             for (Data cashPackage : etc.getData("CashPackage.img").getChildren()) {
@@ -181,9 +190,10 @@ public class CashShop {
                 }
 
                 loadedPackages.put(Integer.parseInt(cashPackage.getName()), cPackage);
-            } CashItemFactory.packages = loadedPackages;
-
-            loadCashCategories(); loadAllModifiedCashItems();
+            }
+            CashItemFactory.packages = loadedPackages;
+            loadCashCategories();
+            loadAllModifiedCashItems();
         }
 
         public static void loadAllModifiedCashItems() {
@@ -193,6 +203,12 @@ public class CashShop {
                     modifiedCashItemDO -> modifiedCashItems.put(modifiedCashItemDO.getSn(), modifiedCashItemDO));
         }
 
+        /**
+         * 加载现金类别
+         *
+         * 该方法首先清空已修改的现金项列表，然后通过ServerManager获取CashShopService的Bean，
+         * 最后通过CashShopService获取所有的现金类别列表，并将它们添加到cashCategories列表中。
+         */
         private static void loadCashCategories() {
             modifiedCashItems.clear();
             CashShopService cashShopService = ServerManager.getApplicationContext().getBean(CashShopService.class);
@@ -284,10 +300,6 @@ public class CashShop {
         }
     }
 
-    public boolean isOpened() {
-        return opened;
-    }
-
     public void open(boolean b) {
         opened = b;
     }
@@ -332,10 +344,6 @@ public class CashShop {
         }
     }
 
-    public List<Integer> getWishList() {
-        return wishList;
-    }
-
     public void clearWishList() {
         wishList.clear();
     }
@@ -376,8 +384,8 @@ public class CashShop {
                         } else {
                             gifts.add(new Pair<>(item, rs.getString("message")));
                         }
-
-                        if (CashItemFactory.isPackage(cItem.getItemId())) { //Packages never contains a ring
+                        //Packages never contains a ring
+                        if (CashItemFactory.isPackage(cItem.getItemId())) {
                             for (Item packageItem : CashItemFactory.getPackage(cItem.getItemId())) {
                                 packageItem.setGiftFrom(rs.getString("from")); addToInventory(packageItem);
                             }
@@ -436,7 +444,8 @@ public class CashShop {
     }
 
     public Optional<CashShopSurpriseResult> openCashShopSurprise(long cashId) {
-        lock.lock(); try {
+        lock.lock();
+        try {
             Optional<Item> maybeCashShopSurprise = getItemByCashId(cashId); if (maybeCashShopSurprise.isEmpty() ||
                     maybeCashShopSurprise.get().getItemId() != ItemId.CASH_SHOP_SURPRISE) {
                 return Optional.empty();

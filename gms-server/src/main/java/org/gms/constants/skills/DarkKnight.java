@@ -43,11 +43,11 @@ public class DarkKnight {
      */
     public static final int RUSH = 1321003;
     /**
-     *
+     * 阿基里斯
      */
     public static final int ACHILLES = 1320005;
     /**
-     * 阿基里斯
+     *
      */
     public static final int BERSERK = 1320006;
     /**

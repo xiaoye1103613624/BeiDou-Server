@@ -1,73 +1,58 @@
 /**北斗脚本
 
-签到脚本
+ 签到脚本
 
----By hanmburger*/
+ ---By hanmburger*/
 var status = -1;
 var text;
-var BeiDouUI ="#fMap/MapHelper.img/BeiDou/logo#";
+var BeiDouUI = "#fMap/MapHelper.img/BeiDou/logo#";
 
 // 每个礼包所需的在线时长
 var condition = new Array(30, 60, 120, 180, 240, 300, 360);
 
-function start() 
-{
-  status = -1;
-  action(1, 0, 0);
+function start() {
+    status = -1;
+    action(1, 0, 0);
 }
 
-function action(mode, type, selection) 
-{
-	if (CheckStatus(mode))
-	{
-	    if (status == 0)
-	    {
-			//第一层对话
-			text = cm.getCharacterExtendValue("每日签到",true);
-			if (text == "TRUE")
-			{
-			    cm.sendOk("您已经签到过了，请明天再来");
-			    cm.dispose();				
-			}
-			else
-			{
-			    cm.saveOrUpdateCharacterExtendValue("每日签到", "TRUE",true);
-			    cm.sendOk("签到成功");
-				cm.gainItem(2430033,1);
-			    cm.dispose();				
-			}
-	    }
-		else
-		{
-			cm.dispose();
-		}
-	}
-			
+function action(mode, type, selection) {
+    if (CheckStatus(mode)) {
+        if (status == 0) {
+            //第一层对话
+            text = cm.getCharacterExtendValue("每日签到", true);
+            if (text == "TRUE") {
+                cm.sendOk("您已经签到过了，请明天再来");
+                cm.dispose();
+            } else {
+                cm.saveOrUpdateCharacterExtendValue("每日签到", "TRUE", true);
+                cm.sendOk("签到成功");
+                cm.gainItem(2430033, 1);
+                cm.dispose();
+            }
+        } else {
+            cm.dispose();
+        }
+    }
+
 }
 
-function CheckStatus(mode)
-{
-	if (mode == -1)
-	{
-		cm.dispose();
-		return false;
-	}
-	
-	if (mode == 1)
-	{
-		status++;
-	}
-	else
-	{
-		status--;
-	}
-	
-	if (status == -1)
-	{
-		cm.dispose();
-		return false;
-	}	
-	return true;
+function CheckStatus(mode) {
+    if (mode == -1) {
+        cm.dispose();
+        return false;
+    }
+
+    if (mode == 1) {
+        status++;
+    } else {
+        status--;
+    }
+
+    if (status == -1) {
+        cm.dispose();
+        return false;
+    }
+    return true;
 }
 
 //获取当前时间

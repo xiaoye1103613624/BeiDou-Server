@@ -81,6 +81,7 @@ function cancelSchedule() {
         timer4.cancel(true); // 取消定时器4
     }
 }
+
 /**
  * 开始双倍经验活动
  */
@@ -92,6 +93,7 @@ function start() {
     world.setExpRate(ExpRate * 2); // 将经验倍率调整为双倍经验
     world.broadcastPacket(PacketCreator.serverNotice(6, "BOSS扫描器检测到即将到来的复活节兔子袭击！GM团队已激活紧急经验池，在接下来的两小时内获得的经验值将翻倍！"));
 }
+
 /**
  * 结束双倍经验活动
  */
@@ -99,7 +101,8 @@ function stop() {
     const Server = Java.type('org.gms.net.server.Server');
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
-    world.setExpRate(4); // 将经验值恢复到原来的4倍（正常情况下）
+    // 将经验值恢复到原来的一半（正常情况下）
+    world.setExpRate(world.getExpRate() / 2);
     world.broadcastPacket(PacketCreator.serverNotice(6, "很遗憾，紧急经验池(EXP)能量已耗尽需要重新充能，经验倍率已恢复正常。"));
 }
 
@@ -108,14 +111,16 @@ function stop() {
 /**
  * 清理函数
  */
-function dispose() {}
+function dispose() {
+}
 
 /**
  * 设置副本
  * @param {Object} eim 副本实例
  * @param {number} leaderid 队长ID
  */
-function setup(eim, leaderid) {}
+function setup(eim, leaderid) {
+}
 
 /**
  * 获取怪物价值
@@ -123,84 +128,98 @@ function setup(eim, leaderid) {}
  * @param {number} mobid 怪物ID
  * @return {number} 总是返回0
  */
-function monsterValue(eim, mobid) {return 0;}
+function monsterValue(eim, mobid) {
+    return 0;
+}
 
 /**
  * 解散队伍
  * @param {Object} eim 副本实例
  * @param {Object} player 玩家对象
  */
-function disbandParty(eim, player) {}
+function disbandParty(eim, player) {
+}
 
 /**
  * 玩家断开连接
  * @param {Object} eim 副本实例
  * @param {Object} player 玩家对象
  */
-function playerDisconnected(eim, player) {}
+function playerDisconnected(eim, player) {
+}
 
 /**
  * 玩家进入副本
  * @param {Object} eim 副本实例
  * @param {Object} player 玩家对象
  */
-function playerEntry(eim, player) {}
+function playerEntry(eim, player) {
+}
 
 /**
  * 怪物被击杀
  * @param {Object} mob 怪物对象
  * @param {Object} eim 副本实例
  */
-function monsterKilled(mob, eim) {}
+function monsterKilled(mob, eim) {
+}
 
 /**
  * 副本超时
  * @param {Object} eim 副本实例
  */
-function scheduledTimeout(eim) {}
+function scheduledTimeout(eim) {
+}
 
 /**
  * 副本设置完成后
  * @param {Object} eim 副本实例
  */
-function afterSetup(eim) {}
+function afterSetup(eim) {
+}
 
 /**
  * 队长变更
  * @param {Object} eim 副本实例
  * @param {Object} leader 新队长对象
  */
-function changedLeader(eim, leader) {}
+function changedLeader(eim, leader) {
+}
 
 /**
  * 玩家退出副本
  * @param {Object} eim 副本实例
  * @param {Object} player 玩家对象
  */
-function playerExit(eim, player) {}
+function playerExit(eim, player) {
+}
 
 /**
  * 玩家离开队伍
  * @param {Object} eim 副本实例
  * @param {Object} player 玩家对象
  */
-function leftParty(eim, player) {}
+function leftParty(eim, player) {
+}
 
 /**
  * 清理副本任务
  * @param {Object} eim 副本实例
  */
-function clearPQ(eim) {}
+function clearPQ(eim) {
+}
 
 /**
  * 所有怪物被击杀
  * @param {Object} eim 副本实例
  */
-function allMonstersDead(eim) {}
+function allMonstersDead(eim) {
+}
 
 /**
  * 玩家取消注册
  * @param {Object} eim 副本实例
  * @param {Object} player 玩家对象
  */
-function playerUnregistered(eim, player) {}
+function playerUnregistered(eim, player) {
+}
