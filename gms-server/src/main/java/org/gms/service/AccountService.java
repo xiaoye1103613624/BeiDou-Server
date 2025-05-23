@@ -5,9 +5,13 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import org.gms.client.Character;
 import org.gms.client.Client;
+import static org.gms.client.Client.LOGIN_LOGGEDIN;
+import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
 import org.gms.client.DefaultDates;
 import org.gms.config.GameConfig;
 import org.gms.dao.entity.*;
+import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
+import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 import org.gms.dao.mapper.*;
 import org.gms.model.dto.AddAccountDTO;
 import org.gms.model.dto.UpdateAccountByGmDTO;
@@ -27,11 +31,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import static org.gms.client.Client.LOGIN_LOGGEDIN;
-import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
-import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
-import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 
 /**
  * 账号业务类
@@ -267,8 +266,17 @@ public class AccountService {
         chr.setBanned(true);
     }
 
+    /**
+     * 封禁IP地址
+     *
+     * @param str 要封禁的对象，可以是IP地址或用户名
+     * @param reason 封禁原因
+     * @param isAccount 表示要封禁的对象是否是账户，true表示是账户，false表示不是账户（可能是角色或其他非账户对象）
+     * @throws NoSuchElementException 如果未找到对应的账户或角色，抛出此异常
+     */
     public void ban(String str, String reason, boolean isAccount) {
         if (str.matches("[0-9]{1,3}\\..*")) {
+            // 是否封禁过
             if (isBanned(str)) {
                 return;
             }

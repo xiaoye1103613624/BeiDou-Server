@@ -1,18 +1,19 @@
 package org.gms.net.packet;
 
-import org.gms.client.Client;
-import org.gms.constants.string.CharsetConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.jcip.annotations.NotThreadSafe;
+import org.gms.constants.string.CharsetConstants;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.util.ThreadLocalUtil;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.Optional;
 
+/**
+ * 字节缓存 输出数据包
+ */
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;

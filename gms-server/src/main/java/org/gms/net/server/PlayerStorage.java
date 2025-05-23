@@ -19,16 +19,13 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package org.gms.net.server;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -69,6 +66,9 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 根据名称获取玩家
+     */
     public Character getCharacterByName(String name) {
         rlock.lock();
         try {
@@ -78,6 +78,9 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 根据id 获取玩家
+     */
     public Character getCharacterById(int id) {
         rlock.lock();
         try {

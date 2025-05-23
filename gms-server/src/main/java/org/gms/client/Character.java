@@ -5666,14 +5666,29 @@ public class Character extends AbstractCharacterObject {
         return (job.getId() == 0 || job.getId() == 1000 || job.getId() == 2000);
     }
 
+    /**
+     * 判断当前角色是否为GM（游戏管理员）
+     * 玩家等级大于1 都是GM
+     *
+     * @return 如果当前角色为GM，则返回true；否则返回false
+     */
     public boolean isGM() {
         return gmLevel > 1;
     }
 
+    /**
+     * 判断地图对象是否可见
+     *
+     * @param mo 地图对象
+     * @return 如果地图对象可见，则返回true；否则返回false
+     */
     public boolean isMapObjectVisible(MapObject mo) {
         return visibleMapObjects.contains(mo);
     }
 
+    /**
+     * 是否为队长
+     */
     public boolean isPartyLeader() {
         prtLock.lock();
         try {
@@ -6682,6 +6697,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 将输入的字符串进行转换，使其更易于阅读。
+     *
+     * @param in 输入的字符串
+     * @return 转换后的字符串
+     */
     public static String makeMapleReadable(String in) {
         return in.replace('I', 'i')
                 .replace('l', 'L')
@@ -6728,6 +6749,11 @@ public class Character extends AbstractCharacterObject {
         dropMessage(5, m);
     }
 
+    /**
+     * 发送黄色提示信息
+     *
+     * @param m 要发送的黄色提示信息内容
+     */
     public void yellowMessage(String m) {
         sendPacket(PacketCreator.sendYellowTip(m));
     }
@@ -8037,6 +8063,7 @@ public class Character extends AbstractCharacterObject {
     public void sendKeymap() {
         sendPacket(PacketCreator.getKeymap(keymap));
     }
+
     public void sendQuickmap() {
         // send quickslots to user
         QuickslotBinding pQuickslotKeyMapped = this.quickSlotKeyMapped;

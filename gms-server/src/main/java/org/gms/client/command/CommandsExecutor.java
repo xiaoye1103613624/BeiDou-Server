@@ -21,6 +21,7 @@
 /*
    @Author: Arthur L - Refactored command content into modules
 */
+
 package org.gms.client.command;
 
 import lombok.Getter;
@@ -58,7 +59,8 @@ public class CommandsExecutor {
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
     private Pair<List<String>, List<String>> levelCommandsCursor;
 
-    private static final CommandService commandService = ServerManager.getApplicationContext().getBean(CommandService.class);
+    private static final CommandService commandService =
+            ServerManager.getApplicationContext().getBean(CommandService.class);
 
     public static boolean isCommand(Client client, String content) {
         char heading = content.charAt(0);
@@ -94,26 +96,45 @@ public class CommandsExecutor {
         }
     }
 
+    /**
+     * 处理内部命令
+     *
+     * @param client 客户端对象
+     * @param message 消息字符串
+     */
     private void handleInternal(Client client, String message) {
+        // 监狱里不允许使用命令，除非是GM
         if (client.getPlayer().getMapId() == MapId.JAIL && !client.getPlayer().isGM()) {
-            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message1"));
+            client.getPlayer()
+                    .yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message1"));
             return;
         }
+        // 分割命令和参数，并以空格为分隔符。如果只有一个元素，则假定其为命令本身，无参数。
         final String splitRegex = "[ ]";
-        String[] splitedMessage = message.substring(1).split(splitRegex, 2);
+        // 去掉命令前缀，并以空格为分隔符分割字符串。如果只有一个元素，则假定其为命令本身，无参数。
+        String[] splitedMessage = message.substring(1)
+                // 用正则拆分成两个部分,就是两个数组成员:[help, 参数1 参数2...]
+                .split(splitRegex, 2);
         if (splitedMessage.length < 2) {
-            splitedMessage = new String[]{splitedMessage[0], ""};
+            // 只有指令 参数设为空串
+            splitedMessage = new String[] {splitedMessage[0], ""};
         }
-
-        client.getPlayer().setLastCommandMessage(splitedMessage[1]);    // thanks Tochi & Nulliphite for noticing string messages being marshalled lowercase
+        // 记录最后一次命令参数
+        client.getPlayer()
+                .setLastCommandMessage(splitedMessage[1]);
+        // 指令:help
         final String commandName = splitedMessage[0].toLowerCase();
-        final String[] lowercaseParams = splitedMessage[1].toLowerCase().split(splitRegex);
-
+        // 参数列表:参数1 参数2...
+        final String[] lowercaseParams = splitedMessage[1].toLowerCase()
+                .split(splitRegex);
+        // 获取指令对象
         final Command command = registeredCommands.get(commandName);
         if (command == null) {
-            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message2", commandName));
+            client.getPlayer()
+                    .yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message2", commandName));
             return;
         }
+        // 检查GM等级是否足够执行该命令
         if (client.getPlayer().gmLevel() < command.getRank()) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message3"));
             return;
@@ -122,11 +143,12 @@ public class CommandsExecutor {
         if (lowercaseParams.length > 0 && !lowercaseParams[0].isEmpty()) {
             params = Arrays.copyOfRange(lowercaseParams, 0, lowercaseParams.length);
         } else {
-            params = new String[]{};
+            params = new String[] {};
         }
 
         command.execute(client, params);
-        log.info(I18nUtil.getLogMessage("CommandsExecutor.handleInternal.info1"), client.getPlayer().getName(), command.getClass().getSimpleName());
+        log.info(I18nUtil.getLogMessage("CommandsExecutor.handleInternal.info1"), client.getPlayer().getName(),
+                command.getClass().getSimpleName());
     }
 
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {
@@ -166,7 +188,8 @@ public class CommandsExecutor {
         addCommandInfo(commandName, commandClass);
 
         try {
-            Command commandInstance = commandClass.getDeclaredConstructor().newInstance();     // thanks Halcyon for noticing commands getting reinstanced every call
+            Command commandInstance = commandClass.getDeclaredConstructor()
+                    .newInstance();     // thanks Halcyon for noticing commands getting reinstanced every call
             commandInstance.setRank(rank);
 
             registeredCommands.put(commandName, commandInstance);
@@ -178,7 +201,7 @@ public class CommandsExecutor {
     private void registerLv0Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
-        addCommand(new String[]{"help", "commands"}, HelpCommand.class);
+        addCommand(new String[] {"help", "commands"}, HelpCommand.class);
         addCommand("droplimit", DropLimitCommand.class);
         addCommand("time", TimeCommand.class);
         addCommand("credits", StaffCommand.class);
@@ -207,7 +230,6 @@ public class CommandsExecutor {
         commandsNameDesc.add(levelCommandsCursor);
     }
 
-
     private void registerLv1Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
@@ -220,7 +242,6 @@ public class CommandsExecutor {
 
         commandsNameDesc.add(levelCommandsCursor);
     }
-
 
     private void registerLv2Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
@@ -240,8 +261,8 @@ public class CommandsExecutor {
         addCommand("clearslot", 2, ClearSlotCommand.class);
         addCommand("clearsavelocs", 2, ClearSavedLocationsCommand.class);
         addCommand("warp", 2, WarpCommand.class);
-        addCommand(new String[]{"warphere", "summon"}, 2, SummonCommand.class);
-        addCommand(new String[]{"warpto", "reach", "follow"}, 2, ReachCommand.class);
+        addCommand(new String[] {"warphere", "summon"}, 2, SummonCommand.class);
+        addCommand(new String[] {"warpto", "reach", "follow"}, 2, ReachCommand.class);
         addCommand("gmshop", 2, GmShopCommand.class);
         addCommand("heal", 2, HealCommand.class);
         addCommand("item", 2, ItemCommand.class);

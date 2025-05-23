@@ -717,13 +717,13 @@ public class PacketCreator {
      * @return
      */
     private static Packet pinOperation(byte mode) {
-        OutPacket p = OutPacket.create(SendOpcode.CHECK_PINCODE);
+        OutPacket p = OutPacket.create(SendOpcode.CHECK_PIN_CODE);
         p.writeByte(mode);
         return p;
     }
 
     public static Packet pinRegistered() {
-        OutPacket p = OutPacket.create(SendOpcode.UPDATE_PINCODE);
+        OutPacket p = OutPacket.create(SendOpcode.UPDATE_PIN_CODE);
         p.writeByte(0);
         return p;
     }
@@ -762,7 +762,7 @@ public class PacketCreator {
      */
     public static Packet getServerList(int serverId, String serverName, int flag, String eventmsg,
                                        List<Channel> channelLoad) {
-        final OutPacket p = OutPacket.create(SendOpcode.SERVERLIST);
+        final OutPacket p = OutPacket.create(SendOpcode.SERVER_LIST);
         p.writeByte(serverId);
         p.writeString(serverName);
         p.writeByte(flag);
@@ -792,7 +792,7 @@ public class PacketCreator {
      * @return The end of server list packet.
      */
     public static Packet getEndOfServerList() {
-        OutPacket p = OutPacket.create(SendOpcode.SERVERLIST);
+        OutPacket p = OutPacket.create(SendOpcode.SERVER_LIST);
         p.writeByte(0xFF);
         return p;
     }
@@ -807,7 +807,7 @@ public class PacketCreator {
      * @return The server status packet.
      */
     public static Packet getServerStatus(int status) {
-        OutPacket p = OutPacket.create(SendOpcode.SERVERSTATUS);
+        OutPacket p = OutPacket.create(SendOpcode.SERVER_STATUS);
         p.writeShort(status);
         return p;
     }
@@ -871,7 +871,7 @@ public class PacketCreator {
      * <br> 21: Verify account via email<br>
      */
     public static Packet getCharList(Client c, int serverId, int status) {
-        final OutPacket p = OutPacket.create(SendOpcode.CHARLIST);
+        final OutPacket p = OutPacket.create(SendOpcode.CHAR_LIST);
         p.writeByte(status);
         List<Character> chars = c.loadCharacters(serverId);
         p.writeByte((byte) chars.size());
@@ -1117,7 +1117,7 @@ public class PacketCreator {
      * @return The spawn packet for the map object.
      */
     public static Packet spawnSummon(Summon summon, boolean animated) {
-        OutPacket p = OutPacket.create(SendOpcode.SPAWN_SPECIAL_MAPOBJECT);
+        OutPacket p = OutPacket.create(SendOpcode.SPAWN_SPECIAL_MAP_OBJECT);
         p.writeInt(summon.getOwner().getId());
         p.writeInt(summon.getObjectId());
         p.writeInt(summon.getSkill());
@@ -1141,7 +1141,7 @@ public class PacketCreator {
      * @return The packet removing the object.
      */
     public static Packet removeSummon(Summon summon, boolean animated) {
-        OutPacket p = OutPacket.create(SendOpcode.REMOVE_SPECIAL_MAPOBJECT);
+        OutPacket p = OutPacket.create(SendOpcode.REMOVE_SPECIAL_MAP_OBJECT);
         p.writeInt(summon.getOwner().getId());
         p.writeInt(summon.getObjectId());
         p.writeByte(animated ? 4 : 1); // ?
@@ -1244,7 +1244,7 @@ public class PacketCreator {
      */
     private static Packet serverMessage(int type, int channel, String message, boolean servermessage, boolean megaEar,
                                         int npc) {
-        OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
+        OutPacket p = OutPacket.create(SendOpcode.SERVER_MESSAGE);
         p.writeByte(type);
         if (servermessage) {
             p.writeByte(1);
@@ -1305,7 +1305,7 @@ public class PacketCreator {
      * @return
      */
     public static Packet gachaponMessage(Item item, String town, Character player) {
-        final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
+        final OutPacket p = OutPacket.create(SendOpcode.SERVER_MESSAGE);
         p.writeByte(0x0B);
         p.writeString(player.getName() + " : 获得了");
         p.writeInt(0); //random?
@@ -1632,7 +1632,7 @@ public class PacketCreator {
      * @return The general chat packet.
      */
     public static Packet getChatText(int cidfrom, String text, boolean gm, int show) {
-        final OutPacket p = OutPacket.create(SendOpcode.CHATTEXT);
+        final OutPacket p = OutPacket.create(SendOpcode.CHAT_TEXT);
         p.writeInt(cidfrom);
         p.writeBool(gm);
         p.writeString(text);
@@ -1735,7 +1735,7 @@ public class PacketCreator {
     public static Packet getShowItemGain(int itemId, short quantity, boolean inChat) {
         final OutPacket p;
         if (inChat) {
-            p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+            p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
             p.writeByte(3);
             p.writeByte(1);
             p.writeInt(itemId);
@@ -3604,7 +3604,7 @@ public class PacketCreator {
      * @return 包含增益效果信息的Packet对象
      */
     public static Packet showOwnBuffEffect(int skillId, int effectId) {
-        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(effectId);
         p.writeInt(skillId);
         p.writeByte(0xA9);
@@ -3620,7 +3620,7 @@ public class PacketCreator {
      * @return 返回配置好的 OutPacket 对象。
      */
     public static Packet showOwnBerserk(int skillLevel, boolean berserk) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(1);
         p.writeInt(1320006);
         p.writeByte(0xA9);
@@ -3711,7 +3711,7 @@ public class PacketCreator {
      * @return 初始化后的Packet对象，包含快速槽的初始化信息。
      */
     public static Packet quickSlotMappedInit(QuickslotBinding pQuickSlot) {
-        OutPacket p = OutPacket.create(SendOpcode.QUICKSLOT_INIT);
+        OutPacket p = OutPacket.create(SendOpcode.QUICK_SLOT_INIT);
         pQuickSlot.encode(p);
         return p;
     }
@@ -4120,7 +4120,7 @@ public class PacketCreator {
     }
 
     public static Packet updatePartyMemberHP(int cid, int curhp, int maxhp) {
-        final OutPacket p = OutPacket.create(SendOpcode.UPDATE_PARTYMEMBER_HP);
+        final OutPacket p = OutPacket.create(SendOpcode.UPDATE_PARTY_MEMBER_HP);
         p.writeInt(cid);
         p.writeInt(curhp);
         p.writeInt(maxhp);
@@ -4136,7 +4136,7 @@ public class PacketCreator {
      * @return
      */
     public static Packet multiChat(String name, String chattext, int mode) {
-        OutPacket p = OutPacket.create(SendOpcode.MULTICHAT);
+        OutPacket p = OutPacket.create(SendOpcode.MULTI_CHAT);
         p.writeByte(mode);
         p.writeString(name);
         p.writeString(chattext);
@@ -4277,7 +4277,7 @@ public class PacketCreator {
     }
 
     public static Packet updateBuddylist(Collection<BuddylistEntry> buddylist) {
-        OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
+        OutPacket p = OutPacket.create(SendOpcode.BUDDY_LIST);
         p.writeByte(7);
         p.writeByte(buddylist.size());
         for (BuddylistEntry buddy : buddylist) {
@@ -4297,13 +4297,13 @@ public class PacketCreator {
     }
 
     public static Packet buddylistMessage(byte message) {
-        final OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
+        final OutPacket p = OutPacket.create(SendOpcode.BUDDY_LIST);
         p.writeByte(message);
         return p;
     }
 
     public static Packet requestBuddylistAdd(int chrIdFrom, int chrId, String nameFrom) {
-        OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
+        OutPacket p = OutPacket.create(SendOpcode.BUDDY_LIST);
         p.writeByte(9);
         p.writeInt(chrIdFrom);
         p.writeString(nameFrom);
@@ -4320,7 +4320,7 @@ public class PacketCreator {
     }
 
     public static Packet updateBuddyChannel(int characterid, int channel) {
-        final OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
+        final OutPacket p = OutPacket.create(SendOpcode.BUDDY_LIST);
         p.writeByte(0x14);
         p.writeInt(characterid);
         p.writeByte(0);
@@ -4336,7 +4336,7 @@ public class PacketCreator {
     }
 
     public static Packet updateBuddyCapacity(int capacity) {
-        final OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
+        final OutPacket p = OutPacket.create(SendOpcode.BUDDY_LIST);
         p.writeByte(0x15);
         p.writeByte(capacity);
         return p;
@@ -4676,7 +4676,7 @@ public class PacketCreator {
     }
 
     public static Packet showOwnPetLevelUp(byte index) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(4);
         p.writeByte(0);
         p.writeByte(index); // Pet Index
@@ -4693,7 +4693,7 @@ public class PacketCreator {
     }
 
     public static Packet changePetName(Character chr, String newname, int slot) {
-        OutPacket p = OutPacket.create(SendOpcode.PET_NAMECHANGE);
+        OutPacket p = OutPacket.create(SendOpcode.PET_NAME_CHANGE);
         p.writeInt(chr.getId());
         p.writeByte(0);
         p.writeString(newname);
@@ -5704,7 +5704,7 @@ public class PacketCreator {
             9: unknown error
         */
     public static Packet sendWorldTransferRules(int error, Client c) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CHECK_TRANSFER_WORLD_POSSIBLE_RESULT);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_CHECK_TRANSFER_WORLD_POSSIBLE_RESULT);
         p.writeInt(0); //ignored
         p.writeByte(error);
         p.writeInt(0);
@@ -5720,7 +5720,7 @@ public class PacketCreator {
     }
 
     public static Packet showWorldTransferSuccess(Item item, int accountId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0xA0);
         addCashItemInformation(p, item, accountId);
         return p;
@@ -5733,7 +5733,7 @@ public class PacketCreator {
             4: unknown error
         */
     public static Packet sendNameTransferRules(int error) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CHECK_NAME_CHANGE_POSSIBLE_RESULT);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_CHECK_NAME_CHANGE_POSSIBLE_RESULT);
         p.writeInt(0);
         p.writeByte(error);
         p.writeInt(0);
@@ -5747,7 +5747,7 @@ public class PacketCreator {
      */
 
     public static Packet sendNameTransferCheck(String availableName, boolean canUseName) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CHECK_NAME_CHANGE);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_CHECK_NAME_CHANGE);
         //Send provided name back to client to add to temporary cache of checked & accepted names
         p.writeString(availableName);
         p.writeBool(!canUseName);
@@ -5755,7 +5755,7 @@ public class PacketCreator {
     }
 
     public static Packet showNameChangeSuccess(Item item, int accountId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x9E);
         addCashItemInformation(p, item, accountId);
         return p;
@@ -5873,7 +5873,7 @@ public class PacketCreator {
 
     public static Packet showCouponRedeemedItems(int accountId, int maplePoints, int mesos, List<Item> cashItems,
                                                  List<Pair<Integer, Integer>> items) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x59);
         p.writeByte((byte) cashItems.size());
         for (Item item : cashItems) {
@@ -6225,7 +6225,7 @@ public class PacketCreator {
     }
 
     public static Packet showGainCard() {
-        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(0x0D);
         return p;
     }
@@ -6255,14 +6255,14 @@ public class PacketCreator {
     }
 
     public static Packet showIntro(String path) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(0x12);
         p.writeString(path);
         return p;
     }
 
     public static Packet showInfo(String path) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(0x17);
         p.writeString(path);
         p.writeInt(1);
@@ -6310,7 +6310,7 @@ public class PacketCreator {
     }
 
     public static Packet itemMegaphone(String msg, boolean whisper, int channel, Item item) {
-        final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
+        final OutPacket p = OutPacket.create(SendOpcode.SERVER_MESSAGE);
         p.writeByte(8);
         p.writeString(msg);
         p.writeByte(channel - 1);
@@ -6397,13 +6397,13 @@ public class PacketCreator {
      * @return
      */
     public static Packet showSpecialEffect(int effect) {
-        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(effect);
         return p;
     }
 
     public static Packet showMakerEffect(boolean makerSucceeded) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(16);
         p.writeInt(makerSucceeded ? 0 : 1);
         return p;
@@ -6429,7 +6429,7 @@ public class PacketCreator {
     }
 
     public static Packet showOwnRecovery(byte heal) {
-        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(0x0A);
         p.writeByte(heal);
         return p;
@@ -6444,7 +6444,7 @@ public class PacketCreator {
     }
 
     public static Packet showWheelsLeft(int left) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
+        final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_IN_CHAT);
         p.writeByte(0x15);
         p.writeByte(left);
         return p;
@@ -6551,7 +6551,7 @@ public class PacketCreator {
     }
 
     public static Packet getMultiMegaphone(String[] messages, int channel, boolean showEar) {
-        final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
+        final OutPacket p = OutPacket.create(SendOpcode.SERVER_MESSAGE);
         p.writeByte(0x0A);
         if (messages[0] != null) {
             p.writeString(messages[0]);
@@ -6655,7 +6655,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtCashPackage(List<Item> cashPackage, int accountId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x89);
         p.writeByte(cashPackage.size());
@@ -6670,7 +6670,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtQuestItem(int itemId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x8D);
         p.writeInt(1);
         p.writeShort(1);
@@ -6682,14 +6682,14 @@ public class PacketCreator {
 
     // Cash Shop Surprise packets found thanks to Arnah (Vertisy)
     public static Packet onCashItemGachaponOpenFailed() {
-        OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CASH_ITEM_GACHAPON_RESULT);
+        OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_CASH_ITEM_GACHAPON_RESULT);
         p.writeByte(0xE4);
         return p;
     }
 
     public static Packet onCashGachaponOpenSuccess(int accountid, long boxCashId, int remainingBoxes, Item reward,
                                                    int rewardItemId, int rewardQuantity, boolean bJackpot) {
-        OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CASH_ITEM_GACHAPON_RESULT);
+        OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_CASH_ITEM_GACHAPON_RESULT);
         p.writeByte(0xE5);   // subopcode thanks to Ubaware
         p.writeLong(boxCashId);
         p.writeInt(remainingBoxes);
@@ -6855,7 +6855,7 @@ public class PacketCreator {
      * @return The "levelup" packet.
      */
     public static Packet levelUpMessage(int type, int level, String charname) {
-        final OutPacket p = OutPacket.create(SendOpcode.NOTIFY_LEVELUP);
+        final OutPacket p = OutPacket.create(SendOpcode.NOTIFY_LEVEL_UP);
         p.writeByte(type);
         p.writeInt(level);
         p.writeString(charname);
@@ -7033,7 +7033,7 @@ public class PacketCreator {
     }
 
     public static Packet showEventInstructions() {
-        final OutPacket p = OutPacket.create(SendOpcode.GMEVENT_INSTRUCTIONS);
+        final OutPacket p = OutPacket.create(SendOpcode.GM_EVENT_INSTRUCTIONS);
         p.writeByte(0);
         return p;
     }
@@ -7170,7 +7170,7 @@ public class PacketCreator {
     }
 
     public static Packet showWishList(Character mc, boolean update) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         if (update) {
             p.writeByte(0x55);
@@ -7190,7 +7190,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtCashItem(Item item, int accountId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x57);
         addCashItemInformation(p, item, accountId);
@@ -7199,7 +7199,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtCashRing(Item ring, String recipient, int accountId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x87);
         addCashItemInformation(p, ring, accountId);
         p.writeString(recipient);
@@ -7261,14 +7261,14 @@ public class PacketCreator {
      * E8 = cannot purchase by anyone under 7
      */
     public static Packet showCashShopMessage(byte message) {
-        OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x5C);
         p.writeByte(message);
         return p;
     }
 
     public static Packet showCashInventory(Client c) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x4B);
         p.writeShort(c.getPlayer().getCashShop().getInventory().size());
@@ -7284,7 +7284,7 @@ public class PacketCreator {
     }
 
     public static Packet showGifts(List<Pair<Item, String>> gifts) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x4D);
         p.writeShort(gifts.size());
@@ -7297,7 +7297,7 @@ public class PacketCreator {
     }
 
     public static Packet showGiftSucceed(String to, ModifiedCashItemDO item) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x5E); //0x5D, Couldn't be sent
         p.writeString(to);
@@ -7309,7 +7309,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtInventorySlots(int type, short slots) {
-        OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x60);
         p.writeByte(type);
@@ -7319,7 +7319,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtStorageSlots(short slots) {
-        OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x62);
         p.writeShort(slots);
@@ -7328,7 +7328,7 @@ public class PacketCreator {
     }
 
     public static Packet showBoughtCharacterSlot(short slots) {
-        OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x64);
         p.writeShort(slots);
@@ -7337,7 +7337,7 @@ public class PacketCreator {
     }
 
     public static Packet takeFromCashInventory(Item item) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x68);
         p.writeShort(item.getPosition());
@@ -7347,14 +7347,14 @@ public class PacketCreator {
     }
 
     public static Packet deleteCashItem(Item item) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x6C);
         p.writeLong(item.getCashId());
         return p;
     }
 
     public static Packet refundCashItem(Item item, int maplePoints) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
         p.writeByte(0x85);
         p.writeLong(item.getCashId());
         p.writeInt(maplePoints);
@@ -7362,7 +7362,7 @@ public class PacketCreator {
     }
 
     public static Packet putIntoCashInventory(Item item, int accountId) {
-        final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        final OutPacket p = OutPacket.create(SendOpcode.CASH_SHOP_OPERATION);
 
         p.writeByte(0x6A);
         addCashItemInformation(p, item, accountId);
@@ -7711,7 +7711,7 @@ public class PacketCreator {
     }
 
     public static Packet updateHpMpAlert(byte hp, byte mp) {
-        OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
+        OutPacket p = OutPacket.create(SendOpcode.UPDATE_HP_MP_ALERT);
         p.writeByte(hp);
         p.writeByte(mp);
         return p;

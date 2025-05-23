@@ -280,6 +280,13 @@ public class Server {
         }
     }
 
+    /**
+     * 从指定世界中获取所有频道列表
+     *
+     * @param world 世界编号
+     * @return 包含频道对象的列表，如果指定世界不存在则返回空列表
+     * @throws NullPointerException 当指定的世界编号不存在时抛出
+     */
     public List<Channel> getChannelsFromWorld(int world) {
         try {
             return this.getWorld(world).getChannels();
@@ -288,6 +295,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取所有频道
+     *
+     * @return 包含所有频道的列表，如果发生空指针异常则返回空列表
+     */
     public List<Channel> getAllChannels() {
         try {
             List<Channel> channelz = new ArrayList<>(); for (World world : this.getWorlds()) {
@@ -298,6 +310,12 @@ public class Server {
         }
     }
 
+    /**
+     * 获取指定世界编号的开启通道集合
+     *
+     * @param world 世界编号
+     * @return 开启通道的集合
+     */
     public Set<Integer> getOpenChannels(int world) {
         wldRLock.lock(); try {
             return new HashSet<>(channels.get(world).keySet());
@@ -306,6 +324,13 @@ public class Server {
         }
     }
 
+    /**
+     * 根据世界编号和频道编号获取IP地址
+     *
+     * @param world 世界编号
+     * @param channel 频道编号
+     * @return 返回对应的IP地址
+     */
     private String getIP(int world, int channel) {
         wldRLock.lock(); try {
             return channels.get(world).get(channel);
@@ -330,29 +355,40 @@ public class Server {
         }
     }
 
-    public int addChannel(int worldid) {
+    /**
+     * 向指定世界ID添加新的频道
+     *
+     * @param worldId 世界ID
+     * @return 返回频道ID，如果添加失败则返回负数
+     * -3：世界ID不存在
+     * -2：频道数量达到上限
+     */
+    public int addChannel(int worldId) {
         World world; Map<Integer, String> channelInfo; int channelid;
 
         wldRLock.lock(); try {
-            if (worldid >= worlds.size()) {
+            if (worldId >= worlds.size()) {
                 return -3;
             }
 
-            channelInfo = channels.get(worldid); if (channelInfo == null) {
+            channelInfo = channels.get(worldId);
+            if (channelInfo == null) {
                 return -3;
             }
 
-            channelid = channelInfo.size(); if (channelid >= GameConfig.getServerInt("max_channel_size")) {
+            channelid = channelInfo.size();
+            if (channelid >= GameConfig.getServerInt("max_channel_size")) {
                 return -2;
             }
 
-            channelid++; world = this.getWorld(worldid);
+            channelid++;
+            world = this.getWorld(worldId);
         } finally {
             wldRLock.unlock();
         }
 
-        Channel channel = new Channel(worldid, channelid, getCurrentTime());
-        channel.setServerMessage(GameConfig.getWorldString(worldid, "recommend_message"));
+        Channel channel = new Channel(worldId, channelid, getCurrentTime());
+        channel.setServerMessage(GameConfig.getWorldString(worldId, "recommend_message"));
 
         if (world.addChannel(channel)) {
             wldWLock.lock(); try {
@@ -966,6 +1002,11 @@ public class Server {
         }
     }
 
+    /**
+     * 删除公会角色
+     *
+     * @param mgc 公会角色对象
+     */
     public void deleteGuildCharacter(GuildCharacter mgc) {
         if (mgc.getCharacter() != null) {
             setGuildMemberOnline(mgc.getCharacter(), false, (byte) -1);
@@ -984,18 +1025,36 @@ public class Server {
         } worlda.reloadGuildSummary();
     }
 
+    /**
+     * 向指定大区的所有玩家广播消息。
+     *
+     * @param world 世界编号，用于确定广播的目标世界。
+     * @param packet 要广播的消息包，包含需要广播的消息内容。
+     */
     public void broadcastMessage(int world, Packet packet) {
         for (Channel ch : getChannelsFromWorld(world)) {
             ch.broadcastPacket(packet);
         }
     }
 
+    /**
+     * 向指定世界的所有频道广播游戏管理消息。
+     *
+     * @param world 指定世界编号
+     * @param packet 要广播的游戏管理消息包
+     */
     public void broadcastGMMessage(int world, Packet packet) {
         for (Channel ch : getChannelsFromWorld(world)) {
             ch.broadcastGMPacket(packet);
         }
     }
 
+    /**
+     * 判断指定世界是否有GM在线
+     *
+     * @param world 世界编号
+     * @return 如果存在GM在线，则返回true；否则返回false
+     */
     public boolean isGmOnline(int world) {
         for (Channel ch : getChannelsFromWorld(world)) {
             for (Character player : ch.getPlayerStorage().getAllCharacters()) {
@@ -1345,10 +1404,9 @@ public class Server {
         }
     }
 
-
     /**
      * 验证在过渡中的角色ID是否有效。
-     *  use_ip_validation:在登录时启用IP检查
+     * use_ip_validation:在登录时启用IP检查
      *
      * @param client 客户端对象
      * @param charId 角色ID

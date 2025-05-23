@@ -19,6 +19,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.net.server.world;
 
 import lombok.Getter;
@@ -34,16 +35,14 @@ import org.gms.server.maps.MapleMap;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.util.PacketCreator;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 组队
+ */
 public class Party {
 
     @Setter
@@ -52,8 +51,14 @@ public class Party {
     @Setter
     @Getter
     private Party enemy = null;
+    /**
+     * 队长id
+     */
     @Getter
     private int leaderId;
+    /**
+     * 成员
+     */
     private final List<PartyCharacter> members = new LinkedList<>();
     private List<PartyCharacter> pqMembers = null;
 
@@ -312,7 +317,8 @@ public class Party {
                 player.sendPacket(PacketCreator.partyStatusMessage(10));
                 return false;
             } else if (player.getAriantColiseum() != null) {
-                player.dropMessage(5, "You cannot request a party creation while participating the Ariant Battle Arena.");
+                player.dropMessage(5,
+                        "You cannot request a party creation while participating the Ariant Battle Arena.");
                 return false;
             }
 
@@ -363,7 +369,8 @@ public class Party {
                     }
                 }
             } else {
-                player.sendPacket(PacketCreator.serverNotice(5, "You couldn't join the party since it had already been disbanded."));
+                player.sendPacket(PacketCreator.serverNotice(5,
+                        "You couldn't join the party since it had already been disbanded."));
             }
         } else {
             if (!silentCheck) {
@@ -416,7 +423,8 @@ public class Party {
             player.setParty(null);
 
             MatchCheckerCoordinator mmce = c.getWorldServer().getMatchCheckerCoordinator();
-            if (mmce.getMatchConfirmationLeaderid(player.getId()) == player.getId() && mmce.getMatchConfirmationType(player.getId()) == MatchCheckerType.GUILD_CREATION) {
+            if (mmce.getMatchConfirmationLeaderid(player.getId()) == player.getId() &&
+                    mmce.getMatchConfirmationType(player.getId()) == MatchCheckerType.GUILD_CREATION) {
                 mmce.dismissMatchConfirmation(player.getId());
             }
         }

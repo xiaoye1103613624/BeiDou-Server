@@ -23,9 +23,10 @@
 /**
  * @description 拍卖行中心脚本
  */
-var OldTitle ="\t\t\t\t\t#e欢迎来到#rXiaoYe#k脚本中心#n\t\t\t\t\r\n";
+var OldTitle = "\t\t\t\t\t#e欢迎来到#rXiaoYe#k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
+
 function start() {
     action(1, 0, 0)
 }
@@ -42,7 +43,7 @@ function action(mode, type, selection) {
     }
 
     if (status === 0) {
-		let text = OldTitle;
+        let text = OldTitle;
         text += "当前点券：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
         text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
         text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
@@ -53,8 +54,8 @@ function action(mode, type, selection) {
             text += "\r\n\r\n";
             text += "\t\t\t\t#r=====以下内容仅GM可见=====\r\n";
             text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l\r\n\r\n";
-			text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n\r\n";
-			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l";
+            text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n\r\n";
+            text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -97,7 +98,7 @@ function doSelect(selection) {
             break;
         case 64:
             openNpc("UI查询");
-            break;	
+            break;
         case 65:
             openNpc("一键删除道具");
             break;

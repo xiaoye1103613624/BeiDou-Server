@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gms.scripting.event;
 
 import org.gms.client.Character;
@@ -29,9 +30,6 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.server.coordinator.world.EventRecallCoordinator;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
-import org.gms.util.NumberTool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.scripting.event.scheduler.EventScriptScheduler;
 import org.gms.server.ItemInformationProvider;
@@ -46,20 +44,22 @@ import org.gms.server.maps.MapManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Portal;
 import org.gms.server.maps.Reactor;
+import org.gms.util.NumberTool;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.script.ScriptException;
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import static java.util.concurrent.TimeUnit.MINUTES;
+import javax.script.ScriptException;
 
 /**
  * 事件实例管理器类，负责管理游戏内事件实例的创建、运行和销毁。
@@ -68,22 +68,32 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  */
 public class EventInstanceManager {
     private static final Logger log = LoggerFactory.getLogger(EventInstanceManager.class);
-    private final Map<Integer, Character> chars = new HashMap<>();// 存储参与事件的玩家，key为玩家ID
-    private int leaderId = -1; // 事件队伍领袖ID
-    private final List<Monster> mobs = new LinkedList<>();// 事件中生成的怪物列表
-    private final Map<Character, Integer> killCount = new HashMap<>();// 玩家击杀计数
-    private EventManager em; // 所属事件管理器
-    private EventScriptScheduler ess; // 事件脚本调度器
-    private MapManager mapManager; // 地图管理器
-    private String name; // 事件实例名称
+    // 存储参与事件的玩家，key为玩家ID
+    private final Map<Integer, Character> chars = new HashMap<>();
+    // 事件队伍领袖ID
+    private int leaderId = -1;
+    // 事件中生成的怪物列表
+    private final List<Monster> mobs = new LinkedList<>();
+    // 玩家击杀计数
+    private final Map<Character, Integer> killCount = new HashMap<>();
+    // 所属事件管理器
+    private EventManager em;
+    // 事件脚本调度器
+    private EventScriptScheduler ess;
+    // 地图管理器
+    private MapManager mapManager;
+    // 事件实例名称
+    private String name;
 
     // 事件属性存储
     private final Properties props = new Properties();
     private final Map<String, Object> objectProps = new HashMap<>();
 
     // 事件计时相关
-    private long timeStarted = 0; // 事件开始时间
-    private long eventTime = 0; // 事件总时长
+    // 事件开始时间
+    private long timeStarted = 0;
+    // 事件总时长
+    private long eventTime = 0;
 
     // 远征队相关
     private Expedition expedition = null;
@@ -106,8 +116,10 @@ public class EventInstanceManager {
     private boolean eventStarted = false; // 事件是否开始
 
     // 奖励相关配置
-    private final Map<Integer, List<Integer>> collectionSet = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
-    private final Map<Integer, List<Integer>> collectionQty = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
+    private final Map<Integer, List<Integer>> collectionSet =
+            new HashMap<>(GameConfig.getServerInt("max_event_levels"));
+    private final Map<Integer, List<Integer>> collectionQty =
+            new HashMap<>(GameConfig.getServerInt("max_event_levels"));
     private final Map<Integer, Integer> collectionExp = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
 
     // 清理阶段奖励
@@ -125,6 +137,7 @@ public class EventInstanceManager {
 
     /**
      * 构造函数，初始化事件实例
+     *
      * @param em 事件管理器
      * @param name 事件实例名称
      */
@@ -257,6 +270,7 @@ public class EventInstanceManager {
 
     /**
      * 注册玩家到事件实例
+     *
      * @param chr 要注册的玩家角色
      * @param runEntryScript 是否执行入口脚本
      */
@@ -699,6 +713,12 @@ public class EventInstanceManager {
         return mapManager;
     }
 
+    /**
+     * 调度执行指定方法
+     *
+     * @param methodName 需要执行的方法名
+     * @param delay 延迟执行的时间（毫秒）
+     */
     public void schedule(final String methodName, long delay) {
         readLock.lock();
         try {
@@ -1034,7 +1054,8 @@ public class EventInstanceManager {
     }
 
     private boolean hasRewardSlot(Character player, int eventLevel) {
-        byte listReq = getRewardListRequirements(eventLevel);   //gets all types of items present in the event reward list
+        byte listReq =
+                getRewardListRequirements(eventLevel);   //gets all types of items present in the event reward list
 
         //iterating over all valid inventory types
         for (byte type = 1; type <= 5; type++) {

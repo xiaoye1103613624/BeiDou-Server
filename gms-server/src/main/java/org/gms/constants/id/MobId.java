@@ -23,17 +23,49 @@ public class MobId {
     public static final int BLOODY_BOOM = 8510100;
 
     public static final int PINK_BEAN = 8820001;
-
+    /**
+     * 扎昆1
+     */
     public static final int ZAKUM_1 = 8800000;
+    /**
+     * 扎昆2
+     */
     public static final int ZAKUM_2 = 8800001;
+    /**
+     * 扎昆3
+     */
     public static final int ZAKUM_3 = 8800002;
+    /**
+     * 扎昆手臂1-8（总共八个）
+     */
     public static final int ZAKUM_ARM_1 = 8800003;
+    /**
+     * 扎昆手臂2-8（总共八个）
+     */
     public static final int ZAKUM_ARM_2 = 8800004;
+    /**
+     * 扎昆手臂3-8（总共八个）
+     */
     public static final int ZAKUM_ARM_3 = 8800005;
+    /**
+     * 扎昆手臂4-8（总共八个）
+     */
     public static final int ZAKUM_ARM_4 = 8800006;
+    /**
+     * 扎昆手臂5-8（总共八个）
+     */
     public static final int ZAKUM_ARM_5 = 8800007;
+    /**
+     * 扎昆手臂6-8（总共八个）
+     */
     public static final int ZAKUM_ARM_6 = 8800008;
+    /**
+     * 扎昆手臂7-8（总共八个）
+     */
     public static final int ZAKUM_ARM_7 = 8800009;
+    /**
+     * 扎昆手臂8-8（总共八个）
+     */
     public static final int ZAKUM_ARM_8 = 8800010;
 
     public static boolean isZakumArm(int mobId) {

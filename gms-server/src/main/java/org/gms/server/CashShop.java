@@ -63,14 +63,32 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Ponk
  */
 public class CashShop {
+    /**
+     * 点卷
+     */
     public static final int NX_CREDIT = 1;
+    /**
+     * 抵用券
+     */
     public static final int MAPLE_POINT = 2;
+    /**
+     * 信用券
+     */
     public static final int NX_PREPAID = 4;
 
     private final int accountId;
     private final int characterId;
+    /**
+     * 点卷
+     */
     private int nxCredit;
+    /**
+     * 抵用券
+     */
     private int maplePoint;
+    /**
+     * 信用券
+     */
     private int nxPrepaid;
     @Getter
     private boolean opened;

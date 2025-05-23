@@ -21,6 +21,7 @@
 /*
    @Author: Arthur L - Refactored command content into modules
 */
+
 package org.gms.client.command.commands.gm4;
 
 import org.gms.client.Character;
@@ -30,6 +31,11 @@ import org.gms.constants.id.MobId;
 import org.gms.server.life.LifeFactory;
 import org.gms.util.I18nUtil;
 
+/**
+ * 扎昆 指令
+ *
+ * @author ronancpl
+ */
 public class ZakumCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ZakumCommand.message1"));

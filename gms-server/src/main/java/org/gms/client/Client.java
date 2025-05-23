@@ -92,11 +92,20 @@ public class Client extends ChannelInboundHandlerAdapter {
     private final long sessionId;
     private final PacketProcessor packetProcessor;
 
+    @Getter
     private Hwid hwid;
+    @Getter
     private String remoteAddress;
     private volatile boolean inTransition;
 
     private io.netty.channel.Channel ioChannel;
+    /**
+     * -- GETTER --
+     * 获取玩家角色
+     *
+     * @return 返回玩家角色对象，类型为 Character
+     */
+    @Getter
     private Character player;
     private int channel = 1;
     private int accId = -4;
@@ -153,6 +162,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     private int voteTime = -1;
     private int visibleWorlds;
     private long lastNpcClick;
+    @Getter
     private long lastPacket = System.currentTimeMillis();
     private int lang = 0;
     // 提供公共方法来获取 sysRescue
@@ -295,10 +305,6 @@ public class Client extends ChannelInboundHandlerAdapter {
         lastPacket = System.currentTimeMillis();
     }
 
-    public long getLastPacket() {
-        return lastPacket;
-    }
-
     public void closeSession() {
         ioChannel.close();
     }
@@ -307,16 +313,8 @@ public class Client extends ChannelInboundHandlerAdapter {
         ioChannel.disconnect();
     }
 
-    public Hwid getHwid() {
-        return hwid;
-    }
-
     public void setHwid(Hwid hwid) {
         this.hwid = hwid;
-    }
-
-    public String getRemoteAddress() {
-        return remoteAddress;
     }
 
     public boolean isInTransition() {
@@ -325,10 +323,6 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     public EventManager getEventManager(String event) {
         return getChannelServer().getEventSM().getEventManager(event);
-    }
-
-    public Character getPlayer() {
-        return player;
     }
 
     /**
@@ -548,6 +542,12 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
     }
 
+    /**
+     * 封禁特定MAC地址
+     * 从数据库中查询出需要禁止的MAC地址，并将其添加到macbans表中。
+     *
+     * @throws SQLException 如果在数据库操作过程中出现异常
+     */
     public void banMacs() {
         try {
             loadMacsIfNescessary();

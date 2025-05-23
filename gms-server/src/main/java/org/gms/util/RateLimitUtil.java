@@ -1,5 +1,6 @@
 package org.gms.util;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.manager.ServerManager;
 import org.gms.model.pojo.RateLimitContext;
@@ -10,10 +11,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 限流工具类
+ *
+ * @author 昨日小睡
+ */
 @Slf4j
 public class RateLimitUtil {
-    private static RateLimitUtil instance;
+    /**
+     * 限流工具类实例
+     */
+    @Getter
+    private static RateLimitUtil instance = new RateLimitUtil();
+    /**
+     * 限流配置
+     */
     private final ServiceProperty.RateLimitProperty rateLimitProperty;
+    /**
+     * ip限流信息映射
+     * key: ip, value: RateLimitContext
+     */
     private final Map<String, RateLimitContext> contextMap;
 
     private RateLimitUtil() {
@@ -21,13 +38,12 @@ public class RateLimitUtil {
         contextMap = new HashMap<>();
     }
 
-    public static RateLimitUtil getInstance() {
-        if (instance == null) {
-            instance = new RateLimitUtil();
-        }
-        return instance;
-    }
-
+    /**
+     * IP 限流检测
+     *
+     * @param ip 需要检查的IP地址
+     * @return 如果未超过速率限制则返回true，否则返回false
+     */
     public boolean check(String ip) {
         if (!rateLimitProperty.isEnabled()) {
             return true;
