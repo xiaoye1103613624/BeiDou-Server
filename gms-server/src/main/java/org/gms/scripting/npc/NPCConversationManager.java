@@ -462,6 +462,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return getPlayer().getGender();
     }
 
+    /**
+     * 通过职业ID更改玩家的职业
+     *
+     * @param a 职业ID
+     */
     public void changeJobById(int a) {
         getPlayer().changeJob(Job.getById(a));
     }

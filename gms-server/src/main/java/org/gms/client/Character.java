@@ -5595,6 +5595,12 @@ public class Character extends AbstractCharacterObject {
         return hasMerchant;
     }
 
+    /**
+     * 检查角色是否有物品
+     *
+     * @param itemid 物品ID
+     * @return 如果物品存在（数量大于0），则返回true；否则返回false
+     */
     public boolean haveItem(int itemid) {
         return getItemQuantity(itemid, ItemConstants.isEquipment(itemid)) > 0;
     }

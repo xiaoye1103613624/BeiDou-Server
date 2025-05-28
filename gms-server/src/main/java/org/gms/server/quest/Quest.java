@@ -84,11 +84,15 @@ import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 任务
  * @author Matze
  * @author Ronan - support for medal quests
  */
 public class Quest {
     private static final Logger log = LoggerFactory.getLogger(Quest.class);
+    /**
+     * 任务id -> 任务
+     */
     private static volatile Map<Integer, Quest> quests = new HashMap<>();
     private static volatile Map<Integer, Integer> infoNumberQuests = new HashMap<>();
     private static final Map<Short, Integer> medals = new HashMap<>();
@@ -229,6 +233,12 @@ public class Quest {
         return autoStart;
     }
 
+    /**
+     * 根据任务ID获取任务实例
+     *
+     * @param id 任务ID
+     * @return 任务实例
+     */
     public static Quest getInstance(int id) {
         Quest ret = quests.get(id);
         if (ret == null) {
@@ -369,6 +379,13 @@ public class Quest {
         return true;
     }
 
+    /**
+     * 强制开始任务
+     *
+     * @param chr 角色对象
+     * @param npc 任务NPC的ID
+     * @return 返回true表示任务开始成功，否则返回false
+     */
     public boolean forceStart(Character chr, int npc) {
         QuestStatus newStatus = new QuestStatus(this, QuestStatus.Status.STARTED, npc);
 

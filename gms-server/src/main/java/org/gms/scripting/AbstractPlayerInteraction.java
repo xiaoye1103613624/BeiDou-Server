@@ -126,10 +126,21 @@ public class AbstractPlayerInteraction {
                 map.getRandomPlayerSpawnpoint().getId();
     }
 
+    /**
+     * 将玩家传送到指定的地图
+     *
+     * @param mapid 要传送的地图ID
+     */
     public void warp(int mapid) {
         getPlayer().changeMap(mapid);
     }
 
+    /**
+     * 将玩家传送到指定的地图和传送门
+     *
+     * @param map    目标地图的ID
+     * @param portal 目标传送门的类型
+     */
     public void warp(int map, int portal) {
         getPlayer().changeMap(map, portal);
     }
@@ -500,6 +511,12 @@ public class AbstractPlayerInteraction {
         return completeQuest(id, npc);
     }
 
+    /**
+     * 开始任务
+     *
+     * @param id 任务ID（short类型）
+     * @return 如果任务开始成功返回true，否则返回false
+     */
     public boolean startQuest(short id) {
         return startQuest((int) id);
     }
