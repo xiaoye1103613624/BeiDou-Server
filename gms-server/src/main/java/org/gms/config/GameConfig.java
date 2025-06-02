@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 /**
  * 北斗动态参数计划，结构
- * {"world":{"0":{"server_message":{"clazz":"java.lang.String","value":"Welcome to Scania!"},"exp_rate":{"clazz":"java.lang.Float","value":"1.0"}}},"server":{"global":{"WORLDS":{"clazz":"java.lang.Integer","value":"1"}},"npc":{"NPCS_SCRIPTABLE":{"clazz":"java.util.Map","value":"{9001105:\"Rescue Gaga!\"}"}}}}
+ * {"world":{"0":{"server_message":{"clazz":"java.lang.String","value":"Welcome to XiaoYe!"},"exp_rate":{"clazz":"java.lang.Float","value":"1.0"}}},"server":{"global":{"WORLDS":{"clazz":"java.lang.Integer","value":"1"}},"npc":{"NPCS_SCRIPTABLE":{"clazz":"java.util.Map","value":"{9001105:\"Rescue Gaga!\"}"}}}}
  */
 public class GameConfig {
     private static final GameConfig config = new GameConfig();

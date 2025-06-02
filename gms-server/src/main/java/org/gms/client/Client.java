@@ -66,6 +66,7 @@ import org.gms.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.script.ScriptEngine;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -73,13 +74,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.*;
 import java.util.Date;
+import java.util.*;
 import java.util.concurrent.Semaphore;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import javax.script.ScriptEngine;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Client extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(Client.class);
@@ -678,10 +679,10 @@ public class Client extends ChannelInboundHandlerAdapter {
      * 登录方法
      *
      * @param login 用户名
-     * @param pwd 密码
-     * @param hwid 硬件ID
+     * @param pwd   密码
+     * @param hwid  硬件ID
      * @return 登录结果状态码
-     *
+     * <p>
      * 该方法实现了用户的登录逻辑，包括尝试连接数据库、验证用户名和密码、检查账户状态等步骤。
      * 登录成功或失败时，会返回不同的状态码。
      */

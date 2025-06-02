@@ -38,19 +38,18 @@ import org.gms.manager.ServerManager;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
-import org.gms.service.CharacterService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.ItemInformationProvider;
+import org.gms.service.CharacterService;
 import org.gms.service.NoteService;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -181,7 +180,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
                     } else {
                         ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
-                        if(cItem == null) {
+                        if (cItem == null) {
                             c.enableCSActions();
                             return;
                         }

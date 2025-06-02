@@ -21,21 +21,9 @@
  */
 package org.gms.net.server.channel.handlers;
 
-import org.gms.client.BuddyList;
-import org.gms.client.BuddylistEntry;
 import org.gms.client.Character;
-import org.gms.client.CharacterNameAndId;
-import org.gms.client.Client;
-import org.gms.client.Disease;
-import org.gms.client.Family;
-import org.gms.client.FamilyEntry;
-import org.gms.client.Mount;
-import org.gms.client.SkillFactory;
-import org.gms.client.inventory.Equip;
-import org.gms.client.inventory.Inventory;
-import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
-import org.gms.client.inventory.Pet;
+import org.gms.client.*;
+import org.gms.client.inventory.*;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
@@ -55,17 +43,17 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.scripting.event.EventInstanceManager;
+import org.gms.server.life.MobSkill;
 import org.gms.service.HpMpAlertService;
+import org.gms.service.NoteService;
+import org.gms.util.DatabaseConnection;
 import org.gms.util.I18nUtil;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.scripting.event.EventInstanceManager;
-import org.gms.server.life.MobSkill;
-import org.gms.service.NoteService;
-import org.gms.util.DatabaseConnection;
-import org.gms.util.PacketCreator;
-import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -396,7 +384,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     */
                 if (player.isGM()) {
                     Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.earnTitleMessage((player.gmLevel() < 6 ? "GM " : "Admin ") + player.getName() + " 登录了游戏"));
-                }else {
+                } else {
                     if (GameConfig.getServerBoolean("use_login_notification")) {
                         String msg = I18nUtil.getMessage("Character.login.globalNotice", player.getName());
                         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(3, c.getChannel(), msg));

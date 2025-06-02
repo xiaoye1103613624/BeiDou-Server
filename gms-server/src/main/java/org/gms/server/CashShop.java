@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.server;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.jcip.annotations.GuardedBy;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
@@ -62,6 +63,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Flav
  * @author Ponk
  */
+@Slf4j
 public class CashShop {
     /**
      * 点卷
@@ -110,11 +112,13 @@ public class CashShop {
             ServerManager.getApplicationContext().getBean(CharacterService.class);
 
     public CashShop(int accountId, int characterId, int jobType) {
-        this.accountId = accountId; this.characterId = characterId;
+        this.accountId = accountId;
+        this.characterId = characterId;
 
         if (!GameConfig.getServerBoolean("use_joint_cash_shop_inventory")) {
             switch (jobType) {
-                case 0 -> factory = ItemFactory.CASH_EXPLORER; case 1 -> factory = ItemFactory.CASH_CYGNUS;
+                case 0 -> factory = ItemFactory.CASH_EXPLORER;
+                case 1 -> factory = ItemFactory.CASH_CYGNUS;
                 case 2 -> factory = ItemFactory.CASH_ARAN;
             }
         } else {
@@ -168,10 +172,11 @@ public class CashShop {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, ModifiedCashItemDO> loadedItems = new HashMap<>();
-            Data loadData = etc.getData("Commodity.img.xml");
+            Data loadData = etc.getData("Commodity.img");
             if (loadData == null) {
                 return;
-            } for (Data item : loadData.getChildren()) {
+            }
+            for (Data item : loadData.getChildren()) {
                 int sn = DataTool.getIntConvert("SN", item);
                 int itemId = DataTool.getIntConvert("ItemId", item);
                 int price = DataTool.getIntConvert("Price", item, 0);
@@ -184,13 +189,15 @@ public class CashShop {
                 Integer maplePoint = DataTool.getInteger("MaplePoint", item);
                 Integer meso = DataTool.getInteger("Meso", item);
                 Integer forPremiumUser = DataTool.getInteger("ForPremiumUser", item);
-                Integer gender = DataTool.getInteger("Gender", item); Integer clz = DataTool.getInteger("Class", item);
+                Integer gender = DataTool.getInteger("Gender", item);
+                Integer clz = DataTool.getInteger("Class", item);
                 // limit一堆问号，是有问题还是就是这样？暂不解析这个字段
 //                Integer limit = DataTool.getInteger("Limit", item);
                 Integer pbCash = DataTool.getInteger("PbCash", item);
                 Integer pbPoint = DataTool.getInteger("PbPoint", item);
                 Integer pbGift = DataTool.getInteger("PbGift", item);
-                Integer packageSN = DataTool.getInteger("PackageSN", item); loadedItems.put(sn,
+                Integer packageSN = DataTool.getInteger("PackageSN", item);
+                loadedItems.put(sn,
                         ModifiedCashItemDO.builder().sn(sn).itemId(itemId).count(count).price(price).bonus(bonus)
                                 .priority(priority).period(period == 0 ? 90 : period).maplePoint(maplePoint).meso(meso)
                                 .forPremiumUser(forPremiumUser).commodityGender(gender).onSale(onSale).clz(clz)
@@ -223,7 +230,7 @@ public class CashShop {
 
         /**
          * 加载现金类别
-         *
+         * <p>
          * 该方法首先清空已修改的现金项列表，然后通过ServerManager获取CashShopService的Bean，
          * 最后通过CashShopService获取所有的现金类别列表，并将它们添加到cashCategories列表中。
          */
@@ -248,9 +255,14 @@ public class CashShop {
         }
 
         public static ModifiedCashItemDO getItem(int sn) {
-            ModifiedCashItemDO cashItemDO = items.get(sn); if (cashItemDO == null) {
+            ModifiedCashItemDO cashItemDO = items.get(sn);
+            if (cashItemDO == null) {
+                log.error("不存在的现金商品: {}", sn);
                 return null;
-            } ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn); ModifiedCashItemDO returnDo = cashItemDO.clone();
+            }
+            log.info("获取现金商品: {}", cashItemDO);
+            ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
+            ModifiedCashItemDO returnDo = cashItemDO.clone();
             if (dbItemDO != null) {
                 returnDo.setItemId(Optional.ofNullable(dbItemDO.getItemId()).orElse(cashItemDO.getItemId()));
                 returnDo.setPrice(Optional.ofNullable(dbItemDO.getPrice()).orElse(cashItemDO.getPrice()));
@@ -272,7 +284,8 @@ public class CashShop {
                 returnDo.setPbPoint(Optional.ofNullable(dbItemDO.getPbPoint()).orElse(cashItemDO.getPbPoint()));
                 returnDo.setPbGift(Optional.ofNullable(dbItemDO.getPbGift()).orElse(cashItemDO.getPbGift()));
                 returnDo.setPackageSn(Optional.ofNullable(dbItemDO.getPackageSn()).orElse(cashItemDO.getPackageSn()));
-            } return returnDo;
+            }
+            return returnDo;
         }
 
         public static ModifiedCashItemDO getWzItem(int sn) {
@@ -300,20 +313,25 @@ public class CashShop {
 
     public int getCash(int type) {
         return switch (type) {
-            case NX_CREDIT -> nxCredit; case MAPLE_POINT -> maplePoint; case NX_PREPAID -> nxPrepaid; default -> 0;
+            case NX_CREDIT -> nxCredit;
+            case MAPLE_POINT -> maplePoint;
+            case NX_PREPAID -> nxPrepaid;
+            default -> 0;
         };
 
     }
 
     public void gainCash(int type, int cash) {
         switch (type) {
-            case NX_CREDIT -> nxCredit += cash; case MAPLE_POINT -> maplePoint += cash;
+            case NX_CREDIT -> nxCredit += cash;
+            case MAPLE_POINT -> maplePoint += cash;
             case NX_PREPAID -> nxPrepaid += cash;
         }
     }
 
     public void gainCash(int type, ModifiedCashItemDO buyItem, int world) {
-        gainCash(type, -buyItem.getPrice()); if (!GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
+        gainCash(type, -buyItem.getPrice());
+        if (!GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
             Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSn());
         }
     }
@@ -323,7 +341,8 @@ public class CashShop {
     }
 
     public List<Item> getInventory() {
-        lock.lock(); try {
+        lock.lock();
+        try {
             return Collections.unmodifiableList(inventory);
         } finally {
             lock.unlock();
@@ -331,9 +350,12 @@ public class CashShop {
     }
 
     public Item findByCashId(int cashId) {
-        boolean isRing; Equip equip = null; for (Item item : getInventory()) {
+        boolean isRing;
+        Equip equip = null;
+        for (Item item : getInventory()) {
             if (item.getInventoryType().equals(InventoryType.EQUIP)) {
-                equip = (Equip) item; isRing = equip.getRingId() > -1;
+                equip = (Equip) item;
+                isRing = equip.getRingId() > -1;
             } else {
                 isRing = false;
             }
@@ -347,7 +369,8 @@ public class CashShop {
     }
 
     public void addToInventory(Item item) {
-        lock.lock(); try {
+        lock.lock();
+        try {
             inventory.add(item);
         } finally {
             lock.unlock();
@@ -355,7 +378,8 @@ public class CashShop {
     }
 
     public void removeFromInventory(Item item) {
-        lock.lock(); try {
+        lock.lock();
+        try {
             inventory.remove(item);
         } finally {
             lock.unlock();
@@ -377,10 +401,15 @@ public class CashShop {
     public void gift(int recipient, String from, String message, int sn, int ringid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)")) {
-            ps.setInt(1, recipient); ps.setString(2, from); ps.setString(3, message); ps.setInt(4, sn);
-            ps.setInt(5, ringid); ps.executeUpdate();
+            ps.setInt(1, recipient);
+            ps.setString(2, from);
+            ps.setString(3, message);
+            ps.setInt(4, sn);
+            ps.setInt(5, ringid);
+            ps.executeUpdate();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
+            log.error("Error while gifting item: " + sqle.getMessage());
         }
     }
 
@@ -394,10 +423,14 @@ public class CashShop {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        notes++; ModifiedCashItemDO cItem = CashItemFactory.getItem(rs.getInt("sn"));
-                        Item item = cItem.toItem(); Equip equip = null; item.setGiftFrom(rs.getString("from"));
+                        notes++;
+                        ModifiedCashItemDO cItem = CashItemFactory.getItem(rs.getInt("sn"));
+                        Item item = cItem.toItem();
+                        Equip equip = null;
+                        item.setGiftFrom(rs.getString("from"));
                         if (item.getInventoryType().equals(InventoryType.EQUIP)) {
-                            equip = (Equip) item; equip.setRingId(rs.getInt("ringid"));
+                            equip = (Equip) item;
+                            equip.setRingId(rs.getInt("ringid"));
                             gifts.add(new Pair<>(equip, rs.getString("message")));
                         } else {
                             gifts.add(new Pair<>(item, rs.getString("message")));
@@ -405,7 +438,8 @@ public class CashShop {
                         //Packages never contains a ring
                         if (CashItemFactory.isPackage(cItem.getItemId())) {
                             for (Item packageItem : CashItemFactory.getPackage(cItem.getItemId())) {
-                                packageItem.setGiftFrom(rs.getString("from")); addToInventory(packageItem);
+                                packageItem.setGiftFrom(rs.getString("from"));
+                                addToInventory(packageItem);
                             }
                         } else {
                             addToInventory(equip == null ? item : equip);
@@ -415,7 +449,8 @@ public class CashShop {
             }
 
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM `gifts` WHERE `to` = ?")) {
-                ps.setInt(1, characterId); ps.executeUpdate();
+                ps.setInt(1, characterId);
+                ps.executeUpdate();
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -435,20 +470,25 @@ public class CashShop {
     public void save(Connection con) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement(
                 "UPDATE `accounts` SET `nxCredit` = ?, `maplePoint` = ?, `nxPrepaid` = ? WHERE `id` = ?")) {
-            ps.setInt(1, nxCredit); ps.setInt(2, maplePoint); ps.setInt(3, nxPrepaid); ps.setInt(4, accountId);
+            ps.setInt(1, nxCredit);
+            ps.setInt(2, maplePoint);
+            ps.setInt(3, nxPrepaid);
+            ps.setInt(4, accountId);
             ps.executeUpdate();
         }
 
         List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
 
-        List<Item> inv = getInventory(); for (Item item : inv) {
+        List<Item> inv = getInventory();
+        for (Item item : inv) {
             itemsWithType.add(new Pair<>(item, item.getInventoryType()));
         }
 
         factory.saveItems(itemsWithType, accountId, con);
 
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM `wishlists` WHERE `charid` = ?")) {
-            ps.setInt(1, characterId); ps.executeUpdate();
+            ps.setInt(1, characterId);
+            ps.executeUpdate();
         }
 
         try (PreparedStatement ps = con.prepareStatement("INSERT INTO `wishlists` VALUES (DEFAULT, ?, ?)")) {
@@ -456,7 +496,8 @@ public class CashShop {
 
             for (int sn : wishList) {
                 // TODO: batch insert
-                ps.setInt(2, sn); ps.executeUpdate();
+                ps.setInt(2, sn);
+                ps.executeUpdate();
             }
         }
     }
@@ -464,12 +505,14 @@ public class CashShop {
     public Optional<CashShopSurpriseResult> openCashShopSurprise(long cashId) {
         lock.lock();
         try {
-            Optional<Item> maybeCashShopSurprise = getItemByCashId(cashId); if (maybeCashShopSurprise.isEmpty() ||
+            Optional<Item> maybeCashShopSurprise = getItemByCashId(cashId);
+            if (maybeCashShopSurprise.isEmpty() ||
                     maybeCashShopSurprise.get().getItemId() != ItemId.CASH_SHOP_SURPRISE) {
                 return Optional.empty();
             }
 
-            Item cashShopSurprise = maybeCashShopSurprise.get(); if (cashShopSurprise.getQuantity() <= 0) {
+            Item cashShopSurprise = maybeCashShopSurprise.get();
+            if (cashShopSurprise.getQuantity() <= 0) {
                 return Optional.empty();
             }
 
@@ -482,12 +525,14 @@ public class CashShop {
                 return Optional.empty();
             }
 
-            short newQuantity = (short) (cashShopSurprise.getQuantity() - 1); cashShopSurprise.setQuantity(newQuantity);
+            short newQuantity = (short) (cashShopSurprise.getQuantity() - 1);
+            cashShopSurprise.setQuantity(newQuantity);
             if (newQuantity <= 0) {
                 removeFromInventory(cashShopSurprise);
             }
 
-            Item itemReward = cashItemReward.get().toItem(); addToInventory(itemReward);
+            Item itemReward = cashItemReward.get().toItem();
+            addToInventory(itemReward);
 
             return Optional.of(new CashShopSurpriseResult(cashShopSurprise, itemReward));
         } finally {
@@ -501,7 +546,8 @@ public class CashShop {
     }
 
     public int getItemsSize() {
-        lock.lock(); try {
+        lock.lock();
+        try {
             return inventory.size();
         } finally {
             lock.unlock();

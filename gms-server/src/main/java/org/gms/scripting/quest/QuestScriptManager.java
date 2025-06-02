@@ -24,10 +24,10 @@ package org.gms.scripting.quest;
 import org.gms.client.Client;
 import org.gms.client.QuestStatus;
 import org.gms.constants.game.GameConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
 import org.gms.server.quest.Quest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -118,6 +118,7 @@ public class QuestScriptManager extends AbstractScriptManager {
                 return;
             }
             if (c.canClickNPC()) {
+                log.info("玩家:[{}-{}];MapId:[{}]NPC:[{}];完成任务:[{}]",c.getPlayer().getAccountId(),c.getPlayer().getName(),  c.getPlayer().getMapId(), npc, questid);
                 qms.put(c, qm);
 
                 /*if (!quest.hasScriptRequirement(true)) {
