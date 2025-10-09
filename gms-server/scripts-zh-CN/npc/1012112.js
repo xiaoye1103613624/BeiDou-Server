@@ -72,7 +72,7 @@ function action(mode, type, selection) {
                         var eli = em.getEligibleParty(cm.getParty());
                         if (eli.size() > 0) {
                             if (!em.startInstance(cm.getParty(), cm.getPlayer().getMap(), 1)) {
-                                cm.sendOk("有人已经在尝试进行组队任务了。请等待他们完成，或者换到另一个频道。");
+                                cm.sendOk("已经有人在尝试这个组队任务了。请等待他们完成，或者寻找其他频道。");
                             }
                         } else {
                             cm.sendOk("你还不能开始这个组队任务，因为你的队伍人数可能不在规定范围内，或者你的一些队员不符合参与条件，又或者他们不在这个地图里。如果你在寻找队员方面有困难，可以试试队伍搜索。");
@@ -82,23 +82,23 @@ function action(mode, type, selection) {
                     }
                 } else if (selection == 1) {
                     var psState = cm.getPlayer().toggleRecvPartySearchInvite();
-                    cm.sendOk("你的组队搜索状态现在是：#b" + (psState ? "启用" : "禁用") + "#k。想要改变状态时随时找我谈谈。");
+                    cm.sendOk("你的队伍搜索状态现在是: #b" + (psState ? "启用" : "禁用") + "#k。如果你想再次更改状态，随时和我交谈。");
                     cm.dispose();
                 } else if (selection == 2) {
-                    cm.sendOk("#e#b<组队任务: 迎月花山丘>#k#n\\r\\n从地图底部的花朵上收集迎月花种子，然后把它们扔到舞台上方的平台旁边。迎月花种子的颜色必须匹配才能让种子生长，所以要不断尝试直到找到正确的组合。当所有种子都种下后，也就是任务的第二阶段开始了，在月妙为饥饿的兴儿准备年糕时进行侦查。一旦兴儿吃饱了，你的任务就完成了。");
+                    cm.sendOk("#e#b<组队任务: 迎月花山丘>#k#n\r\n从地图底部的花朵上收集迎月花种子，然后把它们扔到舞台上方的平台旁边。迎月花种子的颜色必须匹配才能让种子生长，所以要不断尝试直到找到正确的组合。当所有种子都种下后，也就是任务的第二阶段开始了，在月妙为饥饿的兴儿准备年糕时进行侦查。一旦兴儿吃饱了，你的任务就完成了。");
                     cm.dispose();
                 } else {
                     cm.sendYesNo("所以你想用 #b20 个 #b#t4001101##k 兑换这件专属设计的帽子吗？");
                 }
             } else {
-                if (cm.hasItem(4001158, 20)) {
+                if (cm.hasItem(4001101, 20)) {
                     if (cm.canHold(1002798)) {
-                        cm.gainItem(4001158, -20);
-                        cm.gainItem(1002798, 20);
+                        cm.gainItem(4001101, -20);
+                        cm.gainItem(1002798, 1);
                         cm.sendNext("给你。尽情享用！");
                     }
                 } else {
-                    cm.sendNext("你还没有足够的 #t4001158# 来购买它！");
+                    cm.sendNext("你还没有足够的 #t4001101# 来兑换它！");
                 }
 
                 cm.dispose();
@@ -116,7 +116,7 @@ function action(mode, type, selection) {
             }
         } else if (cm.getMapId() == 910010400) {
             if (status == 0) {
-                cm.sendYesNo("那么，你现在要回到明斯港吗？");
+                cm.sendYesNo("那么，你现在要返回射手村吗？");
             } else if (status == 1) {
                 if (cm.getEventInstance() == null) {
                     cm.warp(100000200);

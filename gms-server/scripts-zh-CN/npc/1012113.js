@@ -41,7 +41,6 @@ function action(mode, type, selection) {
                 cm.sendNext("你好！我是达尔米。我们所在的地方附近有个猪猪村庄。那里的猪非常吵闹且难以控制，甚至从旅行者那里偷走了许多武器。它们被原来的村庄赶了出来，现在躲在猪猪村庄里。");
             } else if (status == 1) {
                 if (cm.isEventLeader()) {
-                    //cm.sendNext("你觉得和你的队员一起去那里，给那些吵闹的猪一个教训怎么样？");
                     cm.sendYesNo("你觉得和你的队员一起去那里给那些吵闹的猪一个教训怎么样？");
                 } else {
                     cm.sendOk("感兴趣吗？告诉你的队长来和我谈谈，然后前往那里！");
