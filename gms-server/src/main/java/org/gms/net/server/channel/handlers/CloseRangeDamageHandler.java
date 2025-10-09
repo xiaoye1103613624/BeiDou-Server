@@ -21,22 +21,12 @@
 */
 package org.gms.net.server.channel.handlers;
 
-import org.gms.client.BuffStat;
+import org.gms.client.*;
 import org.gms.client.Character;
-import org.gms.client.Client;
-import org.gms.client.Job;
-import org.gms.client.Skill;
-import org.gms.client.SkillFactory;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
-import org.gms.constants.skills.Crusader;
-import org.gms.constants.skills.DawnWarrior;
-import org.gms.constants.skills.DragonKnight;
-import org.gms.constants.skills.Hero;
-import org.gms.constants.skills.NightWalker;
-import org.gms.constants.skills.Rogue;
-import org.gms.constants.skills.WindArcher;
+import org.gms.constants.skills.*;
 import org.gms.net.packet.InPacket;
 import org.gms.server.StatEffect;
 import org.gms.util.PacketCreator;
@@ -45,11 +35,20 @@ import org.gms.util.Pair;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 处理近程伤害的处理器
+ * @author beidou
+ */
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
 
+    /**
+     * 处理传入的数据包，并更新客户端和角色状态
+     *
+     * @param p 传入的数据包
+     * @param c 客户端对象
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
@@ -68,8 +67,8 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 return;
             }
         }
-
-        if (chr.getDojoEnergy() < 10000 && (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009)) // PE hacking or maybe just lagging
+        // PE hacking or maybe just lagging
+        if (chr.getDojoEnergy() < 10000 && (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009))
         {
             return;
         }
@@ -138,7 +137,8 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             }
         }
         if (attack.numAttacked > 0 && attack.skill == DragonKnight.SACRIFICE) {
-            int totDamageToOneMonster = 0; // sacrifice attacks only 1 mob with 1 attack
+            // sacrifice attacks only 1 mob with 1 attack
+            int totDamageToOneMonster = 0;
             final Iterator<List<Integer>> dmgIt = attack.allDamage.values().iterator();
             if (dmgIt.hasNext()) {
                 totDamageToOneMonster = dmgIt.next().get(0);
@@ -163,8 +163,10 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         if (numFinisherOrbs == 0 && GameConstants.isFinisherSkill(attack.skill)) {
             return;
         }
-        if (attack.skill % 10000000 == 1009) { // bamboo
-            if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
+        // bamboo
+        if (attack.skill % 10000000 == 1009) {
+            // PE hacking or maybe just lagging
+            if (chr.getDojoEnergy() < 10000) {
                 return;
             }
 
@@ -183,7 +185,8 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 }
             }
         }
-        if ((chr.getSkillLevel(SkillFactory.getSkill(NightWalker.VANISH)) > 0 || chr.getSkillLevel(SkillFactory.getSkill(Rogue.DARK_SIGHT)) > 0) && chr.getBuffedValue(BuffStat.DARKSIGHT) != null) {// && chr.getBuffSource(BuffStat.DARKSIGHT) != 9101004
+        // && chr.getBuffSource(BuffStat.DARKSIGHT) != 9101004
+        if ((chr.getSkillLevel(SkillFactory.getSkill(NightWalker.VANISH)) > 0 || chr.getSkillLevel(SkillFactory.getSkill(Rogue.DARK_SIGHT)) > 0) && chr.getBuffedValue(BuffStat.DARKSIGHT) != null) {
             chr.cancelEffectFromBuffStat(BuffStat.DARKSIGHT);
             chr.cancelBuffStats(BuffStat.DARKSIGHT);
         } else if (chr.getSkillLevel(SkillFactory.getSkill(WindArcher.WIND_WALK)) > 0 && chr.getBuffedValue(BuffStat.WIND_WALK) != null) {

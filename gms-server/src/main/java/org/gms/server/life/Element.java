@@ -21,8 +21,44 @@
 */
 package org.gms.server.life;
 
+/**
+ * 元素枚举类，表示不同的属性类型。
+ * @author beidou
+ */
+
 public enum Element {
-    NEUTRAL(0), PHYSICAL(1), FIRE(2, true), ICE(3, true), LIGHTING(4), POISON(5), HOLY(6, true), DARKNESS(7);
+    /**
+     * 中性元素，表示没有特定属性。
+     */
+    NEUTRAL(0),
+    /**
+     * 物理属性，表示没有特定元素效果。
+     */
+    PHYSICAL(1),
+    /**
+     * 火属性
+     */
+    FIRE(2, true),
+    /**
+     * 冰属性
+     */
+    ICE(3, true),
+    /**
+     * 闪电属性
+     */
+    LIGHTING(4),
+    /**
+     * 毒属性
+     */
+    POISON(5),
+    /**
+     * 神圣属性
+     */
+    HOLY(6, true),
+    /**
+     * 暗属性
+     */
+    DARKNESS(7);
 
     private final int value;
     private boolean special = false;
@@ -40,24 +76,24 @@ public enum Element {
         return special;
     }
 
+    /**
+     * 根据字符获取对应的元素。
+     *
+     * @param c 用于确定元素的字符。
+     * @return 对应的元素。
+     * @throws IllegalArgumentException 如果传入的字符无法对应到任何元素，则抛出此异常。
+     */
     public static Element getFromChar(char c) {
-        switch (Character.toUpperCase(c)) {
-            case 'F':
-                return FIRE;
-            case 'I':
-                return ICE;
-            case 'L':
-                return LIGHTING;
-            case 'S':
-                return POISON;
-            case 'H':
-                return HOLY;
-            case 'D':
-                return DARKNESS;
-            case 'P':
-                return NEUTRAL;
-        }
-        throw new IllegalArgumentException("unknown elemnt char " + c);
+        return switch (Character.toUpperCase(c)) {
+            case 'F' -> FIRE;
+            case 'I' -> ICE;
+            case 'L' -> LIGHTING;
+            case 'S' -> POISON;
+            case 'H' -> HOLY;
+            case 'D' -> DARKNESS;
+            case 'P' -> NEUTRAL;
+            default -> throw new IllegalArgumentException("未知元素属性 " + c);
+        };
     }
 
     public int getValue() {

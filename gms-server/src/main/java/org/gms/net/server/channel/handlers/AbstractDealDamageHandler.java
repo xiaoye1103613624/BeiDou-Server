@@ -21,11 +21,8 @@
  */
 package org.gms.net.server.channel.handlers;
 
-import org.gms.client.BuffStat;
+import org.gms.client.*;
 import org.gms.client.Character;
-import org.gms.client.Job;
-import org.gms.client.Skill;
-import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
@@ -34,66 +31,14 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
-import org.gms.constants.skills.Aran;
-import org.gms.constants.skills.Assassin;
-import org.gms.constants.skills.Bandit;
-import org.gms.constants.skills.Beginner;
-import org.gms.constants.skills.Bishop;
-import org.gms.constants.skills.BlazeWizard;
-import org.gms.constants.skills.Bowmaster;
-import org.gms.constants.skills.Brawler;
-import org.gms.constants.skills.Buccaneer;
-import org.gms.constants.skills.ChiefBandit;
-import org.gms.constants.skills.Cleric;
-import org.gms.constants.skills.Corsair;
-import org.gms.constants.skills.Crossbowman;
-import org.gms.constants.skills.Crusader;
-import org.gms.constants.skills.DawnWarrior;
-import org.gms.constants.skills.DragonKnight;
-import org.gms.constants.skills.Evan;
-import org.gms.constants.skills.FPArchMage;
-import org.gms.constants.skills.FPMage;
-import org.gms.constants.skills.FPWizard;
-import org.gms.constants.skills.Fighter;
-import org.gms.constants.skills.Gunslinger;
-import org.gms.constants.skills.Hermit;
-import org.gms.constants.skills.Hero;
-import org.gms.constants.skills.Hunter;
-import org.gms.constants.skills.ILArchMage;
-import org.gms.constants.skills.ILMage;
-import org.gms.constants.skills.Legend;
-import org.gms.constants.skills.Marauder;
-import org.gms.constants.skills.Marksman;
-import org.gms.constants.skills.NightLord;
-import org.gms.constants.skills.NightWalker;
-import org.gms.constants.skills.Noblesse;
-import org.gms.constants.skills.Outlaw;
-import org.gms.constants.skills.Page;
-import org.gms.constants.skills.Paladin;
-import org.gms.constants.skills.Ranger;
-import org.gms.constants.skills.Rogue;
-import org.gms.constants.skills.Shadower;
-import org.gms.constants.skills.Sniper;
-import org.gms.constants.skills.Spearman;
-import org.gms.constants.skills.SuperGM;
-import org.gms.constants.skills.ThunderBreaker;
-import org.gms.constants.skills.WhiteKnight;
-import org.gms.constants.skills.WindArcher;
+import org.gms.constants.skills.*;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
-import org.gms.server.life.Element;
-import org.gms.server.life.ElementalEffectiveness;
-import org.gms.server.life.MobSkill;
-import org.gms.server.life.MobSkillFactory;
-import org.gms.server.life.MobSkillId;
-import org.gms.server.life.MobSkillType;
-import org.gms.server.life.Monster;
-import org.gms.server.life.MonsterDropEntry;
-import org.gms.server.life.MonsterInformationProvider;
+import org.gms.server.life.*;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
@@ -102,13 +47,8 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -122,6 +62,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         public int speed = 4;
         public Point position = new Point();
 
+        /**
+         * 获取指定角色使用指定技能时的攻击效果
+         *
+         * @param chr 角色对象
+         * @param theSkill 技能对象
+         * @return StatEffect 对象，表示攻击效果，如果无法获取则返回 null
+         */
         public StatEffect getAttackEffect(Character chr, Skill theSkill) {
             Skill mySkill = theSkill;
             if (mySkill == null) {
@@ -146,6 +93,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 对玩家应用攻击效果。
+     *
+     * @param attack 攻击信息对象
+     * @param player 玩家对象
+     * @param attackCount 攻击次数
+     */
     protected void applyAttack(AttackInfo attack, final Character player, int attackCount) {
         final MapleMap map = player.getMap();
         if (map.isOwnershipRestricted(player)) {
@@ -578,6 +532,16 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 使用技能对怪物造成伤害
+     *
+     * @param attacker 攻击者
+     * @param map       当前地图
+     * @param monster   目标怪物
+     * @param damage    造成的伤害值
+     * @param skillid   技能ID
+     * @param fixedTime 固定动画时间，如果为0则使用技能的默认动画时间
+     */
     private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final int damage, int skillid, int fixedTime) {
         int animationTime;
 
@@ -598,6 +562,15 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 解析伤害数据包并生成 AttackInfo 对象
+     *
+     * @param p 包含伤害数据的 InPacket 对象
+     * @param chr 发起攻击的角色对象
+     * @param ranged 是否为远程攻击
+     * @param magic 是否为魔法攻击
+     * @return 解析后的 AttackInfo 对象
+     */
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {
         //2C 00 00 01 91 A1 12 00 A5 57 62 FC E2 75 99 10 00 47 80 01 04 01 C6 CC 02 DD FF 5F 00
         AttackInfo ret = new AttackInfo();
@@ -961,6 +934,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         return ret;
     }
 
+    /**
+     * 生成一个介于 l 和 u 之间（包括 l 和 u）的随机整数。
+     *
+     * @param l 随机数的下限（包含）
+     * @param u 随机数的上限（包含）
+     * @return 生成的随机整数
+     */
     private static int rand(int l, int u) {
         return (int) ((Math.random() * (u - l + 1)) + l);
     }
