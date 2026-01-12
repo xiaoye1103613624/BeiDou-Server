@@ -20,7 +20,6 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.gms.client;
 
 import lombok.Getter;
@@ -74,10 +73,7 @@ import org.gms.server.events.Events;
 import org.gms.server.events.RescueGaga;
 import org.gms.server.events.gm.Fitness;
 import org.gms.server.events.gm.Ola;
-import org.gms.server.life.MobSkill;
-import org.gms.server.life.MobSkillId;
-import org.gms.server.life.Monster;
-import org.gms.server.life.PlayerNPC;
+import org.gms.server.life.*;
 import org.gms.server.maps.*;
 import org.gms.server.maps.MiniGame.MiniGameResult;
 import org.gms.server.minigame.RockPaperScissor;
@@ -95,8 +91,8 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.sql.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
@@ -325,8 +321,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private String search = null;
-    private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);
-    // player client is currently trying to change maps or log in the game map //玩家客户端当前正在尝试更改地图或登录游戏地图
+    private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map //玩家客户端当前正在尝试更改地图或登录游戏地图
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicInteger exp = new AtomicInteger();
     private final AtomicInteger gachaExp = new AtomicInteger();
@@ -414,8 +409,7 @@ public class Character extends AbstractCharacterObject {
     private final EnumMap<BuffStat, BuffStatValueHolder> effects = new EnumMap<>(BuffStat.class);
     private final Map<BuffStat, Byte> buffEffectsCount = new LinkedHashMap<>();
     private final Map<Disease, Long> diseaseExpires = new LinkedHashMap<>();
-    private final Map<Integer, Map<BuffStat, BuffStatValueHolder>> buffEffects = new LinkedHashMap<>();
-    // non-overriding buffs thanks to Ronan
+    private final Map<Integer, Map<BuffStat, BuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private final Map<Integer, Long> buffExpires = new LinkedHashMap<>();
     @Getter
     private final Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
@@ -530,18 +524,12 @@ public class Character extends AbstractCharacterObject {
     private float familyExp = 1;
     @Getter
     private float familyDrop = 1;
-    private static final CharacterService characterService =
-            ServerManager.getApplicationContext().getBean(CharacterService.class);
-    private static final NameChangeService nameChangeService =
-            ServerManager.getApplicationContext().getBean(NameChangeService.class);
-    private static final WorldTransferService worldTransferService =
-            ServerManager.getApplicationContext().getBean(WorldTransferService.class);
-    private static final AccountService accountService =
-            ServerManager.getApplicationContext().getBean(AccountService.class);
-    private static final HpMpAlertService hpMpAlertService =
-            ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
-    private static final InventoryService inventoryService =
-            ServerManager.getApplicationContext().getBean(InventoryService.class);
+    private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+    private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+    private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
+    private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    private static final InventoryService inventoryService = ServerManager.getApplicationContext().getBean(InventoryService.class);
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -2262,6 +2250,8 @@ public class Character extends AbstractCharacterObject {
     public static boolean deleteCharFromDB(Character player, int senderAccId) {
         try {
             characterService.deleteCharFromDB(player, senderAccId);
+            // NOTE: 删除缓存,防止角色槽满后无法再次建立角色
+            Server.getInstance().deleteCharacterEntry(senderAccId, player.getId());
             return true;
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Character.deleteCharFromDB.error1"), e);
@@ -2933,8 +2923,10 @@ public class Character extends AbstractCharacterObject {
     public void gainGachaExp() {
         int expgain = 0;
         long currentgexp = gachaExp.get();
-        if ((currentgexp + exp.get()) >= ExpTable.getExpNeededForLevel(level)) {
-            expgain += ExpTable.getExpNeededForLevel(level) - exp.get();
+
+        int levelUpNeed = ExpTable.getExpNeededForLevel(level) - exp.get();
+        if (currentgexp >= levelUpNeed) {
+            expgain += Math.max(0, levelUpNeed);
 
             int nextneed = ExpTable.getExpNeededForLevel(level + 1);
             if (currentgexp - expgain >= nextneed) {
@@ -6833,9 +6825,8 @@ public class Character extends AbstractCharacterObject {
             }
         }
         if (possesed > 0 && !MapId.isDojo(getMapId())) {
-            message(I18nUtil.getLogMessage("Character.useItem.message1"));  //使用安全护符，不扣经验
-            InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true,
-                    false);
+            message(I18nUtil.getMessage("Character.useItem.message1"));  //使用安全护符，不扣经验
+            InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
             usedSafetyCharm = true;
         } else if (getJob() != Job.BEGINNER) { //Hmm...
             if (!FieldLimit.NO_EXP_DECREASE.check(

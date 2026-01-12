@@ -24,7 +24,7 @@ public interface OutPacket extends Packet {
 
     void writeString(String value);
 
-    void writeFixedString(String value);
+    void writeFixedString(String value, int fixed);
 
     void writePos(Point value);
 
