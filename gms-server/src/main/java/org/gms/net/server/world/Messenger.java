@@ -26,6 +26,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 跨频道世界级网络/会话模型「Messenger」。
+ * 在多个 Channel 之间同步队伍、好友、信使、公告等全局状态。
+ */
 public final class Messenger {
 
     private final int id;

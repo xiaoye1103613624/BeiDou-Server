@@ -23,6 +23,9 @@ package org.gms.server.maps;
 
 import java.awt.*;
 
+/**
+ * 【类型】AbstractMapObject（class），包 `org.gms.server.maps`。
+ */
 public abstract class AbstractMapObject implements MapObject {
     private Point position = new Point();
     private int objectId;

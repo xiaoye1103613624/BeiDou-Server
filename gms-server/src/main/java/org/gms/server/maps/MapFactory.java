@@ -46,6 +46,9 @@ import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 【工厂/提供者】MapFactory：创建或提供 `maps` 相关运行时对象。
+ */
 public class MapFactory {
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);

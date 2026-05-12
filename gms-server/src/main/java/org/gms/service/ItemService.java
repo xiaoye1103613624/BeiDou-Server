@@ -10,6 +10,9 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 import org.springframework.stereotype.Service;
 
+/**
+ * 【业务服务】ItemService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @Slf4j
 public class ItemService {

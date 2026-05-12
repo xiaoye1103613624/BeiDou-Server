@@ -32,6 +32,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * 【GM/玩家指令】TimeCommand：聊天或控制台命令实现。
+ */
 public class TimeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("TimeCommand.message1"));

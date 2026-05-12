@@ -36,6 +36,9 @@ import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 【GM/玩家指令】ShutdownCommand：聊天或控制台命令实现。
+ */
 public class ShutdownCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ShutdownCommand.message1"));

@@ -28,6 +28,9 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】EndEventCommand：聊天或控制台命令实现。
+ */
 public class EndEventCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("EndEventCommand.message1"));

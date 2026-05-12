@@ -21,6 +21,9 @@
 */
 package org.gms.client.inventory;
 
+/**
+ * 【枚举】WeaponType：定义 `inventory` 中的一组常量。
+ */
 public enum WeaponType {
     NOT_A_WEAPON(0),
     GENERAL1H_SWING(4.4),

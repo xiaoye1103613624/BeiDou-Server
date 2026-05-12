@@ -29,6 +29,9 @@ import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.quest.Quest;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【类型】MapScriptMethods（class），包 `org.gms.scripting.map`。
+ */
 public class MapScriptMethods extends AbstractPlayerInteraction {
 
     private final String rewardstring = " 勋章挑战已完成！请找勋章老人领取你的勋章。";

@@ -26,6 +26,9 @@ import org.springframework.stereotype.Service;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 
+/**
+ * 【业务服务】GiveService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @Slf4j
 public class GiveService {

@@ -4,6 +4,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.gms.model.dto.BasePageDTO;
 
+/**
+ * 【类型】CashCategory（class），包 `org.gms.model.pojo`。
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor

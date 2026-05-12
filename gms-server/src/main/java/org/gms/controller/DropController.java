@@ -11,6 +11,9 @@ import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 【Web 控制器】DropController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/drop")

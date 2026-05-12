@@ -34,6 +34,9 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ProItemCommand：聊天或控制台命令实现。
+ */
 public class ProItemCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ProItemCommand.message1"));

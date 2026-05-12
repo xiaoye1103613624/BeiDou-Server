@@ -5,6 +5,10 @@ import org.gms.net.opcodes.RecvOpcode;
 
 import java.util.Set;
 
+/**
+ * 封包日志与可观测性「LoggingUtil」。
+ * 用于记录、过滤或诊断收发包内容，便于 GM 与开发排查协议问题。
+ */
 public class LoggingUtil {
     private static final Set<Short> ignoredDebugRecvPackets = Set.of(
             (short) RecvOpcode.MOVE_PLAYER.getValue(), // 41

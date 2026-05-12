@@ -11,6 +11,9 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+/**
+ * 【GM/玩家指令】DevtestCommand：聊天或控制台命令实现。
+ */
 public class DevtestCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("DevtestCommand.message1"));

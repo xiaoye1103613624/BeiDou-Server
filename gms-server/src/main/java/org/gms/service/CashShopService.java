@@ -24,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ * 【业务服务】CashShopService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 public class CashShopService {

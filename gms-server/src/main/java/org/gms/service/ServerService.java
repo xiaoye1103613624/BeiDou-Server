@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 【业务服务】ServerService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 public class ServerService {
 

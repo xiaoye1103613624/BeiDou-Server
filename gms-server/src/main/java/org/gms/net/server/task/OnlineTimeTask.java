@@ -7,6 +7,10 @@ import org.gms.net.server.channel.Channel;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * 服务器定时任务「OnlineTimeTask」。
+ * 在 org.gms.net.server.task 下注册执行，用于重置、刷新或持久化与在线玩家相关的数据。
+ */
 public class OnlineTimeTask implements Runnable {
     private final AtomicReference<LocalDate> lastUpdated = new AtomicReference<>(LocalDate.now());
 

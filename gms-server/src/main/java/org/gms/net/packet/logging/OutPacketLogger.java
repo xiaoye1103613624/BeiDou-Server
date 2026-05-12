@@ -12,6 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.HexTool;
 
+/**
+ * 封包日志与可观测性「OutPacketLogger」。
+ * 用于记录、过滤或诊断收发包内容，便于 GM 与开发排查协议问题。
+ */
 @Sharable
 public class OutPacketLogger extends ChannelOutboundHandlerAdapter implements PacketLogger {
     private static final Logger log = LoggerFactory.getLogger(OutPacketLogger.class);

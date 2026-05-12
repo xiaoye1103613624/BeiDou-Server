@@ -13,6 +13,9 @@ import java.util.List;
 import static org.gms.dao.entity.table.MtsCartDOTableDef.MTS_CART_D_O;
 import static org.gms.dao.entity.table.MtsItemsDOTableDef.MTS_ITEMS_D_O;
 
+/**
+ * 【业务服务】MtsService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 public class MtsService {

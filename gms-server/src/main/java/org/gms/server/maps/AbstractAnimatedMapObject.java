@@ -30,6 +30,9 @@ import org.gms.net.packet.Packet;
 
 import java.util.Arrays;
 
+/**
+ * 【类型】AbstractAnimatedMapObject（class），包 `org.gms.server.maps`。
+ */
 public abstract class AbstractAnimatedMapObject extends AbstractMapObject implements AnimatedMapObject {
     public static final int IDLE_MOVEMENT_PACKET_LENGTH = 15;
     private static final Packet IDLE_MOVEMENT_PACKET = createIdleMovementPacket();

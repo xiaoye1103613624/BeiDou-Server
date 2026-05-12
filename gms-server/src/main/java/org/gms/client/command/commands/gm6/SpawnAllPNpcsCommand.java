@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.server.life.PlayerNPC;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】SpawnAllPNpcsCommand：聊天或控制台命令实现。
+ */
 public class SpawnAllPNpcsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SpawnAllPNpcsCommand.message1"));

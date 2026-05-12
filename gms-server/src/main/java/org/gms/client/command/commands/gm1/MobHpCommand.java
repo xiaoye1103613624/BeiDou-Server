@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】MobHpCommand：聊天或控制台命令实现。
+ */
 public class MobHpCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("MobHpCommand.message1"));

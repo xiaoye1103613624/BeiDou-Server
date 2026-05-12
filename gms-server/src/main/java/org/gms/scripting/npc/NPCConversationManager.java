@@ -79,23 +79,48 @@ import java.util.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * NPC 对话管理器：由 {@link NPCScriptManager} 在玩家与 NPC（或物品脚本）交互时创建，
+ * 供 Rhino/JS 脚本调用，封装多种 NPC 对话 UI、任务、物品、组队、联盟、怪物嘉年华与婚礼等常用能力。
+ * <p>
+ * 继承 {@link AbstractPlayerInteraction}，可访问当前 {@link org.gms.client.Client} 与 {@link Character}。
+ * 带 {@link NextLevelContext} 的 {@code send*Level} / {@code get*Level} 系列可在脚本中声明多级对话的函数名自动路由。
+ *
  * @author Matze
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
+    /** 本类日志。 */
     private static final Logger log = LoggerFactory.getLogger(NPCConversationManager.class);
 
+    /** 对话绑定的 NPC 模板 ID（WZ 中的 NPC 编号）。 */
     private final int npc;
+    /** 地图上该 NPC 实例的对象 OID；未绑实例时可为 -1。 */
     private int npcOid;
+    /** 当前执行的脚本名（不含路径），与 NPCScriptManager 加载的脚本对应。 */
     private String scriptName;
+    /** 客户端通过数字/文本输入框提交的内容缓存，供 {@link #getText()} 读取。 */
     private String getText;
+    /** 是否为「使用物品触发的脚本」对话（与地图点击 NPC 区分）。 */
     private boolean itemScript;
+    /** 部分组队 NPC 对话中缓存的对方队伍成员列表。 */
     private List<PartyCharacter> otherParty;
+    /** 扭蛋业务服务，供 {@link #doGachapon()} 等使用。 */
     private static final GachaponService gachaponService = ServerManager.getApplicationContext().getBean(GachaponService.class);
 
+    /** 按 NPC ID 缓存的默认台词，减少重复读取 WZ。 */
     private final Map<Integer, String> npcDefaultTalks = new HashMap<>();
+    /**
+     * 多级对话路由上下文：记录下一步/上一步/分支等脚本函数名，
+     * 由 {@link NPCScriptManager} 在玩家点击按钮后根据 {@link org.gms.model.pojo.NextLevelType} 派发。
+     */
     @Getter
     private final NextLevelContext nextLevelContext = new NextLevelContext();
 
+    /**
+     * 读取并缓存指定 NPC 的默认一句台词（无脚本或脚本未覆盖时使用）。
+     *
+     * @param npcid NPC 模板 ID
+     * @return 默认对话文本，可能为 null
+     */
     private String getDefaultTalk(int npcid) {
         String talk = npcDefaultTalks.get(npcid);
         if (talk == null) {
@@ -106,10 +131,25 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return talk;
     }
 
+    /**
+     * 由脚本名构造的对话管理器（使用默认 OID -1）。
+     *
+     * @param c           当前客户端
+     * @param npc         NPC 模板 ID
+     * @param scriptName  脚本文件名
+     */
     public NPCConversationManager(Client c, int npc, String scriptName) {
         this(c, npc, -1, scriptName, false);
     }
 
+    /**
+     * 组队等场景使用的构造：仅绑定 NPC 与对方队伍信息，常用于测试或特殊入口。
+     *
+     * @param c           当前客户端
+     * @param npc         NPC 模板 ID
+     * @param otherParty  对方队伍成员快照
+     * @param test        历史参数，保留兼容
+     */
     public NPCConversationManager(Client c, int npc, List<PartyCharacter> otherParty, boolean test) {
         super(c);
         this.c = c;
@@ -117,6 +157,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.otherParty = otherParty;
     }
 
+    /**
+     * 完整构造：绑定 NPC、地图对象 OID、脚本名及是否为物品脚本。
+     *
+     * @param c           当前客户端
+     * @param npc         NPC 模板 ID
+     * @param oid         地图上 NPC 实例 OID
+     * @param scriptName  脚本名
+     * @param itemScript  是否物品触发脚本
+     */
     public NPCConversationManager(Client c, int npc, int oid, String scriptName, boolean itemScript) {
         super(c);
         this.npc = npc;
@@ -125,106 +174,148 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.itemScript = itemScript;
     }
 
+    /** @return 当前 NPC 模板 ID */
     public int getNpc() {
         return npc;
     }
 
+    /** @return 地图上 NPC 实例的对象 ID */
     public int getNpcObjectId() {
         return npcOid;
     }
 
+    /** @return 当前 NPC 脚本文件名 */
     public String getScriptName() {
         return scriptName;
     }
 
+    /** @return 是否为物品脚本对话 */
     public boolean isItemScript() {
         return itemScript;
     }
 
+    /** 清除物品脚本标记（对话结束后恢复为普通 NPC 流程）。 */
     public void resetItemScript() {
         this.itemScript = false;
     }
 
+    /**
+     * 结束当前 NPC 对话：清空多级路由、通知 {@link NPCScriptManager} 释放本 CM，并向客户端解锁操作。
+     */
     public void dispose() {
         nextLevelContext.clear();
         NPCScriptManager.getInstance().dispose(this);
         getClient().sendPacket(PacketCreator.enableActions());
     }
 
+    /**
+     * 发送仅含「下一步」按钮的 NPC 对话。
+     *
+     * @param text 支持 #b 等颜色码的正文
+     */
     public void sendNext(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", (byte) 0));
     }
 
+    /** 发送仅含「上一步」按钮的 NPC 对话。 */
     public void sendPrev(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", (byte) 0));
     }
 
+    /** 发送同时含「上一步 / 下一步」的 NPC 对话。 */
     public void sendNextPrev(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", (byte) 0));
     }
 
+    /** 发送仅含「确定」的 NPC 对话。 */
     public void sendOk(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", (byte) 0));
     }
 
+    /** 发送当前 NPC 在 WZ 中的默认一句台词。 */
     public void sendDefault() {
         sendOk(getDefaultTalk(npc));
     }
 
+    /** 发送「是 / 否」二选一对话。 */
     public void sendYesNo(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", (byte) 0));
     }
 
+    /** 发送「接受 / 拒绝」类对话（ opcode 0x0C ）。 */
     public void sendAcceptDecline(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", (byte) 0));
     }
 
+    /**
+     * 发送简单列表选择对话（#L 选项 #l 由脚本拼在 text 中）。
+     *
+     * @param text 含选项标记的正文
+     */
     public void sendSimple(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", (byte) 0));
     }
 
+    /**
+     * 发送带说话者头像的「下一步」对话。
+     *
+     * @param text    正文
+     * @param speaker 说话者类型（0/1/8/9 常见为 NPC 等，与客户端表现相关）
+     */
     public void sendNext(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", speaker));
     }
 
+    /** 带说话者头像的「上一步」对话。 */
     public void sendPrev(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", speaker));
     }
 
+    /** 带说话者头像的「上一步 / 下一步」对话。 */
     public void sendNextPrev(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", speaker));
     }
 
+    /** 带说话者头像的「确定」对话。 */
     public void sendOk(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", speaker));
     }
 
+    /** 带说话者头像的「是 / 否」对话。 */
     public void sendYesNo(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", speaker));
     }
 
+    /** 带说话者头像的「接受 / 拒绝」对话。 */
     public void sendAcceptDecline(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", speaker));
     }
 
+    /** 带说话者头像的简单列表对话。 */
     public void sendSimple(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", speaker));
     }
 
+    /**
+     * 发送美发/整形等样式选择界面；若 {@code styles} 为空则提示并结束对话，避免客户端崩溃。
+     *
+     * @param text   说明文字
+     * @param styles 可选样式 ID 数组
+     */
     public void sendStyle(String text, int[] styles) {
         if (styles.length > 0) {
             nextLevelContext.clear();
@@ -235,23 +326,39 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 弹出数字输入框（带默认与上下限）。
+     *
+     * @param text 提示语
+     * @param def  默认值
+     * @param min  最小可输入
+     * @param max  最大可输入
+     */
     public void sendGetNumber(String text, int def, int min, int max) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max));
     }
 
+    /** 弹出单行文本输入框。 */
     public void sendGetText(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, ""));
     }
-    public void sendGetNumber(String text, int def, int min, int max,byte speaker) {
+
+    /**
+     * 带说话者头像的数字输入框。
+     *
+     * @param speaker 说话者类型
+     */
+    public void sendGetNumber(String text, int def, int min, int max, byte speaker) {
         nextLevelContext.clear();
-        getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max,speaker));
+        getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max, speaker));
     }
 
-    public void sendGetText(String text,byte speaker) {
+    /** 带说话者头像的文本输入框。 */
+    public void sendGetText(String text, byte speaker) {
         nextLevelContext.clear();
-        getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "",speaker));
+        getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "", speaker));
     }
     /*
      * 0 = ariant colliseum
@@ -262,101 +369,158 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 5 = Pyramid PQ
      * 6 = Kerning Subway
      */
+    /**
+     * 打开次元之镜选单 UI（传送门列表由 {@code text} 中脚本拼好）。
+     *
+     * @param text 客户端展示的选单正文
+     */
     public void sendDimensionalMirror(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getDimensionalMirror(text));
     }
 
+    /** 由脚本侧缓存玩家最近一次在输入框中提交的文字。 */
     public void setGetText(String text) {
         this.getText = text;
     }
 
+    /** @return 最近一次输入框提交的文字 */
     public String getText() {
         return this.getText;
     }
 
+    /**
+     * 以当前 NPC 为任务 NPC 强制开始任务。
+     *
+     * @param id 任务 ID
+     */
     @Override
     public boolean forceStartQuest(int id) {
         return forceStartQuest(id, npc);
     }
 
+    /**
+     * 以当前 NPC 为任务 NPC 强制完成任务。
+     *
+     * @param id 任务 ID
+     */
     @Override
     public boolean forceCompleteQuest(int id) {
         return forceCompleteQuest(id, npc);
     }
 
+    /** @param id 任务 ID（short 重载） */
     @Override
     public boolean startQuest(short id) {
         return startQuest((int) id);
     }
 
+    /** @param id 任务 ID（short 重载） */
     @Override
     public boolean completeQuest(short id) {
         return completeQuest((int) id);
     }
 
+    /** 以当前 NPC 为任务 NPC 开始任务。 */
     @Override
     public boolean startQuest(int id) {
         return startQuest(id, npc);
     }
 
+    /** 以当前 NPC 为任务 NPC 完成任务。 */
     @Override
     public boolean completeQuest(int id) {
         return completeQuest(id, npc);
     }
 
+    /** @return 玩家当前持有金币 */
     public int getMeso() {
         return getPlayer().getMeso();
     }
 
+    /** 为玩家增加或减少金币（负数即扣除）。 */
     public void gainMeso(int gain) {
         getPlayer().gainMeso(gain);
     }
 
+    /** {@link #gainMeso(int)} 的 Double 重载，内部取整。 */
     public void gainMeso(Double gain) {
         getPlayer().gainMeso(gain.intValue());
     }
 
+    /**
+     * 为玩家增加经验（带默认显示与组队分享逻辑，与角色内实现一致）。
+     *
+     * @param gain 经验值
+     */
     public void gainExp(int gain) {
         getPlayer().gainExp(gain, true, true);
     }
 
+    /**
+     * 在当前地图广播环境特效（如任务光效）。
+     *
+     * @param effect 特效资源名或路径标识
+     */
     @Override
     public void showEffect(String effect) {
         getPlayer().getMap().broadcastMessage(PacketCreator.environmentChange(effect, 3));
     }
 
+    /** 修改角色发型并刷新外观与属性包。 */
     public void setHair(int hair) {
         getPlayer().setHair(hair);
         getPlayer().updateSingleStat(Stat.HAIR, hair);
         getPlayer().equipChanged();
     }
 
+    /** 修改角色脸型并刷新外观与属性包。 */
     public void setFace(int face) {
         getPlayer().setFace(face);
         getPlayer().updateSingleStat(Stat.FACE, face);
         getPlayer().equipChanged();
     }
 
+    /**
+     * 修改角色肤色（皮肤色枚举 ID）。
+     *
+     * @param color 肤色 ID，对应 {@link SkinColor#getById(int)}
+     */
     public void setSkin(int color) {
         getPlayer().setSkinColor(SkinColor.getById(color));
         getPlayer().updateSingleStat(Stat.SKIN, color);
         getPlayer().equipChanged();
     }
 
+    /**
+     * @param itemid 物品模板 ID
+     * @return 背包中该物品总数量
+     */
     public int itemQuantity(int itemid) {
         return getPlayer().getInventory(ItemConstants.getInventoryType(itemid)).countById(itemid);
     }
 
+    /** 向客户端打开公会排名展示界面（与当前 NPC 关联）。 */
     public void displayGuildRanks() {
         Guild.displayGuildRanks(getClient(), npc);
     }
 
+    /**
+     * 是否允许在当前规则下于指定地图生成玩家 NPC（等级、GM、配置等条件）。
+     *
+     * @param mapid 地图 ID
+     */
     public boolean canSpawnPlayerNpc(int mapid) {
         Character chr = getPlayer();
         return !GameConfig.getServerBoolean("playernpc_auto_deploy") && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
     }
 
+    /**
+     * 在当前地图查找脚本 ID 匹配的玩家 NPC 实例。
+     *
+     * @param scriptId PlayerNPC 脚本 ID
+     * @return 找到的对象或 null
+     */
     public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
         for (MapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC))) {
             PlayerNPC pn = (PlayerNPC) pnpcObj;
@@ -369,16 +533,29 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return null;
     }
 
+    /**
+     * @return 玩家所在队伍，可能为 null
+     */
     @Override
     public Party getParty() {
         return getPlayer().getParty();
     }
 
+    /**
+     * 重置指定地图上所有反应堆（机关）到初始状态。
+     *
+     * @param mapid 地图 ID
+     */
     @Override
     public void resetMap(int mapid) {
         getClient().getChannelServer().getMapFactory().getMap(mapid).resetReactors();
     }
 
+    /**
+     * 为玩家当前携带的所有宠物增加亲密度（饱食度参数传 0）。
+     *
+     * @param tameness 亲密度增量
+     */
     public void gainTameness(int tameness) {
         for (Pet pet : getPlayer().getPets()) {
             if (pet != null) {
@@ -387,34 +564,52 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /** @return 玩家角色名 */
     public String getName() {
         return getPlayer().getName();
     }
 
+    /** @return 玩家性别 */
     public int getGender() {
         return getPlayer().getGender();
     }
 
+    /** 按职业 ID 转职。 */
     public void changeJobById(int a) {
         getPlayer().changeJob(Job.getById(a));
     }
 
+    /** 转职为指定 {@link Job}。 */
     public void changeJob(Job job) {
         getPlayer().changeJob(job);
     }
 
+    /**
+     * @param id 职业 ID
+     * @return 职业显示名称
+     */
     public String getJobName(int id) {
         return GameConstants.getJobName(id);
     }
 
+    /**
+     * @param itemId 物品 ID
+     * @return 该物品触发的效果（Buff 等），无则来自 ItemInformationProvider
+     */
     public StatEffect getItemEffect(int itemId) {
         return ItemInformationProvider.getInstance().getItemEffect(itemId);
     }
 
+    /** 将玩家 AP 重置为可重新分配状态（具体规则在角色实现中）。 */
     public void resetStats() {
         getPlayer().resetStats();
     }
 
+    /**
+     * 打开指定商店 ID 的 NPC 商店；若数据库缺表项则回退到默认商店并打日志。
+     *
+     * @param id 商店 ID
+     */
     public void openShopNPC(int id) {
         Shop shop = ShopFactory.getInstance().getShop(id);
 
@@ -426,6 +621,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 遍历 String.wz 中 {@code Skill.img} 子节点，对玩家批量调用 {@link Character#changeSkillLevel}（脚本/GM 用技能批量处理）。
+     */
     public void maxMastery() {
         for (Data skill_ : DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {
@@ -441,6 +639,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /** 根据当前 NPC 与玩家执行扭蛋抽取逻辑（委托 {@link GachaponService}）。 */
     public void doGachapon() {
         gachaponService.doGachapon(getPlayer(), npc);
     }
@@ -464,6 +663,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     //     }
     // }
 
+    /** 将玩家所在联盟容量 +1 并广播联盟信息更新。 */
     public void upgradeAlliance() {
         Alliance alliance = Server.getInstance().getAlliance(c.getPlayer().getGuild().getAllianceId());
         alliance.increaseCapacity(1);
@@ -474,26 +674,49 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.sendPacket(GuildPackets.updateAllianceInfo(alliance, c.getWorld()));  // thanks Vcoc for finding an alliance update to leader issue
     }
 
+    /**
+     * 解散指定联盟。
+     *
+     * @param c          发起客户端（部分实现可能忽略）
+     * @param allianceId 联盟 ID
+     */
     public void disbandAlliance(Client c, int allianceId) {
         Alliance.disbandAlliance(allianceId);
     }
 
+    /**
+     * @param name 联盟名称
+     * @return 名称是否未被占用且合法
+     */
     public boolean canBeUsedAllianceName(String name) {
         return Alliance.canBeUsedAllianceName(name);
     }
 
+    /**
+     * 以当前队伍创建新联盟。
+     *
+     * @param name 联盟名
+     * @return 新建联盟对象
+     */
     public Alliance createAlliance(String name) {
         return Alliance.createAlliance(getParty(), name);
     }
 
+    /** @return 当前联盟最大成员容量 */
     public int getAllianceCapacity() {
         return Server.getInstance().getAlliance(getPlayer().getGuild().getAllianceId()).getCapacity();
     }
 
+    /** @return 玩家是否已开设个人商店 */
     public boolean hasMerchant() {
         return getPlayer().hasMerchant();
     }
 
+    /**
+     * 玩家是否在商人仓库中仍存有未取回物品，或托管金币非零。
+     *
+     * @return 有托管货物或金币则 true
+     */
     public boolean hasMerchantItems() {
         try {
             if (!ItemFactory.MERCHANT.loadItems(getPlayer().getId(), false).isEmpty()) {
@@ -506,10 +729,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return getPlayer().getMerchantMeso() != 0;
     }
 
+    /** 打开弗雷德（商人取货）仓库界面。 */
     public void showFredrick() {
         c.sendPacket(PacketCreator.getFredrick(getPlayer()));
     }
 
+    /** @return 与玩家同队且处于同一张地图的人数 */
     public int partyMembersInMap() {
         int inMap = 0;
         for (Character char2 : getPlayer().getMap().getCharacters()) {
@@ -520,25 +745,45 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return inMap;
     }
 
+    /** @return 当前频道正在进行的 GM 活动事件实例，可能为 null */
     public Event getEvent() {
         return c.getChannelServer().getEvent();
     }
 
+    /** 若频道存在活动事件，则按事件计数为玩家分配队伍颜色/阵营。 */
     public void divideTeams() {
         if (getEvent() != null) {
             getPlayer().setTeam(getEvent().getLimit() % 2); //muhaha :D
         }
     }
 
+    /**
+     * 按角色名从本频道玩家存储中查找在线角色。
+     *
+     * @param player 角色名
+     * @return 在线 {@link Character}，未找到则为 null
+     */
     public Character getMapleCharacter(String player) {
         Character target = Server.getInstance().getWorld(c.getWorld()).getChannel(c.getChannel()).getPlayerStorage().getCharacterByName(player);
         return target;
     }
 
+    /**
+     * 记录枫叶点数/抽奖类日志（{@code true} 表示获得类操作）。
+     *
+     * @param prize 奖品或操作描述
+     */
     public void logLeaf(String prize) {
         MapleLeafLogger.log(getPlayer(), true, prize);
     }
 
+    /**
+     * 创建奈特的金字塔组队任务实例并将队伍传入起始地图序列。
+     *
+     * @param mode  金字塔模式枚举名，对应 {@link PyramidMode#valueOf(String)}
+     * @param party 是否多人（影响基础地图 ID 偏移）
+     * @return 成功创建并传送返回 true；若前置地图仍有人占位则 false
+     */
     public boolean createPyramid(String mode, boolean party) {//lol
         PyramidMode mod = PyramidMode.valueOf(mode);
 
@@ -572,10 +817,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return true;
     }
 
+    /**
+     * @param itemid 物品模板 ID
+     * @return 物品是否在数据中存在
+     */
     public boolean itemExists(int itemid) {
         return ItemInformationProvider.getInstance().getName(itemid) != null;
     }
 
+    /**
+     * 解析美发/脸型类物品 ID：若原 ID 不存在则尝试回退到同系基础 ID。
+     *
+     * @param itemid 传入的物品 ID
+     * @return 可用物品 ID，找不到则 -1
+     */
     public int getCosmeticItem(int itemid) {
         if (itemExists(itemid)) {
             return itemid;
@@ -591,6 +846,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return itemid != baseid && itemExists(baseid) ? baseid : -1;
     }
 
+    /**
+     * @param itemid 美发或脸型类物品 ID（小于 30000 按脸型处理，否则按发型）
+     * @return 当前玩家已装备的脸或发对应的物品 ID
+     */
     private int getEquippedCosmeticid(int itemid) {
         if (itemid < 30000) {
             return getPlayer().getFace();
@@ -599,18 +858,27 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * @param itemid 美发/脸型物品 ID
+     * @return 是否与当前玩家已装备的脸或发一致
+     */
     public boolean isCosmeticEquipped(int itemid) {
         return getEquippedCosmeticid(itemid) == itemid;
     }
 
+    /**
+     * @return 是否启用旧版 PQ NPC 对话样式且玩家处于队伍中
+     */
     public boolean isUsingOldPqNpcStyle() {
         return GameConfig.getServerBoolean("use_old_gms_styled_pq_npcs") && this.getPlayer().getParty() != null;
     }
 
+    /** @return 当前玩家可使用的熟练度手册列表（转数组供脚本使用） */
     public Object[] getAvailableMasteryBooks() {
         return ItemInformationProvider.getInstance().usableMasteryBooks(this.getPlayer()).toArray();
     }
 
+    /** @return 可用技能书与可传授技能合并后的数组 */
     public Object[] getAvailableSkillBooks() {
         List<Integer> ret = ItemInformationProvider.getInstance().usableSkillBooks(this.getPlayer());
         ret.addAll(SkillbookInformationProvider.getTeachableSkills(this.getPlayer()));
@@ -618,10 +886,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return ret.toArray();
     }
 
+    /**
+     * @param itemId 物品模板 ID
+     * @return 会掉落该物品的非玩家怪物名称数组（供脚本展示）
+     */
     public Object[] getNamesWhoDropsItem(Integer itemId) {
         return ItemInformationProvider.getInstance().getWhoDrops(itemId).toArray();
     }
 
+    /**
+     * 根据技能书在数据中的可获得方式返回一段英文提示（含颜色码），供 NPC 文本拼接。
+     *
+     * @param itemid 技能书物品 ID
+     * @return 描述字符串，不可获得时为空串
+     */
     public String getSkillBookInfo(int itemid) {
         SkillBookEntry sbe = SkillbookInformationProvider.getSkillbookAvailability(itemid);
         switch (sbe) {
@@ -646,6 +924,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     // (CPQ + WED wishlist) by -- Drago (Dragohe4rt)
+    /**
+     * 计算怪物嘉年华（CPQ）某房间地图上玩家的平均等级。
+     *
+     * @param map 地图 ID（通常为 980000100 系列）
+     */
     public int cpqCalcAvgLvl(int map) {
         int num = 0;
         int avg = 0;
@@ -657,6 +940,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return avg;
     }
 
+    /**
+     * 向玩家发送 CPQ（怪物嘉年华第 1 套地图组）可选场地列表；若无可用场地则返回 false。
+     *
+     * @return 已发送简单列表对话返回 true，否则 false
+     */
     public boolean sendCPQMapLists() {
         String msg = LanguageConstants.getMessage(getPlayer(), LanguageConstants.CPQPickRoom);
         int msgLen = msg.length();
@@ -685,6 +973,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * CPQ 场地 {@code field} 是否已被占用（嘉年华初始化失败或三张对战图任一有人）。
+     *
+     * @param field 场地索引 0–5
+     */
     public boolean fieldTaken(int field) {
         if (!c.getChannelServer().canInitMonsterCarnival(true, field)) {
             return true;
@@ -698,10 +991,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return !c.getChannelServer().getMapFactory().getMap(980000102 + field * 100).getAllPlayer().isEmpty();
     }
 
+    /**
+     * 该场地大厅地图是否已有玩家（用于列表中展示「进行中」信息）。
+     */
     public boolean fieldLobbied(int field) {
         return !c.getChannelServer().getMapFactory().getMap(980000100 + field * 100).getAllPlayer().isEmpty();
     }
 
+    /**
+     * 将本队成员传入 CPQ 大厅地图，启动倒计时与超时踢回出口图。
+     *
+     * @param field 场地索引
+     */
     public void cpqLobby(int field) {
         try {
             final MapleMap map, mapExit;
@@ -726,10 +1027,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * @param id 角色 ID
+     * @return 本频道在线角色，或 null
+     */
     public Character getChrById(int id) {
         return c.getChannelServer().getPlayerStorage().getCharacterById(id);
     }
 
+    /** 清除本队所有成员身上的 CPQ 大厅倒计时任务。 */
     public void cancelCPQLobby() {
         for (PartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
             Character mc = mpc.getPlayer();
@@ -739,6 +1045,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 将仍在 CPQ 大厅内的玩家全部传送出口并重置 CP 相关状态。
+     *
+     * @param lobbyMap 大厅地图实例
+     */
     private void warpoutCPQLobby(MapleMap lobbyMap) {
         MapleMap out = lobbyMap.getChannelServer().getMapFactory().getMap((lobbyMap.getId() < 980030000) ? 980000000 : 980030000);
         for (Character mc : lobbyMap.getAllPlayers()) {
@@ -749,6 +1060,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 校验队伍成员等级与是否均在大厅地图内。
+     *
+     * @return 0 正常；1 有成员不在大厅；2 有成员等级不符合该大厅段
+     */
     private int isCPQParty(MapleMap lobby, Party party) {
         int cpqMinLvl, cpqMaxLvl;
 
@@ -774,6 +1090,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return 0;
     }
 
+    /**
+     * 校验主场队伍与挑战方队伍是否均满足开局条件。
+     *
+     * @return 0 可开局；正/负非零表示某方不满足（与 {@link #isCPQParty} 编码一致）
+     */
     private int canStartCPQ(MapleMap lobby, Party party, Party challenger) {
         int ret = isCPQParty(lobby, party);
         if (ret != 0) {
@@ -788,6 +1109,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return 0;
     }
 
+    /**
+     * 怪物嘉年华（第一套地图组）：将挑战方拉入大厅，倒计时后创建 {@link MonsterCarnival} 实例。
+     *
+     * @param challenger 对方队长所在角色
+     * @param field      与地图 ID 偏移相关的场地参数
+     */
     public void startCPQ(final Character challenger, final int field) {
         try {
             cancelCPQLobby();
@@ -848,6 +1175,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 怪物嘉年华第二套地图组（980031xxx）：逻辑与 {@link #startCPQ} 类似，使用不同 mapid 偏移与 {@code MonsterCarnival} 构造参数。
+     */
     public void startCPQ2(final Character challenger, final int field) {
         try {
             cancelCPQLobby();
@@ -900,6 +1230,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * CPQ 第二套地图组的可选场地列表（3 个场），有可选项时发送 {@link #sendSimple}。
+     *
+     * @return 是否成功发出列表
+     */
     public boolean sendCPQMapLists2() {
         String msg = LanguageConstants.getMessage(getPlayer(), LanguageConstants.CPQPickRoom);
         int msgLen = msg.length();
@@ -928,6 +1263,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /** 第二套 CPQ 场地是否被占用（三张对战图检测）。 */
     public boolean fieldTaken2(int field) {
         if (!c.getChannelServer().canInitMonsterCarnival(false, field)) {
             return true;
@@ -941,10 +1277,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return !c.getChannelServer().getMapFactory().getMap(980031200 + field * 1000).getAllPlayer().isEmpty();
     }
 
+    /** 第二套 CPQ 大厅是否已有玩家。 */
     public boolean fieldLobbied2(int field) {
         return !c.getChannelServer().getMapFactory().getMap(980031000 + field * 1000).getAllPlayer().isEmpty();
     }
 
+    /** 将队伍传入第二套 CPQ 大厅并启动倒计时与踢回出口。 */
     public void cpqLobby2(int field) {
         try {
             final MapleMap map, mapExit;
@@ -969,10 +1307,22 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 在当前地图广播倒计时秒数 UI。
+     *
+     * @param time 秒数
+     */
     public void mapClock(int time) {
         getPlayer().getMap().broadcastMessage(PacketCreator.getClock(time));
     }
 
+    /**
+     * 向世界匹配协调器发起 CPQ 挑战确认（双方队长 ID）。
+     *
+     * @param cpqType  {@code cpq1} 或 {@code cpq2} 等类型标识
+     * @param leaderid 对方队长角色 ID
+     * @return 是否成功创建待确认会话
+     */
     private boolean sendCPQChallenge(String cpqType, int leaderid) {
         Set<Integer> cpqLeaders = new HashSet<>();
         cpqLeaders.add(leaderid);
@@ -981,10 +1331,16 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return c.getWorldServer().getMatchCheckerCoordinator().createMatchConfirmation(MatchCheckerType.CPQ_CHALLENGE, c.getWorld(), getPlayer().getId(), cpqLeaders, cpqType);
     }
 
+    /** 玩家响应 CPQ 挑战弹窗（接受/拒绝）。 */
     public void answerCPQChallenge(boolean accept) {
         c.getWorldServer().getMatchCheckerCoordinator().answerMatchConfirmation(getPlayer().getId(), accept);
     }
 
+    /**
+     * 在第二套 CPQ 场地上查找对方队长并发起挑战匹配。
+     *
+     * @param field 场地索引
+     */
     public void challengeParty2(int field) {
         Character leader = null;
         MapleMap map = c.getChannelServer().getMapFactory().getMap(980031000 + 1000 * field);
@@ -1012,6 +1368,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 在第一套 CPQ 场地上查找对方队长并发起挑战（需对方队伍人数与地图内玩家一致）。
+     *
+     * @param field 场地索引
+     */
     public void challengeParty(int field) {
         Character leader = null;
         MapleMap map = c.getChannelServer().getMapFactory().getMap(980000100 + 100 * field);
@@ -1043,6 +1404,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 若竞技场地图为空则创建 {@link AriantColiseum} 实例。
+     *
+     * @param exped 远征队实例
+     * @param mapid 竞技场入口地图 ID（实际竞技场为 {@code mapid + 1}）
+     * @return 地图已被占用则 false
+     */
     private synchronized boolean setupAriantBattle(Expedition exped, int mapid) {
         MapleMap arenaMap = this.getMap().getChannelServer().getMapFactory().getMap(mapid + 1);
         if (!arenaMap.getAllPlayers().isEmpty()) {
@@ -1053,6 +1421,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return true;
     }
 
+    /**
+     * 尝试从当前远征队开启阿里安特竞技场战斗；失败时返回英文提示字符串，成功返回空串。
+     *
+     * @param expedType 远征类型（决定等级段等）
+     * @param mapid     竞技场入口地图 ID
+     * @return 空串表示成功；非空为客户端可直接展示的失败原因（英文）
+     */
     public String startAriantBattle(ExpeditionType expedType, int mapid) {
         if (!GameConstants.isAriantColiseumLobby(mapid)) {
             return "You cannot start an Ariant tournament from outside the Battle Arena Entrance.";
@@ -1093,6 +1468,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 向玩家下发婚礼心愿单或礼物列表封包（根据是否为新郎及是否本人查看）。
+     *
+     * @param groom true 表示新郎侧心愿单
+     */
     public void sendMarriageWishlist(boolean groom) {
         Character player = this.getPlayer();
         Marriage marriage = player.getMarriageInstance();
@@ -1110,10 +1490,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 将指定礼物列表以婚礼封包形式发给当前玩家。
+     *
+     * @param gifts 礼物物品列表
+     */
     public void sendMarriageGifts(List<Item> gifts) {
         this.getPlayer().sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xA, Collections.singletonList(""), gifts));
     }
 
+    /**
+     * 若婚礼实例中尚未填写对应方心愿单，则打开客户端心愿单编辑 UI。
+     *
+     * @return 已弹出心愿单界面返回 true；否则 false
+     */
     public boolean createMarriageWishlist() {
         Marriage marriage = this.getPlayer().getMarriageInstance();
         if (marriage != null) {

@@ -24,6 +24,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【类型】TeleportMovement（class），包 `org.gms.server.movement`。
+ */
 public class TeleportMovement extends AbsoluteLifeMovement {
 
     public TeleportMovement(int type, Point position, int newstate) {

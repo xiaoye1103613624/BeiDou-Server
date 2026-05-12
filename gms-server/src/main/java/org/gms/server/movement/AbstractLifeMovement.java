@@ -23,6 +23,9 @@ package org.gms.server.movement;
 
 import java.awt.*;
 
+/**
+ * 【类型】AbstractLifeMovement（class），包 `org.gms.server.movement`。
+ */
 public abstract class AbstractLifeMovement implements LifeMovement {
     private final Point position;
     private final int duration;

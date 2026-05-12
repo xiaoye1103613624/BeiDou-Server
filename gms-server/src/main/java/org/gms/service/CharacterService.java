@@ -59,6 +59,9 @@ import static org.gms.dao.entity.table.SkillsDOTableDef.SKILLS_D_O;
 import static org.gms.dao.entity.table.TrocklocationsDOTableDef.TROCKLOCATIONS_D_O;
 import static org.gms.dao.entity.table.WishlistsDOTableDef.WISHLISTS_D_O;
 
+/**
+ * 【业务服务】CharacterService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 @Slf4j

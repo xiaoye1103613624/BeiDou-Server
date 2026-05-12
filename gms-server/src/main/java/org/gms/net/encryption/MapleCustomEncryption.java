@@ -21,6 +21,10 @@
 */
 package org.gms.net.encryption;
 
+/**
+ * 协议加解密与编解码「MapleCustomEncryption」。
+ * 在客户端与服务器之间对帧或载荷进行变换，与 PacketCodec / Protocol 配置一致。
+ */
 public class MapleCustomEncryption {
     private static byte rollLeft(byte in, int count) {
         int tmp = (int) in & 0xFF;

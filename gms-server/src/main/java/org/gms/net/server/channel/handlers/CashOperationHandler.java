@@ -55,6 +55,10 @@ import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
+/**
+ * 处理现金商店（Cash Shop）相关操作的处理器。
+ * 负责处理玩家在购买道具、赠送礼物、修改愿望清单、扩展栏位、物品转移等操作时发送的数据包。
+ */
 public final class CashOperationHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(CashOperationHandler.class);
 
@@ -63,7 +67,13 @@ public final class CashOperationHandler extends AbstractPacketHandler {
     public CashOperationHandler(NoteService noteService) {
         this.noteService = noteService;
     }
-
+    /**
+     * 处理现金商店相关的网络数据包，包括购买道具、赠送礼物、修改愿望清单、
+     * 扩展背包/仓库/角色栏位、物品转移等操作
+     *
+     * @param p 输入的数据包对象，包含操作类型和相关参数
+     * @param c 客户端连接对象，用于发送响应和处理状态
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
@@ -77,6 +87,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {     // thanks Thora for finding out an exploit within cash operations
             try {
                 final int action = p.readByte();
+                // 购买现金道具或礼包
                 if (action == 0x03 || action == 0x1E) { // buy
                     p.readByte();
                     final int useNX = p.readInt();
@@ -115,6 +126,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.showBoughtCashPackage(cashPackage, c.getAccID()));
                     }
                     c.sendPacket(PacketCreator.showCash(chr));
+                    // 赠送礼物给其他角色
                 } else if (action == 0x04) {//TODO check for gender with gift
                     int birthday = p.readInt();
                     ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
@@ -147,6 +159,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     if (receiver != null) {
                         noteService.show(receiver);
                     }
+                     // 修改愿望清单
                 } else if (action == 0x05) { // Modify wish list
                     cs.clearWishList();
                     for (byte i = 0; i < 10; i++) {
@@ -157,6 +170,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
                     }
                     c.sendPacket(PacketCreator.showWishList(chr, true));
+                     // 扩展背包栏位
                 } else if (action == 0x06) { // Increase Inventory Slots
                     p.skip(1);
                     int cash = p.readInt();
@@ -203,6 +217,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             log.warn("Could not add {} slots of type {} for chr {}", qty, type, Character.makeMapleReadable(chr.getName()));
                         }
                     }
+                     // 扩展仓库栏位
                 } else if (action == 0x07) { // Increase Storage Slots
                     p.skip(1);
                     int cash = p.readInt();
@@ -250,6 +265,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             log.warn("Could not add {} slots to {}'s account", qty, Character.makeMapleReadable(chr.getName()));
                         }
                     }
+                    // 扩展角色栏位
                 } else if (action == 0x08) { // Increase Character Slots
                     p.skip(1);
                     int cash = p.readInt();
@@ -273,6 +289,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     }
+                     // 从现金背包取出物品到普通背包
                 } else if (action == 0x0D) { // Take from Cash Inventory
                     Item item = cs.findByCashId(p.readInt());
                     if (item == null) {
@@ -290,6 +307,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             }
                         }
                     }
+                     // 将物品放入现金背包
                 } else if (action == 0x0E) { // Put into Cash Inventory
                     int cashId = p.readInt();
                     p.skip(4);
@@ -317,6 +335,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     cs.addToInventory(item);
                     mi.removeSlot(item.getPosition());
                     c.sendPacket(PacketCreator.putIntoCashInventory(item, c.getAccID()));
+                 //  crush戒指（情侣戒指）
                 } else if (action == 0x1D) { //crush ring (action 28)
                     int birthday = p.readInt();
                     if (checkBirthday(c, birthday)) {
@@ -353,6 +372,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     }
 
                     c.sendPacket(PacketCreator.showCash(c.getPlayer()));
+                    // 使用游戏币购买任务道具
                 } else if (action == 0x20) {
                     int serialNumber = p.readInt();  // thanks GabrielSin for detecting a potential exploit with 1 meso cash items.
                     if (serialNumber / 10000000 != 8) {
@@ -381,6 +401,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
                     }
                     c.sendPacket(PacketCreator.showCash(c.getPlayer()));
+                     // 友谊戒指
                 } else if (action == 0x23) { //Friendship :3
                     int birthday = p.readInt();
                     if (checkBirthday(c, birthday)) {
@@ -412,6 +433,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     }
 
                     c.sendPacket(PacketCreator.showCash(c.getPlayer()));
+                     // 改名服务
                 } else if (action == 0x2E) { //name change
                     ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                     if (cItem == null || !canBuy(chr, cItem, cs.getCash(CashShop.NX_PREPAID))) {
@@ -441,6 +463,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
                     }
                     c.enableCSActions();
+                     // 世界转移服务
                 } else if (action == 0x31) { //world transfer
                     ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                     if (cItem == null || !canBuy(chr, cItem, cs.getCash(CashShop.NX_PREPAID))) {
@@ -491,7 +514,14 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         cal.set(year, month - 1, day);
         return c.checkBirthDate(cal);
     }
-
+    /**
+     * 检查玩家是否可以购买指定的现金道具
+     *
+     * @param chr 玩家角色对象
+     * @param item 要购买的现金道具信息对象
+     * @param cash 玩家拥有的现金数量
+     * @return 如果道具存在、正在出售且价格不超过玩家现金则返回true，否则返回false
+     */
     private static boolean canBuy(Character chr, ModifiedCashItemDO item, int cash) {
         if (item != null && item.isSelling() && item.getPrice() <= cash) {
             log.info("玩家 {} 购买了现金道具 {} (SN {}) 花费 {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSn(), item.getPrice());

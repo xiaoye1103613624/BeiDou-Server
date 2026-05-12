@@ -24,6 +24,10 @@ package org.gms.net;
 import org.gms.client.Client;
 import org.gms.net.server.Server;
 
+/**
+ * 网络层类型「AbstractPacketHandler」。
+ * 位于 `org.gms.net`，参与客户端会话、封包路由或服务器间协作。
+ */
 public abstract class AbstractPacketHandler implements PacketHandler {
     @Override
     public boolean validateState(Client c) {

@@ -18,6 +18,9 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * 【类型】XmlSort（class），包 ``。
+ */
 public class XmlSort {
 
     @Test

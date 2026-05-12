@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.io.Serial;
 
+/**
+ * 【类型】BizException（class），包 `org.gms.exception`。
+ */
 @Setter
 @Getter
 public class BizException extends RuntimeException {

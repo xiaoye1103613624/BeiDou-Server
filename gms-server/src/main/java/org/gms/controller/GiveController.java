@@ -12,6 +12,9 @@ import org.gms.service.GiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 【Web 控制器】GiveController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/give")

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+/**
+ * 【Web 控制器】FileController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/file")

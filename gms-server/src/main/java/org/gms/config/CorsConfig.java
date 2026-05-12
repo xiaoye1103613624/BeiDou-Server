@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * 【类型】CorsConfig（class），包 `org.gms.config`。
+ */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     @Value("${app.vue}")

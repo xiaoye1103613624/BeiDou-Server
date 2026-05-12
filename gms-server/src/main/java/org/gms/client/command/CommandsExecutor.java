@@ -46,6 +46,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 【类型】CommandsExecutor（class），包 `org.gms.client.command`。
+ */
 public class CommandsExecutor {
     private static final Logger log = LoggerFactory.getLogger(CommandsExecutor.class);
     @Getter

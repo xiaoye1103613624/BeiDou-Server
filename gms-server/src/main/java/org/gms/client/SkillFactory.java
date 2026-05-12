@@ -85,6 +85,9 @@ import org.gms.server.life.Element;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 【工厂/提供者】SkillFactory：创建或提供 `client` 相关运行时对象。
+ */
 public class SkillFactory {
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
     private static final DataProvider datasource = DataProviderFactory.getDataProvider(WZFiles.SKILL);

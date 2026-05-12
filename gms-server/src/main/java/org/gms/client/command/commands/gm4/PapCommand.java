@@ -30,6 +30,9 @@ import org.gms.constants.id.MobId;
 import org.gms.server.life.LifeFactory;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】PapCommand：聊天或控制台命令实现。
+ */
 public class PapCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("PapCommand.message1"));

@@ -23,6 +23,10 @@ package org.gms.net.server.guild;
 
 import org.gms.client.Character;
 
+/**
+ * 公会/联盟相关网络模型「GuildCharacter」。
+ * 维护公会成员、技能、联盟关系及下行通知封包组装所需的数据。
+ */
 public class GuildCharacter {
     private Character character;
     private int level;

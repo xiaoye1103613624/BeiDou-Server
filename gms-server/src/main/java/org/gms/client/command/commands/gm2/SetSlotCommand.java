@@ -28,6 +28,9 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】SetSlotCommand：聊天或控制台命令实现。
+ */
 public class SetSlotCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SetSlotCommand.message1"));

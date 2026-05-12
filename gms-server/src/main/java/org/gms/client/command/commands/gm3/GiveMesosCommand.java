@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】GiveMesosCommand：聊天或控制台命令实现。
+ */
 public class GiveMesosCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GiveMesosCommand.message1"));

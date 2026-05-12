@@ -26,6 +26,9 @@ import org.gms.client.Client;
 import org.gms.util.PacketCreator;
 
 
+/**
+ * 【类型】Dragon（class），包 `org.gms.server.maps`。
+ */
 public class Dragon extends AbstractAnimatedMapObject {
     private final Character owner;
 

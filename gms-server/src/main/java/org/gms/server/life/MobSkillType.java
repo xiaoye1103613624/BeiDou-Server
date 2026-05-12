@@ -3,6 +3,9 @@ package org.gms.server.life;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * 【枚举】MobSkillType：定义 `life` 中的一组常量。
+ */
 public enum MobSkillType {
     ATTACK_UP(100),
     MAGIC_ATTACK_UP(101),

@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * 【类型】XmlDiff（class），包 ``。
+ */
 public class XmlDiff {
     @Test
     public void stringDiff() throws Exception {

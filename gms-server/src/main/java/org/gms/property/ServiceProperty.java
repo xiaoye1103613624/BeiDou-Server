@@ -4,6 +4,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * 【类型】ServiceProperty（class），包 `org.gms.property`。
+ */
 @ConfigurationProperties(prefix = "gms.service")
 @Component
 @Data

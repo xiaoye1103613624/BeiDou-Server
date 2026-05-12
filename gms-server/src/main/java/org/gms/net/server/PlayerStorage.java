@@ -33,6 +33,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 游戏服务器网络子系统「PlayerStorage」。
+ * 包路径 `org.gms.net.server`，与在线存储、玩家进出频道及跨服数据协作。
+ */
 public class PlayerStorage {
     private final Map<Integer, Character> storage = new LinkedHashMap<>();
     private final Map<String, Character> nameStorage = new LinkedHashMap<>();

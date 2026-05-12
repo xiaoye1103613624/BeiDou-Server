@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 【类型】CharacterListener（class），包 `org.gms.client`。
+ */
 public class CharacterListener implements AbstractCharacterListener {
     private final Character character;
     public CharacterListener(Character character) {

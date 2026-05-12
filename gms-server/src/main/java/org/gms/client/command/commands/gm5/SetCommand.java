@@ -28,6 +28,9 @@ import org.gms.client.command.Command;
 import org.gms.constants.net.ServerConstants;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】SetCommand：聊天或控制台命令实现。
+ */
 public class SetCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SetCommand.message1"));

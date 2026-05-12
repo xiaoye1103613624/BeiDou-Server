@@ -30,6 +30,9 @@ import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】DCAllCommand：聊天或控制台命令实现。
+ */
 public class DCAllCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("DCAllCommand.message1"));

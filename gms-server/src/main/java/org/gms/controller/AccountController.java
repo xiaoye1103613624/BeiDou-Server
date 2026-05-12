@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+/**
+ * 【Web 控制器】AccountController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @RequestMapping("/account")
 public class AccountController {

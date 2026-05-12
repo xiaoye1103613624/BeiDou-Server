@@ -33,6 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
+/**
+ * 【GM/玩家指令】GmCommand：聊天或控制台命令实现。
+ */
 public class GmCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GmCommand.message1"));

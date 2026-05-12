@@ -31,6 +31,9 @@ import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQU
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
 import static org.gms.dao.entity.table.PetignoresDOTableDef.PETIGNORES_D_O;
 
+/**
+ * 【业务服务】InventoryService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Transactional
 @Service
 @AllArgsConstructor

@@ -37,6 +37,9 @@ import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
+/**
+ * 【GM/玩家指令】SearchCommand：聊天或控制台命令实现。
+ */
 public class SearchCommand extends Command {
     private static Data npcStringData;
     private static Data mobStringData;

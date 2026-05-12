@@ -25,6 +25,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【接口】LifeMovementFragment：由 `movement` 模块实现的契约。
+ */
 public interface LifeMovementFragment {
     void serialize(OutPacket p);
     Point getPosition();

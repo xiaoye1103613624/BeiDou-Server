@@ -65,6 +65,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Flav
  * @author Ponk
  */
+/**
+ * 【类型】CashShop（class），包 `org.gms.server`。
+ */
 public class CashShop {
     public static final int NX_CREDIT = 1;
     public static final int MAPLE_POINT = 2;

@@ -23,6 +23,10 @@ package org.gms.net.server.world;
 
 import org.gms.client.Character;
 
+/**
+ * 跨频道世界级网络/会话模型「MessengerCharacter」。
+ * 在多个 Channel 之间同步队伍、好友、信使、公告等全局状态。
+ */
 public class MessengerCharacter {
     private final String name;
     private final int id;

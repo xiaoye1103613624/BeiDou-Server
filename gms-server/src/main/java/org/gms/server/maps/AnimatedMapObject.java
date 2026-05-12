@@ -21,6 +21,9 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 【接口】AnimatedMapObject：由 `maps` 模块实现的契约。
+ */
 public interface AnimatedMapObject extends MapObject {
     int getStance();
     void setStance(int stance);

@@ -42,6 +42,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
+/**
+ * 【GM/玩家指令】PeCommand：聊天或控制台命令实现。
+ */
 public class PeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("PeCommand.message1"));

@@ -29,6 +29,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 【类型】SpawnPoint（class），包 `org.gms.server.life`。
+ */
 public class SpawnPoint {
     private final int monster;
     private final int mobTime;

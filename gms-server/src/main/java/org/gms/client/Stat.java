@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.client;
 
+/**
+ * 【枚举】Stat：定义 `client` 中的一组常量。
+ */
 public enum Stat {
     SKIN(0x1),
     FACE(0x2),

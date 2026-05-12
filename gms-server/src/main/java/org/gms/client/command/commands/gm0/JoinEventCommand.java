@@ -31,6 +31,9 @@ import org.gms.server.events.gm.Event;
 import org.gms.server.maps.FieldLimit;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】JoinEventCommand：聊天或控制台命令实现。
+ */
 public class JoinEventCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("JoinEventCommand.message1"));

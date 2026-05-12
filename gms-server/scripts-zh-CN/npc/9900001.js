@@ -23,9 +23,11 @@
 /**
  * @description 拍卖行中心脚本
  */
-var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
+var OldTitle = "\t\t\t\t\t\t\t\t#e欢迎来到#r 萧 曳 #k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
+var changeLine = "\r\n";
+var changeTwoLine = "\r\n\r\n";
 function start() {
     action(1, 0, 0)
 }
@@ -42,17 +44,20 @@ function action(mode, type, selection) {
 
     if (status === 0) {
 		let text = OldTitle;
-        text += "当前点券：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
-        text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
-        text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
-        text += " \r\n\r\n";
-        text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l\r\n";
-        text += "#L3#传送自由#l \t #L4#爆率一览#l\r\n";
+        text += "当前点券    ：" + cm.getPlayer().getCashShop().getCash(1) + changeLine;
+        text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + changeLine;
+        text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + changeLine;
+        text += changeTwoLine;
+        text += "#L5#[回到自由]#l \t #L61#[快捷传送]#l \t #L70#[副本大厅]#l";
+        text += changeTwoLine;
+        text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l" + changeLine;
+        text += "#L3#传送自由#l \t #L4#爆率一览#l" + changeLine;
+
         if (cm.getPlayer().isGM()) {
-            text += "\r\n\r\n";
-            text += "\t\t\t\t#r=====以下内容仅GM可见=====\r\n";
-            text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l\r\n\r\n";
-			text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n\r\n";
+            text += changeTwoLine;
+            text += "\t\t\t\t#r=====以下内容仅GM可见=====" + changeLine;
+            text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l" + changeTwoLine;
+            text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l" + changeTwoLine;
 			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l";
         }
         cm.sendSimple(text);

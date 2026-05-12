@@ -11,6 +11,9 @@ import org.gms.util.I18nUtil;
 import java.util.Collections;
 import java.util.Optional;
 
+/**
+ * 【GM/玩家指令】MobSkillCommand：聊天或控制台命令实现。
+ */
 public class MobSkillCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("MobSkillCommand.message1"));

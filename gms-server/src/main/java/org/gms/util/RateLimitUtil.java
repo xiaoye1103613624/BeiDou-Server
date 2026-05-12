@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 【类型】RateLimitUtil（class），包 `org.gms.util`。
+ */
 @Slf4j
 public class RateLimitUtil {
     private static RateLimitUtil instance;

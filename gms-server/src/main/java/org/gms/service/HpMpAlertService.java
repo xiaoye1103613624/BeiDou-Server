@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 【业务服务】HpMpAlertService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Slf4j
 @Service
 public class HpMpAlertService {

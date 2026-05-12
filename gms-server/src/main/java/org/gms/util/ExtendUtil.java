@@ -9,6 +9,9 @@ import java.sql.Date;
 
 import static org.gms.dao.entity.table.ExtendValueDOTableDef.EXTEND_VALUE_D_O;
 
+/**
+ * 【类型】ExtendUtil（class），包 `org.gms.util`。
+ */
 public class ExtendUtil {
     private static final ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
 

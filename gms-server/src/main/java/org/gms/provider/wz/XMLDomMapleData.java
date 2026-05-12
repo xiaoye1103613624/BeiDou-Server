@@ -41,6 +41,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 【类型】XMLDomMapleData（class），包 `org.gms.provider.wz`。
+ */
 public class XMLDomMapleData implements Data {
     private final Node node;
     private Path imageDataDir;

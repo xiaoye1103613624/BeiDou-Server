@@ -2,6 +2,9 @@ package org.gms.util;
 
 import java.util.Random;
 
+/**
+ * 【类型】Randomizer（class），包 `org.gms.util`。
+ */
 public class Randomizer {
 
     private final static Random rand = new Random();

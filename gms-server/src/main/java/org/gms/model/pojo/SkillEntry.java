@@ -1,5 +1,8 @@
 package org.gms.model.pojo;
 
+/**
+ * 【类型】SkillEntry（class），包 `org.gms.model.pojo`。
+ */
 public class SkillEntry {
     public int masterLevel;
     public byte skillLevel;

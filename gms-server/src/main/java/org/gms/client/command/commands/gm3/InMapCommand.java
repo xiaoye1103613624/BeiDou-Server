@@ -28,6 +28,9 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】InMapCommand：聊天或控制台命令实现。
+ */
 public class InMapCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("InMapCommand.message1"));

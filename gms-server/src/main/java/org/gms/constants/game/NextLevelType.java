@@ -2,6 +2,9 @@ package org.gms.constants.game;
 
 import lombok.Getter;
 
+/**
+ * 【枚举】NextLevelType：定义 `game` 中的一组常量。
+ */
 @Getter
 public enum NextLevelType {
     SEND_NEXT("sendNextLevel"),

@@ -38,6 +38,9 @@ import org.gms.util.I18nUtil;
 import java.util.*;
 import java.util.Map.Entry;
 
+/**
+ * 【GM/玩家指令】GotoCommand：聊天或控制台命令实现。
+ */
 public class GotoCommand extends Command {
 
     {

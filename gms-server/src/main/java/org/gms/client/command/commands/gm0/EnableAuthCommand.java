@@ -28,6 +28,9 @@ import org.gms.client.command.Command;
 import org.gms.net.server.coordinator.login.LoginBypassCoordinator;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】EnableAuthCommand：聊天或控制台命令实现。
+ */
 public class EnableAuthCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("EnableAuthCommand.message1"));

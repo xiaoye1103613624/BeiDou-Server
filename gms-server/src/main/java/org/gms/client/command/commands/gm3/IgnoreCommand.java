@@ -31,6 +31,9 @@ import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【GM/玩家指令】IgnoreCommand：聊天或控制台命令实现。
+ */
 public class IgnoreCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("IgnoreCommand.message1"));

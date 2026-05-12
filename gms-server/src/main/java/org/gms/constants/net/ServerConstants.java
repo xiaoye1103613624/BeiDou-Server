@@ -1,5 +1,8 @@
 package org.gms.constants.net;
 
+/**
+ * 【类型】ServerConstants（class），包 `org.gms.constants.net`。
+ */
 public class ServerConstants {
 
     //Server Version

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 【Web 控制器】GachaponController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @RequestMapping("/gachapon")
 public class GachaponController {

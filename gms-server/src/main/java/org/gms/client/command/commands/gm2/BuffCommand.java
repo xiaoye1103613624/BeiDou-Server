@@ -30,6 +30,9 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】BuffCommand：聊天或控制台命令实现。
+ */
 public class BuffCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("BuffCommand.message1"));

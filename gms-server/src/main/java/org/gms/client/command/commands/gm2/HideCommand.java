@@ -29,6 +29,9 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】HideCommand：聊天或控制台命令实现。
+ */
 public class HideCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("HideCommand.message1"));

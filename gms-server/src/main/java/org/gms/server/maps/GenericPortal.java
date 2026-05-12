@@ -32,6 +32,9 @@ import java.awt.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 【类型】GenericPortal（class），包 `org.gms.server.maps`。
+ */
 public class GenericPortal implements Portal {
     private String name;
     private String target;

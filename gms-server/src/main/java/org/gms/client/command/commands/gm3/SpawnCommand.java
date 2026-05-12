@@ -30,6 +30,9 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】SpawnCommand：聊天或控制台命令实现。
+ */
 public class SpawnCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SpawnCommand.message1"));

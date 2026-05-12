@@ -25,6 +25,9 @@ import org.gms.server.TimerManager;
 
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * 【类型】MapMonitor（class），包 `org.gms.server.maps`。
+ */
 public class MapMonitor {
     private ScheduledFuture<?> monitorSchedule;
     private MapleMap map;

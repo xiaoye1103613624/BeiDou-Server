@@ -10,6 +10,9 @@ import org.gms.client.inventory.Item;
 
 import java.util.Optional;
 
+/**
+ * 【类型】InventorySearchRtnDTO（class），包 `org.gms.model.dto`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

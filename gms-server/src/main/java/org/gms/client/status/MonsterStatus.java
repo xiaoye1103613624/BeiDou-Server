@@ -21,6 +21,9 @@
 */
 package org.gms.client.status;
 
+/**
+ * 【枚举】MonsterStatus：定义 `status` 中的一组常量。
+ */
 public enum MonsterStatus {
     WATK(0x1),
     WDEF(0x2),

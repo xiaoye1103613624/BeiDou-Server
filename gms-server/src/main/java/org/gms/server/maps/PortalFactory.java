@@ -26,6 +26,9 @@ import org.gms.provider.DataTool;
 
 import java.awt.*;
 
+/**
+ * 【工厂/提供者】PortalFactory：创建或提供 `maps` 相关运行时对象。
+ */
 public class PortalFactory {
     private int nextDoorPortal;
 

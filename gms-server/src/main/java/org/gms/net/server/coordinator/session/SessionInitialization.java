@@ -11,7 +11,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Manages session initialization using remote host (ip address).
+ * 会话与并发协调「SessionInitialization」。
+ * 在多开检测、登录绕过、匹配、事件召回等场景下集中管理跨连接状态。
  */
 public class SessionInitialization {
     private final static Logger log = LoggerFactory.getLogger(SessionInitialization.class);

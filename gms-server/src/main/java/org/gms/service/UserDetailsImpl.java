@@ -9,6 +9,9 @@ import java.io.Serial;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * 【类型】UserDetailsImpl（class），包 `org.gms.service`。
+ */
 public class UserDetailsImpl implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;

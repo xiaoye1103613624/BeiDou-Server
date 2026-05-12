@@ -21,6 +21,10 @@
 */
 package org.gms.net.opcodes;
 
+/**
+ * 网络层类型「RecvOpcode」。
+ * 位于 `org.gms.net.opcodes`，参与客户端会话、封包路由或服务器间协作。
+ */
 public enum RecvOpcode implements Opcode {
     CUSTOM_PACKET(0x3713),//13 37 lol // 自定义封包
 

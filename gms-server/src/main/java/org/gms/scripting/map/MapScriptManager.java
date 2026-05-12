@@ -32,6 +32,9 @@ import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 【类型】MapScriptManager（class），包 `org.gms.scripting.map`。
+ */
 public class MapScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(MapScriptManager.class);
     private static final MapScriptManager instance = new MapScriptManager();

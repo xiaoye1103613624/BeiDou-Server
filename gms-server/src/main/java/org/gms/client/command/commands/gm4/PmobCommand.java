@@ -38,6 +38,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * 【GM/玩家指令】PmobCommand：聊天或控制台命令实现。
+ */
 public class PmobCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("PmobCommand.message1"));

@@ -43,6 +43,9 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 【GM/玩家指令】DebugCommand：聊天或控制台命令实现。
+ */
 public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
     private final static ItemInformationProvider ii = ItemInformationProvider.getInstance();

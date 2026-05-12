@@ -50,6 +50,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Ronan - concurrency safety + check available slots + trade results
                     并发安全+检查可用插槽+交易结果
  */
+/**
+ * 【类型】Trade（class），包 `org.gms.server`。
+ */
 public class Trade {
     private static final Logger log = LoggerFactory.getLogger(Trade.class);
 

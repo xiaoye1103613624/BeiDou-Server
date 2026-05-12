@@ -28,6 +28,9 @@ import java.util.Calendar;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
+/**
+ * 【类型】DueyPackage（class），包 `org.gms.server`。
+ */
 public class DueyPackage {
     private String sender = null;
     private Item item = null;

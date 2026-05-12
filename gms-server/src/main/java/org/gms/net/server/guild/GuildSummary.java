@@ -21,6 +21,10 @@
 */
 package org.gms.net.server.guild;
 
+/**
+ * 公会/联盟相关网络模型「GuildSummary」。
+ * 维护公会成员、技能、联盟关系及下行通知封包组装所需的数据。
+ */
 public class GuildSummary {
     private final String name;
     private final short logoBG;

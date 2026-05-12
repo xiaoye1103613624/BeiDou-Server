@@ -21,6 +21,9 @@
 */
 package org.gms.scripting.portal;
 
+/**
+ * 【接口】PortalScript：由 `portal` 模块实现的契约。
+ */
 public interface PortalScript {
     boolean enter(PortalPlayerInteraction ppi);
 }

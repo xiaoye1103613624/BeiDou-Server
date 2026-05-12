@@ -9,6 +9,10 @@ import org.gms.util.RateLimitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Netty 网络组件「LoginServerInitializer」。
+ * 参与 Channel 管道上的编解码、握手、空闲检测或与 ChannelServer 绑定的 IO 逻辑。
+ */
 public class LoginServerInitializer extends ServerChannelInitializer {
     private static final Logger log = LoggerFactory.getLogger(LoginServerInitializer.class);
 

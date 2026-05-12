@@ -3,6 +3,9 @@ package org.gms.model.dto;
 import com.mybatisflex.annotation.Column;
 import lombok.*;
 
+/**
+ * 【类型】InventoryequipmentRtnDTO（class），包 `org.gms.model.dto`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -25,6 +25,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【类型】ChangeEquip（class），包 `org.gms.server.movement`。
+ */
 public class ChangeEquip implements LifeMovementFragment {
     private final int wui;
 

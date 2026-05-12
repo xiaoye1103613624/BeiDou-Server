@@ -32,6 +32,9 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】SetEqStatCommand：聊天或控制台命令实现。
+ */
 public class SetEqStatCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SetEqStatCommand.message1"));

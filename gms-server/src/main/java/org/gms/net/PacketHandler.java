@@ -24,6 +24,12 @@ package org.gms.net;
 import org.gms.client.Client;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 游戏客户端入站封包处理契约。
+ * 实现类在频道服或登录服注册到 {@link org.gms.net.PacketProcessor} 后，
+ * 由 {@link org.gms.client.Client#channelRead} 在解析 opcode 并校验状态后调用 {@link #handlePacket}。
+ * {@link #validateState} 用于拒绝当前会话状态下不应到达的封包。
+ */
 public interface PacketHandler {
     void handlePacket(InPacket p, Client c);
     boolean validateState(Client c);

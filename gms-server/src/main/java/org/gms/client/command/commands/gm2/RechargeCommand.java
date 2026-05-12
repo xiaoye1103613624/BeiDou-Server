@@ -32,6 +32,9 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】RechargeCommand：聊天或控制台命令实现。
+ */
 public class RechargeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("RechargeCommand.message1"));

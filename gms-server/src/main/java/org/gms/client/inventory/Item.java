@@ -30,6 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 【类型】Item（class），包 `org.gms.client.inventory`。
+ */
 public class Item implements Comparable<Item> {
 
     private static final AtomicInteger runningCashId = new AtomicInteger(777000000);  // pets & rings shares cashid values

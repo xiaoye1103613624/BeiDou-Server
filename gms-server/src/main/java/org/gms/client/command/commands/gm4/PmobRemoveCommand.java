@@ -40,6 +40,9 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 【GM/玩家指令】PmobRemoveCommand：聊天或控制台命令实现。
+ */
 public class PmobRemoveCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("PmobRemoveCommand.message1"));

@@ -5,6 +5,9 @@ import org.gms.provider.Data;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
 
+/**
+ * 【类型】MakeCharInfoValidator（class），包 `org.gms.client.creator`。
+ */
 public class MakeCharInfoValidator {
     private static final MakeCharInfo charFemale;
     private static final MakeCharInfo charMale;

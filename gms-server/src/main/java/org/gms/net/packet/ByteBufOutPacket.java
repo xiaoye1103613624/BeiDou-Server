@@ -14,6 +14,10 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * 网络协议层类型「ByteBufOutPacket」。
+ * 属于 org.gms.net.packet 下的通用封包、读写或工具定义。
+ */
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;

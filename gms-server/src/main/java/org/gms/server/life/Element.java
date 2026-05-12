@@ -21,6 +21,9 @@
 */
 package org.gms.server.life;
 
+/**
+ * 【枚举】Element：定义 `life` 中的一组常量。
+ */
 public enum Element {
     NEUTRAL(0), PHYSICAL(1), FIRE(2, true), ICE(3, true), LIGHTING(4), POISON(5), HOLY(6, true), DARKNESS(7);
 

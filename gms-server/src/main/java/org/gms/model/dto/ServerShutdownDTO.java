@@ -3,6 +3,9 @@ package org.gms.model.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * 【类型】ServerShutdownDTO（class），包 `org.gms.model.dto`。
+ */
 @Data
 @Schema(description = "关服请求参数")
 public class ServerShutdownDTO {

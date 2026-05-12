@@ -62,6 +62,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 // TODO: remove dependency on custom Npc.wz. All NPCs with id 9901910 and above are custom additions for player npcs.
 // In summary: NPCs 9901910-9906599 and 9977777 are custom additions to HeavenMS that should be removed.
+/**
+ * 【类型】PlayerNPC（class），包 `org.gms.server.life`。
+ */
 public class PlayerNPC extends AbstractMapObject {
     private static final Logger log = LoggerFactory.getLogger(PlayerNPC.class);
     private static final Map<Byte, List<Integer>> availablePlayerNpcScriptIds = new HashMap<>();

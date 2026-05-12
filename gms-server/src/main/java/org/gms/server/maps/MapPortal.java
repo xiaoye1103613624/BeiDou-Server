@@ -21,6 +21,9 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 【类型】MapPortal（class），包 `org.gms.server.maps`。
+ */
 public class MapPortal extends GenericPortal {
     public MapPortal() {
         super(Portal.MAP_PORTAL);

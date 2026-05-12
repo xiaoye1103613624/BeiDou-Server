@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 【类型】GiveResourceReqDTO（class），包 `org.gms.model.dto`。
+ */
 @Setter
 @Getter
 public class GiveResourceReqDTO {

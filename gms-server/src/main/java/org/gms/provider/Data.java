@@ -25,6 +25,9 @@ import org.gms.provider.wz.DataType;
 
 import java.util.List;
 
+/**
+ * 【接口】Data：由 `provider` 模块实现的契约。
+ */
 public interface Data extends DataEntity, Iterable<Data> {
     @Override
     String getName();

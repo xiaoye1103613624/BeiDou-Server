@@ -32,6 +32,9 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】FaceCommand：聊天或控制台命令实现。
+ */
 public class FaceCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("FaceCommand.message1"));

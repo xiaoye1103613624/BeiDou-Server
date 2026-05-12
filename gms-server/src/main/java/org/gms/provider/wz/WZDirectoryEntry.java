@@ -28,6 +28,9 @@ import org.gms.provider.DataFileEntry;
 
 import java.util.*;
 
+/**
+ * 【类型】WZDirectoryEntry（class），包 `org.gms.provider.wz`。
+ */
 public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
     private final List<DataDirectoryEntry> subdirs = new ArrayList<>();
     private final List<DataFileEntry> files = new ArrayList<>();

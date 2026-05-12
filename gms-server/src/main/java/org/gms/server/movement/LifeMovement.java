@@ -23,6 +23,9 @@ package org.gms.server.movement;
 
 import java.awt.*;
 
+/**
+ * 【接口】LifeMovement：由 `movement` 模块实现的契约。
+ */
 public interface LifeMovement extends LifeMovementFragment {
     Point getPosition();
     int getNewstate();

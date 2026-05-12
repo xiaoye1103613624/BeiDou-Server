@@ -25,6 +25,9 @@ import org.gms.client.Client;
 
 import java.awt.*;
 
+/**
+ * 【接口】MapObject：由 `maps` 模块实现的契约。
+ */
 public interface MapObject {
     int getObjectId();
     void setObjectId(int id);

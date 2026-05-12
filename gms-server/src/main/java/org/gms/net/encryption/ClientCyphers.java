@@ -2,6 +2,10 @@ package org.gms.net.encryption;
 
 import org.gms.constants.net.ServerConstants;
 
+/**
+ * 协议加解密与编解码「ClientCyphers」。
+ * 在客户端与服务器之间对帧或载荷进行变换，与 PacketCodec / Protocol 配置一致。
+ */
 public class ClientCyphers {
     private final MapleAESOFB send;
     private final MapleAESOFB receive;

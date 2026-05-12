@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.gms.dao.entity.table.NewyearDOTableDef.NEWYEAR_D_O;
 
+/**
+ * 【业务服务】NewYearCardService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 public class NewYearCardService {

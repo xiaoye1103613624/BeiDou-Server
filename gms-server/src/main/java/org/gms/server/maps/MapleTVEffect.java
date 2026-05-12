@@ -33,6 +33,9 @@ import java.util.List;
  * @author MrXotic (XoticStory)
  * @author Ronan - made MapleTV mechanics synchronous
  */
+/**
+ * 【类型】MapleTVEffect（class），包 `org.gms.server.maps`。
+ */
 public class MapleTVEffect {
 
     private final static boolean[] ACTIVE = new boolean[Server.getInstance().getWorldsSize()];

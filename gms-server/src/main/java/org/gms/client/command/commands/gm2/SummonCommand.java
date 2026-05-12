@@ -32,6 +32,9 @@ import org.gms.server.maps.MapleMap;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】SummonCommand：聊天或控制台命令实现。
+ */
 public class SummonCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SummonCommand.message1"));

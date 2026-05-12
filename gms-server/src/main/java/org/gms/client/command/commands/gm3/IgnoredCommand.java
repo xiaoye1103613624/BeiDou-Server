@@ -29,6 +29,9 @@ import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】IgnoredCommand：聊天或控制台命令实现。
+ */
 public class IgnoredCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("IgnoredCommand.message1"));

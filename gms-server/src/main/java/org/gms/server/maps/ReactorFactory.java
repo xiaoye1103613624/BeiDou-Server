@@ -35,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 【工厂/提供者】ReactorFactory：创建或提供 `maps` 相关运行时对象。
+ */
 public class ReactorFactory {
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
     private static final Map<Integer, ReactorStats> reactorStats = new HashMap<>();

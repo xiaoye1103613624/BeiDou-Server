@@ -33,6 +33,9 @@ import org.gms.util.PacketCreator;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 【GM/玩家指令】WarpWorldCommand：聊天或控制台命令实现。
+ */
 public class WarpWorldCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WarpWorldCommand.message1"));

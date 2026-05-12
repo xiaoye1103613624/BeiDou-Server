@@ -2,6 +2,9 @@ package org.gms.exception;
 
 import org.gms.util.I18nUtil;
 
+/**
+ * 【枚举】BizExceptionEnum：定义 `exception` 中的一组常量。
+ */
 public enum BizExceptionEnum implements BaseErrorInfoInterface {
 
     SUCCESS(20000, I18nUtil.getExceptionMessage("SUCCESS")),

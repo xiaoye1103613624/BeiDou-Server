@@ -32,6 +32,9 @@ import org.gms.util.I18nUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/**
+ * 【GM/玩家指令】UnBanCommand：聊天或控制台命令实现。
+ */
 public class UnBanCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("UnBanCommand.message1"));

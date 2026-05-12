@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+/**
+ * 【类型】CustomSpringBeanConfig（class），包 `org.gms.util`。
+ */
 @Configuration
 
 public class CustomSpringBeanConfig {

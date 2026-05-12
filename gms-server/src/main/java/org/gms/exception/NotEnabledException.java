@@ -1,5 +1,8 @@
 package org.gms.exception;
 
+/**
+ * 【类型】NotEnabledException（class），包 `org.gms.exception`。
+ */
 public class NotEnabledException extends RuntimeException {
 
     public NotEnabledException() {

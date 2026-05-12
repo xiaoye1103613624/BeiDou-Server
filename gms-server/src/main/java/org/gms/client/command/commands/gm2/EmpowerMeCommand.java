@@ -29,6 +29,9 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】EmpowerMeCommand：聊天或控制台命令实现。
+ */
 public class EmpowerMeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("EmpowerMeCommand.message1"));

@@ -5,6 +5,9 @@ import org.gms.config.GameConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 【类型】ChatLogger（class），包 `org.gms.server`。
+ */
 public class ChatLogger {
     private static final Logger log = LoggerFactory.getLogger(ChatLogger.class);
 

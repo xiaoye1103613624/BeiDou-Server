@@ -11,6 +11,9 @@ import org.gms.provider.DataTool;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 【类型】MakeCharInfo（class），包 `org.gms.client.creator`。
+ */
 public class MakeCharInfo {
     private static final Logger log = LoggerFactory.getLogger(MakeCharInfo.class);
     private static final String FACE_ID = "0";

@@ -11,6 +11,9 @@ import org.gms.model.dto.*;
 import org.gms.service.CommandService;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 【Web 控制器】CommandController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/command")

@@ -21,6 +21,9 @@
 */
 package org.gms.client;
 
+/**
+ * 【枚举】BuffStat：定义 `client` 中的一组常量。
+ */
 public enum BuffStat {
     //SLOW(0x1L),
     MORPH(0x2L),

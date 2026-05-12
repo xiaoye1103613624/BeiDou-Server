@@ -3,6 +3,9 @@ package org.gms.model.dto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 【类型】ShopSearchReqDTO（class），包 `org.gms.model.dto`。
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ShopSearchReqDTO extends BasePageDTO {

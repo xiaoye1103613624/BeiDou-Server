@@ -1,5 +1,8 @@
 package org.gms.constants.id;
 
+/**
+ * 【类型】MobId（class），包 `org.gms.constants.id`。
+ */
 public class MobId {
     public static final int ARPQ_BOMB = 9300166;
     public static final int GIANT_CAKE = 9400606;

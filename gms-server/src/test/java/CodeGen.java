@@ -14,6 +14,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * 【类型】CodeGen（class），包 ``。
+ */
 public class CodeGen {
     @Test
     public void genMapperAndEntity() {

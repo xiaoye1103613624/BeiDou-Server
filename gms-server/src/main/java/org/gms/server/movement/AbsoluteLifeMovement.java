@@ -25,6 +25,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【类型】AbsoluteLifeMovement（class），包 `org.gms.server.movement`。
+ */
 public class AbsoluteLifeMovement extends AbstractLifeMovement {
     private Point pixelsPerSecond;
     private int fh;

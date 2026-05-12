@@ -12,6 +12,9 @@ import java.io.BufferedReader;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * 【类型】ResultBody（class），包 `org.gms.model.dto`。
+ */
 @Data
 @Slf4j
 public class ResultBody<T> {

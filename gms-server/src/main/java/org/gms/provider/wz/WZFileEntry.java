@@ -24,6 +24,9 @@ package org.gms.provider.wz;
 import org.gms.provider.DataEntity;
 import org.gms.provider.DataFileEntry;
 
+/**
+ * 【类型】WZFileEntry（class），包 `org.gms.provider.wz`。
+ */
 public class WZFileEntry extends WZEntry implements DataFileEntry {
     private int offset;
 

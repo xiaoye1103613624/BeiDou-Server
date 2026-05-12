@@ -21,6 +21,9 @@
 */
 package org.gms.server.life;
 
+/**
+ * 【枚举】ElementalEffectiveness：定义 `life` 中的一组常量。
+ */
 public enum ElementalEffectiveness {
     NORMAL, IMMUNE, STRONG, WEAK, NEUTRAL;
 

@@ -36,6 +36,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 【类型】MonsterBook（class），包 `org.gms.client`。
+ */
 public final class MonsterBook {
     private int specialCard = 0;
     private int normalCard = 0;

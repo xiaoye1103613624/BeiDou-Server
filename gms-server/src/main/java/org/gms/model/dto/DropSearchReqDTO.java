@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * 【类型】DropSearchReqDTO（class），包 `org.gms.model.dto`。
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor

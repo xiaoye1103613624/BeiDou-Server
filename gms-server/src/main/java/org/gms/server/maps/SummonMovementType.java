@@ -21,6 +21,9 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 【枚举】SummonMovementType：定义 `maps` 中的一组常量。
+ */
 public enum SummonMovementType {
     STATIONARY(0), FOLLOW(1), CIRCLE_FOLLOW(3);
     private final int val;

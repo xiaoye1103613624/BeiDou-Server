@@ -8,6 +8,9 @@ import org.gms.server.maps.Portal;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】WarpToLifeCommand：聊天或控制台命令实现。
+ */
 public class WarpToLifeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GotoNPCCommand.message1"));

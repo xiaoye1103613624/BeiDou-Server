@@ -24,6 +24,9 @@ package org.gms.provider.wz;
 import org.gms.provider.DataEntity;
 import org.gms.provider.DataEntry;
 
+/**
+ * 【类型】WZEntry（class），包 `org.gms.provider.wz`。
+ */
 public class WZEntry implements DataEntry {
     private final String name;
     private final int size;

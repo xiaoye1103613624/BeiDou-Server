@@ -21,6 +21,9 @@
 */
 package org.gms.util;
 
+/**
+ * 【类型】StringUtil（class），包 `org.gms.util`。
+ */
 public class StringUtil {
     /**
      * Gets a string padded from the left to <code>length</code> by

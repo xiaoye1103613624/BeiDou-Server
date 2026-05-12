@@ -19,6 +19,9 @@ package org.gms.server.life;
 
 import org.gms.constants.game.GameConstants;
 
+/**
+ * 【类型】ChangeableStats（class），包 `org.gms.server.life`。
+ */
 public class ChangeableStats extends OverrideMonsterStats {
 
     public int watk, matk, wdef, mdef, level;

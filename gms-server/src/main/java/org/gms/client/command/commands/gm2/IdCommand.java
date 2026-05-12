@@ -21,6 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * 【GM/玩家指令】IdCommand：聊天或控制台命令实现。
+ */
 public class IdCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("IdCommand.message1"));

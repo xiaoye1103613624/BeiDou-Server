@@ -27,6 +27,9 @@ import java.util.Objects;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.WorldtransfersDOTableDef.WORLDTRANSFERS_D_O;
 
+/**
+ * 【业务服务】WorldTransferService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 @Slf4j

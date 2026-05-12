@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】FlyCommand：聊天或控制台命令实现。
+ */
 public class FlyCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("FlyCommand.message1"));

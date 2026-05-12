@@ -2,6 +2,9 @@ package org.gms.client;
 
 import org.gms.util.I18nUtil;
 
+/**
+ * 【枚举】FamilyEntitlement：定义 `client` 中的一组常量。
+ */
 public enum FamilyEntitlement {
     FAMILY_REUINION(1, 300, I18nUtil.getMessage("FamilyEntitlement.message1"), I18nUtil.getMessage("FamilyEntitlement.message2")),
     SUMMON_FAMILY(1, 500, I18nUtil.getMessage("FamilyEntitlement.message3"), I18nUtil.getMessage("FamilyEntitlement.message4")),

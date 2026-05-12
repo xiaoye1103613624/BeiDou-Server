@@ -16,6 +16,9 @@ import java.util.*;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+/**
+ * 【业务服务】FileTreeService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Slf4j
 @Service
 public class FileTreeService {

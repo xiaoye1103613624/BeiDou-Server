@@ -16,6 +16,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 【类型】ExpLogger（class），包 `org.gms.server`。
+ */
 public class ExpLogger {
     private static final LinkedBlockingQueue<ExpLogRecord> expLoggerQueue = new LinkedBlockingQueue<>();
     private static final short EXP_LOGGER_THREAD_SLEEP_DURATION_SECONDS = 60;

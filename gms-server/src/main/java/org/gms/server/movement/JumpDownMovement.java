@@ -25,6 +25,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【类型】JumpDownMovement（class），包 `org.gms.server.movement`。
+ */
 public class JumpDownMovement extends AbstractLifeMovement {
     private Point pixelsPerSecond;
     private int fh;

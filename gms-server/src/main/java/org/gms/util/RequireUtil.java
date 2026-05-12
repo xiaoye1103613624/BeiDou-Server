@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+/**
+ * 【类型】RequireUtil（class），包 `org.gms.util`。
+ */
 public class RequireUtil {
     public static void requireNull(Object obj) {
         requireNull(obj, null);

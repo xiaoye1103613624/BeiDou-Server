@@ -37,6 +37,9 @@ import org.gms.util.I18nUtil;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * 【GM/玩家指令】DebuffCommand：聊天或控制台命令实现。
+ */
 public class DebuffCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("DebuffCommand.message1"));

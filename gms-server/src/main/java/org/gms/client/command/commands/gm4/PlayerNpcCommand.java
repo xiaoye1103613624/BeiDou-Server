@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.server.life.PlayerNPC;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】PlayerNpcCommand：聊天或控制台命令实现。
+ */
 public class PlayerNpcCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("PlayerNpcCommand.message1"));

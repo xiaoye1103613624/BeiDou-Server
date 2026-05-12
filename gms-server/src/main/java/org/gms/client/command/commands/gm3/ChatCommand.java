@@ -28,6 +28,9 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ChatCommand：聊天或控制台命令实现。
+ */
 public class ChatCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ChatCommand.message1"));

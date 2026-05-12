@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.net.packet.logging.MonitoredChrLogger;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】MonitorsCommand：聊天或控制台命令实现。
+ */
 public class MonitorsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("MonitorsCommand.message1"));

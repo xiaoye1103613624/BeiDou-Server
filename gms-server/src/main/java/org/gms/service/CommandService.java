@@ -27,6 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 【业务服务】CommandService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Slf4j
 @Service
 @AllArgsConstructor

@@ -8,6 +8,10 @@ import org.gms.util.PacketCreator;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 出站协议构造「ShowNotesPacket」。
+ * 将服务端状态序列化为发往客户端的二进制 {@link org.gms.net.packet.Packet}（或子类）。
+ */
 public final class ShowNotesPacket extends ByteBufOutPacket {
 
     public ShowNotesPacket(List<NotesDO> notes) {

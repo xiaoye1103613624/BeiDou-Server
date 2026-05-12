@@ -34,6 +34,9 @@ import org.gms.util.Pair;
 
 import java.util.List;
 
+/**
+ * 【GM/玩家指令】RanksCommand：聊天或控制台命令实现。
+ */
 public class RanksCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("RanksCommand.message1"));

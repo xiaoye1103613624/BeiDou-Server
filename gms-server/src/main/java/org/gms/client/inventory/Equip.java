@@ -40,6 +40,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 【类型】Equip（class），包 `org.gms.client.inventory`。
+ */
 public class Equip extends Item {
     private static final Logger log = LoggerFactory.getLogger(Equip.class);
 

@@ -7,6 +7,10 @@ import org.gms.util.ThreadLocalUtil;
 
 import java.awt.*;
 
+/**
+ * 网络协议层类型「ByteBufInPacket」。
+ * 属于 org.gms.net.packet 下的通用封包、读写或工具定义。
+ */
 public class ByteBufInPacket implements InPacket {
     private final ByteBuf byteBuf;
 

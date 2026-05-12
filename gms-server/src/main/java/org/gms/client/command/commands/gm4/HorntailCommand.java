@@ -31,6 +31,9 @@ import org.gms.util.I18nUtil;
 
 import java.awt.*;
 
+/**
+ * 【GM/玩家指令】HorntailCommand：聊天或控制台命令实现。
+ */
 public class HorntailCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("HorntailCommand.message1"));

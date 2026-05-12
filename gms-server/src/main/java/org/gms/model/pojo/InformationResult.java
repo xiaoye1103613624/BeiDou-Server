@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 【类型】InformationResult（class），包 `org.gms.model.pojo`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

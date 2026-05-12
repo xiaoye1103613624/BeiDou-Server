@@ -19,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * 【Web 控制器】ConfigController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/config")

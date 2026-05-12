@@ -13,6 +13,9 @@ import org.gms.model.dto.SubmitBody;
 import org.gms.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 【Web 控制器】CharacterController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/character")

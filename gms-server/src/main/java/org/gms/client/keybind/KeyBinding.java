@@ -21,6 +21,9 @@
 */
 package org.gms.client.keybind;
 
+/**
+ * 【类型】KeyBinding（class），包 `org.gms.client.keybind`。
+ */
 public class KeyBinding {
     private final int type;
     private final int action;

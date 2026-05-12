@@ -21,6 +21,9 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 【枚举】MapObjectType：定义 `maps` 中的一组常量。
+ */
 public enum MapObjectType {
     NPC,
     MONSTER,

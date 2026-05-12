@@ -64,6 +64,9 @@ import java.util.*;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
+/**
+ * 【类型】AbstractPlayerInteraction（class），包 `org.gms.scripting`。
+ */
 public class AbstractPlayerInteraction {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractPlayerInteraction.class);

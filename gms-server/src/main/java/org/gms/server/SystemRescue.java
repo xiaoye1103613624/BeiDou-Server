@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 【类型】SystemRescue（class），包 `org.gms.server`。
+ */
 @Getter
 public class SystemRescue {
     private static final Logger log = LoggerFactory.getLogger(SystemRescue.class);

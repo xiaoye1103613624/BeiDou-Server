@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * 【类型】UserDetailsServiceImpl（class），包 `org.gms.service`。
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final AccountsMapper userDao;

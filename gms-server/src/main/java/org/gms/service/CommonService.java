@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * 【业务服务】CommonService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @Slf4j
 public class CommonService {

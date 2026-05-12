@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 【类型】InformationSearch（class），包 `org.gms.model.pojo`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

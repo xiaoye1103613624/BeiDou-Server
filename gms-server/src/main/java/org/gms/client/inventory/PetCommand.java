@@ -24,6 +24,9 @@ package org.gms.client.inventory;
 /*
  * @author Leifde
  */
+/**
+ * 【GM/玩家指令】PetCommand：聊天或控制台命令实现。
+ */
 public class PetCommand {
     private final int petId;
     private final int skillId;

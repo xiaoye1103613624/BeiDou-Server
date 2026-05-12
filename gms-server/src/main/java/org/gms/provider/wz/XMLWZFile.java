@@ -34,6 +34,9 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * 【类型】XMLWZFile（class），包 `org.gms.provider.wz`。
+ */
 public class XMLWZFile implements DataProvider {
 	private static final Logger log = LoggerFactory.getLogger(DataProvider.class);
 	private final Path root;

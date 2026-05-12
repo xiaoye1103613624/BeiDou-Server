@@ -23,6 +23,9 @@ package org.gms.server.life;
 
 import org.gms.server.maps.AbstractAnimatedMapObject;
 
+/**
+ * 【类型】AbstractLoadedLife（class），包 `org.gms.server.life`。
+ */
 public abstract class AbstractLoadedLife extends AbstractAnimatedMapObject {
     private final int id;
     private int f;

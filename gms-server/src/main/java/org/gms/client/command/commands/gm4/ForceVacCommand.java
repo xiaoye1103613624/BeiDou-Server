@@ -38,6 +38,9 @@ import org.gms.util.PacketCreator;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 【GM/玩家指令】ForceVacCommand：聊天或控制台命令实现。
+ */
 public class ForceVacCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ForceVacCommand.message1"));

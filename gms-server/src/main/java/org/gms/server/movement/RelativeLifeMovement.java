@@ -25,6 +25,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【类型】RelativeLifeMovement（class），包 `org.gms.server.movement`。
+ */
 public class RelativeLifeMovement extends AbstractLifeMovement {
     public RelativeLifeMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);

@@ -29,6 +29,9 @@ import org.gms.config.GameConfig;
 import org.gms.dao.entity.GameConfigDO;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ShowPacketsCommand：聊天或控制台命令实现。
+ */
 public class ShowPacketsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ShowPacketsCommand.message1"));

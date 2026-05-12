@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.scripting.portal.PortalScriptManager;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ReloadPortalsCommand：聊天或控制台命令实现。
+ */
 public class ReloadPortalsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ReloadPortalsCommand.message1"));

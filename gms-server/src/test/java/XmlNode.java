@@ -4,6 +4,9 @@ import lombok.Getter;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 【类型】XmlNode（class），包 ``。
+ */
 public class XmlNode {
     @Getter
     public enum NodeType {

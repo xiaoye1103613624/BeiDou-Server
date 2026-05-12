@@ -21,6 +21,9 @@
 */
 package org.gms.provider;
 
+/**
+ * 【工厂/提供者】DataProvider：创建或提供 `provider` 相关运行时对象。
+ */
 public interface DataProvider {
     Data getData(String path);
     DataDirectoryEntry getRoot();

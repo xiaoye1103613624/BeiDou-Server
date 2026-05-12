@@ -33,6 +33,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 【类型】PortalPlayerInteraction（class），包 `org.gms.scripting.portal`。
+ */
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
     private final Portal portal;
 

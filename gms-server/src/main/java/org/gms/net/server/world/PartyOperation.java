@@ -21,6 +21,10 @@
 */
 package org.gms.net.server.world;
 
+/**
+ * 跨频道世界级网络/会话模型「PartyOperation」。
+ * 在多个 Channel 之间同步队伍、好友、信使、公告等全局状态。
+ */
 public enum PartyOperation {
     JOIN, LEAVE, EXPEL, DISBAND, SILENT_UPDATE, LOG_ONOFF, CHANGE_LEADER
 }

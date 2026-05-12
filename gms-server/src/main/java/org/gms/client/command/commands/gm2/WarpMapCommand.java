@@ -31,6 +31,9 @@ import org.gms.util.I18nUtil;
 
 import java.util.Collection;
 
+/**
+ * 【GM/玩家指令】WarpMapCommand：聊天或控制台命令实现。
+ */
 public class WarpMapCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WarpMapCommand.message1"));

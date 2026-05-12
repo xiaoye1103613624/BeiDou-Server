@@ -33,6 +33,9 @@ import org.gms.util.I18nUtil;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 【GM/玩家指令】ItemVacCommand：聊天或控制台命令实现。
+ */
 public class ItemVacCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ItemVacCommand.message1"));

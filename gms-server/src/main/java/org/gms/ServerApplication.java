@@ -17,6 +17,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 
+/**
+ * 【类型】ServerApplication（class），包 `org.gms`。
+ */
 @SpringBootApplication
 @MapperScan("org.gms.dao.mapper")
 @Slf4j

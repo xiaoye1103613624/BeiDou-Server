@@ -1,5 +1,8 @@
 package org.gms.constants.skills;
 
+/**
+ * 【类型】Evan（class），包 `org.gms.constants.skills`。
+ */
 public class Evan {
     // EVAN1
     public static final int BLESSING_OF_THE_FAIRY = 20010012;

@@ -34,6 +34,9 @@ import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】MaxSkillCommand：聊天或控制台命令实现。
+ */
 public class MaxSkillCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("MaxSkillCommand.message1"));

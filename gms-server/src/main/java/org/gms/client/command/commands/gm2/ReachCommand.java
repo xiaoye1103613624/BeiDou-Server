@@ -30,6 +30,9 @@ import org.gms.server.maps.MapleMap;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】ReachCommand：聊天或控制台命令实现。
+ */
 public class ReachCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ReachCommand.message1"));

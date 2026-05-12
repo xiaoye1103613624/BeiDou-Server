@@ -15,6 +15,10 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 公会/联盟相关网络模型「GuildPackets」。
+ * 维护公会成员、技能、联盟关系及下行通知封包组装所需的数据。
+ */
 public class GuildPackets {
     public static Packet showGuildInfo(Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);

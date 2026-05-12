@@ -25,6 +25,9 @@ import lombok.Getter;
 import org.gms.util.I18nUtil;
 
 
+/**
+ * 【枚举】Job：定义 `client` 中的一组常量。
+ */
 public enum Job {
     BEGINNER(0, I18nUtil.getMessage("job.name.0")),
     WARRIOR(100, I18nUtil.getMessage("job.name.100")),

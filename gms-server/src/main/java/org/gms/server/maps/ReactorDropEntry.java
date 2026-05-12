@@ -20,6 +20,9 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 【类型】ReactorDropEntry（class），包 `org.gms.server.maps`。
+ */
 public class ReactorDropEntry {
 
     public ReactorDropEntry(int itemId, int chance, int questId) {

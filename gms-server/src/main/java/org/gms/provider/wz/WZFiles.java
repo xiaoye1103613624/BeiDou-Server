@@ -6,6 +6,9 @@ import org.gms.property.ServiceProperty;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * 【枚举】WZFiles：定义 `wz` 中的一组常量。
+ */
 public enum WZFiles {
     QUEST("Quest"),
     ETC("Etc"),

@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
+/**
+ * 【类型】ServerConfig（class），包 `org.gms.config`。
+ */
 @Configuration
 public class ServerConfig {
     @Bean

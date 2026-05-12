@@ -27,6 +27,9 @@ import org.gms.server.life.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 【类型】Skill（class），包 `org.gms.client`。
+ */
 public class Skill {
     private final int id;
     private final List<StatEffect> effects = new ArrayList<>();

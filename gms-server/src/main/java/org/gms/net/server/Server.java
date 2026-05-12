@@ -86,6 +86,10 @@ import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
 
+/**
+ * 游戏主进程入口单例：维护世界列表、频道、登录状态迁移与全局资源。
+ * 为 Netty 管线、Handler 与脚本层提供统一的 {@link org.gms.net.server.Server#getInstance()} 访问点。
+ */
 public class Server {
     static {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."

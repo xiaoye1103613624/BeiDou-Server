@@ -37,6 +37,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * 【类型】BuddyList（class），包 `org.gms.client`。
+ */
 public class BuddyList {
     public enum BuddyOperation {
         ADDED, DELETED

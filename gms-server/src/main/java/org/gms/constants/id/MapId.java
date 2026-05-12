@@ -1,5 +1,8 @@
 package org.gms.constants.id;
 
+/**
+ * 【类型】MapId（class），包 `org.gms.constants.id`。
+ */
 public class MapId {
     // Special
     public static final int NONE = 999999999;

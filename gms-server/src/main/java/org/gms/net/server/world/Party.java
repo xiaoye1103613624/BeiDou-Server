@@ -44,6 +44,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 跨频道世界级网络/会话模型「Party」。
+ * 在多个 Channel 之间同步队伍、好友、信使、公告等全局状态。
+ */
 public class Party {
 
     @Setter

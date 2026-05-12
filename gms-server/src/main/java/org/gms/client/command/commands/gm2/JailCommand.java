@@ -34,6 +34,9 @@ import org.gms.util.StringUtil;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
+/**
+ * 【GM/玩家指令】JailCommand：聊天或控制台命令实现。
+ */
 public class JailCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("JailCommand.message1"));

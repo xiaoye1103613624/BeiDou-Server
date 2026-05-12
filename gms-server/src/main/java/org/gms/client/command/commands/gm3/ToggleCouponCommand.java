@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ToggleCouponCommand：聊天或控制台命令实现。
+ */
 public class ToggleCouponCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ToggleCouponCommand.message1"));

@@ -20,6 +20,10 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Netty 网络组件「ServerChannelInitializer」。
+ * 参与 Channel 管道上的编解码、握手、空闲检测或与 ChannelServer 绑定的 IO 逻辑。
+ */
 public abstract class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private static final Logger log = LoggerFactory.getLogger(ServerChannelInitializer.class);
     private static final int IDLE_TIME_SECONDS = 30;

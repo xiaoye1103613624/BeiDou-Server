@@ -3,6 +3,9 @@ package org.gms.constants.string;
 import lombok.Getter;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【枚举】CategoryType：定义 `string` 中的一组常量。
+ */
 @Getter
 public enum CategoryType {
     MAIN(8, I18nUtil.getMessage("CategoryType.MAIN")),

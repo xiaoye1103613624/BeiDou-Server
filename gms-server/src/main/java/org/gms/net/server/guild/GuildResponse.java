@@ -23,6 +23,10 @@ package org.gms.net.server.guild;
 
 import org.gms.net.packet.Packet;
 
+/**
+ * 公会/联盟相关网络模型「GuildResponse」。
+ * 维护公会成员、技能、联盟关系及下行通知封包组装所需的数据。
+ */
 public enum GuildResponse {
     NOT_IN_CHANNEL(0x2a),
     ALREADY_IN_GUILD(0x28),

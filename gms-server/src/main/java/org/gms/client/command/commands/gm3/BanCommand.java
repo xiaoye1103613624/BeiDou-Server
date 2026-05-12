@@ -36,6 +36,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * 【GM/玩家指令】BanCommand：聊天或控制台命令实现。
+ */
 public class BanCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("BanCommand.message1"));

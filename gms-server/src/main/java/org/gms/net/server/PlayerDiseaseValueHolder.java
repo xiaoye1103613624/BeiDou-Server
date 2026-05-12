@@ -22,6 +22,10 @@ package org.gms.net.server;
 
 import org.gms.client.Disease;
 
+/**
+ * 游戏服务器网络子系统「PlayerDiseaseValueHolder」。
+ * 包路径 `org.gms.net.server`，与在线存储、玩家进出频道及跨服数据协作。
+ */
 public class PlayerDiseaseValueHolder {//Thanks Celino
 
     public long startTime;

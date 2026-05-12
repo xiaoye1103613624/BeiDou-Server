@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * 【Web 控制器】AuthController：处理 HTTP 请求，归属模块 `controller`。
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

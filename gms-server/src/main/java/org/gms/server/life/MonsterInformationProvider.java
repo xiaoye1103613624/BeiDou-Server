@@ -46,6 +46,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 【工厂/提供者】MonsterInformationProvider：创建或提供 `life` 相关运行时对象。
+ */
 public class MonsterInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(MonsterInformationProvider.class);
     // Author : LightPepsi

@@ -2,6 +2,9 @@ package org.gms.constants.id;
 
 import java.util.stream.IntStream;
 
+/**
+ * 【类型】ItemId（class），包 `org.gms.constants.id`。
+ */
 public class ItemId {
     // Misc
     public static final int PENDANT_OF_THE_SPIRIT = 1122017;

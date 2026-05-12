@@ -31,6 +31,9 @@ import org.gms.util.I18nUtil;
 
 import java.util.Collection;
 
+/**
+ * 【GM/玩家指令】ReloadMapCommand：聊天或控制台命令实现。
+ */
 public class ReloadMapCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ReloadMapCommand.message1"));

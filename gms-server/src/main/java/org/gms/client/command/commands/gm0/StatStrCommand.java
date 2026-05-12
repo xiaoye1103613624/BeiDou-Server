@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】StatStrCommand：聊天或控制台命令实现。
+ */
 public class StatStrCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("StatStrCommand.message1"));

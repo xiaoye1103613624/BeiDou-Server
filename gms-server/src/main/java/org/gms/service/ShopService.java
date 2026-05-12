@@ -25,6 +25,9 @@ import java.util.Objects;
 import static org.gms.dao.entity.table.ShopitemsDOTableDef.SHOPITEMS_D_O;
 import static org.gms.dao.entity.table.ShopsDOTableDef.SHOPS_D_O;
 
+/**
+ * 【业务服务】ShopService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 public class ShopService {

@@ -31,6 +31,11 @@ import org.gms.util.PacketCreator;
 
 import java.util.List;
 
+/**
+ * 登录服务器入站封包处理器「ServerlistRequestHandler」。
+ * 处理账号登录、选角、创建角色、PIN/PIC、服务器列表等与尚未进入频道相关的协议。
+ * 在验证通过后可能更新 {@link org.gms.client.Client} 的账号状态并切换会话阶段。
+ */
 public final class ServerlistRequestHandler extends AbstractPacketHandler {
 
     @Override

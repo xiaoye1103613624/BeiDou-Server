@@ -26,6 +26,9 @@ package org.gms.client.command;
 import lombok.Data;
 import org.gms.client.Client;
 
+/**
+ * 【GM/玩家指令】Command：聊天或控制台命令实现。
+ */
 @Data
 public abstract class Command {
 

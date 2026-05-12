@@ -7,6 +7,9 @@ import org.gms.util.PacketCreator;
 
 import java.awt.*;
 
+/**
+ * 【类型】Kite（class），包 `org.gms.server.maps`。
+ */
 public class Kite extends AbstractMapObject {
     private final Point pos;
     private final Character owner;

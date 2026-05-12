@@ -33,6 +33,10 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * 协议加解密与编解码「MapleAESOFB」。
+ * 在客户端与服务器之间对帧或载荷进行变换，与 PacketCodec / Protocol 配置一致。
+ */
 public class MapleAESOFB {
     private static final Logger log = LoggerFactory.getLogger(MapleAESOFB.class);
     private final static SecretKeySpec skey = new SecretKeySpec(

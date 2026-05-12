@@ -1,5 +1,8 @@
 package org.gms.constants.id;
 
+/**
+ * 【类型】NpcId（class），包 `org.gms.constants.id`。
+ */
 public class NpcId {
     public static final int CUSTOM_DEV = 9977777;
 

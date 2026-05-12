@@ -36,6 +36,9 @@ import java.util.List;
  * @author kevintjuh93
  */
 //Make them better :)
+/**
+ * 【类型】Coconut（class），包 `org.gms.server.events.gm`。
+ */
 public class Coconut extends Event {
     private MapleMap map = null;
     private int MapleScore = 0;

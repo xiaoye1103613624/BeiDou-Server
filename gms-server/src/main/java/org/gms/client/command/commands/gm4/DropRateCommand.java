@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【GM/玩家指令】DropRateCommand：聊天或控制台命令实现。
+ */
 public class DropRateCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("DropRateCommand.message1"));

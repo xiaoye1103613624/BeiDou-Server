@@ -31,6 +31,9 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】CakeCommand：聊天或控制台命令实现。
+ */
 public class CakeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("CakeCommand.message1"));

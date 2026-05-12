@@ -15,6 +15,9 @@ import org.gms.util.RequireUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 【类型】CommonInformation（class），包 `org.gms.server`。
+ */
 public class CommonInformation {
     private static CommonInformation instance;
     private final DataProvider stringData;

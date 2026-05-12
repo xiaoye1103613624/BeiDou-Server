@@ -35,6 +35,9 @@ import org.gms.util.I18nUtil;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
+/**
+ * 【GM/玩家指令】ItemCommand：聊天或控制台命令实现。
+ */
 public class ItemCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ItemCommand.message1"));

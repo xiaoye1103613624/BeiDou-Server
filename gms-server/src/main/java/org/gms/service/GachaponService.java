@@ -31,6 +31,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 【业务服务】GachaponService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Slf4j
 @Service
 public class GachaponService {

@@ -7,6 +7,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.sql.Date;
 
+/**
+ * 【类型】UpdateAccountByGmDTO（class），包 `org.gms.model.dto`。
+ */
 @Data
 public class UpdateAccountByGmDTO implements Serializable {
     private String newPwd;

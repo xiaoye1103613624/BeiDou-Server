@@ -28,6 +28,9 @@ import org.gms.client.command.Command;
 import org.gms.server.ShopFactory;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】GmShopCommand：聊天或控制台命令实现。
+ */
 public class GmShopCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GmShopCommand.message1"));

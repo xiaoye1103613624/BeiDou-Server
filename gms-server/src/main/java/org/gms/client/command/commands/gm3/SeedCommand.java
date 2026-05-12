@@ -33,6 +33,9 @@ import org.gms.util.I18nUtil;
 
 import java.awt.*;
 
+/**
+ * 【GM/玩家指令】SeedCommand：聊天或控制台命令实现。
+ */
 public class SeedCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SeedCommand.message1"));

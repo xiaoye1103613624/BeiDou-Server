@@ -28,6 +28,9 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】KillMapCommand：聊天或控制台命令实现。
+ */
 public class KillMapCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("KillMapCommand.message1"));

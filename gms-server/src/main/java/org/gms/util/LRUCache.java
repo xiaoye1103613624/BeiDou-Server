@@ -3,6 +3,9 @@ package org.gms.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 【类型】LRUCache（class），包 `org.gms.util`。
+ */
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     private final int capacity;
 

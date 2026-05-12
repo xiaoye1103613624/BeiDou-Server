@@ -26,6 +26,9 @@ import org.gms.server.ShopFactory;
 import org.gms.server.maps.MapObjectType;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【类型】NPC（class），包 `org.gms.server.life`。
+ */
 public class NPC extends AbstractLoadedLife {
     private final NPCStats stats;
 

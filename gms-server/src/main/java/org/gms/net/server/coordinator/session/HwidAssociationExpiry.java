@@ -7,6 +7,10 @@ import java.time.Instant;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 
+/**
+ * 会话与并发协调「HwidAssociationExpiry」。
+ * 在多开检测、登录绕过、匹配、事件召回等场景下集中管理跨连接状态。
+ */
 public class HwidAssociationExpiry {
     public static Instant getHwidAccountExpiry(int relevance) {
         return Instant.ofEpochMilli(Server.getInstance().getCurrentTime()).plusMillis(hwidExpirationUpdate(relevance));

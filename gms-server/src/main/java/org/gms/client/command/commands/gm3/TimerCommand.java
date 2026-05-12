@@ -30,6 +30,9 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】TimerCommand：聊天或控制台命令实现。
+ */
 public class TimerCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("TimerCommand.message1"));

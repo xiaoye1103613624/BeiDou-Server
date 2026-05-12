@@ -28,6 +28,9 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】StaffCommand：聊天或控制台命令实现。
+ */
 public class StaffCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("StaffCommand.message1"));

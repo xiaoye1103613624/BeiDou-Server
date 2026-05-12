@@ -44,6 +44,9 @@ import static com.mybatisflex.core.query.QueryMethods.distinct;
 import static org.gms.dao.entity.table.GameConfigDOTableDef.GAME_CONFIG_D_O;
 import static org.gms.dao.entity.table.LangResourcesDOTableDef.LANG_RESOURCES_D_O;
 
+/**
+ * 【业务服务】ConfigService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 @Slf4j

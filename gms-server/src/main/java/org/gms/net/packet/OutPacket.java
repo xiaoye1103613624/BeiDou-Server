@@ -5,6 +5,10 @@ import org.gms.net.opcodes.SendOpcode;
 
 import java.awt.*;
 
+/**
+ * 网络协议层类型「OutPacket」。
+ * 属于 org.gms.net.packet 下的通用封包、读写或工具定义。
+ */
 public interface OutPacket extends Packet {
     void writeByte(byte value);
     void writeByte(int value);

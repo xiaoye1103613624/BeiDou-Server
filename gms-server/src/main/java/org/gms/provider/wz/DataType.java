@@ -21,6 +21,9 @@
 */
 package org.gms.provider.wz;
 
+/**
+ * 【枚举】DataType：定义 `wz` 中的一组常量。
+ */
 public enum DataType {
     NONE,
     IMG_0x00,

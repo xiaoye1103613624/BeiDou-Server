@@ -21,6 +21,9 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.net.InetAddress;
 
+/**
+ * 【类型】ServerManager（class），包 `org.gms.manager`。
+ */
 @Component
 @Slf4j
 public class ServerManager implements ApplicationContextAware, ApplicationRunner, DisposableBean {

@@ -21,6 +21,9 @@
 */
 package org.gms.client;
 
+/**
+ * 【类型】SkillMacro（class），包 `org.gms.client`。
+ */
 public class SkillMacro {
     private int skill1;
     private int skill2;

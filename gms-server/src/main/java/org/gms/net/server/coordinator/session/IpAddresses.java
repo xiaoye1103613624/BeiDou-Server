@@ -5,6 +5,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * 会话与并发协调「IpAddresses」。
+ * 在多开检测、登录绕过、匹配、事件召回等场景下集中管理跨连接状态。
+ */
 public class IpAddresses {
     private static final List<Pattern> LOCAL_ADDRESS_PATTERNS = loadLocalAddressPatterns();
 

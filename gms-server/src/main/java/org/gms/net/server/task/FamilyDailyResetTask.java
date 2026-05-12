@@ -15,6 +15,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Calendar;
 
+/**
+ * 服务器定时任务「FamilyDailyResetTask」。
+ * 在 org.gms.net.server.task 下注册执行，用于重置、刷新或持久化与在线玩家相关的数据。
+ */
 public class FamilyDailyResetTask implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(FamilyDailyResetTask.class);
     private final World world;

@@ -34,6 +34,9 @@ import org.gms.util.I18nUtil;
 
 import java.util.List;
 
+/**
+ * 【GM/玩家指令】GachaCommand：聊天或控制台命令实现。
+ */
 public class GachaCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GachaCommand.message1"));

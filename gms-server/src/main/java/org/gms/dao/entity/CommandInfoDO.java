@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * 【实体对象】CommandInfoDO：与数据库表字段对应的持久化模型。
+ */
 @Data
 @Builder
 @NoArgsConstructor

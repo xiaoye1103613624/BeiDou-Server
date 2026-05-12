@@ -32,6 +32,9 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】HairCommand：聊天或控制台命令实现。
+ */
 public class HairCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("HairCommand.message1"));

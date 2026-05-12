@@ -38,6 +38,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Iterator;
 
+/**
+ * 【GM/玩家指令】WhoDropsCommand：聊天或控制台命令实现。
+ */
 public class WhoDropsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WhoDropsCommand.message1"));

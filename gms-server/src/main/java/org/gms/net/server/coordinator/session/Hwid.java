@@ -2,6 +2,10 @@ package org.gms.net.server.coordinator.session;
 
 import java.util.regex.Pattern;
 
+/**
+ * 会话与并发协调「Hwid」。
+ * 在多开检测、登录绕过、匹配、事件召回等场景下集中管理跨连接状态。
+ */
 public record Hwid(String hwid) {
     private static final int HWID_LENGTH = 8;
     // First part is a mac address (without dashes), second part is the hwid

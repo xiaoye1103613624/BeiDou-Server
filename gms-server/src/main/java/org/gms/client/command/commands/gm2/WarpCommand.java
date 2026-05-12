@@ -32,6 +32,9 @@ import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.I18nUtil;
 import org.gms.server.maps.Portal;
 
+/**
+ * 【GM/玩家指令】WarpCommand：聊天或控制台命令实现。
+ */
 public class WarpCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WarpCommand.message1"));

@@ -21,6 +21,10 @@
  */
 package org.gms.net.opcodes;
 
+/**
+ * 网络层类型「SendOpcode」。
+ * 位于 `org.gms.net.opcodes`，参与客户端会话、封包路由或服务器间协作。
+ */
 public enum SendOpcode implements Opcode {
 
     LOGIN_STATUS(0x00), // 登录状态

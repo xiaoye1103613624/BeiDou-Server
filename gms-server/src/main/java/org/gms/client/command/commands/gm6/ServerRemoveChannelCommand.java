@@ -30,6 +30,9 @@ import org.gms.net.server.Server;
 import org.gms.server.ThreadManager;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ServerRemoveChannelCommand：聊天或控制台命令实现。
+ */
 public class ServerRemoveChannelCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ServerRemoveChannelCommand.message1"));

@@ -34,6 +34,9 @@ import org.gms.util.I18nUtil;
 import java.util.List;
 import java.util.Map.Entry;
 
+/**
+ * 【GM/玩家指令】ExpedsCommand：聊天或控制台命令实现。
+ */
 public class ExpedsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ExpedsCommand.message1"));

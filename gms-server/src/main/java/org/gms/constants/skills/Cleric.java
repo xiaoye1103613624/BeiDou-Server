@@ -21,6 +21,9 @@
 */
 package org.gms.constants.skills;
 
+/**
+ * 【类型】Cleric（class），包 `org.gms.constants.skills`。
+ */
 public class Cleric {
     public static final int MP_EATER = 2300000;
     public static final int HEAL = 2301002;

@@ -29,6 +29,9 @@ import org.gms.server.ShopFactory;
 import org.gms.util.I18nUtil;
 
 
+/**
+ * 【GM/玩家指令】ReloadShopsCommand：聊天或控制台命令实现。
+ */
 public class ReloadShopsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ReloadShopsCommand.message1"));

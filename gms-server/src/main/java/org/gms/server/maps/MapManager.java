@@ -27,6 +27,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 【类型】MapManager（class），包 `org.gms.server.maps`。
+ */
 public class MapManager {
     private final int channel;
     private final int world;

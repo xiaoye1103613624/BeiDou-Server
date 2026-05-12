@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】LevelCommand：聊天或控制台命令实现。
+ */
 public class LevelCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("LevelCommand.message1"));

@@ -32,6 +32,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【GM/玩家指令】ReportBugCommand：聊天或控制台命令实现。
+ */
 public class ReportBugCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ReportBugCommand.message1"));

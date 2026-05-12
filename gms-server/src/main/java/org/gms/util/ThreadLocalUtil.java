@@ -4,6 +4,9 @@ import org.gms.client.Client;
 
 import java.util.Optional;
 
+/**
+ * 【类型】ThreadLocalUtil（class），包 `org.gms.util`。
+ */
 public class ThreadLocalUtil {
     private static final ThreadLocal<Client> threadLocal = new ThreadLocal<>();
 

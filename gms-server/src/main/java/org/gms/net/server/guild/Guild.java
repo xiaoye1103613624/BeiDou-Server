@@ -52,6 +52,10 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 公会/联盟相关网络模型「Guild」。
+ * 维护公会成员、技能、联盟关系及下行通知封包组装所需的数据。
+ */
 public class Guild {
     private static final Logger log = LoggerFactory.getLogger(Guild.class);
 

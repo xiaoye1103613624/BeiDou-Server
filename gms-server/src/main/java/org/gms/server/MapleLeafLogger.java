@@ -4,6 +4,9 @@ import org.gms.client.Character;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 【类型】MapleLeafLogger（class），包 `org.gms.server`。
+ */
 public class MapleLeafLogger {
     private static final Logger log = LoggerFactory.getLogger(MapleLeafLogger.class);
 

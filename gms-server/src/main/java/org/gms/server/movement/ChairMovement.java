@@ -25,6 +25,9 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 【类型】ChairMovement（class），包 `org.gms.server.movement`。
+ */
 public class ChairMovement extends AbstractLifeMovement {
     private int fh;
 

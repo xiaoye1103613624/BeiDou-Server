@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 【类型】ShopItemSearchRtnDTO（class），包 `org.gms.model.dto`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

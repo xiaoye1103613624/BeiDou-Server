@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 【类型】ConfigTypeDTO（class），包 `org.gms.model.dto`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -41,6 +41,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 【工厂/提供者】LifeFactory：创建或提供 `life` 相关运行时对象。
+ */
 public class LifeFactory {
     private static final Logger log = LoggerFactory.getLogger(LifeFactory.class);
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);

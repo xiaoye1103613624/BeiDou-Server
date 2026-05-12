@@ -26,6 +26,9 @@ import org.gms.server.life.MobSkillType;
 
 import java.util.Arrays;
 
+/**
+ * 【枚举】Disease：定义 `client` 中的一组常量。
+ */
 public enum Disease {
     NULL(0x0),
     SLOW(0x1, MobSkillType.SLOW),

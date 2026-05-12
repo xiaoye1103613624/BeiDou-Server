@@ -32,6 +32,9 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
+/**
+ * 【GM/玩家指令】MonitorCommand：聊天或控制台命令实现。
+ */
 public class MonitorCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("MonitorCommand.message1"));

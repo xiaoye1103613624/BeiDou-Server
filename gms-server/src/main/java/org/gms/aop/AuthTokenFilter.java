@@ -22,6 +22,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.*;
 
+/**
+ * 【类型】AuthTokenFilter（class），包 `org.gms.aop`。
+ */
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired

@@ -21,6 +21,9 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 【类型】SavedLocation（class），包 `org.gms.server.maps`。
+ */
 public class SavedLocation {
     private final int mapId;
     private final int portal;

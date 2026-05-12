@@ -21,6 +21,9 @@
 */
 package org.gms.server;
 
+/**
+ * 【接口】TimerManagerMBean：由 `server` 模块实现的契约。
+ */
 public interface TimerManagerMBean {
     boolean isTerminated();
     boolean isShutdown();

@@ -27,6 +27,9 @@ import org.gms.server.life.MobSkill;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 【类型】MonsterStatusEffect（class），包 `org.gms.client.status`。
+ */
 public class MonsterStatusEffect {
 
     private final Map<MonsterStatus, Integer> stati;

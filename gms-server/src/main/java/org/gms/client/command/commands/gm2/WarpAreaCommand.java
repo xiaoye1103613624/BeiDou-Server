@@ -32,6 +32,9 @@ import org.gms.util.I18nUtil;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * 【GM/玩家指令】WarpAreaCommand：聊天或控制台命令实现。
+ */
 public class WarpAreaCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WarpAreaCommand.message1"));

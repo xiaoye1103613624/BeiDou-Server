@@ -30,6 +30,9 @@ import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【GM/玩家指令】NoticeCommand：聊天或控制台命令实现。
+ */
 public class NoticeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("NoticeCommand.message1"));

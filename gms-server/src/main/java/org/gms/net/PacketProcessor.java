@@ -55,6 +55,10 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 网络层类型「PacketProcessor」。
+ * 位于 `org.gms.net`，参与客户端会话、封包路由或服务器间协作。
+ */
 public final class PacketProcessor {
     private static final Logger log = LoggerFactory.getLogger(PacketProcessor.class);
     private static final Map<String, PacketProcessor> instances = new LinkedHashMap<>();

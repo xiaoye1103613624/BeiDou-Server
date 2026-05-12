@@ -21,6 +21,9 @@
 */
 package org.gms.client;
 
+/**
+ * 【类型】BuddylistEntry（class），包 `org.gms.client`。
+ */
 public class BuddylistEntry {
     private final String name;
     private String group;

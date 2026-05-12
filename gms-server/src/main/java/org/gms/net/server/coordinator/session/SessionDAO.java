@@ -13,6 +13,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 会话与并发协调「SessionDAO」。
+ * 在多开检测、登录绕过、匹配、事件召回等场景下集中管理跨连接状态。
+ */
 public class SessionDAO {
     private static final Logger log = LoggerFactory.getLogger(SessionDAO.class);
 

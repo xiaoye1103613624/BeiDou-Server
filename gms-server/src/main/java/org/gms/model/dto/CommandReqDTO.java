@@ -6,6 +6,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+/**
+ * 【类型】CommandReqDTO（class），包 `org.gms.model.dto`。
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder

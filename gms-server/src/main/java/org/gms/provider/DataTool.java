@@ -25,6 +25,9 @@ import org.gms.provider.wz.DataType;
 
 import java.awt.*;
 
+/**
+ * 【类型】DataTool（class），包 `org.gms.provider`。
+ */
 public class DataTool {
     public static String getString(Data data) {
         return ((String) data.getData());

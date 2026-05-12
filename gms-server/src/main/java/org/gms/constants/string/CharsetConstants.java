@@ -20,6 +20,9 @@ import org.gms.property.ServiceProperty;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
+/**
+ * 【类型】CharsetConstants（class），包 `org.gms.constants.string`。
+ */
 public class CharsetConstants {
     // 保证只加载一次
     private static final Language SERVICE_LANGUAGE = loadServiceLanguage();

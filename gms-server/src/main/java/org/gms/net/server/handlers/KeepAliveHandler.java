@@ -25,6 +25,10 @@ import org.gms.client.Client;
 import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 游戏网络入站封包处理器「KeepAliveHandler」。
+ * 位于登录或频道之外的 handler 子包时，负责对应流程的协议解析与状态迁移。
+ */
 public class KeepAliveHandler implements PacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {

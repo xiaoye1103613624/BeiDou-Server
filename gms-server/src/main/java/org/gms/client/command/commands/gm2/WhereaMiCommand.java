@@ -34,6 +34,9 @@ import org.gms.util.I18nUtil;
 
 import java.util.HashSet;
 
+/**
+ * 【GM/玩家指令】WhereaMiCommand：聊天或控制台命令实现。
+ */
 public class WhereaMiCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WhereaMiCommand.message1"));

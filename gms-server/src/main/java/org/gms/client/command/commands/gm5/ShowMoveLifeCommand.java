@@ -29,6 +29,9 @@ import org.gms.config.GameConfig;
 import org.gms.dao.entity.GameConfigDO;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】ShowMoveLifeCommand：聊天或控制台命令实现。
+ */
 public class ShowMoveLifeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ShowMoveLifeCommand.message1"));

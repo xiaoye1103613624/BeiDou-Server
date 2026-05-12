@@ -21,6 +21,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
+/**
+ * 【类型】SpringSecurityConfig（class），包 `org.gms.config`。
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity()

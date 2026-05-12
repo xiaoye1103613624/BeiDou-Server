@@ -2,6 +2,9 @@ package org.gms.constants.api;
 
 import lombok.Getter;
 
+/**
+ * 【枚举】InformationType：定义 `api` 中的一组常量。
+ */
 @Getter
 public enum InformationType {
     CASH("cash"),

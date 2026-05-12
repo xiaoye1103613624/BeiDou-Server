@@ -25,6 +25,9 @@ import org.gms.client.Client;
 import org.gms.net.packet.Packet;
 import org.gms.util.PacketCreator;
 
+/**
+ * 【类型】MapEffect（class），包 `org.gms.server.maps`。
+ */
 public class MapEffect {
     private final String msg;
     private final int itemId;

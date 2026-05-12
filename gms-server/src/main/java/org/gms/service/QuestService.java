@@ -21,6 +21,9 @@ import static org.gms.dao.entity.table.MedalmapsDOTableDef.MEDALMAPS_D_O;
 import static org.gms.dao.entity.table.QuestprogressDOTableDef.QUESTPROGRESS_D_O;
 import static org.gms.dao.entity.table.QueststatusDOTableDef.QUESTSTATUS_D_O;
 
+/**
+ * 【业务服务】QuestService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 public class QuestService {

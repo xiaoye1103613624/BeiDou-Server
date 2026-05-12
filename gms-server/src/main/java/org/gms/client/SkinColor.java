@@ -21,6 +21,9 @@
 */
 package org.gms.client;
 
+/**
+ * 【枚举】SkinColor：定义 `client` 中的一组常量。
+ */
 public enum SkinColor {
     NORMAL(0),
     DARK(1),

@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 【类型】Quartet（class），包 `org.gms.util`。
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

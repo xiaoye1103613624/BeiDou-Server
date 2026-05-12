@@ -34,6 +34,9 @@ import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 【类型】PortalScriptManager（class），包 `org.gms.scripting.portal`。
+ */
 public class PortalScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(PortalScriptManager.class);
     private static final PortalScriptManager instance = new PortalScriptManager();

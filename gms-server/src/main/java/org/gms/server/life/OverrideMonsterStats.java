@@ -17,6 +17,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.server.life;
 
+/**
+ * 【类型】OverrideMonsterStats（class），包 `org.gms.server.life`。
+ */
 public class OverrideMonsterStats {
 
     public int hp;

@@ -25,6 +25,9 @@ import org.gms.client.Client;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.server.ItemInformationProvider.ScriptedItem;
 
+/**
+ * 【类型】ItemScriptManager（class），包 `org.gms.scripting.item`。
+ */
 public class ItemScriptManager {
 
     private static final ItemScriptManager instance = new ItemScriptManager();

@@ -25,6 +25,9 @@ import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D
 import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
 import static org.gms.dao.entity.table.RingsDOTableDef.RINGS_D_O;
 
+/**
+ * 【业务服务】NameChangeService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 @Slf4j

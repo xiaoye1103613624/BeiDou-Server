@@ -29,6 +29,9 @@ import org.gms.client.command.Command;
 import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
 
+/**
+ * 【GM/玩家指令】QuestResetCommand：聊天或控制台命令实现。
+ */
 public class QuestResetCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("QuestResetCommand.message1"));

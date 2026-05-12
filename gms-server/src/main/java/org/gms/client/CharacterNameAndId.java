@@ -21,6 +21,9 @@
 */
 package org.gms.client;
 
+/**
+ * 【类型】CharacterNameAndId（class），包 `org.gms.client`。
+ */
 public class CharacterNameAndId {
     private final int id;
     private final String name;

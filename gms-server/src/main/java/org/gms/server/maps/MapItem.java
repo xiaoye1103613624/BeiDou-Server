@@ -31,6 +31,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 【类型】MapItem（class），包 `org.gms.server.maps`。
+ */
 public class MapItem extends AbstractMapObject {
     protected Client ownerClient;
     protected Item item;

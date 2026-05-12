@@ -33,6 +33,9 @@ import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 
+/**
+ * 【业务服务】AccountService：封装 `service` 相关应用逻辑与数据协作。
+ */
 @Service
 @AllArgsConstructor
 public class AccountService {
