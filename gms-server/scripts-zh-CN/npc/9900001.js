@@ -51,14 +51,16 @@ function action(mode, type, selection) {
         text += "#L5#[回到自由]#l \t #L61#[快捷传送]#l \t #L70#[副本大厅]#l";
         text += changeTwoLine;
         text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l" + changeLine;
-        text += "#L3#传送自由#l \t #L4#爆率一览#l" + changeLine;
+        text += "#L3#传送自由#l \t #L4#爆率一览#l \t #L69#卡片收集#l" + changeLine;
+        text += "#L71#玩具收集#l \t #L72#城镇任务#l" + changeLine;
 
         if (cm.getPlayer().isGM()) {
             text += changeTwoLine;
             text += "\t\t\t\t#r=====以下内容仅GM可见=====" + changeLine;
             text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l" + changeTwoLine;
             text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l" + changeTwoLine;
-			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l";
+			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l" + changeTwoLine;
+			text += "#L73#快速转职#l \t #L74#一键满技能#l";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -87,6 +89,15 @@ function doSelect(selection) {
         case 4:
             openNpc("当前地图掉落");
             break;
+        case 69:
+            openNpc("卡片收集");
+            break;
+        case 71:
+            openNpc("玩具收集");
+            break;
+        case 72:
+            openNpc("城镇任务");
+            break;
         // GM功能
         case 61:
             openNpc("万能传送");
@@ -113,6 +124,12 @@ function doSelect(selection) {
             break;
         case 68:
             openNpc("Example2")
+            break;
+        case 73:
+            openNpc("快速转职");
+            break;
+        case 74:
+            openNpc("一键满技能");
             break;
         default:
             cm.sendOk("该功能暂不支持，敬请期待！");
