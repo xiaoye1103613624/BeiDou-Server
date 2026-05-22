@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- *  实体类。
+ * 【实体】BuddiesDO（class），包 `org.gms.dao.entity`。
  *
- * @author sleep
- * @since 2024-05-24
+ * 对应数据库表 buddies，存储好友关系数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

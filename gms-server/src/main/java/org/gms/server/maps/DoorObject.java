@@ -31,6 +31,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 【类型】DoorObject，class，包 {@code org.gms.server.maps}。
+ *
+ * 地图传送门对象，表示由技能（如魔法师的"神秘门"）创建的临时传送门，支持双向传送并仅对队长和队员可见。
+ *
  * @author Ronan
  */
 public class DoorObject extends AbstractMapObject {

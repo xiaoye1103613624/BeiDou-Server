@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Noblesse（class），包 `org.gms.constants.skills`。
+ *
+ * 定义贵族（皇家骑士团初心者）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Noblesse {
     public static final int BLESSING_OF_THE_FAIRY = 10000012;

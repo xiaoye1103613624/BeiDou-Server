@@ -34,6 +34,10 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * 【类型】MiniGame，class，包 {@code org.gms.server.maps}。
+ *
+ * 小游戏（MiniGame）房间对象，实现奥默棋（Omok）和翻牌配对（Match Card）两种休闲对战的完整逻辑，包括回合管理、胜负判定和平局处理。
+ *
  * @author Matze
  * @author Ronan (HeavenMS)
  */

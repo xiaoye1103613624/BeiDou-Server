@@ -32,7 +32,11 @@ import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】CakeCommand：聊天或控制台命令实现。
+ * 【GM指令】CakeCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前位置召唤巨型蛋糕怪物，可指定HP。
+ *
+ * @author Arthur L
  */
 public class CakeCommand extends Command {
     {

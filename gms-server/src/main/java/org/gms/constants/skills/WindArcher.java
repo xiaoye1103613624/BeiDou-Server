@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】WindArcher（class），包 `org.gms.constants.skills`。
+ *
+ * 定义风灵使者（皇家骑士团弓箭手）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class WindArcher {
     // 1st job

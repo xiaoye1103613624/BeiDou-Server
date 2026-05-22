@@ -30,6 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】ReactorStats，class，包 {@code org.gms.server.maps}。
+ *
+ * 反应堆属性数据类，存储反应堆各状态的触发类型、掉落物品、技能列表、超时时间和下一个状态等信息，内含 {@code StateData} 内部类封装单个状态数据。
+ *
  * @author Lerk
  * @author Ronan
  */

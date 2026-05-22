@@ -34,8 +34,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Ronan
- * 玩家完成切换地图触发
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PLAYER_MAP_TRANSFER} 封包。
+ * 负责处理客户端玩家完成切换地图后的初始化操作（重置控制器、发送怪物生成数据等）。
  */
 public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
 

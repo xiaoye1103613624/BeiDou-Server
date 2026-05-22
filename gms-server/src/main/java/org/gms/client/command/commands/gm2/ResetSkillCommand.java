@@ -35,7 +35,11 @@ import org.gms.provider.wz.WZFiles;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ResetSkillCommand：聊天或控制台命令实现。
+ * 【GM指令】ResetSkillCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：重置所有技能等级为0（用于重新分配技能点时清空技能）。
+ *
+ * @author Arthur L
  */
 public class ResetSkillCommand extends Command {
     {

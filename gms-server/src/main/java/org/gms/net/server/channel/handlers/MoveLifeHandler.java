@@ -44,9 +44,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Danny (Leifde)
- * @author ExtremeDevilz
- * @author Ronan (HeavenMS)
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MOVE_LIFE} 封包。
+ * 负责处理客户端怪物移动、攻击及技能释放操作。
  */
 public final class MoveLifeHandler extends AbstractMovementPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(MoveLifeHandler.class);

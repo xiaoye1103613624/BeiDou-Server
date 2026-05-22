@@ -30,6 +30,10 @@ import org.gms.util.I18nUtil;
 import java.util.Collection;
 
 /**
+ * 【类型】IpListCommand（class），继承 {@link Command}，包 {@code org.gms.client.command.commands.gm5}。
+ *
+ * GM5 级指令：列出所有在线玩家的名称与 IP 地址，按世界分组展示。
+ *
  * @author Mist
  * @author Blood (Tochi)
  * @author Ronan

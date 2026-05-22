@@ -31,8 +31,8 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Jay Estrella
- * @author Ubaware
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#ADD_FAMILY} 封包。
+ * 负责处理客户端的添加家族成员操作。
  */
 public final class FamilyAddHandler extends AbstractPacketHandler {
     @Override

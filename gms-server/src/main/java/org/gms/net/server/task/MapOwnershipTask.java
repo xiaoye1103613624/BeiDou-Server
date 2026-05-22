@@ -23,6 +23,12 @@ import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
 
 /**
+ * 地图所有权检查任务。
+ * <p>
+ * 该任务定期遍历所有频道，执行地图所有权状态的检查与更新逻辑，
+ * 确保地图资源的正确分配与管理。
+ * </p>
+ *
  * @author Ronan
  */
 public class MapOwnershipTask extends BaseTask implements Runnable {

@@ -30,9 +30,8 @@ import org.gms.net.server.world.World;
 import org.gms.util.PacketCreator;
 
 /**
- * @author XoticStory
- * @author BubblesDev
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PARTY_SEARCH_START} 封包。
+ * 负责处理客户端开始组队搜索的操作。
  */
 public class PartySearchStartHandler extends AbstractPacketHandler {
     @Override

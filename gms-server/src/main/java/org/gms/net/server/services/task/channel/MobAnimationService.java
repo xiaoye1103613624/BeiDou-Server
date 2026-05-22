@@ -29,6 +29,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类】MobAnimationService，包 `org.gms.net.server.services.task.channel`。
+ *
+ * 怪物动画服务，管理怪物的动画效果时长，防止重复触发同一怪物的动画。
+ *
  * @author Ronan
  */
 public class MobAnimationService extends BaseService {

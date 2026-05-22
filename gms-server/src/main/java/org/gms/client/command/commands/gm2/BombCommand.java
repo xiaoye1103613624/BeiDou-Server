@@ -35,7 +35,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】BombCommand：聊天或控制台命令实现。
+ * 【GM2指令】BombCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：在自身或指定玩家位置生成炸弹怪物。
+ *
+ * @author Arthur L
  */
 public class BombCommand extends Command {
     {

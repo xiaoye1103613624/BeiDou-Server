@@ -8,9 +8,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
 /**
- * @Author Arnah
- * @Website http://Vertisy.ca/
- * @since Aug 15, 2016
+ * 【类型】RockPaperScissor（class），包 `org.gms.server.minigame`。
+ *
+ * 石头剪刀布小游戏，通过随机出拳判定胜负，支持10轮晋级，获胜可获得对应等级的RPS证书道具。
+ *
+ * @author 萧曵
  */
 public class RockPaperScissor {
     private int round = 0;

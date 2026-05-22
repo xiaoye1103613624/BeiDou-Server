@@ -22,7 +22,11 @@
 package org.gms.provider;
 
 /**
- * @author Matze
+ * 【接口】DataFileEntry（interface），包 `org.gms.provider`。
+ *
+ * WZ 数据文件条目接口，扩展 DataEntry，允许设置文件偏移量。
+ *
+ * @author 萧曵
  */
 public interface DataFileEntry extends DataEntry {
     void setOffset(int offset);

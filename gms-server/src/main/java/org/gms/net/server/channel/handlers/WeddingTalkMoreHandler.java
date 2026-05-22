@@ -28,7 +28,8 @@ import org.gms.util.PacketCreator;
 import org.gms.util.packets.WeddingPackets;
 
 /**
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#WEDDING_TALK_MORE} 封包。
+ * 负责处理客户端婚礼对话补充操作（宾客祝福等）。
  */
 public final class WeddingTalkMoreHandler extends AbstractPacketHandler {
 

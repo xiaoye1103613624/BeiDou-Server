@@ -40,6 +40,11 @@ import org.gms.server.Storage;
 import org.gms.util.PacketCreator;
 
 /**
+ * 【类型】StorageProcessor（class），包 {@code org.gms.client.processor.npc}。
+ *
+ * 仓库（Storage）NPC 处理器，处理仓库物品存取、金币存取、整理排序及密码验证等交互，
+ * 使用 {@link ItemFactory#STORAGE} 持久化，含并发保护与卡拉标志物存取控制。
+ *
  * @author Matze
  * @author Ronan - inventory concurrency protection on storing items
  */

@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- *  实体类。
+ * 【实体】HwidaccountsDO（class），包 `org.gms.dao.entity`。
  *
- * @author sleep
- * @since 2024-05-24
+ * 对应数据库表 hwidaccounts，存储硬件ID与账号关联数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

@@ -33,7 +33,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
- * 【GM/玩家指令】UnBanCommand：聊天或控制台命令实现。
+ * 【GM指令】UnBanCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：解封指定账号（清除封禁、IP封禁和MAC封禁记录）。
+ *
+ * @author Arthur L
  */
 public class UnBanCommand extends Command {
     {

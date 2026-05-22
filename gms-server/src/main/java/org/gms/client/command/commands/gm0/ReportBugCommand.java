@@ -33,7 +33,11 @@ import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】ReportBugCommand：聊天或控制台命令实现。
+ * 【GM0指令】ReportBugCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：向所有GM报告游戏Bug或问题。
+ *
+ * @author Arthur L
  */
 public class ReportBugCommand extends Command {
     {

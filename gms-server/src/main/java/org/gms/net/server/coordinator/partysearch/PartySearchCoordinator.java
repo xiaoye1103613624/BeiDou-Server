@@ -46,6 +46,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 【类】PartySearchCoordinator，包 `org.gms.net.server.coordinator.partysearch`。
+ *
+ * 组队搜索协调器，实现按职业和等级范围搜索附近可组队玩家的功能，支持队长队列轮询和超时回收机制。
+ *
  * @author Ronan
  */
 public class PartySearchCoordinator {

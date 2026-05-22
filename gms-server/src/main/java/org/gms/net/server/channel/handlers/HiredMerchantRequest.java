@@ -38,7 +38,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
- * @author XoticStory
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#HIRED_MERCHANT_REQUEST} 封包。
+ * 负责处理客户端的雇佣商人请求操作。
  */
 public final class HiredMerchantRequest extends AbstractPacketHandler {
     @Override

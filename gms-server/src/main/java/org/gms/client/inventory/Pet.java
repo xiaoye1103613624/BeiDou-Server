@@ -40,6 +40,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * 【类型】Pet（class），继承 {@link Item}，包 {@code org.gms.client.inventory}。
+ *
+ * 宠物实体类，封装宠物的名称、唯一 ID、亲密度、等级、饱食度、位置/姿态、召唤状态及宠物属性标志位。
+ * 提供数据库加载/保存/创建/删除以及亲密度与饱食度增长计算等核心逻辑。
+ *
  * @author Matze
  */
 public class Pet extends Item {

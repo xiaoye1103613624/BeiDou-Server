@@ -50,9 +50,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * @author Jvlaple
- * @author Ronan - major overhaul on Ring handling mechanics
- * @author Drago (Dragohe4rt) - on Wishlist
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#RING_ACTION} 封包。
+ * 负责处理客户端戒指操作（好友戒指、婚戒、友情戒指等的创建与管理）。
  */
 public final class RingActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(RingActionHandler.class);

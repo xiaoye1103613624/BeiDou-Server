@@ -27,6 +27,10 @@ import java.awt.*;
 
 /**
  * 【类型】RelativeLifeMovement（class），包 `org.gms.server.movement`。
+ *
+ * 相对移动指令，记录角色在相对坐标系下的短距离移动（不含像素移速），用于多人同步广播小幅移动包。
+ *
+ * @author 萧曵
  */
 public class RelativeLifeMovement extends AbstractLifeMovement {
     public RelativeLifeMovement(int type, Point position, int duration, int newstate) {

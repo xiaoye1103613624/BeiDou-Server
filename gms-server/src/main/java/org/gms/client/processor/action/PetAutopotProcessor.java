@@ -37,6 +37,11 @@ import org.gms.util.PacketCreator;
 import java.util.List;
 
 /**
+ * 【类型】PetAutopotProcessor（class），包 {@code org.gms.client.processor.action}。
+ *
+ * 宠物自动吃药处理器，实现宠物 HP/MP 自动补药功能：
+ * 定时检测角色 HP/MP 比例，触阈值时自动从背包消耗对应药水，支持连续多次补药。
+ *
  * @author Ronan - multi-pot consumption feature
  */
 public class PetAutopotProcessor {

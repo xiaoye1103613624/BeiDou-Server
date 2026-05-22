@@ -25,9 +25,12 @@ package org.gms.server.expeditions;
 import org.gms.config.GameConfig;
 
 /**
- * @author Alan (SharpAceX)
+ * 【类型】ExpeditionType（enum），包 `org.gms.server.expeditions`。
+ *
+ * 远征队类型枚举，定义各远征Boss的组队人数范围、等级要求和注册等待时间等参数。
+ *
+ * @author 萧曵
  */
-
 public enum ExpeditionType {
     BALROG_EASY(3, 30, 50, 255, 5),
     BALROG_NORMAL(6, 30, 50, 255, 5),

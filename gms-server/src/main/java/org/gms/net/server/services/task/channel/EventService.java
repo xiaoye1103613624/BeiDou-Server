@@ -24,6 +24,10 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 【类】EventService，包 `org.gms.net.server.services.task.channel`。
+ *
+ * 频道事件服务，按地图分区管理延迟事件调度（如地图刷新、定时触发等）。
+ *
  * @author Ronan
  */
 public class EventService extends BaseService {

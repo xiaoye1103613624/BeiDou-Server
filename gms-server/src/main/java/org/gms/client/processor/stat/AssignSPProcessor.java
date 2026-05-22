@@ -35,6 +35,11 @@ import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 
 /**
+ * 【类型】AssignSPProcessor（class），包 {@code org.gms.client.processor.stat}。
+ *
+ * 技能点（SP）分配处理器，校验技能学习条件（技能树、GM 技能限制、PQ 技能限制等），
+ * 计算 SP 消耗（含技能等级提升情况），并执行 SP 扣减与技能等级提升。
+ *
  * @author RonanLana - synchronization of SP transaction modules
  */
 public class AssignSPProcessor {

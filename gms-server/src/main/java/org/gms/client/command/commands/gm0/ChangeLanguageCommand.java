@@ -28,7 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ChangeLanguageCommand：聊天或控制台命令实现。
+ * 【GM0指令】ChangeLanguageCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：切换客户端语言。
+ *
+ * @author Arthur L
  */
 public class ChangeLanguageCommand extends Command {
     {

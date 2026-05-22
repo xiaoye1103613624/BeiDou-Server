@@ -33,7 +33,11 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】RechargeCommand：聊天或控制台命令实现。
+ * 【GM指令】RechargeCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：将背包中所有消耗类道具（飞镖、弓箭、子弹等）数量补充至最大。
+ *
+ * @author Arthur L
  */
 public class RechargeCommand extends Command {
     {

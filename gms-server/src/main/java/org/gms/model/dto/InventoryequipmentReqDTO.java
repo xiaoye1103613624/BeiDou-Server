@@ -7,7 +7,8 @@ import org.gms.dao.entity.InventoryequipmentDO;
 
 
 /**
- * 【类型】InventoryequipmentReqDTO（class），包 `org.gms.model.dto`。
+ * 装备表查询请求DTO
+ * <p>用于查询装备详情表的筛选条件</p>
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -16,8 +17,10 @@ import org.gms.dao.entity.InventoryequipmentDO;
 @SuperBuilder
 public class InventoryequipmentReqDTO  extends BasePageDTO{
 
+    /** 装备记录ID */
     private Long inventoryequipmentid;
 
+    /** 关联的物品记录ID */
     private Long inventoryitemid;
 
 

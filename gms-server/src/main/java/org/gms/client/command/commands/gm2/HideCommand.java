@@ -30,7 +30,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】HideCommand：聊天或控制台命令实现。
+ * 【GM指令】HideCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：切换GM隐身状态（使用GM隐身技能9101004），在地图上隐藏自身。
+ *
+ * @author Arthur L
  */
 public class HideCommand extends Command {
     {

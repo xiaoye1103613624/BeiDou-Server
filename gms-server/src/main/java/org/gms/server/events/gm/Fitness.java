@@ -30,7 +30,11 @@ import org.gms.util.PacketCreator;
 import java.util.concurrent.ScheduledFuture;
 
 /**
- * @author kevintjuh93
+ * 【类型】Fitness（class），包 `org.gms.server.events.gm`。
+ *
+ * 冒险岛体能测试活动，控制体能测试的计时、倒计时提示广播和超时自动传送退出逻辑。
+ *
+ * @author 萧曵
  */
 public class Fitness {
     private final Character chr;

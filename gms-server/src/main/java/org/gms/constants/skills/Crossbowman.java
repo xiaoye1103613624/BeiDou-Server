@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Crossbowman（class），包 `org.gms.constants.skills`。
+ *
+ * 定义弩弓手职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Crossbowman {
     public static final int CROSSBOW_MASTERY = 3200000;

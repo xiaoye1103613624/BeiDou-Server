@@ -31,7 +31,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】ReachCommand：聊天或控制台命令实现。
+ * 【GM指令】ReachCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：传送到指定玩家所在位置（若不在同一频道则会提示频道号）。
+ *
+ * @author Arthur L
  */
 public class ReachCommand extends Command {
     {

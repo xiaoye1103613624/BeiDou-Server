@@ -29,7 +29,11 @@ import org.gms.constants.id.NpcId;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】HelpCommand：聊天或控制台命令实现。
+ * 【GM0指令】HelpCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：打开帮助菜单，列出所有可用命令。
+ *
+ * @author Arthur L
  */
 public class HelpCommand extends Command {
     {

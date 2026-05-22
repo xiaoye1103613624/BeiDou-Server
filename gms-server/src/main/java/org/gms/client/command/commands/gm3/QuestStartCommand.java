@@ -30,7 +30,11 @@ import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】QuestStartCommand：聊天或控制台命令实现。
+ * 【GM指令】QuestStartCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：强制开始指定任务。
+ *
+ * @author Arthur L
  */
 public class QuestStartCommand extends Command {
     {

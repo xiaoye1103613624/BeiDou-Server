@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】EndEventCommand：聊天或控制台命令实现。
+ * 【GM指令】EndEventCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：结束当前频道的活动事件。
+ *
+ * @author Arthur L
  */
 public class EndEventCommand extends Command {
     {

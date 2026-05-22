@@ -38,7 +38,11 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * 【GM/玩家指令】DebuffCommand：聊天或控制台命令实现。
+ * 【GM指令】DebuffCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：对当前地图范围内的其他玩家施加减益效果（支持减速、诱惑、眩晕、封印等多种Debuff类型）。
+ *
+ * @author Arthur L
  */
 public class DebuffCommand extends Command {
     {

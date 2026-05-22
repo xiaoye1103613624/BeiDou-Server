@@ -17,7 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 【Web 控制器】CashShopController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】CashShopController（class），包 {@code org.gms.controller}。
+ *
+ * 处理点券商城（Cash Shop）的商品管理，包括商城分类查询、
+ * 按分类分页查询商品列表、商品详情查询、商品上架/下架及批量上下架操作。
+ *
+ * @author 萧曵
  */
 @RestController
 @RequestMapping("/cashShop")

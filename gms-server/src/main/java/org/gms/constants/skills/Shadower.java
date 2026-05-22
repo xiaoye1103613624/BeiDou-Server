@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Shadower（class），包 `org.gms.constants.skills`。
+ *
+ * 定义独行客职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Shadower {
     public static final int MAPLE_WARRIOR = 4221000;

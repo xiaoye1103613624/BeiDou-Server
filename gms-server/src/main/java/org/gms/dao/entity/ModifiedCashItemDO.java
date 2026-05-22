@@ -24,10 +24,11 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 
 /**
- * 商城物品修改表 实体类。
+ * 【实体】ModifiedCashItemDO（class），包 `org.gms.dao.entity`。
  *
- * @author CN
- * @since 2024-08-08
+ * 对应数据库表 modified_cash_item，存储商城物品修改数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

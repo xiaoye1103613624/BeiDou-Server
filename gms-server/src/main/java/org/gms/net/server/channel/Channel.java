@@ -77,7 +77,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 单个游戏频道的运行时宿主：端口、玩家容器、地图工厂、事件脚本与频道内服务。
+ * 【类型】Channel（class），包 {@code org.gms.net.server.channel}。单个游戏频道的运行时宿主：端口、玩家容器、地图工厂、事件脚本与频道内服务。
  * 与 {@link org.gms.net.netty.ChannelServer} 绑定，对外接受玩家连接并在本频道内完成大部分游戏逻辑。
  */
 public final class Channel {

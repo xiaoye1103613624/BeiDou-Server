@@ -25,15 +25,25 @@ import org.gms.client.Client;
 import org.gms.net.server.Server;
 
 /**
- * 网络层类型「AbstractPacketHandler」。
- * 位于 `org.gms.net`，参与客户端会话、封包路由或服务器间协作。
+ * 【类型】AbstractPacketHandler（abstract class），包 `org.gms.net`。
+ *
+ * 数据包处理器的抽象基类，实现 {@link PacketHandler} 接口。
+ * 提供默认的身份验证逻辑（检查客户端是否已登录）和服务器时间戳工具方法。
+ *
+ * 大部分频道服的 handler 继承此类，少数需要特殊身份校验的 handler 会覆盖 {@link #validateState(Client)} 方法。
+ * handler 实例通过 {@link PacketProcessor#registerHandler} 注册到对应的 opcode 上。
+ *
+ * @see PacketHandler
+ * @see PacketProcessor
  */
 public abstract class AbstractPacketHandler implements PacketHandler {
+    /** 默认验证：客户端必须处于已登录状态 */
     @Override
     public boolean validateState(Client c) {
         return c.isLoggedIn();
     }
 
+    /** @return 服务器当前时间戳（毫秒），用于封包中的时间字段 */
     protected static long currentServerTime() {
         return Server.getInstance().getCurrentTime();
     }

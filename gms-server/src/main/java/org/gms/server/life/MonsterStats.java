@@ -36,6 +36,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 【类型】MonsterStats，class，包 {@code org.gms.server.life}。
+ *
+ * 怪物属性数据类，存储怪物的基础数值（HP、MP、经验、等级、攻击力、命中、回避等）、元素抗性、技能列表、复活信息、动画帧尺寸和移动类型等。
+ *
  * @author Frz
  */
 public class MonsterStats {

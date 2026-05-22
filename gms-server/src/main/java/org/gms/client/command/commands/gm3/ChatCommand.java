@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ChatCommand：聊天或控制台命令实现。
+ * 【GM指令】ChatCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：切换GM的白色聊天模式（白字显示聊天内容，全服可见）。
+ *
+ * @author Arthur L
  */
 public class ChatCommand extends Command {
     {

@@ -22,7 +22,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * 【GM/玩家指令】IdCommand：聊天或控制台命令实现。
+ * 【GM指令】IdCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：通过handbook数据文件搜索游戏ID（支持地图、道具、NPC、武器等类型），方便管理员快速查找资源编号。
+ *
+ * @author Arthur L
  */
 public class IdCommand extends Command {
     {

@@ -39,7 +39,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * 【GM/玩家指令】PmobCommand：聊天或控制台命令实现。
+ * 【GM指令】PmobCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前地图永久添加怪物（持久化到数据库）。
+ *
+ * @author Ronan
  */
 public class PmobCommand extends Command {
     {

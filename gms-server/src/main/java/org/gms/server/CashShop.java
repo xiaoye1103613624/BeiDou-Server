@@ -66,25 +66,41 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Ponk
  */
 /**
- * 【类型】CashShop（class），包 `org.gms.server`。
+ * 【类型】CashShop（class），包 {@code org.gms.server}。商城系统，管理点券商城（NX/MAPLE点）、道具购买、礼物收发和愿望清单。
  */
 public class CashShop {
+    /** NX抵用券类型常量 */
     public static final int NX_CREDIT = 1;
+    /** 枫叶点数类型常量 */
     public static final int MAPLE_POINT = 2;
+    /** NX预付券类型常量 */
     public static final int NX_PREPAID = 4;
 
+    /** 所属账号ID */
     private final int accountId;
+    /** 进入商城的角色ID */
     private final int characterId;
+    /** NX抵用券余额 */
     private int nxCredit;
+    /** 枫叶点数余额 */
     private int maplePoint;
+    /** NX预付券余额 */
     private int nxPrepaid;
+    /** 商城是否已打开 */
     private boolean opened;
+    /** 商城物品工厂（按职业分离） */
     private ItemFactory factory;
+    /** 商城背包物品列表 */
     private final List<Item> inventory = new ArrayList<>();
+    /** 愿望清单（SN列表） */
     private final List<Integer> wishList = new ArrayList<>();
+    /** 未读礼物数量 */
     private int notes = 0;
+    /** 线程安全锁 */
     private final Lock lock = new ReentrantLock();
+    /** 账号服务Bean */
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    /** 角色服务Bean */
     private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
 
     public CashShop(int accountId, int characterId, int jobType) {
@@ -124,12 +140,17 @@ public class CashShop {
         wishlistsDOList.forEach(wishlistsDO -> wishList.add(wishlistsDO.getSn()));
     }
 
+    /** 商城道具工厂：从WZ加载商品数据并提供查询 */
     public static class CashItemFactory {
+        /** 商城道具映射表（SN→商品） */
         @Getter
         private static volatile Map<Integer, ModifiedCashItemDO> items = new HashMap<>();
+        /** 礼包映射表（礼包SN→包含SN列表） */
         private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
+        /** 商城分类列表 */
         @Getter
         private static final List<CashCategory> cashCategories = new ArrayList<>();
+        /** 数据库覆盖的商城道具 */
         @Getter
         private static final Map<Integer, ModifiedCashItemDO> modifiedCashItems = new HashMap<>();
 
@@ -274,6 +295,7 @@ public class CashShop {
 
     }
 
+    /** 商城惊喜箱开箱结果（消耗品+奖励） */
     public record CashShopSurpriseResult(Item usedCashShopSurprise, Item reward) {
     }
 

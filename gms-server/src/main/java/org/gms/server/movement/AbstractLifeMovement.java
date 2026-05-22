@@ -24,7 +24,11 @@ package org.gms.server.movement;
 import java.awt.*;
 
 /**
- * 【类型】AbstractLifeMovement（class），包 `org.gms.server.movement`。
+ * 【类型】AbstractLifeMovement（abstract class），包 `org.gms.server.movement`。
+ *
+ * 移动指令抽象基类，封装移动类型、目标坐标、持续时间和新状态，为具体移动类型提供基础序列化能力。
+ *
+ * @author 萧曵
  */
 public abstract class AbstractLifeMovement implements LifeMovement {
     private final Point position;

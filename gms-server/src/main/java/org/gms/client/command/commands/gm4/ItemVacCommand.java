@@ -34,7 +34,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】ItemVacCommand：聊天或控制台命令实现。
+ * 【GM指令】ItemVacCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：吸取当前地图所有掉落物品（使用拾取逻辑，按距离排序）。
+ *
+ * @author Arthur L
  */
 public class ItemVacCommand extends Command {
     {

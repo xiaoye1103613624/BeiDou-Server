@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ClearDropsCommand：聊天或控制台命令实现。
+ * 【GM2指令】ClearDropsCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：清除当前地图上的所有掉落物品。
+ *
+ * @author Arthur L
  */
 public class ClearDropsCommand extends Command {
     {

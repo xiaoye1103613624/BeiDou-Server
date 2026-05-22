@@ -32,7 +32,11 @@ import org.gms.util.I18nUtil;
 import java.awt.*;
 
 /**
- * 【GM/玩家指令】HorntailCommand：聊天或控制台命令实现。
+ * 【GM指令】HorntailCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前位置召唤暗黑龙王。
+ *
+ * @author Arthur L
  */
 public class HorntailCommand extends Command {
     {

@@ -1,7 +1,7 @@
 package org.gms.constants.net;
 
 /**
- * 【类型】ServerConstants（class），包 `org.gms.constants.net`。
+ * 【类型】ServerConstants（class），包 `org.gms.constants.net`。服务器常量：服务器版本号、屏蔽角色名列表、北导版本与构建时间等。
  */
 public class ServerConstants {
 

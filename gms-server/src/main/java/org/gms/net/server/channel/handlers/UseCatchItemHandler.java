@@ -37,7 +37,8 @@ import org.gms.server.life.Monster;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_CATCH_ITEM} 封包。
+ * 负责处理客户端使用捕捉道具捕捉怪物的操作。
  */
 public final class UseCatchItemHandler extends AbstractPacketHandler {
     @Override

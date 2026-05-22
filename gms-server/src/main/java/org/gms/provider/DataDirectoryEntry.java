@@ -24,7 +24,11 @@ package org.gms.provider;
 import java.util.List;
 
 /**
- * @author Matze
+ * 【接口】DataDirectoryEntry（interface），包 `org.gms.provider`。
+ *
+ * WZ 数据目录条目接口，表示 WZ 文件中的目录节点，可包含子目录和文件条目。
+ *
+ * @author 萧曵
  */
 public interface DataDirectoryEntry extends DataEntry {
     List<DataDirectoryEntry> getSubdirectories();

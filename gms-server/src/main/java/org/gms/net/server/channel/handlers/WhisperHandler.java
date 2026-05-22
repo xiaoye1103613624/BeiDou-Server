@@ -33,7 +33,8 @@ import org.gms.util.PacketCreator;
 import org.gms.util.PacketCreator.WhisperFlag;
 
 /**
- * @author Chronos
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#WHISPER} 封包。
+ * 负责处理客户端密语（私聊）与好友位置查找操作。
  */
 public final class WhisperHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(WhisperHandler.class);

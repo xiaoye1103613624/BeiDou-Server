@@ -38,8 +38,8 @@ import java.util.Calendar;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
- * @author Ronan
- * @author Ubaware
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#NAME_TRANSFER} 封包。
+ * 负责处理客户端角色改名操作（校验改名资格）。
  */
 public final class TransferNameHandler extends AbstractPacketHandler {
 

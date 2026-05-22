@@ -31,7 +31,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】TimerCommand：聊天或控制台命令实现。
+ * 【GM指令】TimerCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：为指定玩家设置或移除倒计时。
+ *
+ * @author MedicOP
  */
 public class TimerCommand extends Command {
     {

@@ -32,6 +32,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 【类型】MiniDungeon，class，包 {@code org.gms.server.maps}。
+ *
+ * 迷你地下城实例管理类，负责创建、维护和销毁一个限时副本区域。支持玩家注册/注销、超时自动关闭和队长离开时全员传出。
+ *
  * @author Ronan
  */
 public class MiniDungeon {

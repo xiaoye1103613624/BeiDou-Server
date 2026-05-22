@@ -36,7 +36,11 @@ import org.gms.util.I18nUtil;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
- * 【GM/玩家指令】ItemCommand：聊天或控制台命令实现。
+ * 【GM指令】ItemCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：在背包中创建指定ID和数量的物品（支持宠物创建及过期时间设定）。
+ *
+ * @author Arthur L
  */
 public class ItemCommand extends Command {
     {

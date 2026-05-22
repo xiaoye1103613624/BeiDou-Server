@@ -6,13 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 【类型】InventoryTypeRtnDTO（class），包 `org.gms.model.dto`。
+ * 背包类型返回DTO
+ * <p>用于返回背包类型枚举信息</p>
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class InventoryTypeRtnDTO {
+    /** 背包类型值 */
     private Byte inventoryType;
+    /** 背包类型名称 */
     private String name;
 }

@@ -22,7 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Aran（class），包 `org.gms.constants.skills`。
+ *
+ * 定义战神职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Aran {
     // 1st job

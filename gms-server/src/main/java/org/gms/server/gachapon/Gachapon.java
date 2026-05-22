@@ -31,7 +31,11 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.Randomizer;
 
 /**
- * @author Alan (SharpAceX)
+ * 【类型】Gachapon（class），包 `org.gms.server.gachapon`。
+ *
+ * 扭蛋机核心类，管理各城镇扭蛋机的道具抽取逻辑，根据稀有度（普通/罕见/稀有）和地域专属道具池随机抽取物品。
+ *
+ * @author 萧曵
  */
 public class Gachapon {
     private static final Logger log = LoggerFactory.getLogger(Gachapon.class);

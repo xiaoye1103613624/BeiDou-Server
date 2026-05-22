@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Brawler（class），包 `org.gms.constants.skills`。
+ *
+ * 定义拳手职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Brawler {
     public static final int IMPROVE_MAX_HP = 5100000;

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Bishop（class），包 `org.gms.constants.skills`。
+ *
+ * 定义主教职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Bishop {
     public static final int MAPLE_WARRIOR = 2321000;

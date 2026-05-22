@@ -52,10 +52,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 频道服务器入站封包处理器「MTSHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MTS_OPERATION} 封包。
+ * 负责处理客户端的交易市场（MTS）操作（上架、购买、搜索、下架、购物车等）。
  */
 public final class MTSHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(MTSHandler.class);

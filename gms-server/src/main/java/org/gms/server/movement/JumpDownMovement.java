@@ -27,6 +27,10 @@ import java.awt.*;
 
 /**
  * 【类型】JumpDownMovement（class），包 `org.gms.server.movement`。
+ *
+ * 跳下移动指令，记录角色从平台跳下时的移动信息（含起跳层和落地层高度），用于多人同步广播跳下动作包。
+ *
+ * @author 萧曵
  */
 public class JumpDownMovement extends AbstractLifeMovement {
     private Point pixelsPerSecond;

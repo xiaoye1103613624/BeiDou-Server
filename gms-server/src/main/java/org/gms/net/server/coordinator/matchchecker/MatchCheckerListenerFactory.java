@@ -23,6 +23,10 @@ import org.gms.net.server.coordinator.matchchecker.listener.MatchCheckerCPQChall
 import org.gms.net.server.coordinator.matchchecker.listener.MatchCheckerGuildCreation;
 
 /**
+ * 【类】MatchCheckerListenerFactory，包 `org.gms.net.server.coordinator.matchchecker`。
+ *
+ * 匹配确认监听器工厂，定义所有匹配确认类型（公会创建、嘉年华挑战等）及其对应的监听器实例。
+ *
  * @author Ronan
  */
 public class MatchCheckerListenerFactory {

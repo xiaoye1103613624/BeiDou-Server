@@ -8,7 +8,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.service.HpMpAlertService;
 
 /**
- * @author lee
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#SET_HPMPALERT} 封包。
+ * 负责处理客户端HP/MP警报阈值设置的操作。
  */
 public class SetHpMpAlertHandler extends AbstractPacketHandler {
     /**

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Hermit（class），包 `org.gms.constants.skills`。
+ *
+ * 定义隐士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Hermit {
     public static final int ALCHEMIST = 4110000;

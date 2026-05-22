@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author kevintjuh93
+ * 【技能常量】Legend（class），包 `org.gms.constants.skills`。
+ *
+ * 定义传说（战神初心者）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Legend {
     public static final int THREE_SNAILS = 20001000;

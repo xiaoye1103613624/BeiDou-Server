@@ -30,7 +30,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ShowRatesCommand：聊天或控制台命令实现。
+ * 【GM0指令】ShowRatesCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看服务器全局倍率详情（包含世界倍率、角色倍率、优惠券倍率等逐层明细）。
+ *
+ * @author Arthur L
  */
 public class ShowRatesCommand extends Command {
     {

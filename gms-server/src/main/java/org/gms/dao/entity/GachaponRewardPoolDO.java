@@ -17,10 +17,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- *  实体类。
+ * 【实体】GachaponRewardPoolDO（class），包 `org.gms.dao.entity`。
  *
- * @author lee
- * @since 2024-09-19
+ * 对应数据库表 gachapon_reward_pool，存储转蛋机奖励池数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

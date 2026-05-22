@@ -12,7 +12,13 @@ import org.gms.util.RequireUtil;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 后面如有商城相关，叫cashShop
+ * 【控制器】ShopController（class），包 {@code org.gms.controller}。
+ *
+ * 处理NPC商店与商品的CRUD操作，包括商店列表查询、商品分页查询、
+ * 商品新增、修改及删除功能。注意：此控制器管理的是游戏内NPC商店，
+ * 点券商城相关功能请参见 {@link CashShopController}。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

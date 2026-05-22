@@ -70,73 +70,151 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
+ * 【类型】ItemInformationProvider（class），包 `org.gms.server`。
+ *
+ * 物品信息提供器 —— 整个服务器唯一实例（单例），负责从 WZ 文件（Item.wz, Character.wz, String.wz, Etc.wz）
+ * 加载并缓存所有物品的元数据。几乎所有游戏系统（脚本、战斗、交易、制造、商城等）都通过此类查询物品属性。
+ *
+ * 核心功能：
+ * <ul>
+ *   <li>WZ 数据加载：Item.wz（道具基础属性）、Character.wz（装备属性）、String.wz（名称/描述）、Etc.wz（杂项数据）</li>
+ *   <li>装备系统：属性计算、混沌卷轴强化、装备等级/需求、穿戴检查</li>
+ *   <li>物品效果：消耗品 BUFF/DEBUFF、卷轴效果、技能书效果</li>
+ *   <li>制造系统：Maker 制造配方、水晶、催化剂</li>
+ *   <li>经济系统：商店价格、Meso 回收、任务物品标记</li>
+ *   <li>交易限制：不可交易标记、Karma 剪刀、掉落/拾取限制</li>
+ * </ul>
+ *
+ * 所有属性数据采用懒加载 + 缓存策略：首次查询时从 WZ 解析并写入对应的 Map 缓存，后续直接命中。
+ *
  * @author Matze
  */
 public class ItemInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(ItemInformationProvider.class);
+    /** 全局单例 */
     private final static ItemInformationProvider instance = new ItemInformationProvider();
 
     public static ItemInformationProvider getInstance() {
         return instance;
     }
 
+    // ==================== WZ 数据源 ====================
+    /** 道具基础数据：Item.wz */
     protected DataProvider itemData;
+    /** 角色/装备数据：Character.wz */
     protected DataProvider equipData;
+    /** 字符串表：String.wz（名称、描述） */
     protected DataProvider stringData;
+    /** 杂项数据：Etc.wz */
     protected DataProvider etcData;
+    /** String.wz/Cash.img */
     protected Data cashStringData;
+    /** String.wz/Consume.img */
     protected Data consumeStringData;
+    /** String.wz/Eqp.img */
     protected Data eqpStringData;
+    /** String.wz/Etc.img */
     protected Data etcStringData;
+    /** String.wz/Ins.img */
     protected Data insStringData;
+    /** String.wz/Pet.img */
     protected Data petStringData;
+
+    // ==================== 缓存 Map（key=物品ID） ====================
+    /** 物品最大堆叠数 */
     protected Map<Integer, Short> slotMaxCache = new HashMap<>();
+    /** 物品使用效果（BUFF/DEBUFF） */
     protected Map<Integer, StatEffect> itemEffects = new HashMap<>();
+    /** 装备属性 Map<物品ID, Map<属性名, 属性值>> */
     protected Map<Integer, Map<String, Integer>> equipStatsCache = new HashMap<>();
+    /** 装备对象缓存 */
     protected Map<Integer, Equip> equipCache = new HashMap<>();
+    /** 装备等级信息（WZ 原始数据） */
     protected Map<Integer, Data> equipLevelInfoCache = new HashMap<>();
+    /** 装备等级需求 */
     protected Map<Integer, Integer> equipLevelReqCache = new HashMap<>();
+    /** 装备最大等级（成长装备） */
     protected Map<Integer, Integer> equipMaxLevelCache = new HashMap<>();
+    /** 卷轴升级所需物品列表 */
     protected Map<Integer, List<Integer>> scrollReqsCache = new HashMap<>();
+    /** 物品整价（商店售价） */
     protected Map<Integer, Integer> wholePriceCache = new HashMap<>();
+    /** 物品单价 */
     protected Map<Integer, Double> unitPriceCache = new HashMap<>();
+    /** 飞镖/子弹的攻击力 */
     protected Map<Integer, Integer> projectileWatkCache = new HashMap<>();
+    /** 物品名称和描述 */
     protected Map<Integer, Pair<String, String>> nameDescCache = new HashMap<>();
+    /** 物品使用消息 */
     protected Map<Integer, String> msgCache = new HashMap<>();
+    /** 是否绑定账号 */
     protected Map<Integer, Boolean> accountItemRestrictionCache = new HashMap<>();
+    /** 是否禁止丢弃 */
     protected Map<Integer, Boolean> dropRestrictionCache = new HashMap<>();
+    /** 是否禁止拾取 */
     protected Map<Integer, Boolean> pickupRestrictionCache = new HashMap<>();
+    /** 物品卖店价格（Meso 回收价） */
     protected Map<Integer, Integer> getMesoCache = new HashMap<>();
+    /** 怪物卡 ID 映射 */
     protected Map<Integer, Integer> monsterBookID = new HashMap<>();
+    /** 是否不可交易 */
     protected Map<Integer, Boolean> untradeableCache = new HashMap<>();
+    /** 装备后是否变为不可交易 */
     protected Map<Integer, Boolean> onEquipUntradeableCache = new HashMap<>();
+    /** 脚本物品（双击触发脚本） */
     protected Map<Integer, ScriptedItem> scriptedItemCache = new HashMap<>();
+    /** 是否可使用 Karma 剪刀解除交易限制 */
     protected Map<Integer, Boolean> karmaCache = new HashMap<>();
+    /** 触发物品映射 */
     protected Map<Integer, Integer> triggerItemCache = new HashMap<>();
+    /** 物品使用获得的经验值 */
     protected Map<Integer, Integer> expCache = new HashMap<>();
+    /** 使用后创建的物品 */
     protected Map<Integer, Integer> createItem = new HashMap<>();
+    /** 物品召唤的怪物 ID */
     protected Map<Integer, Integer> mobItem = new HashMap<>();
+    /** 物品使用延迟（毫秒） */
     protected Map<Integer, Integer> useDelay = new HashMap<>();
+    /** 怪物包召唤怪物的 HP */
     protected Map<Integer, Integer> mobHP = new HashMap<>();
+    /** 物品等级 */
     protected Map<Integer, Integer> levelCache = new HashMap<>();
+    /** 奖励物品（物品ID -> 奖励概率, 奖励列表） */
     protected Map<Integer, Pair<Integer, List<RewardItem>>> rewardCache = new HashMap<>();
+    /** 全量物品名称列表（用于搜索） */
     protected List<Pair<Integer, String>> itemNameCache = new ArrayList<>();
+    /** 拾取后是否自动使用 */
     protected Map<Integer, Boolean> consumeOnPickupCache = new HashMap<>();
+    /** 是否为任务物品 */
     protected Map<Integer, Boolean> isQuestItemCache = new HashMap<>();
+    /** 是否为组队任务物品 */
     protected Map<Integer, Boolean> isPartyQuestItemCache = new HashMap<>();
+    /** 过期后替换为其他物品 */
     protected Map<Integer, Pair<Integer, String>> replaceOnExpireCache = new HashMap<>();
+    /** 装备槽位名称（如 "Pants", "Coat"） */
     protected Map<Integer, String> equipmentSlotCache = new HashMap<>();
+    /** 使用后是否不取消鼠标状态 */
     protected Map<Integer, Boolean> noCancelMouseCache = new HashMap<>();
+    /** 怪物水晶制造产出 */
     protected Map<Integer, Integer> mobCrystalMakerCache = new HashMap<>();
+    /** 属性强化石制造信息 */
     protected Map<Integer, Pair<String, Integer>> statUpgradeMakerCache = new HashMap<>();
+    /** Maker 制造配方 */
     protected Map<Integer, MakerItemFactory.MakerItemCreateEntry> makerItemCache = new HashMap<>();
+    /** Maker 催化剂 */
     protected Map<Integer, Integer> makerCatalystCache = new HashMap<>();
+    /** 技能强化属性 Map<物品ID, Map<技能名, 提升值>> */
     protected Map<Integer, Map<String, Integer>> skillUpgradeCache = new HashMap<>();
+    /** 技能强化信息（WZ 原始数据） */
     protected Map<Integer, Data> skillUpgradeInfoCache = new HashMap<>();
+    /** 宠物食品信息：<物品ID, <饱食度增加值, 适用宠物类型集合>> */
     protected Map<Integer, Pair<Integer, Set<Integer>>> cashPetFoodCache = new HashMap<>();
+    /** 任务消耗物品信息 */
     protected Map<Integer, QuestConsItem> questItemConsCache = new HashMap<>();
+    /** 现金物品信息（商城道具属性） */
     protected Map<Integer, ItemCashInfo> itemCashInfoCache = new HashMap<>();
 
+    /** 私有构造：加载怪物卡数据、初始化 WZ 数据源 */
     private ItemInformationProvider() {
         loadCardIdData();
         itemData = DataProviderFactory.getDataProvider(WZFiles.ITEM);

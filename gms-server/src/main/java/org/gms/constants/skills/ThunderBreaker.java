@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】ThunderBreaker（class），包 `org.gms.constants.skills`。
+ *
+ * 定义奇袭者（皇家骑士团海盗）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class ThunderBreaker {
     // 1st job

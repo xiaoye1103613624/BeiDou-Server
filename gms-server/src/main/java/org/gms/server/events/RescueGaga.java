@@ -11,7 +11,11 @@ import org.gms.client.SkillFactory;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
- * @author kevintjuh93
+ * 【类型】RescueGaga（class），包 `org.gms.server.events`。
+ *
+ * 营救加加活动实现，追踪玩家营救加加的完成次数，并根据完成度给予对应的技能奖励（20天有效期）。
+ *
+ * @author 萧曵
  */
 public class RescueGaga extends Events {
 

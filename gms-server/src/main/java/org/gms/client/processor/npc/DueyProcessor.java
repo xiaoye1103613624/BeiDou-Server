@@ -54,6 +54,11 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
+ * 【类型】DueyProcessor（class），包 {@code org.gms.client.processor.npc}。
+ *
+ * Duey 快递系统 NPC 处理器，负责快递包裹的发送、接收、物品存入/取出、包裹删除等操作，
+ * 使用 {@link ItemFactory#DUEY} 进行物品持久化，含防止物品复制的并发控制。
+ *
  * @author RonanLana - synchronization of Duey modules
  */
 public class DueyProcessor {

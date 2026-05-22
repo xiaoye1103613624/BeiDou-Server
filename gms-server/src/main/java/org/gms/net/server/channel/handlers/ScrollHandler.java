@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Matze
- * @author Frz
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_UPGRADE_SCROLL} 封包。
+ * 负责处理客户端的使用卷轴操作。
  */
 public final class ScrollHandler extends AbstractPacketHandler {
 

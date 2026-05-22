@@ -30,7 +30,11 @@ import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】BossHpCommand：聊天或控制台命令实现。
+ * 【GM1指令】BossHpCommand（class），包 `org.gms.client.command.commands.gm1`。
+ *
+ * GM指令：查看当前地图内所有Boss的血量百分比及血条。
+ *
+ * @author Arthur L
  */
 public class BossHpCommand extends Command {
     {

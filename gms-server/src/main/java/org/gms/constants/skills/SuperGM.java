@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】SuperGM（class），包 `org.gms.constants.skills`。
+ *
+ * 定义超级管理员职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class SuperGM {
     public static final int HEAL_PLUS_DISPEL = 9101000;

@@ -27,6 +27,10 @@ import java.awt.*;
 
 /**
  * 【类型】AbsoluteLifeMovement（class），包 `org.gms.server.movement`。
+ *
+ * 绝对移动指令，记录角色在绝对坐标系的移动轨迹（含像素移速和站立层高度），用于多人同步广播移动包。
+ *
+ * @author 萧曵
  */
 public class AbsoluteLifeMovement extends AbstractLifeMovement {
     private Point pixelsPerSecond;

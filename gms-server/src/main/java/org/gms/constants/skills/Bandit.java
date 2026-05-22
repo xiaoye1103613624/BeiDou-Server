@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Bandit（class），包 `org.gms.constants.skills`。
+ *
+ * 定义侠客职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Bandit {
     public static final int DAGGER_MASTERY = 4200000;

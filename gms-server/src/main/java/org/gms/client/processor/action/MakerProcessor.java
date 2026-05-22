@@ -44,6 +44,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】MakerProcessor（class），包 {@code org.gms.client.processor.action}。
+ *
+ * 装备/道具制作系统处理器，负责解析客户端制作请求、匹配制作配方（{@link org.gms.server.MakerItemFactory}），
+ * 校验材料与金币，产出成品并触发制作动画与奖励经验。
+ *
  * @author Ronan
  */
 public class MakerProcessor {

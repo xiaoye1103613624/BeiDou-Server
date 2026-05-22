@@ -22,7 +22,9 @@ import java.io.InputStream;
 import java.net.InetAddress;
 
 /**
- * 【类型】ServerManager（class），包 `org.gms.manager`。
+ * 【类型】ServerManager（class），包 {@code org.gms.manager}。服务器生命周期管理器：实现 ApplicationRunner 和 DisposableBean，
+ * 在 Spring 启动完成后调用 Server.init() 初始化游戏世界/频道/登录服，在 Spring 关闭时调用 Server.shutdownInternal() 执行优雅停机。
+ * 同时持有全局 ApplicationContext 引用供非 Spring 管理的类获取 Spring Bean。
  */
 @Component
 @Slf4j

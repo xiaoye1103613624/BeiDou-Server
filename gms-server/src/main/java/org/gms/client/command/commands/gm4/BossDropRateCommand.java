@@ -26,6 +26,10 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
+ * 【类型】BossDropRateCommand（class），继承 {@link Command}，包 {@code org.gms.client.command.commands.gm4}。
+ *
+ * GM4 级指令：设置服务器 Boss 掉率倍率，向全服广播变更通知。
+ *
  * @author Ronan
  */
 public class BossDropRateCommand extends Command {

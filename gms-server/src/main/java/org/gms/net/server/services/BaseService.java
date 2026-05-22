@@ -22,6 +22,10 @@ package org.gms.net.server.services;
 import org.gms.config.GameConfig;
 
 /**
+ * 【抽象类】BaseService，包 `org.gms.net.server.services`。
+ *
+ * 服务抽象基类，定义频道服务的基础结构，提供地图分区索引计算和资源释放接口。
+ *
  * @author Ronan
  */
 public abstract class BaseService {

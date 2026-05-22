@@ -5,7 +5,8 @@ import lombok.experimental.SuperBuilder;
 
 
 /**
- * 【类型】GachaponPoolSearchReqDTO（class），包 `org.gms.model.dto`。
+ * 百宝箱奖池查询请求DTO
+ * <p>用于查询指定百宝箱的奖池列表</p>
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -13,5 +14,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class GachaponPoolSearchReqDTO extends BasePageDTO {
+    /** 百宝箱NPC ID */
     private Integer gachaponId;
 }

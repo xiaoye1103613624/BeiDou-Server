@@ -38,19 +38,24 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * 【类型】BuddyList（class），包 `org.gms.client`。
+ * 【类型】BuddyList（class），包 {@code org.gms.client}。好友列表系统，管理玩家的好友关系、待处理请求和容量上限。
  */
 public class BuddyList {
+    /** 好友操作类型：添加/删除 */
     public enum BuddyOperation {
         ADDED, DELETED
     }
 
+    /** 好友添加结果：列表已满/已存在/成功 */
     public enum BuddyAddResult {
         BUDDYLIST_FULL, ALREADY_ON_LIST, OK
     }
 
+    /** 好友映射表（角色ID→好友条目） */
     private final Map<Integer, BuddylistEntry> buddies = new LinkedHashMap<>();
+    /** 好友列表容量上限 */
     private int capacity;
+    /** 待处理的好友请求队列 */
     private final Deque<CharacterNameAndId> pendingRequests = new LinkedList<>();
 
     public BuddyList(int capacity) {

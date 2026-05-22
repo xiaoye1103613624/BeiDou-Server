@@ -38,7 +38,8 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Matze
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_ITEM} 封包。
+ * 负责处理客户端的使用物品操作。
  */
 public final class UseItemHandler extends AbstractPacketHandler {
     @Override
@@ -53,27 +54,29 @@ public final class UseItemHandler extends AbstractPacketHandler {
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
+        // 校验物品存在且数量充足
         Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
-            if (itemId == ItemId.ALL_CURE_POTION) {
+            // 特殊物品硬编码处理
+            if (itemId == ItemId.ALL_CURE_POTION) { // 万病通肠丸：解除所有异常
                 chr.dispelDebuffs();
                 remove(c, slot);
                 return;
-            } else if (itemId == ItemId.EYEDROP) {
+            } else if (itemId == ItemId.EYEDROP) { // 眼药水：解除黑暗
                 chr.dispelDebuff(Disease.DARKNESS);
                 remove(c, slot);
                 return;
-            } else if (itemId == ItemId.TONIC) {
+            } else if (itemId == ItemId.TONIC) { // 补药：解除虚弱和减速
                 chr.dispelDebuff(Disease.WEAKEN);
                 chr.dispelDebuff(Disease.SLOW);
                 remove(c, slot);
                 return;
-            } else if (itemId == ItemId.HOLY_WATER) {
+            } else if (itemId == ItemId.HOLY_WATER) { // 圣水：解除封印和诅咒
                 chr.dispelDebuff(Disease.SEAL);
                 chr.dispelDebuff(Disease.CURSE);
                 remove(c, slot);
                 return;
-            } else if (ItemConstants.isTownScroll(itemId)) {
+            } else if (ItemConstants.isTownScroll(itemId)) { // 城镇传送卷轴
                 int banMap = chr.getMapId();
                 int banSp = chr.getMap().findClosestPlayerSpawnpoint(chr.getPosition()).getId();
                 long banTime = currentServerTime();
@@ -95,8 +98,10 @@ public final class UseItemHandler extends AbstractPacketHandler {
                 return;
             }
 
+            // 扣除物品
             remove(c, slot);
 
+            // 普通物品应用效果（生日蛋糕特殊处理：全图玩家生效）
             if (toUse.getItemId() != ItemId.HAPPY_BIRTHDAY) {
                 ii.getItemEffect(toUse.getItemId()).applyTo(chr);
             } else {

@@ -54,40 +54,64 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 事件管理器，负责管理游戏中的各种事件实例
+ * 【类型】EventManager（class），包 {@code org.gms.scripting.event}。
+ * 事件管理器，负责管理事件实例（EventInstanceManager）的生命周期，包括创建、注册怪物、玩家进出、
+ * 大厅调度、队列管理等功能。每个事件脚本对应一个 EventManager，由 {@link EventScriptManager} 创建。
+ *
  * @author Matze
  * @author Ronan
  */
 public class EventManager {
     private static final Logger log = LoggerFactory.getLogger(EventManager.class);
-    private Invocable iv;  // 可调用的脚本引擎
-    private Channel cserv;  // 频道服务器
-    private World wserv;  // 世界服务器
-    private Server server;  // 主服务器
-    private final EventScriptScheduler ess = new EventScriptScheduler();  // 事件脚本调度器
-    private final Map<String, EventInstanceManager> instances = new HashMap<>();  // 事件实例映射表
-    private final Map<String, Integer> instanceLocks = new HashMap<>();  // 实例锁定映射表
-    private final Queue<Integer> queuedGuilds = new LinkedList<>();  // 排队中的公会队列
-    private final Map<Integer, Integer> queuedGuildLeaders = new HashMap<>();  // 排队公会及其会长映射
+    /** 可调用的 JS 脚本引擎，用于调用事件脚本中的函数 */
+    private Invocable iv;
+    /** 所属频道服务器 */
+    private Channel cserv;
+    /** 所属世界服务器 */
+    private World wserv;
+    /** 主服务器实例 */
+    private Server server;
+    /** 事件脚本调度器，管理定时任务 */
+    private final EventScriptScheduler ess = new EventScriptScheduler();
+    /** 事件实例名 -> EventInstanceManager 的映射 */
+    private final Map<String, EventInstanceManager> instances = new HashMap<>();
+    /** 实例名 -> 大厅ID 的锁定映射 */
+    private final Map<String, Integer> instanceLocks = new HashMap<>();
+    /** 公会排队队列 */
+    private final Queue<Integer> queuedGuilds = new LinkedList<>();
+    /** 排队公会ID -> 会长ID 的映射 */
+    private final Map<Integer, Integer> queuedGuildLeaders = new HashMap<>();
+    /** 大厅列表，记录每个大厅的锁定状态与时间戳 */
     private final List<Pair<Boolean, Long>> openedLobbys;
-    private final List<EventInstanceManager> readyInstances = new LinkedList<>();  // 准备就绪的实例队列
-    private Integer readyId = 0, onLoadInstances = 0;  // 准备ID和加载中的实例数
-    private final Properties props = new Properties();  // 属性配置
-    private final String name;  // 事件名称
-    private final Lock lobbyLock = new ReentrantLock();  // 大厅锁
-    private final Lock queueLock = new ReentrantLock();  // 队列锁
-    private final Lock startLock = new ReentrantLock();  // 启动锁
+    /** 预创建好的就绪实例队列 */
+    private final List<EventInstanceManager> readyInstances = new LinkedList<>();
+    /** 就绪实例ID自增计数器与正在加载的实例数 */
+    private Integer readyId = 0, onLoadInstances = 0;
+    /** 事件属性配置 */
+    private final Properties props = new Properties();
+    /** 事件名称 */
+    private final String name;
+    /** 大厅锁 */
+    private final Lock lobbyLock = new ReentrantLock();
+    /** 队列锁 */
+    private final Lock queueLock = new ReentrantLock();
+    /** 启动锁 */
+    private final Lock startLock = new ReentrantLock();
 
-    private final Set<Integer> playerPermit = new HashSet<>();  // 玩家许可集合
-    private final Semaphore startSemaphore = new Semaphore(7);  // 启动信号量
+    /** 已获启动许可的玩家ID集合 */
+    private final Set<Integer> playerPermit = new HashSet<>();
+    /** 启动信号量，限制并发启动数 */
+    private final Semaphore startSemaphore = new Semaphore(7);
 
-    private static final int maxLobbys = 8;     // 一个事件管理器最多支持同时运行的大厅数量
+    /** 一个事件管理器最多支持同时运行的大厅数量 */
+    private static final int maxLobbys = 8;
 
     /**
-     * 构造函数
-     * @param cserv 频道服务器
-     * @param iv 可调用的脚本引擎
-     * @param name 事件名称
+     * 构造函数。
+     *
+     * @param cserv 所属频道服务器
+     * @param iv    可调用的 JS 脚本引擎
+     * @param name  事件名称
      */
     public EventManager(Channel cserv, Invocable iv, String name) {
         this.server = Server.getInstance();
@@ -103,15 +127,17 @@ public class EventManager {
     }
 
     /**
-     * 检查事件管理器是否已释放
-     * @return 是否已释放
+     * 检查此事件管理器是否已被释放/销毁。
+     *
+     * @return true 表示已释放
      */
     private boolean isDisposed() {
         return onLoadInstances <= -1000;
     }
 
     /**
-     * 取消事件管理器（确保在没有玩家在线时调用）
+     * 取消事件管理器，释放所有实例与资源。
+     * 确保在没有玩家在线时调用。
      */
     public void cancel() {
         ess.dispose();
@@ -154,7 +180,8 @@ public class EventManager {
     }
 
     /**
-     * 将对象列表转换为整数列表
+     * 将 Object 列表转换为 Integer 列表。
+     *
      * @param objects 对象列表
      * @return 整数列表
      */
@@ -169,41 +196,46 @@ public class EventManager {
     }
 
     /**
-     * 获取大厅延迟时间
-     * @return 延迟时间（毫秒）
+     * 获取大厅延迟时间（毫秒），从全局配置读取。
+     *
+     * @return 延迟毫秒数
      */
     public long getLobbyDelay() {
         return GameConfig.getServerLong("event_lobby_delay");
     }
 
     /**
-     * 获取最大大厅数量
+     * 获取最大大厅数量。优先调用 JS 脚本中的 {@code getMaxLobbies()}，
+     * 若未定义则使用默认值 {@code maxLobbys}。
+     *
      * @return 最大大厅数量
      */
     private int getMaxLobbies() {
         try {
             return (int) iv.invokeFunction("getMaxLobbies");
-        } catch (ScriptException | NoSuchMethodException ex) { // 如果没有定义大厅范围
+        } catch (ScriptException | NoSuchMethodException ex) {
             return maxLobbys;
         }
     }
 
     /**
-     * 调度事件方法
-     * @param methodName 方法名
-     * @param delay 延迟时间
-     * @return 事件调度未来对象
+     * 调度一个事件方法，延迟指定毫秒后执行。
+     *
+     * @param methodName 要调用的 JS 方法名
+     * @param delay      延迟时间（毫秒）
+     * @return 可取消的调度 Future
      */
     public EventScheduledFuture schedule(String methodName, long delay) {
         return schedule(methodName, null, delay);
     }
 
     /**
-     * 调度事件方法（带事件实例）
-     * @param methodName 方法名
-     * @param eim 事件实例管理器
-     * @param delay 延迟时间
-     * @return 事件调度未来对象
+     * 调度一个事件方法（带 EventInstanceManager 参数），延迟指定毫秒后执行。
+     *
+     * @param methodName 要调用的 JS 方法名
+     * @param eim        事件实例管理器
+     * @param delay      延迟时间（毫秒）
+     * @return 可取消的调度 Future
      */
     public EventScheduledFuture schedule(final String methodName, final EventInstanceManager eim, long delay) {
         Runnable r = () -> {
@@ -219,10 +251,11 @@ public class EventManager {
     }
 
     /**
-     * 在指定时间戳调度事件
-     * @param methodName 方法名
-     * @param timestamp 时间戳
-     * @return 事件调度未来对象
+     * 在指定的绝对时间戳调度一个事件方法。
+     *
+     * @param methodName 要调用的 JS 方法名
+     * @param timestamp  绝对时间戳（毫秒）
+     * @return 可取消的调度 Future
      */
     public EventScheduledFuture scheduleAtTimestamp(final String methodName, long timestamp) {
         Runnable r = () -> {
@@ -237,42 +270,35 @@ public class EventManager {
         return new EventScheduledFuture(r, ess);
     }
 
-    /**
-     * 获取世界服务器
-     * @return 世界服务器
-     */
+    /** @return 所属世界服务器 */
     public World getWorldServer() {
         return wserv;
     }
 
-    /**
-     * 获取频道服务器
-     * @return 频道服务器
-     */
+    /** @return 所属频道服务器 */
     public Channel getChannelServer() {
         return cserv;
     }
 
-    /**
-     * 获取可调用的脚本引擎
-     * @return 可调用的脚本引擎
-     */
+    /** @return 可调用的 JS 脚本引擎 */
     public Invocable getIv() {
         return iv;
     }
 
     /**
-     * 获取指定名称的事件实例
+     * 根据名称获取事件实例。
+     *
      * @param name 实例名称
-     * @return 事件实例管理器
+     * @return 对应的事件实例管理器，不存在则返回 null
      */
     public EventInstanceManager getInstance(String name) {
         return instances.get(name);
     }
 
     /**
-     * 获取所有事件实例
-     * @return 事件实例集合
+     * 获取所有事件实例的集合。
+     *
+     * @return 事件实例管理器集合
      */
     public Collection<EventInstanceManager> getInstances() {
         synchronized (instances) {
@@ -281,10 +307,11 @@ public class EventManager {
     }
 
     /**
-     * 创建新的事件实例
+     * 创建一个新的事件实例。
+     *
      * @param name 实例名称
-     * @return 事件实例管理器
-     * @throws EventInstanceInProgressException 如果实例已存在
+     * @return 新创建的事件实例管理器
+     * @throws EventInstanceInProgressException 如果同名实例已存在
      */
     public EventInstanceManager newInstance(String name) throws EventInstanceInProgressException {
         EventInstanceManager ret = getReadyInstance();
@@ -306,10 +333,11 @@ public class EventManager {
     }
 
     /**
-     * 创建新的婚姻实例
+     * 创建一个新的婚姻事件实例。
+     *
      * @param name 实例名称
-     * @return 婚姻实例
-     * @throws EventInstanceInProgressException 如果实例已存在
+     * @return 婚姻事件实例
+     * @throws EventInstanceInProgressException 如果同名实例已存在
      */
     public Marriage newMarriage(String name) throws EventInstanceInProgressException {
         Marriage ret = new Marriage(this, name);
@@ -325,7 +353,8 @@ public class EventManager {
     }
 
     /**
-     * 释放指定名称的实例
+     * 延迟释放指定名称的实例。
+     *
      * @param name 实例名称
      */
     public void disposeInstance(final String name) {
@@ -338,55 +367,36 @@ public class EventManager {
         }, SECONDS.toMillis(GameConfig.getServerLong("event_lobby_delay")));
     }
 
-    /**
-     * 设置属性
-     * @param key 属性键
-     * @param value 属性值
-     */
+    /** 设置字符串属性 */
     public void setProperty(String key, String value) {
         props.setProperty(key, value);
     }
 
-    /**
-     * 设置整数属性
-     * @param key 属性键
-     * @param value 属性值
-     */
+    /** 设置整数属性 */
     public void setIntProperty(String key, int value) {
         setProperty(key, value);
     }
 
-    /**
-     * 设置属性（整数）
-     * @param key 属性键
-     * @param value 属性值
-     */
+    /** 设置整数属性（内部转字符串） */
     public void setProperty(String key, int value) {
         props.setProperty(key, value + "");
     }
 
-    /**
-     * 获取属性
-     * @param key 属性键
-     * @return 属性值
-     */
+    /** 获取字符串属性 */
     public String getProperty(String key) {
         return props.getProperty(key);
     }
 
-    /**
-     * 获取整数属性
-     * @param key 属性键
-     * @return 属性值
-     */
+    /** 获取整数属性 */
     public int getIntProperty(String key) {
         return Integer.parseInt(props.getProperty(key));
     }
 
     /**
-     * 设置大厅锁定状态
+     * 设置大厅锁定状态。
+     *
      * @param lobbyId 大厅ID
-     * @param lock 是否锁定
+     * @param lock    true 锁定，false 解锁
      */
     private void setLockLobby(int lobbyId, boolean lock) {
         lobbyLock.lock();
@@ -398,9 +408,10 @@ public class EventManager {
     }
 
     /**
-     * 启动大厅实例
+     * 尝试启动指定大厅的实例。若大厅未锁定、已超时或 PQ 地图无人，则允许启动。
+     *
      * @param lobbyId 大厅ID
-     * @return 是否成功启动
+     * @return true 表示可以启动
      */
     private boolean startLobbyInstance(int lobbyId) {
         lobbyLock.lock();
@@ -424,8 +435,9 @@ public class EventManager {
     }
 
     /**
-     * 释放大厅实例
-     * @param lobbyName 大厅名称
+     * 释放大厅实例的锁定。
+     *
+     * @param lobbyName 大厅/实例名称
      */
     private void freeLobbyInstance(String lobbyName) {
         Integer i = instanceLocks.get(lobbyName);
@@ -439,17 +451,15 @@ public class EventManager {
         }
     }
 
-    /**
-     * 获取事件名称
-     * @return 事件名称
-     */
+    /** @return 事件名称 */
     public String getName() {
         return name;
     }
 
     /**
-     * 获取可用的大厅实例ID
-     * @return 大厅ID，如果没有可用则返回-1
+     * 获取一个可用的大厅ID。
+     *
+     * @return 大厅ID，没有可用大厅时返回 -1
      */
     private int availableLobbyInstance() {
         int maxLobbies = getMaxLobbies();
@@ -466,9 +476,10 @@ public class EventManager {
     }
 
     /**
-     * 获取内部脚本异常消息
+     * 从异常链中提取内部脚本异常消息。
+     *
      * @param a 异常对象
-     * @return 异常消息
+     * @return 异常消息，非 ScriptException 时返回 null
      */
     private String getInternalScriptExceptionMessage(Throwable a) {
         if (!(a instanceof ScriptException)) {
@@ -486,21 +497,23 @@ public class EventManager {
     }
 
     /**
-     * 创建事件实例
-     * @param name 实例名称
-     * @param args 参数
-     * @return 事件实例管理器
-     * @throws ScriptException 脚本异常
-     * @throws NoSuchMethodException 方法不存在异常
+     * 通过调用 JS 脚本中的方法创建事件实例。
+     *
+     * @param name JS 方法名（通常为 "setup"）
+     * @param args 传给 JS 方法的参数
+     * @return 创建好的 EventInstanceManager
+     * @throws ScriptException     脚本执行异常
+     * @throws NoSuchMethodException JS 方法不存在
      */
     private EventInstanceManager createInstance(String name, Object... args) throws ScriptException, NoSuchMethodException {
         return (EventInstanceManager) iv.invokeFunction(name, args);
     }
 
     /**
-     * 注册事件实例
-     * @param eventName 事件名称
-     * @param lobbyId 大厅ID
+     * 注册事件实例与大厅ID的绑定关系。
+     *
+     * @param eventName 事件实例名称
+     * @param lobbyId   大厅ID
      */
     private void registerEventInstance(String eventName, int lobbyId) {
         Integer oldLobby = instanceLocks.get(eventName);
@@ -511,31 +524,20 @@ public class EventManager {
         instanceLocks.put(eventName, lobbyId);
     }
 
-    /**
-     * 启动远征队实例
-     * @param exped 远征队
-     * @return 是否成功启动
-     */
+    // ==================== startInstance 重载方法 ====================
+
+    /** 启动远征队实例 */
     public boolean startInstance(Expedition exped) {
         return startInstance(-1, exped);
     }
 
-    /**
-     * 启动远征队实例（指定大厅）
-     * @param lobbyId 大厅ID
-     * @param exped 远征队
-     * @return 是否成功启动
-     */
+    /** 启动远征队实例（指定大厅） */
     public boolean startInstance(int lobbyId, Expedition exped) {
         return startInstance(lobbyId, exped, exped.getLeader());
     }
 
     /**
-     * 启动远征队实例（指定大厅和队长）
-     * @param lobbyId 大厅ID
-     * @param exped 远征队
-     * @param leader 队长
-     * @return 是否成功启动
+     * 启动远征队实例（指定大厅与队长）。
      */
     public boolean startInstance(int lobbyId, Expedition exped, Character leader) {
         if (this.isDisposed()) {
@@ -600,32 +602,18 @@ public class EventManager {
         return false;
     }
 
-    /**
-     * 启动玩家实例
-     * @param chr 玩家
-     * @return 是否成功启动
-     */
+    /** 启动单人实例 */
     public boolean startInstance(Character chr) {
         return startInstance(-1, chr);
     }
 
-    /**
-     * 启动玩家实例（指定大厅）
-     * @param lobbyId 大厅ID
-     * @param leader 队长
-     * @return 是否成功启动
-     */
+    /** 启动单人实例（指定大厅） */
     public boolean startInstance(int lobbyId, Character leader) {
         return startInstance(lobbyId, leader, leader, 1);
     }
 
     /**
-     * 启动玩家实例（指定大厅、玩家、队长和难度）
-     * @param lobbyId 大厅ID
-     * @param chr 玩家
-     * @param leader 队长
-     * @param difficulty 难度
-     * @return 是否成功启动
+     * 启动单人实例（指定大厅、玩家、队长和难度）。
      */
     public boolean startInstance(int lobbyId, Character chr, Character leader, int difficulty) {
         if (this.isDisposed()) {
@@ -690,34 +678,18 @@ public class EventManager {
         return false;
     }
 
-    /**
-     * 启动队伍实例（PQ）
-     * @param party 队伍
-     * @param map 地图
-     * @return 是否成功启动
-     */
+    /** 启动队伍 PQ 实例 */
     public boolean startInstance(Party party, MapleMap map) {
         return startInstance(-1, party, map);
     }
 
-    /**
-     * 启动队伍实例（PQ，指定大厅）
-     * @param lobbyId 大厅ID
-     * @param party 队伍
-     * @param map 地图
-     * @return 是否成功启动
-     */
+    /** 启动队伍 PQ 实例（指定大厅） */
     public boolean startInstance(int lobbyId, Party party, MapleMap map) {
         return startInstance(lobbyId, party, map, party.getLeader().getPlayer());
     }
 
     /**
-     * 启动队伍实例（PQ，指定大厅和队长）
-     * @param lobbyId 大厅ID
-     * @param party 队伍
-     * @param map 地图
-     * @param leader 队长
-     * @return 是否成功启动
+     * 启动队伍 PQ 实例（指定大厅与队长）。
      */
     public boolean startInstance(int lobbyId, Party party, MapleMap map, Character leader) {
         if (this.isDisposed()) {
@@ -782,37 +754,18 @@ public class EventManager {
         return false;
     }
 
-    /**
-     * 启动队伍实例（PQ，带难度）
-     * @param party 队伍
-     * @param map 地图
-     * @param difficulty 难度
-     * @return 是否成功启动
-     */
+    /** 启动队伍 PQ 实例（带难度） */
     public boolean startInstance(Party party, MapleMap map, int difficulty) {
         return startInstance(-1, party, map, difficulty);
     }
 
-    /**
-     * 启动队伍实例（PQ，指定大厅和难度）
-     * @param lobbyId 大厅ID
-     * @param party 队伍
-     * @param map 地图
-     * @param difficulty 难度
-     * @return 是否成功启动
-     */
+    /** 启动队伍 PQ 实例（指定大厅和难度） */
     public boolean startInstance(int lobbyId, Party party, MapleMap map, int difficulty) {
         return startInstance(lobbyId, party, map, difficulty, party.getLeader().getPlayer());
     }
 
     /**
-     * 启动队伍实例（PQ，指定大厅、难度和队长）
-     * @param lobbyId 大厅ID
-     * @param party 队伍
-     * @param map 地图
-     * @param difficulty 难度
-     * @param leader 队长
-     * @return 是否成功启动
+     * 启动队伍 PQ 实例（指定大厅、难度和队长）。
      */
     public boolean startInstance(int lobbyId, Party party, MapleMap map, int difficulty, Character leader) {
         if (this.isDisposed()) {
@@ -877,44 +830,23 @@ public class EventManager {
         return false;
     }
 
-    /**
-     * 启动非PQ事件实例
-     * @param eim 事件实例管理器
-     * @param ldr 队长名称
-     * @return 是否成功启动
-     */
+    /** 启动非 PQ 事件实例 */
     public boolean startInstance(EventInstanceManager eim, String ldr) {
         return startInstance(-1, eim, ldr);
     }
 
-    /**
-     * 启动非PQ事件实例（指定队长）
-     * @param eim 事件实例管理器
-     * @param ldr 队长
-     * @return 是否成功启动
-     */
+    /** 启动非 PQ 事件实例（指定队长对象） */
     public boolean startInstance(EventInstanceManager eim, Character ldr) {
         return startInstance(-1, eim, ldr.getName(), ldr);
     }
 
-    /**
-     * 启动非PQ事件实例（指定大厅）
-     * @param lobbyId 大厅ID
-     * @param eim 事件实例管理器
-     * @param ldr 队长名称
-     * @return 是否成功启动
-     */
+    /** 启动非 PQ 事件实例（指定大厅） */
     public boolean startInstance(int lobbyId, EventInstanceManager eim, String ldr) {
         return startInstance(-1, eim, ldr, eim.getEm().getChannelServer().getPlayerStorage().getCharacterByName(ldr));
     }
 
     /**
-     * 启动非PQ事件实例（指定大厅和队长）
-     * @param lobbyId 大厅ID
-     * @param eim 事件实例管理器
-     * @param ldr 队长名称
-     * @param leader 队长
-     * @return 是否成功启动
+     * 启动非 PQ 事件实例（指定大厅与队长）。
      */
     public boolean startInstance(int lobbyId, EventInstanceManager eim, String ldr, Character leader) {
         if (this.isDisposed()) {
@@ -971,9 +903,10 @@ public class EventManager {
     }
 
     /**
-     * 获取符合条件的队伍成员
+     * 获取队伍中符合事件条件的成员列表（通过调用 JS 脚本的 {@code getEligibleParty}）。
+     *
      * @param party 队伍
-     * @return 符合条件的成员列表
+     * @return 符合条件的队伍成员列表
      */
     public List<PartyCharacter> getEligibleParty(Party party) {
         if (party == null) {
@@ -994,10 +927,7 @@ public class EventManager {
         return new ArrayList<>();
     }
 
-    /**
-     * 清除PQ
-     * @param eim 事件实例管理器
-     */
+    /** 清除 PQ 事件 */
     public void clearPQ(EventInstanceManager eim) {
         try {
             iv.invokeFunction("clearPQ", eim);
@@ -1006,11 +936,7 @@ public class EventManager {
         }
     }
 
-    /**
-     * 清除PQ并传送到指定地图
-     * @param eim 事件实例管理器
-     * @param toMap 目标地图
-     */
+    /** 清除 PQ 事件并传送到指定地图 */
     public void clearPQ(EventInstanceManager eim, MapleMap toMap) {
         try {
             iv.invokeFunction("clearPQ", eim, toMap);
@@ -1019,11 +945,15 @@ public class EventManager {
         }
     }
 
+    /**
+     * 获取事件超时时间（毫秒），默认 2 小时。
+     * 由 JS 脚本的 {@code getEventTimeout()} 定义，超时后大厅锁自动失效。
+     *
+     * @return 超时毫秒数
+     */
     public long getEventTimeout() {
-        // 默认2h
         long timeout = 7200000L;
         try {
-            // 可以在事件脚本定义事件超时时间，如果超过超时时间锁仍未失效，则锁失效
             timeout = (long) iv.invokeFunction("getEventTimeout");
         } catch (ScriptException | NoSuchMethodException ignored) {
 
@@ -1031,10 +961,15 @@ public class EventManager {
         return timeout;
     }
 
+    /**
+     * 检查事件地图上是否无人。
+     * 由 JS 脚本的 {@code getEventMaps()} 定义事件地图列表。
+     *
+     * @return true 表示所有事件地图上都没有玩家
+     */
     public boolean isNobodyInPQ() {
         try {
             boolean nobody = true;
-            // 可以在事件脚本定义事件地图，如果地图上没人，则锁失效
             Object o = iv.invokeFunction("getEventMaps");
             if (o instanceof List<?> mapIds) {
                 for (Object mapId : mapIds) {
@@ -1044,7 +979,6 @@ public class EventManager {
                     } else {
                         id = Integer.parseInt(mapId.toString());
                     }
-                    // 无效的mapId
                     if (id <= 0) {
                         continue;
                     }
@@ -1063,18 +997,16 @@ public class EventManager {
     }
 
     /**
-     * 获取怪物对象
-     * @param mid 怪物ID
+     * 根据怪物ID创建 Monster 对象。
+     *
+     * @param mid 怪物ID（WZ 中的 mob ID）
      * @return 怪物对象
      */
     public Monster getMonster(int mid) {
         return (LifeFactory.getMonster(mid));
     }
 
-    /**
-     * 通知公会准备就绪
-     * @param guildId 公会ID
-     */
+    /** 通知已排队的公会准备就绪 */
     private void exportReadyGuild(Integer guildId) {
         Guild mg = server.getGuild(guildId);
         String callout = "[公会任务] 您的公会已成功报名参加频道 " + this.getChannelServer().getId() + " 的" +
@@ -1084,11 +1016,7 @@ public class EventManager {
         mg.dropMessage(6, callout);
     }
 
-    /**
-     * 通知公会队列位置
-     * @param guildId 公会ID
-     * @param place 队列位置
-     */
+    /** 通知公会在队列中的新位置 */
     private void exportMovedQueueToGuild(Integer guildId, int place) {
         Guild mg = server.getGuild(guildId);
         String callout = "[公会任务] 您的公会已成功报名参加频道 " + this.getChannelServer().getId() + " 的" +
@@ -1098,8 +1026,9 @@ public class EventManager {
     }
 
     /**
-     * 获取下一个排队的公会
-     * @return 公会ID和会长ID列表
+     * 从队列中取出下一个排队的公会。
+     *
+     * @return 包含 [公会ID, 会长ID] 的列表，队列为空时返回 null
      */
     private List<Integer> getNextGuildQueue() {
         synchronized (queuedGuilds) {
@@ -1124,20 +1053,14 @@ public class EventManager {
         }
     }
 
-    /**
-     * 检查队列是否已满
-     * @return 是否已满
-     */
+    /** @return true 表示公会排队队列已满 */
     public boolean isQueueFull() {
         synchronized (queuedGuilds) {
             return queuedGuilds.size() >= GameConfig.getServerInt("event_max_guild_queue");
         }
     }
 
-    /**
-     * 获取队列大小
-     * @return 队列大小
-     */
+    /** @return 当前排队公会数量 */
     public int getQueueSize() {
         synchronized (queuedGuilds) {
             return queuedGuilds.size();
@@ -1145,10 +1068,11 @@ public class EventManager {
     }
 
     /**
-     * 添加公会到队列
-     * @param guildId 公会ID
+     * 将公会加入排队队列。
+     *
+     * @param guildId  公会ID
      * @param leaderId 会长ID
-     * @return 添加结果（-1=已在队列，0=队列已满，1=成功加入，2=成功并立即开始）
+     * @return -1=已在队列中，0=队列已满，1=成功加入队列，2=成功加入并立即开始
      */
     public byte addGuildToQueue(Integer guildId, Integer leaderId) {
         if (wserv.isGuildQueued(guildId)) {
@@ -1187,8 +1111,9 @@ public class EventManager {
     }
 
     /**
-     * 尝试启动公会实例
-     * @return 是否成功启动
+     * 尝试为队列中的下一个公会启动事件实例。
+     *
+     * @return true 表示成功启动
      */
     public boolean attemptStartGuildInstance() {
         Character chr = null;
@@ -1210,12 +1135,7 @@ public class EventManager {
         }
     }
 
-    /**
-     * 强制开始任务
-     * @param chr 玩家
-     * @param id 任务ID
-     * @param npcid NPC ID
-     */
+    /** 强制开始一个任务 */
     public void startQuest(Character chr, int id, int npcid) {
         try {
             Quest.getInstance(id).forceStart(chr, npcid);
@@ -1224,12 +1144,7 @@ public class EventManager {
         }
     }
 
-    /**
-     * 强制完成任务
-     * @param chr 玩家
-     * @param id 任务ID
-     * @param npcid NPC ID
-     */
+    /** 强制完成一个任务 */
     public void completeQuest(Character chr, int id, int npcid) {
         try {
             Quest.getInstance(id).forceComplete(chr, npcid);
@@ -1239,8 +1154,9 @@ public class EventManager {
     }
 
     /**
-     * 修正运输时间
-     * @param travelTime 旅行时间
+     * 获取修正后的运输时间。
+     *
+     * @param travelTime 原始旅行时间
      * @return 修正后的运输时间
      */
     public int getTransportationTime(int travelTime) {
@@ -1248,23 +1164,24 @@ public class EventManager {
     }
 
     /**
-     * 修正Boss刷新时间
-     * @param BossTime 刷新时间
-     * @return 修正后的Boss刷新时间
+     * 获取修正后的 Boss 刷新时间。
+     *
+     * @param BossTime 原始 Boss 刷新时间
+     * @return 应用倍率后的刷新时间
      */
     public int getBossTime(int BossTime) {
         return (int) (BossTime * GameConfig.getServerFloat("boss_respawn_mob_time_rate"));
     }
-    /**
-     * 填充EIM队列
-     */
+
+    /** 触发异步填充预创建实例队列 */
     private void fillEimQueue() {
-        ThreadManager.getInstance().newTask(new EventManagerTask());  // 调用新线程填充准备就绪的实例队列
+        ThreadManager.getInstance().newTask(new EventManagerTask());
     }
 
     /**
-     * 获取准备就绪的实例
-     * @return 事件实例管理器
+     * 从就绪队列中取出一个预创建的 EventInstanceManager。
+     *
+     * @return 就绪的实例，队列为空时返回 null
      */
     private EventInstanceManager getReadyInstance() {
         queueLock.lock();
@@ -1283,9 +1200,7 @@ public class EventManager {
         }
     }
 
-    /**
-     * 实例化队列中的实例
-     */
+    /** 实例化一个 EventInstanceManager 并放入就绪队列（持续填充直到阈值） */
     private void instantiateQueuedInstance() {
         int nextEventId;
         queueLock.lock();
@@ -1304,7 +1219,7 @@ public class EventManager {
         EventInstanceManager eim = new EventInstanceManager(this, "sampleName" + nextEventId);
         queueLock.lock();
         try {
-            if (this.isDisposed()) {  // 事件管理器已释放
+            if (this.isDisposed()) {
                 return;
             }
 
@@ -1314,11 +1229,11 @@ public class EventManager {
             queueLock.unlock();
         }
 
-        instantiateQueuedInstance();    // 持续填充队列直到达到阈值
+        instantiateQueuedInstance();
     }
 
     /**
-     * 事件管理器任务类
+     * 异步填充就绪实例队列的任务 Runnable。
      */
     private class EventManagerTask implements Runnable {
         @Override

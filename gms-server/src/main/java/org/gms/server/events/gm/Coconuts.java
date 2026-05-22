@@ -22,7 +22,11 @@
 package org.gms.server.events.gm;
 
 /**
- * @author kevintjuh93
+ * 【类型】Coconuts（class），包 `org.gms.server.events.gm`。
+ *
+ * 椰子果实，代表椰子 harvest 活动中单个可击打的椰子，追踪其被击打次数、可击打状态和击打时间。
+ *
+ * @author 萧曵
  */
 public class Coconuts {
     private final int id;

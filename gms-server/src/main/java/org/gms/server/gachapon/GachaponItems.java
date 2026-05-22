@@ -23,9 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.server.gachapon;
 
 /**
- * @author Alan (SharpAceX)
+ * 【类型】GachaponItems（abstract class），包 `org.gms.server.gachapon`。
+ *
+ * 扭蛋道具池抽象基类，定义扭蛋机各城镇专属道具池的三级稀有度物品列表契约，子类实现 getCommonItems/getUncommonItems/getRareItems。
+ *
+ * @author 萧曵
  */
-
 public abstract class GachaponItems {
 
     public abstract int[] getCommonItems();

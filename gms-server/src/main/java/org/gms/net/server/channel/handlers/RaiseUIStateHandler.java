@@ -10,7 +10,8 @@ import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.server.quest.Quest;
 
 /**
- * @author Xari
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#OPEN_ITEMUI} 封包。
+ * 负责处理客户端打开任务物品界面的操作。
  */
 public class RaiseUIStateHandler extends AbstractPacketHandler {
 

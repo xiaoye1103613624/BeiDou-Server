@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】NightCommand：聊天或控制台命令实现。
+ * 【GM指令】NightCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：触发当前地图的夜晚特效。
+ *
+ * @author Arthur L
  */
 public class NightCommand extends Command {
     {

@@ -39,19 +39,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 频道服务器入站封包处理器「AbstractMovementPacketHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新
- * {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与
- * {@link org.gms.net.server.channel.Channel} 上的服务协同。
- * 
- * 移动相关入站封包的解析基类：按客户端协议从 {@link org.gms.net.packet.InPacket} 顺序读取移动指令，
- * 构造 {@link org.gms.server.movement.LifeMovementFragment} 列表，或仅把坐标/姿态写回
- * {@link org.gms.server.maps.AnimatedMapObject}。
+ * 【Handler】抽象基类，为子类提供移动封包解析（{@link #parseMovement}）与位置更新（{@link #updatePosition}）的通用逻辑。
  * <p>
- * 子类用于玩家、宠物、召唤兽等具体实体的移动封包；本类统一维护各 {@code command} 字节分支及字段读写顺序，
- * 与 {@link org.gms.net.AbstractPacketHandler} 的频道处理链衔接。
+ * 子类分别处理：
+ * {@link org.gms.net.opcodes.RecvOpcode#MOVE_PLAYER}（玩家移动）、
+ * {@link org.gms.net.opcodes.RecvOpcode#MOVE_PET}（宠物移动）、
+ * {@link org.gms.net.opcodes.RecvOpcode#MOVE_SUMMON}（召唤兽移动）、
+ * {@link org.gms.net.opcodes.RecvOpcode#MOVE_DRAGON}（龙移动）、
+ * {@link org.gms.net.opcodes.RecvOpcode#MOVE_LIFE}（生命体移动）封包。
+ * </p>
  */
 public abstract class AbstractMovementPacketHandler extends AbstractPacketHandler {
     /** 记录未识别的移动 command 等异常路径。 */

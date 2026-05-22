@@ -37,9 +37,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * @author Ronan
- * <p>
- * Header layout thanks to Eric
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#NEW_YEAR_CARD_REQUEST} 封包。
+ * 负责处理客户端新年贺卡发送与接收操作。
  */
 public final class NewYearCardHandler extends AbstractPacketHandler {
 

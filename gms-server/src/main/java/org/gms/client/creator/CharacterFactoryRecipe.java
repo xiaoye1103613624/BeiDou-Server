@@ -33,6 +33,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 【类型】CharacterFactoryRecipe（class），包 {@code org.gms.client.creator}。
+ *
+ * 角色创建配方/配置类，封装新建角色所需的全部参数：职业、等级、出生地图、初始四维属性、
+ * 最大 HP/MP、AP/SP、初始装备（上衣/下装/鞋子/武器）、初始技能与背包物品列表。
+ *
  * @author RonanLana
  */
 public class CharacterFactoryRecipe {

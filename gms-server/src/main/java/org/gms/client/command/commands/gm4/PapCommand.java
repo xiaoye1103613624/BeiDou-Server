@@ -31,7 +31,11 @@ import org.gms.server.life.LifeFactory;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】PapCommand：聊天或控制台命令实现。
+ * 【GM指令】PapCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前位置召唤闹钟（帕普拉图斯）。
+ *
+ * @author Arthur L
  */
 public class PapCommand extends Command {
     {

@@ -34,7 +34,11 @@ import org.gms.util.I18nUtil;
 import java.awt.*;
 
 /**
- * 【GM/玩家指令】SeedCommand：聊天或控制台命令实现。
+ * 【GM指令】SeedCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：在月兔活动地图（赫尼斯PQ）生成种子道具。
+ *
+ * @author Arthur L
  */
 public class SeedCommand extends Command {
     {

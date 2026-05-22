@@ -40,11 +40,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Lerk
- * @author Ronan
- */
-/**
- * 反应器对象类，继承自AbstractMapObject
+ * 【类】Reactor（class），包 {@code org.gms.server.maps}。
+ * 反应器系统，管理地图中可交互对象的生命周期，包括击中、状态转换、物品掉落、重生等逻辑。
  */
 public class Reactor extends AbstractMapObject {
     private final int rid;  // 反应器ID

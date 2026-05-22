@@ -32,9 +32,9 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
 /**
- * @author Xotic (XoticStory) & BubblesDev
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MOB_DAMAGE_MOB_FRIENDLY} 封包。
+ * 负责处理客户端怪物对友好怪物造成伤害的操作。
  */
-
 public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

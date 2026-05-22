@@ -53,6 +53,11 @@ function action(mode, type, selection) {
         text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l" + changeLine;
         text += "#L3#传送自由#l \t #L4#爆率一览#l \t #L69#卡片收集#l" + changeLine;
         text += "#L71#玩具收集#l \t #L72#城镇任务#l" + changeLine;
+        text += "#L75#道具搜索#l \t #L76#角色信息#l \t #L77#Boss入口#l" + changeLine;
+        text += "#L78#成就中心#l \t #L79#任务板#l \t #L80#拍卖行#l" + changeLine;
+        text += "#L81#金币商城#l \t #L82#装备回收#l \t #L83#制作合成#l" + changeLine;
+        text += "#L84#活动管理#l \t #L85#钓鱼#l \t #L86#商店查找#l" + changeLine;
+        text += "#L87#抽奖查看#l \t #L88#结婚信息#l" + changeLine;
 
         if (cm.getPlayer().isGM()) {
             text += changeTwoLine;
@@ -60,7 +65,9 @@ function action(mode, type, selection) {
             text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l" + changeTwoLine;
             text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l" + changeTwoLine;
 			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l" + changeTwoLine;
-			text += "#L73#快速转职#l \t #L74#一键满技能#l";
+			text += "#L73#快速转职#l \t #L74#一键满技能#l" + changeTwoLine;
+			text += "#L89#地图监控#l \t #L90#服务器设置#l \t #L91#合服工具#l" + changeTwoLine;
+			text += "#L92#GM日志查看#l";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -130,6 +137,62 @@ function doSelect(selection) {
             break;
         case 74:
             openNpc("一键满技能");
+            break;
+        // 非GM功能 - 新增
+        case 75:
+            openNpc("道具搜索");
+            break;
+        case 76:
+            openNpc("角色信息卡");
+            break;
+        case 77:
+            openNpc("Boss入口");
+            break;
+        case 78:
+            openNpc("成就中心");
+            break;
+        case 79:
+            openNpc("任务板");
+            break;
+        case 80:
+            openNpc("拍卖行");
+            break;
+        case 81:
+            openNpc("金币商城");
+            break;
+        case 82:
+            openNpc("装备回收");
+            break;
+        case 83:
+            openNpc("制作合成");
+            break;
+        case 84:
+            openNpc("活动管理器");
+            break;
+        case 85:
+            openNpc("钓鱼");
+            break;
+        case 86:
+            openNpc("商店查找器");
+            break;
+        case 87:
+            openNpc("抽奖查看器");
+            break;
+        case 88:
+            openNpc("结婚扩展");
+            break;
+        // GM功能 - 新增
+        case 89:
+            openNpc("地图监控");
+            break;
+        case 90:
+            openNpc("服务器设置");
+            break;
+        case 91:
+            openNpc("合服工具");
+            break;
+        case 92:
+            openNpc("GM日志查看");
             break;
         default:
             cm.sendOk("该功能暂不支持，敬请期待！");

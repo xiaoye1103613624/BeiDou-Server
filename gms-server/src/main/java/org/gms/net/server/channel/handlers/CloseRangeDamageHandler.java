@@ -49,10 +49,8 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 频道服务器入站封包处理器「CloseRangeDamageHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CLOSE_RANGE_ATTACK} 封包。
+ * 负责处理客户端的近战攻击操作。
  */
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
 
@@ -66,7 +64,9 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         }
         chr.getAutobanManager().spam(8);*/
 
+        // 解析近战攻击数据
         AttackInfo attack = parseDamage(p, chr, false, false);
+        // 变形状态检测：变形期间不可攻击
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
             if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
                 // How are they attacking when the client won't let them?
@@ -75,6 +75,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             }
         }
 
+        // 修炼场能量不足时拦截特殊技能
         if (chr.getDojoEnergy() < 10000 && (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009)) // PE hacking or maybe just lagging
         {
             return;
@@ -84,6 +85,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
+        // 广播近战攻击动画
         chr.getMap().broadcastMessage(chr, PacketCreator.closeRangeAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, attack.speed, attack.direction, attack.display), false, true);
         int numFinisherOrbs = 0;
         Integer comboBuff = chr.getBuffedValue(BuffStat.COMBO);
@@ -143,6 +145,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 }
             }
         }
+        // 龙骑士献祭技能反伤处理
         if (attack.numAttacked > 0 && attack.skill == DragonKnight.SACRIFICE) {
             int totDamageToOneMonster = 0; // sacrifice attacks only 1 mob with 1 attack
             final Iterator<List<Integer>> dmgIt = attack.allDamage.values().iterator();
@@ -152,6 +155,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
 
             chr.safeAddHP(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100);
         }
+        // 烈焰之刃充能消耗检测
         if (attack.numAttacked > 0 && attack.skill == 1211002) {
             boolean advcharge_prob = false;
             int advcharge_level = chr.getSkillLevel(SkillFactory.getSkill(1220010));
@@ -169,6 +173,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         if (numFinisherOrbs == 0 && GameConstants.isFinisherSkill(attack.skill)) {
             return;
         }
+        // 修炼场特殊技能（竹子）
         if (attack.skill % 10000000 == 1009) { // bamboo
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
@@ -178,6 +183,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         } else if (attack.skill > 0) {
+            // 技能冷却处理
             Skill skill = SkillFactory.getSkill(attack.skill);
             StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
             if (effect_.getCooldown() > 0) {
@@ -189,6 +195,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 }
             }
         }
+        // 隐身/风之漫步攻击后解除隐身状态
         if ((chr.getSkillLevel(SkillFactory.getSkill(NightWalker.VANISH)) > 0 || chr.getSkillLevel(SkillFactory.getSkill(Rogue.DARK_SIGHT)) > 0) && chr.getBuffedValue(BuffStat.DARKSIGHT) != null) {// && chr.getBuffSource(BuffStat.DARKSIGHT) != 9101004
             chr.cancelEffectFromBuffStat(BuffStat.DARKSIGHT);
             chr.cancelBuffStats(BuffStat.DARKSIGHT);
@@ -197,6 +204,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             chr.cancelBuffStats(BuffStat.WIND_WALK);
         }
 
+        // 施加攻击伤害到目标怪物
         applyAttack(attack, chr, attackCount);
     }
 }

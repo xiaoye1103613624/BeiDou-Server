@@ -30,7 +30,8 @@ import org.gms.server.maps.HiredMerchant;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93 - :3
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#REMOTE_STORE} 封包。
+ * 负责处理客户端远程访问雇佣商人的操作。
  */
 public class RemoteStoreHandler extends AbstractPacketHandler {
     @Override

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Paladin（class），包 `org.gms.constants.skills`。
+ *
+ * 定义圣骑士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Paladin {
     public static final int MAPLE_WARRIOR = 1221000;

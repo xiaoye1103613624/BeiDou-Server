@@ -29,7 +29,11 @@ import org.gms.constants.id.NpcId;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】StaffCommand：聊天或控制台命令实现。
+ * 【GM0指令】StaffCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看服务器制作人员/鸣谢名单。
+ *
+ * @author Arthur L
  */
 public class StaffCommand extends Command {
     {

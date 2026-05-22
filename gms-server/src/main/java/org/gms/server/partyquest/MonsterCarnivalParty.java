@@ -8,7 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Rob
+ * 【类型】MonsterCarnivalParty（class），包 `org.gms.server.partyquest`。
+ *
+ * 怪物嘉年华队伍信息，管理单支队伍的成员列表、召唤次数限制、胜负状态和队伍传送逻辑。
+ *
+ * @author 萧曵
  */
 public class MonsterCarnivalParty {
 

@@ -30,7 +30,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】StatLukCommand：聊天或控制台命令实现。
+ * 【GM0指令】StatLukCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：一键将剩余能力点分配至运气（LUK）。
+ *
+ * @author Arthur L
  */
 public class StatLukCommand extends Command {
     {

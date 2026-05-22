@@ -35,7 +35,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 /**
- * 【GM/玩家指令】ExpedsCommand：聊天或控制台命令实现。
+ * 【GM指令】ExpedsCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：列出所有频道的远征队信息（类型、成员、队长、状态等）。
+ *
+ * @author Arthur L
  */
 public class ExpedsCommand extends Command {
     {

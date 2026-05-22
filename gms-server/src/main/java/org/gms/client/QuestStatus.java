@@ -31,9 +31,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】QuestStatus（class），包 {@code org.gms.client}。任务状态追踪器，管理玩家单个任务的进度、完成情况和过期时间。
+ *
  * @author Matze
  */
 public class QuestStatus {
+    /** 任务状态枚举：未定义/未开始/进行中/已完成 */
     public enum Status {
         UNDEFINED(-1),
         NOT_STARTED(0),
@@ -59,14 +62,22 @@ public class QuestStatus {
         }
     }
 
+    /** 关联的任务ID */
     private final short questID;
+    /** 当前任务状态 */
     private Status status;
     //private boolean updated;   //maybe this can be of use for someone?
+    /** 杀怪进度记录（怪物ID→击杀数） */
     private final Map<Integer, String> progress = new LinkedHashMap<>();
+    /** 勋章任务已访问地图列表 */
     private final List<Integer> medalProgress = new LinkedList<>();
+    /** 关联的NPC ID */
     private int npc;
+    /** 完成时间 / 过期时间 */
     private long completionTime, expirationTime;
+    /** 放弃次数 / 完成次数 */
     private int forfeited = 0, completed = 0;
+    /** 自定义扩展数据 */
     private String customData;
 
     public QuestStatus(Quest quest, Status status) {
@@ -107,16 +118,16 @@ public class QuestStatus {
     public final void setStatus(Status status) {
         this.status = status;
     }
-    
+
     /*
     public boolean wasUpdated() {
         return updated;
     }
-    
+
     private void setUpdated() {
         this.updated = true;
     }
-    
+
     public void resetUpdated() {
         this.updated = false;
     }

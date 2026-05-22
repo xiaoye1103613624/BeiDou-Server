@@ -29,7 +29,11 @@ import org.gms.constants.net.ServerConstants;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】SetCommand：聊天或控制台命令实现。
+ * 【GM指令】SetCommand（class），包 `org.gms.client.command.commands.gm5`。
+ *
+ * GM指令：设置服务器调试常量值（ServerConstants.DEBUG_VALUES）。
+ *
+ * @author Arthur L
  */
 public class SetCommand extends Command {
     {

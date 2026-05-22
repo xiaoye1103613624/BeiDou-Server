@@ -31,7 +31,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.npc.NPCScriptManager;
 
 /**
- * @author Generic
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_REMOTE} 封包。
+ * 负责处理客户端使用远程扭蛋机（Remote Gachapon）的操作。
  */
 public final class RemoteGachaponHandler extends AbstractPacketHandler {
     @Override

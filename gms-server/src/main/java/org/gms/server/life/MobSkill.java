@@ -45,24 +45,43 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】MobSkill（class），包 {@code org.gms.server.life}。
+ * 怪物技能类，封装怪物的技能数据（技能类型、等级、伤害、持续时间、冷却时间等），
+ * 并提供技能效果执行逻辑，包括增益/减益、召唤怪物、区域毒雾、反伤等。
+ * 使用 {@link Builder} 构造器模式构建实例。
+ *
  * @author Danny (Leifde)
  */
 public class MobSkill {
     private static final Logger log = LoggerFactory.getLogger(MobSkill.class);
 
+    /** 技能标识（类型 + 等级） */
     private final MobSkillId id;
+    /** MP消耗 */
     private final int mpCon;
+    /** 召唤怪物时的特效ID */
     private final int spawnEffect;
+    /** HP相关参数 */
     private final int hp;
+    /** 技能参数X（伤害百分比等） */
     private final int x;
+    /** 技能参数Y */
     private final int y;
+    /** 技能作用次数 */
     private final int count;
+    /** 技能持续时间（毫秒） */
     private final long duration;
+    /** 技能冷却时间（毫秒） */
     private final long cooltime;
+    /** 技能发动概率（0.0~1.0） */
     private final float prop;
+    /** 技能范围左上角坐标（相对偏移） */
     private final Point lt;
+    /** 技能范围右下角坐标（相对偏移） */
     private final Point rb;
+    /** 召唤数量上限 */
     private final int limit;
+    /** 待召唤的怪物ID列表 */
     private final List<Integer> toSummon;
 
     private MobSkill(MobSkillType type, int level, int mpCon, int spawnEffect, int hp, int x, int y, int count,

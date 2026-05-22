@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 
 
 /**
- * 【GM/玩家指令】ReloadShopsCommand：聊天或控制台命令实现。
+ * 【GM指令】ReloadShopsCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：重新加载商店数据。
+ *
+ * @author Arthur L
  */
 public class ReloadShopsCommand extends Command {
     {

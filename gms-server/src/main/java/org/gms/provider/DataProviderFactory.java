@@ -27,7 +27,8 @@ import org.gms.provider.wz.XMLWZFile;
 import java.nio.file.Path;
 
 /**
- * 【工厂/提供者】DataProviderFactory：创建或提供 `provider` 相关运行时对象。
+ * 【类型】DataProviderFactory（class），包 {@code org.gms.provider}。WZ 数据提供器工厂：根据 WZFiles 枚举创建对应的 XMLWZFile
+ * 实例作为 DataProvider，供各 Provider 层读取 WZ XML 中的怪物、物品、地图、技能等静态游戏数据。
  */
 public class DataProviderFactory {
     private static DataProvider getWZ(Path in) {

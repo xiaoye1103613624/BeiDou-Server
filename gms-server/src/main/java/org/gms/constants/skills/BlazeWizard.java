@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】BlazeWizard（class），包 `org.gms.constants.skills`。
+ *
+ * 定义炎术士（皇家骑士团魔法师）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class BlazeWizard {
     // 1st job

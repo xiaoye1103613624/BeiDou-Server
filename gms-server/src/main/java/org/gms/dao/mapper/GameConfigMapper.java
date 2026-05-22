@@ -4,10 +4,11 @@ import com.mybatisflex.core.BaseMapper;
 import org.gms.dao.entity.GameConfigDO;
 
 /**
- * 游戏参数表 映射层。
+ * 【映射器】GameConfigMapper（interface），包 {@code org.gms.dao.mapper}。
  *
- * @author CN
- * @since 2024-10-18
+ * 对应数据库表 game_config 的数据访问接口，提供游戏配置参数相关查询操作。
+ *
+ * @author 萧曵
  */
 public interface GameConfigMapper extends BaseMapper<GameConfigDO> {
 

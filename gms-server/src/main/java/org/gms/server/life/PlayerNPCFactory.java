@@ -24,6 +24,10 @@ import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
 
 /**
+ * 【类型】PlayerNPCFactory，class，包 {@code org.gms.server.life}。
+ *
+ * 玩家 NPC 工厂类，用于判断指定的 scriptId 在 WZ 数据（Npc.wz）中是否存在对应的图像资源。
+ *
  * @author RonanLana
  */
 public class PlayerNPCFactory {

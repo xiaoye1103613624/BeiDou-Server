@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】ILWizard（class），包 `org.gms.constants.skills`。
+ *
+ * 定义冰雷巫师职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class ILWizard {
     public static final int MP_EATER = 2200000;

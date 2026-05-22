@@ -25,6 +25,10 @@ import org.gms.net.server.services.ServiceType;
 import org.gms.net.server.services.task.world.CharacterSaveService;
 
 /**
+ * 【枚举】WorldServices，包 `org.gms.net.server.services.type`。
+ *
+ * 世界服务枚举，定义所有世界级服务的类型和对应的实现类，如角色保存服务。
+ *
  * @author Ronan
  */
 public enum WorldServices implements ServiceType {

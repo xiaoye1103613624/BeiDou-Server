@@ -32,7 +32,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 /**
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#OWL_ACTION} 封包。
+ * 负责处理客户端使用密涅瓦猫头鹰（Owl of Minerva）搜索物品的操作。
  */
 public final class UseOwlOfMinervaHandler extends AbstractPacketHandler {
 

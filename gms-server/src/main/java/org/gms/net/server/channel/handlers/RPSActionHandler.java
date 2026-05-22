@@ -9,9 +9,8 @@ import org.gms.server.minigame.RockPaperScissor;
 import org.gms.util.PacketCreator;
 
 /**
- * @Author Arnah
- * @Website http://Vertisy.ca/
- * @since Aug 15, 2016
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#RPS_ACTION} 封包。
+ * 负责处理客户端石头剪刀布小游戏的操作。
  */
 public final class RPSActionHandler extends AbstractPacketHandler {
 

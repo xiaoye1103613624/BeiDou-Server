@@ -35,6 +35,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 【类型】AbstractCharacterObject（abstract class），包 {@code org.gms.client}。
+ *
+ * 角色与怪物的公共基类，封装力量/敏捷/智力/运气四维属性、HP/MP 及最大 HP/MP、
+ * AP/SP 分配与属性池变更逻辑，使用读写锁保证线程安全，并通过 {@link AbstractCharacterListener} 回调通知状态变化。
+ *
  * @author RonanLana
  */
 public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject {

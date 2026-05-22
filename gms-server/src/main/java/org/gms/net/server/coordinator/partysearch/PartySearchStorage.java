@@ -32,6 +32,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 【类】PartySearchStorage，包 `org.gms.net.server.coordinator.partysearch`。
+ *
+ * 组队搜索主存储，维护按等级排序的玩家列表，使用二分查找匹配等级范围内的候选玩家，支持空区间缓存优化。
+ *
  * @author Ronan
  */
 public class PartySearchStorage {

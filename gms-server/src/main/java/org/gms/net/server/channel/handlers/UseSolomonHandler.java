@@ -33,9 +33,8 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.PacketCreator;
 
 /**
- * @author XoticStory
- * <p>
- * Modified by -- kevintjuh93, Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_SOLOMON_ITEM} 封包。
+ * 负责处理客户端使用所罗门物品兑换扭蛋经验的操作。
  */
 public final class UseSolomonHandler extends AbstractPacketHandler {
 

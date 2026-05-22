@@ -37,6 +37,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 【类型】AutobanFactory（enum），包 {@code org.gms.client.autoban}。
+ *
+ * 自动封禁违规类型枚举，定义每种违规（怪物数量、伤害异常、距离异常、快速攻击等）的扣分阈值与过期时间，
+ * 提供 GM 广播告警、自动封禁执行及角色忽略名单管理。
+ *
  * @author kevintjuh93
  */
 public enum AutobanFactory {

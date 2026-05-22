@@ -30,7 +30,11 @@ import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ToggleCouponCommand：聊天或控制台命令实现。
+ * 【GM指令】ToggleCouponCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：切换服务器全局优惠券状态。
+ *
+ * @author Arthur L
  */
 public class ToggleCouponCommand extends Command {
     {

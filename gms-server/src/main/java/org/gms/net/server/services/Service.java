@@ -20,6 +20,10 @@
 package org.gms.net.server.services;
 
 /**
+ * 【类】Service，包 `org.gms.net.server.services`。
+ *
+ * 服务包装器，通过反射实例化 BaseService 子类，提供类型安全的服务访问和生命周期管理。
+ *
  * @author Ronan
  */
 public class Service<T extends BaseService> {

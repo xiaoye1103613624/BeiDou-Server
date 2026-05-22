@@ -22,6 +22,10 @@
 package org.gms.net.server.channel;
 
 /**
+ * 【类】CharacterIdChannelPair，包 `org.gms.net.server.channel`。
+ *
+ * 角色-频道配对数据结构，记录角色 ID 与其当前所在频道的对应关系，用于跨服角色定位。
+ *
  * @author Frz
  */
 public class CharacterIdChannelPair {

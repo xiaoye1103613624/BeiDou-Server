@@ -67,10 +67,15 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 频道服务器入站封包处理器「AbstractDealDamageHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】抽象基类，为子类提供攻击伤害解析（{@link #parseDamage}）与伤害施加（{@link #applyAttack}）的通用逻辑。
+ * <p>
+ * 子类按攻击类型分别处理：
+ * {@link org.gms.net.opcodes.RecvOpcode#CLOSE_RANGE_ATTACK}（近战攻击）、
+ * {@link org.gms.net.opcodes.RecvOpcode#RANGED_ATTACK}（远程攻击）、
+ * {@link org.gms.net.opcodes.RecvOpcode#MAGIC_ATTACK}（魔法攻击）、
+ * {@link org.gms.net.opcodes.RecvOpcode#SUMMON_ATTACK}（召唤兽攻击）、
+ * {@link org.gms.net.opcodes.RecvOpcode#TOUCH_MONSTER_ATTACK}（触碰怪物攻击）封包。
+ * </p>
  */
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Buccaneer（class），包 `org.gms.constants.skills`。
+ *
+ * 定义冲锋队长职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Buccaneer {
     public static final int MAPLE_WARRIOR = 5121000;

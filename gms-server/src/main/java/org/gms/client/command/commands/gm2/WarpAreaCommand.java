@@ -33,7 +33,11 @@ import java.awt.*;
 import java.util.Collection;
 
 /**
- * 【GM/玩家指令】WarpAreaCommand：聊天或控制台命令实现。
+ * 【GM指令】WarpAreaCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：将当前地图范围内（距离50000单位以内）的所有玩家传送到目标地图。
+ *
+ * @author MedicOP
  */
 public class WarpAreaCommand extends Command {
     {

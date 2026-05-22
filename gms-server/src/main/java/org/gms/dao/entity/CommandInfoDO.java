@@ -12,7 +12,11 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 【实体对象】CommandInfoDO：与数据库表字段对应的持久化模型。
+ * 【实体】CommandInfoDO（class），包 `org.gms.dao.entity`。
+ *
+ * 对应数据库表 command_info，存储命令信息数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

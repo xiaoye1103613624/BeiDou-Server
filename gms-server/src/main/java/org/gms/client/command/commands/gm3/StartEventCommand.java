@@ -32,7 +32,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】StartEventCommand：聊天或控制台命令实现。
+ * 【GM指令】StartEventCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：启动全服GM活动，广播活动信息。
+ *
+ * @author Arthur L
  */
 public class StartEventCommand extends Command {
     {

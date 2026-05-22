@@ -122,6 +122,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】StatEffect（class），包 `org.gms.server`。
+ *
+ * 属性效果类，描述物品/技能使用后对角色或怪物产生的数值变化。
+ * 包含 BUFF/DEBUFF 的所有属性（攻击、防御、速度、HP/MP 恢复、异常状态等），
+ * 以及技能/物品附带的特殊效果（传送、骑宠、召唤、驱散等）。
+ *
+ * 由 {@link ItemInformationProvider#getItemEffect} 和 {@link SkillFactory} 从 WZ 解析创建，
+ * 通过 {@link #applyTo(Character)} 或 {@link #applyTo(Character, Point)} 作用到目标。
+ *
  * @author Matze
  * @author Frz
  * @author Ronan

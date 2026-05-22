@@ -36,8 +36,11 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 
 /**
- * @author Conrad
- * @author Ronan
+ * 【类型】ExpeditionBossLog（class），包 `org.gms.server.expeditions`。
+ *
+ * 远征队Boss日志，管理玩家每日/每周Boss挑战次数限制，通过数据库记录追踪并控制远征入场次数。
+ *
+ * @author 萧曵
  */
 public class ExpeditionBossLog {
 

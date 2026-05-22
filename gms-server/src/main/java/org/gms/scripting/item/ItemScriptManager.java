@@ -26,16 +26,25 @@ import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.server.ItemInformationProvider.ScriptedItem;
 
 /**
- * 【类型】ItemScriptManager（class），包 `org.gms.scripting.item`。
+ * 【类型】ItemScriptManager（class），包 {@code org.gms.scripting.item}。
+ * 物品脚本管理器，单例模式。收到物品脚本执行请求后，直接委托给 {@link NPCScriptManager} 处理，
+ * 将 {@link ScriptedItem} 作为脚本上下文传入。仅 ID 在 243xxxx 范围的物品会触发此管理器。
  */
 public class ItemScriptManager {
 
+    /** 单例实例 */
     private static final ItemScriptManager instance = new ItemScriptManager();
 
     public static ItemScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     * 运行物品脚本，委托 NPCScriptManager 执行。
+     *
+     * @param c          客户端连接
+     * @param scriptItem 带脚本信息的物品实体
+     */
     public void runItemScript(Client c, ScriptedItem scriptItem) {
         NPCScriptManager.getInstance().start(c, scriptItem, null);
     }

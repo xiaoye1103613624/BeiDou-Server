@@ -34,6 +34,11 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.PacketCreator;
 
 /**
+ * 【类型】CharacterFactory（abstract class），包 {@code org.gms.client.creator}。
+ *
+ * 角色创建工厂基类，提供创建新角色的统一入口（createNewCharacter），
+ * 处理基础外观（发型/脸型/肤色/性别）、初始装备穿戴、属性校验与数据库持久化等共性逻辑。
+ *
  * @author RonanLana
  */
 public abstract class CharacterFactory {

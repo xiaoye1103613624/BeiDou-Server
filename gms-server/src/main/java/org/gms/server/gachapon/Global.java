@@ -3,10 +3,12 @@ package org.gms.server.gachapon;
 import org.gms.constants.id.ItemId;
 
 /**
- * @author Alan (SharpAceX)
- * @author Ronan - added ores and reworked global loots
+ * 【类型】Global（class），包 `org.gms.server.gachapon`。
+ *
+ * 通用扭蛋道具池，提供所有扭蛋机共享的道具列表（药水、矿石、特殊卷轴和椅子），与各城镇专属池合并抽取。
+ *
+ * @author 萧曵
  */
-
 public class Global extends GachaponItems {
 
     @Override

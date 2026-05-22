@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】InMapCommand：聊天或控制台命令实现。
+ * 【GM指令】InMapCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：列出当前地图中的所有玩家。
+ *
+ * @author Arthur L
  */
 public class InMapCommand extends Command {
     {

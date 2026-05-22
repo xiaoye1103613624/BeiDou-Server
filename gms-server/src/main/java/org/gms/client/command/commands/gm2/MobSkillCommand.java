@@ -12,7 +12,11 @@ import java.util.Collections;
 import java.util.Optional;
 
 /**
- * 【GM/玩家指令】MobSkillCommand：聊天或控制台命令实现。
+ * 【GM指令】MobSkillCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：对当前地图所有怪物施放指定ID和等级的怪物技能。
+ *
+ * @author 昨日小睡
  */
 public class MobSkillCommand extends Command {
     {

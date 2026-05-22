@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 【Web 控制器】InventoryController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】InventoryController（class），包 {@code org.gms.controller}。
+ *
+ * 处理玩家背包管理，包括背包分类类型查询、按条件分页查询背包玩家列表、
+ * 查看指定玩家指定分类下的所有物品，以及背包物品的修改与删除。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

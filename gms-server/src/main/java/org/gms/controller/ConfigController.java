@@ -20,7 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * 【Web 控制器】ConfigController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】ConfigController（class），包 {@code org.gms.controller}。
+ *
+ * 处理游戏动态配置参数的管理，包括配置大类和类型查询、参数列表分页查询、
+ * 参数新增/修改/删除、批量删除以及YAML配置文件的导入与导出。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

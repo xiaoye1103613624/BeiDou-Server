@@ -40,6 +40,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类】MonsterAggroCoordinator，包 `org.gms.net.server.coordinator.world`。
+ *
+ * 怪物仇恨协调器，计算和维护怪物对玩家的仇恨值排序，根据累积伤害决定怪物的攻击目标，支持空闲自动停启。
+ *
  * @author Ronan
  */
 public class MonsterAggroCoordinator {

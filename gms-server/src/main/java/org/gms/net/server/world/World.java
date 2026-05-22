@@ -117,6 +117,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.gms.dao.entity.table.PlayernpcsFieldDOTableDef.PLAYERNPCS_FIELD_D_O;
 
 /**
+ * 【类型】World（class），包 {@code org.gms.net.server.world}。游戏世界/大区运行时实体：管理所属频道列表、在线玩家容器、
+ * 公会、家族、婚姻、组队、雇佣商店等业务模块，并通过 TimerManager 注册各类定时任务（宠物饱食度、坐骑疲劳、钓鱼、角色自动存档等）。
+ * 每个 World 代表一个独立的游戏大区（如 Scania、Bera）。
+ *
  * @author kevintjuh93
  * @author Ronan - thread-oriented (world schedules + guild queue + marriages + party chars)
  */

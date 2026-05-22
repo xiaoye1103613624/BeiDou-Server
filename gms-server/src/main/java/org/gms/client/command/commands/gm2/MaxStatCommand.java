@@ -31,7 +31,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】MaxStatCommand：聊天或控制台命令实现。
+ * 【GM指令】MaxStatCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：将角色所有属性拉满（等级255、满HP/MP、满四维属性、满人气）。
+ *
+ * @author Arthur L
  */
 public class MaxStatCommand extends Command {
     {

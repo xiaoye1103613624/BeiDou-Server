@@ -31,7 +31,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】BuffCommand：聊天或控制台命令实现。
+ * 【GM2指令】BuffCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：为自身添加指定技能ID的增益效果（满级）。
+ *
+ * @author Arthur L
  */
 public class BuffCommand extends Command {
     {

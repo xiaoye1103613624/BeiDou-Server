@@ -4,10 +4,11 @@ import com.mybatisflex.core.BaseMapper;
 import org.gms.dao.entity.MtsCartDO;
 
 /**
- *  映射层。
+ * 【映射器】MtsCartMapper（interface），包 {@code org.gms.dao.mapper}。
  *
- * @author sleep
- * @since 2024-05-24
+ * 对应数据库表 mts_cart 的数据访问接口，提供交易系统购物车相关查询操作。
+ *
+ * @author 萧曵
  */
 public interface MtsCartMapper extends BaseMapper<MtsCartDO> {
 

@@ -12,7 +12,12 @@ import org.gms.util.RequireUtil;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 【Web 控制器】DropController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】DropController（class），包 {@code org.gms.controller}。
+ *
+ * 处理怪物掉落及全局掉落的配置管理，包括普通掉落与全局掉落的分页查询、
+ * 掉落数据的新增/修改/删除操作，其中全局掉落独立于怪物归属。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

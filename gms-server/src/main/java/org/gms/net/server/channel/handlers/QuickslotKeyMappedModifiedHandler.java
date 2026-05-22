@@ -6,7 +6,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author Shavit
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CHANGE_QUICKSLOT} 封包。
+ * 负责处理客户端快捷栏按键修改操作。
  */
 public class QuickslotKeyMappedModifiedHandler extends AbstractPacketHandler {
     @Override

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Marksman（class），包 `org.gms.constants.skills`。
+ *
+ * 定义箭神职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Marksman {
     public static final int MAPLE_WARRIOR = 3221000;

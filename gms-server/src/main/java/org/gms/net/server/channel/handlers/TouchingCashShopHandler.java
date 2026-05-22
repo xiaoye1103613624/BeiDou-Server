@@ -27,7 +27,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Terry Han (Acrylic)
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CHECK_CASH} 封包。
+ * 负责处理客户端触碰现金商城（查看现金信息）的操作。
  */
 public final class TouchingCashShopHandler extends AbstractPacketHandler {
     @Override

@@ -28,7 +28,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Drago (Dragohe4rt)
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#WEDDING_ACTION} 封包。
+ * 负责处理客户端婚礼操作（礼物赠送与领取等）。
  */
 public final class WeddingHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(WeddingHandler.class);

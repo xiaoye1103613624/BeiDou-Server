@@ -26,7 +26,7 @@ import org.gms.util.I18nUtil;
 
 
 /**
- * 【枚举】Job：定义 `client` 中的一组常量。
+ * 【枚举】Job（enum），包 {@code org.gms.client}。定义MapleStory全部职业，包含冒险家、骑士团、战神、龙神等所有转职分支。
  */
 public enum Job {
     BEGINNER(0, I18nUtil.getMessage("job.name.0")),
@@ -68,8 +68,10 @@ public enum Job {
     EVAN1(2200,I18nUtil.getMessage("job.name.2200")), EVAN2(2210, I18nUtil.getMessage("job.name.2210")), EVAN3(2211, I18nUtil.getMessage("job.name.2211")), EVAN4(2212, I18nUtil.getMessage("job.name.2212")), EVAN5(2213, I18nUtil.getMessage("job.name.2213")), EVAN6(2214, I18nUtil.getMessage("job.name.2214")),
     EVAN7(2215, I18nUtil.getMessage("job.name.2215")), EVAN8(2216, I18nUtil.getMessage("job.name.2216")), EVAN9(2217, I18nUtil.getMessage("job.name.2217")), EVAN10(2218, I18nUtil.getMessage("job.name.2218"));
 
+    /** 职业编码ID */
     @Getter
     private final int id;
+    /** 职业显示名称（i18n） */
     @Getter
     private final String name;
 
@@ -118,12 +120,12 @@ public enum Job {
 
     public int getJobNiche() {
         return (id / 100) % 10;
-        
+
         /*
         case 0: BEGINNER;
         case 1: WARRIOR;
         case 2: MAGICIAN;
-        case 3: BOWMAN;  
+        case 3: BOWMAN;
         case 4: THIEF;
         case 5: PIRATE;
         */

@@ -40,7 +40,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * @author Ronan
+ * 【类型】AriantColiseum（class），包 `org.gms.server.partyquest`。
+ *
+ * 阿里安特竞技场组队任务，管理竞技得分、排名奖励分配、定时广播和进入王室的传送逻辑。
+ *
+ * @author 萧曵
  */
 public class AriantColiseum {
 

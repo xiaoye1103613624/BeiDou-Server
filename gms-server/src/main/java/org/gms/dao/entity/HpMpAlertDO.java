@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- *  实体类。
+ * 【实体】HpMpAlertDO（class），包 `org.gms.dao.entity`。
  *
- * @author lee
- * @since 2024-09-06
+ * 对应数据库表 hp_mp_alert，存储角色HP/MP告警阈值数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

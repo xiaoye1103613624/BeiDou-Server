@@ -37,8 +37,8 @@ import org.gms.util.PacketCreator;
 import java.util.Objects;
 
 /**
- * @author Moogra
- * @author Ubaware
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_FAMILY} 封包。
+ * 负责处理客户端的使用家族功能操作。
  */
 public final class FamilyUseHandler extends AbstractPacketHandler {
     @Override

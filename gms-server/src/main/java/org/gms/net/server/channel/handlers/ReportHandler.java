@@ -40,10 +40,8 @@ import java.time.Instant;
  * @author BubblesDev
  */
 /**
- * 频道服务器入站封包处理器「ReportHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#REPORT} 封包。
+ * 负责处理客户端的举报操作（举报非法程序或不当聊天）。
  */
 public final class ReportHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {

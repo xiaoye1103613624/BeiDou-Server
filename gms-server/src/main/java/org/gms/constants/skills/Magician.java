@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Magician（class），包 `org.gms.constants.skills`。
+ *
+ * 定义魔法师职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Magician {
     public static final int IMPROVED_MP_RECOVERY = 2000000;

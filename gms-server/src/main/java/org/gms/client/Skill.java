@@ -28,14 +28,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 【类型】Skill（class），包 `org.gms.client`。
+ * 【类型】Skill（class），包 {@code org.gms.client}。技能数据对象，封装技能ID、等级效果和属性信息。
  */
 public class Skill {
+    /** 技能唯一标识 */
     private final int id;
+    /** 各等级技能效果列表 */
     private final List<StatEffect> effects = new ArrayList<>();
+    /** 技能元素属性（火/冰/雷等） */
     private Element element;
+    /** 技能动画持续时间 */
     private int animationTime;
+    /** 所属职业（从ID推算） */
     private final int job;
+    /** 是否拥有动作效果 */
     private boolean action;
 
     public Skill(int id) {

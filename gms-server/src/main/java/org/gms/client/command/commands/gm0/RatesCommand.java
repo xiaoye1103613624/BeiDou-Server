@@ -31,7 +31,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】RatesCommand：聊天或控制台命令实现。
+ * 【GM0指令】RatesCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看当前角色最终生效的经验、金币、掉率等倍率。
+ *
+ * @author Arthur L
  */
 public class RatesCommand extends Command {
     {

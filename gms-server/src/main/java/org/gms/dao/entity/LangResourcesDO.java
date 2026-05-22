@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- * 数据库i18n表 实体类。
+ * 【实体】LangResourcesDO（class），包 `org.gms.dao.entity`。
  *
- * @author CN
- * @since 2024-11-22
+ * 对应数据库表 lang_resources，存储国际化（i18n）语言资源数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

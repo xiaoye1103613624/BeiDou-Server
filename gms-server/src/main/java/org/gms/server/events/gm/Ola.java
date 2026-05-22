@@ -29,7 +29,11 @@ import org.gms.util.PacketCreator;
 import java.util.concurrent.ScheduledFuture;
 
 /**
- * @author kevintjuh93
+ * 【类型】Ola（class），包 `org.gms.server.events.gm`。
+ *
+ * Ola Ola 跳跃活动，控制活动计时、传送门开启和超时自动退出逻辑。
+ *
+ * @author 萧曵
  */
 public class Ola {
     private final Character chr;

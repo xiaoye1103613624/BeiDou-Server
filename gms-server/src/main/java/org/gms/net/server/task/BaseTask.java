@@ -22,6 +22,10 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 【抽象类】BaseTask，包 `org.gms.net.server.task`。
+ *
+ * 频道/世界定时任务抽象基类，关联 World 实例，作为所有周期性后台任务的父类。
+ *
  * @author Ronan
  */
 public abstract class BaseTask implements Runnable {

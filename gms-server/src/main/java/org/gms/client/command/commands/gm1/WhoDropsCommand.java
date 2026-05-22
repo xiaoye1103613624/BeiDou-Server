@@ -39,7 +39,11 @@ import java.sql.ResultSet;
 import java.util.Iterator;
 
 /**
- * 【GM/玩家指令】WhoDropsCommand：聊天或控制台命令实现。
+ * 【GM1指令】WhoDropsCommand（class），包 `org.gms.client.command.commands.gm1`。
+ *
+ * GM指令：根据物品名称查询哪些怪物掉落该物品。
+ *
+ * @author Arthur L
  */
 public class WhoDropsCommand extends Command {
     {

@@ -56,8 +56,8 @@ import java.util.Objects;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
- * 处理现金商店（Cash Shop）相关操作的处理器。
- * 负责处理玩家在购买道具、赠送礼物、修改愿望清单、扩展栏位、物品转移等操作时发送的数据包。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CASHSHOP_OPERATION} 封包。
+ * 负责处理客户端的现金商店（商城）操作。
  */
 public final class CashOperationHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(CashOperationHandler.class);

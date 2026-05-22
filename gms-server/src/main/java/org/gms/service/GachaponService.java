@@ -82,10 +82,20 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 分页查询百宝箱奖池列表。
+     * <p>
+     * 根据查询条件从数据库检索奖池记录，将实体转换为DTO并附加NPC名称。
+     * 当指定了有效的百宝箱ID时，会计算并填充各奖池的真实中奖概率。
+     * </p>
+     *
+     * @param condition 查询条件，包含百宝箱ID、分页页码和每页条数
+     * @return 分页后的奖池DTO列表，包含基本信息和真实中奖概率
+     */
     public Page<GachaponPoolSearchRtnDTO> getPools(GachaponPoolSearchReqDTO condition) {
         rLock.lock();
         try {
-            // 数据查询
+            // 构建查询条件：按是否公开降序排列，指定百宝箱时同时包含公共奖池
             QueryWrapper qw = new QueryWrapper().orderBy(GachaponRewardPoolDO::getIsPublic, false);
             if (condition.getGachaponId() != null) {
                 qw.eq("gachapon_id", condition.getGachaponId()).or("is_public=1");
@@ -95,7 +105,7 @@ public class GachaponService {
                     condition.getPageSize(),
                     qw);
 
-            // 类型转换
+            // 将数据库实体转换为DTO，并附加NPC名称
             List<GachaponPoolSearchRtnDTO> records = new ArrayList<>();
             GachaponPoolSearchRtnDTO data;
             for (GachaponRewardPoolDO record : paginate.getRecords()) {
@@ -114,7 +124,7 @@ public class GachaponService {
                 records.add(data);
             }
 
-            // 设置真实概率
+            // 指定了有效百宝箱ID时，计算各奖池的真实中奖概率
             if (condition.getGachaponId() != null && condition.getGachaponId() != -1) {
                 setRealProb(records);
             }

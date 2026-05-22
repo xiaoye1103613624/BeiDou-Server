@@ -114,6 +114,17 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
+ * 【类型】PacketCreator（class），包 `org.gms.util`。
+ *
+ * 客户端封包构建器 —— 服务器向客户端发送的所有数据包都通过此类的静态方法构建。
+ * 包含游戏内几乎所有通信协议的封包生成逻辑：角色属性同步、地图对象广播、聊天消息、
+ * NPC 对话 UI、物品/装备操作反馈、组队/公会/家族系统、怪物/BOSS 状态、交易/商城等。
+ *
+ * 每个方法返回一个 {@link org.gms.net.packet.Packet} 对象（底层为字节数组），
+ * 通过 {@link org.gms.client.Client#sendPacket} 发送给客户端。
+ *
+ * 封包格式遵循 MapleStory GMS v083 客户端协议，包含 opcode + 数据体的结构。
+ *
  * @author Frz
  */
 public class PacketCreator {

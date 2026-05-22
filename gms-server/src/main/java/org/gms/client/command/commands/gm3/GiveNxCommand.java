@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】GiveNxCommand：聊天或控制台命令实现。
+ * 【GM指令】GiveNxCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：给予指定玩家点券（支持点券nx、抵用券mp、信用点np三种类型）。
+ *
+ * @author Arthur L
  */
 public class GiveNxCommand extends Command {
     {

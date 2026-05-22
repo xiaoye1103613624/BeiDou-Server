@@ -26,7 +26,11 @@ import org.gms.net.packet.OutPacket;
 import java.awt.*;
 
 /**
- * 【接口】LifeMovementFragment：由 `movement` 模块实现的契约。
+ * 【类型】LifeMovementFragment（interface），包 `org.gms.server.movement`。
+ *
+ * 移动片段基接口，定义移动包序列化和位置获取的基础契约，为 ChangeEquip 和 LifeMovement 提供统一抽象。
+ *
+ * @author 萧曵
  */
 public interface LifeMovementFragment {
     void serialize(OutPacket p);

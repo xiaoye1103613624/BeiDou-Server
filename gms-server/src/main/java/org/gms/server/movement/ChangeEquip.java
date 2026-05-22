@@ -27,6 +27,10 @@ import java.awt.*;
 
 /**
  * 【类型】ChangeEquip（class），包 `org.gms.server.movement`。
+ *
+ * 装备切换指令，记录角色在地图上切换装备的 WUI 信息，用于同步装备显示变更。
+ *
+ * @author 萧曵
  */
 public class ChangeEquip implements LifeMovementFragment {
     private final int wui;

@@ -29,7 +29,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】DropLimitCommand：聊天或控制台命令实现。
+ * 【GM0指令】DropLimitCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看当前地图已掉落物品数量及上限。
+ *
+ * @author Arthur L
  */
 public class DropLimitCommand extends Command {
     {

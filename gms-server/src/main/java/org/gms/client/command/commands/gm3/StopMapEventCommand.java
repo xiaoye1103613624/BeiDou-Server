@@ -28,7 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】StopMapEventCommand：聊天或控制台命令实现。
+ * 【GM指令】StopMapEventCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：停止当前地图的事件。
+ *
+ * @author MedicOP
  */
 public class StopMapEventCommand extends Command {
     {

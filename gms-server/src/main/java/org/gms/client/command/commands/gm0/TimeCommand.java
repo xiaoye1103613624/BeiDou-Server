@@ -33,7 +33,11 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * 【GM/玩家指令】TimeCommand：聊天或控制台命令实现。
+ * 【GM0指令】TimeCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看当前服务器时间。
+ *
+ * @author Arthur L
  */
 public class TimeCommand extends Command {
     {

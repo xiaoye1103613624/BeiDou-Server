@@ -31,6 +31,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 【类型】PetDataFactory（class），包 {@code org.gms.client.inventory}。
+ *
+ * 宠物数据工厂，从 WZ 文件（Item.wz/Pet/）加载宠物互动指令（触发概率与亲密度增量）
+ * 及宠物饥饿度数据，采用延迟加载 + 缓存模式。
+ *
  * @author Danny (Leifde)
  */
 public class PetDataFactory {

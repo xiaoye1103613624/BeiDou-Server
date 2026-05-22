@@ -9,7 +9,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】WarpToLifeCommand：聊天或控制台命令实现。
+ * 【GM指令】WarpToLifeCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：传送到指定生命体（NPC或怪物）所在的地图。
+ *
+ * @author Arthur L
  */
 public class WarpToLifeCommand extends Command {
     {

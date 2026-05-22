@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ServerMessageCommand：聊天或控制台命令实现。
+ * 【GM指令】ServerMessageCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：设置服务器公告消息（登录时显示）。
+ *
+ * @author Arthur L
  */
 public class ServerMessageCommand extends Command {
     {

@@ -20,6 +20,10 @@
 package org.gms.net.server.services;
 
 /**
+ * 【接口】ServiceType，包 `org.gms.net.server.services`。
+ *
+ * 服务类型枚举接口，定义创建 Service 实例和枚举值的标准方法。
+ *
  * @author Ronan
  */
 public interface ServiceType<T extends Enum<?>> {

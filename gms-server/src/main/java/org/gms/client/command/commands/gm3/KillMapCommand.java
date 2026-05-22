@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】KillMapCommand：聊天或控制台命令实现。
+ * 【GM指令】KillMapCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：击杀当前地图所有玩家。
+ *
+ * @author Arthur L
  */
 public class KillMapCommand extends Command {
     {

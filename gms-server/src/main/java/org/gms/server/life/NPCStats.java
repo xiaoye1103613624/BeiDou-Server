@@ -22,6 +22,10 @@
 package org.gms.server.life;
 
 /**
+ * 【类型】NPCStats，class，包 {@code org.gms.server.life}。
+ *
+ * NPC 属性数据类，存储 NPC 的基本信息（名称等）。
+ *
  * @author Matze
  */
 public class NPCStats {

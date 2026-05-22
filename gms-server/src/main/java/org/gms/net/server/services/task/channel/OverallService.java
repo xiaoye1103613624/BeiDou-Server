@@ -24,6 +24,10 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 【类】OverallService，包 `org.gms.net.server.services.task.channel`。
+ *
+ * 频道整体调度服务，提供延迟和立即执行两种方式的地图级通用任务调度。
+ *
  * @author Ronan
  */
 public class OverallService extends BaseService {   // thanks Alex for suggesting a refactor over the several channel schedulers unnecessarily populating the Channel class

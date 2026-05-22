@@ -32,7 +32,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】NpcCommand：聊天或控制台命令实现。
+ * 【GM指令】NpcCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：在玩家当前位置召唤指定ID的NPC。
+ *
+ * @author Arthur L
  */
 public class NpcCommand extends Command {
     {

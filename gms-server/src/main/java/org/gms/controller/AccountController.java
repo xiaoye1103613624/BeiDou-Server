@@ -14,7 +14,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 /**
- * 【Web 控制器】AccountController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】AccountController（class），包 {@code org.gms.controller}。
+ *
+ * 处理账号管理相关操作，包括账号注册、当前用户信息获取、账号列表查询、
+ * 资料更新（用户自助/管理员）、账号删除、在线状态重置、封停与解封等功能。
+ *
+ * @author 萧曵
  */
 @RestController
 @RequestMapping("/account")

@@ -22,6 +22,10 @@ package org.gms.net.server.services;
 import java.util.List;
 
 /**
+ * 【接口】SchedulerListener，包 `org.gms.net.server.services`。
+ *
+ * 调度器监听器接口，用于接收调度条目被移除时的回调通知。
+ *
  * @author Ronan
  */
 public interface SchedulerListener {

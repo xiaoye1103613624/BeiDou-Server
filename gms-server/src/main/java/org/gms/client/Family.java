@@ -36,6 +36,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 【类型】Family（class），包 {@code org.gms.client}。
+ *
+ * 冒险岛家族系统核心类，管理家族成员树（父/子/辈分）、族长、家族公告、
+ * 家族 Buff、声望值批量保存及跨世界广播等功能，成员数据以 {@link FamilyEntry} 形式存储。
+ *
  * @author Jay Estrella - Mr.Trash :3
  * @author Ubaware
  */

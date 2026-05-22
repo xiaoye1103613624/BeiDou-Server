@@ -22,6 +22,10 @@
 package org.gms.server.life;
 
 /**
+ * 【类型】MobAttackInfo，class，包 {@code org.gms.server.life}。
+ *
+ * 怪物攻击信息数据类，描述怪物某一攻击动作的属性，包括是否致死攻击、MP燃烧量、异常状态技能及等级、MP消耗等。
+ *
  * @author Danny (Leifde)
  */
 public class MobAttackInfo {

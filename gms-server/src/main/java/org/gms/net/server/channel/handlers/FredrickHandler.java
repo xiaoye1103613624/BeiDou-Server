@@ -28,7 +28,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#FREDRICK_ACTION} 封包。
+ * 负责处理客户端的Fredrick仓库操作。
  */
 public class FredrickHandler extends AbstractPacketHandler {
     private final FredrickProcessor fredrickProcessor;

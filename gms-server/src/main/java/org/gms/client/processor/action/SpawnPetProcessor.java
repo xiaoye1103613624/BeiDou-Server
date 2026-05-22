@@ -35,6 +35,11 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 
 /**
+ * 【类型】SpawnPetProcessor（class），包 {@code org.gms.client.processor.action}。
+ *
+ * 宠物召唤处理器，处理召唤/收回宠物请求：从 WZ 加载宠物数据，校验召唤条件（死亡地图限制等），
+ * 生成宠物唯一 ID，发送召唤/移动/互动广播包，并支持领头宠物切换。
+ *
  * @author RonanLana - just added locking on OdinMS' SpawnPetHandler method body
  */
 public class SpawnPetProcessor {

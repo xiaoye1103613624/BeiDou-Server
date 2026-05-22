@@ -29,10 +29,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * 频道服务器入站封包处理器「SkillMacroHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#SKILL_MACRO} 封包。
+ * 负责处理客户端技能宏（自定义技能组合快捷键）的更新操作。
  */
 public final class SkillMacroHandler extends AbstractPacketHandler {
 

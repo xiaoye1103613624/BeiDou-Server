@@ -28,7 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】StartMapEventCommand：聊天或控制台命令实现。
+ * 【GM指令】StartMapEventCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：启动当前地图的事件。
+ *
+ * @author MedicOP
  */
 public class StartMapEventCommand extends Command {
     {

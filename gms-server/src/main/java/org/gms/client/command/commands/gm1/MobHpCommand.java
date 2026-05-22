@@ -30,7 +30,11 @@ import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】MobHpCommand：聊天或控制台命令实现。
+ * 【GM1指令】MobHpCommand（class），包 `org.gms.client.command.commands.gm1`。
+ *
+ * GM指令：查看当前地图内所有怪物的当前血量及最大血量。
+ *
+ * @author Arthur L
  */
 public class MobHpCommand extends Command {
     {

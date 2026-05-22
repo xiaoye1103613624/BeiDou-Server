@@ -39,7 +39,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】ForceVacCommand：聊天或控制台命令实现。
+ * 【GM指令】ForceVacCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：强制吸取当前地图所有掉落物品（支持金币、消耗品、宠物等）。
+ *
+ * @author Arthur L
  */
 public class ForceVacCommand extends Command {
     {

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Pirate（class），包 `org.gms.constants.skills`。
+ *
+ * 定义海盗职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Pirate {
     public static final int BULLET_TIME = 5000000;

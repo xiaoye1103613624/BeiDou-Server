@@ -23,7 +23,11 @@
 package org.gms.server.events.gm;
 
 /**
- * @author kevintjuh93
+ * 【类型】Event（class），包 `org.gms.server.events.gm`。
+ *
+ * GM 活动事件基类，封装活动地图 ID 和参与人数上限，提供减少/增加剩余名额的方法。
+ *
+ * @author 萧曵
  */
 public class Event {
     private final int mapid;

@@ -22,7 +22,11 @@
 package org.gms.provider;
 
 /**
- * @author Matze
+ * 【接口】DataEntry（interface），包 `org.gms.provider`。
+ *
+ * WZ 数据条目接口，扩展 DataEntity，增加文件大小、校验和与偏移量等文件属性。
+ *
+ * @author 萧曵
  */
 public interface DataEntry extends DataEntity {
     String getName();

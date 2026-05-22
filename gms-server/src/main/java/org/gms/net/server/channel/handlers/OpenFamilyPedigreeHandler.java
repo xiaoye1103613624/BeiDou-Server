@@ -27,7 +27,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Ubaware
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#OPEN_FAMILY_PEDIGREE} 封包。
+ * 负责处理客户端打开家族谱系的操作。
  */
 public final class OpenFamilyPedigreeHandler extends AbstractPacketHandler {
     @Override

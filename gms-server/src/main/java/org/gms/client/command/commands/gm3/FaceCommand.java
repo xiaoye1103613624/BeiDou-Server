@@ -33,7 +33,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】FaceCommand：聊天或控制台命令实现。
+ * 【GM指令】FaceCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：更改自身或指定玩家的脸型（按脸型道具ID设置）。
+ *
+ * @author Arthur L
  */
 public class FaceCommand extends Command {
     {

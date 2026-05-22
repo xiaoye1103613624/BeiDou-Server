@@ -20,6 +20,11 @@
 package org.gms.client;
 
 /**
+ * 【类型】AbstractCharacterListener（interface），包 {@code org.gms.client}。
+ *
+ * 角色/怪物属性变化监听器接口，定义 HP 变化、HP/MP 池更新、属性更新及属性池广播等回调方法，
+ * 供 {@link AbstractCharacterObject} 在状态变更时通知上层（如 {@link Character}）。
+ *
  * @author Ronan
  */
 public interface AbstractCharacterListener {

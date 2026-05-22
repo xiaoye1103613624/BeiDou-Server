@@ -40,19 +40,34 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】NPCScriptManager（class），包 `org.gms.scripting.npc`。
+ *
+ * NPC 脚本管理器（单例），负责加载和执行 NPC 对话脚本，管理客户端与 {@link NPCConversationManager} 的映射关系。
+ * 每个客户端同一时间只能有一个活跃的 NPC 对话，通过 {@code cms} Map 维护。
+ *
+ * 脚本路由策略（见 {@link #start} 方法）：
+ * <ol>
+ *   <li>指定了 fileName → 先查 npc/ 目录，再查 BeiDouSpecial/ 目录（物品脚本查 item/）</li>
+ *   <li>未指定 fileName → 按 NPC ID 查找 npc/{npcId}.js</li>
+ *   <li>都找不到 → 返回 false，客户端显示 "NPC is uncoded"</li>
+ * </ol>
+ *
  * @author Matze
  */
 public class NPCScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(NPCScriptManager.class);
     private static final NPCScriptManager instance = new NPCScriptManager();
 
+    /** 客户端 → 对话管理器映射：每个客户端最多一个活跃的 NPC 对话 */
     private final Map<Client, NPCConversationManager> cms = new HashMap<>();
+    /** 客户端 → 可调用脚本引擎映射 */
     private final Map<Client, Invocable> scripts = new HashMap<>();
 
     public static NPCScriptManager getInstance() {
         return instance;
     }
 
+    /** 检查指定文件名的 NPC 脚本是否存在（用于条件判断） */
     public boolean isNpcScriptAvailable(Client c, String fileName) {
         ScriptEngine engine = null;
         if (fileName != null) {
@@ -61,6 +76,8 @@ public class NPCScriptManager extends AbstractScriptManager {
 
         return engine != null;
     }
+
+    // ---- start() 重载链，最终汇聚到最完整的 start(c, npc, oid, fileName, chr, itemScript, engineName) ----
 
     public boolean start(Client c, int npc, Character chr) {
         return start(c, npc, -1, chr);
@@ -113,6 +130,18 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 核心 start 方法：加载脚本文件、创建对话管理器、绑定引擎变量、调用脚本 start() 函数。
+     *
+     * @param c          客户端连接
+     * @param npc        NPC 模板 ID
+     * @param oid        地图上 NPC 实例的 OID（无实例时为 -1）
+     * @param fileName   指定的脚本文件名（null 则按 NPC ID 自动查找）
+     * @param chr        与 NPC 交互的角色
+     * @param itemScript 是否为物品触发的脚本（物品脚本引擎名用 "im"）
+     * @param engineName 脚本中访问 CM 的变量名（NPC=cm, 物品=im）
+     * @return true=脚本启动成功, false=启动失败
+     */
     private boolean start(Client c, int npc, int oid, String fileName, Character chr, boolean itemScript, String engineName) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, oid, fileName, itemScript);

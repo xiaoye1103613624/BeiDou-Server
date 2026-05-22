@@ -41,7 +41,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】PnpcRemoveCommand：聊天或控制台命令实现。
+ * 【GM指令】PnpcRemoveCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：从当前地图永久移除NPC（按ID或位置范围）。
+ *
+ * @author Ronan
  */
 public class PnpcRemoveCommand extends Command {
     {

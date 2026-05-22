@@ -39,12 +39,19 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
  * 【类型】TimerManager（class），包 `org.gms.server`。
+ *
+ * 全局定时任务管理器（单例），封装 {@link ScheduledThreadPoolExecutor}（4 核心线程），
+ * 提供定时任务和延迟任务的注册、更新、停止功能。所有游戏内的周期性逻辑
+ * （怪物刷新、物品过期、定时活动等）均通过此管理器调度。
+ *
+ * 实现 {@link TimerManagerMBean} 接口，可通过 JMX 监控线程池状态。
  */
 public class TimerManager implements TimerManagerMBean {
     private static final Logger log = LoggerFactory.getLogger(TimerManager.class);
     @Getter
     private static final TimerManager instance = new TimerManager();
 
+    /** 调度线程池（4 核心线程，空闲 5 分钟后回收） */
     private ScheduledThreadPoolExecutor ses;
 
     private TimerManager() {

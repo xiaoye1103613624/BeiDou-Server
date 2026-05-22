@@ -31,7 +31,11 @@ import org.gms.server.life.LifeFactory;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】PianusCommand：聊天或控制台命令实现。
+ * 【GM指令】PianusCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前位置召唤皮亚努斯（右侧）。
+ *
+ * @author Arthur L
  */
 public class PianusCommand extends Command {
     {

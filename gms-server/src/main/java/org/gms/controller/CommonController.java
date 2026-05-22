@@ -17,7 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 【Web 控制器】CommonController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】CommonController（class），包 {@code org.gms.controller}。
+ *
+ * 处理通用查询接口，包括根据物品ID查询装备基础属性信息、
+ * 各世界在线玩家数量统计以及根据ID或名称搜索游戏内资料（物品、怪物、地图等）。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

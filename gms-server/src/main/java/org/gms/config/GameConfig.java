@@ -15,8 +15,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * 北斗动态参数计划，结构
- * {"world":{"0":{"server_message":{"clazz":"java.lang.String","value":"Welcome to Scania!"},"exp_rate":{"clazz":"java.lang.Float","value":"1.0"}}},"server":{"global":{"WORLDS":{"clazz":"java.lang.Integer","value":"1"}},"npc":{"NPCS_SCRIPTABLE":{"clazz":"java.util.Map","value":"{9001105:\"Rescue Gaga!\"}"}}}}
+ * 【类型】GameConfig（class），包 {@code org.gms.config}。动态游戏配置单例：从数据库 game_config 表加载 exp/drop/meso 等倍率、
+ * 服务器消息、开关参数等运行时配置，支持热重载（增/删/改），无需重启服务器。配置按 type/subType/key 三级 JSON 结构组织，
+ * 主要作用域为 world（按大区）和 server（全局）。
  */
 public class GameConfig {
     private static final GameConfig config = new GameConfig();

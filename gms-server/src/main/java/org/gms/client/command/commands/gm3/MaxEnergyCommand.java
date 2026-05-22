@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】MaxEnergyCommand：聊天或控制台命令实现。
+ * 【GM指令】MaxEnergyCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：将道场能量值设为最大值10000。
+ *
+ * @author Arthur L
  */
 public class MaxEnergyCommand extends Command {
     {

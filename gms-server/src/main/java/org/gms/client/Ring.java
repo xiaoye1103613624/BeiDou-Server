@@ -31,14 +31,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 【类型】Ring（class），包 {@code org.gms.client}。戒指系统，管理友谊戒指/情侣戒指/结婚戒指的创建、配对和删除。
+ *
  * @author Danny
  */
 public class Ring implements Comparable<Ring> {
+    /** 本戒指唯一ID */
     private final int ringId;
+    /** 配对戒指唯一ID */
     private final int ringId2;
+    /** 伙伴角色ID */
     private final int partnerId;
+    /** 戒指道具ID */
     private final int itemId;
+    /** 伙伴角色名称 */
     private final String partnerName;
+    /** 是否已装备 */
     private boolean equipped = false;
 
     public Ring(int id, int id2, int partnerId, int itemid, String partnername) {

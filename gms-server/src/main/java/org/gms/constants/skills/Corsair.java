@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Corsair（class），包 `org.gms.constants.skills`。
+ *
+ * 定义船长职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Corsair {
     public static final int MAPLE_WARRIOR = 5221000;

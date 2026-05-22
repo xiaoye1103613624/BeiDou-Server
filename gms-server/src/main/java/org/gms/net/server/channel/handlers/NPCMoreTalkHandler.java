@@ -28,14 +28,15 @@ import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
 
 /**
- * @author Matze
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#NPC_TALK_MORE} 封包。
+ * 负责处理客户端的NPC连续对话操作。
  */
 public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        byte lastMsg = p.readByte(); // 00 (last msg type I think)
-        byte action = p.readByte(); // 00 = end chat, 01 == follow
-        // lastMsg等于2有returnText，不等于则没有
+        byte lastMsg = p.readByte(); // 上一个对话框类型
+        byte action = p.readByte(); // 00 = 结束对话, 01 = 继续
+        // lastMsg==2表示需要回传文本（如输入框），否则为选择型对话框
         if (lastMsg == 2) {
             if (action != 0) {
                 String returnText = p.readString();
@@ -55,6 +56,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
             } else {
                 c.getCM().dispose();
             }
+        // 选择型对话框：读取玩家选择项
         } else {
             int selection = -1;
             if (p.available() >= 4) {
@@ -62,6 +64,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
             } else if (p.available() > 0) {
                 selection = p.readUnsignedByte();
             }
+            // 任务管理器优先处理
             if (c.getQM() != null) {
                 if (c.getQM().isStart()) {
                     QuestScriptManager.getInstance().start(c, action, lastMsg, selection);
@@ -74,6 +77,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
         }
     }
 
+    // 路由到NPC脚本：无Level上下文走action()，有Level上下文走nextLevel()
     private void cmRouting(Client c, byte action, byte lastMsg, int selection) {
         if (c.getCM().getNextLevelContext().getLevelType() == null) {
             NPCScriptManager.getInstance().action(c, action, lastMsg, selection);

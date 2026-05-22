@@ -32,6 +32,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 【类型】MobAttackInfoFactory，class，包 {@code org.gms.server.life}。
+ *
+ * 怪物攻击信息工厂类，负责从 WZ 数据中加载并缓存怪物的攻击信息（{@link MobAttackInfo}），采用懒加载和双重校验锁保证线程安全。
+ *
  * @author Danny (Leifde)
  */
 public class MobAttackInfoFactory {

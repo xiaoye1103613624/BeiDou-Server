@@ -10,10 +10,11 @@ import java.sql.Date;
 import java.util.List;
 
 /**
- * 扩展字段表 映射层。
+ * 【映射器】ExtendValueMapper（interface），包 {@code org.gms.dao.mapper}。
  *
- * @author CN
- * @since 2024-07-08
+ * 对应数据库表 extend_value 的数据访问接口，提供扩展字段相关查询操作。
+ *
+ * @author 萧曵
  */
 public interface ExtendValueMapper extends BaseMapper<ExtendValueDO> {
     @Delete("delete from extend_value where extend_type = #{extendType} and create_time < #{createTime}")

@@ -21,9 +21,12 @@
 package org.gms.server.life;
 
 /**
+ * 【类型】MonsterDropEntry，class，包 {@code org.gms.server.life}。
+ *
+ * 怪物掉落条目数据类，描述某一怪物特定物品的掉落概率、数量范围和关联的任务 ID。
+ *
  * @author LightPepsi
  */
-
 public class MonsterDropEntry {
     public MonsterDropEntry(int itemId, int chance, int Minimum, int Maximum, short questid) {
         this.itemId = itemId;

@@ -86,16 +86,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 【工厂/提供者】SkillFactory：创建或提供 `client` 相关运行时对象。
+ * 【类型】SkillFactory（class），包 `org.gms.client`。
+ *
+ * 技能工厂，负责从 Skill.wz 加载全部技能数据并缓存。
+ * 使用 volatile 保证多线程可见性。服务器启动时调用 {@link #loadAllSkills()} 一次性全量加载，
+ * 运行时通过 {@link #getSkill(int)} 按 ID 查询。
  */
 public class SkillFactory {
+    /** 全量技能缓存（volatile 保证多线程可见） */
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
+    /** Skill.wz 数据源 */
     private static final DataProvider datasource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
 
+    /** 按 ID 获取技能对象 */
     public static Skill getSkill(int id) {
         return skills.get(id);
     }
 
+    /** 从 WZ 加载所有技能数据 */
     public static void loadAllSkills() {
         final Map<Integer, Skill> loadedSkills = new HashMap<>();
         final DataDirectoryEntry root = datasource.getRoot();

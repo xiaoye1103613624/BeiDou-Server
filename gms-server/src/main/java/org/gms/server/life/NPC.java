@@ -28,8 +28,15 @@ import org.gms.util.PacketCreator;
 
 /**
  * 【类型】NPC（class），包 `org.gms.server.life`。
+ *
+ * 地图上的 NPC 实例，继承 {@link AbstractLoadedLife}，由 {@link LifeFactory#getNPC(int)} 根据 WZ 数据创建。
+ * 每个 NPC 持有一个 {@link NPCStats} 属性集（名称、功能标记等），并提供商店快捷访问。
+ *
+ * NPC 通过 {@link org.gms.scripting.npc.NPCScriptManager} 触发 JS 脚本交互，
+ * 脚本通过 {@code cm.openNpc(npcId, "ScriptName")} 调用。
  */
 public class NPC extends AbstractLoadedLife {
+    /** NPC 属性（名称、是否可移动等） */
     private final NPCStats stats;
 
     public NPC(int id, NPCStats stats) {
@@ -37,10 +44,12 @@ public class NPC extends AbstractLoadedLife {
         this.stats = stats;
     }
 
+    /** 检查此 NPC 是否关联了商店 */
     public boolean hasShop() {
         return ShopFactory.getInstance().getShopForNPC(getId()) != null;
     }
 
+    /** 向指定客户端发送商店 UI */
     public void sendShop(Client c) {
         ShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
     }

@@ -26,7 +26,8 @@ import org.gms.client.Client;
 import java.awt.*;
 
 /**
- * 【接口】MapObject：由 `maps` 模块实现的契约。
+ * 【接口】MapObject（interface），包 {@code org.gms.server.maps}。
+ * 地图对象基础契约接口，定义所有地图内对象的通用行为（生成、销毁、位置等）。
  */
 public interface MapObject {
     int getObjectId();

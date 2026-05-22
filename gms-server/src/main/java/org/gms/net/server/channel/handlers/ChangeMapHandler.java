@@ -45,10 +45,8 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * 频道服务器入站封包处理器「ChangeMapHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CHANGE_MAP} 封包。
+ * 负责处理客户端的换地图操作。
  */
 public final class ChangeMapHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ChangeMapHandler.class);
@@ -56,6 +54,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
+        // 正在换图或被封禁时拒绝
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {
                 log.warn(I18nUtil.getLogMessage("ChangeMapHandler.warn.message1"),
@@ -69,10 +68,12 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
+        // 交易中换图则取消交易
         if (chr.getTrade() != null) {
             Trade.cancelTrade(chr, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         }
 
+        // 封包长度为0表示从商城进入地图
         boolean enteringMapFromCashShop = p.available() == 0;
         if (enteringMapFromCashShop) {
             enterFromCashShop(c);
@@ -85,13 +86,15 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
         }
 
         try {
+            // 读取传送信息：死亡标志(1=死亡, 0=普通传送)、目标地图、传送口名称
             p.readByte(); // 1 = from dying 0 = regular portals
             int targetMapId = p.readInt();
             String portalName = p.readString();
             Portal portal = chr.getMap().getPortal(portalName);
             p.readByte();
-            boolean wheel = p.readByte() > 0;
+            boolean wheel = p.readByte() > 0; // 是否使用命运轮
 
+            // GM追踪玩家
             boolean chasing = p.readByte() == 1 && chr.isGM() && p.available() == 2 * Integer.BYTES;
             if (chasing) {
                 chr.setChasing(true);
@@ -99,6 +102,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
             }
 
             if (targetMapId != -1) {
+                // 死亡状态换图：命运轮复活 / 事件复活 / 回城复活
                 if (!chr.isAlive()) {
                     MapleMap map = chr.getMap();
                     if (wheel && chr.haveItemWithId(ItemId.WHEEL_OF_FORTUNE, false)) {
@@ -118,11 +122,14 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                             chr.respawn(map.getReturnMapId());
                         }
                     }
+                // 存活状态换图
                 } else {
+                    // GM可直接传送任意地图
                     if (chr.isGM()) {
                         MapleMap to = chr.getWarpMap(targetMapId);
                         chr.changeMap(to, to.getPortal(0));
                     } else {
+                        // 普通玩家根据当前地图区域限制可传送的目标地图
                         final int divi = chr.getMapId() / 100;
                         boolean warp = false;
                         if (divi == 0) {
@@ -172,6 +179,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                 chr.getOla().resetTimes();
             }
 
+            // 传送口距离检测（防止远距离传送作弊）
             if (portal != null) {
                 if (portal.getPosition().distanceSq(chr.getPosition()) > 400000) {
                     c.sendPacket(PacketCreator.enableActions());

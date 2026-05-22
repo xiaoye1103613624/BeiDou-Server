@@ -85,41 +85,93 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 【类型】Monster（class），包 `org.gms.server.life`。
+ *
+ * 游戏怪物的核心类，继承 {@link AbstractLoadedLife}，代表地图上一个活着的怪物实例。
+ * 负责管理怪物的 HP/MP、状态效果（BUFF/DEBUFF）、仇恨系统、控制器（谁在打）、掉落物生成、
+ * 技能使用、召唤小怪、自毁倒计时等完整的怪物生命周期。
+ *
+ * 关键机制：
+ * <ul>
+ *   <li><b>控制器（controller）</b>：第一个攻击怪物的玩家成为控制器，负责接收怪物的移动/攻击同步数据</li>
+ *   <li><b>仇恨追踪</b>：通过 {@link MonsterAggroCoordinator} 追踪每个攻击者的伤害贡献，决定掉落归属</li>
+ *   <li><b>状态系统</b>：通过 {@link MonsterStatus} 和 {@link MonsterStatusEffect} 管理封印、眩晕、中毒等异常状态</li>
+ *   <li><b>掉落系统</b>：死亡时通过 {@link org.gms.server.loot.LootManager} 计算并生成掉落物</li>
+ *   <li><b>Banish 机制</b>：部分 BOSS 可将玩家驱逐出地图，由 {@link LifeFactory.BanishInfo} 配置</li>
+ * </ul>
+ *
+ * @see MonsterStats
+ * @see MonsterInformationProvider
+ * @see org.gms.server.loot.LootManager
  */
 public class Monster extends AbstractLoadedLife {
     private static final Logger log = LoggerFactory.getLogger(Monster.class);
 
-    private ChangeableStats ostats = null;  //unused, v83 WZs offers no support for changeable stats.
+    /** 可变属性（v83 WZ 不支持，未使用） */
+    private ChangeableStats ostats = null;
+    /** 怪物基础属性（HP/MP/EXP/攻击力等），从 WZ 加载 */
     private MonsterStats stats;
+    /** 当前 HP（原子操作，保证多线程安全） */
     private final AtomicInteger hp = new AtomicInteger(1);
+    /** 最大 HP + 治疗量上限（怪物治疗不能超过此值） */
     private final AtomicLong maxHpPlusHeal = new AtomicLong(1);
+    /** 当前 MP */
     private int mp;
+    /** 当前控制器（第一个攻击此怪的玩家），WeakReference 防止内存泄漏 */
     private WeakReference<Character> controller = new WeakReference<>(null);
-    private boolean controllerHasAggro, controllerKnowsAboutAggro, controllerHasPuppet;
+    /** 控制器是否已建立仇恨 */
+    private boolean controllerHasAggro;
+    /** 控制器是否知道自己有仇恨 */
+    private boolean controllerKnowsAboutAggro;
+    /** 控制器是否放置了替身（飞镖职业的 puppet） */
+    private boolean controllerHasPuppet;
+    /** 怪物死亡监听器列表 */
     private final Collection<MonsterListener> listeners = new LinkedList<>();
+    /** 当前状态效果集合（EnumMap 高效枚举索引） */
     private final EnumMap<MonsterStatus, MonsterStatusEffect> stati = new EnumMap<>(MonsterStatus.class);
+    /** 已经施加过的 BUFF 列表（防止重复施放） */
     private final ArrayList<MonsterStatus> alreadyBuffed = new ArrayList<>();
+    /** 所在的地图实例 */
     private MapleMap map;
+    /** 毒液（Venom）层数 */
     private int VenomMultiplier = 0;
+    /** 是否为假怪物（仅动画，不参与战斗） */
     private boolean fake = false;
+    /** 是否禁用掉落 */
     private boolean dropsDisabled = false;
+    /** 已使用的技能 ID 集合（防止同技能重复使用） */
     private final Set<MobSkillId> usedSkills = new HashSet<>();
+    /** 已使用的攻击 ID 集合 */
     private final Set<Integer> usedAttacks = new HashSet<>();
+    /** 召唤出的小怪 OID 集合 */
     private Set<Integer> calledMobOids = null;
+    /** 召唤本怪物的父怪物（WeakReference） */
     private WeakReference<Monster> callerMob = new WeakReference<>(null);
+    /** 被偷取的物品 ID 列表（飞侠技能） */
     private final List<Integer> stolenItems = new ArrayList<>(5);
+    /** 队伍标识（用于组队副本） */
     private int team;
+    /** 父怪物 OID */
     private int parentMobOid = 0;
+    /** 生成特效 ID */
     private int spawnEffect = 0;
+    /** 各玩家对怪物的累计伤害：<角色ID, 伤害值> */
     private final HashMap<Integer, AtomicLong> takenDamage = new HashMap<>();
+    /** 怪物掉落物生成定时任务 */
     private ScheduledFuture<?> monsterItemDrop = null;
+    /** 怪物移除后执行的回调 */
     private Runnable removeAfterAction = null;
+    /** 是否允许更新傀儡状态标记 */
     private boolean availablePuppetUpdate = true;
 
+    /** 外部调用锁 */
     private final Lock externalLock = new ReentrantLock();
+    /** 怪物内部状态锁 */
     private final Lock monsterLock = new ReentrantLock(true);
+    /** 状态效果锁 */
     private final Lock statiLock = new ReentrantLock();
+    /** 动画/技能锁 */
     private final Lock animationLock = new ReentrantLock();
+    /** 仇恨更新锁 */
     private final Lock aggroUpdateLock = new ReentrantLock();
 
     public Monster(int id, MonsterStats stats) {

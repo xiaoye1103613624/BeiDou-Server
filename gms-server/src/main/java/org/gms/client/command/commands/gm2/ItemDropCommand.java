@@ -37,7 +37,11 @@ import org.gms.util.I18nUtil;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
- * 【GM/玩家指令】ItemDropCommand：聊天或控制台命令实现。
+ * 【GM指令】ItemDropCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：在玩家当前位置的地面上掉落指定ID和数量的物品（支持宠物掉落及过期时间设定）。
+ *
+ * @author Arthur L
  */
 public class ItemDropCommand extends Command {
     {

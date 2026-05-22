@@ -26,7 +26,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author Quasar
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PARTY_SEARCH_REGISTER} 封包。
+ * 负责处理客户端组队搜索注册操作。
  */
 public class PartySearchRegisterHandler extends AbstractPacketHandler {
 

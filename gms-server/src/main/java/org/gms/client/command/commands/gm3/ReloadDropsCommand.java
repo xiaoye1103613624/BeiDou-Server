@@ -30,7 +30,11 @@ import org.gms.server.life.MonsterInformationProvider;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ReloadDropsCommand：聊天或控制台命令实现。
+ * 【GM指令】ReloadDropsCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：重新加载怪物掉落数据。
+ *
+ * @author Arthur L
  */
 public class ReloadDropsCommand extends Command {
     {

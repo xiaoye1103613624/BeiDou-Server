@@ -28,7 +28,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#LEFT_KNOCKBACK} 封包。
+ * 负责处理客户端的左侧击退操作。
  */
 public class LeftKnockbackHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, final Client c) {

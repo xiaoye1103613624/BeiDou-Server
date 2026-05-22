@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】SetStatCommand：聊天或控制台命令实现。
+ * 【GM指令】SetStatCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：统一设置角色的力量、敏捷、智力、运气四项属性值。
+ *
+ * @author Arthur L
  */
 public class SetStatCommand extends Command {
     {

@@ -13,7 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 【Web 控制器】GiveController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】GiveController（class），包 {@code org.gms.controller}。
+ *
+ * 处理GM向玩家分发资源的操作，支持向指定角色发送物品、金币、
+ * 经验值等游戏资源，是后台管理中赠送功能的核心接口。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

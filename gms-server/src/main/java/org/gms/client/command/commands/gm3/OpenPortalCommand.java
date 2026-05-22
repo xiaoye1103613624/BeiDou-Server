@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】OpenPortalCommand：聊天或控制台命令实现。
+ * 【GM指令】OpenPortalCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：打开当前地图指定的传送门。
+ *
+ * @author Arthur L
  */
 public class OpenPortalCommand extends Command {
     {

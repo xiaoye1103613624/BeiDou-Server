@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * 【Web 控制器】FileController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】FileController（class），包 {@code org.gms.controller}。
+ *
+ * 处理服务器文件树的管理，包括脚本等文件的读取、写入（在线编辑）
+ * 以及目录树的浏览与导航。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

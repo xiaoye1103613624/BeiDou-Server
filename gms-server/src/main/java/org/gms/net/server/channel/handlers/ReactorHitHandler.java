@@ -27,7 +27,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.maps.Reactor;
 
 /**
- * @author Lerk
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#DAMAGE_REACTOR} 封包。
+ * 负责处理客户端攻击反应堆（Reactor）的操作。
  */
 public final class ReactorHitHandler extends AbstractPacketHandler {
     @Override

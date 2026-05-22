@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】HealCommand：聊天或控制台命令实现。
+ * 【GM指令】HealCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：立即恢复玩家的HP和MP至满值。
+ *
+ * @author Arthur L
  */
 public class HealCommand extends Command {
     {

@@ -22,6 +22,11 @@ package org.gms.client.inventory;
 import org.gms.client.Character;
 
 /**
+ * 【类型】InventoryProof（class），继承 {@link Inventory}，包 {@code org.gms.client.inventory}。
+ *
+ * 临时库存副本，用于交易/仓库等场景下在不影响原库存的情况下验证空间与暂存物品。
+ * 支持克隆（cloneContents）与清空（flushContents）操作。
+ *
  * @author Ronan
  */
 public class InventoryProof extends Inventory {

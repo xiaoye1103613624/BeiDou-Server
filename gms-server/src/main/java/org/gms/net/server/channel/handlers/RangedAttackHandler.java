@@ -55,10 +55,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 /**
- * 频道服务器入站封包处理器「RangedAttackHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#RANGED_ATTACK} 封包。
+ * 负责处理客户端的远程攻击操作。
  */
 public final class RangedAttackHandler extends AbstractDealDamageHandler {
     private static final Logger log = LoggerFactory.getLogger(RangedAttackHandler.class);
@@ -73,8 +71,10 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
         }
         chr.getAutobanManager().spam(8);*/
 
+        // 解析远程攻击数据
         AttackInfo attack = parseDamage(p, chr, true, false);
 
+        // 变形状态检测
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
             if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
                 // How are they attacking when the client won't let them?
@@ -88,6 +88,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
+        // 能量球/闪光弹/挑拨类技能（无弹道投射物）
         if (attack.skill == Buccaneer.ENERGY_ORB || attack.skill == ThunderBreaker.SPARK || attack.skill == Shadower.TAUNT || attack.skill == NightLord.TAUNT) {
             chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             applyAttack(attack, chr, 1);
@@ -98,6 +99,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             for (int i = 0; i < attack.numAttacked; i++) {
                 chr.handleEnergyChargeGain();
             }
+        // 战神连击技能（消耗Combo值释放）
         } else if (attack.skill == Aran.COMBO_SMASH || attack.skill == Aran.COMBO_FENRIR || attack.skill == Aran.COMBO_TEMPEST) {
             chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             if (attack.skill == Aran.COMBO_SMASH && chr.getCombo() >= 30) {
@@ -121,6 +123,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             short bulletCount = 1;
             short supplement = 0;   //用于补充平衡之怒的变量
             StatEffect effect = null;
+            // 技能攻击时获取技能效果及弹药数
             if (attack.skill != 0) {
                 effect = attack.getAttackEffect(chr, null);
                 bulletCount = effect.getBulletCount();
@@ -142,10 +145,12 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     }
                 }
             }
+            // 影分身双倍消耗
             boolean hasShadowPartner = chr.getBuffedValue(BuffStat.SHADOWPARTNER) != null;
             if (hasShadowPartner) {
                 bulletCount *= 2;
             }
+            // 遍历消耗栏查找匹配的弹药
             Inventory inv = chr.getInventory(InventoryType.USE);
             for (short i = 1; i <= inv.getSlotLimit(); i++) {
                 Item item = inv.getItem(i);
@@ -205,6 +210,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 }
             }
 
+            // 有弹药或无消耗技能时发起攻击
             if (projectile != 0 || soulArrow || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 4111004 || attack.skill == 13101005) {
                 int visProjectile = projectile; //visible projectile sent to players
                 if (ItemConstants.isThrowingStar(projectile)) {
@@ -222,6 +228,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     visProjectile = 0;
                 }
 
+                // 根据技能类型生成对应格式的攻击封包
                 final Packet packet;
                 switch (attack.skill) {
                     case 3121004: // Hurricane

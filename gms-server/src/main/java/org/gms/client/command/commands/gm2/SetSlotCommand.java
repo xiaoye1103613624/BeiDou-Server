@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】SetSlotCommand：聊天或控制台命令实现。
+ * 【GM指令】SetSlotCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：设置装备、消耗、装饰、其他四类背包的槽位数（自动对齐为4的倍数）。
+ *
+ * @author Ronan
  */
 public class SetSlotCommand extends Command {
     {

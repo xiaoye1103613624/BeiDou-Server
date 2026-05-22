@@ -36,13 +36,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 【类型】QuestScriptManager（class），包 `org.gms.scripting.quest`。
+ *
+ * 任务脚本管理器（单例），负责执行任务相关的 JS 脚本。
+ * 脚本路径为 quest/{questId}.js，勋章任务回退到 quest/medalQuest.js。
+ * 通过 {@code qms} Map 维护客户端与 {@link QuestActionManager} 的映射。
+ *
  * @author RMZero213
  */
 public class QuestScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(QuestScriptManager.class);
     private static final QuestScriptManager instance = new QuestScriptManager();
 
+    /** 客户端 → 任务动作管理器 */
     private final Map<Client, QuestActionManager> qms = new HashMap<>();
+    /** 客户端 → 可调用脚本引擎 */
     private final Map<Client, Invocable> scripts = new HashMap<>();
 
     public static QuestScriptManager getInstance() {

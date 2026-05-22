@@ -8,8 +8,11 @@ import org.gms.util.ThreadLocalUtil;
 import java.awt.*;
 
 /**
- * 网络协议层类型「ByteBufInPacket」。
- * 属于 org.gms.net.packet 下的通用封包、读写或工具定义。
+ * 【类】ByteBufInPacket，包 `org.gms.net.packet`。
+ *
+ * 基于 Netty ByteBuf 的入站封包实现，以小端序（LE）读取并解析客户端发来的数据包字节流。
+ *
+ * @author Ronan
  */
 public class ByteBufInPacket implements InPacket {
     private final ByteBuf byteBuf;

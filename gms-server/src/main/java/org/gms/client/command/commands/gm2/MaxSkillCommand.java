@@ -35,7 +35,11 @@ import org.gms.provider.wz.WZFiles;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】MaxSkillCommand：聊天或控制台命令实现。
+ * 【GM指令】MaxSkillCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：将当前职业所有技能等级提升至最大，并为特定职业处理骑宠技能。
+ *
+ * @author Arthur L
  */
 public class MaxSkillCommand extends Command {
     {

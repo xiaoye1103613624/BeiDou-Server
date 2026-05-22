@@ -33,24 +33,25 @@ import org.gms.server.maps.MapObject;
 import java.awt.*;
 
 /**
- * @author Matze
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#ITEM_PICKUP} 封包。
+ * 负责处理客户端的拾取物品操作。
  */
 public final class ItemPickupHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
 
     @Override
     public void handlePacket(final InPacket p, final Client c) {
-        p.readInt(); //Timestamp
+        p.readInt(); // 时间戳
         p.readByte();
-        p.readPos(); //cpos
-        int oid = p.readInt();
+        p.readPos(); // 角色位置
+        int oid = p.readInt(); // 物品对象ID
         Character chr = c.getPlayer();
         MapObject ob = chr.getMap().getMapObject(oid);
         if (ob == null) {
             return;
         }
 
+        // 距离检测：X轴超过800或Y轴超过600则视为远程拾取外挂
         Point charPos = chr.getPosition();
         Point obPos = ob.getPosition();
         if (Math.abs(charPos.getX() - obPos.getX()) > 800 || Math.abs(charPos.getY() - obPos.getY()) > 600) {
@@ -61,6 +62,7 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
             return;
         }
 
+        // 执行拾取
         chr.pickupItem(ob);
     }
 }

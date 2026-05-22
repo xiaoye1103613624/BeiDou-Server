@@ -22,7 +22,11 @@
 package org.gms.provider;
 
 /**
- * @author Matze
+ * 【接口】DataEntity（interface），包 `org.gms.provider`。
+ *
+ * WZ 数据实体基础接口，定义 WZ 数据树结构中节点的基本契约（名称和父节点）。
+ *
+ * @author 萧曵
  */
 public interface DataEntity {
     String getName();

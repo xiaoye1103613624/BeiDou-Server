@@ -30,6 +30,10 @@ import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.util.PacketCreator;
 
 /**
+ * 【类】SetGenderHandler，包 `org.gms.net.server.handlers.login`。
+ *
+ * 性别设置处理器，处理新角色创建时的性别选择请求，确认后完成登录流程。
+ *
  * @author kevintjuh93
  */
 public class SetGenderHandler extends AbstractPacketHandler {

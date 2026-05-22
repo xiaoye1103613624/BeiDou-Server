@@ -25,6 +25,8 @@ import lombok.Getter;
 import org.gms.util.I18nUtil;
 
 /**
+ * 【类型】InventoryType（enum），包 `org.gms.client.inventory`。背包类型枚举：定义物品背包分类（装备、消耗、设置、其他、现金）及对应的WZ目录名映射与位域编码。
+ *
  * @author Matze
  */
 @Getter

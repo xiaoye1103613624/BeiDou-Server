@@ -84,15 +84,23 @@ import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 【类型】Quest（class），包 {@code org.gms.server.quest}。
+ * 任务定义类，封装任务的接取条件、完成条件和奖励动作，任务数据从WZ文件（Quest.wz）加载。
+ * 通过 {@link #getInstance(int)} 获取任务实例，内部维护实例缓存以提升性能。
+ *
  * @author Matze
  * @author Ronan - support for medal quests
  */
 public class Quest {
     private static final Logger log = LoggerFactory.getLogger(Quest.class);
+    /** 任务实例缓存（任务ID -> Quest实例） */
     private static volatile Map<Integer, Quest> quests = new HashMap<>();
+    /** infoNumber到任务ID的映射表 */
     private static volatile Map<Integer, Integer> infoNumberQuests = new HashMap<>();
+    /** 勋章任务映射（任务ID -> 勋章物品ID） */
     private static final Map<Short, Integer> medals = new HashMap<>();
 
+    /** 可重复利用的任务ID集合（允许通过对话反复接取/完成） */
     private static final Set<Short> exploitableQuests = new HashSet<>();
 
     static {
@@ -102,20 +110,37 @@ public class Quest {
         exploitableQuests.add((short) 21752);
     }
 
+    /** 任务ID */
     protected short id;
+    /** 任务时间限制（秒，0表示无限制） */
     protected int timeLimit, timeLimit2;
+    /** 接取任务的条件集合 */
     protected Map<QuestRequirementType, AbstractQuestRequirement> startReqs = new EnumMap<>(QuestRequirementType.class);
+    /** 完成任务的条件集合 */
     protected Map<QuestRequirementType, AbstractQuestRequirement> completeReqs = new EnumMap<>(QuestRequirementType.class);
+    /** 接取任务时执行的动作集合 */
     protected Map<QuestActionType, AbstractQuestAction> startActs = new EnumMap<>(QuestActionType.class);
+    /** 完成任务时执行的动作集合 */
     protected Map<QuestActionType, AbstractQuestAction> completeActs = new EnumMap<>(QuestActionType.class);
+    /** 关联的怪物ID列表 */
     protected List<Integer> relevantMobs = new LinkedList<>();
+    /** 是否自动接取 */
     private boolean autoStart;
+    /** 是否自动完成 */
     private boolean autoPreComplete, autoComplete;
+    /** 是否可重复接取 */
     private boolean repeatable = false;
-    private String name = "", parent = "";
+    /** 任务名称 */
+    private String name = "";
+    /** 父任务名称 */
+    private String parent = "";
+    /** WZ数据提供器（Quest.wz） */
     private final static DataProvider questData = DataProviderFactory.getDataProvider(WZFiles.QUEST);
+    /** QuestInfo.img数据节点 */
     private final static Data questInfo = questData.getData("QuestInfo.img");
+    /** Act.img数据节点 */
     private final static Data questAct = questData.getData("Act.img");
+    /** Check.img数据节点 */
     private final static Data questReq = questData.getData("Check.img");
 
     private Quest(int id) {

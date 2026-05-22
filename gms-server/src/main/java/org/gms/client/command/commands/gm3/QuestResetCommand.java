@@ -30,7 +30,11 @@ import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】QuestResetCommand：聊天或控制台命令实现。
+ * 【GM指令】QuestResetCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：重置指定任务的进度。
+ *
+ * @author Arthur L
  */
 public class QuestResetCommand extends Command {
     {

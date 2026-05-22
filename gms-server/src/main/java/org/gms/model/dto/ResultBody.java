@@ -13,14 +13,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * 【类型】ResultBody（class），包 `org.gms.model.dto`。
+ * 统一API响应体
+ * <p>封装服务器响应结果，包含状态码、消息、响应ID和业务数据</p>
+ *
+ * @param <T> 响应数据类型
  */
 @Data
 @Slf4j
 public class ResultBody<T> {
+    /** 响应状态码（0表示成功，其他表示错误） */
     private Integer code;
+    /** 响应消息 */
     private String message;
+    /** 响应唯一标识 */
     private String responseId;
+    /** 响应业务数据 */
     private T data;
 
     public ResultBody() {

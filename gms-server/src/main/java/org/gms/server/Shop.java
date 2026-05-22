@@ -45,16 +45,28 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 【类型】Shop（class），包 `org.gms.server`。
+ *
+ * 商店类，代表游戏中的一个 NPC 商店实例。维护商品列表（{@link ShopItem}），
+ * 处理玩家的购买/出售/充值请求。每个商店关联一个 NPC，数据从数据库加载。
+ * 充值物品（飞镖、子弹等）在静态初始化块中预设。
+ *
  * @author Matze
  */
 public class Shop {
     private static final Logger log = LoggerFactory.getLogger(Shop.class);
+    /** 可充值的物品 ID 集合（飞镖、子弹等） */
     private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
 
+    /** 商店 ID */
     private final int id;
+    /** 关联的 NPC ID */
     private final int npcId;
+    /** 商店商品列表 */
     private final List<ShopItem> items;
+    /** 代币值上限 */
     private final int tokenvalue = 1000000000;
+    /** 代币物品 ID（黄金枫叶） */
     private final int token = ItemId.GOLDEN_MAPLE_LEAF;
 
     static {

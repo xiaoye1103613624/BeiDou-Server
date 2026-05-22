@@ -27,6 +27,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 【类型】FootholdTree，class，包 {@code org.gms.server.maps}。
+ *
+ * 立足点空间索引树，使用四叉树结构管理地图上的所有立足点（Foothold），支持高效的空间查询（如 findBelow 查找脚下立足点、findWall 查找墙壁）。
+ *
  * @author Matze
  */
 public class FootholdTree {

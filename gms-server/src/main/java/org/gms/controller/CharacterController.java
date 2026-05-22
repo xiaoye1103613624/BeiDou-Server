@@ -14,7 +14,12 @@ import org.gms.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 【Web 控制器】CharacterController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】CharacterController（class），包 {@code org.gms.controller}。
+ *
+ * 处理角色相关操作，包括玩家个人倍率（经验倍率、金币倍率、掉落倍率）
+ * 的调整与重置，以及在线玩家列表的分页查询。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

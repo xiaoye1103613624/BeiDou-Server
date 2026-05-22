@@ -33,7 +33,11 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】SetEqStatCommand：聊天或控制台命令实现。
+ * 【GM指令】SetEqStatCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：批量修改已穿戴装备的所有属性值（攻击、防御、属性等均设为相同值）。
+ *
+ * @author Arthur L
  */
 public class SetEqStatCommand extends Command {
     {

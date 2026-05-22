@@ -38,7 +38,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
 /**
- * 【GM/玩家指令】SearchCommand：聊天或控制台命令实现。
+ * 【GM指令】SearchCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：通过关键词搜索WZ数据中的物品、NPC、怪物、技能、地图或任务，返回匹配的ID与名称列表。
+ *
+ * @author Arthur L
  */
 public class SearchCommand extends Command {
     private static Data npcStringData;

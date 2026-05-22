@@ -30,7 +30,8 @@ import org.gms.server.maps.MapObject;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Matze
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_DOOR} 封包。
+ * 负责处理客户端的传送门使用操作。
  */
 public final class DoorHandler extends AbstractPacketHandler {
     @Override

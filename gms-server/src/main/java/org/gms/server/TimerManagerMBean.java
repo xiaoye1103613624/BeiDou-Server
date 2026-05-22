@@ -22,7 +22,11 @@
 package org.gms.server;
 
 /**
- * 【接口】TimerManagerMBean：由 `server` 模块实现的契约。
+ * 【类型】TimerManagerMBean（interface），包 `org.gms.server`。
+ *
+ * 定时任务管理器 JMX Bean 接口，暴露任务调度的运行状态指标（活跃任务数、已完成任务数、队列深度等），供 JMX 监控工具查询。
+ *
+ * @author 萧曵
  */
 public interface TimerManagerMBean {
     boolean isTerminated();

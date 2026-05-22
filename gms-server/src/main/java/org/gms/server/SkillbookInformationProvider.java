@@ -42,11 +42,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author RonanLana
- */
-
-/**
- * Only used in 1 script that gives players information about where skillbooks can be found
+ * 【类型】SkillbookInformationProvider（class），包 `org.gms.server`。
+ *
+ * 技能书信息提供器，从任务奖励、反应堆掉落和脚本文件中汇总技能书的获取途径，供游戏中查询技能书来源。
+ *
+ * @author 萧曵
  */
 public class SkillbookInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(SkillbookInformationProvider.class);

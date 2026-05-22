@@ -16,7 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Drago (Dragohe4rt)
+ * 【类型】CarnivalFactory（class），包 `org.gms.server.partyquest`。
+ *
+ * 怪物嘉年华工厂，从 WZ 资源中加载嘉年华技能和守护者技能数据，根据技能目标（单体/群体）随机分配技能。
+ *
+ * @author 萧曵
  */
 public class CarnivalFactory {
 

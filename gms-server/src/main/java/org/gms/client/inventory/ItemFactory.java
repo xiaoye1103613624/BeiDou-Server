@@ -34,6 +34,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类型】ItemFactory（enum），包 {@code org.gms.client.inventory}。
+ *
+ * 物品持久化工厂枚举，定义背包、仓库、现金商城、雇佣商人、结婚礼物、Duey 快递等存储类型，
+ * 提供按类型加载/保存物品列表的统一接口，内部维护分段锁以提升并发性能。
+ *
  * @author Flav
  */
 public enum ItemFactory {

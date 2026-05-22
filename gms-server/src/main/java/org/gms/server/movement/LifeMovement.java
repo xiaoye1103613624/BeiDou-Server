@@ -24,7 +24,11 @@ package org.gms.server.movement;
 import java.awt.*;
 
 /**
- * 【接口】LifeMovement：由 `movement` 模块实现的契约。
+ * 【类型】LifeMovement（interface），包 `org.gms.server.movement`。
+ *
+ * 移动指令接口，扩展 LifeMovementFragment 并添加移动类型、新状态和持续时间的约定，用于所有角色/生物移动类型的序列化。
+ *
+ * @author 萧曵
  */
 public interface LifeMovement extends LifeMovementFragment {
     Point getPosition();

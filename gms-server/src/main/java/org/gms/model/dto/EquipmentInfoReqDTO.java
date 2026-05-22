@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 【类型】EquipmentInfoReqDTO（class），包 `org.gms.model.dto`。
+ * 装备信息查询请求DTO
+ * <p>用于查询装备详情的筛选条件</p>
  */
 @Setter
 @Getter
@@ -14,7 +15,8 @@ public class EquipmentInfoReqDTO {
 //    private Integer playerId;
 //    private String player;
 //    private Byte type;
-    private Integer id;//装备的ID 物品的ID
+    /** 装备记录ID（对应物品ID） */
+    private Integer id;
 //    private Integer quantity;
 //    private Integer rate;
 //    private Short str;

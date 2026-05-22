@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Beginner（class），包 `org.gms.constants.skills`。
+ *
+ * 定义初心者职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Beginner {
     public static final int BLESSING_OF_THE_FAIRY = 12;

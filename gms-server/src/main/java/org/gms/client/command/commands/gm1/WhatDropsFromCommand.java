@@ -36,7 +36,11 @@ import org.gms.util.Pair;
 import java.util.Iterator;
 
 /**
- * 【GM/玩家指令】WhatDropsFromCommand：聊天或控制台命令实现。
+ * 【GM1指令】WhatDropsFromCommand（class），包 `org.gms.client.command.commands.gm1`。
+ *
+ * GM指令：根据怪物名称查询其掉落物品及概率。
+ *
+ * @author Arthur L
  */
 public class WhatDropsFromCommand extends Command {
     {

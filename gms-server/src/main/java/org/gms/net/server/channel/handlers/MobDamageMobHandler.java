@@ -39,8 +39,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * @author Jay Estrella
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MOB_DAMAGE_MOB} 封包。
+ * 负责处理客户端怪物对怪物造成伤害的操作。
  */
 public final class MobDamageMobHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(MobDamageMobHandler.class);

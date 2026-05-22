@@ -24,6 +24,10 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
+ * 【GM2指令】GachaListCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：打开扭蛋机列表查询界面。
+ *
  * @author Ronan
  */
 public class GachaListCommand extends Command {

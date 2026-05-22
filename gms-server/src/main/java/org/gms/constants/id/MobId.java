@@ -1,7 +1,7 @@
 package org.gms.constants.id;
 
 /**
- * 【类型】MobId（class），包 `org.gms.constants.id`。
+ * 【类型】MobId（class），包 `org.gms.constants.id`。怪物ID常量：所有怪物及Boss的ID定义，包括扎昆、黑龙、品克缤、鱼王以及各类任务/道场/友好怪物，含怪物类型判断方法。
  */
 public class MobId {
     public static final int ARPQ_BOMB = 9300166;

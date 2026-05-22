@@ -30,7 +30,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】BuffMeCommand：聊天或控制台命令实现。
+ * 【GM1指令】BuffMeCommand（class），包 `org.gms.client.command.commands.gm1`。
+ *
+ * GM指令：为自己添加常用增益Buff（速度、跳跃、攻击、隐身、回血）。
+ *
+ * @author Arthur L
  */
 public class BuffMeCommand extends Command {
     {

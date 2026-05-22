@@ -31,7 +31,11 @@ import org.gms.server.maps.MapleMap;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】MapOwnerClaimCommand：聊天或控制台命令实现。
+ * 【GM0指令】MapOwnerClaimCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：声明或释放当前地图的所有权（开启地图所有权系统时有效）。
+ *
+ * @author Ronan
  */
 public class MapOwnerClaimCommand extends Command {
     {

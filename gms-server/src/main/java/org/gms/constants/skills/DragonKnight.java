@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author David
+ * 【技能常量】DragonKnight（class），包 `org.gms.constants.skills`。
+ *
+ * 定义龙骑士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class DragonKnight {
     public static final int ELEMENTAL_RESISTANCE = 1310000;

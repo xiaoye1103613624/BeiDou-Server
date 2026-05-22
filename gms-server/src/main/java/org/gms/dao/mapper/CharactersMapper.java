@@ -8,10 +8,11 @@ import org.gms.dao.entity.CharactersDO;
 import java.util.List;
 
 /**
- *  映射层。
+ * 【映射器】CharactersMapper（interface），包 {@code org.gms.dao.mapper}。
  *
- * @author sleep
- * @since 2024-05-24
+ * 对应数据库表 characters 的数据访问接口，提供角色信息相关查询操作。
+ *
+ * @author 萧曵
  */
 public interface CharactersMapper extends BaseMapper<CharactersDO> {
     @Update("UPDATE characters SET HasMerchant = #{value}")

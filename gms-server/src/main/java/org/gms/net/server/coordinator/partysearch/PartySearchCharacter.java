@@ -24,6 +24,10 @@ import org.gms.client.Character;
 import java.lang.ref.WeakReference;
 
 /**
+ * 【类】PartySearchCharacter，包 `org.gms.net.server.coordinator.partysearch`。
+ *
+ * 组队搜索角色封装，使用弱引用持有玩家对象，记录等级和排队状态，支持被队长搜索时验证可用性。
+ *
  * @author Ronan
  */
 public class PartySearchCharacter {

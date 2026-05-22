@@ -30,7 +30,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】BuffMapCommand：聊天或控制台命令实现。
+ * 【GM2指令】BuffMapCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：为当前地图所有玩家添加超级增益Buff。
+ *
+ * @author Arthur L
  */
 public class BuffMapCommand extends Command {
     {

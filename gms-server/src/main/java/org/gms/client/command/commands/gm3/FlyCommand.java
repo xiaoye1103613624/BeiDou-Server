@@ -30,7 +30,11 @@ import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】FlyCommand：聊天或控制台命令实现。
+ * 【GM指令】FlyCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：开启或关闭飞行模式（账号级别，开启后该账号下所有角色均可飞行）。
+ *
+ * @author Arthur L
  */
 public class FlyCommand extends Command {
     {

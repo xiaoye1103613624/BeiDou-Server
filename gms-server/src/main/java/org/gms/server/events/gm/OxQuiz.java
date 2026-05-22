@@ -35,7 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author FloppyDisk
+ * 【类型】OxQuiz（class），包 `org.gms.server.events.gm`。
+ *
+ * OX 问答活动，从 WZ 数据中加载题目并根据玩家站位判断答案正确性，支持多轮问答直至剩下最后两名玩家。
+ *
+ * @author 萧曵
  */
 public final class OxQuiz {
     private int round = 1;

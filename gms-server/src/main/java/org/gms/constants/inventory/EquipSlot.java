@@ -1,6 +1,8 @@
 package org.gms.constants.inventory;
 
 /**
+ * 【类型】EquipSlot（enum），包 `org.gms.constants.inventory`。装备槽位常量：定义角色装备栏位（帽子、上衣、裤子、武器、戒指、披风、勋章等）及其WZ映射名和允许的槽位编号。
+ *
  * @author The Spookster (The Real Spookster)
  */
 public enum EquipSlot {

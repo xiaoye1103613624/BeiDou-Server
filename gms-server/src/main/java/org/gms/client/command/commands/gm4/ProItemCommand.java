@@ -35,7 +35,11 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ProItemCommand：聊天或控制台命令实现。
+ * 【GM指令】ProItemCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：创建指定属性值的装备物品（全属性、攻击、防御等均一致）。
+ *
+ * @author Arthur L
  */
 public class ProItemCommand extends Command {
     {

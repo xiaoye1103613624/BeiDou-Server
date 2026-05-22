@@ -6,7 +6,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ReadPointsCommand：聊天或控制台命令实现。
+ * 【GM0指令】ReadPointsCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看当前角色的奖励积分（RP）与投票积分（VP）。
+ *
+ * @author Arthur L
  */
 public class ReadPointsCommand extends Command {
     {

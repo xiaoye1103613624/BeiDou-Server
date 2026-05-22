@@ -4,7 +4,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 【类型】GameConfigReqDTO（class），包 `org.gms.model.dto`。
+ * 游戏配置查询请求DTO
+ * <p>用于查询游戏配置参数的筛选条件</p>
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

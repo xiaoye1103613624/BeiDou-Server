@@ -30,7 +30,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】CheckDmgCommand：聊天或控制台命令实现。
+ * 【GM指令】CheckDmgCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：查看指定玩家的伤害统计信息（四维属性、攻击力、魔力、Buff加成与基础伤害）。
+ *
+ * @author Arthur L
  */
 public class CheckDmgCommand extends Command {
     {

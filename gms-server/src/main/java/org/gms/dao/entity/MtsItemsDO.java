@@ -13,10 +13,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- *  实体类。
+ * 【实体】MtsItemsDO（class），包 `org.gms.dao.entity`。
  *
- * @author sleep
- * @since 2024-05-24
+ * 对应数据库表 mts_items，存储交易商城物品数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

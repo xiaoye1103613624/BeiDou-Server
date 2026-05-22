@@ -22,6 +22,10 @@
 package org.gms.net.server;
 
 /**
+ * 【类】PlayerCoolDownValueHolder，包 `org.gms.net.server`。
+ *
+ * 玩家技能冷却值持有者，封装技能冷却的技能 ID、开始时间和持续时长。
+ *
  * @author Danny
  */
 public class PlayerCoolDownValueHolder {

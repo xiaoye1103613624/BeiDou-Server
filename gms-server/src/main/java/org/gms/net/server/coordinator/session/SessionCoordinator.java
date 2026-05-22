@@ -44,6 +44,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
+ * 【类】SessionCoordinator，包 `org.gms.net.server.coordinator.session`。
+ *
+ * 会话协调器（单例），统一管理登录/游戏的客户端会话生命周期，实现 HWID 校验、防多开检测和多账户关联控制。
+ *
  * @author Ronan
  */
 public class SessionCoordinator {

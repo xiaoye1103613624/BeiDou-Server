@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Marauder（class），包 `org.gms.constants.skills`。
+ *
+ * 定义斗士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Marauder {
     public static final int STUN_MASTERY = 5110000;

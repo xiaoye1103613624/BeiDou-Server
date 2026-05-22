@@ -30,7 +30,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】LevelCommand：聊天或控制台命令实现。
+ * 【GM指令】LevelCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：直接将自身等级设置为指定值（不触发升级动画，重置经验为0）。
+ *
+ * @author Arthur L
  */
 public class LevelCommand extends Command {
     {

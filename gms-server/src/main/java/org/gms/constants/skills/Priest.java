@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Priest（class），包 `org.gms.constants.skills`。
+ *
+ * 定义祭司职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Priest {
     public static final int ELEMENTAL_RESISTANCE = 2310000;

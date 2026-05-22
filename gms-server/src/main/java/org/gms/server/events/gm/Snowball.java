@@ -31,7 +31,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author kevintjuh93
+ * 【类型】Snowball（class），包 `org.gms.server.events.gm`。
+ *
+ * 雪球大战活动，控制两队推雪球的推进进度、雪人血量、击打判定和胜负判定，结束时自动传送队伍到对应地图。
+ *
+ * @author 萧曵
  */
 public class Snowball {
     private final MapleMap map;

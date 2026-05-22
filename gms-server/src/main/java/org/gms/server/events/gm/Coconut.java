@@ -33,11 +33,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author kevintjuh93
- */
-//Make them better :)
-/**
  * 【类型】Coconut（class），包 `org.gms.server.events.gm`。
+ *
+ * 椰子 harvest 活动核心，管理 Maple/Story 两队椰子击打得分、炸弹/掉落/停止计数以及加时赛和胜负判定逻辑。
+ *
+ * @author 萧曵
  */
 public class Coconut extends Event {
     private MapleMap map = null;

@@ -29,9 +29,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 【类型】QuestRequirement（class），包 {@code org.gms.server.quest.requirements}。
+ * 任务需求——前置任务条件，检查玩家是否已满足指定任务的状态要求（未接取/进行中/已完成等）。
+ *
  * @author Tyler (Twdtwd)
  */
 public class QuestRequirement extends AbstractQuestRequirement {
+    /** 前置任务条件映射：任务ID -> 状态要求 */
     Map<Integer, Integer> quests = new HashMap<>();
 
     public QuestRequirement(Quest quest, Data data) {

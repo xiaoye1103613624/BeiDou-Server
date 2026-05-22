@@ -30,7 +30,11 @@ import org.gms.dao.entity.GameConfigDO;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ShowMoveLifeCommand：聊天或控制台命令实现。
+ * 【GM指令】ShowMoveLifeCommand（class），包 `org.gms.client.command.commands.gm5`。
+ *
+ * GM指令：切换是否显示生命体（怪物/NPC）移动的调试信息。
+ *
+ * @author Arthur L
  */
 public class ShowMoveLifeCommand extends Command {
     {

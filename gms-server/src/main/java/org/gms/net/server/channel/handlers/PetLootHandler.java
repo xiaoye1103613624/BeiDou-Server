@@ -33,8 +33,8 @@ import org.gms.util.PacketCreator;
 import java.util.Set;
 
 /**
- * @author TheRamon
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PET_LOOT} 封包。
+ * 负责处理客户端宠物拾取物品的操作。
  */
 public final class PetLootHandler extends AbstractPacketHandler {
     @Override

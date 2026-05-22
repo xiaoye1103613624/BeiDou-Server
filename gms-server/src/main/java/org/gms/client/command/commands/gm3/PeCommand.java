@@ -43,7 +43,11 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 /**
- * 【GM/玩家指令】PeCommand：聊天或控制台命令实现。
+ * 【GM指令】PeCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：读取并执行pe.txt文件中的自定义数据包。
+ *
+ * @author Arthur L
  */
 public class PeCommand extends Command {
     {

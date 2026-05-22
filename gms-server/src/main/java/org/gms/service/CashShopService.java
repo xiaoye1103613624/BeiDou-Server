@@ -25,17 +25,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 /**
- * 【业务服务】CashShopService：封装 `service` 相关应用逻辑与数据协作。
+ * 【业务服务】CashShopService：封装商城（点券商城）商品查询、分类管理、上下架批处理相关的业务逻辑。
+ *
+ * <p>商城数据来源有两层：WZ 文件中定义的基础商品（通过 {@link CashShop.CashItemFactory} 加载），
+ * 以及数据库 {@code modified_cash_item} 表中可能覆盖的字段（价格、优先级、上下架状态等）。
+ * 查询时以 WZ 数据为基准，再用数据库数据覆盖差异字段，实现动态运营调整。</p>
  */
 @Service
 @AllArgsConstructor
 public class CashShopService {
     private final ModifiedCashItemMapper modifiedCashItemMapper;
 
+    /**
+     * 加载数据库中所有增量/覆盖的道具商城配置（用于启动时初始化缓存）。
+     *
+     * @return 所有数据库中的自定义商城道具记录
+     */
     public List<ModifiedCashItemDO> loadAllModifiedCashItems() {
         return modifiedCashItemMapper.selectAll();
     }
 
+    /**
+     * 获取商城全部分类（一级 + 二级），数据来源于 WZ {@code ETC/Category.img}。
+     *
+     * @return 商城分类列表
+     */
     public List<CashCategory> getAllCategoryList() {
         DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
         List<CashCategory> cashCategoryList = new ArrayList<>();
@@ -49,6 +63,22 @@ public class CashShopService {
         return cashCategoryList;
     }
 
+    /**
+     * 按分类分页查询商城商品。
+     *
+     * <p>查询流程：</p>
+     * <ol>
+     *   <li>校验分类 ID 和子分类 ID 非空</li>
+     *   <li>从 WZ 缓存中取出该分类下所有商品</li>
+     *   <li>从数据库缓存中取出同分类下所有覆盖数据</li>
+     *   <li>以数据库覆盖字段为准更新 WZ 商品</li>
+     *   <li>按上架状态、物品 ID 做二次过滤</li>
+     *   <li>按优先级降序、物品 ID 升序排列后分页</li>
+     * </ol>
+     *
+     * @param data 分类查询条件（id、subId 必填；onSale、itemId 可选过滤）
+     * @return 分页后的商城商品列表
+     */
     public Page<CashShopSearchRtnDTO> getCommodityByCategory(CashCategory data) {
         RequireUtil.requireNotNull(data.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
         RequireUtil.requireNotNull(data.getSubId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "subId"));
@@ -96,8 +126,17 @@ public class CashShopService {
                 .page();
     }
 
+    /**
+     * 根据商品 SN（序列号）查询单条商城商品详情。
+     *
+     * <p>从 SN 中解析出一级分类 ID 和二级分类 ID，查询 WZ 基准数据后再用数据库覆盖字段。</p>
+     *
+     * @param sn 商品序列号
+     * @return 商品详情 DTO
+     */
     public CashShopSearchRtnDTO getCommodityBySn(Integer sn) {
         RequireUtil.requireNotNull(sn, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
+        // 从SN中解析分类：第一位=一级分类，第2-3位=二级分类
         String snStr = String.valueOf(sn);
         int id = Integer.parseInt(snStr.substring(0, 1));
         int subId = Integer.parseInt(snStr.substring(1, 3));
@@ -105,6 +144,7 @@ public class CashShopService {
         ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getWzItem(sn);
         RequireUtil.requireNotNull(cashItem, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "sn", sn));
         CashShopSearchRtnDTO rtnDTO = fromCashItem(cashCategory, cashItem);
+        // 用数据库覆盖字段更新返回值
         CashShop.CashItemFactory.getModifiedCashItems().values().stream()
                 .filter(dbCashItem -> Objects.equals(dbCashItem.getSn(), sn))
                 .findFirst()
@@ -112,6 +152,15 @@ public class CashShopService {
         return rtnDTO;
     }
 
+    /**
+     * 修改单个商品的上下架状态及可选参数（价格、数量、有效期等）。
+     *
+     * <p>使用 {@code insertSelective} 仅插入非 null 字段，避免覆盖 WZ 默认值。
+     * 若为下架（onSale != 1），仅写入 onSale=0 记录。
+     * 修改完成后立即刷新内存缓存。</p>
+     *
+     * @param data 待修改的商品数据（sn 必填）
+     */
     @Transactional(rollbackFor = Exception.class)
     public void changeOnSale(ModifiedCashItemDO data) {
         RequireUtil.requireNotNull(data.getSn(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
@@ -126,6 +175,7 @@ public class CashShopService {
             CashShop.CashItemFactory.loadAllModifiedCashItems();
             return;
         }
+        // 仅存储与WZ默认值不同的字段，减少数据库冗余
         if (Objects.equals(cashItem.getItemId(), data.getItemId())) {
             data.setItemId(null);
         }
@@ -148,6 +198,40 @@ public class CashShopService {
         CashShop.CashItemFactory.loadAllModifiedCashItems();
     }
 
+    /**
+     * 批量修改商品上架状态，支持按"价格"/"数量"/"有效期"三种维度统一设置。
+     *
+     * <p>遍历传入的商品列表，逐个设置 onSale=1 并调用 {@link #changeOnSale(ModifiedCashItemDO)}。</p>
+     *
+     * @param submit 批量操作请求（包含商品列表、操作类型、统一值）
+     */
+    @Transactional
+    public void batchChangeOnSale(CashShopBatchOnSaleReqDTO submit) {
+        for (ModifiedCashItemDO data : submit.getData()) {
+            data.setOnSale(1);
+            switch (submit.getType()) {
+                case "价格":
+                    data.setPrice(submit.getValue());
+                    break;
+                case "数量":
+                    data.setCount(submit.getValue().shortValue());
+                    break;
+                case "有效期":
+                    data.setPeriod(submit.getValue().longValue());
+                    break;
+            }
+            changeOnSale(data);
+        }
+    }
+
+    /**
+     * 根据一级和二级分类 ID 从缓存中匹配分类对象。
+     *
+     * @param id    一级分类 ID
+     * @param subId 二级分类 ID
+     * @return 匹配的商城分类
+     * @throws BizException 未找到匹配分类时抛出
+     */
     private CashCategory getCategory(Integer id, Integer subId) {
         return CashShop.CashItemFactory.getCashCategories().stream()
                 .filter(cc -> Objects.equals(cc.getId(), id) && Objects.equals(cc.getSubId(), subId))
@@ -155,6 +239,13 @@ public class CashShopService {
                 .orElseThrow(() -> new BizException(I18nUtil.getExceptionMessage("CashShopService.getByCategory.exception1")));
     }
 
+    /**
+     * 将 WZ 商品实体 + 分类信息组装为前端展示 DTO。
+     *
+     * @param cashCategory 商品所属分类
+     * @param cashItem     WZ 中的商品数据
+     * @return 前端展示用的 DTO
+     */
     private CashShopSearchRtnDTO fromCashItem(CashCategory cashCategory, ModifiedCashItemDO cashItem) {
         return CashShopSearchRtnDTO.builder()
                 .categoryId(cashCategory.getId())
@@ -198,6 +289,12 @@ public class CashShopService {
                 .build();
     }
 
+    /**
+     * 用数据库中的覆盖字段更新返回 DTO（数据库有值时覆盖 WZ 默认值）。
+     *
+     * @param rtnDTO     返回给前端的 DTO
+     * @param dbCashItem 数据库中的覆盖记录
+     */
     private void setDbItemValue(CashShopSearchRtnDTO rtnDTO, ModifiedCashItemDO dbCashItem) {
         rtnDTO.setItemId(Optional.ofNullable(dbCashItem.getItemId()).orElse(rtnDTO.getItemId()));
         rtnDTO.setPrice(Optional.ofNullable(dbCashItem.getPrice()).orElse(rtnDTO.getPrice()));
@@ -216,24 +313,5 @@ public class CashShopService {
         rtnDTO.setPbPoint(Optional.ofNullable(dbCashItem.getPbPoint()).orElse(rtnDTO.getPbPoint()));
         rtnDTO.setPbGift(Optional.ofNullable(dbCashItem.getPbGift()).orElse(rtnDTO.getPbGift()));
         rtnDTO.setPackageSn(Optional.ofNullable(dbCashItem.getPackageSn()).orElse(rtnDTO.getPackageSn()));
-    }
-
-    @Transactional
-    public void batchChangeOnSale(CashShopBatchOnSaleReqDTO submit) {
-        for (ModifiedCashItemDO data : submit.getData()) {
-            data.setOnSale(1);
-            switch (submit.getType()) {
-                case "价格":
-                    data.setPrice(submit.getValue());
-                    break;
-                case "数量":
-                    data.setCount(submit.getValue().shortValue());
-                    break;
-                case "有效期":
-                    data.setPeriod(submit.getValue().longValue());
-                    break;
-            }
-            changeOnSale(data);
-        }
     }
 }

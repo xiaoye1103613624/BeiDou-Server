@@ -60,10 +60,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 频道服务器入站封包处理器「TakeDamageHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#TAKE_DAMAGE} 封包。
+ * 负责处理客户端的受到伤害操作。
  */
 public final class TakeDamageHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(TakeDamageHandler.class);
@@ -83,6 +81,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         int mpattack = 0;
         Monster attacker = null;
         final MapleMap map = chr.getMap();
+        // 非环境伤害（-3/-4为掉落/踩刺）时读取怪物信息
         if (damagefrom != -3 && damagefrom != -4) {
             monsteridfrom = p.readInt();
             oid = p.readInt();
@@ -101,6 +100,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         return;
                     }
 
+                    // 怪物偷取物品逻辑
                     List<loseItem> loseItems;
                     if (damage > 0) {
                         loseItems = attacker.getStats().loseItem();
@@ -158,6 +158,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
 
             direction = p.readByte();
         }
+        // 非假死攻击时处理怪物攻击信息
         if (damagefrom != -1 && damagefrom != -2 && attacker != null) {
             MobAttackInfo attackInfo = MobAttackInfoFactory.getMobAttackInfo(attacker, damagefrom);
             if (attackInfo != null) {
@@ -210,9 +211,11 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             mpattack = 0;
         }
 
+        // 非隐身时实际处理伤害扣血
         if (damage > 0 && !chr.isHidden()) {
             if (attacker != null) {
                 if (damagefrom == -1) {
+                    // 反伤/能量护盾（boss战减半）
                     if (chr.getBuffedValue(BuffStat.POWERGUARD) != null) { // PG works on bosses, but only at half of the rate.
                         int bouncedamage = (int) (damage * (chr.getBuffedValue(BuffStat.POWERGUARD).doubleValue() / (attacker.isBoss() ? 200 : 100)));
                         bouncedamage = Math.min(bouncedamage, attacker.getMaxHp() / 10);
@@ -255,6 +258,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     damage *= Math.ceil(highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
             }
+            // 魔法护盾（优先扣MP）vs 金钱护盾（消耗金币抵伤）vs 普通扣血
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
                 int mploss = (int) (damage * (chr.getBuffedValue(BuffStat.MAGIC_GUARD).doubleValue() / 100.0));
@@ -284,16 +288,19 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 chr.addMPHP(-damage, -mpattack);
             }
         }
+        // 广播伤害给周围玩家
         if (!chr.isHidden()) {
             map.broadcastMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         } else {
             map.broadcastGMMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         }
+        // 修炼场受击奖励
         if (MapId.isDojo(map.getId())) {
             chr.setDojoEnergy(chr.getDojoEnergy() + GameConfig.getServerInt("dojo_energy_dmg"));
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
+        // 处理被驱逐的玩家
         for (Character player : banishPlayers) {  // chill, if this list ever gets non-empty an attacker does exist, trust me :)
             player.changeMapBanish(attacker.getBanish().getMap(), attacker.getBanish().getPortal(), attacker.getBanish().getMsg());
         }

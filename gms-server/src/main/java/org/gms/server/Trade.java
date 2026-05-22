@@ -46,12 +46,13 @@ import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @author Matze
- * @author Ronan - concurrency safety + check available slots + trade results
-                    并发安全+检查可用插槽+交易结果
- */
-/**
  * 【类型】Trade（class），包 `org.gms.server`。
+ *
+ * 玩家交易系统，处理双方物品/Meso 的放置、确认和交换流程。
+ * 包含交易锁（防重入）、邀请机制（TradeInvite）、并发安全控制和完整的交易结果枚举。
+ *
+ * @author Matze
+ * @author Ronan
  */
 public class Trade {
     private static final Logger log = LoggerFactory.getLogger(Trade.class);

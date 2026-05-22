@@ -56,7 +56,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * @author Alan (SharpAceX)
+ * 【类型】Expedition（class），包 `org.gms.server.expeditions`。
+ *
+ * 远征队系统核心，管理远征队伍的注册、成员加入/踢出/封禁、Boss日志记录以及队员集合传送等操作。
+ *
+ * @author 萧曵
  */
 public class Expedition {
     private static final Logger log = LoggerFactory.getLogger(Expedition.class);

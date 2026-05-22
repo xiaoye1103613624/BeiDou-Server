@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】HurtCommand：聊天或控制台命令实现。
+ * 【GM指令】HurtCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：将指定玩家的HP降为1。
+ *
+ * @author Arthur L
  */
 public class HurtCommand extends Command {
     {

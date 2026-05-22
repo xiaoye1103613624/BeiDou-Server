@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】NightWalker（class），包 `org.gms.constants.skills`。
+ *
+ * 定义暗夜行者（皇家骑士团飞侠）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class NightWalker {
     // 1st job

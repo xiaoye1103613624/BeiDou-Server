@@ -42,11 +42,25 @@ import java.util.List;
 
 
 /**
- * @author Drago (Dragohe4rt)
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MONSTER_CARNIVAL} 封包。
+ * 负责处理客户端怪物嘉年华（召唤怪物、施加减益、守护者等）操作。
  */
-
 public final class MonsterCarnivalHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理怪物嘉年华（Monster Carnival）客户端封包。
+     * <p>
+     * 根据操作类型（tab）执行不同的嘉年华功能：
+     * </p>
+     * <ul>
+     *   <li>tab=0：召唤怪物，消耗CP点数在己方队伍区域内随机位置生成怪物</li>
+     *   <li>tab=1：施加减益效果（Debuff），对敌方队伍施加异常状态或驱散</li>
+     *   <li>tab=2：召唤守护者（Guardian），在地图指定位置生成守护NPC</li>
+     * </ul>
+     *
+     * @param p 客户端发送的封包数据
+     * @param c 客户端连接对象
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         if (c.tryacquireClient()) {
@@ -55,6 +69,8 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                     int tab = p.readByte();
                     int num = p.readByte();
                     int neededCP = 0;
+
+                    // tab=0：召唤怪物，校验CP点数和队伍召唤次数上限
                     if (tab == 0) {
                         final List<Pair<Integer, Integer>> mobs = c.getPlayer().getMap().getMobsToSpawn();
                         if (num >= mobs.size() || c.getPlayer().getCP() < mobs.get(num).right) {
@@ -66,18 +82,21 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         final Monster mob = LifeFactory.getMonster(mobs.get(num).left);
                         MonsterCarnival mcpq = c.getPlayer().getMonsterCarnival();
                         if (mcpq != null) {
+                            // 校验当前队伍是否还有召唤次数剩余
                             if (!mcpq.canSummonR() && c.getPlayer().getTeam() == 0 || !mcpq.canSummonB() && c.getPlayer().getTeam() == 1) {
                                 c.sendPacket(PacketCreator.CPQMessage((byte) 2));
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             }
 
+                            // 记录对应队伍的召唤次数
                             if (c.getPlayer().getTeam() == 0) {
                                 mcpq.summonR();
                             } else {
                                 mcpq.summonB();
                             }
 
+                            // 在己方队伍随机出生点生成怪物
                             Point spawnPos = c.getPlayer().getMap().getRandomSP(c.getPlayer().getTeam());
                             mob.setPosition(spawnPos);
 
@@ -87,14 +106,16 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         }
 
                         neededCP = mobs.get(num).right;
-                    } else if (tab == 1) { //debuffs
+
+                    // tab=1：对敌方队伍施加减益效果或驱散
+                    } else if (tab == 1) {
                         final List<Integer> skillid = c.getPlayer().getMap().getSkillIds();
                         if (num >= skillid.size()) {
                             c.getPlayer().dropMessage(5, "An unexpected error has occurred.");
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
-                        final MCSkill skill = CarnivalFactory.getInstance().getSkill(skillid.get(num)); //ugh wtf
+                        final MCSkill skill = CarnivalFactory.getInstance().getSkill(skillid.get(num));
                         if (skill == null || c.getPlayer().getCP() < skill.cpLoss()) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());
@@ -102,6 +123,8 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         }
                         final Disease dis = skill.getDisease();
                         Party enemies = c.getPlayer().getParty().getEnemy();
+
+                        // 群体减益：通过命中率判定是否对所有敌方队员生效
                         if (skill.targetsAll()) {
                             int hitChance = rollHitChance(dis.getMobSkillType());
                             if (hitChance <= 80) {
@@ -117,6 +140,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                                 }
                             }
                         } else {
+                            // 单体减益：随机选取一名敌方队员施加效果
                             int amount = enemies.getMembers().size() - 1;
                             int randd = (int) Math.floor(Math.random() * amount);
                             Character chrApp = c.getPlayer().getMap().getCharacterById(enemies.getMemberByPos(randd).getId());
@@ -130,7 +154,9 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         }
                         neededCP = skill.cpLoss();
                         c.sendPacket(PacketCreator.enableActions());
-                    } else if (tab == 2) { //protectors
+
+                    // tab=2：召唤守护者，校验CP点数和队伍守护者数量上限
+                    } else if (tab == 2) {
                         final MCSkill skill = CarnivalFactory.getInstance().getGuardian(num);
                         if (skill == null || c.getPlayer().getCP() < skill.cpLoss()) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
@@ -140,12 +166,14 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
 
                         MonsterCarnival mcpq = c.getPlayer().getMonsterCarnival();
                         if (mcpq != null) {
+                            // 校验当前队伍是否还有守护者召唤名额
                             if (!mcpq.canGuardianR() && c.getPlayer().getTeam() == 0 || !mcpq.canGuardianB() && c.getPlayer().getTeam() == 1) {
                                 c.sendPacket(PacketCreator.CPQMessage((byte) 2));
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             }
 
+                            // 尝试生成守护者，失败时根据返回码发送对应错误提示
                             int success = c.getPlayer().getMap().spawnGuardian(c.getPlayer().getTeam(), num);
                             if (success != 1) {
                                 switch (success) {
@@ -167,6 +195,8 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             }
                         }
                     }
+
+                    // 扣除消耗的CP点数并广播操作结果
                     c.getPlayer().gainCP(-neededCP);
                     c.getPlayer().getMap().broadcastMessage(PacketCreator.playerSummoned(c.getPlayer().getName(), tab, num));
                 } catch (Exception e) {

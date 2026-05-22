@@ -35,7 +35,11 @@ import org.gms.util.I18nUtil;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】GachaCommand：聊天或控制台命令实现。
+ * 【GM0指令】GachaCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：根据指定扭蛋机名称查询对应的奖品列表。
+ *
+ * @author Arthur L
  */
 public class GachaCommand extends Command {
     {

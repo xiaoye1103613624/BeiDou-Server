@@ -39,25 +39,23 @@ import org.gms.util.PacketCreator;
 import java.util.List;
 
 /**
- * 频道服务器入站封包处理器「PartyOperationHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PARTY_OPERATION} 封包。
+ * 负责处理客户端的组队操作。
  */
 public final class PartyOperationHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        int operation = p.readByte();
+        int operation = p.readByte(); // 组队操作类型：1创建 2离开/解散 3加入 4邀请 5踢出 6转移队长
         Character player = c.getPlayer();
         World world = c.getWorldServer();
         Party party = player.getParty();
         switch (operation) {
-            case 1: { // create
+            case 1: { // 创建队伍
                 Party.createParty(player, false);
                 break;
             }
-            case 2: { // leave/disband
+            case 2: { // 离开/解散队伍
                 if (party != null) {
                     List<Character> partymembers = player.getPartyMembersOnline();
 
@@ -67,9 +65,10 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 3: { // join
+            case 3: { // 接受邀请加入队伍
                 int partyid = p.readInt();
 
+                // 验证邀请是否有效
                 InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
                 InviteResultType res = inviteRes.result;
                 if (res == InviteResultType.ACCEPTED) {
@@ -79,10 +78,11 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 4: { // invite
+            case 4: { // 邀请玩家入队
                 String name = p.readString();
                 Character invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
+                    // 等级检查：最低要求10级
                     if (invited.getLevel() < 10 && (!GameConfig.getServerBoolean("use_party_for_starters") || player.getLevel() >= 10)) { //min requirement is level 10
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));
                         return;
@@ -92,6 +92,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                         return;
                     }
 
+                    // 被邀请者未组队时发起邀请
                     if (invited.getParty() == null) {
                         if (party == null) {
                             if (!Party.createParty(player, false)) {
@@ -100,6 +101,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
 
                             party = player.getParty();
                         }
+                        // 队伍最多6人
                         if (party.getMembers().size() < 6) {
                             if (InviteCoordinator.createInvite(InviteType.PARTY, player, party.getId(), invited.getId())) {
                                 invited.sendPacket(PacketCreator.partyInvite(player));
@@ -117,12 +119,12 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 5: { // expel
+            case 5: { // 踢出队伍
                 int cid = p.readInt();
                 Party.expelFromParty(party, c, cid);
                 break;
             }
-            case 6: { // change leader
+            case 6: { // 转移队长
                 int newLeader = p.readInt();
                 PartyCharacter newLeadr = party.getMemberById(newLeader);
                 world.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeadr);

@@ -30,19 +30,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 【类型】SpawnPoint（class），包 `org.gms.server.life`。
+ * 【类型】SpawnPoint（class），包 {@code org.gms.server.life}。
+ * 怪物刷新点，记录地图上怪物的刷新位置、刷新间隔与生成条件。
+ * 通过 {@link #shouldSpawn()} 判断是否达到刷新时机，{@link #getMonster()} 创建怪物实例并注册死亡监听器。
  */
 public class SpawnPoint {
+    /** 怪物ID */
     private final int monster;
+    /** 怪物刷新冷却时间（秒，-1表示不刷新） */
     private final int mobTime;
+    /** 怪物所属队伍 */
     private final int team;
+    /** 怪物站立平台高度 */
     private final int fh;
+    /** 怪物朝向（左/右） */
     private final int f;
+    /** 刷新位置坐标 */
     private final Point pos;
+    /** 下次可刷新时间戳 */
     private long nextPossibleSpawn;
+    /** 怪物刷新间隔（毫秒） */
     private int mobInterval = 5000;
+    /** 当前已刷新的怪物数量 */
     private final AtomicInteger spawnedMonsters = new AtomicInteger(0);
+    /** 是否为不可移动怪物 */
     private final boolean immobile;
+    /** 是否禁止刷新 */
     private boolean denySpawn = false;
 
     public SpawnPoint(final Monster monster, Point pos, boolean immobile, int mobTime, int mobInterval, int team) {

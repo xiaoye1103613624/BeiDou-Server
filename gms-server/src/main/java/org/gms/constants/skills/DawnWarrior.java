@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】DawnWarrior（class），包 `org.gms.constants.skills`。
+ *
+ * 定义魂骑士（皇家骑士团战士）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class DawnWarrior {
     // 1st job

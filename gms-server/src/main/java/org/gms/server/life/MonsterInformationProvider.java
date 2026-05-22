@@ -47,7 +47,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 【工厂/提供者】MonsterInformationProvider：创建或提供 `life` 相关运行时对象。
+ * 【类型】MonsterInformationProvider（class），包 {@code org.gms.server.life}。
+ * 怪物数据提供器（单例），负责从数据库加载怪物的掉落表数据，
+ * 并提供怪物名称查询、Boss判定、攻击动画时间等怪物属性的查询接口。
  */
 public class MonsterInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(MonsterInformationProvider.class);
@@ -59,20 +61,31 @@ public class MonsterInformationProvider {
         return instance;
     }
 
+    /** 怪物掉落表缓存（怪物ID -> 掉落条目列表） */
     private final Map<Integer, List<MonsterDropEntry>> drops = new HashMap<>();
+    /** 全局掉落表（所有怪物共享的掉落） */
     private final List<MonsterGlobalDropEntry> globaldrops = new ArrayList<>();
+    /** 按大陆区分的全局掉落缓存 */
     private final Map<Integer, List<MonsterGlobalDropEntry>> continentdrops = new HashMap<>();
 
+    /** 掉落概率池（用于随机选择掉落物） */
     private final Map<Integer, List<Integer>> dropsChancePool = new HashMap<>();    // thanks to ronan
+    /** 不包含多件装备掉落的怪物ID集合 */
     private final Set<Integer> hasNoMultiEquipDrops = new HashSet<>();
+    /** 多件装备额外掉落缓存 */
     private final Map<Integer, List<MonsterDropEntry>> extraMultiEquipDrops = new HashMap<>();
 
+    /** 怪物攻击动画时间缓存 */
     private final Map<Pair<Integer, Integer>, Integer> mobAttackAnimationTime = new HashMap<>();
+    /** 怪物技能动画时间缓存 */
     private final Map<MobSkill, Integer> mobSkillAnimationTime = new HashMap<>();
 
+    /** 怪物攻击信息（MP消耗、冷却时间） */
     private final Map<Integer, Pair<Integer, Integer>> mobAttackInfo = new HashMap<>();
 
+    /** 怪物Boss判定缓存 */
     private final Map<Integer, Boolean> mobBossCache = new HashMap<>();
+    /** 怪物名称缓存 */
     private final Map<Integer, String> mobNameCache = new HashMap<>();
 
     protected MonsterInformationProvider() {

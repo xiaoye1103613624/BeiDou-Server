@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Spearman（class），包 `org.gms.constants.skills`。
+ *
+ * 定义枪战士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Spearman {
     public static final int SPEAR_MASTERY = 1300000;

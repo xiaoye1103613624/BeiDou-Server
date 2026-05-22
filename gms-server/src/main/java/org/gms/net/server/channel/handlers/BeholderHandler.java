@@ -30,7 +30,8 @@ import org.gms.server.maps.Summon;
 import java.util.Collection;
 
 /**
- * @author BubblesDev
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#BEHOLDER} 封包。
+ * 负责处理客户端的黑暗骑士Beholder召唤兽操作。
  */
 public final class BeholderHandler extends AbstractPacketHandler {//Summon Skills noobs
 

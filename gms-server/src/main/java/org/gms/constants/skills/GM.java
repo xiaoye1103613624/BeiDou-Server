@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】GM（class），包 `org.gms.constants.skills`。
+ *
+ * 定义GM管理员职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class GM {
     public static final int GM_ROAR1 = 9001001;

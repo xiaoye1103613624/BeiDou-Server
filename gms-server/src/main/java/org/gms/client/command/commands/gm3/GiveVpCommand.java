@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】GiveVpCommand：聊天或控制台命令实现。
+ * 【GM指令】GiveVpCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：给予投票点数（VP），可指定目标玩家。
+ *
+ * @author Arthur L
  */
 public class GiveVpCommand extends Command {
     {

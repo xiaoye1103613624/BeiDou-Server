@@ -17,7 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 【Web 控制器】GachaponController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】GachaponController（class），包 {@code org.gms.controller}。
+ *
+ * 处理扭蛋（抽奖）系统的奖池与奖品管理，包括奖池列表分页查询、
+ * 奖池的创建/更新/删除以及各奖池下奖品的查询、创建/更新与删除。
+ *
+ * @author 萧曵
  */
 @RestController
 @RequestMapping("/gachapon")

@@ -35,6 +35,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【抽象类】BaseScheduler，包 `org.gms.net.server.services`。
+ *
+ * 定时调度器抽象基类，管理注册条目的定时执行与过期处理，支持外部锁和空闲自动停启。
+ *
  * @author Ronan
  */
 public abstract class BaseScheduler {

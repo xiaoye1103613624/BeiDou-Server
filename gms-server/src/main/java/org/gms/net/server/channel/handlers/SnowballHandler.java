@@ -29,7 +29,8 @@ import org.gms.server.events.gm.Snowball;
 import org.gms.server.maps.MapleMap;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#SNOWBALL} 封包。
+ * 负责处理客户端雪球活动（Snowball Event）的操作。
  */
 public final class SnowballHandler extends AbstractPacketHandler {
 

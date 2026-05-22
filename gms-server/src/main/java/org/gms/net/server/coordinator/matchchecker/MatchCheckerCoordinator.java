@@ -36,6 +36,10 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 【类】MatchCheckerCoordinator，包 `org.gms.net.server.coordinator.matchchecker`。
+ *
+ * 匹配确认协调器，管理多人匹配确认流程（如公会创建、嘉年华挑战），使用信号量控制并发，确保所有参与者一致同意后执行。
+ *
  * @author Ronan
  */
 public class MatchCheckerCoordinator {

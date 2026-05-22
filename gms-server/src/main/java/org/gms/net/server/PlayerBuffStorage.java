@@ -32,8 +32,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Danny//changed to map :3
- * @author Ronan//debuffs to storage as well
+ * 【类】PlayerBuffStorage，包 `org.gms.net.server`。
+ *
+ * 玩家 Buff 暂存器，在角色切换频道或离线时临时存储 Buff 和异常状态数据，恢复时还原。
+ *
+ * @author Danny
+ * @author Ronan
  */
 public class PlayerBuffStorage {
     private final int id = (int) (Math.random() * 100);

@@ -44,7 +44,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】DebugCommand：聊天或控制台命令实现。
+ * 【GM指令】DebugCommand（class），包 `org.gms.client.command.commands.gm5`。
+ *
+ * GM指令：多功能调试命令，支持查看怪物、传送门、地图、事件、反应堆等多种调试信息。
+ *
+ * @author Arthur L
  */
 public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};

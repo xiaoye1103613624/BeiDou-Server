@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 【类型】AutobanManager（class），包 {@code org.gms.client.autoban}。
+ *
+ * 角色级自动封禁管理器，记录各类违规行为的扣分累计、过期衰减、MISS 计数与操作频率检测（spam/timestamp），
+ * 当违规分数达到 {@link AutobanFactory} 定义的阈值时触发自动封禁。
+ *
  * @author kevintjuh93
  */
 public class AutobanManager {

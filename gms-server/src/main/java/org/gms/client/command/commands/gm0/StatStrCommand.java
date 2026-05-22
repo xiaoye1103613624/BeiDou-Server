@@ -30,7 +30,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】StatStrCommand：聊天或控制台命令实现。
+ * 【GM0指令】StatStrCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：一键将剩余能力点分配至力量（STR）。
+ *
+ * @author Arthur L
  */
 public class StatStrCommand extends Command {
     {

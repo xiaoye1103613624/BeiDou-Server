@@ -39,18 +39,19 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 
 /**
- * @author LaiLaiNoob
+ * 【类】Mist（class），包 {@code org.gms.server.maps}。
+ * 迷雾/区域效果系统，表示地图中的持续性范围效果（毒雾、烟雾弹、回复光环等）。
  */
 public class Mist extends AbstractMapObject {
-    private final Rectangle mistPosition;
-    private Character owner = null;
-    private Monster mob = null;
-    private StatEffect source;
-    private MobSkill skill;
-    private final boolean isMobMist;
-    private boolean isPoisonMist;
-    private boolean isRecoveryMist;
-    private final int skillDelay;
+    private final Rectangle mistPosition; // 迷雾区域
+    private Character owner = null; // 施放者
+    private Monster mob = null; // 怪物施放者
+    private StatEffect source; // 来源技能效果
+    private MobSkill skill; // 怪物技能
+    private final boolean isMobMist; // 是否怪物迷雾
+    private boolean isPoisonMist; // 是否毒雾
+    private boolean isRecoveryMist; // 是否回复迷雾
+    private final int skillDelay; // 技能延迟
 
     public Mist(Rectangle mistPosition, Monster mob, MobSkill skill) {
         this.mistPosition = mistPosition;

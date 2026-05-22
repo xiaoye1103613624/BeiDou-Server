@@ -42,12 +42,23 @@ import java.util.Map;
 
 /**
  * 【类型】Equip（class），包 `org.gms.client.inventory`。
+ *
+ * 装备物品类，继承 {@link Item}，代表一件具体的装备（武器、帽子、衣服、鞋子、戒指等）。
+ * 拥有装备特有的属性：力量/敏捷/智力/运气加成、攻击/魔力、防御、命中/回避、手技、速度/跳跃、
+ * 升级次数、装备等级、物品等级、制造属性等。
+ *
+ * 关键机制：
+ * <ul>
+ *   <li><b>卷轴强化</b>：通过 {@link #scrollEquipWithId} 使用卷轴，根据成功率返回 {@link ScrollResult}</li>
+ *   <li><b>属性统计</b>：{@link #getStatIncrease(int)} 计算单个属性的总加成（基础 + 制造强化）</li>
+ *   <li><b>混沌卷轴</b>：{@link #scrollOptionEquipWithChaos} 随机增减所有属性</li>
+ * </ul>
  */
 public class Equip extends Item {
     private static final Logger log = LoggerFactory.getLogger(Equip.class);
 
+    /** 卷轴使用结果 */
     public enum ScrollResult {
-
         FAIL(0), SUCCESS(1), CURSE(2);
         private int value = -1;
 
@@ -60,8 +71,8 @@ public class Equip extends Item {
         }
     }
 
+    /** 装备可强化的属性类型（位置索引与属性名对应关系） */
     public enum StatUpgrade {
-
         incDEX(0), incSTR(1), incINT(2), incLUK(3),
         incMHP(4), incMMP(5), incPAD(6), incMAD(7),
         incPDD(8), incMDD(9), incEVA(10), incACC(11),
@@ -73,10 +84,14 @@ public class Equip extends Item {
         }
     }
 
+    /** 剩余可用升级次数 */
     private byte upgradeSlots;
+    /** 装备等级（需求等级）、物品等级（成长装备的当前等级） */
     @Getter
     private byte level, itemLevel;
+    /** 装备标志位 */
     private short flag;
+    /** 基础属性：力量/敏捷/智力/运气/HP/MP/攻击/魔力/物防/魔防/命中/回避/手技/速度/跳跃/恶毒 */
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
     private float itemExp;
     private int ringid = -1;

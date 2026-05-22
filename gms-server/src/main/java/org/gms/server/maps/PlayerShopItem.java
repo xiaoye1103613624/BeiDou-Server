@@ -24,6 +24,10 @@ package org.gms.server.maps;
 import org.gms.client.inventory.Item;
 
 /**
+ * 【类型】PlayerShopItem，class，包 {@code org.gms.server.maps}。
+ *
+ * 玩家商店物品条目数据类，封装商店中单个商品的物品对象、捆绑数量和价格信息。
+ *
  * @author Matze
  */
 public class PlayerShopItem {

@@ -26,7 +26,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author BubblesDev
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_INNER_PORTAL} 封包。
+ * 负责处理客户端的内部传送门使用操作。
  */
 public final class InnerPortalHandler extends AbstractPacketHandler {
     @Override

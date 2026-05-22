@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】TimerMapCommand：聊天或控制台命令实现。
+ * 【GM指令】TimerMapCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：为当前地图所有玩家设置或移除倒计时。
+ *
+ * @author MedicOP
  */
 public class TimerMapCommand extends Command {
     {

@@ -33,7 +33,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】MonitorCommand：聊天或控制台命令实现。
+ * 【GM指令】MonitorCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：切换是否监控指定玩家的数据包。
+ *
+ * @author Arthur L
  */
 public class MonitorCommand extends Command {
     {

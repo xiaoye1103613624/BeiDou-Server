@@ -39,7 +39,11 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * 【GM/玩家指令】GotoCommand：聊天或控制台命令实现。
+ * 【GM1指令】GotoCommand（class），包 `org.gms.client.command.commands.gm1`。
+ *
+ * GM指令：快速传送至指定城镇或区域地图。
+ *
+ * @author Arthur L
  */
 public class GotoCommand extends Command {
 

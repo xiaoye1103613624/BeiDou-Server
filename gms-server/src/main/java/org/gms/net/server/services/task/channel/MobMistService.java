@@ -24,6 +24,10 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 【类】MobMistService，包 `org.gms.net.server.services.task.channel`。
+ *
+ * 怪物迷雾服务，按地图分区管理怪物迷雾效果的延迟取消调度。
+ *
  * @author Ronan
  */
 public class MobMistService extends BaseService {

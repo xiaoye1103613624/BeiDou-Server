@@ -31,6 +31,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 【类】PartySearchEchelon，包 `org.gms.net.server.coordinator.partysearch`。
+ *
+ * 组队搜索梯队缓冲，作为待合并到主存储的玩家暂存队列，使用读写锁保证线程安全的批量导出。
+ *
  * @author Ronan
  */
 public class PartySearchEchelon {

@@ -30,7 +30,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】SpCommand：聊天或控制台命令实现。
+ * 【GM指令】SpCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：设置自身或指定玩家的剩余技能点（SP）数量。
+ *
+ * @author Arthur L
  */
 public class SpCommand extends Command {
     {

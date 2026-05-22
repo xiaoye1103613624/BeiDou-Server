@@ -30,7 +30,11 @@ import org.gms.server.life.PlayerNPC;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】PlayerNpcCommand：聊天或控制台命令实现。
+ * 【GM指令】PlayerNpcCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前位置创建指定玩家的玩家NPC。
+ *
+ * @author Arthur L
  */
 public class PlayerNpcCommand extends Command {
     {

@@ -1,7 +1,7 @@
 package org.gms.constants.id;
 
 /**
- * 【类型】MapId（class），包 `org.gms.constants.id`。
+ * 【类型】MapId（class），包 `org.gms.constants.id`。地图ID常量：所有地图ID的定义，包括城镇、事件地图、Boss地图、道场、副本等区域及区域范围判断方法。
  */
 public class MapId {
     // Special

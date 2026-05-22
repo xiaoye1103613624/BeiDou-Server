@@ -27,7 +27,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Xterminator
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CLOSE_CHALKBOARD} 封包。
+ * 负责处理客户端的关闭黑板操作。
  */
 public final class CloseChalkboardHandler extends AbstractPacketHandler {
 

@@ -29,14 +29,15 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 
 /**
- * @author Jan
+ * 【类】Summon（class），包 {@code org.gms.server.maps}。
+ * 召唤兽对象，表示玩家技能召唤出的战斗伙伴，支持跟随、攻击、傀儡等行为。
  */
 public class Summon extends AbstractAnimatedMapObject {
-    private final Character owner;
-    private final byte skillLevel;
-    private final int skill;
-    private int hp;
-    private final SummonMovementType movementType;
+    private final Character owner; // 所属主人
+    private final byte skillLevel; // 技能等级
+    private final int skill; // 技能ID
+    private int hp; // 当前血量
+    private final SummonMovementType movementType; // 移动类型
 
     public Summon(Character owner, int skill, Point pos, SummonMovementType movementType) {
         this.owner = owner;

@@ -35,7 +35,11 @@ import org.gms.util.Pair;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】RanksCommand：聊天或控制台命令实现。
+ * 【GM0指令】RanksCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看当前世界玩家等级排行。
+ *
+ * @author Arthur L
  */
 public class RanksCommand extends Command {
     {

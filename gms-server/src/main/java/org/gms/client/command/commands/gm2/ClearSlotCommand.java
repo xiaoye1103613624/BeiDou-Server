@@ -33,7 +33,11 @@ import org.gms.constants.game.GameConstants;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ClearSlotCommand：聊天或控制台命令实现。
+ * 【GM2指令】ClearSlotCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：批量清除指定背包类型（装备/消耗/其他/设置/现金）中的所有物品。
+ *
+ * @author Arthur L
  */
 public class ClearSlotCommand extends Command {
     {

@@ -18,6 +18,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * 【类型】ExpLogger（class），包 `org.gms.server`。
+ *
+ * 经验值日志记录器，通过定时任务将玩家的经验获取记录批量写入数据库，用于经验获取追踪与数据分析。
+ *
+ * @author 萧曵
  */
 public class ExpLogger {
     private static final LinkedBlockingQueue<ExpLogRecord> expLoggerQueue = new LinkedBlockingQueue<>();

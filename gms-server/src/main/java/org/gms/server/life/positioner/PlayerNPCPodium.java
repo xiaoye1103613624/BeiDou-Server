@@ -36,6 +36,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 【类型】PlayerNPCPodium，class，包 {@code org.gms.server.life.positioner}。
+ *
+ * 玩家 NPC 展台定位器，采用多层展台（podium）布局自动计算玩家 NPC 在地图上的摆放位置，支持动态重排和多频道同步。
+ *
  * @author RonanLana
  * <p>
  * Note: the podium uses getGroundBelow that in its turn uses inputted posY minus 7.

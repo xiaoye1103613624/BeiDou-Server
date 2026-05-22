@@ -26,7 +26,8 @@ import org.gms.provider.wz.DataType;
 import java.awt.*;
 
 /**
- * 【类型】DataTool（class），包 `org.gms.provider`。
+ * 【类型】DataTool（class），包 {@code org.gms.provider}。WZ 数据读取工具类：提供一系列静态方法，从 WZ Data 节点中按路径安全地
+ * 读取 String、int、double、float、Point 等基础类型，支持带默认值的空安全访问以及从字符串自动转换（convert）。
  */
 public class DataTool {
     public static String getString(Data data) {

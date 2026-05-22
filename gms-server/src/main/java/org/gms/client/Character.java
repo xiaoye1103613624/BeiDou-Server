@@ -107,35 +107,92 @@ import java.util.stream.Collectors;
 import static java.util.concurrent.TimeUnit.*;
 
 /**
- * 【类型】Character（class），包 `org.gms.client`。
+ * 角色类 - 代表游戏中的一个玩家角色
+ * <p>
+ * 这是游戏服务器的核心类之一，负责管理玩家角色的所有属性和行为，包括：
+ * </p>
+ * <ul>
+ *   <li>基础属性：等级、职业、力量、敏捷、智力、运气等</li>
+ *   <li>装备和道具：背包管理、装备栏、消耗品等</li>
+ *   <li>技能系统：技能学习、冷却时间、技能宏等</li>
+ *   <li>社交功能：好友、公会、组队、私聊等</li>
+ *   <li>战斗系统：攻击、防御、Buff/Debuff状态等</li>
+ *   <li>任务系统：任务进度、成就记录等</li>
+ *   <li>地图交互：移动、传送、地图对象可见性等</li>
+ *   <li>商店系统：个人商店、雇佣商人、现金商城等</li>
+ * </ul>
+ * <p>
+ * 该类继承自 {@link AbstractCharacterObject}，提供了完整的角色生命周期管理，
+ * 包括登录、游戏过程、保存数据和登出等功能。
+ * </p>
+ *
+ * @author OdinMS Team
+ * @version 1.0
+ * @see AbstractCharacterObject
+ * @see Client
  */
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
+    /**
+     * 角色所属世界ID
+     * <p>用于标识角色所在的游戏世界（服务器分区）</p>
+     */
     @Getter
     @Setter
     private int world;
+    /**
+     * 角色唯一标识ID
+     * <p>在整个游戏世界中唯一标识一个角色</p>
+     */
     @Getter
     @Setter
     private int id;
+    /**
+     * 角色所属账号ID
+     * <p>关联到用户账号的唯一标识</p>
+     */
     @Getter
     @Setter
     private int accountId;
+    /**
+     * 角色当前等级
+     * <p>范围通常为1-200，取决于服务器配置</p>
+     */
     @Getter
     @Setter
     private int level;
+    /**
+     * 全服排名
+     * <p>基于等级或其他标准的综合排名</p>
+     */
     @Getter
     @Setter
     private int rank;
+    /**
+     * 排名变化趋势
+     * <p>正数表示上升，负数表示下降</p>
+     */
     @Getter
     @Setter
     private int rankMove;
+    /**
+     * 职业排名
+     * <p>在当前职业中的排名位置</p>
+     */
     @Getter
     @Setter
     private int jobRank;
+    /**
+     * 职业排名变化趋势
+     */
     @Getter
     @Setter
     private int jobRankMove;
+    /**
+     * 角色性别
+     * <p>0=男性, 1=女性</p>
+     */
     @Setter
     @Getter
     private int gender;
@@ -629,6 +686,11 @@ public class Character extends AbstractCharacterObject {
         return canRecvPartySearchInvite;
     }
 
+    /**
+     * 检查角色是否启用接收队伍搜索邀请功能
+     *
+     * @return true 表示允许接收队伍搜索邀请，false 表示禁止接收队伍搜索邀请
+     */
     public boolean isRecvPartySearchInviteEnabled() {
         return canRecvPartySearchInvite;
     }
@@ -4485,7 +4547,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public float getExpRate() {
-        if (hasNoviceExpRate()) {   // base exp rate 1x for early levels idea thanks to Vcoc
+        if (hasNoviceExpRate()) {   // 由于Vcoc，早期关卡的基本经验率为1x
             return 1;
         }
 

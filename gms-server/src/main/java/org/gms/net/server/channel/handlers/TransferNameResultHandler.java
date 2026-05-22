@@ -27,7 +27,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CHECK_CHAR_NAME} 封包。
+ * 负责处理客户端检查角色名称是否可用的操作。
  */
 public final class TransferNameResultHandler extends AbstractPacketHandler {
 

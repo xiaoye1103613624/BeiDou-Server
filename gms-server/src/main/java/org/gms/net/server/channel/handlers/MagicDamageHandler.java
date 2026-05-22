@@ -40,10 +40,8 @@ import org.gms.util.PacketCreator;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 频道服务器入站封包处理器「MagicDamageHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MAGIC_ATTACK} 封包。
+ * 负责处理客户端的魔法攻击操作。
  */
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
     @Override
@@ -56,8 +54,10 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 		}
 		chr.getAutobanManager().spam(8);*/
 
+        // 解析魔法攻击数据
         AttackInfo attack = parseDamage(p, chr, false, true);
 
+        // 变形状态检测
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
             if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
                 // How are they attacking when the client won't let them?
@@ -66,18 +66,22 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             }
         }
 
+        // 修炼场能量奖励
         if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + +GameConfig.getServerInt("dojo_energy_atk"));
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
+        // 蓄力技能（龙神、大魔导士大爆炸）检测
         int charge = (attack.skill == Evan.FIRE_BREATH || attack.skill == Evan.ICE_BREATH || attack.skill == FPArchMage.BIG_BANG || attack.skill == ILArchMage.BIG_BANG || attack.skill == Bishop.BIG_BANG) ? attack.charge : -1;
         Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
 
+        // 广播魔法攻击
         chr.getMap().broadcastMessage(chr, packet, false, true);
         StatEffect effect = attack.getAttackEffect(chr, null);
         Skill skill = SkillFactory.getSkill(attack.skill);
         StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+        // 技能冷却处理
         if (effect_.getCooldown() > 0) {
             if (chr.skillIsCooling(attack.skill)) {
                 return;
@@ -86,7 +90,9 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
                 chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
             }
         }
+        // 施加魔法伤害
         applyAttack(attack, chr, effect.getAttackCount());
+        // 魔力吸收被动效果
         Skill eaterSkill = SkillFactory.getSkill((chr.getJob().getId() - (chr.getJob().getId() % 10)) * 10000);// MP Eater, works with right job
         int eaterLevel = chr.getSkillLevel(eaterSkill);
         if (eaterLevel > 0) {

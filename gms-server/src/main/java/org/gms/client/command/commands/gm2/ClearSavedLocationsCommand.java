@@ -30,7 +30,11 @@ import org.gms.server.maps.SavedLocationType;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ClearSavedLocationsCommand：聊天或控制台命令实现。
+ * 【GM2指令】ClearSavedLocationsCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：清除自身或指定玩家保存的所有传送返回位置。
+ *
+ * @author Arthur L
  */
 public class ClearSavedLocationsCommand extends Command {
     {

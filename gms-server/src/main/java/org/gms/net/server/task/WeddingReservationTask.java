@@ -30,19 +30,28 @@ import java.util.Set;
  */
 public class WeddingReservationTask extends BaseTask implements Runnable {
 
+    /**
+     * 遍历当前世界的所有频道，依次处理大教堂和小教堂的婚礼预约。
+     * <p>
+     * 对每个频道分别获取下一个大教堂和小教堂的婚礼预约信息，
+     * 若存在有效预约则启动对应的婚礼流程，否则清除该频道的婚礼状态。
+     * </p>
+     */
     @Override
     public void run() {
         for (Channel ch : wserv.getChannels()) {
             Pair<Boolean, Pair<Integer, Set<Integer>>> wedding;
 
-            wedding = ch.getNextWeddingReservation(true);   // start cathedral
+            // 获取并启动大教堂（Cathedral）的下一场婚礼预约
+            wedding = ch.getNextWeddingReservation(true);
             if (wedding != null) {
                 ch.setOngoingWedding(true, wedding.getLeft(), wedding.getRight().getLeft(), wedding.getRight().getRight());
             } else {
                 ch.setOngoingWedding(true, null, null, null);
             }
 
-            wedding = ch.getNextWeddingReservation(false);  // start chapel
+            // 获取并启动小教堂（Chapel）的下一场婚礼预约
+            wedding = ch.getNextWeddingReservation(false);
             if (wedding != null) {
                 ch.setOngoingWedding(false, wedding.getLeft(), wedding.getRight().getLeft(), wedding.getRight().getRight());
             } else {

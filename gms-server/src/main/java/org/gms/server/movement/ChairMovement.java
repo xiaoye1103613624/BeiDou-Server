@@ -27,6 +27,10 @@ import java.awt.*;
 
 /**
  * 【类型】ChairMovement（class），包 `org.gms.server.movement`。
+ *
+ * 椅子移动指令，记录角色在坐上椅子时的移动信息（含站立层高度），用于多人同步广播椅子坐下/移动包。
+ *
+ * @author 萧曵
  */
 public class ChairMovement extends AbstractLifeMovement {
     private int fh;

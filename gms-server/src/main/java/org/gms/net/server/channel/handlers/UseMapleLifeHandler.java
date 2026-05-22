@@ -26,7 +26,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author RonanLana
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_MAPLELIFE} 封包。
+ * 负责处理客户端使用MapleLife角色名查询的操作。
  */
 public class UseMapleLifeHandler extends AbstractPacketHandler {
     @Override

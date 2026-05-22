@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】ILMage（class），包 `org.gms.constants.skills`。
+ *
+ * 定义冰雷法师职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class ILMage {
     public static final int PARTIAL_RESISTANCE = 2210000;

@@ -36,8 +36,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
- * @author Ronan
- * @author Ubaware
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#WORLD_TRANSFER} 封包。
+ * 负责处理客户端角色世界转移操作（校验转移资格）。
  */
 public final class TransferWorldHandler extends AbstractPacketHandler {
 

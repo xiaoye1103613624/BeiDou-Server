@@ -32,7 +32,11 @@ import org.gms.util.I18nUtil;
 import java.util.Collection;
 
 /**
- * 【GM/玩家指令】WarpMapCommand：聊天或控制台命令实现。
+ * 【GM指令】WarpMapCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：将当前地图的所有玩家集体传送到目标地图。
+ *
+ * @author MedicOP
  */
 public class WarpMapCommand extends Command {
     {

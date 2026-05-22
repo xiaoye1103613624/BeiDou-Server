@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ClosePortalCommand：聊天或控制台命令实现。
+ * 【GM指令】ClosePortalCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：关闭当前地图的指定传送门（按传送门名称）。
+ *
+ * @author Arthur L
  */
 public class ClosePortalCommand extends Command {
     {

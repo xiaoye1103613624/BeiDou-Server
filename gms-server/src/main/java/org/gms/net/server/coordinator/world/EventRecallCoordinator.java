@@ -28,6 +28,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 【类】EventRecallCoordinator，包 `org.gms.net.server.coordinator.world`。
+ *
+ * 事件召回协调器（单例），暂存玩家离开事件副本时的状态，支持玩家断线重连后恢复事件进度。
+ *
  * @author Ronan
  */
 public class EventRecallCoordinator {

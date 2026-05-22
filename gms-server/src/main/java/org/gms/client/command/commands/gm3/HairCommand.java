@@ -33,7 +33,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】HairCommand：聊天或控制台命令实现。
+ * 【GM指令】HairCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：更改玩家发型。
+ *
+ * @author Arthur L
  */
 public class HairCommand extends Command {
     {

@@ -30,6 +30,10 @@ import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
  * 【类型】DueyPackage（class），包 `org.gms.server`。
+ *
+ * 投递包裹数据模型，管理玩家间通过 Duey 快递系统发送的物品、金币和消息。
+ *
+ * @author 萧曵
  */
 public class DueyPackage {
     private String sender = null;

@@ -56,8 +56,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
- * @author Matze
- * @author Ronan - concurrency safety and reviewed minigames
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PLAYER_INTERACTION} 封包。
+ * 负责处理客户端的玩家交互操作。
  */
 public final class PlayerInteractionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(PlayerInteractionHandler.class);
@@ -140,15 +140,17 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
+        // 获取客户端锁防止并发交互漏洞
         if (!c.tryacquireClient()) {    // thanks GabrielSin for pointing dupes within player interactions
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
         try {
-            byte mode = p.readByte();
+            byte mode = p.readByte(); // 读取操作模式
             final Character chr = c.getPlayer();
 
+            // --- 创建交互 ---
             if (mode == Action.CREATE.getCode()) {
                 if (!chr.isAlive()) {    // thanks GabrielSin for pointing this
                     chr.sendPacket(PacketCreator.getMiniRoomError(4));
@@ -156,9 +158,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 byte createType = p.readByte();
-                if (createType == 3) {  // trade
+                if (createType == 3) {  // 交易
                     Trade.startTrade(chr);
-                } else if (createType == 1) { // omok mini game
+                } else if (createType == 1) { // 五子棋小游戏
                     int status = establishMiniroomStatus(chr, true);
                     if (status > 0) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(status));
@@ -192,7 +194,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().addMapObject(game);
                     chr.getMap().broadcastMessage(PacketCreator.addOmokBox(chr, 1, 0));
                     game.sendOmok(c, type);
-                } else if (createType == 2) { // matchcard
+                } else if (createType == 2) { // 记忆配对卡牌游戏
                     int status = establishMiniroomStatus(chr, true);
                     if (status > 0) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(status));
@@ -233,7 +235,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().addMapObject(game);
                     chr.getMap().broadcastMessage(PacketCreator.addMatchCardBox(chr, 1, 0));
                     game.sendMatchCard(c, type);
-                } else if (createType == 4 || createType == 5) { // shop
+                } else if (createType == 4 || createType == 5) { // 个人商店 / 雇佣商人
                     if (!GameConstants.isFreeMarketRoom(chr.getMapId())) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(15));
                         return;
@@ -272,6 +274,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         chr.sendPacket(PacketCreator.getHiredMerchant(chr, merchant, true));
                     }
                 }
+            // --- 邀请交易 ---
             } else if (mode == Action.INVITE.getCode()) {
                 int otherCid = p.readInt();
                 Character other = chr.getMap().getCharacterById(otherCid);
@@ -280,8 +283,10 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 Trade.inviteTrade(chr, other);
+            // --- 拒绝交易 ---
             } else if (mode == Action.DECLINE.getCode()) {
                 Trade.declineTrade(chr);
+            // --- 访问交互（交易/商店/小游戏/雇佣商人）---
             } else if (mode == Action.VISIT.getCode()) {
                 if (chr.getTrade() != null && chr.getTrade().getPartner() != null) {
                     if (!chr.getTrade().isFullTrade() && !chr.getTrade().getPartner().isFullTrade()) {
@@ -325,6 +330,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         merchant.visitShop(chr);
                     }
                 }
+            // --- 聊天 ---
             } else if (mode == Action.CHAT.getCode()) { // chat lol
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (chr.getTrade() != null) {
@@ -342,6 +348,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 } else if (merchant != null) {
                     merchant.sendMessage(chr, p.readString());
                 }
+            // --- 退出交互 ---
             } else if (mode == Action.EXIT.getCode()) {
                 if (chr.getTrade() != null) {
                     Trade.cancelTrade(chr, Trade.TradeResult.PARTNER_CANCEL);
@@ -350,6 +357,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.closeMiniGame(false);
                     chr.closeHiredMerchant(true);
                 }
+            // --- 开店（个人商店/雇佣商人）---
             } else if (mode == Action.OPEN_STORE.getCode() || mode == Action.OPEN_CASH.getCode()) {
                 if (isTradeOpen(chr)) {
                     return;
@@ -397,6 +405,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.UN_READY.getCode()) {
                 MiniGame game = chr.getMiniGame();
                 game.broadcast(PacketCreator.getMiniGameUnReady(game));
+            // --- 小游戏开始 ---
             } else if (mode == Action.START.getCode()) {
                 MiniGame game = chr.getMiniGame();
                 if (game.getGameType().equals(MiniGameType.OMOK)) {
@@ -409,6 +418,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     game.broadcast(PacketCreator.getMatchCardStart(game, game.getLoser()));
                     chr.getMap().broadcastMessage(PacketCreator.addMatchCardBox(game.getOwner(), 2, 1));
                 }
+            // --- 小游戏认输 ---
             } else if (mode == Action.GIVE_UP.getCode()) {
                 MiniGame game = chr.getMiniGame();
                 if (game.getGameType().equals(MiniGameType.OMOK)) {
@@ -483,8 +493,10 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 } else {
                     game.broadcast(PacketCreator.getMatchCardSelect(game, turn, slot, firstslot, 1));
                 }
+            // --- 交易设置金币 ---
             } else if (mode == Action.SET_MESO.getCode()) {
                 chr.getTrade().setMeso(p.readInt());
+            // --- 交易放置物品 ---
             } else if (mode == Action.SET_ITEMS.getCode()) {
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 InventoryType ivType = InventoryType.getByType(p.readByte());
@@ -568,8 +580,10 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         }
                     }
                 }
+            // --- 交易确认 ---
             } else if (mode == Action.CONFIRM.getCode()) {
                 Trade.completeTrade(chr);
+            // --- 商店/雇佣商人物品上架 ---
             } else if (mode == Action.ADD_ITEM.getCode() || mode == Action.PUT_ITEM.getCode()) {
                 if (isTradeOpen(chr)) {
                     return;
@@ -738,6 +752,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));
 
+            // --- 购买物品 ---
             } else if (mode == Action.BUY.getCode() || mode == Action.MERCHANT_BUY.getCode()) {
                 if (isTradeOpen(chr)) {
                     return;

@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】MaxHpMpCommand：聊天或控制台命令实现。
+ * 【GM指令】MaxHpMpCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：调整玩家最大HP/MP值，可指定目标玩家。
+ *
+ * @author Arthur L
  */
 public class MaxHpMpCommand extends Command {
     {

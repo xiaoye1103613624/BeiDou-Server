@@ -40,6 +40,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 【类】Alliance，包 `org.gms.net.server.guild`。
+ *
+ * 公会联盟类，管理多个公会的联盟创建、解散、扩容、成员操作及数据库持久化，支持联盟内消息广播和邀请机制。
+ *
  * @author XoticStory
  * @author Ronan
  */

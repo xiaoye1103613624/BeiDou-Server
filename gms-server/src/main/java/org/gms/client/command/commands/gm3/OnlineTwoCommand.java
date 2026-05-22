@@ -31,7 +31,11 @@ import org.gms.net.server.channel.Channel;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】OnlineTwoCommand：聊天或控制台命令实现。
+ * 【GM指令】OnlineTwoCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：查看各频道在线玩家数量及详细列表。
+ *
+ * @author Arthur L
  */
 public class OnlineTwoCommand extends Command {
     {

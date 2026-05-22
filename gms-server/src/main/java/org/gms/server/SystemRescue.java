@@ -22,6 +22,10 @@ import java.util.Random;
 
 /**
  * 【类型】SystemRescue（class），包 `org.gms.server`。
+ *
+ * 系统救援工具，检测玩家角色异常状态（如卡地图）并自动将其传送到安全地图，同时通过扩展值机制通知玩家救援信息。
+ *
+ * @author 萧曵
  */
 @Getter
 public class SystemRescue {

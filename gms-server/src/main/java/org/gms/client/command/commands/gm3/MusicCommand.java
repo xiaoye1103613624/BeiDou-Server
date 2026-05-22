@@ -32,7 +32,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】MusicCommand：聊天或控制台命令实现。
+ * 【GM指令】MusicCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：播放或切换当前地图的背景音乐。
+ *
+ * @author Arthur L
  */
 public class MusicCommand extends Command {
     {

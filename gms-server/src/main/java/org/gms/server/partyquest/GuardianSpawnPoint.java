@@ -3,7 +3,11 @@ package org.gms.server.partyquest;
 import java.awt.*;
 
 /**
- * @author David
+ * 【类型】GuardianSpawnPoint（class），包 `org.gms.server.partyquest`。
+ *
+ * 嘉年华守护者生成点，管理守护者的生成位置、占用状态和所属队伍，用于怪物嘉年华中的守护者召唤机制。
+ *
+ * @author 萧曵
  */
 public class GuardianSpawnPoint {
 

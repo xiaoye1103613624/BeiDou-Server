@@ -20,6 +20,10 @@
 package org.gms.net.server.services;
 
 /**
+ * 【类】ServicesManager，包 `org.gms.net.server.services`。
+ *
+ * 服务管理器，批量初始化、访问和关闭服务集合，是频道/世界服务的统一入口。
+ *
  * @author Ronan
  */
 public class ServicesManager {

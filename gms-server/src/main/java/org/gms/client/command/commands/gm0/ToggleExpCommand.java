@@ -28,7 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ToggleExpCommand：聊天或控制台命令实现。
+ * 【GM0指令】ToggleExpCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：开关经验获取状态。
+ *
+ * @author Ronan
  */
 public class ToggleExpCommand extends Command {
     {

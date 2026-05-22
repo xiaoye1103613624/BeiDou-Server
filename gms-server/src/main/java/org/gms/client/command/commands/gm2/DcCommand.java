@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】DcCommand：聊天或控制台命令实现。
+ * 【GM2指令】DcCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：强制断开指定玩家的连接（踢人下线）。
+ *
+ * @author Arthur L
  */
 public class DcCommand extends Command {
     {

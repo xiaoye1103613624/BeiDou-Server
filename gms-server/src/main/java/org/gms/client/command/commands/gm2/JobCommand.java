@@ -31,7 +31,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】JobCommand：聊天或控制台命令实现。
+ * 【GM指令】JobCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：更改自身或指定玩家的职业（支持按职业ID精确设置）。
+ *
+ * @author Arthur L
  */
 public class JobCommand extends Command {
     {

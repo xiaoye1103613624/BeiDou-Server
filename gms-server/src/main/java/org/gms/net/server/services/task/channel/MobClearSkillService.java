@@ -24,6 +24,10 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 【类】MobClearSkillService，包 `org.gms.net.server.services.task.channel`。
+ *
+ * 怪物清除技能服务，按地图分区调度怪物技能效果的延迟清除操作。
+ *
  * @author Ronan
  */
 public class MobClearSkillService extends BaseService {

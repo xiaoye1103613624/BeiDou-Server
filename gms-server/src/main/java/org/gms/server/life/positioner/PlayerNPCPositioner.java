@@ -37,6 +37,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 【类型】PlayerNPCPositioner，class，包 {@code org.gms.server.life.positioner}。
+ *
+ * 玩家 NPC 网格定位器，在地图范围内按网格扫描空闲站位，自动为玩家 NPC 分配不重叠的生成位置，支持动态步长调整和多频道同步。
+ *
  * @author RonanLana
  */
 public class PlayerNPCPositioner {

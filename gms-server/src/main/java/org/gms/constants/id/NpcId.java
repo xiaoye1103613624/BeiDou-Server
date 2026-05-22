@@ -1,7 +1,7 @@
 package org.gms.constants.id;
 
 /**
- * 【类型】NpcId（class），包 `org.gms.constants.id`。
+ * 【类型】NpcId（class），包 `org.gms.constants.id`。NPC ID常量：所有功能性NPC的ID定义，包括管理员、次元之境、转蛋机、玩家NPC等。
  */
 public class NpcId {
     public static final int CUSTOM_DEV = 9977777;

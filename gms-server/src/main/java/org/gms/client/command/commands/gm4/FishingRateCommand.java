@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】FishingRateCommand：聊天或控制台命令实现。
+ * 【GM指令】FishingRateCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：设置服务器全局钓鱼倍率。
+ *
+ * @author Ronan
  */
 public class FishingRateCommand extends Command {
     {

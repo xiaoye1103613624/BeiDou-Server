@@ -37,6 +37,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * 【类】LoginBypassCoordinator，包 `org.gms.net.server.coordinator.login`。
+ *
+ * 登录绕过协调器，管理基于 HWID 的 PIN/PIC 免验证缓存，支持在线玩家自动续期，减少重复验证开销。
+ *
  * @author Ronan
  */
 public class LoginBypassCoordinator {

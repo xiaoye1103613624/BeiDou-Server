@@ -87,7 +87,7 @@ import java.util.stream.Collectors;
 import static java.util.concurrent.TimeUnit.*;
 
 /**
- * 游戏主进程入口单例：维护世界列表、频道、登录状态迁移与全局资源。
+ * 【类型】Server（class），包 {@code org.gms.net.server}。游戏主进程入口单例：维护世界列表、频道、登录状态迁移与全局资源。
  * 为 Netty 管线、Handler 与脚本层提供统一的 {@link org.gms.net.server.Server#getInstance()} 访问点。
  */
 public class Server {

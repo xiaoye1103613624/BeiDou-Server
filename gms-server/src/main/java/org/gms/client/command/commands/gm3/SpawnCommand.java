@@ -31,7 +31,11 @@ import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】SpawnCommand：聊天或控制台命令实现。
+ * 【GM指令】SpawnCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：在当前位置召唤指定怪物，可指定数量。
+ *
+ * @author Arthur L
  */
 public class SpawnCommand extends Command {
     {

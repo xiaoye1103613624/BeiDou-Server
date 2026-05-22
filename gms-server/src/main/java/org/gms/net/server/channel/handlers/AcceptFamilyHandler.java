@@ -42,8 +42,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * @author Jay Estrella
- * @author Ubaware
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#ACCEPT_FAMILY} 封包。
+ * 负责处理客户端的接受家族邀请操作。
  */
 public final class AcceptFamilyHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(AcceptFamilyHandler.class);

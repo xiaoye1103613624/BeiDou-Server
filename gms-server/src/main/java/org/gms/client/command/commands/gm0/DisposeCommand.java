@@ -31,7 +31,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】DisposeCommand：聊天或控制台命令实现。
+ * 【GM0指令】DisposeCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：释放当前NPC对话或任务对话状态，解除卡死。
+ *
+ * @author Arthur L
  */
 public class DisposeCommand extends Command {
     {

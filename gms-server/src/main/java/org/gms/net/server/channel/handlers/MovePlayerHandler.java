@@ -27,22 +27,23 @@ import org.gms.util.PacketCreator;
 import org.gms.exception.EmptyMovementException;
 
 /**
- * 频道服务器入站封包处理器「MovePlayerHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MOVE_PLAYER} 封包。
+ * 负责处理客户端的玩家移动操作。
  */
 public final class MovePlayerHandler extends AbstractMovementPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        p.skip(9);
+        p.skip(9); // 跳过包头固定9字节
         try {   // thanks Sa for noticing empty movement sequences crashing players
             int movementDataStart = p.getPosition();
+            // 解析移动数据并更新玩家位置
             updatePosition(p, c.getPlayer(), 0);
             long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
             p.seek(movementDataStart);
 
+            // 更新地图中玩家位置
             c.getPlayer().getMap().movePlayer(c.getPlayer(), c.getPlayer().getPosition());
+            // 根据隐身状态选择广播方式
             if (c.getPlayer().isHidden()) {
                 c.getPlayer().getMap().broadcastGMMessage(c.getPlayer(), PacketCreator.movePlayer(c.getPlayer().getId(), p, movementDataLength), false);
             } else {

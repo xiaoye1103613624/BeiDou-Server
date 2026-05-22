@@ -12,10 +12,11 @@ import java.io.Serializable;
 import java.sql.Date;
 
 /**
- * 扩展字段表 实体类。
+ * 【实体】ExtendValueDO（class），包 `org.gms.dao.entity`。
  *
- * @author CN
- * @since 2024-07-08
+ * 对应数据库表 extend_value，存储扩展字段键值对数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

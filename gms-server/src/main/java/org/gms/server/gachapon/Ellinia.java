@@ -1,12 +1,12 @@
 package org.gms.server.gachapon;
 
 /**
- * @author Alan (SharpAceX) - gachapon source classes stub & pirate equipment
- * @author Ronan - parsed MapleSEA loots
- * <p>
- * MapleSEA-like loots thanks to AyumiLove - src: https://ayumilovemaple.wordpress.com/maplestory-gachapon-guide/
+ * 【类型】Ellinia（class），包 `org.gms.server.gachapon`。
+ *
+ * 魔法密林扭蛋道具池，提供该城镇专属的卷轴、装备和消耗品掉落列表。
+ *
+ * @author 萧曵
  */
-
 public class Ellinia extends GachaponItems {
 
     @Override

@@ -18,7 +18,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * @author Drago (Dragohe4rt)
+ * 【类型】MonsterCarnival（class），包 `org.gms.server.partyquest`。
+ *
+ * 怪物嘉年华组队任务核心，管理红蓝两队的嘉年华积分、怪物召唤、守护者放置、倒计时和胜负判定逻辑。
+ *
+ * @author 萧曵
  */
 public class MonsterCarnival {
 

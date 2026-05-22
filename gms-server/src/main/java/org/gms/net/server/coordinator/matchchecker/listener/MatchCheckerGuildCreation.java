@@ -35,6 +35,10 @@ import org.gms.net.server.world.Party;
 import java.util.Set;
 
 /**
+ * 【类】MatchCheckerGuildCreation，包 `org.gms.net.server.coordinator.matchchecker.listener`。
+ *
+ * 公会创建匹配确认监听器，处理创建公会的多玩家确认流程：创建邀请、全票通过、拒绝解散和超时处理。
+ *
  * @author Ronan
  */
 public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {

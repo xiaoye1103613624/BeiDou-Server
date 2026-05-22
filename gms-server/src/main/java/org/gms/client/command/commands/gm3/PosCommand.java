@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】PosCommand：聊天或控制台命令实现。
+ * 【GM指令】PosCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：查看当前玩家的坐标和地形高度信息。
+ *
+ * @author Arthur L
  */
 public class PosCommand extends Command {
     {

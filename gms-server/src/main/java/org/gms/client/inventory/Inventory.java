@@ -44,16 +44,39 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类型】Inventory（class），包 `org.gms.client.inventory`。
+ *
+ * 背包系统的核心类，代表角色的一个背包（装备栏、消耗栏、物品栏、特殊栏、现金栏等）。
+ * 使用 {@link LinkedHashMap} 维护物品按槽位顺序，支持线程安全的增删改查操作。
+ *
+ * 背包类型由 {@link InventoryType} 枚举定义：
+ * <ul>
+ *   <li>EQUIP (1)：装备背包</li>
+ *   <li>USE (2)：消耗品背包</li>
+ *   <li>SETUP (3)：设置物品背包（椅子、特效等）</li>
+ *   <li>ETC (4)：其他物品背包（任务物品、矿物等）</li>
+ *   <li>CASH (5)：现金栏背包（商城道具、宠物等）</li>
+ *   <li>EQUIPPED (-1)：已装备栏（虚拟背包，实际装备中的物品）</li>
+ * </ul>
+ *
+ * 物品操作委托给 {@link InventoryManipulator} 执行，它会同时处理数据库持久化和客户端封包通知。
+ *
  * @author Matze, Ronan
  */
 public class Inventory implements Iterable<Item> {
     private static final Logger log = LoggerFactory.getLogger(Inventory.class);
+    /** 物品存储：key=槽位号(short), value=物品实例，LinkedHashMap 保证插入顺序 */
     protected final Map<Short, Item> inventory;
+    /** 背包类型 */
     protected final InventoryType type;
+    /** 背包操作锁 */
     protected final Lock lock = new ReentrantLock(true);
 
+    /** 背包所属角色 */
     protected Character owner;
+    /** 该背包的最大槽位数 */
     protected byte slotLimit;
+    /** 是否已完成首次校验 */
     protected boolean checked = false;
 
     public Inventory(Character mc, InventoryType type, byte slotLimit) {

@@ -1,7 +1,11 @@
 package org.gms.constants.skills;
 
 /**
- * 【类型】Evan（class），包 `org.gms.constants.skills`。
+ * 【技能常量】Evan（class），包 `org.gms.constants.skills`。
+ *
+ * 定义龙神职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Evan {
     // EVAN1

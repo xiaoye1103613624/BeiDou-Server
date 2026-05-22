@@ -32,6 +32,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类】MobStatusService，包 `org.gms.net.server.services.task.channel`。
+ *
+ * 怪物状态服务，管理怪物状态效果的注册、超时处理、中断取消和周期性额外效果触发。
+ *
  * @author Ronan
  */
 public class MobStatusService extends BaseService {

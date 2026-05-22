@@ -30,7 +30,11 @@ import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ApCommand：聊天或控制台命令实现。
+ * 【GM2指令】ApCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：设置自身或指定玩家的能力点数（AP）。
+ *
+ * @author Arthur L
  */
 public class ApCommand extends Command {
     {

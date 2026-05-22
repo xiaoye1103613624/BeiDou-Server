@@ -37,7 +37,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * 【GM/玩家指令】BanCommand：聊天或控制台命令实现。
+ * 【GM指令】BanCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：封禁指定玩家（IP封禁+账号封禁+MAC封禁），5秒后强制断开连接。
+ *
+ * @author Arthur L
  */
 public class BanCommand extends Command {
     {

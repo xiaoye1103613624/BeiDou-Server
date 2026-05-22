@@ -32,7 +32,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】KillCommand：聊天或控制台命令实现。
+ * 【GM指令】KillCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：击杀指定玩家。
+ *
+ * @author Arthur L
  */
 public class KillCommand extends Command {
     {

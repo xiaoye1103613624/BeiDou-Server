@@ -48,6 +48,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * 【类型】InventoryManipulator（class），包 {@code org.gms.client.inventory.manipulator}。
+ *
+ * 库存操作工具类，提供物品添加（按 ID/从掉落）、删除（按槽位/按 ID）、移动、穿戴/脱下、
+ * 丢弃等核心库存变更方法，处理堆叠、空间检查、装备性别限制等边界逻辑。
+ *
  * @author Matze
  * @author Ronan - improved check space feature and removed redundant object calls
  */

@@ -27,7 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Ronan
+ * 【类型】OpcodeConstants（class），包 `org.gms.constants.net`。
+ *
+ * 操作码常量类，管理发送和接收操作码的名称映射，用于网络协议调试和日志记录。
+ *
+ * @author 萧曵
  */
 public class OpcodeConstants {
     public static Map<Integer, String> sendOpcodeNames = new HashMap<>();

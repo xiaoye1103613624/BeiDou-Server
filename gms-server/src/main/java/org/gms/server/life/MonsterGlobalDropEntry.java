@@ -21,6 +21,10 @@
 package org.gms.server.life;
 
 /**
+ * 【类型】MonsterGlobalDropEntry，class，包 {@code org.gms.server.life}。
+ *
+ * 怪物全局掉落条目数据类，描述所有怪物在指定大陆范围内可共享的掉落物品、概率、数量范围和关联的任务 ID。
+ *
  * @author LightPepsi
  */
 public class MonsterGlobalDropEntry {

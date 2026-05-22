@@ -34,7 +34,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
 /**
- * 【GM/玩家指令】GmCommand：聊天或控制台命令实现。
+ * 【GM0指令】GmCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：向所有GM广播一条消息。
+ *
+ * @author Arthur L
  */
 public class GmCommand extends Command {
     {

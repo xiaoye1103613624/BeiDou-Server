@@ -40,6 +40,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 【类型】MobSkillFactory，class，包 {@code org.gms.server.life}。
+ *
+ * 怪物技能工厂类，负责从 WZ 数据（MobSkill.img）中加载并缓存怪物技能对象（{@link MobSkill}），使用读写锁保证线程安全。
+ *
  * @author Danny (Leifde)
  */
 public class MobSkillFactory {

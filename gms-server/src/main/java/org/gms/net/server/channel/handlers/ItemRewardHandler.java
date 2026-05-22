@@ -38,8 +38,8 @@ import org.gms.util.Randomizer;
 import java.util.List;
 
 /**
- * @author Jay Estrella
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_ITEM_REWARD} 封包。
+ * 负责处理客户端的使用物品奖励操作。
  */
 public final class ItemRewardHandler extends AbstractPacketHandler {
     @Override

@@ -31,7 +31,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】RipCommand：聊天或控制台命令实现。
+ * 【GM指令】RipCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：发送全服公告（死亡通知样式）。
+ *
+ * @author Arthur L
  */
 public class RipCommand extends Command {
     {

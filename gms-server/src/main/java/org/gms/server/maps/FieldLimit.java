@@ -21,6 +21,10 @@
 package org.gms.server.maps;
 
 /**
+ * 【类型】FieldLimit，enum，包 {@code org.gms.server.maps}。
+ *
+ * 地图字段限制枚举，定义地图上允许或禁止的各种行为标志（如跳跃、移动技能、召唤、传送门、药水使用等），通过位掩码运算进行组合判断。
+ *
  * @author AngelSL
  */
 public enum FieldLimit {

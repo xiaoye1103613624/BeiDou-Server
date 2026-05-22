@@ -29,7 +29,11 @@ import org.gms.net.server.coordinator.login.LoginBypassCoordinator;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】EnableAuthCommand：聊天或控制台命令实现。
+ * 【GM0指令】EnableAuthCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：解除当前账号的登录验证限制（HWID认证豁免）。
+ *
+ * @author Arthur L
  */
 public class EnableAuthCommand extends Command {
     {

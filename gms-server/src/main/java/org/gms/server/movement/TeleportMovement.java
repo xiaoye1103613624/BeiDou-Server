@@ -26,6 +26,10 @@ import java.awt.*;
 
 /**
  * 【类型】TeleportMovement（class），包 `org.gms.server.movement`。
+ *
+ * 传送移动指令，继承绝对移动并省略持续时间字段，用于魔法师/传送门等瞬间位移场景的移动包序列化。
+ *
+ * @author 萧曵
  */
 public class TeleportMovement extends AbsoluteLifeMovement {
 

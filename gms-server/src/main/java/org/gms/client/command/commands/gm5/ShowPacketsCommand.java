@@ -30,7 +30,11 @@ import org.gms.dao.entity.GameConfigDO;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ShowPacketsCommand：聊天或控制台命令实现。
+ * 【GM指令】ShowPacketsCommand（class），包 `org.gms.client.command.commands.gm5`。
+ *
+ * GM指令：切换是否在控制台显示接收到的数据包日志。
+ *
+ * @author Arthur L
  */
 public class ShowPacketsCommand extends Command {
     {

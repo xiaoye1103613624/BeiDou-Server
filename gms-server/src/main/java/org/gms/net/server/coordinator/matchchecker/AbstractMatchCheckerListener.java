@@ -24,6 +24,10 @@ import org.gms.client.Character;
 import java.util.Set;
 
 /**
+ * 【接口】AbstractMatchCheckerListener，包 `org.gms.net.server.coordinator.matchchecker`。
+ *
+ * 匹配确认监听器接口，定义匹配创建、接受、拒绝和取消四个阶段的生命周期回调方法。
+ *
  * @author Ronan
  */
 public interface AbstractMatchCheckerListener {

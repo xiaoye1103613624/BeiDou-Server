@@ -35,7 +35,11 @@ import java.util.concurrent.ScheduledFuture;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * @author kevintjuh93
+ * 【类型】Pyramid（class），包 `org.gms.server.partyquest`。
+ *
+ * 金字塔组队任务（奈特金字塔），管理难度模式、计分面板（命中/失误/冷却）、阶段传送以及根据击杀数计算排名和经验奖励。
+ *
+ * @author 萧曵
  */
 public class Pyramid extends PartyQuest {
     public enum PyramidMode {

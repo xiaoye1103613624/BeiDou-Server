@@ -28,7 +28,8 @@ import org.gms.scripting.reactor.ReactorScriptManager;
 import org.gms.server.maps.Reactor;
 
 /**
- * @author Generic
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#TOUCHING_REACTOR} 封包。
+ * 负责处理客户端触碰反应堆（Reactor）的操作。
  */
 public final class TouchReactorHandler extends AbstractPacketHandler {
 

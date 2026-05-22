@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Outlaw（class），包 `org.gms.constants.skills`。
+ *
+ * 定义侠客（海盗火枪手三转）职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Outlaw {
     public static final int BURST_FIRE = 5210000;

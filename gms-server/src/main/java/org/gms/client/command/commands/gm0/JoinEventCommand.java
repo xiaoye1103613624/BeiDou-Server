@@ -32,7 +32,11 @@ import org.gms.server.maps.FieldLimit;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】JoinEventCommand：聊天或控制台命令实现。
+ * 【GM0指令】JoinEventCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：加入当前服务器正在进行的活动事件。
+ *
+ * @author Arthur L
  */
 public class JoinEventCommand extends Command {
     {

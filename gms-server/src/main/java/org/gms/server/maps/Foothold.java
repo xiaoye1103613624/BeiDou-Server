@@ -24,13 +24,14 @@ package org.gms.server.maps;
 import java.awt.*;
 
 /**
- * @author Matze
+ * 【类】Foothold（class），包 {@code org.gms.server.maps}。
+ * 立足点系统，定义地图中角色可行走的地面线段，用于碰撞检测和物理计算。
  */
 public class Foothold implements Comparable<Foothold> {
-    private final Point p1;
-    private final Point p2;
-    private final int id;
-    private int next, prev;
+    private final Point p1; // 端点1
+    private final Point p2; // 端点2
+    private final int id; // 立足点ID
+    private int next, prev; // 前后连接点
 
     public Foothold(Point p1, Point p2, int id) {
         this.p1 = p1;

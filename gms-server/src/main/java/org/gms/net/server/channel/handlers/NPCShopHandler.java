@@ -30,7 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Matze
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#NPC_SHOP} 封包。
+ * 负责处理客户端NPC商店购买、出售及充值操作。
  */
 public final class NPCShopHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NPCShopHandler.class);

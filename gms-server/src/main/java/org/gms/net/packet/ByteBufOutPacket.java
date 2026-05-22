@@ -15,8 +15,11 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * 网络协议层类型「ByteBufOutPacket」。
- * 属于 org.gms.net.packet 下的通用封包、读写或工具定义。
+ * 【类】ByteBufOutPacket，包 `org.gms.net.packet`。
+ *
+ * 基于 Netty ByteBuf 的出站封包实现，以小端序（LE）写入构造发往客户端的数据包字节流，非线程安全。
+ *
+ * @author Ronan
  */
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {

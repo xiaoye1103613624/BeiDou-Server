@@ -33,7 +33,11 @@ import org.gms.util.I18nUtil;
 import org.gms.server.maps.Portal;
 
 /**
- * 【GM/玩家指令】WarpCommand：聊天或控制台命令实现。
+ * 【GM指令】WarpCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：传送自身到指定地图ID，可指定目标传送门名称或编号。
+ *
+ * @author Arthur L
  */
 public class WarpCommand extends Command {
     {

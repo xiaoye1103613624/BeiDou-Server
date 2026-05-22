@@ -41,18 +41,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 【类型】ReactorScriptManager（class），包 {@code org.gms.scripting.reactor}。
+ * 反应堆脚本管理器，单例模式。处理地图上反应堆（Reactor，如可破坏的箱子、矿石等）的交互事件，
+ * 包括打击（hit）、触发（act）、接触/离开（touch/untouch）以及掉落物查询。
+ * 脚本位于 {@code reactor/<id>.js}，向 JS 引擎注入 "{@code rm}" 变量（ReactorActionManager）。
+ *
  * @author Lerk
  */
 public class ReactorScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(ReactorScriptManager.class);
+    /** 单例实例 */
     private static final ReactorScriptManager instance = new ReactorScriptManager();
 
+    /** 反应堆ID -> 掉落物列表的缓存 */
     private final Map<Integer, List<ReactorDropEntry>> drops = new HashMap<>();
 
     public static ReactorScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     * 反应堆被打击时的回调，执行对应 JS 脚本中的 {@code hit()} 函数（可选实现）。
+     *
+     * @param c       玩家客户端连接
+     * @param reactor 被打击的反应堆
+     */
     public void onHit(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
@@ -62,12 +75,18 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
             iv.invokeFunction("hit");
         } catch (final NoSuchMethodException e) {
-            //do nothing, hit is OPTIONAL
+            // hit 方法是可选的，忽略
         } catch (final ScriptException | NullPointerException e) {
             log.error("Error during onHit script for reactor: {}", reactor.getId(), e);
         }
     }
 
+    /**
+     * 反应堆被触发（完成）时的回调，执行对应 JS 脚本中的 {@code act()} 函数。
+     *
+     * @param c       玩家客户端连接
+     * @param reactor 被触发的反应堆
+     */
     public void act(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
@@ -81,6 +100,12 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 获取指定反应堆的掉落物列表（从数据库查询并缓存）。
+     *
+     * @param reactorId 反应堆ID
+     * @return 掉落物条目列表
+     */
     public List<ReactorDropEntry> getDrops(int reactorId) {
         List<ReactorDropEntry> ret = drops.get(reactorId);
         if (ret == null) {
@@ -102,18 +127,28 @@ public class ReactorScriptManager extends AbstractScriptManager {
         return ret;
     }
 
+    /** 清空掉落物缓存 */
     public void clearDrops() {
         drops.clear();
     }
 
+    /** 反应堆被玩家接触时的回调 */
     public void touch(Client c, Reactor reactor) {
         touching(c, reactor, true);
     }
 
+    /** 反应堆被玩家离开时的回调 */
     public void untouch(Client c, Reactor reactor) {
         touching(c, reactor, false);
     }
 
+    /**
+     * 处理反应堆的接触/离开事件。
+     *
+     * @param c        玩家客户端连接
+     * @param reactor  反应堆
+     * @param touching true=接触，false=离开
+     */
     private void touching(Client c, Reactor reactor, boolean touching) {
         final String functionName = touching ? "touch" : "untouch";
         try {
@@ -128,6 +163,13 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 初始化反应堆脚本引擎，加载 JS 文件并注入 "{@code rm}" 变量。
+     *
+     * @param c       玩家客户端连接
+     * @param reactor 反应堆
+     * @return 可调用的 JS 引擎接口，脚本不存在时返回 null
+     */
     private Invocable initializeInvocable(Client c, Reactor reactor) {
         ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
         if (engine == null) {

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】FPMage（class），包 `org.gms.constants.skills`。
+ *
+ * 定义火毒法师职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class FPMage {
     public static final int PARTIAL_RESISTANCE = 2110000;

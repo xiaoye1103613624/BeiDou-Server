@@ -56,15 +56,32 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 网络层类型「PacketProcessor」。
- * 位于 `org.gms.net`，参与客户端会话、封包路由或服务器间协作。
+ * 【类型】PacketProcessor（class），包 `org.gms.net`。
+ *
+ * 客户端封包路由处理器，负责将客户端发来的 opcode 映射到对应的 {@link PacketHandler} 处理逻辑。
+ * 每个服务器实例（world + channel 唯一标识）持有一个独立的处理器实例，各自的 handler 数组通过
+ * {@link #reset(int)} 按版本和服务器类型（登录服 / 频道服）注册不同的处理链路。
+ *
+ * 核心架构：
+ * - {@link #handlers} 数组，下标为 opcode 值，值为对应的 {@link PacketHandler} 实现
+ * - {@link #registerCommonHandlers()} 注册所有服务器共用的 handler（心跳、自定义封包）
+ * - {@link #registerLoginHandlers()} 注册登录服专用 handler（登录、创角、选角等）
+ * - {@link #registerChannelHandlers()} 注册频道服专用 handler（聊天、战斗、交易等游戏内操作）
+ * - {@link #getHandler(short)} 由 {@link org.gms.client.Client#channelRead} 调用，根据解析出的 opcode 获取 handler 并执行
+ *
+ * @see PacketHandler
+ * @see org.gms.net.opcodes.RecvOpcode
  */
 public final class PacketProcessor {
     private static final Logger log = LoggerFactory.getLogger(PacketProcessor.class);
+
+    /** 按 "world channel" 格式的字符串作为 key 缓存各服务器实例的处理器，确保每个服务器只有一份 */
     private static final Map<String, PacketProcessor> instances = new LinkedHashMap<>();
 
+    /** 频道服务器所需的依赖注入（NoteService、FredrickProcessor），由 Spring 在启动时设置 */
     private static ChannelDependencies channelDeps;
 
+    /** handler 数组，下标 = opcode 值，值为对应的处理逻辑。数组大小由 RecvOpcode 枚举的最大值决定 */
     private PacketHandler[] handlers;
 
     private PacketProcessor() {
@@ -77,14 +94,32 @@ public final class PacketProcessor {
         handlers = new PacketHandler[maxRecvOp + 1];
     }
 
+    /**
+     * 注册频道服所需的 Spring 依赖注入。在 Server 启动时由上下文调用一次。
+     *
+     * @param channelDependencies 包含 NoteService 和 FredrickProcessor 的依赖集合
+     */
     public static void registerGameHandlerDependencies(ChannelDependencies channelDependencies) {
         PacketProcessor.channelDeps = channelDependencies;
     }
 
+    /**
+     * 获取登录服务器的处理器实例（world=WORLD_ID, channel=CHANNEL_ID，channel 为负数）。
+     *
+     * @return 登录服专用的 PacketProcessor
+     */
     public static PacketProcessor getLoginServerProcessor() {
         return getProcessor(LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
     }
 
+    /**
+     * 获取频道服务器的处理器实例。调用前必须已通过 {@link #registerGameHandlerDependencies(ChannelDependencies)} 注入依赖。
+     *
+     * @param world   大区 ID
+     * @param channel 频道号
+     * @return 频道服专用的 PacketProcessor
+     * @throws IllegalStateException 如果依赖尚未注册
+     */
     public static PacketProcessor getChannelServerProcessor(int world, int channel) {
         if (channelDeps == null) {
             throw new IllegalStateException("Unable to get channel server processor - dependencies are not registered");
@@ -93,6 +128,12 @@ public final class PacketProcessor {
         return getProcessor(world, channel);
     }
 
+    /**
+     * 根据 opcode 值查找对应的 handler。
+     *
+     * @param packetId 客户端封包中的 opcode 值
+     * @return 对应的 PacketHandler，找不到或超出范围返回 null
+     */
     public PacketHandler getHandler(short packetId) {
         if (packetId > handlers.length) {
             return null;
@@ -101,6 +142,12 @@ public final class PacketProcessor {
         return handler;
     }
 
+    /**
+     * 将一个 opcode 与 handler 绑定注册。
+     *
+     * @param code    操作码枚举
+     * @param handler 对应的处理逻辑实现
+     */
     public void registerHandler(Opcode code, PacketHandler handler) {
         try {
             handlers[code.getValue()] = handler;
@@ -109,6 +156,13 @@ public final class PacketProcessor {
         }
     }
 
+    /**
+     * 按 world + channel 获取或创建处理器实例（线程安全），确保每个服务器只有一份。
+     *
+     * @param world   大区 ID
+     * @param channel 频道号（登录服为负数）
+     * @return 对应服务器的 PacketProcessor
+     */
     public synchronized static PacketProcessor getProcessor(int world, int channel) {
         final String processorId = world + " " + channel;
         PacketProcessor processor = instances.get(processorId);
@@ -120,6 +174,12 @@ public final class PacketProcessor {
         return processor;
     }
 
+    /**
+     * 重置 handler 数组并按版本注册所有 handler。
+     * channel &lt; 0 表示登录服，否则为频道服。
+     *
+     * @param channel 频道号（负数=登录服）
+     */
     public void reset(int channel) {
         handlers = new PacketHandler[handlers.length];
 
@@ -139,11 +199,13 @@ public final class PacketProcessor {
         }
     }
 
+    /** 注册所有服务器类型共用的 handler（心跳保活、自定义封包） */
     private void registerCommonHandlers() {
         registerHandler(RecvOpcode.PONG, new KeepAliveHandler());
         registerHandler(RecvOpcode.CUSTOM_PACKET, new CustomPacketHandler());
     }
 
+    /** 注册登录服专用 handler：协议确认、登录认证、角色管理、服务器列表等 */
     private void registerLoginHandlers() {
         registerHandler(RecvOpcode.ACCEPT_TOS, new AcceptToSHandler());
         registerHandler(RecvOpcode.AFTER_LOGIN, new AfterLoginHandler());
@@ -168,6 +230,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.VIEW_ALL_PIC_REGISTER, new ViewAllCharRegisterPicHandler());
     }
 
+    /** 注册频道服专用 handler：聊天、移动、战斗、背包、技能、社交、宠物、家族、商城等游戏内操作 */
     private void registerChannelHandlers() {
         registerHandler(RecvOpcode.NAME_TRANSFER, new TransferNameHandler());
         registerHandler(RecvOpcode.CHECK_CHAR_NAME, new TransferNameResultHandler());

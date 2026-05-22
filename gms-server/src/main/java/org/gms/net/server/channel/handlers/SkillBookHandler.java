@@ -37,10 +37,8 @@ import org.gms.util.PacketCreator;
 import java.util.Map;
 
 /**
- * 频道服务器入站封包处理器「SkillBookHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_SKILL_BOOK} 封包。
+ * 负责处理客户端使用技能书（提升技能最高等级）的操作。
  */
 public final class SkillBookHandler extends AbstractPacketHandler {
     @Override

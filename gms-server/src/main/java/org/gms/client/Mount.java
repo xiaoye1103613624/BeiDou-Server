@@ -22,15 +22,24 @@
 package org.gms.client;
 
 /**
+ * 【类型】Mount（class），包 {@code org.gms.client}。骑宠系统，管理骑宠的获得、等级、疲劳度和骑乘状态。
+ *
  * @author PurpleMadness < Patrick :O >
  */
 public class Mount {
+    /** 骑宠道具ID */
     private int itemid;
+    /** 骑宠技能ID */
     private int skillid;
+    /** 当前疲劳度 */
     private int tiredness;
+    /** 骑宠经验值 */
     private int exp;
+    /** 骑宠等级 */
     private int level;
+    /** 所属角色 */
     private Character owner;
+    /** 是否处于激活（骑乘）状态 */
     private boolean active;
 
     public Mount(Character owner, int id, int skillid) {

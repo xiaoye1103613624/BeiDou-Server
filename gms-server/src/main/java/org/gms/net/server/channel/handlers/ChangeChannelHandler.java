@@ -28,23 +28,28 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 
 /**
- * @author Matze
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CHANGE_CHANNEL} 封包。
+ * 负责处理客户端的换频道操作。
  */
 public final class ChangeChannelHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        int channel = p.readByte() + 1;
+        int channel = p.readByte() + 1; // 客户端值从0开始，服务端从1开始
         p.readInt();
+        // 更新反作弊时间戳
         c.getPlayer().getAutoBanManager().setTimestamp(6, Server.getInstance().getCurrentTimestamp(), 3);
+        // 切到同一频道视为异常
         if (c.getChannel() == channel) {
             AutobanFactory.GENERAL.alert(c.getPlayer(), "CCing to same channel.");
             c.disconnect(false, false);
             return;
+        // 商城/小游戏/商店中禁止切频道
         } else if (c.getPlayer().getCashShop().isOpened() || c.getPlayer().getMiniGame() != null || c.getPlayer().getPlayerShop() != null) {
             return;
         }
 
+        // 执行频道切换
         c.changeChannel(channel);
     }
 }

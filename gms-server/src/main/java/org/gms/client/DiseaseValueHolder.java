@@ -21,6 +21,11 @@
 package org.gms.client;
 
 /**
+ * 【类型】DiseaseValueHolder（class），包 {@code org.gms.client}。
+ *
+ * 异常状态（Disease）数值容器，记录状态效果的开始时间与持续时长，
+ * 用于 Buff/Debuff 的计时与过期判断。
+ *
  * @author anybody can do this
  */
 public class DiseaseValueHolder {

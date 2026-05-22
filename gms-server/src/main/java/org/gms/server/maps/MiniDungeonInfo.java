@@ -24,9 +24,12 @@ package org.gms.server.maps;
 import org.gms.constants.id.MapId;
 
 /**
+ * 【类型】MiniDungeonInfo，enum，包 {@code org.gms.server.maps}。
+ *
+ * 迷你地下城信息枚举，定义游戏中所有迷你地下城的入口地图、副本起始 ID 和副本数量，提供根据地图 ID 查找对应地下城的方法。
+ *
  * @author Alan (SharpAceX)
  */
-
 public enum MiniDungeonInfo {
 
     //http://bbb.hidden-street.net/search_finder/mini%20dungeon

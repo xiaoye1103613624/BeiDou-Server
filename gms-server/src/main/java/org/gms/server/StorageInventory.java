@@ -28,7 +28,11 @@ import org.gms.constants.inventory.ItemConstants;
 import java.util.*;
 
 /**
- * @author RonanLana
+ * 【类型】StorageInventory（class），包 `org.gms.server`。
+ *
+ * 仓库物品清单管理，提供仓库物品的合并、排序（支持按ID/名称/数量/等级排列）和槽位整理功能。
+ *
+ * @author 萧曵
  */
 public class StorageInventory {
     private final Client c;

@@ -26,7 +26,8 @@ import org.gms.client.Client;
 import java.awt.*;
 
 /**
- * 【接口】Portal：由 `maps` 模块实现的契约。
+ * 【接口】Portal（interface），包 {@code org.gms.server.maps}。
+ * 传送门系统契约，定义地图传送点的类型、状态和进入行为。
  */
 public interface Portal {
     int TELEPORT_PORTAL = 1;

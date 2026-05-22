@@ -35,7 +35,11 @@ import org.gms.util.StringUtil;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
- * 【GM/玩家指令】JailCommand：聊天或控制台命令实现。
+ * 【GM指令】JailCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：将指定玩家关入监牢，可设置关押时长（默认5分钟）。
+ *
+ * @author Arthur L
  */
 public class JailCommand extends Command {
     {

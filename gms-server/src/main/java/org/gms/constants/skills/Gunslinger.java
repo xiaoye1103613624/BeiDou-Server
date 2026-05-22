@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Gunslinger（class），包 `org.gms.constants.skills`。
+ *
+ * 定义枪手职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Gunslinger {
     public static final int GUN_MASTERY = 5200000;

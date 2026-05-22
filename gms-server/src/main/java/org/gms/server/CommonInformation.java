@@ -17,6 +17,10 @@ import java.util.List;
 
 /**
  * 【类型】CommonInformation（class），包 `org.gms.server`。
+ *
+ * 通用信息查询器，从 WZ 字符串资源中按类型（物品、怪物、地图、技能等）搜索和匹配名称或ID，为管理后台提供数据查找能力。
+ *
+ * @author 萧曵
  */
 public class CommonInformation {
     private static CommonInformation instance;

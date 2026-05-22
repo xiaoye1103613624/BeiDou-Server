@@ -23,7 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.server.events;
 
 /**
- * @author kevintjuh93
+ * 【类型】Events（abstract class），包 `org.gms.server.events`。
+ *
+ * 活动事件抽象基类，定义了游戏内活动事件（如营救加加）的通用行为契约，子类需实现 getInfo 返回活动信息。
+ *
+ * @author 萧曵
  */
 public abstract class Events {
     public Events() {

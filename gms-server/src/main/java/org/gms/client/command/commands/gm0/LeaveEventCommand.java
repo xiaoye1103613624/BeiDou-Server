@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】LeaveEventCommand：聊天或控制台命令实现。
+ * 【GM0指令】LeaveEventCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：离开当前正在参与的活动事件，返回进入前的地图。
+ *
+ * @author Arthur L
  */
 public class LeaveEventCommand extends Command {
     {

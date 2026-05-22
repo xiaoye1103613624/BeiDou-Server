@@ -5,7 +5,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author Tyler
+ * 【技能常量】Warrior（class），包 `org.gms.constants.skills`。
+ *
+ * 定义战士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Warrior {
     public static final int IMPROVED_HPREC = 1000000;

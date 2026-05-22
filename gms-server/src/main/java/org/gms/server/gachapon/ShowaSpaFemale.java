@@ -1,12 +1,12 @@
 package org.gms.server.gachapon;
 
 /**
- * @author Alan (SharpAceX) - gachapon source classes stub
- * @author Ronan - parsed MapleSEA loots
- * <p>
- * MapleSEA-like loots src: http://maplesecrets.blogspot.com/2011/06/gachapon-showa-towns-sauna-female-spa.html
+ * 【类型】ShowaSpaFemale（class），包 `org.gms.server.gachapon`。
+ *
+ * 昭和村女澡堂扭蛋道具池，提供该地点专属的卷轴、装备和消耗品掉落列表。
+ *
+ * @author 萧曵
  */
-
 public class ShowaSpaFemale extends GachaponItems {
 
     @Override

@@ -31,7 +31,8 @@ import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#COCONUT} 封包。
+ * 负责处理客户端的椰子活动操作。
  */
 public final class CoconutHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {

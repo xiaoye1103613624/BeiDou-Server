@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.client;
 
 /**
- * 【枚举】Stat：定义 `client` 中的一组常量。
+ * 【枚举】Stat（enum），包 {@code org.gms.client}。角色属性枚举，定义力量/敏捷/智力/运气/HP/MP/经验/人气等所有角色属性及其位掩码值。
  */
 public enum Stat {
     SKIN(0x1),
@@ -45,6 +45,7 @@ public enum Stat {
     MESO(0x40000),
     PET(0x180008),
     GACHAEXP(0x200000);
+    /** 属性对应的位掩码值 */
     private final int i;
 
     Stat(int i) {

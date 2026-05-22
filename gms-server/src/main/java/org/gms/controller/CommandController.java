@@ -12,7 +12,12 @@ import org.gms.service.CommandService;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 【Web 控制器】CommandController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】CommandController（class），包 {@code org.gms.controller}。
+ *
+ * 处理GM命令库的管理及游戏数据热重载，包括命令列表查询与更新、
+ * 事件重载、传送点重装及地图重装等服务器运行时热更新功能。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

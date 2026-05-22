@@ -26,7 +26,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.guild.Alliance;
 
 /**
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#DENY_ALLIANCE_REQUEST} 封包。
+ * 负责处理客户端的拒绝联盟请求操作。
  */
 public final class DenyAllianceRequestHandler extends AbstractPacketHandler {
 

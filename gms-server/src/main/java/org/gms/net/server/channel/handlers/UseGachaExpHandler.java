@@ -29,9 +29,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93
- * <p>
- * Modified by -- Ronan - concurrency protection
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_GACHA_EXP} 封包。
+ * 负责处理客户端领取扭蛋经验（Gacha EXP）的操作。
  */
 public class UseGachaExpHandler extends AbstractPacketHandler {
 

@@ -37,7 +37,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】KillAllCommand：聊天或控制台命令实现。
+ * 【GM指令】KillAllCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：击杀当前地图所有怪物（排除友好怪物和龙王）。
+ *
+ * @author Arthur L
  */
 public class KillAllCommand extends Command {
     {

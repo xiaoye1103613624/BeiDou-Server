@@ -3,7 +3,7 @@ package org.gms.constants.id;
 import java.util.stream.IntStream;
 
 /**
- * 【类型】ItemId（class），包 `org.gms.constants.id`。
+ * 【类型】ItemId（class），包 `org.gms.constants.id`。物品ID常量：所有物品ID的定义，包括消耗品、装备、宠物、椅子、卷轴、结婚系统等各类型物品ID及类型判断方法。
  */
 public class ItemId {
     // Misc

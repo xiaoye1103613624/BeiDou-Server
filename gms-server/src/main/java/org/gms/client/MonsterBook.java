@@ -37,14 +37,20 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 【类型】MonsterBook（class），包 `org.gms.client`。
+ * 【类型】MonsterBook（class），包 {@code org.gms.client}。怪物图鉴系统，记录玩家收集的怪物卡片、图鉴等级，支持卡片增量与持久化。
  */
 public final class MonsterBook {
+    /** 特殊怪物卡片数量 */
     private int specialCard = 0;
+    /** 普通怪物卡片数量 */
     private int normalCard = 0;
+    /** 当前图鉴等级 */
     private int bookLevel = 1;
+    /** 卡片数据（卡片ID→收集数量） */
     private final Map<Integer, Integer> cards = new LinkedHashMap<>();
+    /** 线程安全锁 */
     private final Lock lock = new ReentrantLock();
+    /** 怪物图鉴服务Bean */
     private static final MonsterBookService monsterBookService = ServerManager.getApplicationContext().getBean(MonsterBookService.class);
 
     public MonsterBook(int cid) {

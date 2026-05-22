@@ -35,30 +35,47 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 【类型】FamilyEntry（class），包 {@code org.gms.client}。家族成员条目，管理家族树结构中的单个成员信息，包括辈分关系、声望值、上下级遍历和家族分叉/合并操作。
+ *
  * @author Ubaware
  */
 
 public class FamilyEntry {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(FamilyEntry.class);
 
+    /** 角色ID */
     private final int characterID;
+    /** 所属家族 */
     private volatile Family family;
+    /** 在线角色对象 */
     private volatile Character character;
 
+    /** 上级（前辈）成员 */
     private volatile FamilyEntry senior;
+    /** 下级（后辈）成员（最多2个） */
     private final FamilyEntry[] juniors = new FamilyEntry[2];
+    /** 家族特权使用次数 */
     private final int[] entitlements = new int[11];
+    /** 当前声望 / 累计声望 */
     private volatile int reputation, totalReputation;
+    /** 今日声望 / 向上级贡献声望（每日值） */
     private volatile int todaysRep, repsToSenior; //both are daily values
+    /** 下级总数 / 上级总数 */
     private volatile int totalJuniors, totalSeniors;
 
+    /** 在家族树中的辈分（代数） */
     private volatile int generation;
 
+    /** 声望是否有未保存变更 */
     private volatile boolean repChanged; //used to ignore saving unchanged rep values
 
     // cached values for offline players
+    /** 离线缓存：角色名 */
     private String charName;
+    /** 离线缓存：等级 */
     private int level;
+    /** 离线缓存：职业 */
     private Job job;
 
     public FamilyEntry(Family family, int characterID, String charName, int level, Job job) {

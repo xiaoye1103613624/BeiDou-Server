@@ -44,6 +44,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类型】PlayerShop，class，包 {@code org.gms.server.maps}。
+ *
+ * 玩家个人商店地图对象，提供玩家间实时点对点交易功能。支持访客进入/离开、物品上架/下架、购买、聊天记录、黑名单和交易记录查询。
+ *
  * @author Matze
  * @author Ronan - concurrency protection
  */

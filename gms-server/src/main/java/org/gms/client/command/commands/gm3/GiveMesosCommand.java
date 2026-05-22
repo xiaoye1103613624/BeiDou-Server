@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】GiveMesosCommand：聊天或控制台命令实现。
+ * 【GM指令】GiveMesosCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：给予指定玩家金币（支持"max"/"min"关键字设置最大值或最小值）。
+ *
+ * @author Arthur L
  */
 public class GiveMesosCommand extends Command {
     {

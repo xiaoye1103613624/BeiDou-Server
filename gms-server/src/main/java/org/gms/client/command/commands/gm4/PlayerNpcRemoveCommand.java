@@ -30,7 +30,11 @@ import org.gms.server.life.PlayerNPC;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】PlayerNpcRemoveCommand：聊天或控制台命令实现。
+ * 【GM指令】PlayerNpcRemoveCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：移除指定玩家的玩家NPC。
+ *
+ * @author Arthur L
  */
 public class PlayerNpcRemoveCommand extends Command {
     {

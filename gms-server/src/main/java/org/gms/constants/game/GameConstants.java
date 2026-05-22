@@ -21,7 +21,7 @@ import java.util.*;
  * @author Ronan
  */
 /**
- * 【类型】GameConstants（class），包 `org.gms.constants.game`。
+ * 【类型】GameConstants（class），包 `org.gms.constants.game`。游戏常量：数字格式化、职业判断、技能检查、地图判断、掉率/经验倍率等通用工具方法。
  */
 public class GameConstants {
     public static String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};

@@ -34,7 +34,8 @@ import org.gms.util.I18nUtil;
 import java.awt.*;
 
 /**
- * @author Matze
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#QUEST_ACTION} 封包。
+ * 负责处理客户端任务操作（接取、完成、放弃任务等）。
  */
 public final class QuestActionHandler extends AbstractPacketHandler {
 

@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】LevelProCommand：聊天或控制台命令实现。
+ * 【GM指令】LevelProCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：逐步升级至目标等级（每次触发完整的升级流程和动画），比LevelCommand更加正规。
+ *
+ * @author Arthur L
  */
 public class LevelProCommand extends Command {
     {

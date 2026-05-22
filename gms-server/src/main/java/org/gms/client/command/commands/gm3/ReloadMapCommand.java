@@ -32,7 +32,11 @@ import org.gms.util.I18nUtil;
 import java.util.Collection;
 
 /**
- * 【GM/玩家指令】ReloadMapCommand：聊天或控制台命令实现。
+ * 【GM指令】ReloadMapCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：重置并重新加载当前地图。
+ *
+ * @author Arthur L
  */
 public class ReloadMapCommand extends Command {
     {

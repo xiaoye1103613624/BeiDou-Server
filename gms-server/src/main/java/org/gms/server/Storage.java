@@ -48,7 +48,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Matze
+ * 【类型】Storage（class），包 `org.gms.server`。
+ *
+ * 仓库存储系统，管理玩家账号仓库的物品存取、金币存取、槽位扩展以及物品整理功能，数据持久化到数据库。
+ *
+ * @author 萧曵
  */
 public class Storage {
     private static final Logger log = LoggerFactory.getLogger(Storage.class);

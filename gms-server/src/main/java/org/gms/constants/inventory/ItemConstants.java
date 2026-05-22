@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 【类型】ItemConstants（class），包 `org.gms.constants.inventory`。物品常量：物品类型判断（武器、装备、消耗品、宠物、椅子等）、物品标志位、ID范围检查。
+ *
  * @author Jay Estrella
  * @author Ronan
  */

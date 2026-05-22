@@ -56,6 +56,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 【类型】HiredMerchant，class，包 {@code org.gms.server.maps}。
+ *
+ * 雇佣商人地图对象，提供离线自动售货功能。玩家可以摆摊并离线，其他玩家可以访问商铺购买物品；支持访客管理、黑名单、消息聊天和交易记录。
+ *
  * @author XoticStory
  * @author Ronan - concurrency protection
  */

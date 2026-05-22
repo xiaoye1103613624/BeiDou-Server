@@ -30,7 +30,8 @@ import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Flav
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#ENTER_CASHSHOP} 封包。
+ * 负责处理客户端的进入现金商店操作。
  */
 public class EnterCashShopHandler extends AbstractPacketHandler {
     @Override

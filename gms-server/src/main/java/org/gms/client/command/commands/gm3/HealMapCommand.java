@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】HealMapCommand：聊天或控制台命令实现。
+ * 【GM指令】HealMapCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：治疗当前地图所有玩家的HP/MP。
+ *
+ * @author Arthur L
  */
 public class HealMapCommand extends Command {
     {

@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】QuestRateCommand：聊天或控制台命令实现。
+ * 【GM指令】QuestRateCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：设置服务器全局任务经验倍率。
+ *
+ * @author Arthur L
  */
 public class QuestRateCommand extends Command {
     {

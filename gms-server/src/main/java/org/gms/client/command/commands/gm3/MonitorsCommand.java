@@ -30,7 +30,11 @@ import org.gms.net.packet.logging.MonitoredChrLogger;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】MonitorsCommand：聊天或控制台命令实现。
+ * 【GM指令】MonitorsCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：列出当前被监控数据包的玩家。
+ *
+ * @author Arthur L
  */
 public class MonitorsCommand extends Command {
     {

@@ -30,7 +30,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】UnJailCommand：聊天或控制台命令实现。
+ * 【GM指令】UnJailCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：提前释放被关入监牢的玩家，清除其关押时间。
+ *
+ * @author Arthur L
  */
 public class UnJailCommand extends Command {
     {

@@ -23,6 +23,10 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 【类】CharacterSaveService，包 `org.gms.net.server.services.task.world`。
+ *
+ * 角色保存服务，管理跨世界角色数据的定时保存调度，将角色数据持久化到数据库。
+ *
  * @author Ronan
  */
 public class CharacterSaveService extends BaseService {

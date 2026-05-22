@@ -13,10 +13,11 @@ import java.io.Serial;
 import java.util.Date;
 
 /**
- * 游戏参数表 实体类。
+ * 【实体】GameConfigDO（class），包 `org.gms.dao.entity`。
  *
- * @author CN
- * @since 2024-10-18
+ * 对应数据库表 game_config，存储游戏动态参数配置数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

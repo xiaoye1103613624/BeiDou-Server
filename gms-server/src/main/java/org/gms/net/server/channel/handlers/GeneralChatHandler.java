@@ -33,10 +33,8 @@ import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
 /**
- * 频道服务器入站封包处理器「GeneralChatHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#GENERAL_CHAT} 封包。
+ * 负责处理客户端的普通聊天操作。
  */
 public final class GeneralChatHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(GeneralChatHandler.class);
@@ -45,10 +43,12 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         String s = p.readString();
         Character chr = c.getPlayer();
+        // 刷屏检测：200ms内连续发言则拦截
         if (chr.getAutoBanManager().getLastSpam(7) + 200 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
+        // 封包长度异常检测：非GM消息超过127字节视为封包篡改
         if (s.length() > Byte.MAX_VALUE && !chr.isGM()) {
             AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit in General Chat.");
             log.warn("Chr {} tried to send text with length of {}", c.getPlayer().getName(), s.length());
@@ -56,15 +56,18 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
             return;
         }
         char heading = s.charAt(0);
+        // GM命令路由：以'/'开头且匹配命令列表则转交命令执行器
         if (CommandsExecutor.isCommand(c, s)) {
             CommandsExecutor.getInstance().handle(c, s);
         } else if (heading != '/') {
             int show = p.readByte();
+            // 地图禁言检测
             if (chr.getMap().isMuted() && !chr.isGM()) {
                 chr.dropMessage(5, "The map you are in is currently muted. Please try again later.");
                 return;
             }
 
+            // 根据隐身状态选择广播方式：隐身GM仅对GM可见
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
                 ChatLogger.log(c, "General", s);

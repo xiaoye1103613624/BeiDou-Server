@@ -29,7 +29,11 @@ import org.gms.server.ShopFactory;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】GmShopCommand：聊天或控制台命令实现。
+ * 【GM指令】GmShopCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：打开GM商店（1337号商店），方便管理员获取各类物品。
+ *
+ * @author Arthur L
  */
 public class GmShopCommand extends Command {
     {

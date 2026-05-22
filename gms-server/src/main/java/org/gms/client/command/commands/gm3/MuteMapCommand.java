@@ -29,7 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】MuteMapCommand：聊天或控制台命令实现。
+ * 【GM指令】MuteMapCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：切换当前地图的全体禁言状态。
+ *
+ * @author Arthur L
  */
 public class MuteMapCommand extends Command {
     {

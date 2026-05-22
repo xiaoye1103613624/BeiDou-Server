@@ -30,7 +30,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.npc.NPCScriptManager;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CLICK_GUIDE} 封包。
+ * 负责处理客户端的点击引导操作。
  */
 public class ClickGuideHandler extends AbstractPacketHandler {
     @Override

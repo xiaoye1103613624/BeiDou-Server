@@ -24,6 +24,10 @@ package org.gms.net.server;
 import org.gms.server.StatEffect;
 
 /**
+ * 【类】PlayerBuffValueHolder，包 `org.gms.net.server`。
+ *
+ * 玩家 Buff 值持有者，封装单个 Buff 的已用时间和对应的效果对象（StatEffect）。
+ *
  * @author Danny
  */
 public class PlayerBuffValueHolder {

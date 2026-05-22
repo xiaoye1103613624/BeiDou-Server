@@ -31,6 +31,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
+ * 【类】LoginStorage，包 `org.gms.net.server.coordinator.login`。
+ *
+ * 登录存储，记录每个账户的登录尝试次数和时间，防止短时间内暴力登录攻击。
+ *
  * @author Ronan
  */
 public class LoginStorage {

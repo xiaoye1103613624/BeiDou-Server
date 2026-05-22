@@ -28,7 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】EquipLvCommand：聊天或控制台命令实现。
+ * 【GM0指令】EquipLvCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看当前身上所有装备的等级与强化属性。
+ *
+ * @author Arthur L
  */
 public class EquipLvCommand extends Command {
     {

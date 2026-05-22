@@ -34,8 +34,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author PurpleMadness
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_MOUNT_FOOD} 封包。
+ * 负责处理客户端使用坐骑食物的操作。
  */
 public final class UseMountFoodHandler extends AbstractPacketHandler {
     @Override

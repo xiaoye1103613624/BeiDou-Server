@@ -29,8 +29,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author BubblesDev
- * @author Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#PET_EXCLUDE_ITEMS} 封包。
+ * 负责处理客户端宠物排除物品设置操作。
  */
 public final class PetExcludeItemsHandler extends AbstractPacketHandler {
 

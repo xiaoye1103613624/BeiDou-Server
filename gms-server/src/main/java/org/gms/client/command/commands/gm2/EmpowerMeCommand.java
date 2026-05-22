@@ -30,7 +30,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】EmpowerMeCommand：聊天或控制台命令实现。
+ * 【GM2指令】EmpowerMeCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：为自身添加大量增益Buff（全能Buff套）。
+ *
+ * @author Arthur L
  */
 public class EmpowerMeCommand extends Command {
     {

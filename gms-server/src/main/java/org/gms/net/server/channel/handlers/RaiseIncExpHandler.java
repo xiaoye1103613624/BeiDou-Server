@@ -16,8 +16,8 @@ import org.gms.util.PacketCreator;
 import java.util.Map;
 
 /**
- * @author Xari
- * @author Ronan - added concurrency protection and quest progress limit
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_ITEMUI} 封包。
+ * 负责处理客户端使用任务消耗品增加任务进度的操作。
  */
 public class RaiseIncExpHandler extends AbstractPacketHandler {
 

@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Page（class），包 `org.gms.constants.skills`。
+ *
+ * 定义准骑士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Page {
     public static final int SWORD_MASTERY = 1200000;

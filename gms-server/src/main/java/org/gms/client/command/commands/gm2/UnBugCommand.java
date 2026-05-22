@@ -29,7 +29,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
- * 【GM/玩家指令】UnBugCommand：聊天或控制台命令实现。
+ * 【GM指令】UnBugCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：解除当前地图所有玩家的卡死/卡动作状态（广播enableActions包）。
+ *
+ * @author Arthur L
  */
 public class UnBugCommand extends Command {
     {

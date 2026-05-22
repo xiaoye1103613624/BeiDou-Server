@@ -28,16 +28,24 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * 【类型】MapManager（class），包 `org.gms.server.maps`。
+ * 【类型】MapManager（class），包 {@code org.gms.server.maps}。
+ * 地图管理器/地图工厂，负责频道内地图实例的加载、缓存与生命周期管理。
+ * 支持通过地图ID获取 {@link MapleMap} 实例，采用读写锁保证多线程安全。
  */
 public class MapManager {
+    /** 所属频道 */
     private final int channel;
+    /** 所属世界 */
     private final int world;
+    /** 关联的事件实例管理器 */
     private EventInstanceManager event;
 
+    /** 地图缓存（地图ID -> 地图实例） */
     private final Map<Integer, MapleMap> maps = new HashMap<>();
 
+    /** 地图缓存读锁 */
     private final Lock mapsRLock;
+    /** 地图缓存写锁 */
     private final Lock mapsWLock;
 
     public MapManager(EventInstanceManager eim, int world, int channel) {

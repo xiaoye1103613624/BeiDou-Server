@@ -40,7 +40,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * 【GM/玩家指令】PnpcCommand：聊天或控制台命令实现。
+ * 【GM指令】PnpcCommand（class），包 `org.gms.client.command.commands.gm4`。
+ *
+ * GM指令：在当前地图永久添加NPC（持久化到数据库，同步所有频道）。
+ *
+ * @author Ronan
  */
 public class PnpcCommand extends Command {
     {

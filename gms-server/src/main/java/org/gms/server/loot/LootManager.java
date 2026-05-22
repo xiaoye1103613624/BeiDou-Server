@@ -28,6 +28,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 【类型】LootManager（class），包 {@code org.gms.server.loot}。
+ * 掉落管理器，负责根据队伍成员的任务状态过滤怪物掉落物品，
+ * 确保只有相关任务进行中的玩家才能看到并拾取任务掉落物。
+ *
  * @author Ronan
  */
 public class LootManager {
@@ -36,7 +40,7 @@ public class LootManager {
         if (dropEntry.questid <= 0) {
             return true;
         }
-        
+
         int qStartAmount = 0, qCompleteAmount = 0;
         Quest quest = Quest.getInstance(dropEntry.questid);
         if (quest != null) {

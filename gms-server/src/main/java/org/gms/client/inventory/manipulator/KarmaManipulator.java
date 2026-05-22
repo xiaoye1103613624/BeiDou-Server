@@ -23,6 +23,11 @@ import org.gms.client.inventory.Item;
 import org.gms.constants.inventory.ItemConstants;
 
 /**
+ * 【类型】KarmaManipulator（class），包 {@code org.gms.client.inventory.manipulator}。
+ *
+ * 卡拉（Karma/可交易）标志位管理工具，提供装备/消耗品的 Karma 标记查询、设置与
+ * 切换为不可交易状态等方法，通过物品 flag 位运算实现。
+ *
  * @author RonanLana
  */
 public class KarmaManipulator {

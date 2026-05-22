@@ -33,7 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author kevintjuh93
+ * 【类型】PartyQuest（class），包 `org.gms.server.partyquest`。
+ *
+ * 组队任务基类，管理组队玩家的参与列表、频道/世界信息和经验值计算，为各具体组队任务（如金银岛PQ、玩具城PQ）提供基础框架。
+ *
+ * @author 萧曵
  */
 public class PartyQuest {
     private static final Logger log = LoggerFactory.getLogger(PartyQuest.class);

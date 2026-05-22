@@ -12,10 +12,11 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- *  实体类。
+ * 【实体】NotesDO（class），包 `org.gms.dao.entity`。
  *
- * @author sleep
- * @since 2024-05-24
+ * 对应数据库表 notes，存储便签留言数据。
+ *
+ * @author 萧曵
  */
 @Data
 @Builder

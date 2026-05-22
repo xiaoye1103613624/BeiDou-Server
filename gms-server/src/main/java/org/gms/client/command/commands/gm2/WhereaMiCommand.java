@@ -35,7 +35,11 @@ import org.gms.util.I18nUtil;
 import java.util.HashSet;
 
 /**
- * 【GM/玩家指令】WhereaMiCommand：聊天或控制台命令实现。
+ * 【GM指令】WhereaMiCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：列出当前地图中所有玩家、NPC、PlayerNPC和怪物的详细信息（ID与名称）。
+ *
+ * @author Arthur L
  */
 public class WhereaMiCommand extends Command {
     {

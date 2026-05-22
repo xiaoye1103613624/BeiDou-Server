@@ -34,7 +34,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 【GM/玩家指令】UptimeCommand：聊天或控制台命令实现。
+ * 【GM0指令】UptimeCommand（class），包 `org.gms.client.command.commands.gm0`。
+ *
+ * GM指令：查看服务器自启动以来的运行时长。
+ *
+ * @author Arthur L
  */
 public class UptimeCommand extends Command {
     {

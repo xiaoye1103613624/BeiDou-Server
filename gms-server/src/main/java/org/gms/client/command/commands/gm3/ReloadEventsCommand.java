@@ -31,7 +31,11 @@ import org.gms.net.server.channel.Channel;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ReloadEventsCommand：聊天或控制台命令实现。
+ * 【GM指令】ReloadEventsCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：重新加载所有频道的事件脚本。
+ *
+ * @author Arthur L
  */
 public class ReloadEventsCommand extends Command {
     {

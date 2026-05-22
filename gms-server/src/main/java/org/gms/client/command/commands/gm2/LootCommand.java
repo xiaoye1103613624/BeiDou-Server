@@ -34,7 +34,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 【GM/玩家指令】LootCommand：聊天或控制台命令实现。
+ * 【GM指令】LootCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：自动拾取当前地图上属于自己或队伍的所有掉落物品。
+ *
+ * @author Resinate
  */
 public class LootCommand extends Command {
 

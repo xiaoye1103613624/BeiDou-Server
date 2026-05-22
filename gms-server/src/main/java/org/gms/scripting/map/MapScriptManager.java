@@ -33,22 +33,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 【类型】MapScriptManager（class），包 `org.gms.scripting.map`。
+ * 【类型】MapScriptManager（class），包 {@code org.gms.scripting.map}。
+ * 地图脚本管理器，单例模式。当玩家进入某张地图时触发对应脚本（位于 {@code map/*.js}），
+ * 脚本通过 {@code MapScriptMethods} 与玩家交互。同一地图脚本加载后缓存，避免重复编译。
+ * 首次进入的玩家会记录已执行标记，防止重复触发。
  */
 public class MapScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(MapScriptManager.class);
+    /** 单例实例 */
     private static final MapScriptManager instance = new MapScriptManager();
 
+    /** 地图脚本路径 -> 已编译的 JS 可调用接口的缓存 */
     private final Map<String, Invocable> scripts = new HashMap<>();
 
     public static MapScriptManager getInstance() {
         return instance;
     }
 
+    /** 清空脚本缓存（热重载时调用） */
     public void reloadScripts() {
         scripts.clear();
     }
 
+    /**
+     * 执行地图脚本。
+     *
+     * @param c             客户端连接
+     * @param mapScriptPath 地图脚本路径（不含 {@code map/} 前缀与 {@code .js} 后缀）
+     * @param firstUser     该玩家是否为此地图的第一个进入者
+     * @return true 表示脚本执行成功
+     */
     public boolean runMapScript(Client c, String mapScriptPath, boolean firstUser) {
         if (firstUser) {
             Character chr = c.getPlayer();

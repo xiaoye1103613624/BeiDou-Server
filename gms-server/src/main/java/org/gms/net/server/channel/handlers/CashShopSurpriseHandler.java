@@ -29,8 +29,8 @@ import org.gms.util.PacketCreator;
 import java.util.Optional;
 
 /**
- * @author RonanLana
- * @author Ponk
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#CASHSHOP_SURPRISE} 封包。
+ * 负责处理客户端的现金商店惊喜商品操作。
  */
 public class CashShopSurpriseHandler extends AbstractPacketHandler {
 

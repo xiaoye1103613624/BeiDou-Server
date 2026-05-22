@@ -29,7 +29,8 @@ import org.gms.server.maps.FieldLimit;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#TROCK_ADD_MAP} 封包。
+ * 负责处理客户端传送岩石（Teleport Rock）添加或删除地图的操作。
  */
 public final class TrockAddMapHandler extends AbstractPacketHandler {
 

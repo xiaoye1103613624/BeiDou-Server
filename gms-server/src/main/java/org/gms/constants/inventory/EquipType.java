@@ -23,7 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author RonanLana
+ * 【枚举】EquipType（enum），包 `org.gms.constants.inventory`。
+ *
+ * 装备类型枚举，定义各类装备（武器、防具、饰品等）的类型标识及其与物品 ID 的映射关系。
+ *
+ * @author 萧曵
  */
 public enum EquipType {
     UNDEFINED(-1),

@@ -106,95 +106,196 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * 【类型】MapleMap（class），包 `org.gms.server.maps`。
+ *
+ * 游戏地图的核心类，每个实例代表一个具体的地图（如"射手村"、"魔法密林"等）。
+ * 负责管理地图内的所有对象（玩家、怪物、NPC、掉落物、反应堆、传送门等）及其生命周期，
+ * 处理怪物刷新、掉落物、传送、战斗伤害、BOSS 战、事件（雪球、椰子、OX 问答等）。
+ *
+ * 关键职责：
+ * <ul>
+ *   <li><b>生命周期管理</b>：地图加载/卸载、怪物刷新调度、物品过期清理</li>
+ *   <li><b>玩家管理</b>：玩家进入/离开、广播消息、队伍追踪</li>
+ *   <li><b>怪物系统</b>：怪物生成/死亡/伤害、BOSS 血条广播、仇恨追踪</li>
+ *   <li><b>掉落系统</b>：物品掉落定位、拾取校验、掉落物过期清理</li>
+ *   <li><b>事件系统</b>：GM 事件（雪球、椰子、OX）、PQ、地图特效</li>
+ *   <li><b>安全机制</b>：读写锁保护玩家/对象集合、伤害/传送校验</li>
+ * </ul>
+ *
+ * 每个地图绑定到特定的 world + channel，由 {@link org.gms.server.maps.MapManager} 的 MapFactory 创建和管理。
+ *
+ * @author Matze
  */
 public class MapleMap {
     private static final Logger log = LoggerFactory.getLogger(MapleMap.class);
+    /** 需要按范围同步给玩家的地图对象类型（商店、物品、NPC、怪物、门、召唤兽、反应堆） */
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
+    /** 掉落物有效范围缓存：key=怪物ID, value=<最小X偏移, 最大X偏移> */
     private static final Map<Integer, Pair<Integer, Integer>> dropBoundsCache = new HashMap<>(100);
 
+    // ==================== 地图对象容器 ====================
+    /** 地图上所有对象（怪物、NPC、玩家、掉落物等），key=OID */
     private final Map<Integer, MapObject> mapobjects = new LinkedHashMap<>();
+    /** 带有自毁倒计时的对象 OID 集合 */
     private final Set<Integer> selfDestructives = new LinkedHashSet<>();
+    /** 当前活跃的怪物刷新点列表（副本等场景可动态增删） */
     private final Collection<SpawnPoint> monsterSpawn = Collections.synchronizedList(new LinkedList<>());
+    /** 地图的所有怪物刷新点（不会动态变化，用于 reload） */
     private final Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<>());
+    /** 当前地图已生成的怪物计数（原子操作） */
     private final AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
+    /** 当前地图掉落物计数（原子操作） */
     private final AtomicInteger droppedItemCount = new AtomicInteger(0);
+    /** 当前地图的玩家集合 */
     private final Collection<Character> characters = new LinkedHashSet<>();
+    /** 地图内队伍映射：<mapId, <partyId>>，用于追踪同一地图的多队伍 */
     private final Map<Integer, Set<Integer>> mapParty = new LinkedHashMap<>();
+    /** 地图传送门（key=传送门名称或ID） */
     private final Map<Integer, Portal> portals = new HashMap<>();
+    /** 地图背景类型 */
     private final Map<Integer, Integer> backgroundTypes = new HashMap<>();
+    /** 地图环境变量（如天气效果、BGM） */
     private final Map<String, Integer> environment = new LinkedHashMap<>();
+    /** 当前地图的掉落物：<掉落物Item, 掉落时间戳> */
     private final Map<MapItem, Long> droppedItems = new LinkedHashMap<>();
+    /** 已注册到全局掉落追踪的弱引用对象列表 */
     private final LinkedList<WeakReference<MapObject>> registeredDrops = new LinkedList<>();
+    /** 怪物掉落锁——防止同一怪物被多次拾取，<MobLootEntry, 处理时间戳> */
     private final Map<MobLootEntry, Long> mobLootEntries = new HashMap(20);
+    /** 角色状态更新任务列表 */
     private final List<Runnable> statUpdateRunnables = new ArrayList(50);
+    /** 地图上的区域定义（用于事件判断） */
     private final List<Rectangle> areas = new ArrayList<>();
+
+    // ==================== 地形数据 ====================
+    /** 地图的 foothold 四叉树（用于寻路和掉落定位） */
     private FootholdTree footholds = null;
-    private Pair<Integer, Integer> xLimits;  // caches the min and max x's with available footholds
+    /** 地图 X 轴玩家可到达的边界 [minX, maxX] */
+    private Pair<Integer, Integer> xLimits;
+    /** 地图矩形区域 */
     private final Rectangle mapArea = new Rectangle();
+
+    // ==================== 基础属性 ====================
+    /** 地图 ID（WZ 中的地图编号） */
     private final int mapid;
+    /** 地图对象 ID 自增器（OID 从 1000000001 开始） */
     private final AtomicInteger runningOid = new AtomicInteger(1000000001);
+    /** 从本图离开时的返回地图 ID */
     private final int returnMapId;
+    /** 所属频道号 */
     private final int channel;
+    /** 所属大区号 */
     private final int world;
+    /** 地图座位数 */
     private int seats;
+    /** 怪物刷新倍率 */
     private byte monsterRate;
+    /** 是否显示时钟 */
     private boolean clock;
+    /** 是否为船类地图 */
     private boolean boat;
+    /** 船是否已靠岸 */
     private boolean docked = false;
+    /** 绑定的事件实例 */
     private EventInstanceManager event = null;
+    /** 地图名称 */
     private String mapName;
+    /** 地图所属街道名称 */
     private String streetName;
+    /** 地图特效 */
     private MapEffect mapEffect = null;
+    /** 是否永久地图（不随玩家离开而卸载） */
     private boolean everlast = false;
+    /** 强制返回地图 ID */
     private int forcedReturnMap = MapId.NONE;
+    /** 地图时间限制（秒） */
     private int timeLimit;
+    /** 地图计时器起始时间 */
     private long mapTimer;
+    /** 每秒扣减值 */
     private int decHP = 0;
+    /** HP/MP 恢复倍率 */
     private float recovery = 1.0f;
+    /** 保护物品 ID（持有后可免疫地图伤害） */
     private int protectItem = 0;
+    /** 是否为城镇地图 */
     private boolean town;
+    /** OX 问答事件对象 */
     private OxQuiz ox;
+    /** 是否为 OX 问答地图 */
     private boolean isOxQuiz = false;
+    /** 是否允许掉落 */
     private boolean dropsOn = true;
+    /** 第一个玩家进入时执行的脚本 */
     private String onFirstUserEnter;
+    /** 每个玩家进入时执行的脚本 */
     private String onUserEnter;
+    /** 地图类型（如 0=普通, 1=副本等） */
     private int fieldType;
+    /** 地图限制标志位（跳跃限制、传送限制等） */
     private int fieldLimit = 0;
+    /** 怪物容量上限（-1 无限制） */
     private int mobCapacity = -1;
-    private MonsterAggroCoordinator aggroMonitor = null;   // aggroMonitor activity in sync with itemMonitor
+
+    // ==================== 调度/服务 ====================
+    /** 怪物仇恨追踪器 */
+    private MonsterAggroCoordinator aggroMonitor = null;
+    /** 物品监控定时任务 */
     private ScheduledFuture<?> itemMonitor = null;
+    /** 过期物品清理定时任务 */
     private ScheduledFuture<?> expireItemsTask = null;
+    /** 怪物刷新定时任务 */
     private ScheduledFuture<?> mobSpawnLootTask = null;
+    /** 角色状态更新定时任务 */
     private ScheduledFuture<?> characterStatUpdateTask = null;
+    /** 物品监控超时时间 */
     private short itemMonitorTimeout;
+    /** 限时怪物：<怪物ID, 提示消息> */
     private Pair<Integer, String> timeMob = null;
+    /** 怪物刷新间隔（毫秒） */
     private short mobInterval = 5000;
-    private boolean allowSummons = true; // All maps should have this true at the beginning
+    /** 是否允许召唤兽 */
+    private boolean allowSummons = true;
+    /** 地图所有者（副本专用） */
     private Character mapOwner = null;
+    /** 地图所有者最后活动时间 */
     private long mapOwnerLastActivityTime = Long.MAX_VALUE;
 
-    // events
-    private boolean eventstarted = false, isMuted = false;
+    // ==================== 事件状态 ====================
+    /** 事件是否已开始 */
+    private boolean eventstarted = false;
+    /** 是否全局禁言 */
+    private boolean isMuted = false;
+    /** 雪球事件：队伍0的雪球 */
     private Snowball snowball0 = null;
+    /** 雪球事件：队伍1的雪球 */
     private Snowball snowball1 = null;
+    /** 椰子事件 */
     private Coconut coconut;
 
-    //CPQ
+    // ==================== 怪物嘉年华(CPQ) ====================
+    /** CPQ 最大怪物数 */
     private int maxMobs;
+    /** CPQ 最大反应堆数 */
     private int maxReactors;
+    /** CPQ 死亡扣分 */
     private int deathCP;
+    /** CPQ 默认时间 */
     private int timeDefault;
+    /** CPQ 扩展时间 */
     private int timeExpand;
 
-    //locks
+    // ==================== 线程安全锁 ====================
+    /** 角色集合读锁 */
     private final Lock chrRLock;
+    /** 角色集合写锁 */
     private final Lock chrWLock;
+    /** 地图对象集合读锁 */
     private final Lock objectRLock;
+    /** 地图对象集合写锁 */
     private final Lock objectWLock;
-
+    /** 掉落物操作锁 */
     private final Lock lootLock = new ReentrantLock(true);
-
-    // due to the nature of loadMapFromWz (synchronized), sole function that calls 'generateMapDropRangeCache', this lock remains optional.
+    /** 掉落范围缓存锁 */
     private static final Lock bndLock = new ReentrantLock(true);
 
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {

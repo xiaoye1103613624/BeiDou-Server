@@ -25,6 +25,10 @@ import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.util.I18nUtil;
 
 /**
+ * 【类型】ShowSessionsCommand（class），继承 {@link Command}，包 {@code org.gms.client.command.commands.gm5}。
+ *
+ * GM5 级指令：打印当前服务器会话追踪信息，用于调试登录/在线会话状态。
+ *
  * @author Ronan
  */
 public class ShowSessionsCommand extends Command {

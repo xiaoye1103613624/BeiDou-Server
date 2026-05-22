@@ -29,8 +29,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Matze
- * @author Ronan - concurrency protection
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MESO_DROP} 封包。
+ * 负责处理客户端的金币丢弃操作。
  */
 public final class MesoDropHandler extends AbstractPacketHandler {
     @Override

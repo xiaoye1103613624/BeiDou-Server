@@ -6,7 +6,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】GiveRpCommand：聊天或控制台命令实现。
+ * 【GM指令】GiveRpCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：给予自身或指定玩家Reward Points（奖励积分）。
+ *
+ * @author 昨日小睡
  */
 public class GiveRpCommand extends Command {
     {

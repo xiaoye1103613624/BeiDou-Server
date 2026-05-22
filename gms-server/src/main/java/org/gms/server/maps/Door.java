@@ -31,20 +31,20 @@ import java.awt.*;
 import java.util.Collection;
 
 /**
- * @author Matze
- * @author Ronan
+ * 【类】Door（class），包 {@code org.gms.server.maps}。
+ * 神秘之门系统，实现角色技能创建的双向传送门，连接城镇与狩猎地图。
  */
 public class Door {
-    private int ownerId;
-    private MapleMap town;
-    private Portal townPortal;
-    private final MapleMap target;
-    private Pair<String, Integer> posStatus = null;
-    private long deployTime;
-    private boolean active;
+    private int ownerId; // 所有者ID
+    private MapleMap town; // 城镇地图
+    private Portal townPortal; // 城镇传送点
+    private final MapleMap target; // 目标地图
+    private Pair<String, Integer> posStatus = null; // 位置状态
+    private long deployTime; // 部署时间
+    private boolean active; // 是否活跃
 
-    private DoorObject townDoor;
-    private DoorObject areaDoor;
+    private DoorObject townDoor; // 城镇侧门对象
+    private DoorObject areaDoor; // 狩猎侧门对象
 
     public Door(Character owner, Point targetPosition) {
         this.ownerId = owner.getId();

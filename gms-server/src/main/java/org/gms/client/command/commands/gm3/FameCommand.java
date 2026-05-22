@@ -31,7 +31,11 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 /**
- * 【GM/玩家指令】FameCommand：聊天或控制台命令实现。
+ * 【GM指令】FameCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：设置自身或指定玩家的人气值。
+ *
+ * @author Arthur L
  */
 public class FameCommand extends Command {
     {

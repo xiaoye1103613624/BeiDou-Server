@@ -20,7 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 【Web 控制器】ServerController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】ServerController（class），包 {@code org.gms.controller}。
+ *
+ * 处理游戏服务器的生命周期管理，包括服务器启停、重启、自定义停服消息、
+ * 在线状态查询、大区（World）列表、频道（Channel）列表及服务器版本号查询。
+ *
+ * @author 萧曵
  */
 @RestController
 @AllArgsConstructor

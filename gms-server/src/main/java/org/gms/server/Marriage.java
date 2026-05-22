@@ -39,6 +39,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 【类型】Marriage（class），包 `org.gms.server`。
+ *
+ * 婚礼事件实例，继承 {@link EventInstanceManager}，负责管理婚礼流程：
+ * 愿望清单收集、礼物交换、结婚戒指创建与发放。
+ * 婚礼在指定地图进行，由结婚礼堂 NPC 触发。
+ *
  * @author Ronan
  */
 public class Marriage extends EventInstanceManager {

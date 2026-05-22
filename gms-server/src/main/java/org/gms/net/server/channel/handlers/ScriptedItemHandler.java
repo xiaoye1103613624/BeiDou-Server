@@ -31,7 +31,8 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.server.ItemInformationProvider.ScriptedItem;
 
 /**
- * @author Jay Estrella
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#SCRIPTED_ITEM} 封包。
+ * 负责处理客户端的脚本物品操作。
  */
 public final class ScriptedItemHandler extends AbstractPacketHandler {
     @Override

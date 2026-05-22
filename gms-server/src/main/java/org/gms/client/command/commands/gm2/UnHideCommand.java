@@ -30,7 +30,11 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】UnHideCommand：聊天或控制台命令实现。
+ * 【GM指令】UnHideCommand（class），包 `org.gms.client.command.commands.gm2`。
+ *
+ * GM指令：取消GM隐身状态，使自己在地图上重新可见（与HideCommand互逆）。
+ *
+ * @author Arthur L
  */
 public class UnHideCommand extends Command {
     {

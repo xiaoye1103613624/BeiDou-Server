@@ -27,7 +27,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author Jay Estrella, Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#MAKER_SKILL} 封包。
+ * 负责处理客户端的物品制作技能操作。
  */
 public final class MakerSkillHandler extends AbstractPacketHandler {
 

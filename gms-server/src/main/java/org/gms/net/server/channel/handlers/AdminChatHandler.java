@@ -8,7 +8,8 @@ import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
 /**
- * @author kevintjuh93
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#ADMIN_CHAT} 封包。
+ * 负责处理客户端的GM管理员聊天操作。
  */
 public class AdminChatHandler extends AbstractPacketHandler {
 

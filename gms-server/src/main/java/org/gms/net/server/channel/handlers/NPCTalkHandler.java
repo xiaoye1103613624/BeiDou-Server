@@ -38,25 +38,26 @@ import org.gms.server.maps.MapObject;
 import org.gms.util.PacketCreator;
 
 /**
- * 频道服务器入站封包处理器「NPCTalkHandler」。
- * 对应客户端在频道内发起的一类操作（移动、技能、物品、NPC、商店、社交等之一），
- * 从 {@link org.gms.net.packet.InPacket} 读取字段后更新 {@link org.gms.client.Character} 与地图/世界状态。
- * 通常继承 {@link org.gms.net.AbstractPacketHandler}，并与 {@link org.gms.net.server.channel.Channel} 上的服务协同。
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#NPC_TALK} 封包。
+ * 负责处理客户端的NPC对话操作。
  */
 public final class NPCTalkHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NPCTalkHandler.class);
 
     @Override
     public void handlePacket(InPacket p, Client c) {
+        // 监狱地图禁止使用脚本
         if (c.getPlayer().getMapId() == MapId.JAIL) {   //监狱地图不可使用脚本
             c.getPlayer().dropMessage(1,I18nUtil.getMessage("ActionHandler.map.message1"));
             c.sendPacket(PacketCreator.enableActions());
             return;
+        // 死亡状态禁用NPC
         } else if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
+        // NPC操作冷却防刷
         if (currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -64,11 +65,13 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
 
         int oid = p.readInt();
         MapObject obj = c.getPlayer().getMap().getMapObject(oid);
+        // NPC对象类型分支处理
         if (obj instanceof NPC npc) {
             if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM()) {
                 c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message1") + npc.getId());
             }
 
+            // Duey快递特殊处理
             if (npc.getId() == NpcId.DUEY) {
                 DueyProcessor.dueySendTalk(c, false);
             } else {
@@ -77,7 +80,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                // Custom handling to reduce the amount of scripts needed.
+                // 特殊NPC统一脚本路由：减少重复脚本数量
                 if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "gachapon", null);
                 } else if (npc.getName().endsWith("Maple TV")) {
@@ -85,6 +88,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                 } else if (GameConfig.getServerBoolean("use_rebirth_system") && npc.getId() == GameConfig.getServerInt("rebirth_npc_id")) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "rebirth", null);
                 } else {
+                    // 通用NPC：查找对应脚本，找不到则尝试打开商店
                     boolean hasNpcScript = NPCScriptManager.getInstance().start(c, npc.getId(), oid, null);
                     if (!hasNpcScript) {
                         if (!npc.hasShop()) {
@@ -99,6 +103,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     }
                 }
             }
+        // PlayerNPC处理（玩家开设的NPC）
         } else if (obj instanceof PlayerNPC pnpc) {
             NPCScriptManager nsm = NPCScriptManager.getInstance();
 

@@ -52,6 +52,11 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
+ * 【类型】FredrickProcessor（class），包 {@code org.gms.client.processor.npc}。
+ *
+ * Fredrick NPC 处理器，负责雇佣商人到期后物品的检索与取回：
+ * 从数据库查询过期商店物品，发送通知信件，并在玩家交互时归还物品/金币。
+ *
  * @author RonanLana - synchronization of Fredrick modules and operation results
  */
 public class FredrickProcessor {

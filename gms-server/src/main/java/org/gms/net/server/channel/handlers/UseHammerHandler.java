@@ -27,7 +27,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
- * @author Jay Estrella
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#USE_HAMMER} 封包。
+ * 负责处理客户端使用金锤子（Vicious Hammer）扩充装备升级次数的操作。
  */
 public final class UseHammerHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {

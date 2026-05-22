@@ -31,7 +31,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * @author Jay Estrella, Ronan
+ * 【类型】MakerItemFactory（class），包 `org.gms.server`。
+ *
+ * 制造工坊工厂，根据配方计算装备制作/分解的消耗（金币、材料），提供制作条目与晶体生成的静态工厂方法。
+ *
+ * @author 萧曵
  */
 public class MakerItemFactory {
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();

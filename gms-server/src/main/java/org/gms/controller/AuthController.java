@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * 【Web 控制器】AuthController：处理 HTTP 请求，归属模块 `controller`。
+ * 【控制器】AuthController（class），包 {@code org.gms.controller}。
+ *
+ * 处理用户认证相关操作，包括登录获取JWT令牌、登出及令牌刷新。
+ * 所有API接口均以 {@code /auth} 为前缀，是后台管理系统的认证入口。
+ *
+ * @author 萧曵
  */
 @RestController
 @RequestMapping("/auth")

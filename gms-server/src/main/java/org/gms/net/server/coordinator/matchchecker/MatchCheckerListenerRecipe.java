@@ -20,6 +20,10 @@
 package org.gms.net.server.coordinator.matchchecker;
 
 /**
+ * 【接口】MatchCheckerListenerRecipe，包 `org.gms.net.server.coordinator.matchchecker`。
+ *
+ * 匹配确认监听器配方接口，提供获取 AbstractMatchCheckerListener 实例的统一工厂方法。
+ *
  * @author Ronan
  */
 public interface MatchCheckerListenerRecipe {

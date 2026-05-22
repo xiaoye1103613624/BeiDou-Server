@@ -30,7 +30,11 @@ import org.gms.scripting.portal.PortalScriptManager;
 import org.gms.util.I18nUtil;
 
 /**
- * 【GM/玩家指令】ReloadPortalsCommand：聊天或控制台命令实现。
+ * 【GM指令】ReloadPortalsCommand（class），包 `org.gms.client.command.commands.gm3`。
+ *
+ * GM指令：重新加载传送门脚本。
+ *
+ * @author Arthur L
  */
 public class ReloadPortalsCommand extends Command {
     {

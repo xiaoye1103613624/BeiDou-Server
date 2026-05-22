@@ -12,13 +12,20 @@ import java.util.List;
 import static org.gms.dao.entity.table.MonsterbookDOTableDef.MONSTERBOOK_D_O;
 
 /**
- * 【业务服务】MonsterBookService：封装 `service` 相关应用逻辑与数据协作。
+ * 怪物手册服务
+ * <p>提供怪物手册卡片的数据查询</p>
  */
 @Service
 @AllArgsConstructor
 public class MonsterBookService {
     private final MonsterbookMapper monsterbookMapper;
 
+    /**
+     * 根据角色ID查询怪物手册卡片
+     *
+     * @param cid 角色ID
+     * @return 卡片列表
+     */
     public List<MonsterbookDO> getByCharacterId(int cid) {
         return monsterbookMapper.selectListByQuery(QueryWrapper.create().where(MONSTERBOOK_D_O.CHARID.eq(cid)).orderBy(MONSTERBOOK_D_O.CHARID, true));
     }

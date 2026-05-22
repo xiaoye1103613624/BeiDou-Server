@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Assassin（class），包 `org.gms.constants.skills`。
+ *
+ * 定义刺客职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Assassin {
     public static final int CLAW_MASTERY = 4100000;

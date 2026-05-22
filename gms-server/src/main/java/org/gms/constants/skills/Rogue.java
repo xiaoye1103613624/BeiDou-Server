@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】Rogue（class），包 `org.gms.constants.skills`。
+ *
+ * 定义飞侠职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class Rogue {
     public static final int NIMBLE_BODY = 4001000;

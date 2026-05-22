@@ -5,6 +5,11 @@ import org.gms.net.packet.OutPacket;
 import java.util.Arrays;
 
 /**
+ * 【类型】QuickslotBinding（class），包 {@code org.gms.client.keybind}。
+ *
+ * 快捷栏按键绑定类，管理 8 个快捷栏槽位与键盘按键的映射关系，
+ * 负责编码快捷栏数据包供客户端加载，支持默认按键与自定义按键的区分。
+ *
  * @author Shavit
  */
 public class QuickslotBinding {

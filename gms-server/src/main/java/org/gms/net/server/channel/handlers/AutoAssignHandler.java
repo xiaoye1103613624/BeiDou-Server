@@ -27,7 +27,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * @author Generic, Ronan
+ * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#AUTO_DISTRIBUTE_AP} 封包。
+ * 负责处理客户端的自动分配能力点操作。
  */
 public class AutoAssignHandler extends AbstractPacketHandler {
 

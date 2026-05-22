@@ -3,7 +3,11 @@ package org.gms.constants.string;
 import org.gms.client.Character;
 
 /**
- * @author Drago (Dragohe4rt)
+ * 【类型】LanguageConstants（class），包 `org.gms.constants.string`。
+ *
+ * 多语言常量类，存储怪物嘉年华（CPQ）等游戏内消息的多语言文本数组，支持葡萄牙语、西班牙语、英语和中文。
+ *
+ * @author 萧曵
  */
 public class LanguageConstants {
 

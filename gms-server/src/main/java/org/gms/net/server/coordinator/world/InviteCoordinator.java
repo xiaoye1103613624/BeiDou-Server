@@ -29,6 +29,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 【类】InviteCoordinator，包 `org.gms.net.server.coordinator.world`。
+ *
+ * 邀请协调器，管理各类社交邀请（组队、公会、联盟、交易、家族等）的创建、应答和超时自动过期处理。
+ *
  * @author Ronan
  */
 public class InviteCoordinator {

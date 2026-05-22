@@ -22,7 +22,11 @@
 package org.gms.constants.skills;
 
 /**
- * @author BubblesDev
+ * 【技能常量】WhiteKnight（class），包 `org.gms.constants.skills`。
+ *
+ * 定义骑士职业的技能ID常量。
+ *
+ * @author 萧曵
  */
 public class WhiteKnight {
     public static final int IMPROVING_MP_RECOVERY = 1210000;

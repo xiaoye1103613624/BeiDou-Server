@@ -28,7 +28,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 /**
- * @author Traitor
+ * 【类型】MTSItemInfo（class），包 `org.gms.server`。
+ *
+ * 交易市场物品信息模型，封装在 MTS（Maple Trade System）中拍卖物品的价格、上架日期和卖家信息。
+ *
+ * @author 萧曵
  */
 public class MTSItemInfo {
     private final int price;
