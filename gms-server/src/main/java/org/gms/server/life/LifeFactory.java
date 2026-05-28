@@ -272,6 +272,10 @@ public class LifeFactory {
             MonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 Pair<MonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
+                if (mobStats == null) {
+                    log.warn("Could not find mob data for id {}", mid);
+                    return null;
+                }
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
 

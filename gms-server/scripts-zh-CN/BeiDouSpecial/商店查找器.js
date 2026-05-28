@@ -9,7 +9,7 @@
  */
 
 var status = -1;
-var Server = Java.type('org.gms.server.Server');
+var Server = Java.type('org.gms.net.server.Server');
 var searchResults = [];
 
 function start() {

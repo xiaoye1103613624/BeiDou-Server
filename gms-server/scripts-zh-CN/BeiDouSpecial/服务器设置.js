@@ -10,7 +10,7 @@
 
 var status = -1;
 var GameConfig = Java.type('org.gms.config.GameConfig');
-var Server = Java.type('org.gms.server.Server');
+var Server = Java.type('org.gms.net.server.Server');
 
 function start() {
     status = -1;

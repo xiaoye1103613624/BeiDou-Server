@@ -55,7 +55,9 @@ import java.util.Map;
  * @author Matze
  */
 public class NPCScriptManager extends AbstractScriptManager {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(NPCScriptManager.class);
+    /** 单例实例 */
     private static final NPCScriptManager instance = new NPCScriptManager();
 
     /** 客户端 → 对话管理器映射：每个客户端最多一个活跃的 NPC 对话 */
@@ -63,6 +65,10 @@ public class NPCScriptManager extends AbstractScriptManager {
     /** 客户端 → 可调用脚本引擎映射 */
     private final Map<Client, Invocable> scripts = new HashMap<>();
 
+    /**
+     * 获取 NPCScriptManager 单例实例
+     * @return 单例对象
+     */
     public static NPCScriptManager getInstance() {
         return instance;
     }
@@ -79,34 +85,83 @@ public class NPCScriptManager extends AbstractScriptManager {
 
     // ---- start() 重载链，最终汇聚到最完整的 start(c, npc, oid, fileName, chr, itemScript, engineName) ----
 
+    /**
+     * 启动 NPC 对话脚本（无实例 OID）
+     * @param c    客户端连接
+     * @param npc  NPC 模板 ID
+     * @param chr  交互角色
+     * @return true=启动成功
+     */
     public boolean start(Client c, int npc, Character chr) {
         return start(c, npc, -1, chr);
     }
 
+    /**
+     * 启动 NPC 对话脚本（带实例 OID）
+     * @param c    客户端连接
+     * @param npc  NPC 模板 ID
+     * @param oid  地图上 NPC 实例的 OID
+     * @param chr  交互角色
+     * @return true=启动成功
+     */
     public boolean start(Client c, int npc, int oid, Character chr) {
         return start(c, npc, oid, null, chr);
     }
 
+    /**
+     * 启动指定脚本文件的 NPC 对话
+     * @param c        客户端连接
+     * @param npc      NPC 模板 ID
+     * @param fileName 指定的脚本文件名
+     * @param chr      交互角色
+     * @return true=启动成功
+     */
     public boolean start(Client c, int npc, String fileName, Character chr) {
         return start(c, npc, -1, fileName, chr);
     }
 
+    /**
+     * 启动 NPC 对话脚本（完整参数，非物品脚本）
+     * @param c        客户端连接
+     * @param npc      NPC 模板 ID
+     * @param oid      地图上 NPC 实例的 OID
+     * @param fileName 指定的脚本文件名（null 则按 NPC ID 查找）
+     * @param chr      交互角色
+     * @return true=启动成功
+     */
     public boolean start(Client c, int npc, int oid, String fileName, Character chr) {
         return start(c, npc, oid, fileName, chr, false, "cm");
     }
 
+    /**
+     * 通过物品脚本启动 NPC 对话
+     * @param c          客户端连接
+     * @param scriptItem 物品脚本配置
+     * @param chr        交互角色
+     * @return true=启动成功
+     */
     public boolean start(Client c, ScriptedItem scriptItem, Character chr) {
         return start(c, scriptItem.getNpc(), -1, scriptItem.getScript(), chr, true, "im");
     }
 
+    /**
+     * 启动组队 NPC 对话脚本（用于组队任务场景）
+     * @param filename 脚本文件名
+     * @param c        客户端连接
+     * @param npc      NPC 模板 ID
+     * @param chrs     队伍成员列表
+     */
     public void start(String filename, Client c, int npc, List<PartyCharacter> chrs) {
         try {
+            // 创建组队对话管理器
             final NPCConversationManager cm = new NPCConversationManager(c, npc, chrs, true);
             cm.dispose();
+            // 检查是否已有活跃对话
             if (cms.containsKey(c)) {
                 return;
             }
             cms.put(c, cm);
+            // 加载脚本引擎
             ScriptEngine engine = getInvocableScriptEngine("npc/" + filename + ".js", c);
 
             if (engine == null) {
@@ -114,11 +169,13 @@ public class NPCScriptManager extends AbstractScriptManager {
                 cm.dispose();
                 return;
             }
+            // 绑定对话管理器到脚本引擎
             engine.put("cm", cm);
 
             Invocable invocable = (Invocable) engine;
             scripts.put(c, invocable);
             try {
+                // 调用脚本的 start(chrs) 函数
                 invocable.invokeFunction("start", chrs);
             } catch (final NoSuchMethodException nsme) {
                 nsme.printStackTrace();
@@ -198,59 +255,62 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 执行 NPC 对话动作（玩家选择、输入等交互）
+     * @param c         客户端连接
+     * @param mode      操作模式（0=取消, 1=确认）
+     * @param type      交互类型
+     * @param selection 玩家选择的选项索引
+     */
     public void action(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
             try {
-                c.tryacquireClient();
-                c.setClickedNPC();
-                iv.invokeFunction("action", mode, type, selection);
+                c.tryacquireClient();  // 获取客户端锁
+                c.setClickedNPC();     // 标记点击状态
+                iv.invokeFunction("action", mode, type, selection);  // 调用脚本 action 函数
             } catch (Exception t) {
                 if (getCM(c) != null) {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
-                dispose(c, true);
+                dispose(c, true);  // 异常时清理并启用玩家动作
             } finally {
-                c.releaseClient();
+                c.releaseClient();  // 释放客户端锁
             }
         }
     }
 
+    /**
+     * 执行 NPC 对话层级跳转（根据 NextLevelContext 调用对应脚本函数）
+     * @param c         客户端连接
+     * @param mode      操作模式（-1=关闭, 0=返回上一层, 1=进入下一层）
+     * @param type      交互类型
+     * @param selection 玩家选择的选项索引
+     */
     public void nextLevel(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
             try {
-                c.tryacquireClient();
-                c.setClickedNPC();
+                c.tryacquireClient();  // 获取客户端锁
+                c.setClickedNPC();     // 标记点击状态
                 NextLevelContext nextLevelContext = c.getCM().getNextLevelContext();
+                // 根据对话层级类型分发到对应的脚本函数
                 switch (nextLevelContext.getLevelType()) {
                     case NextLevelType.SEND_SELECT -> {
-                        if (mode == 0) {
-                            dispose(c, true);
-                            return;
-                        }
+                        if (mode == 0) { dispose(c, true); return; }
                         iv.invokeFunction("level" + nextLevelContext.getPrefix() + selection);
                     }
                     case NextLevelType.GET_INPUT_NUMBER, NextLevelType.SEND_NEXT_SELECT -> {
-                        if (mode == 0) {
-                            dispose(c, true);
-                            return;
-                        }
+                        if (mode == 0) { dispose(c, true); return; }
                         iv.invokeFunction("level" + nextLevelContext.getNextLevel(), selection);
                     }
                     case NextLevelType.GET_INPUT_TEXT -> {
-                        if (mode == 0) {
-                            dispose(c, true);
-                            return;
-                        }
+                        if (mode == 0) { dispose(c, true); return; }
                         iv.invokeFunction("level" + nextLevelContext.getNextLevel(), c.getCM().getText());
                     }
                     case NextLevelType.SEND_LAST_NEXT, NextLevelType.SEND_NEXT, NextLevelType.SEND_LAST,
                          NextLevelType.SEND_OK, NextLevelType.SEND_ACCEPT_DECLINE, NextLevelType.SEND_YES_NO -> {
-                        if (mode == -1) {
-                            dispose(c, true);
-                            return;
-                        }
+                        if (mode == -1) { dispose(c, true); return; }
                         if (mode == 0) {
                             iv.invokeFunction("level" + nextLevelContext.getLastLevel());
                         } else {
@@ -273,13 +333,18 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 清理 NPC 对话资源（通过对话管理器）
+     * @param cm 对话管理器
+     */
     public void dispose(NPCConversationManager cm) {
         Client c = cm.getClient();
-        c.getPlayer().setCS(false);
-        c.getPlayer().setNpcCooldown(System.currentTimeMillis());
-        cms.remove(c);
-        scripts.remove(c);
+        c.getPlayer().setCS(false);                          // 取消 CS 状态
+        c.getPlayer().setNpcCooldown(System.currentTimeMillis());  // 设置 NPC 冷却时间
+        cms.remove(c);                                       // 移除对话管理器映射
+        scripts.remove(c);                                   // 移除脚本引擎映射
 
+        // 重置脚本上下文（item 或 npc 目录）
         String scriptFolder = (cm.isItemScript() ? "item" : "npc");
         if (cm.getScriptName() != null) {
             resetContext(scriptFolder + "/" + cm.getScriptName() + ".js", c);
@@ -287,23 +352,37 @@ public class NPCScriptManager extends AbstractScriptManager {
             resetContext(scriptFolder + "/" + cm.getNpc() + ".js", c);
         }
 
-        c.getPlayer().flushDelayedUpdateQuests();
+        c.getPlayer().flushDelayedUpdateQuests();  // 刷新延迟更新的任务
     }
 
+    /**
+     * 清理客户端的 NPC 对话资源（不发送启用动作包）
+     * @param c 客户端连接
+     */
     public void dispose(Client c) {
         dispose(c, false);
     }
 
+    /**
+     * 清理客户端的 NPC 对话资源
+     * @param c      客户端连接
+     * @param action 是否发送启用动作包
+     */
     public void dispose(Client c, boolean action) {
         NPCConversationManager cm = cms.get(c);
         if (cm != null) {
             dispose(cm);
         }
         if (action) {
-            c.sendPacket(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());  // 发送启用动作包，允许玩家继续操作
         }
     }
 
+    /**
+     * 获取指定客户端的对话管理器
+     * @param c 客户端连接
+     * @return NPCConversationManager 实例，无活跃对话时返回 null
+     */
     public NPCConversationManager getCM(Client c) {
         return cms.get(c);
     }

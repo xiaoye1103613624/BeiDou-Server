@@ -309,7 +309,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private long jailExpiration = -1;
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
-    private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
+    private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, equipwdef, equipmdef, localchairhp, localchairmp;
     private int localchairrate;
     @Getter
     private boolean hidden;
@@ -6793,8 +6793,13 @@ public class Character extends AbstractCharacterObject {
             equipluk = 0;
             equipmagic = 0;
             equipwatk = 0;
+            equipwdef = 0;
+            equipmdef = 0;
             //equipspeed = 0;
             //equipjump = 0;
+
+            // 时装强化属性加成
+            Map<String, Map<String, Integer>> enhanceData = CashEquipEnhanceManager.loadEnhanceData(getId());
 
             for (Item item : getInventory(InventoryType.EQUIPPED)) {
                 Equip equip = (Equip) item;
@@ -6806,8 +6811,26 @@ public class Character extends AbstractCharacterObject {
                 equipluk += equip.getLuk();
                 equipmagic += equip.getMatk() + equip.getInt();
                 equipwatk += equip.getWatk();
+                equipwdef += equip.getWdef();
+                equipmdef += equip.getMdef();
                 //equipspeed += equip.getSpeed();
                 //equipjump += equip.getJump();
+
+                // 应用时装强化属性
+                Map<String, Integer> bonus = enhanceData.get("slot_" + equip.getPosition());
+                if (bonus != null) {
+                    equipmaxhp += bonus.getOrDefault("HP", 0);
+                    equipmaxmp += bonus.getOrDefault("MP", 0);
+                    equipdex += bonus.getOrDefault("DEX", 0);
+                    equipint_ += bonus.getOrDefault("INT", 0);
+                    equipstr += bonus.getOrDefault("STR", 0);
+                    equipluk += bonus.getOrDefault("LUK", 0);
+                    int bonusMatk = bonus.getOrDefault("MATK", 0);
+                    equipmagic += bonusMatk + bonus.getOrDefault("INT", 0);
+                    equipwatk += bonus.getOrDefault("WATK", 0);
+                    equipwdef += bonus.getOrDefault("WDEF", 0);
+                    equipmdef += bonus.getOrDefault("MDEF", 0);
+                }
             }
 
             equipchanged = false;

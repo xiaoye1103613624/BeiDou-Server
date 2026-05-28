@@ -14,8 +14,8 @@ var COOLDOWN_KEY = "bossCooldown";
 
 var bossList = [
     { name: "扎昆", mapId: 211042300, cost: 380000, cooldown: 86400000, icon: 4000082 },
-    { name: "暗黑龙王", mapId: 240040700, cost: 380000, cooldown: 86400000, icon: 4000085 },
-    { name: "品克缤", mapId: 270000100, cost: 380000, cooldown: 86400000, icon: 4000088 },
+    { name: "暗黑龙王", mapId: 240050400, cost: 380000, cooldown: 86400000, icon: 4000085 },
+    { name: "品克缤", mapId: 270050000, cost: 380000, cooldown: 86400000, icon: 4000088 },
     { name: "闹钟", mapId: 220080000, cost: 380000, cooldown: 86400000, icon: 4000053 },
     { name: "鱼王", mapId: 230040420, cost: 380000, cooldown: 86400000, icon: 4000075 },
     { name: "巨魔蝙蝠", mapId: 105100100, cost: 380000, cooldown: 86400000, icon: 4000030 },

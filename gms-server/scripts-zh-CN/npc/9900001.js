@@ -11,23 +11,16 @@
     this program under any other version of the GNU Affero General Public
     License.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /**
- * @description 拍卖行中心脚本
+ * @description 北斗脚本中心 - 主入口
  */
 var OldTitle = "\t\t\t\t\t\t\t\t#e欢迎来到#r 萧 曳 #k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
-var i = 0;
-var changeLine = "\r\n";
-var changeTwoLine = "\r\n\r\n";
+
 function start() {
     action(1, 0, 0)
 }
@@ -43,31 +36,78 @@ function action(mode, type, selection) {
     }
 
     if (status === 0) {
-		let text = OldTitle;
-        text += "当前点券    ：" + cm.getPlayer().getCashShop().getCash(1) + changeLine;
-        text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + changeLine;
-        text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + changeLine;
-        text += changeTwoLine;
-        text += "#L5#[回到自由]#l \t #L61#[快捷传送]#l \t #L70#[副本大厅]#l";
-        text += changeTwoLine;
-        text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l" + changeLine;
-        text += "#L3#传送自由#l \t #L4#爆率一览#l \t #L69#卡片收集#l" + changeLine;
-        text += "#L71#玩具收集#l \t #L72#城镇任务#l" + changeLine;
-        text += "#L75#道具搜索#l \t #L76#角色信息#l \t #L77#Boss入口#l" + changeLine;
-        text += "#L78#成就中心#l \t #L79#任务板#l \t #L80#拍卖行#l" + changeLine;
-        text += "#L81#金币商城#l \t #L82#装备回收#l \t #L83#制作合成#l" + changeLine;
-        text += "#L84#活动管理#l \t #L85#钓鱼#l \t #L86#商店查找#l" + changeLine;
-        text += "#L87#抽奖查看#l \t #L88#结婚信息#l" + changeLine;
+        var text = OldTitle;
+        text += "当前点券    ：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
+        text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
+        text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
+        text += "\r\n\r\n";
+
+        // ======================== 快捷入口 ========================
+        text += "#d========== 快捷入口 ==========#k\r\n";
+        text += "#L5#回到自由#l \t #L61#快捷传送#l \t #L77#Boss入口#l\r\n";
+        text += "\r\n";
+
+        // ======================== 日常福利 ========================
+        text += "#d========== 日常福利 ==========#k\r\n";
+        text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l\r\n";
+        text += "\r\n";
+
+        // ======================== 信息查询 ========================
+        text += "#d========== 信息查询 ==========#k\r\n";
+        text += "#L4#爆率一览#l \t #L75#道具搜索#l \t #L76#角色信息#l\r\n";
+        text += "#L69#卡片收集#l \t #L71#玩具收集#l \t #L86#商店查找#l\r\n";
+        text += "#L87#抽奖查看#l\r\n";
+        text += "\r\n";
+
+        // ======================== 经济交易 ========================
+        text += "#d========== 经济交易 ==========#k\r\n";
+        text += "#L80#拍卖行#l \t #L81#金币商城#l \t #L82#装备回收#l\r\n";
+        text += "#L83#制作合成#l \t #L97#售卖装备#l \t #L98#售卖其他#l\r\n";
+        text += "\r\n";
+
+        // ======================== 社交活动 ========================
+        text += "#d========== 社交活动 ==========#k\r\n";
+        text += "#L84#活动管理#l \t #L85#钓鱼#l \t #L72#城镇任务#l\r\n";
+        text += "#L78#成就中心#l \t #L79#任务板#l\r\n";
+        text += "\r\n";
+
+        // ======================== 角色相关 ========================
+        text += "#d========== 角色相关 ==========#k\r\n";
+        text += "#L88#结婚信息#l \t #L94#家族信息#l \t #L101#全能转职#l\r\n";
 
         if (cm.getPlayer().isGM()) {
-            text += changeTwoLine;
-            text += "\t\t\t\t#r=====以下内容仅GM可见=====" + changeLine;
-            text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l" + changeTwoLine;
-            text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l" + changeTwoLine;
-			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l" + changeTwoLine;
-			text += "#L73#快速转职#l \t #L74#一键满技能#l" + changeTwoLine;
-			text += "#L89#地图监控#l \t #L90#服务器设置#l \t #L91#合服工具#l" + changeTwoLine;
-			text += "#L92#GM日志查看#l";
+            text += "\r\n";
+            text += "\t\t\t\t#r===== 以下内容仅GM可见 =====#k\r\n";
+            text += "\r\n";
+
+            // ======================== GM | 传送/商店 ========================
+            text += "#d========== 传送/商店 ==========#k\r\n";
+            text += "#L62#超级商店#l \t #L63#整容集合#l\r\n";
+            text += "\r\n";
+
+            // ======================== GM | 数据管理 ========================
+            text += "#d========== 数据管理 ==========#k\r\n";
+            text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n";
+            text += "#L89#地图监控#l \t #L90#服务器设置#l \t #L91#合服工具#l\r\n";
+            text += "#L92#GM日志查看#l \t #L93#UI速查脚本#l \t #L95#玩家管理#l\r\n";
+            text += "#L96#批量发放#l \t #L102#怪物召唤#l \t #L108#技能给予#l\r\n";
+            text += "\r\n";
+
+            // ======================== GM | 快速操作 ========================
+            text += "#d========== 快速操作 ==========#k\r\n";
+            text += "#L73#快速转职#l \t #L74#一键满技能#l\r\n";
+            text += "#L99#快速售卖装备#l \t #L100#快速售卖其他#l\r\n";
+            text += "\r\n";
+
+            // ======================== GM | 脚本示例 ========================
+            text += "#d========== 脚本示例 ==========#k\r\n";
+            text += "#L67#状态脚本示例#l \t #L68#NextLevel示例#l\r\n";
+
+            // ======================== 待测试功能 ========================
+            text += "\r\n";
+            text += "\t\t\t\t#r===== 待测试功能（need_test）=====#k\r\n";
+            text += "#L103#抽奖#l \t #L104#装备强化#l \t #L105#装备合成#l\r\n";
+            text += "#L106#时装强化#l \t #L107#时装洗练#l\r\n";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -79,7 +119,19 @@ function action(mode, type, selection) {
 
 function doSelect(selection) {
     switch (selection) {
-        // 非GM功能
+        // ========== 快捷入口 ==========
+        case 5:
+            cm.getPlayer().saveLocation("FREE_MARKET");
+            cm.warp(910000000, "out00");
+            break;
+        case 61:
+            openNpc("万能传送");
+            break;
+        case 77:
+            openNpc("Boss入口");
+            break;
+
+        // ========== 日常福利 ==========
         case 0:
             openNpc("新人福利");
             break;
@@ -89,12 +141,16 @@ function doSelect(selection) {
         case 2:
             openNpc("在线奖励_nextlevel");
             break;
-        case 3:
-            cm.getPlayer().saveLocation("FREE_MARKET");
-            cm.warp(910000000, "out00");
-            break;
+
+        // ========== 信息查询 ==========
         case 4:
             openNpc("当前地图掉落");
+            break;
+        case 75:
+            openNpc("道具搜索");
+            break;
+        case 76:
+            openNpc("角色信息卡");
             break;
         case 69:
             openNpc("卡片收集");
@@ -102,58 +158,14 @@ function doSelect(selection) {
         case 71:
             openNpc("玩具收集");
             break;
-        case 72:
-            openNpc("城镇任务");
+        case 86:
+            openNpc("商店查找器");
             break;
-        // GM功能
-        case 61:
-            openNpc("万能传送");
+        case 87:
+            openNpc("抽奖查看器");
             break;
-        case 62:
-            cm.dispose();
-            cm.openShopNPC(9900001);
-            cm.dispose();
-            break;
-        case 63:
-            openNpc("Salon");
-            break;
-        case 64:
-            openNpc("UI查询");
-            break;	
-        case 65:
-            openNpc("一键删除道具");
-            break;
-        case 66:
-            openNpc("一键刷道具");
-            break;
-        case 67:
-            openNpc("Example1")
-            break;
-        case 68:
-            openNpc("Example2")
-            break;
-        case 73:
-            openNpc("快速转职");
-            break;
-        case 74:
-            openNpc("一键满技能");
-            break;
-        // 非GM功能 - 新增
-        case 75:
-            openNpc("道具搜索");
-            break;
-        case 76:
-            openNpc("角色信息卡");
-            break;
-        case 77:
-            openNpc("Boss入口");
-            break;
-        case 78:
-            openNpc("成就中心");
-            break;
-        case 79:
-            openNpc("任务板");
-            break;
+
+        // ========== 经济交易 ==========
         case 80:
             openNpc("拍卖行");
             break;
@@ -166,34 +178,127 @@ function doSelect(selection) {
         case 83:
             openNpc("制作合成");
             break;
+        case 97:
+            openNpc("一键售卖装备");
+            break;
+        case 98:
+            openNpc("一键售卖其他");
+            break;
+
+        // ========== 社交活动 ==========
         case 84:
             openNpc("活动管理器");
             break;
         case 85:
             openNpc("钓鱼");
             break;
-        case 86:
-            openNpc("商店查找器");
+        case 72:
+            openNpc("城镇任务");
             break;
-        case 87:
-            openNpc("抽奖查看器");
+        case 78:
+            openNpc("成就中心");
             break;
+        case 79:
+            openNpc("任务板");
+            break;
+
+        // ========== 角色相关 ==========
         case 88:
             openNpc("结婚扩展");
             break;
-        // GM功能 - 新增
+        case 94:
+            openNpc("家族信息");
+            break;
+        case 101:
+            openNpc("全能转职");
+            break;
+
+        // ========== GM | 传送/商店 ==========
+        case 62:
+            cm.dispose();
+            cm.openShopNPC(9900001);
+            break;
+        case 63:
+            openNpc("Salon");
+            break;
+
+        // ========== GM | 数据管理 ==========
+        case 64:
+            openNpc("gm/UI查询");
+            break;
+        case 65:
+            openNpc("一键删除道具");
+            break;
+        case 66:
+            openNpc("gm/一键刷道具");
+            break;
         case 89:
-            openNpc("地图监控");
+            openNpc("gm/地图监控");
             break;
         case 90:
-            openNpc("服务器设置");
+            openNpc("gm/服务器设置");
             break;
         case 91:
-            openNpc("合服工具");
+            openNpc("gm/合服工具");
             break;
         case 92:
-            openNpc("GM日志查看");
+            openNpc("gm/GM日志查看");
             break;
+        case 93:
+            openNpc("gm/UI速查脚本");
+            break;
+        case 95:
+            openNpc("gm/玩家管理");
+            break;
+        case 96:
+            openNpc("gm/批量发放");
+            break;
+        case 102:
+            openNpc("gm/怪物召唤");
+            break;
+        case 108:
+            openNpc("gm/玩家技能给予");
+            break;
+
+        // ========== GM | 快速操作 ==========
+        case 73:
+            openNpc("快速转职");
+            break;
+        case 74:
+            openNpc("满技能2");
+            break;
+        case 99:
+            openNpc("快速售卖装备");
+            break;
+        case 100:
+            openNpc("快速售卖其他");
+            break;
+
+        // ========== GM | 脚本示例 ==========
+        case 67:
+            openNpc("Example1");
+            break;
+        case 68:
+            openNpc("Example2");
+            break;
+
+        // ========== 待测试功能 ==========
+        case 103:
+            openNpc("need_test/xy_抽奖");
+            break;
+        case 104:
+            openNpc("need_test/xy_装备强化");
+            break;
+        case 105:
+            openNpc("need_test/xy_装备合成");
+            break;
+        case 106:
+            openNpc("need_test/xy_时装强化");
+            break;
+        case 107:
+            openNpc("need_test/xy_时装洗练");
+            break;
+
         default:
             cm.sendOk("该功能暂不支持，敬请期待！");
             cm.dispose();
