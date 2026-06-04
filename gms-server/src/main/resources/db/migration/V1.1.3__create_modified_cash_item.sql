@@ -1,5 +1,5 @@
 drop table if exists modified_cash_item;
-create table modified_cash_item (
+CREATE TABLE modified_cash_item (
     `sn` int(11) not null comment 'sn码',
     `item_id` int(11) comment '物品id',
     `count` int(11) comment '数量',

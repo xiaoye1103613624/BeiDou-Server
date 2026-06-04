@@ -27,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/gachapon")
 public class GachaponController {
+    /** 扭蛋服务 */
     @Autowired
     private GachaponService gachaponService;
 

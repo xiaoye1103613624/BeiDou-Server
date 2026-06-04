@@ -43,10 +43,15 @@ import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 @Service
 @AllArgsConstructor
 public class AccountService {
+    /** 账号数据访问接口 */
     private final AccountsMapper accountsMapper;
+    /** 角色数据访问接口 */
     private final CharactersMapper charactersMapper;
+    /** IP封禁数据访问接口 */
     private final IpbansMapper ipbansMapper;
+    /** Mac封禁数据访问接口 */
     private final MacbansMapper macbansMapper;
+    /** 快捷栏按键映射数据访问接口 */
     private final QuickslotkeymappedMapper quickslotkeymappedMapper;
 
     /**

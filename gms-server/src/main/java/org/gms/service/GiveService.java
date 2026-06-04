@@ -27,14 +27,41 @@ import static java.util.concurrent.TimeUnit.DAYS;
 
 
 /**
- * 【业务服务】GiveService：封装 `service` 相关应用逻辑与数据协作。
+ * 【业务服务】GiveService：资源发放服务类，负责向玩家发放各种游戏资源。
+ * 
+ * <p>支持向单个玩家或所有在线玩家发放资源，包括：
+ * <ul>
+ *   <li>点券（NX Credit）</li>
+ *   <li>信用点（NX Prepaid）</li>
+ *   <li>抵用券（Maple Point）</li>
+ *   <li>金币（Mesos）</li>
+ *   <li>经验值（EXP）</li>
+ *   <li>物品（Item）</li>
+ *   <li>装备（Equip）</li>
+ *   <li>倍率加成（EXP/Meso/Drop/Boss Rate）</li>
+ *   <li>GM权限等级</li>
+ *   <li>声望（Fame）</li>
+ *   <li>传送至指定地图</li>
+ * </ul></p>
  */
 @Service
 @Slf4j
 public class GiveService {
+    /** 角色服务 */
     @Autowired
     CharacterService characterService;
 
+    /**
+     * 发放资源给玩家。
+     * 
+     * <p>根据 playerId 判断发放对象：
+     * <ul>
+     *   <li>playerId = 0：发放给所有在线玩家</li>
+     *   <li>playerId > 0：发放给指定玩家</li>
+     * </ul></p>
+     * 
+     * @param submitData 发放请求数据
+     */
     public void give(GiveResourceReqDTO submitData) {
         if (submitData.getPlayerId() == 0) {
             giveAllOnlineChr(submitData);

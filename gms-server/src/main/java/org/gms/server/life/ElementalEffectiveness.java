@@ -22,11 +22,29 @@
 package org.gms.server.life;
 
 /**
- * 【枚举】ElementalEffectiveness：定义 `life` 中的一组常量。
+ * 【枚举】ElementalEffectiveness：定义元素克制关系的效果等级。
+ * <p>用于表示怪物对特定元素攻击的抗性程度：</p>
+ * <ul>
+ *   <li>NORMAL: 普通（正常伤害）</li>
+ *   <li>IMMUNE: 免疫（伤害为0）</li>
+ *   <li>STRONG: 强效（造成额外伤害）</li>
+ *   <li>WEAK: 弱点（受到额外伤害）</li>
+ *   <li>NEUTRAL: 中立（无特殊效果）</li>
+ * </ul>
  */
 public enum ElementalEffectiveness {
-    NORMAL, IMMUNE, STRONG, WEAK, NEUTRAL;
+    NORMAL,  // 普通
+    IMMUNE,  // 免疫
+    STRONG,  // 强效
+    WEAK,    // 弱点
+    NEUTRAL; // 中立
 
+    /**
+     * 根据数字编码获取元素效果等级
+     * @param num 数字编码（1=IMMUNE, 2=STRONG, 3=WEAK, 4=NEUTRAL）
+     * @return 对应的元素效果枚举
+     * @throws IllegalArgumentException 未知编码时抛出
+     */
     public static ElementalEffectiveness getByNumber(int num) {
         switch (num) {
             case 1:

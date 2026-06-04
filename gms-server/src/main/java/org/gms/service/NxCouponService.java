@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class NxCouponService {
+    /** NX优惠券数据访问接口 */
     private final NxcouponsMapper nxcouponsMapper;
 
     /**

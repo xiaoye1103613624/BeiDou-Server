@@ -45,35 +45,35 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author kevintjuh93
  */
 public enum AutobanFactory {
-    MOB_COUNT,
-    GENERAL,
-    FIX_DAMAGE,
-    DAMAGE_HACK(15, MINUTES.toMillis(1)),
-    DISTANCE_HACK(10, MINUTES.toMillis(2)),
-    PORTAL_DISTANCE(5, SECONDS.toMillis(30)),
-    PACKET_EDIT,
-    ACC_HACK,
-    CREATION_GENERATOR,
-    HIGH_HP_HEALING,
-    FAST_HP_HEALING(15),
-    FAST_MP_HEALING(20, SECONDS.toMillis(30)),
-    GACHA_EXP,
-    TUBI(20, SECONDS.toMillis(15)),
-    SHORT_ITEM_VAC,
-    ITEM_VAC,
-    FAST_ITEM_PICKUP(5, SECONDS.toMillis(30)),
-    FAST_ATTACK(10, SECONDS.toMillis(30)),
-    MPCON(25, SECONDS.toMillis(30)),
+    MOB_COUNT,              // 怪物数量异常
+    GENERAL,                // 通用违规
+    FIX_DAMAGE,             // 伤害固定（外挂特征）
+    DAMAGE_HACK(15, MINUTES.toMillis(1)),      // 伤害作弊
+    DISTANCE_HACK(10, MINUTES.toMillis(2)),    // 距离作弊
+    PORTAL_DISTANCE(5, SECONDS.toMillis(30)),  // 传送门距离异常
+    PACKET_EDIT,            // 封包修改
+    ACC_HACK,               // 连击作弊
+    CREATION_GENERATOR,     // 物品生成器
+    HIGH_HP_HEALING,        // 高额HP恢复
+    FAST_HP_HEALING(15),    // 快速HP恢复
+    FAST_MP_HEALING(20, SECONDS.toMillis(30)), // 快速MP恢复
+    GACHA_EXP,              // 扭蛋经验异常
+    TUBI(20, SECONDS.toMillis(15)),            // 瞬移作弊
+    SHORT_ITEM_VAC,         // 短距吸物
+    ITEM_VAC,               // 吸物作弊
+    FAST_ITEM_PICKUP(5, SECONDS.toMillis(30)), // 快速拾取
+    FAST_ATTACK(10, SECONDS.toMillis(30)),     // 快速攻击
+    MPCON(25, SECONDS.toMillis(30)),           // MP消耗异常
+    ATTACK_INTERVAL(60, SECONDS.toMillis(60)); // 攻击频率
 
-    /**
-     * 攻击频率
-     */
-    ATTACK_INTERVAL(60, SECONDS.toMillis(60));
-
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(AutobanFactory.class);
+    /** 忽略名单（不会触发GM告警的角色ID） */
     private static final Set<Integer> ignoredChrIds = new HashSet<>();
 
+    /** 违规阈值（达到此分数触发封禁） */
     private final int points;
+    /** 分数过期时间（毫秒，-1表示不过期） */
     private final long expiretime;
 
     AutobanFactory() {
@@ -90,24 +90,43 @@ public enum AutobanFactory {
         this.expiretime = expire;
     }
 
+    /**
+     * 获取违规阈值
+     * @return 触发封禁所需的分数
+     */
     public int getMaximum() {
         return points;
     }
 
+    /**
+     * 获取分数过期时间
+     * @return 过期时间（毫秒），-1表示不过期
+     */
     public long getExpire() {
         return expiretime;
     }
 
+    /**
+     * 增加违规分数
+     * @param ban AutobanManager实例
+     * @param reason 违规原因
+     */
     public void addPoint(AutobanManager ban, String reason) {
         ban.addPoint(this, reason);
     }
 
+    /**
+     * 向GM广播告警
+     * @param chr 触发违规的角色
+     * @param reason 违规原因
+     */
     public void alert(Character chr, String reason) {
         if (GameConfig.getServerBoolean("use_auto_ban")) {
             if (chr != null && isIgnored(chr.getId())) {
                 return;
             }
-            Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
+            Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), 
+                PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
         }
         if (GameConfig.getServerBoolean("use_auto_ban_log")) {
             final String chrName = chr != null ? Character.makeMapleReadable(chr.getName()) : "";
@@ -115,18 +134,23 @@ public enum AutobanFactory {
         }
     }
 
+    /**
+     * 执行自动封禁
+     * @param chr 要封禁的角色
+     * @param value 封禁详情
+     */
     public void autoban(Character chr, String value) {
         if (GameConfig.getServerBoolean("use_auto_ban")) {
             chr.autoBan("Autobanned for (" + this.name() + ": " + value + ")");
-            //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");
         }
     }
 
     /**
-     * Toggle ignored status for a character id.
-     * An ignored character will not trigger GM alerts.
+     * 切换角色的忽略状态
+     * 被忽略的角色不会触发GM告警
      *
-     * @return new status. true if the chrId is now ignored, otherwise false.
+     * @param chrId 角色ID
+     * @return 新状态：true=已忽略, false=未忽略
      */
     public static boolean toggleIgnored(int chrId) {
         if (ignoredChrIds.contains(chrId)) {
@@ -138,10 +162,19 @@ public enum AutobanFactory {
         }
     }
 
+    /**
+     * 判断角色是否在忽略名单中
+     * @param chrId 角色ID
+     * @return true=在忽略名单中
+     */
     private static boolean isIgnored(int chrId) {
         return ignoredChrIds.contains(chrId);
     }
 
+    /**
+     * 获取忽略名单
+     * @return 忽略的角色ID集合
+     */
     public static Collection<Integer> getIgnoredChrIds() {
         return ignoredChrIds;
     }

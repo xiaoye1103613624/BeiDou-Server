@@ -26,34 +26,47 @@ import org.gms.provider.Data;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
- * Base class for a Quest Requirement. Quest system uses it for all requirements.
- *
- * @author Tyler (Twdtwd)
- */
-public abstract class AbstractQuestRequirement {
-    private final QuestRequirementType type;
-
-    public AbstractQuestRequirement(QuestRequirementType type) {
-        this.type = type;
-    }
-
-    /**
-     * Checks the requirement to see if the player currently meets it.
+     * 【抽象类】AbstractQuestRequirement，包 {@code org.gms.server.quest.requirements}。
+     * 任务条件抽象基类，定义任务条件检查的接口。
+     * 任务系统使用此类作为所有条件的基类。
      *
-     * @param chr   The {@link Character} to check on.
-     * @param npcid The NPC ID it was called from.
-     * @return boolean    If the check was passed or not.
+     * @author Tyler (Twdtwd)
      */
-    public abstract boolean check(Character chr, Integer npcid);
+    public abstract class AbstractQuestRequirement {
+        /** 条件类型 */
+        private final QuestRequirementType type;
 
-    /**
-     * Processes the data and stores it in the class for future use.
-     *
-     * @param data The data to process.
-     */
-    public abstract void processData(Data data);
+        /**
+         * 构造函数
+         *
+         * @param type 条件类型
+         */
+        public AbstractQuestRequirement(QuestRequirementType type) {
+            this.type = type;
+        }
 
-    public QuestRequirementType getType() {
-        return type;
+        /**
+         * 检查玩家是否满足条件
+         *
+         * @param chr   玩家角色
+         * @param npcid NPC ID
+         * @return 如果满足条件返回true
+         */
+        public abstract boolean check(Character chr, Integer npcid);
+
+        /**
+         * 处理WZ数据并存储供后续使用
+         *
+         * @param data 要处理的数据
+         */
+        public abstract void processData(Data data);
+
+        /**
+         * 获取条件类型
+         *
+         * @return 条件类型
+         */
+        public QuestRequirementType getType() {
+            return type;
+        }
     }
-}

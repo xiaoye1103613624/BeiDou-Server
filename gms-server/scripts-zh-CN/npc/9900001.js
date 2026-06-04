@@ -55,8 +55,8 @@ function action(mode, type, selection) {
         // ======================== 信息查询 ========================
         text += "#d========== 信息查询 ==========#k\r\n";
         text += "#L4#爆率一览#l \t #L75#道具搜索#l \t #L76#角色信息#l\r\n";
-        text += "#L69#卡片收集#l \t #L71#玩具收集#l \t #L86#商店查找#l\r\n";
-        text += "#L87#抽奖查看#l\r\n";
+        text += "#L69#卡片收集#l \t #L70#XY收集#l \t #L71#玩具收集#l\r\n";
+        text += "#L86#商店查找#l \t #L87#抽奖查看#l\r\n";
         text += "\r\n";
 
         // ======================== 经济交易 ========================
@@ -90,7 +90,7 @@ function action(mode, type, selection) {
             text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n";
             text += "#L89#地图监控#l \t #L90#服务器设置#l \t #L91#合服工具#l\r\n";
             text += "#L92#GM日志查看#l \t #L93#UI速查脚本#l \t #L95#玩家管理#l\r\n";
-            text += "#L96#批量发放#l \t #L102#怪物召唤#l \t #L108#技能给予#l\r\n";
+            text += "#L96#批量发放#l \t #L102#怪物召唤#l \t #L108#技能给予#l\r\n#L109#怪物攻城#l\r\n";
             text += "\r\n";
 
             // ======================== GM | 快速操作 ========================
@@ -107,7 +107,7 @@ function action(mode, type, selection) {
             text += "\r\n";
             text += "\t\t\t\t#r===== 待测试功能（need_test）=====#k\r\n";
             text += "#L103#抽奖#l \t #L104#装备强化#l \t #L105#装备合成#l\r\n";
-            text += "#L106#时装强化#l \t #L107#时装洗练#l\r\n";
+            text += "#L106#时装强化#l \t #L107#时装洗练#l \t #L108#勋章强化#l\r\n";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -154,6 +154,9 @@ function doSelect(selection) {
             break;
         case 69:
             openNpc("卡片收集");
+            break;
+        case 70:
+            openNpc("XY收集");
             break;
         case 71:
             openNpc("玩具收集");
@@ -259,6 +262,9 @@ function doSelect(selection) {
         case 108:
             openNpc("gm/玩家技能给予");
             break;
+        case 109:
+            openNpc("gm/怪物攻城");
+            break;
 
         // ========== GM | 快速操作 ==========
         case 73:
@@ -287,7 +293,7 @@ function doSelect(selection) {
             openNpc("need_test/xy_抽奖");
             break;
         case 104:
-            openNpc("need_test/xy_装备强化");
+            openNpc("装备强化");
             break;
         case 105:
             openNpc("need_test/xy_装备合成");
@@ -297,6 +303,9 @@ function doSelect(selection) {
             break;
         case 107:
             openNpc("need_test/xy_时装洗练");
+            break;
+        case 108:
+            openNpc("gm/xy_勋章强化");
             break;
 
         default:

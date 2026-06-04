@@ -40,10 +40,24 @@ import org.gms.util.PacketCreator;
 /**
  * 【Handler】处理 {@link org.gms.net.opcodes.RecvOpcode#NPC_TALK} 封包。
  * 负责处理客户端的NPC对话操作。
+ * 
+ * <p>该处理器实现了完整的NPC交互逻辑，包括安全检查、脚本路由、
+ * 商店开启等功能。通过多种条件判断确保游戏的安全性和稳定性。</p>
  */
 public final class NPCTalkHandler extends AbstractPacketHandler {
+    /** 日志记录器：用于记录NPC相关操作和异常 */
     private static final Logger log = LoggerFactory.getLogger(NPCTalkHandler.class);
 
+    /**
+     * 处理NPC对话封包的主要方法。
+     * 
+     * <p>执行一系列安全检查，包括地图限制、角色状态、防刷机制等，
+     * 然后根据NPC类型进行不同的处理流程：普通NPC调用脚本系统或商店，
+     * 玩家NPC则使用专门的处理逻辑。</p>
+     * 
+     * @param p 输入封包，包含NPC交互的相关数据
+     * @param c 客户端连接对象
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         // 监狱地图禁止使用脚本

@@ -22,28 +22,39 @@
 package org.gms.client;
 
 /**
- * 【枚举】SkinColor：定义 `client` 中的一组常量。
+ * 【枚举】SkinColor：定义角色肤色类型常量。
+ * <p>支持多种肤色：普通、深色、黑色、苍白、蓝色、绿色、白色、粉色</p>
  */
 public enum SkinColor {
-    NORMAL(0),
-    DARK(1),
-    BLACK(2),
-    PALE(3),
-    BLUE(4),
-    GREEN(5),
-    WHITE(9),
-    PINK(10);
+    NORMAL(0),   // 普通肤色
+    DARK(1),     // 深色肤色
+    BLACK(2),    // 黑色肤色
+    PALE(3),     // 苍白色肤色
+    BLUE(4),     // 蓝色肤色
+    GREEN(5),    // 绿色肤色
+    WHITE(9),    // 白色肤色
+    PINK(10);    // 粉色肤色
 
+    /** 肤色ID */
     final int id;
 
     SkinColor(int id) {
         this.id = id;
     }
 
+    /**
+     * 获取肤色ID
+     * @return 肤色ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * 根据ID获取肤色枚举
+     * @param id 肤色ID
+     * @return 对应的肤色枚举，未找到返回null
+     */
     public static SkinColor getById(int id) {
         for (SkinColor l : SkinColor.values()) {
             if (l.getId() == id) {

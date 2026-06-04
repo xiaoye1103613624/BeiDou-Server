@@ -23,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/inventory")
 public class InventoryController {
+    /** 背包服务 */
     private final InventoryService inventoryService;
 
     @Tag(name = "/inventory/" + ApiConstant.LATEST)

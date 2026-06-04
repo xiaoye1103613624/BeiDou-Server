@@ -1,0 +1,68 @@
+export default {
+  'menu.game.equipEnhance': 'Equip Enhance',
+  // List columns
+  'equipEnhance.list.column.icon': 'Icon',
+  'equipEnhance.list.column.itemId': 'Equip ID',
+  'equipEnhance.list.column.itemName': 'Name',
+  'equipEnhance.list.column.maxEnhance': 'Max Lv',
+  'equipEnhance.list.column.uniquePerChar': 'Unique',
+  'equipEnhance.list.column.enabled': 'Enabled',
+  'equipEnhance.list.column.operations': 'Ops',
+  // Form title
+  'equipEnhance.form.title.create': 'Add Equip Enhance',
+  'equipEnhance.form.title.update': 'Edit Equip Enhance',
+  // Form fields
+  'equipEnhance.form.field.itemId': 'Equip ID',
+  'equipEnhance.form.field.itemName': 'Equip Name',
+  'equipEnhance.form.field.uniquePerChar': 'Unique',
+  'equipEnhance.form.field.uniquePerCharHint':
+    'Only one enhanced copy per character when enabled',
+  'equipEnhance.form.field.maxEnhance': 'Max Level',
+  'equipEnhance.form.field.enabled': 'Enabled',
+  'equipEnhance.form.field.levels': 'Enhance Levels',
+  'equipEnhance.form.field.enhanceLevel': 'Lv',
+  'equipEnhance.form.field.successRate': 'Success(%)',
+  'equipEnhance.form.field.destroyOnFail': 'Destroy',
+  'equipEnhance.form.field.mesoCost': 'Meso Cost',
+  // Stat group labels
+  'equipEnhance.form.field.statMain': 'Main Stats',
+  'equipEnhance.form.field.statAttack': 'Attack',
+  'equipEnhance.form.field.statDefense': 'Defense',
+  'equipEnhance.form.field.statOther': 'Other Stats',
+  // Stat fields
+  'equipEnhance.form.field.strAdd': 'STR',
+  'equipEnhance.form.field.dexAdd': 'DEX',
+  'equipEnhance.form.field.intAdd': 'INT',
+  'equipEnhance.form.field.lukAdd': 'LUK',
+  'equipEnhance.form.field.hpAdd': 'HP',
+  'equipEnhance.form.field.mpAdd': 'MP',
+  'equipEnhance.form.field.watkAdd': 'WATK',
+  'equipEnhance.form.field.matkAdd': 'MATK',
+  'equipEnhance.form.field.wdefAdd': 'WDEF',
+  'equipEnhance.form.field.mdefAdd': 'MDEF',
+  'equipEnhance.form.field.accAdd': 'ACC',
+  'equipEnhance.form.field.avoidAdd': 'AVOID',
+  'equipEnhance.form.field.speedAdd': 'SPEED',
+  'equipEnhance.form.field.jumpAdd': 'JUMP',
+  // Cost items section
+  'equipEnhance.form.field.costs': 'Item Costs',
+  'equipEnhance.form.field.costItemId': 'Item ID',
+  'equipEnhance.form.field.costCount': 'Qty',
+  // Action buttons
+  'equipEnhance.form.addLevel': 'Add Level',
+  'equipEnhance.form.addCost': 'Add Item Cost',
+  'equipEnhance.form.removeLevel': 'Remove Level',
+  'equipEnhance.form.removeCost': 'Remove Item',
+  // Messages
+  'equipEnhance.message.deleteTips': 'Delete this equip enhance config?',
+  'equipEnhance.message.saveSuccess': 'Saved successfully',
+  'equipEnhance.message.saveFailed': 'Save failed',
+  'equipEnhance.message.deleteSuccess': 'Deleted successfully',
+  'equipEnhance.message.deleteFailed': 'Delete failed',
+  'equipEnhance.message.recordIdRequired': 'Record ID is required',
+  // Status tags
+  'equipEnhance.unique.true': 'Yes',
+  'equipEnhance.unique.false': 'No',
+  'equipEnhance.enabled.true': 'Yes',
+  'equipEnhance.enabled.false': 'No',
+};

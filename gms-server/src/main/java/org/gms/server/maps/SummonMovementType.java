@@ -22,16 +22,25 @@
 package org.gms.server.maps;
 
 /**
- * 【枚举】SummonMovementType：定义 `maps` 中的一组常量。
+ * 【枚举】SummonMovementType：定义召唤物移动类型常量。
+ * <p>用于控制召唤物的移动行为模式</p>
  */
 public enum SummonMovementType {
-    STATIONARY(0), FOLLOW(1), CIRCLE_FOLLOW(3);
+    STATIONARY(0),     // 静止不动
+    FOLLOW(1),         // 跟随玩家
+    CIRCLE_FOLLOW(3);  // 环绕跟随
+
+    /** 移动类型数值 */
     private final int val;
 
     SummonMovementType(int val) {
         this.val = val;
     }
 
+    /**
+     * 获取移动类型数值
+     * @return 数值标识
+     */
     public int getValue() {
         return val;
     }

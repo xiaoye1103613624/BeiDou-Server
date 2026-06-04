@@ -34,6 +34,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class CashShopService {
+    /** 修改商城道具数据访问接口 */
     private final ModifiedCashItemMapper modifiedCashItemMapper;
 
     /**

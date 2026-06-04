@@ -1,0 +1,20 @@
+export default {
+  'menu.game.scriptManager': '脚本管理',
+  'scriptManager.overrideBanner': '脚本覆盖目录已激活：{path}',
+  'scriptManager.toolbar.newFile': '新建文件',
+  'scriptManager.toolbar.newFolder': '新建文件夹',
+  'scriptManager.toolbar.refresh': '刷新',
+  'scriptManager.contextMenu.rename': '重命名',
+  'scriptManager.contextMenu.delete': '删除',
+  'scriptManager.dialog.createFile': '新建脚本文件',
+  'scriptManager.dialog.createFolder': '新建文件夹',
+  'scriptManager.dialog.rename': '重命名',
+  'scriptManager.dialog.namePlaceholder': '请输入名称 (例: myScript.js)',
+  'scriptManager.dialog.deleteConfirm':
+    '确定删除 "{name}" 吗？此操作不可恢复。',
+  'scriptManager.emptyState': '选择脚本文件以编辑',
+  'scriptManager.message.saveSuccess': '保存成功',
+  'scriptManager.message.createSuccess': '创建成功',
+  'scriptManager.message.deleteSuccess': '删除成功',
+  'scriptManager.message.renameSuccess': '重命名成功',
+};

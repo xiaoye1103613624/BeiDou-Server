@@ -24,14 +24,19 @@ package org.gms.net.server.world;
 import org.gms.client.Character;
 
 /**
- * 跨频道世界级网络/会话模型「MessengerCharacter」。
- * 在多个 Channel 之间同步队伍、好友、信使、公告等全局状态。
+ * Messenger（信使）系统中的角色信息封装类。
+ * 用于跨频道传递信使成员的状态信息，支持最多3人同时在线聊天。
  */
 public class MessengerCharacter {
+    /** 角色名称 */
     private final String name;
+    /** 角色ID */
     private final int id;
+    /** 在信使中的位置（0-2，最多3个位置） */
     private int position;
+    /** 所在频道 */
     private final int channel;
+    /** 在线状态 */
     private final boolean online;
 
     public MessengerCharacter(Character maplechar, int position) {

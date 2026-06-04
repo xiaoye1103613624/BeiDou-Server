@@ -57,6 +57,8 @@ public class SpawnPoint {
     private final boolean immobile;
     /** 是否禁止刷新 */
     private boolean denySpawn = false;
+    /** 重生速率倍率（0.1~1.0，越小越快，1.0=正常速度） */
+    private float respawnRateMultiplier = 1.0f;
 
     public SpawnPoint(final Monster monster, Point pos, boolean immobile, int mobTime, int mobInterval, int team) {
         this.monster = monster.getId();
@@ -105,9 +107,10 @@ public class SpawnPoint {
             public void monsterKilled(int aniTime) {
                 nextPossibleSpawn = Server.getInstance().getCurrentTime();
                 if (mobTime > 0) {
-                    nextPossibleSpawn += SECONDS.toMillis(mobTime);
+                    // 应用重生速率倍率，加速怪物刷新
+                    nextPossibleSpawn += (long) (SECONDS.toMillis(mobTime) * respawnRateMultiplier);
                 } else {
-                    nextPossibleSpawn += aniTime;
+                    nextPossibleSpawn += (long) (aniTime * respawnRateMultiplier);
                 }
                 spawnedMonsters.decrementAndGet();
             }
@@ -119,7 +122,8 @@ public class SpawnPoint {
             public void monsterHealed(int trueHeal) {}
         });
         if (mobTime == 0) {
-            nextPossibleSpawn = Server.getInstance().getCurrentTime() + mobInterval;
+            // 应用重生速率倍率
+            nextPossibleSpawn = Server.getInstance().getCurrentTime() + (long) (mobInterval * respawnRateMultiplier);
         }
         return mob;
     }
@@ -146,5 +150,31 @@ public class SpawnPoint {
 
     public int getTeam() {
         return team;
+    }
+
+    /**
+     * 设置重生速率倍率（0.1~1.0，越小怪物重生越快，1.0=正常速度）
+     */
+    public void setRespawnRateMultiplier(float multiplier) {
+        this.respawnRateMultiplier = Math.max(0.1f, Math.min(multiplier, 1.0f));
+    }
+
+    public float getRespawnRateMultiplier() {
+        return respawnRateMultiplier;
+    }
+
+    /**
+     * 立即对正在等待重生的刷怪点应用新的倍率。
+     * 将剩余等待时间按新旧倍率比例缩放。
+     */
+    public void applyRespawnReduction(float oldMultiplier) {
+        if (oldMultiplier <= 0.0f || respawnRateMultiplier <= 0.0f) {
+            return;
+        }
+        long now = Server.getInstance().getCurrentTime();
+        if (spawnedMonsters.get() <= 0 && nextPossibleSpawn > now) {
+            long remaining = nextPossibleSpawn - now;
+            nextPossibleSpawn = now + (long) (remaining * respawnRateMultiplier / oldMultiplier);
+        }
     }
 }

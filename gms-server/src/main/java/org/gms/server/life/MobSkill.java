@@ -195,6 +195,14 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 延迟应用技能效果（用于技能动画播放后）
+     *
+     * @param player       玩家
+     * @param monster      怪物
+     * @param skill        是否为技能攻击
+     * @param animationTime 动画时间（毫秒）
+     */
     public void applyDelayedEffect(final Character player, final Monster monster, final boolean skill, int animationTime) {
         Runnable toRun = () -> {
             if (monster.isAlive()) {
@@ -206,11 +214,23 @@ public class MobSkill {
         service.registerOverallAction(monster.getMap().getId(), toRun, animationTime);
     }
 
+    /**
+     * 应用技能效果（无玩家目标）
+     *
+     * @param monster 怪物
+     */
     public void applyEffect(Monster monster) {
         applyEffect(null, monster, false, Collections.emptyList());
     }
 
-    // TODO: avoid output argument banishPlayersOutput
+    /**
+     * 应用技能效果
+     *
+     * @param player              玩家
+     * @param monster             怪物
+     * @param skill               是否为技能攻击
+     * @param banishPlayersOutput 被驱逐的玩家列表（输出参数）
+     */
     public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayersOutput) {
         // See if the MobSkill is successful before doing anything
         if (!makeChanceResult()) {
@@ -280,6 +300,12 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 应用治疗效果
+     *
+     * @param skill   是否为技能攻击
+     * @param monster 怪物
+     */
     private void applyHealEffect(boolean skill, Monster monster) {
         if (lt != null && rb != null && skill) {
             List<MapObject> objects = getObjectsInRange(monster, MapObjectType.MONSTER);
@@ -292,6 +318,13 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 应用驱散效果
+     *
+     * @param skill   是否为技能攻击
+     * @param monster 怪物
+     * @param player  玩家
+     */
     private void applyDispelEffect(boolean skill, Monster monster, Character player) {
         if (lt != null && rb != null && skill) {
             getPlayersInRange(monster).forEach(Character::dispel);
@@ -300,6 +333,14 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 应用驱逐效果
+     *
+     * @param skill               是否为技能攻击
+     * @param monster             怪物
+     * @param player              玩家
+     * @param banishPlayersOutput 被驱逐的玩家列表
+     */
     private void applyBanishEffect(boolean skill, Monster monster, Character player,
                                    List<Character> banishPlayersOutput) {
         if (lt != null && rb != null && skill) {
@@ -309,6 +350,11 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 生成怪物毒雾
+     *
+     * @param monster 怪物
+     */
     private void spawnMonsterMist(Monster monster) {
         Rectangle mistArea = calculateBoundingBox(monster.getPosition());
         var mist = new Mist(mistArea, monster, this);
@@ -316,11 +362,16 @@ public class MobSkill {
         monster.getMap().spawnMist(mist, mistDuration, false, false, false);
     }
 
+    /**
+     * 召唤怪物
+     *
+     * @param monster 怪物
+     */
     private void summonMonsters(Monster monster) {
         int skillLimit = this.limit;
         MapleMap map = monster.getMap();
 
-        if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
+        if (MapId.isDojo(map.getId())) {
             skillLimit = Integer.MAX_VALUE;
         }
 
@@ -335,24 +386,24 @@ public class MobSkill {
                     Monster toSpawn = LifeFactory.getMonster(mobId);
                     if (toSpawn != null) {
                         if (bossRushMap) {
-                            toSpawn.disableDrops();  // no littering on BRPQ pls
+                            toSpawn.disableDrops();
                         }
                         toSpawn.setPosition(monster.getPosition());
                         int ypos, xpos;
                         xpos = (int) monster.getPosition().getX();
                         ypos = (int) monster.getPosition().getY();
                         switch (mobId) {
-                            case MobId.HIGH_DARKSTAR: // Pap bomb high
+                            case MobId.HIGH_DARKSTAR:
                                 toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
                                 ypos = -590;
                                 break;
-                            case MobId.LOW_DARKSTAR: // Pap bomb
+                            case MobId.LOW_DARKSTAR:
                                 xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
                                 if (ypos != -590) {
                                     ypos = (int) monster.getPosition().getY();
                                 }
                                 break;
-                            case MobId.BLOODY_BOOM: //Pianus bomb
+                            case MobId.BLOODY_BOOM:
                                 if (Math.ceil(Math.random() * 5) == 1) {
                                     ypos = 78;
                                     xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
@@ -362,14 +413,14 @@ public class MobSkill {
                                 break;
                         }
                         switch (map.getId()) {
-                            case MapId.ORIGIN_OF_CLOCKTOWER: //Pap map
+                            case MapId.ORIGIN_OF_CLOCKTOWER:
                                 if (xpos < -890) {
                                     xpos = (int) (Math.ceil(Math.random() * 150) - 890);
                                 } else if (xpos > 230) {
                                     xpos = (int) (230 - Math.ceil(Math.random() * 150));
                                 }
                                 break;
-                            case MapId.CAVE_OF_PIANUS: // Pianus map
+                            case MapId.CAVE_OF_PIANUS:
                                 if (xpos < -239) {
                                     xpos = (int) (Math.ceil(Math.random() * 150) - 239);
                                 } else if (xpos > 371) {
@@ -390,6 +441,14 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 应用怪物增益效果
+     *
+     * @param stats      状态映射
+     * @param skill      是否为技能攻击
+     * @param monster    怪物
+     * @param reflection 反射列表
+     */
     private void applyMonsterBuffs(Map<MonsterStatus, Integer> stats, boolean skill, Monster monster, List<Integer> reflection) {
         if (lt != null && rb != null && skill) {
             for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
@@ -400,6 +459,14 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 应用疾病效果
+     *
+     * @param disease 疾病类型
+     * @param skill   是否为技能攻击
+     * @param monster 怪物
+     * @param player  玩家
+     */
     private void applyDisease(Disease disease, boolean skill, Monster monster, Character player) {
         if (lt != null && rb != null && skill) {
             int i = 0;
@@ -420,46 +487,103 @@ public class MobSkill {
         }
     }
 
+    /**
+     * 获取范围内的玩家列表
+     *
+     * @param monster 怪物
+     * @return 玩家列表
+     */
     private List<Character> getPlayersInRange(Monster monster) {
         return monster.getMap().getPlayersInRange(calculateBoundingBox(monster.getPosition()));
     }
 
+    /**
+     * 获取技能标识
+     *
+     * @return 技能标识
+     */
     public MobSkillId getId() {
         return id;
     }
 
+    /**
+     * 获取技能类型
+     *
+     * @return 技能类型
+     */
     public MobSkillType getType() {
         return id.type();
     }
 
+    /**
+     * 获取MP消耗
+     *
+     * @return MP消耗
+     */
     public int getMpCon() {
         return mpCon;
     }
 
+    /**
+     * 获取HP参数
+     *
+     * @return HP参数
+     */
     public int getHP() {
         return hp;
     }
 
+    /**
+     * 获取技能参数X
+     *
+     * @return 参数X
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * 获取技能参数Y
+     *
+     * @return 参数Y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * 获取技能持续时间
+     *
+     * @return 持续时间（毫秒）
+     */
     public long getDuration() {
         return duration;
     }
 
+    /**
+     * 获取技能冷却时间
+     *
+     * @return 冷却时间（毫秒）
+     */
     public long getCoolTime() {
         return cooltime;
     }
 
+    /**
+     * 判断技能是否成功发动（基于概率）
+     *
+     * @return true表示技能发动成功
+     */
     public boolean makeChanceResult() {
         return prop == 1.0 || Math.random() < prop;
     }
 
+    /**
+     * 计算技能作用范围的边界框
+     *
+     * @param posFrom 起始位置
+     * @return 边界框
+     */
     private Rectangle calculateBoundingBox(Point posFrom) {
         Point mylt = new Point(lt.x + posFrom.x, lt.y + posFrom.y);
         Point myrb = new Point(rb.x + posFrom.x, rb.y + posFrom.y);
@@ -467,6 +591,13 @@ public class MobSkill {
         return bounds;
     }
 
+    /**
+     * 获取范围内的指定类型对象
+     *
+     * @param monster     怪物
+     * @param objectType  对象类型
+     * @return 对象列表
+     */
     private List<MapObject> getObjectsInRange(Monster monster, MapObjectType objectType) {
         return monster.getMap().getMapObjectsInBox(calculateBoundingBox(monster.getPosition()), Collections.singletonList(objectType));
     }

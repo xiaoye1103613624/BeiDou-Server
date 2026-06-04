@@ -20,19 +20,41 @@ import java.util.function.Function;
  * 主要作用域为 world（按大区）和 server（全局）。
  */
 public class GameConfig {
+    /** 单例实例：持有所有动态配置数据 */
     private static final GameConfig config = new GameConfig();
+    /** 配置属性容器：采用三层嵌套JSON结构存储配置(type->subType->key) */
     private final JSONObject properties = new JSONObject();
 
+    /**
+     * 私有构造函数：初始化配置单例，从数据库加载所有配置项
+     * 
+     * <p>通过Spring上下文获取配置服务实例，查询数据库中所有配置记录，
+     * 并逐个添加到properties容器中构建完整的配置树结构。</p>
+     */
     private GameConfig() {
         ConfigService configService = ServerManager.getApplicationContext().getBean(ConfigService.class);
         List<GameConfigDO> gameConfigDOS = configService.loadGameConfigs();
         gameConfigDOS.forEach(gameConfigDO -> add(this, gameConfigDO));
     }
 
+    /**
+     * 添加配置项到全局配置容器。
+     * 
+     * @param gameConfigDO 游戏配置实体对象
+     */
     public static void add(GameConfigDO gameConfigDO) {
         add(config, gameConfigDO);
     }
 
+    /**
+     * 内部方法：向指定配置实例添加配置项。
+     * 
+     * <p>按三级结构组织配置数据：type -> subType -> key
+     * 如果各级容器不存在则自动创建，最终将配置值和类型信息存储到叶子节点。</p>
+     * 
+     * @param config 配置实例
+     * @param gameConfigDO 游戏配置实体对象
+     */
     private static void add(GameConfig config, GameConfigDO gameConfigDO) {
         JSONObject typeProp = config.properties.getJSONObject(gameConfigDO.getConfigType());
         if (typeProp == null) {

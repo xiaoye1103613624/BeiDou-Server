@@ -102,6 +102,86 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'monsterInvasion',
+      name: 'monsterInvasion',
+      component: () => import('@/views/game/monsterInvasion/index.vue'),
+      meta: {
+        locale: 'menu.game.monsterInvasion',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'townConfig',
+      name: 'townConfig',
+      component: () => import('@/views/townConfig/list/index.vue'),
+      meta: {
+        locale: 'menu.game.townConfig',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'catchUpExp',
+      name: 'CatchUpExpConfig',
+      component: () => import('@/views/catchUpExpConfig/list/index.vue'),
+      meta: {
+        locale: 'menu.game.catchUpExp',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'scriptManager',
+      name: 'ScriptManager',
+      component: () => import('@/views/game/scriptManager/index.vue'),
+      meta: {
+        locale: 'menu.game.scriptManager',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'cardCollection',
+      name: 'cardCollection',
+      component: () => import('@/views/game/cardCollection/index.vue'),
+      meta: {
+        locale: 'menu.game.cardCollection',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'equipEnhance',
+      name: 'equipEnhance',
+      component: () => import('@/views/game/equipEnhance/index.vue'),
+      meta: {
+        locale: 'menu.game.equipEnhance',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'medalEnhance',
+      name: 'medalEnhance',
+      component: () => import('@/views/game/medalEnhance/index.vue'),
+      meta: {
+        locale: 'menu.game.medalEnhance',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'xyCollection',
+      name: 'xyCollection',
+      component: () => import('@/views/game/xyCollection/index.vue'),
+      meta: {
+        locale: 'menu.game.xyCollection',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

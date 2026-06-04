@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/shop")
 public class ShopController {
+    /** 商店服务 */
     private final ShopService shopService;
 
     @Tag(name = "/shop/" + ApiConstant.LATEST)

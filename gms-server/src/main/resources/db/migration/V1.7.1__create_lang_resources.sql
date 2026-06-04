@@ -10,12 +10,12 @@ create table if not exists lang_resources
     index idx_lang_code (lang_code)
     ) comment '数据库i18n表';
 
-insert into lang_resources(lang_type, lang_base, lang_code, lang_value, lang_extend)
+INSERT into lang_resources(lang_type, lang_base, lang_code, lang_value, lang_extend)
 select 'zh-CN', 'game_config', config_code, substring_index(substring_index(config_desc, '(', 1), ')', -1), null
 from game_config;
 
-insert into lang_resources(lang_type, lang_base, lang_code, lang_value, lang_extend)
+INSERT into lang_resources(lang_type, lang_base, lang_code, lang_value, lang_extend)
 select 'en-US', 'game_config', config_code, substring_index(substring_index(config_desc, '(', -1), ')', 1), null
 from game_config;
 
-update game_config set config_desc = config_code;
+UPDATE game_config set config_desc = config_code;

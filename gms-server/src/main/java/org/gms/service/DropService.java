@@ -32,7 +32,9 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class DropService {
+    /** 怪物掉落数据访问接口 */
     private final DropDataMapper dropDataMapper;
+    /** 全局掉落数据访问接口 */
     private final DropDataGlobalMapper dropDataGlobalMapper;
 
     /**

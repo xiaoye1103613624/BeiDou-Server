@@ -10,18 +10,32 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * 【类型】UserDetailsImpl（class），包 `org.gms.service`。
+ * 【认证组件】UserDetailsImpl：Spring Security用户详情实现类。
+ * 
+ * <p>实现Spring Security的UserDetails接口，封装GM账号的认证信息，包括用户ID、用户名、密码和权限列表。</p>
  */
 public class UserDetailsImpl implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
+    
+    /** 用户ID */
     private final Integer id;
+    /** 用户名 */
     private final String username;
+    /** 密码（JSON序列化时忽略） */
     @JsonIgnore
     private final String password;
-
+    /** 权限列表 */
     private final Collection<? extends GrantedAuthority> authorities;
 
+    /**
+     * 构造函数。
+     * 
+     * @param id 用户ID
+     * @param name 用户名
+     * @param password 密码
+     * @param authorities 权限列表
+     */
     public UserDetailsImpl(Integer id, String name, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
@@ -30,6 +44,13 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+    /**
+     * 从AccountsDO构建UserDetailsImpl实例。
+     * 
+     * @param user 账号DO对象
+     * @param authorities 权限列表
+     * @return UserDetailsImpl实例
+     */
     public static UserDetailsImpl build(AccountsDO user, Collection<? extends GrantedAuthority> authorities) {
         return new UserDetailsImpl(
                 user.getId(),

@@ -57,52 +57,190 @@ import java.util.Map;
 public class Equip extends Item {
     private static final Logger log = LoggerFactory.getLogger(Equip.class);
 
-    /** 卷轴使用结果 */
+    /**
+     * 卷轴使用结果枚举。
+     * 
+     * <p>表示装备卷轴使用后的三种可能结果：</p>
+     * <ul>
+     *   <li>FAIL: 卷轴使用失败，装备属性不变</li>
+     *   <li>SUCCESS: 卷轴使用成功，装备属性提升</li>
+     *   <li>CURSE: 卷轴使用诅咒，装备消失</li>
+     * </ul>
+     */
     public enum ScrollResult {
-        FAIL(0), SUCCESS(1), CURSE(2);
+        /** 卷轴使用失败 */
+        FAIL(0), 
+        /** 卷轴使用成功 */
+        SUCCESS(1), 
+        /** 卷轴使用诅咒（装备消失） */
+        CURSE(2);
+        
+        /** 对应的数值 */
         private int value = -1;
 
+        /**
+         * 构造函数。
+         * 
+         * @param value 对应的数值
+         */
         ScrollResult(int value) {
             this.value = value;
         }
 
+        /**
+         * 获取对应的数值。
+         * 
+         * @return 数值
+         */
         public int getValue() {
             return value;
         }
     }
 
-    /** 装备可强化的属性类型（位置索引与属性名对应关系） */
+    /**
+     * 装备可强化的属性类型枚举。
+     * 
+     * <p>定义了装备可以升级的各种属性类型，每个类型都有对应的索引值，
+     * 用于在装备升级时确定要修改哪个属性。</p>
+     * 
+     * <ul>
+     *   <li>incDEX: 敏捷加成</li>
+     *   <li>incSTR: 力量加成</li>
+     *   <li>incINT: 智力加成</li>
+     *   <li>incLUK: 运气加成</li>
+     *   <li>incMHP: 最大HP加成</li>
+     *   <li>incMMP: 最大MP加成</li>
+     *   <li>incPAD: 物理攻击力加成</li>
+     *   <li>incMAD: 魔法攻击力加成</li>
+     *   <li>incPDD: 物理防御力加成</li>
+     *   <li>incMDD: 魔法防御力加成</li>
+     *   <li>incEVA: 回避率加成</li>
+     *   <li>incACC: 命中率加成</li>
+     *   <li>incSpeed: 速度加成</li>
+     *   <li>incJump: 跳跃力加成</li>
+     *   <li>incVicious: 恶毒值加成</li>
+     *   <li>incSlot: 升级槽数量加成</li>
+     * </ul>
+     */
     public enum StatUpgrade {
-        incDEX(0), incSTR(1), incINT(2), incLUK(3),
-        incMHP(4), incMMP(5), incPAD(6), incMAD(7),
-        incPDD(8), incMDD(9), incEVA(10), incACC(11),
-        incSpeed(12), incJump(13), incVicious(14), incSlot(15);
+        /** 敏捷加成 */
+        incDEX(0), 
+        /** 力量加成 */
+        incSTR(1), 
+        /** 智力加成 */
+        incINT(2), 
+        /** 运气加成 */
+        incLUK(3),
+        /** 最大HP加成 */
+        incMHP(4), 
+        /** 最大MP加成 */
+        incMMP(5), 
+        /** 物理攻击力加成 */
+        incPAD(6), 
+        /** 魔法攻击力加成 */
+        incMAD(7),
+        /** 物理防御力加成 */
+        incPDD(8), 
+        /** 魔法防御力加成 */
+        incMDD(9), 
+        /** 回避率加成 */
+        incEVA(10), 
+        /** 命中率加成 */
+        incACC(11),
+        /** 速度加成 */
+        incSpeed(12), 
+        /** 跳跃力加成 */
+        incJump(13), 
+        /** 恶毒值加成 */
+        incVicious(14), 
+        /** 升级槽数量加成 */
+        incSlot(15);
+        
+        /** 对应的索引值 */
         private int value = -1;
 
+        /**
+         * 构造函数。
+         * 
+         * @param value 对应的索引值
+         */
         StatUpgrade(int value) {
             this.value = value;
         }
     }
 
-    /** 剩余可用升级次数 */
+    /** 剩余可用升级次数：表示该装备还可以进行多少次升级操作 */
     private byte upgradeSlots;
-    /** 装备等级（需求等级）、物品等级（成长装备的当前等级） */
+    /** 装备等级：表示装备的要求等级；物品等级：表示成长装备的当前等级 */
     @Getter
     private byte level, itemLevel;
-    /** 装备标志位 */
+    /** 装备标志位：存储装备的各种标志信息（如封印、交易限制等） */
     private short flag;
-    /** 基础属性：力量/敏捷/智力/运气/HP/MP/攻击/魔力/物防/魔防/命中/回避/手技/速度/跳跃/恶毒 */
-    private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
+    /** 力量加成：装备提供的力量属性加成 */
+    private short str;
+    /** 敏捷加成：装备提供的敏捷属性加成 */
+    private short dex;
+    /** 智力加成：装备提供的智力属性加成 */
+    private short _int;
+    /** 运气加成：装备提供的运气属性加成 */
+    private short luk;
+    /** HP加成：装备提供的生命值加成 */
+    private short hp;
+    /** MP加成：装备提供的魔法值加成 */
+    private short mp;
+    /** 物理攻击力：装备提供的物理攻击力 */
+    private short watk;
+    /** 魔法攻击力：装备提供的魔法攻击力 */
+    private short matk;
+    /** 物理防御力：装备提供的物理防御力 */
+    private short wdef;
+    /** 魔法防御力：装备提供的魔法防御力 */
+    private short mdef;
+    /** 命中率：装备提供的命中率加成 */
+    private short acc;
+    /** 回避率：装备提供的回避率加成 */
+    private short avoid;
+    /** 手技：装备提供的手技加成（影响某些技能效果） */
+    private short hands;
+    /** 移动速度：装备提供的移动速度加成 */
+    private short speed;
+    /** 跳跃力：装备提供的跳跃力加成 */
+    private short jump;
+    /** 恶毒值：装备的恶毒属性（通常通过特殊卷轴获得） */
+    private short vicious;
+    /** 装备经验值：用于成长装备的等级提升 */
     private float itemExp;
+    /** 戒指ID：如果是戒指装备则存储其唯一ID，否则为-1 */
     private int ringid = -1;
+    /** 是否穿戴：标记该装备是否正在被角色穿戴 */
     private boolean wear = false;
-    private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
+    /** 是否可升级：标记装备是否可以进行升级 */
+    private boolean isUpgradeable;
+    /** 是否为元素装备：标记是否为timeless或reverse等可升级的特殊装备 */
+    private boolean isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
+    /** 物品信息提供者：用于获取物品相关信息的静态实例 */
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
+    /**
+     * 构造函数：创建装备实例。
+     * 
+     * @param id 装备ID
+     * @param position 装备在库存中的位置
+     */
     public Equip(int id, short position) {
         this(id, position, 0);
     }
 
+    /**
+     * 构造函数：创建装备实例。
+     * 
+     * <p>初始化装备的基本属性，包括升级槽数量、经验值和等级。
+     * 同时根据物品信息判断该装备是否为可升级的元素装备。</p>
+     * 
+     * @param id 装备ID
+     * @param position 装备在库存中的位置
+     * @param slots 初始升级槽数量
+     */
     public Equip(int id, short position, int slots) {
         super(id, position, (short) 1);
         this.upgradeSlots = (byte) slots;
@@ -154,70 +292,155 @@ public class Equip extends Item {
         return 1;
     }
 
+    /**
+     * 获取剩余升级槽数量。
+     * 
+     * @return 剩余升级槽数量
+     */
     public byte getUpgradeSlots() {
         return upgradeSlots;
     }
 
+    /**
+     * 获取力量加成值。
+     * 
+     * @return 力量加成值
+     */
     public short getStr() {
         return str;
     }
 
+    /**
+     * 获取敏捷加成值。
+     * 
+     * @return 敏捷加成值
+     */
     public short getDex() {
         return dex;
     }
 
+    /**
+     * 获取智力加成值。
+     * 
+     * @return 智力加成值
+     */
     public short getInt() {
         return _int;
     }
 
+    /**
+     * 获取运气加成值。
+     * 
+     * @return 运气加成值
+     */
     public short getLuk() {
         return luk;
     }
 
+    /**
+     * 获取HP加成值。
+     * 
+     * @return HP加成值
+     */
     public short getHp() {
         return hp;
     }
 
+    /**
+     * 获取MP加成值。
+     * 
+     * @return MP加成值
+     */
     public short getMp() {
         return mp;
     }
 
+    /**
+     * 获取物理攻击力加成值。
+     * 
+     * @return 物理攻击力加成值
+     */
     public short getWatk() {
         return watk;
     }
 
+    /**
+     * 获取魔法攻击力加成值。
+     * 
+     * @return 魔法攻击力加成值
+     */
     public short getMatk() {
         return matk;
     }
 
+    /**
+     * 获取物理防御力加成值。
+     * 
+     * @return 物理防御力加成值
+     */
     public short getWdef() {
         return wdef;
     }
 
+    /**
+     * 获取魔法防御力加成值。
+     * 
+     * @return 魔法防御力加成值
+     */
     public short getMdef() {
         return mdef;
     }
 
+    /**
+     * 获取命中率加成值。
+     * 
+     * @return 命中率加成值
+     */
     public short getAcc() {
         return acc;
     }
 
+    /**
+     * 获取回避率加成值。
+     * 
+     * @return 回避率加成值
+     */
     public short getAvoid() {
         return avoid;
     }
 
+    /**
+     * 获取手技加成值。
+     * 
+     * @return 手技加成值
+     */
     public short getHands() {
         return hands;
     }
 
+    /**
+     * 获取速度加成值。
+     * 
+     * @return 速度加成值
+     */
     public short getSpeed() {
         return speed;
     }
 
+    /**
+     * 获取跳跃力加成值。
+     * 
+     * @return 跳跃力加成值
+     */
     public short getJump() {
         return jump;
     }
 
+    /**
+     * 获取恶毒值。
+     * 
+     * @return 恶毒值
+     */
     public short getVicious() {
         return vicious;
     }
@@ -227,70 +450,155 @@ public class Equip extends Item {
         this.flag = flag;
     }
 
+    /**
+     * 设置力量加成值。
+     * 
+     * @param str 力量加成值
+     */
     public void setStr(short str) {
         this.str = str;
     }
 
+    /**
+     * 设置敏捷加成值。
+     * 
+     * @param dex 敏捷加成值
+     */
     public void setDex(short dex) {
         this.dex = dex;
     }
 
+    /**
+     * 设置智力加成值。
+     * 
+     * @param _int 智力加成值
+     */
     public void setInt(short _int) {
         this._int = _int;
     }
 
+    /**
+     * 设置运气加成值。
+     * 
+     * @param luk 运气加成值
+     */
     public void setLuk(short luk) {
         this.luk = luk;
     }
 
+    /**
+     * 设置HP加成值。
+     * 
+     * @param hp HP加成值
+     */
     public void setHp(short hp) {
         this.hp = hp;
     }
 
+    /**
+     * 设置MP加成值。
+     * 
+     * @param mp MP加成值
+     */
     public void setMp(short mp) {
         this.mp = mp;
     }
 
+    /**
+     * 设置物理攻击力加成值。
+     * 
+     * @param watk 物理攻击力加成值
+     */
     public void setWatk(short watk) {
         this.watk = watk;
     }
 
+    /**
+     * 设置魔法攻击力加成值。
+     * 
+     * @param matk 魔法攻击力加成值
+     */
     public void setMatk(short matk) {
         this.matk = matk;
     }
 
+    /**
+     * 设置物理防御力加成值。
+     * 
+     * @param wdef 物理防御力加成值
+     */
     public void setWdef(short wdef) {
         this.wdef = wdef;
     }
 
+    /**
+     * 设置魔法防御力加成值。
+     * 
+     * @param mdef 魔法防御力加成值
+     */
     public void setMdef(short mdef) {
         this.mdef = mdef;
     }
 
+    /**
+     * 设置命中率加成值。
+     * 
+     * @param acc 命中率加成值
+     */
     public void setAcc(short acc) {
         this.acc = acc;
     }
 
+    /**
+     * 设置回避率加成值。
+     * 
+     * @param avoid 回避率加成值
+     */
     public void setAvoid(short avoid) {
         this.avoid = avoid;
     }
 
+    /**
+     * 设置手技加成值。
+     * 
+     * @param hands 手技加成值
+     */
     public void setHands(short hands) {
         this.hands = hands;
     }
 
+    /**
+     * 设置速度加成值。
+     * 
+     * @param speed 速度加成值
+     */
     public void setSpeed(short speed) {
         this.speed = speed;
     }
 
+    /**
+     * 设置跳跃力加成值。
+     * 
+     * @param jump 跳跃力加成值
+     */
     public void setJump(short jump) {
         this.jump = jump;
     }
 
+    /**
+     * 设置恶毒值。
+     * 
+     * @param vicious 恶毒值
+     */
     public void setVicious(short vicious) {
         this.vicious = vicious;
     }
 
+    /**
+     * 设置升级槽数量。
+     * 
+     * @param upgradeSlots 升级槽数量
+     */
     public void setUpgradeSlots(byte upgradeSlots) {
         this.upgradeSlots = upgradeSlots;
     }
@@ -625,7 +933,17 @@ public class Equip extends Item {
     }
 
     /**
-     * 处理装备升级的逻辑，包括属性提升、升级槽增加、金锤子减少等，并通知客户端更新装备状态
+     * 处理装备升级的逻辑。
+     * 
+     * <p>当装备经验值达到升级要求时，执行以下操作：
+     * <ul>
+     *   <li>提升装备等级</li>
+     *   <li>根据装备类型（元素装备或普通装备）计算属性提升</li>
+     *   <li>可能增加升级槽或减少恶毒值</li>
+     *   <li>通知客户端装备状态变更</li>
+     *   <li>显示升级效果和提示信息</li>
+     * </ul></p>
+     * 
      * @param c 触发升级的客户端
      */
     private void gainLevel(Client c) {
@@ -703,7 +1021,11 @@ public class Equip extends Item {
     }
 
     /**
-     * 处理装备经验值的增加逻辑（Ronan 的装备经验值获取方法）
+     * 处理装备经验值的增加逻辑。
+     * 
+     * <p>根据获得的经验值更新装备的经验值，并在达到升级要求时自动升级装备。
+     * 支持连续升级直到达到最大等级或服务器配置限制。</p>
+     * 
      * @param c 客户端对象
      * @param gain 获得的经验值
      */
@@ -790,26 +1112,56 @@ public class Equip extends Item {
         super.setQuantity(quantity);
     }
 
+    /**
+     * 设置升级槽数量。
+     * 
+     * @param i 升级槽数量
+     */
     public void setUpgradeSlots(int i) {
         this.upgradeSlots = (byte) i;
     }
 
+    /**
+     * 设置恶毒值。
+     * 
+     * @param i 恶毒值
+     */
     public void setVicious(int i) {
         this.vicious = (short) i;
     }
 
+    /**
+     * 获取戒指ID。
+     * 
+     * @return 戒指ID，如果不是戒指则返回-1
+     */
     public int getRingId() {
         return ringid;
     }
 
+    /**
+     * 设置戒指ID。
+     * 
+     * @param id 戒指ID
+     */
     public void setRingId(int id) {
         this.ringid = id;
     }
 
+    /**
+     * 检查装备是否正在被穿戴。
+     * 
+     * @return 如果正在穿戴则返回true，否则返回false
+     */
     public boolean isWearing() {
         return wear;
     }
 
+    /**
+     * 设置装备穿戴状态。
+     * 
+     * @param yes 是否穿戴
+     */
     public void wear(boolean yes) {
         wear = yes;
     }

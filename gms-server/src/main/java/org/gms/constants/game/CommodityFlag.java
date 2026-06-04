@@ -75,7 +75,10 @@ public enum CommodityFlag {
         this.desc = desc;
         this.writeMapper = writeMapper;
     }
-
+    /**
+     * 获取可用的已排序属性列表
+     * @return 可用属性列表
+     */
     public static List<CommodityFlag> getAvailableSortedValues() {
         List<CommodityFlag> result = new ArrayList<>();
         for (CommodityFlag value : values()) {

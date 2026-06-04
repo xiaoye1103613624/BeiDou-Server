@@ -22,21 +22,22 @@
 package org.gms.server.maps;
 
 /**
- * 【枚举】MapObjectType：定义 `maps` 中的一组常量。
+ * 【枚举】MapObjectType：定义地图对象类型常量。
+ * <p>用于标识地图上各类对象的类型，便于统一管理和处理</p>
  */
 public enum MapObjectType {
-    NPC,
-    MONSTER,
-    ITEM,
-    PLAYER,
-    DOOR,
-    SUMMON,
-    SHOP,
-    MINI_GAME,
-    MIST,
-    REACTOR,
-    HIRED_MERCHANT,
-    PLAYER_NPC,
-    DRAGON,
-    KITE
+    NPC,              // NPC
+    MONSTER,          // 怪物
+    ITEM,             // 掉落物品
+    PLAYER,           // 玩家
+    DOOR,             // 门
+    SUMMON,           // 召唤物
+    SHOP,             // 商店
+    MINI_GAME,        // 小游戏
+    MIST,             // 毒雾/迷雾
+    REACTOR,          // 反应物（可交互的地图元素）
+    HIRED_MERCHANT,   // 雇佣商人
+    PLAYER_NPC,       // 玩家NPC（玩家创建的NPC）
+    DRAGON,           // 龙（龙神职业的龙）
+    KITE              // 风筝（弓箭手技能）
 }

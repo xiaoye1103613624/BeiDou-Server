@@ -22,6 +22,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    /** 认证服务 */
     private final AuthService authService;
 
     @Autowired

@@ -27,29 +27,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Tyler (Twdtwd)
- */
-public abstract class AbstractQuestAction {
-    private final QuestActionType type;
-    protected int questID;
+     * 【抽象类】AbstractQuestAction，包 {@code org.gms.server.quest.actions}。
+     * 任务动作抽象基类，定义任务执行时的动作接口。
+     *
+     * @author Tyler (Twdtwd)
+     */
+    public abstract class AbstractQuestAction {
+        /** 动作类型 */
+        private final QuestActionType type;
+        /** 任务ID */
+        protected int questID;
 
-    public AbstractQuestAction(QuestActionType action, Quest quest) {
-        this.type = action;
-        this.questID = quest.getId();
-    }
+        /**
+         * 构造函数
+         *
+         * @param action 动作类型
+         * @param quest  所属任务
+         */
+        public AbstractQuestAction(QuestActionType action, Quest quest) {
+            this.type = action;
+            this.questID = quest.getId();
+        }
 
-    public abstract void run(Character chr, Integer extSelection);
-    public abstract void processData(Data data);
+        /**
+         * 执行动作
+         *
+         * @param chr          玩家角色
+         * @param extSelection 扩展选择（用于多选奖励）
+         */
+        public abstract void run(Character chr, Integer extSelection);
 
-    public boolean check(Character chr, Integer extSelection) {
-        return true;
-    }
+        /**
+         * 处理WZ数据
+         *
+         * @param data WZ数据
+         */
+        public abstract void processData(Data data);
 
-    public QuestActionType getType() {
-        return type;
-    }
+        /**
+         * 检查动作是否可以执行
+         *
+         * @param chr          玩家角色
+         * @param extSelection 扩展选择
+         * @return 默认返回true
+         */
+        public boolean check(Character chr, Integer extSelection) {
+            return true;
+        }
 
-    public static List<Integer> getJobBy5ByteEncoding(int encoded) {
+        /**
+         * 获取动作类型
+         *
+         * @return 动作类型
+         */
+        public QuestActionType getType() {
+            return type;
+        }
+
+        /**
+         * 通过5字节编码获取职业列表
+         *
+         * @param encoded 编码值
+         * @return 职业ID列表
+         */
+        public static List<Integer> getJobBy5ByteEncoding(int encoded) {
         List<Integer> ret = new ArrayList<>();
         if ((encoded & 0x1) != 0) {
             ret.add(0);
@@ -112,20 +153,26 @@ public abstract class AbstractQuestAction {
         return ret;
     }
 
-    public static List<Integer> getJobBySimpleEncoding(int encoded) {
-        List<Integer> ret = new ArrayList<>();
-        if ((encoded & 0x1) != 0) {
-            ret.add(200);
+    /**
+         * 通过简单编码获取职业列表
+         *
+         * @param encoded 编码值
+         * @return 职业ID列表
+         */
+        public static List<Integer> getJobBySimpleEncoding(int encoded) {
+            List<Integer> ret = new ArrayList<>();
+            if ((encoded & 0x1) != 0) {
+                ret.add(200);
+            }
+            if ((encoded & 0x2) != 0) {
+                ret.add(300);
+            }
+            if ((encoded & 0x4) != 0) {
+                ret.add(400);
+            }
+            if ((encoded & 0x8) != 0) {
+                ret.add(500);
+            }
+            return ret;
         }
-        if ((encoded & 0x2) != 0) {
-            ret.add(300);
-        }
-        if ((encoded & 0x4) != 0) {
-            ret.add(400);
-        }
-        if ((encoded & 0x8) != 0) {
-            ret.add(500);
-        }
-        return ret;
     }
-}

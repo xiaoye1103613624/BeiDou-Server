@@ -11,7 +11,7 @@ create table if not exists game_config
     update_time     timestamp comment '最后更新时间'
     ) comment '游戏参数表';
 
-insert into game_config (config_type, config_sub_type, config_clazz, config_code, config_value, config_desc)
+INSERT into game_config (config_type, config_sub_type, config_clazz, config_code, config_value, config_desc)
 values ('world', '0', 'java.lang.Integer', 'flag', '0', '0=普通大区，1=活动大区，2=新区，3=热门大区(0=nothing,1=event,2=new,3=hot)'),
        ('world', '0', 'java.lang.String', 'server_message', 'Welcome to Scania!', '顶部滚动信息(top scrolling information)'),
        ('world', '0', 'java.lang.String', 'event_message', 'Scania', '大区描述(world description)'),

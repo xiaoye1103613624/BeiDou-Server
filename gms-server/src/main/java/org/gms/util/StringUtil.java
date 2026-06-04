@@ -129,6 +129,12 @@ public class StringUtil {
         return ret;
     }
 
+    /**
+     * 判断字符串是否为数字（支持整数和小数）
+     *
+     * @param str 待检查的字符串
+     * @return true=是数字, false=不是数字
+     */
     public static boolean isNumeric(String str) {
         return str.matches("-?\\d+(\\.\\d+)?");
     }

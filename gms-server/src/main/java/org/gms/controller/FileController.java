@@ -22,6 +22,7 @@ import java.util.*;
 @AllArgsConstructor
 @RequestMapping("/file")
 public class FileController {
+    /** 文件树服务 */
     private final FileTreeService fileTreeService;
 
     @Tag(name = "/file/" + ApiConstant.LATEST)

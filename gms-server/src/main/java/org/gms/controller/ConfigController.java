@@ -25,12 +25,16 @@ import java.util.List;
  * 处理游戏动态配置参数的管理，包括配置大类和类型查询、参数列表分页查询、
  * 参数新增/修改/删除、批量删除以及YAML配置文件的导入与导出。
  *
+ * <p>该控制器提供了完整的配置管理API，支持通过Web界面进行配置的CRUD操作，
+ * 同时支持YAML格式的批量导入导出功能，便于配置的迁移和备份。</p>
+ *
  * @author 萧曵
  */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/config")
 public class ConfigController {
+    /** 配置服务：提供配置数据的业务逻辑处理 */
     private final ConfigService configService;
 
     @Tag(name = "/config/" + ApiConstant.LATEST)

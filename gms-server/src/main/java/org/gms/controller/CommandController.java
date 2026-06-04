@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/command")
 public class CommandController {
+    /** 命令服务 */
     private final CommandService commandService;
 
     @Tag(name = "/command/" + ApiConstant.LATEST)

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/give")
 public class GiveController {
+    /** 资源分发服务 */
     @Autowired
     private final GiveService giveService;
 

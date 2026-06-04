@@ -18,6 +18,7 @@ import static org.gms.dao.entity.table.MonsterbookDOTableDef.MONSTERBOOK_D_O;
 @Service
 @AllArgsConstructor
 public class MonsterBookService {
+    /** 怪物手册数据访问接口 */
     private final MonsterbookMapper monsterbookMapper;
 
     /**

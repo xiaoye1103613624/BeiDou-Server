@@ -3,45 +3,64 @@ package org.gms.constants.string;
 import org.gms.client.Character;
 
 /**
- * 【类型】LanguageConstants（class），包 `org.gms.constants.string`。
- *
- * 多语言常量类，存储怪物嘉年华（CPQ）等游戏内消息的多语言文本数组，支持葡萄牙语、西班牙语、英语和中文。
+ * 多语言常量类
+ * <p>存储怪物嘉年华（CPQ）等游戏内消息的多语言文本数组，支持葡萄牙语、西班牙语、英语和中文</p>
  *
  * @author 萧曵
  */
 public class LanguageConstants {
 
+    /** 语言枚举 */
     enum Language {
+        /** 葡萄牙语 */
         LANG_PRT(0),
+        /** 西班牙语 */
         LANG_ESP(1),
+        /** 英语 */
         LANG_ENG(2),
+        /** 中文 */
         LANG_CN(3),
         ;
 
+        /** 语言ID */
         int lang;
 
         Language(int lang) {
             this.lang = lang;
         }
 
+        /** 获取语言ID */
         private int getValue() {
             return this.lang;
         }
 
     }
 
+    /** CPQ蓝队名称 */
     public static String[] CPQBlue = new String[4];
+    /** CPQ错误消息 */
     public static String[] CPQError = new String[4];
+    /** CPQ进入提示 */
     public static String[] CPQEntry = new String[4];
+    /** CPQ查找错误 */
     public static String[] CPQFindError = new String[4];
+    /** CPQ红队名称 */
     public static String[] CPQRed = new String[4];
+    /** CPQ玩家退出消息 */
     public static String[] CPQPlayerExit = new String[4];
+    /** CPQ进入大厅提示 */
     public static String[] CPQEntryLobby = new String[4];
+    /** CPQ选择房间提示 */
     public static String[] CPQPickRoom = new String[4];
+    /** CPQ时间延长消息 */
     public static String[] CPQExtendTime = new String[4];
+    /** CPQ队长未找到消息 */
     public static String[] CPQLeaderNotFound = new String[4];
+    /** CPQ挑战回应消息 */
     public static String[] CPQChallengeRoomAnswer = new String[4];
+    /** CPQ挑战发送消息 */
     public static String[] CPQChallengeRoomSent = new String[4];
+    /** CPQ挑战拒绝消息 */
     public static String[] CPQChallengeRoomDenied = new String[4];
 
     static {
@@ -105,11 +124,16 @@ public class LanguageConstants {
         LanguageConstants.CPQChallengeRoomDenied[lang] = "房间里的队伍取消了你的挑战。";
         LanguageConstants.CPQFindError[lang] = "该房间没有队伍\r\n也许该队伍已经解散了！";
         LanguageConstants.CPQEntryLobby[lang] = "您现在将收到来自其他队伍的挑战。如果你在3分钟内不接受挑战，你将被淘汰。";
-        // todo Ability是什么？先机翻一下
         LanguageConstants.CPQEntry[lang] = "在怪物嘉年华期间，你能使用\"召唤怪物\"，\"策略\" 或者 \"防守\"作为您的战术。使用Tab和F1~F12快速访问！";
 
     }
 
+    /**
+     * 根据角色获取对应语言的消息
+     * @param chr 角色
+     * @param message 多语言消息数组
+     * @return 对应语言的消息
+     */
     public static String getMessage(Character chr, String[] message) {
         return message[chr.getClient().getLanguage()];
     }

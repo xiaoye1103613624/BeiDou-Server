@@ -70,16 +70,38 @@ public abstract class AbstractScriptManager {
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
         String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
 
-        Path scriptPath = Path.of(scriptName, path);
-        Path scriptLangPath = Path.of(scriptLangName, path);
+        // 检查外部覆盖目录
+        String overridePath = serviceProperty.getScriptOverridePath();
+        Path overrideBase = null;
+        if (overridePath != null && !overridePath.isBlank()) {
+            overrideBase = Path.of(overridePath);
+            if (!overrideBase.isAbsolute()) {
+                overrideBase = Path.of(System.getProperty("user.dir")).resolve(overridePath);
+            }
+            overrideBase = overrideBase.toAbsolutePath().normalize();
+        }
 
-        Path actualPath;
-        if (Files.exists(scriptLangPath)) {
-            actualPath = scriptLangPath;
-        } else if (Files.exists(scriptPath)){
-            actualPath = scriptPath;
-        } else {
-            return null;
+        Path actualPath = null;
+        if (overrideBase != null) {
+            Path overrideLangPath = overrideBase.resolve(scriptLangName).resolve(path);
+            Path overrideScriptPath = overrideBase.resolve(scriptName).resolve(path);
+            if (Files.exists(overrideLangPath)) {
+                actualPath = overrideLangPath;
+            } else if (Files.exists(overrideScriptPath)) {
+                actualPath = overrideScriptPath;
+            }
+        }
+
+        if (actualPath == null) {
+            Path scriptPath = Path.of(scriptName, path);
+            Path scriptLangPath = Path.of(scriptLangName, path);
+            if (Files.exists(scriptLangPath)) {
+                actualPath = scriptLangPath;
+            } else if (Files.exists(scriptPath)) {
+                actualPath = scriptPath;
+            } else {
+                return null;
+            }
         }
 
         ScriptEngine engine = sef.getScriptEngine();

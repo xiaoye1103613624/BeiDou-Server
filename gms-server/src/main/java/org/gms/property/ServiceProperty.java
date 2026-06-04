@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ServiceProperty {
     private String language;
+    private String scriptOverridePath;
     private RateLimitProperty rateLimit;
     private String wanHost;
     private String lanHost;

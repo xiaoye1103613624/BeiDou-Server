@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/character")
 public class CharacterController {
+    /** 角色服务 */
     private final CharacterService characterService;
 
     @Tag(name = "/character/" + ApiConstant.LATEST)

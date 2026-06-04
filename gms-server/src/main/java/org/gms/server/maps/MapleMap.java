@@ -31,6 +31,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
+import org.gms.config.BossConfigManager;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
@@ -255,6 +256,14 @@ public class MapleMap {
     private short mobInterval = 5000;
     /** 是否允许召唤兽 */
     private boolean allowSummons = true;
+    /** 轮回石碑NPC（当前地图上的轮回石碑） */
+    private NPC samsaraStoneNpc = null;
+    /** 轮回石碑所有者 */
+    private Character samsaraOwner = null;
+    /** 轮回石碑过期时间戳 */
+    private long samsaraExpireTime = 0;
+    /** 轮回石碑自动移除定时器 */
+    private ScheduledFuture<?> samsaraRemoveTask = null;
     /** 地图所有者（副本专用） */
     private Character mapOwner = null;
     /** 地图所有者最后活动时间 */
@@ -298,6 +307,15 @@ public class MapleMap {
     /** 掉落范围缓存锁 */
     private static final Lock bndLock = new ReentrantLock(true);
 
+    /**
+     * 构造函数，创建地图实例
+     *
+     * @param mapid       地图ID
+     * @param world       所属大区号
+     * @param channel     所属频道号
+     * @param returnMapId 返回地图ID
+     * @param monsterRate 怪物刷新倍率
+     */
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {
         this.mapid = mapid;
         this.channel = channel;
@@ -319,10 +337,20 @@ public class MapleMap {
         aggroMonitor = new MonsterAggroCoordinator();
     }
 
+    /**
+     * 设置事件实例管理器
+     *
+     * @param eim 事件实例管理器
+     */
     public void setEventInstance(EventInstanceManager eim) {
         event = eim;
     }
 
+    /**
+     * 获取事件实例管理器
+     *
+     * @return 事件实例管理器
+     */
     public EventInstanceManager getEventInstance() {
         return event;
     }
@@ -331,18 +359,41 @@ public class MapleMap {
         return mapArea;
     }
 
+    /**
+     * 获取所属大区号
+     *
+     * @return 大区号
+     */
     public int getWorld() {
         return world;
     }
 
+    /**
+     * 向地图上除源玩家外的所有玩家广播数据包
+     *
+     * @param source 源玩家（不会收到广播）
+     * @param packet 要广播的数据包
+     */
     public void broadcastPacket(Character source, Packet packet) {
         broadcastPacket(packet, chr -> chr != null && chr.getClient() != null && chr != source);
     }
 
+    /**
+     * 向地图上除源玩家外的GM玩家广播数据包（仅GM等级>=源玩家的GM能收到）
+     *
+     * @param source 源GM玩家
+     * @param packet 要广播的数据包
+     */
     public void broadcastGMPacket(Character source, Packet packet) {
         broadcastPacket(packet, chr -> chr != null && chr.getClient() != null && chr != source && chr.gmLevel() >= source.gmLevel());
     }
 
+    /**
+     * 向地图上满足条件的玩家广播数据包
+     *
+     * @param packet    要广播的数据包
+     * @param chrFilter 玩家过滤条件
+     */
     private void broadcastPacket(Packet packet, Predicate<Character> chrFilter) {
         chrRLock.lock();
         try {
@@ -354,14 +405,29 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 切换掉落开关状态
+     */
     public void toggleDrops() {
         this.dropsOn = !dropsOn;
     }
 
+    /**
+     * 获取地图对象同步的范围距离（平方值）
+     *
+     * @return 距离平方值
+     */
     private static double getRangedDistance() {
         return GameConfig.getServerBoolean("use_max_range") ? Double.POSITIVE_INFINITY : 722500;
     }
 
+    /**
+     * 获取指定矩形区域内的地图对象
+     *
+     * @param box   矩形区域
+     * @param types 对象类型列表
+     * @return 符合条件的地图对象列表
+     */
     public List<MapObject> getMapObjectsInRect(Rectangle box, List<MapObjectType> types) {
         objectRLock.lock();
         final List<MapObject> ret = new LinkedList<>();
@@ -379,18 +445,38 @@ public class MapleMap {
         return ret;
     }
 
+    /**
+     * 获取地图ID
+     *
+     * @return 地图ID
+     */
     public int getId() {
         return mapid;
     }
 
+    /**
+     * 获取所属频道服务器
+     *
+     * @return 频道服务器
+     */
     public Channel getChannelServer() {
         return Server.getInstance().getWorld(world).getChannel(channel);
     }
 
+    /**
+     * 获取所属世界服务器
+     *
+     * @return 世界服务器
+     */
     public World getWorldServer() {
         return Server.getInstance().getWorld(world);
     }
 
+    /**
+     * 获取返回地图
+     *
+     * @return 返回地图实例
+     */
     public MapleMap getReturnMap() {
         if (returnMapId == MapId.NONE) {
             return this;
@@ -398,22 +484,47 @@ public class MapleMap {
         return getChannelServer().getMapFactory().getMap(returnMapId);
     }
 
+    /**
+     * 获取返回地图ID
+     *
+     * @return 返回地图ID
+     */
     public int getReturnMapId() {
         return returnMapId;
     }
 
+    /**
+     * 获取强制返回地图
+     *
+     * @return 强制返回地图实例
+     */
     public MapleMap getForcedReturnMap() {
         return getChannelServer().getMapFactory().getMap(forcedReturnMap);
     }
 
+    /**
+     * 获取强制返回地图ID
+     *
+     * @return 强制返回地图ID
+     */
     public int getForcedReturnId() {
         return forcedReturnMap;
     }
 
+    /**
+     * 设置强制返回地图
+     *
+     * @param map 地图ID
+     */
     public void setForcedReturnMap(int map) {
         this.forcedReturnMap = map;
     }
 
+    /**
+     * 获取地图时间限制（秒）
+     *
+     * @return 时间限制
+     */
     public int getTimeLimit() {
         return timeLimit;
     }
@@ -422,10 +533,18 @@ public class MapleMap {
         this.timeLimit = timeLimit;
     }
 
+    /**
+     * 获取剩余时间（秒）
+     *
+     * @return 剩余时间
+     */
     public int getTimeLeft() {
         return (int) ((mapTimer - System.currentTimeMillis()) / 1000);
     }
 
+    /**
+     * 设置所有反应堆状态为激活状态
+     */
     public void setReactorState() {
         for (MapObject o : getMapObjects()) {
             if (o.getType() == MapObjectType.REACTOR) {
@@ -443,6 +562,12 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 限制指定ID的反应堆数量
+     *
+     * @param rid 反应堆ID
+     * @param num 最大数量
+     */
     public final void limitReactor(final int rid, final int num) {
         List<Reactor> toDestroy = new ArrayList<>();
         Map<Integer, Integer> contained = new LinkedHashMap<>();
@@ -465,6 +590,13 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 检查所有指定ID的反应堆是否都处于指定状态
+     *
+     * @param reactorId 反应堆ID
+     * @param state     状态
+     * @return 如果所有反应堆都处于指定状态返回true
+     */
     public boolean isAllReactorState(final int reactorId, final int state) {
         for (MapObject mo : getReactors()) {
             Reactor r = (Reactor) mo;
@@ -2085,6 +2217,9 @@ public class MapleMap {
         }
 
         monster.changeDifficulty(difficulty, isPq);
+
+        // 应用BOSS属性倍率配置（HP/EXP/伤害）
+        BossConfigManager.applyBossConfig(monster);
 
         monster.setMap(this);
         if (getEventInstance() != null) {
@@ -3757,6 +3892,40 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 设置所有刷怪点的重生速率倍率（轮回石碑加速用）。
+     *
+     * @param multiplier 倍率（0.1~1.0），例如 0.3 表示重生时间缩短到原来的30%
+     * @return 旧的倍率值，用于后续 applyRespawnReduction
+     */
+    public float setRespawnAcceleration(float multiplier) {
+        float oldMultiplier = 1.0f;
+        List<SpawnPoint> spawns = getMonsterSpawn();
+        synchronized (monsterSpawn) {
+            if (!spawns.isEmpty()) {
+                oldMultiplier = spawns.get(0).getRespawnRateMultiplier();
+            }
+            for (SpawnPoint sp : spawns) {
+                sp.setRespawnRateMultiplier(multiplier);
+                sp.applyRespawnReduction(oldMultiplier);
+            }
+        }
+        return oldMultiplier;
+    }
+
+    /**
+     * 获取当前刷怪倍率（0.1~1.0，1.0=正常速度）
+     */
+    public float getRespawnAcceleration() {
+        List<SpawnPoint> spawns = getMonsterSpawn();
+        synchronized (monsterSpawn) {
+            if (spawns.isEmpty()) {
+                return 1.0f;
+            }
+            return spawns.get(0).getRespawnRateMultiplier();
+        }
+    }
+
     public void setAllowSpawnPointInBox(boolean allow, Rectangle box) {
         for (SpawnPoint sp : getMonsterSpawn()) {
             if (box.contains(sp.getPosition())) {
@@ -3811,6 +3980,11 @@ public class MapleMap {
     public void respawn() {
         if (!allowSummons) {
             return;
+        }
+
+        // 检查轮回石碑是否过期（兜底机制，防止定时器未触发）
+        if (samsaraExpireTime > 0 && System.currentTimeMillis() > samsaraExpireTime) {
+            removeSamsaraStoneNpc();
         }
 
         int numPlayers;
@@ -4225,6 +4399,104 @@ public class MapleMap {
     public short getMobInterval() {
         return mobInterval;
     }
+
+    // ==================== 轮回石碑（Samsara Stone）====================
+
+    /**
+     * 在地图上生成轮回石碑NPC，启动怪物刷新加速，并注册自动消失定时器。
+     *
+     * @param owner            石碑所有者
+     * @param npcId            NPC模板ID
+     * @param durationMinutes  持续时间（分钟）
+     * @param accelerationRate 刷怪加速倍率（如 0.3f = 30%原始重生时间）
+     */
+    public void spawnSamsaraStoneNpc(Character owner, int npcId, int durationMinutes, float accelerationRate) {
+        // 先移除旧的轮回石碑（如果存在）
+        removeSamsaraStoneNpc();
+
+        // 记录状态（NPC可能不存在，但加速效果仍然生效）
+        this.samsaraOwner = owner;
+        this.samsaraExpireTime = System.currentTimeMillis() + (long) durationMinutes * 60 * 1000;
+
+        // 创建并放置视觉NPC（如果WZ中存在该NPC ID）
+        NPC npc = LifeFactory.getNPC(npcId);
+        if (npc != null) {
+            Point pos = owner.getPosition();
+            npc.setPosition(new Point(pos));
+            npc.setCy(pos.y);
+            npc.setRx0(pos.x + 50);
+            npc.setRx1(pos.x - 50);
+            Foothold fh = getFootholds().findBelow(pos);
+            if (fh != null) {
+                npc.setFh(fh.getId());
+            }
+            addMapObject(npc);
+            broadcastMessage(PacketCreator.spawnNPC(npc));
+            this.samsaraStoneNpc = npc;
+        }
+
+        // 启动刷怪加速
+        setRespawnAcceleration(accelerationRate);
+
+        // 注册自动消失定时器
+        this.samsaraRemoveTask = TimerManager.getInstance().schedule(() -> {
+            removeSamsaraStoneNpc();
+        }, durationMinutes * 60 * 1000);
+
+        // 广播提示消息
+        dropMessage(6, "[" + owner.getName() + "] 召唤了轮回石碑，怪物刷新速度提升！持续 " + durationMinutes + " 分钟。");
+    }
+
+    /**
+     * 移除轮回石碑NPC，恢复正常刷怪速度，取消定时器。
+     */
+    public void removeSamsaraStoneNpc() {
+        // 检查是否有活跃的轮回石碑
+        if (samsaraExpireTime == 0 && samsaraStoneNpc == null) {
+            return;
+        }
+
+        // 取消定时器
+        if (samsaraRemoveTask != null) {
+            samsaraRemoveTask.cancel(false);
+            samsaraRemoveTask = null;
+        }
+
+        // 移除视觉NPC
+        if (samsaraStoneNpc != null) {
+            broadcastMessage(PacketCreator.removeNPCController(samsaraStoneNpc.getObjectId()));
+            broadcastMessage(PacketCreator.removeNPC(samsaraStoneNpc.getObjectId()));
+            removeMapObject(samsaraStoneNpc.getObjectId());
+            samsaraStoneNpc = null;
+        }
+
+        // 发送提示消息
+        dropMessage(6, "轮回石碑的效果消失了，怪物刷新速度恢复正常。");
+
+        // 恢复刷怪速度
+        setRespawnAcceleration(1.0f);
+
+        // 清理状态
+        samsaraOwner = null;
+        samsaraExpireTime = 0;
+    }
+
+    /** 当前地图是否有活跃的轮回石碑效果 */
+    public boolean hasSamsaraStone() {
+        return samsaraExpireTime > 0 && System.currentTimeMillis() < samsaraExpireTime;
+    }
+
+    /** 获取轮回石碑所有者 */
+    public Character getSamsaraOwner() {
+        return samsaraOwner;
+    }
+
+    /** 获取轮回石碑过期时间戳 */
+    public long getSamsaraExpireTime() {
+        return samsaraExpireTime;
+    }
+
+    // ==================== 轮回石碑 END ====================
 
     public void clearMapObjects() {
         clearDrops();
@@ -4641,6 +4913,14 @@ public class MapleMap {
         }
 
         clearMapObjects();
+
+        // 清理轮回石碑定时器，防止内存泄漏
+        if (samsaraRemoveTask != null) {
+            samsaraRemoveTask.cancel(false);
+            samsaraRemoveTask = null;
+        }
+        samsaraStoneNpc = null;
+        samsaraOwner = null;
 
         event = null;
         footholds = null;

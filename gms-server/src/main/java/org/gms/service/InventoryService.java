@@ -32,18 +32,31 @@ import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D
 import static org.gms.dao.entity.table.PetignoresDOTableDef.PETIGNORES_D_O;
 
 /**
- * 【业务服务】InventoryService：封装 `service` 相关应用逻辑与数据协作。
+ * 【业务服务】InventoryService：背包服务类，负责玩家背包数据的管理。
+ * 
+ * <p>提供背包物品的查询、修改、删除功能，支持在线玩家和离线玩家的背包操作。
+ * 支持物品背包和装备背包的管理，包括宠物、戒指等特殊物品。</p>
  */
 @Transactional
 @Service
 @AllArgsConstructor
 public class InventoryService {
+    /** 物品背包数据访问接口 */
     private final InventoryitemsMapper inventoryitemsMapper;
+    /** 装备背包数据访问接口 */
     private final InventoryequipmentMapper inventoryequipmentMapper;
+    /** 戒指数据访问接口 */
     private final RingsMapper ringsMapper;
+    /** 宠物数据访问接口 */
     private final PetsMapper petsMapper;
+    /** 宠物技能忽略数据访问接口 */
     private final PetignoresMapper petignoresMapper;
 
+    /**
+     * 获取背包类型列表。
+     * 
+     * @return 背包类型列表
+     */
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
         for (InventoryType value : InventoryType.values()) {
@@ -414,4 +427,3 @@ public class InventoryService {
         return inventoryItemsDO;
     }
 }
-

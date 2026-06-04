@@ -17,8 +17,8 @@ var DataProviderFactory = Java.type('org.gms.provider.DataProviderFactory');
 var WZFiles = Java.type('org.gms.provider.wz.WZFiles');
 var DataTool = Java.type('org.gms.provider.DataTool');
 
-// T键的键码 (标准GMS v083键盘: Q=29, W=30, E=31, R=32, T=33)
-var T_KEY = 33;
+// T键的键码 (标准GMS v083键盘: Q=29, W=30, E=31, R=32, T=20)
+var T_KEY = 20;
 
 var status = -1;
 var selectedWorld = -1;
@@ -304,7 +304,7 @@ function action(mode, type, selection) {
     // status 3: 选择分类中的具体职业
     // ========================================
     } else if (status === 3) {
-        if (selection === 99999) { status = 1; action(1, 0, 0); return; }
+        if (selection === 99999) { status = -1; action(1, 0, 0); return; }
 
         selectedCategory = selection;
         var cat = jobCategories[selectedCategory];
@@ -326,7 +326,7 @@ function action(mode, type, selection) {
     // status 4: 展示该职业的所有技能
     // ========================================
     } else if (status === 4) {
-        if (selection === 99999) { status = 2; action(1, 0, 0); return; }
+        if (selection === 99999) { status = 2; showPlayerDetailAndCategories(); return; }
 
         var cat = jobCategories[selectedCategory];
         if (selection >= cat.jobs.length) { cm.dispose(); return; }
@@ -358,7 +358,7 @@ function action(mode, type, selection) {
     // status 5: 确认并给予技能
     // ========================================
     } else if (status === 5) {
-        if (selection === 99999) { status = 3; action(1, 0, 0); return; }
+        if (selection === 99999) { status = 3; showJobSelection(); return; }
 
         if (selection >= skillList.length) { cm.dispose(); return; }
 
@@ -401,13 +401,30 @@ function action(mode, type, selection) {
 }
 
 // ==================== 返回处理 ====================
+// 注意：不能直接调用 action(1, 0, 0)，因为 selection=0 会被目标页面的 handler 当作菜单第0项选中
+// 必须直接设置 status 并调用对应的渲染函数，让用户重新选择
 function handleBack() {
-    // status: 0(频道)→1(玩家)→2(详情)→3(职业列表)→4(技能列表)→5(确认)
-    if (status >= 2) {
-        status -= 2;
-        action(1, 0, 0);
-    } else {
+    if (status <= 0) {
         cm.dispose();
+        return;
+    }
+    if (status <= 2) {
+        // 频道选择/玩家列表/玩家详情 → 都回到频道选择（status 0）重新开始
+        // 避免 selection=0 被误当作频道或玩家选中
+        status = -1;
+        action(1, 0, 0);
+    } else if (status === 3) {
+        // 从具体职业选择回到职业分类列表
+        status = 2;
+        showPlayerDetailAndCategories();
+    } else if (status === 4) {
+        // 从技能列表回到职业选择
+        status = 3;
+        showJobSelection();
+    } else if (status === 5) {
+        // 从确认页回到技能列表
+        status = 4;
+        showSkillList();
     }
 }
 
@@ -453,6 +470,41 @@ function showPlayerDetailAndCategories() {
 
     text += "\r\n#d" + "".padStart(30, "——") + "#k\r\n";
     text += "#L99999##b返回玩家列表#k#l\r\n";
+    cm.sendSimple(text);
+}
+
+// ==================== 显示职业选择列表（同一分类下的职业） ====================
+function showJobSelection() {
+    var cat = jobCategories[selectedCategory];
+
+    var text = "#e#b=== 选择职业 ===#k#n\r\n\r\n";
+    text += "目标玩家：#b" + selectedPlayerName + "#k\r\n";
+    text += "#d" + "".padStart(30, "——") + "#k\r\n\r\n";
+    text += "【#b" + cat.name + "#k】中的职业：\r\n\r\n";
+
+    for (var i = 0; i < cat.jobs.length; i++) {
+        text += "#L" + i + "##b" + cat.jobs[i].name + "#k (ID: " + cat.jobs[i].id + ")#l\r\n";
+    }
+
+    text += "\r\n#d" + "".padStart(30, "——") + "#k\r\n";
+    text += "#L99999##b返回上级#k#l\r\n";
+    cm.sendSimple(text);
+}
+
+// ==================== 显示技能列表 ====================
+function showSkillList() {
+    var text = "#e#b=== " + getJobName(selectedJobId) + " (ID:" + selectedJobId + ") 的技能列表 ===#k#n\r\n\r\n";
+    text += "目标玩家：#b" + selectedPlayerName + "#k\r\n";
+    text += "共 #b" + skillList.length + "#k 个技能\r\n";
+    text += "#d" + "".padStart(30, "——") + "#k\r\n\r\n";
+
+    for (var i = 0; i < skillList.length; i++) {
+        var sk = skillList[i];
+        text += "#L" + i + "##b" + sk.name + "#k (ID:" + sk.id + ") 最高等级:" + sk.maxLevel + "#l\r\n";
+    }
+
+    text += "\r\n#d" + "".padStart(30, "——") + "#k\r\n";
+    text += "#L99999##b返回上级#k#l\r\n";
     cm.sendSimple(text);
 }
 

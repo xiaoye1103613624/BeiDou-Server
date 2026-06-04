@@ -27,16 +27,30 @@ import lombok.Data;
 import org.gms.client.Client;
 
 /**
- * 【GM/玩家指令】Command：聊天或控制台命令实现。
+ * 【GM/玩家指令】Command：聊天或控制台命令实现基类。
+ * <p>所有命令都继承此类，实现 execute 方法处理具体逻辑</p>
  */
 @Data
 public abstract class Command {
 
+    /** 命令所需GM等级（0=普通玩家可用） */
     protected int rank;
+    /** 命令描述（用于帮助信息） */
     protected String description;
 
+    /**
+     * 执行命令
+     * @param client 客户端
+     * @param params 命令参数
+     */
     public abstract void execute(Client client, String[] params);
 
+    /**
+     * 从指定索引开始拼接字符串数组
+     * @param arr 字符串数组
+     * @param start 起始索引
+     * @return 拼接后的字符串
+     */
     protected String joinStringFrom(String[] arr, int start) {
         StringBuilder builder = new StringBuilder();
         for (int i = start; i < arr.length; i++) {
@@ -48,4 +62,3 @@ public abstract class Command {
         return builder.toString();
     }
 }
-

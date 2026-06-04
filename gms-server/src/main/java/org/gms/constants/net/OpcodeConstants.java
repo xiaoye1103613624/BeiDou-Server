@@ -27,16 +27,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 【类型】OpcodeConstants（class），包 `org.gms.constants.net`。
- *
- * 操作码常量类，管理发送和接收操作码的名称映射，用于网络协议调试和日志记录。
+ * 操作码常量类
+ * <p>管理发送和接收操作码的名称映射，用于网络协议调试和日志记录</p>
  *
  * @author 萧曵
  */
 public class OpcodeConstants {
+    /** 发送操作码名称映射 */
     public static Map<Integer, String> sendOpcodeNames = new HashMap<>();
+    /** 接收操作码名称映射 */
     public static Map<Integer, String> recvOpcodeNames = new HashMap<>();
 
+    /**
+     * 根据服务器版本生成操作码名称映射
+     */
     public static void generateOpcodeNames() {
         switch (ServerConstants.VERSION) {
             case 83  -> init(SendOpcode.values(), RecvOpcode.values());
@@ -44,6 +48,11 @@ public class OpcodeConstants {
         }
     }
 
+    /**
+     * 初始化操作码名称映射
+     * @param sendValues 发送操作码数组
+     * @param recvValues 接收操作码数组
+     */
     public static void init(Opcode[] sendValues, Opcode[] recvValues) {
         for (Opcode op : sendValues) {
             sendOpcodeNames.put(op.getValue(), op.getName());

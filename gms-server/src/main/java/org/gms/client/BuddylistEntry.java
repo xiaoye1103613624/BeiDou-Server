@@ -23,19 +23,27 @@ package org.gms.client;
 
 /**
  * 【类型】BuddylistEntry（class），包 `org.gms.client`。
+ * <p>好友列表条目数据类，记录单个好友的详细信息</p>
  */
 public class BuddylistEntry {
+    /** 好友角色名称 */
     private final String name;
+    /** 好友分组名称 */
     private String group;
+    /** 好友角色ID */
     private final int cid;
+    /** 所在频道（-1表示离线） */
     private int channel;
+    /** 是否可见（对方是否屏蔽了自己） */
     private boolean visible;
 
     /**
-     * @param name
-     * @param characterId
-     * @param channel     should be -1 if the buddy is offline
-     * @param visible
+     * 构造好友条目
+     * @param name 好友角色名称
+     * @param group 好友分组
+     * @param characterId 好友角色ID
+     * @param channel 所在频道（离线时为-1）
+     * @param visible 是否可见
      */
     public BuddylistEntry(String name, String group, int characterId, int channel, boolean visible) {
         this.name = name;
@@ -46,16 +54,25 @@ public class BuddylistEntry {
     }
 
     /**
-     * @return the channel the character is on. If the character is offline returns -1.
+     * 获取好友所在频道
+     * @return 频道号，离线返回-1
      */
     public int getChannel() {
         return channel;
     }
 
+    /**
+     * 设置好友所在频道
+     * @param channel 频道号
+     */
     public void setChannel(int channel) {
         this.channel = channel;
     }
 
+    /**
+     * 判断好友是否在线
+     * @return true=在线, false=离线
+     */
     public boolean isOnline() {
         return channel >= 0;
     }
@@ -80,6 +97,10 @@ public class BuddylistEntry {
         return visible;
     }
 
+    /**
+     * 修改好友分组
+     * @param group 新分组名称
+     */
     public void changeGroup(String group) {
         this.group = group;
     }

@@ -29,12 +29,22 @@ package org.gms.server.life;
  * @author Danny (Leifde)
  */
 public class MobAttackInfo {
+    /** 是否为致死攻击（无视防御直接击杀） */
     private boolean isDeadlyAttack;
+    /** MP燃烧量（攻击时消耗目标MP） */
     private int mpBurn;
+    /** 异常状态技能ID */
     private int diseaseSkill;
+    /** 异常状态技能等级 */
     private int diseaseLevel;
+    /** 攻击消耗的MP */
     private int mpCon;
 
+    /**
+     * 构造怪物攻击信息
+     * @param mobId    怪物ID
+     * @param attackId 攻击动作ID
+     */
     public MobAttackInfo(int mobId, int attackId) {
     }
 

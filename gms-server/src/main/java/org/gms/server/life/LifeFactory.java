@@ -46,14 +46,26 @@ import java.util.Set;
  */
 public class LifeFactory {
     private static final Logger log = LoggerFactory.getLogger(LifeFactory.class);
+    /** MOB.wz 数据提供器 */
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
+    /** String.wz 数据提供器 */
     private final static DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
+    /** 怪物字符串数据 */
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
+    /** NPC字符串数据 */
     private static final Data npcStringData = stringDataWZ.getData("Npc.img");
+    /** 怪物属性缓存（怪物ID -> MonsterStats） */
     private static final Map<Integer, MonsterStats> monsterStats = new HashMap<>();
+    /** 需要显示血条的BOSS怪物ID集合 */
     private static final Set<Integer> hpbarBosses = getHpBarBosses();
+    /** NPC名称缓存（NPC ID -> 名称） */
     private static final Map<Integer, String> npcNames = new HashMap<>();
 
+    /**
+     * 获取需要显示血条的BOSS怪物ID集合
+     *
+     * @return BOSS怪物ID集合
+     */
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
 
@@ -65,6 +77,13 @@ public class LifeFactory {
         return ret;
     }
 
+    /**
+     * 根据类型获取怪物或NPC实例
+     *
+     * @param id   实体ID
+     * @param type 类型（"n"表示NPC，"m"表示怪物）
+     * @return 实体实例
+     */
     public static AbstractLoadedLife getLife(int id, String type) {
         if (type.equalsIgnoreCase("n")) {
             return getNPC(id);
@@ -76,10 +95,17 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 怪物攻击信息持有者（内部类）
+     */
     private static class MobAttackInfoHolder {
+        /** 攻击位置 */
         protected int attackPos;
+        /** MP消耗 */
         protected int mpCon;
+        /** 冷却时间 */
         protected int coolTime;
+        /** 动画时间 */
         protected int animationTime;
 
         protected MobAttackInfoHolder(int attackPos, int mpCon, int coolTime, int animationTime) {
@@ -90,6 +116,12 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 设置怪物攻击信息到全局提供者
+     *
+     * @param mid        怪物ID
+     * @param attackInfos 攻击信息列表
+     */
     private static void setMonsterAttackInfo(int mid, List<MobAttackInfoHolder> attackInfos) {
         if (!attackInfos.isEmpty()) {
             MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
@@ -101,6 +133,12 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 从WZ文件解析怪物属性
+     *
+     * @param mid 怪物ID
+     * @return 怪物属性和攻击信息列表
+     */
     private static Pair<MonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
         Data monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
         if (monsterData == null) {
@@ -267,6 +305,12 @@ public class LifeFactory {
         return new Pair<>(stats, attackInfos);
     }
 
+    /**
+     * 获取怪物实例（带缓存）
+     *
+     * @param mid 怪物ID
+     * @return 怪物实例
+     */
     public static Monster getMonster(int mid) {
         try {
             MonsterStats stats = monsterStats.get(mid);
@@ -288,6 +332,12 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 获取怪物等级
+     *
+     * @param mid 怪物ID
+     * @return 怪物等级，-1表示未找到
+     */
     public static int getMonsterLevel(int mid) {
         try {
             MonsterStats stats = monsterStats.get(mid);
@@ -308,12 +358,24 @@ public class LifeFactory {
         return -1;
     }
 
+    /**
+     * 解析元素属性字符串
+     *
+     * @param stats     怪物属性
+     * @param elemAttr  元素属性字符串
+     */
     private static void decodeElementalString(MonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
             stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.parseInt(String.valueOf(elemAttr.charAt(i + 1)))));
         }
     }
 
+    /**
+     * 获取NPC实例（带缓存）
+     *
+     * @param nid NPC ID
+     * @return NPC实例
+     */
     public static NPC getNPC(int nid) {
         String name = npcNames.get(nid);
         if (RequireUtil.isEmpty(name)) {
@@ -323,18 +385,35 @@ public class LifeFactory {
         return new NPC(nid, new NPCStats(name));
     }
 
+    /**
+     * 获取NPC名称
+     *
+     * @param nid NPC ID
+     * @return NPC名称
+     */
     public static String getNPCName(int nid) {
         return getNPC(nid).getName();
     }
 
+    /**
+     * 获取NPC默认对话
+     *
+     * @param nid NPC ID
+     * @return 默认对话文本
+     */
     public static String getNPCDefaultTalk(int nid) {
         return DataTool.getString(nid + "/d0", npcStringData, "(...)");
     }
 
+    /**
+     * 驱逐信息类（怪物将玩家传送走的信息）
+     */
     public static class BanishInfo {
-
+        /** 传送目标地图 */
         private final int map;
+        /** 传送目标传送门 */
         private final String portal;
+        /** 驱逐消息 */
         private final String msg;
 
         public BanishInfo(String msg, int map, String portal) {
@@ -356,10 +435,15 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 掉落物品类（怪物被攻击时掉落的物品）
+     */
     public static class loseItem {
-
+        /** 物品ID */
         private final int id;
+        /** 掉落概率 */
         private final byte chance;
+        /** X坐标偏移 */
         private final byte x;
 
         public loseItem(int id, byte chance, byte x) {
@@ -381,10 +465,15 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 自毁信息类（怪物自爆相关信息）
+     */
     public static class selfDestruction {
-
+        /** 自毁动作类型 */
         private final byte action;
+        /** 自毁后移除延迟 */
         private final int removeAfter;
+        /** 触发自毁的HP阈值 */
         private final int hp;
 
         public selfDestruction(byte action, int removeAfter, int hp) {

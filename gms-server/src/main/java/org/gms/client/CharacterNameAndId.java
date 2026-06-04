@@ -23,11 +23,19 @@ package org.gms.client;
 
 /**
  * 【类型】CharacterNameAndId（class），包 `org.gms.client`。
+ * <p>角色名称与ID的轻量级数据容器，用于快速传递角色基本信息</p>
  */
 public class CharacterNameAndId {
+    /** 角色ID */
     private final int id;
+    /** 角色名称 */
     private final String name;
 
+    /**
+     * 构造角色名称ID对
+     * @param id 角色ID
+     * @param name 角色名称
+     */
     public CharacterNameAndId(int id, String name) {
         super();
         this.id = id;

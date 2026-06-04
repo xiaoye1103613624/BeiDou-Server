@@ -31,7 +31,9 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/server")
 public class ServerController {
+    /** Spring应用上下文 */
     private final ApplicationContext applicationContext;
+    /** 服务器服务 */
     private final ServerService serverService;
 
     @Tag(name = "/server/" + ApiConstant.LATEST)

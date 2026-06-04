@@ -28,6 +28,7 @@ import java.util.List;
 @RequestMapping("/cashShop")
 @AllArgsConstructor
 public class CashShopController {
+    /** 点券商城服务 */
     private final CashShopService cashShopService;
 
     @Tag(name = "/cashShop/" + ApiConstant.LATEST)

@@ -34,6 +34,7 @@ import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.GameConfig;
+import org.gms.config.TownConfigManager;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
@@ -1417,6 +1418,13 @@ public class Character extends AbstractCharacterObject {
         } else {
             warpMap = getMap(map, true);
             if (warpMap == null) return; //判断地图不存在则直接返回并发送提示消息。
+        }
+
+        // 城镇关闭检查：如果目标地图为城镇且已关闭，重定向至射手村
+        if (warpMap.isTown() && TownConfigManager.isTownClosed(map) && map != MapId.HENESYS) {
+            warpMap = getMap(MapId.HENESYS, true);
+            if (warpMap == null) return;
+            dropMessage(5, "该城镇暂未开放，您已被传送至射手村。");
         }
 
         Portal portal = switch (pt) {
@@ -8822,6 +8830,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 启动任务过期检查任务。
+     * 
+     * <p>当存在待过期任务时，注册一个定时任务每隔10秒检查一次任务过期情况。</p>
+     */
     public void questExpirationTask() {
         evtLock.lock();
         try {
@@ -8835,24 +8848,33 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 执行任务过期检查。
+     * 
+     * <p>遍历所有待过期任务，检查是否已到过期时间，过期的任务会被标记为过期并从列表中移除。
+     * 如果所有任务都已过期，则取消定时任务。</p>
+     */
     private void runQuestExpireTask() {
         evtLock.lock();
         try {
             long timeNow = Server.getInstance().getCurrentTime();
             List<Quest> expireList = new LinkedList<>();
 
+            // 收集已过期的任务
             for (Entry<Quest, Long> qe : questExpirations.entrySet()) {
                 if (qe.getValue() <= timeNow) {
                     expireList.add(qe.getKey());
                 }
             }
 
+            // 处理过期任务
             if (!expireList.isEmpty()) {
                 for (Quest quest : expireList) {
                     quest.expireQuest(this);
                     questExpirations.remove(quest);
                 }
 
+                // 如果没有待过期任务了，取消定时任务
                 if (questExpirations.isEmpty()) {
                     questExpireTask.cancel(false);
                     questExpireTask = null;
@@ -8863,6 +8885,14 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 注册任务过期时间。
+     * 
+     * <p>将任务添加到过期检查列表中，并启动定时检查任务（如果尚未启动）。</p>
+     * 
+     * @param quest 任务对象
+     * @param time 过期时间（毫秒）
+     */
     private void registerQuestExpire(Quest quest, long time) {
         evtLock.lock();
         try {
@@ -8876,11 +8906,28 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 设置任务时间限制。
+     * 
+     * <p>为任务设置剩余时间，并向客户端发送时间限制通知包。</p>
+     * 
+     * @param quest 任务对象
+     * @param seconds 剩余秒数
+     */
     public void questTimeLimit(final Quest quest, int seconds) {
         registerQuestExpire(quest, SECONDS.toMillis(seconds));
         sendPacket(PacketCreator.addQuestTimeLimit(quest.getId(), (int) SECONDS.toMillis(seconds)));
     }
 
+    /**
+     * 设置任务时间限制（使用绝对时间戳）。
+     * 
+     * <p>根据指定的过期时间戳计算剩余时间，如果已过期则立即触发任务过期，
+     * 否则注册到过期检查列表中。</p>
+     * 
+     * @param quest 任务对象
+     * @param expires 过期时间戳（毫秒）
+     */
     public void questTimeLimit2(final Quest quest, long expires) {
         long timeLeft = expires - System.currentTimeMillis();
 
@@ -8891,64 +8938,127 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 更新单个属性值。
+     * 
+     * @param stat 属性类型
+     * @param newval 新的属性值
+     */
     public void updateSingleStat(Stat stat, int newval) {
         updateSingleStat(stat, newval, false);
     }
 
+    /**
+     * 更新单个属性值（内部方法）。
+     * 
+     * @param stat 属性类型
+     * @param newval 新的属性值
+     * @param itemReaction 是否为物品反应（影响显示效果）
+     */
     private void updateSingleStat(Stat stat, int newval, boolean itemReaction) {
         sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Integer.valueOf(newval))), itemReaction, this));
     }
 
+    /**
+     * 发送数据包到客户端。
+     * 
+     * @param packet 要发送的数据包
+     */
     public void sendPacket(Packet packet) {
         if (client != null) {
             client.sendPacket(packet);
         }
     }
 
+    /**
+     * 获取对象ID（实现MapObject接口）。
+     * 
+     * @return 角色ID
+     */
     @Override
     public int getObjectId() {
         return getId();
     }
 
+    /**
+     * 获取对象类型（实现MapObject接口）。
+     * 
+     * @return 返回PLAYER类型
+     */
     @Override
     public MapObjectType getType() {
         return MapObjectType.PLAYER;
     }
 
+    /**
+     * 发送角色销毁数据给指定客户端（实现MapObject接口）。
+     * 
+     * @param client 目标客户端
+     */
     @Override
     public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.removePlayerFromMap(this.getObjectId()));
     }
 
+    /**
+     * 发送角色生成数据给指定客户端（实现MapObject接口）。
+     * 
+     * <p>根据角色隐藏状态和观察者的GM等级决定是否发送生成数据包。
+     * 如果角色处于隐藏状态但观察者GM等级>1，则仍然可见。</p>
+     * 
+     * @param client 目标客户端
+     */
     @Override
     public void sendSpawnData(Client client) {
         if (!this.isHidden() || client.getPlayer().gmLevel() > 1) {
             client.sendPacket(PacketCreator.spawnPlayerMapObject(client, this, false));
 
-            if (buffEffects.containsKey(getJobMapChair(job))) { // mustn't effLock, chrLock sendSpawnData
+            // 发送椅子技能效果（注意：此处不能使用effLock和chrLock）
+            if (buffEffects.containsKey(getJobMapChair(job))) {
                 client.sendPacket(PacketCreator.giveForeignChairSkillEffect(id));
             }
         }
 
+        // 如果角色隐藏，向其他GM广播隐身效果
         if (this.isHidden()) {
             List<Pair<BuffStat, Integer>> dsstat = Collections.singletonList(new Pair<>(BuffStat.DARKSIGHT, 0));
             getMap().broadcastGMMessage(this, PacketCreator.giveForeignBuff(getId(), dsstat), false);
         }
     }
 
+    /**
+     * 设置对象ID（实现MapObject接口，角色不支持此操作）。
+     * 
+     * @param id 对象ID（未使用）
+     */
     @Override
     public void setObjectId(int id) {
     }
 
+    /**
+     * 返回角色名称（用于调试和日志）。
+     * 
+     * @return 角色名称
+     */
     @Override
     public String toString() {
         return name;
     }
 
+    /**
+     * 获取所有新年贺卡记录。
+     * 
+     * @return 新年贺卡记录集合
+     */
     public Set<NewYearCardRecord> getNewYearRecords() {
         return newyears;
     }
 
+    /**
+     * 获取已接收的新年贺卡记录。
+     * 
+     * @return 已接收的新年贺卡记录集合
+     */
     public Set<NewYearCardRecord> getReceivedNewYearRecords() {
         Set<NewYearCardRecord> received = new LinkedHashSet<>();
 
@@ -8961,6 +9071,12 @@ public class Character extends AbstractCharacterObject {
         return received;
     }
 
+    /**
+     * 根据贺卡ID获取新年贺卡记录。
+     * 
+     * @param cardid 贺卡ID
+     * @return 新年贺卡记录，如果未找到返回null
+     */
     public NewYearCardRecord getNewYearRecord(int cardid) {
         for (NewYearCardRecord nyc : newyears) {
             if (nyc.getId() == cardid) {
@@ -8971,22 +9087,51 @@ public class Character extends AbstractCharacterObject {
         return null;
     }
 
+    /**
+     * 添加新年贺卡记录。
+     * 
+     * @param newyear 新年贺卡记录
+     */
     public void addNewYearRecord(NewYearCardRecord newyear) {
         newyears.add(newyear);
     }
 
+    /**
+     * 移除新年贺卡记录。
+     * 
+     * @param newyear 新年贺卡记录
+     */
     public void removeNewYearRecord(NewYearCardRecord newyear) {
         newyears.remove(newyear);
     }
 
+    /**
+     * 设置传送门延迟时间。
+     * 
+     * <p>用于限制玩家频繁使用传送门，防止传送门滥用。</p>
+     * 
+     * @param delay 延迟时间（毫秒）
+     */
     public void portalDelay(long delay) {
         this.portaldelay = System.currentTimeMillis() + delay;
     }
 
+    /**
+     * 获取传送门延迟剩余时间。
+     * 
+     * @return 传送门延迟剩余时间（毫秒）
+     */
     public long portalDelay() {
         return portaldelay;
     }
 
+    /**
+     * 阻止指定脚本名称的传送门。
+     * 
+     * <p>用于脚本中临时禁用某些传送门，防止玩家在特定条件下使用。</p>
+     * 
+     * @param scriptName 脚本名称
+     */
     public void blockPortal(String scriptName) {
         if (!blockedPortals.contains(scriptName) && scriptName != null) {
             blockedPortals.add(scriptName);
@@ -8994,12 +9139,24 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 解除指定脚本名称的传送门阻止。
+     * 
+     * @param scriptName 脚本名称
+     */
     public void unblockPortal(String scriptName) {
         if (blockedPortals.contains(scriptName) && scriptName != null) {
             blockedPortals.remove(scriptName);
         }
     }
 
+    /**
+     * 检查是否包含指定区域信息。
+     * 
+     * @param area 区域ID
+     * @param info 信息内容
+     * @return 如果包含返回true，否则返回false
+     */
     public boolean containsAreaInfo(int area, String info) {
         short area_ = (short) area;
         if (area_info.containsKey(area_)) {
@@ -9008,26 +9165,54 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
+    /**
+     * 更新区域信息。
+     * 
+     * <p>更新区域信息并向客户端发送更新通知包。</p>
+     * 
+     * @param area 区域ID
+     * @param info 信息内容
+     */
     public void updateAreaInfo(int area, String info) {
         area_info.put((short) area, info);
         sendPacket(PacketCreator.updateAreaInfo(area, info));
     }
 
+    /**
+     * 获取所有区域信息。
+     * 
+     * @return 区域信息映射
+     */
     public Map<Short, String> getAreaInfos() {
         return area_info;
     }
 
+    /**
+     * 自动封禁玩家。
+     * 
+     * <p>GM和已被封禁的玩家不会被自动封禁。执行封禁后发送封禁提示，
+     * 5秒后断开连接，并向所有GM广播封禁消息。</p>
+     * 
+     * @param reason 封禁原因
+     */
     public void autoBan(String reason) {
-        if (this.isGM() || this.isBanned()) {  // thanks RedHat for noticing GM's being able to get banned
+        if (this.isGM() || this.isBanned()) {
             return;
         }
         this.ban(reason);
-        sendPacket(PacketCreator.sendPolice(I18nUtil.getMessage("Character.autoBan.message1")));  //发送自动封禁提示
+        sendPacket(PacketCreator.sendPolice(I18nUtil.getMessage("Character.autoBan.message1")));
         TimerManager.getInstance().schedule(() -> client.disconnect(false, false), 5000);
 
         Server.getInstance().broadcastGMMessage(this.getWorld(), PacketCreator.serverNotice(6, Character.makeMapleReadable(this.name) + " was autobanned for " + reason));
     }
 
+    /**
+     * 临时封禁账号。
+     * 
+     * @param reason 封禁原因代码
+     * @param days 封禁天数
+     * @param desc 封禁描述
+     */
     public void block(int reason, int days, String desc) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, days);
@@ -9039,14 +9224,29 @@ public class Character extends AbstractCharacterObject {
                 .build());
     }
 
+    /**
+     * 获取传送岩地图列表。
+     * 
+     * @return 传送岩保存的地图ID列表
+     */
     public List<Integer> getTrockMaps() {
         return trockmaps;
     }
 
+    /**
+     * 获取VIP传送岩地图列表。
+     * 
+     * @return VIP传送岩保存的地图ID列表
+     */
     public List<Integer> getVipTrockMaps() {
         return viptrockmaps;
     }
 
+    /**
+     * 获取传送岩已保存的数量。
+     * 
+     * @return 已保存的传送岩数量
+     */
     public int getTrockSize() {
         int ret = trockmaps.indexOf(MapId.NONE);
         if (ret == -1) {
@@ -9056,6 +9256,11 @@ public class Character extends AbstractCharacterObject {
         return ret;
     }
 
+    /**
+     * 从传送岩列表中删除指定地图。
+     * 
+     * @param map 要删除的地图ID
+     */
     public void deleteFromTrocks(int map) {
         trockmaps.remove(Integer.valueOf(map));
         while (trockmaps.size() < 10) {
@@ -9063,6 +9268,9 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 添加当前地图到传送岩列表。
+     */
     public void addTrockMap() {
         int index = trockmaps.indexOf(MapId.NONE);
         if (index != -1) {
@@ -9070,11 +9278,22 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 检查指定地图是否在传送岩列表中。
+     * 
+     * @param id 地图ID
+     * @return 如果存在返回true，否则返回false
+     */
     public boolean isTrockMap(int id) {
         int index = trockmaps.indexOf(id);
         return index != -1;
     }
 
+    /**
+     * 获取VIP传送岩已保存的数量。
+     * 
+     * @return 已保存的VIP传送岩数量
+     */
     public int getVipTrockSize() {
         int ret = viptrockmaps.indexOf(MapId.NONE);
 
@@ -9085,6 +9304,11 @@ public class Character extends AbstractCharacterObject {
         return ret;
     }
 
+    /**
+     * 从VIP传送岩列表中删除指定地图。
+     * 
+     * @param map 要删除的地图ID
+     */
     public void deleteFromVipTrocks(int map) {
         viptrockmaps.remove(Integer.valueOf(map));
         while (viptrockmaps.size() < 10) {
@@ -9092,6 +9316,9 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 添加当前地图到VIP传送岩列表。
+     */
     public void addVipTrockMap() {
         int index = viptrockmaps.indexOf(MapId.NONE);
         if (index != -1) {
@@ -9099,19 +9326,42 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 检查指定地图是否在VIP传送岩列表中。
+     * 
+     * @param id 地图ID
+     * @return 如果存在返回true，否则返回false
+     */
     public boolean isVipTrockMap(int id) {
         int index = viptrockmaps.indexOf(id);
         return index != -1;
     }
 
+    /**
+     * 获取自动封禁管理器。
+     * 
+     * @return 自动封禁管理器
+     */
     public AutobanManager getAutoBanManager() {
         return autoBan;
     }
 
+    /**
+     * 设置自动封禁管理器。
+     * 
+     * @param autoBan 自动封禁管理器
+     */
     public void setAutoBanManager(AutobanManager autoBan) {
         this.autoBan = autoBan;
     }
 
+    /**
+     * 装备物品时的特殊处理。
+     * 
+     * <p>处理特殊装备效果，如精灵吊坠、金币磁铁、道具袋等。</p>
+     * 
+     * @param equip 装备物品
+     */
     public void equippedItem(Equip equip) {
         int itemid = equip.getItemId();
 
@@ -9126,6 +9376,13 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 卸下装备时的特殊处理。
+     * 
+     * <p>取消特殊装备效果，如精灵吊坠、金币磁铁、道具袋等。</p>
+     * 
+     * @param equip 装备物品
+     */
     public void unequippedItem(Equip equip) {
         int itemid = equip.getItemId();
 
@@ -9140,20 +9397,29 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void equipPendantOfSpirit() {   //精灵吊坠装备时长经验计算
+    /**
+     * 装备精灵吊坠。
+     * 
+     * <p>启动计时任务，每小时增加吊坠经验，最多增加到3小时（30%经验加成）。</p>
+     */
+    private void equipPendantOfSpirit() {
         if (pendantOfSpirit == null) {
             pendantOfSpirit = TimerManager.getInstance().register(() -> {
                 if (pendantExp < 3) {
                     pendantExp++;
-                    //用于准确提示装备1小时内还是装备经过几小时
                     message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp == 3 ? 2 : pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
-            }, 3600000); //1 hour
+            }, 3600000);
         }
     }
 
+    /**
+     * 卸下精灵吊坠。
+     * 
+     * <p>取消计时任务并重置吊坠经验。</p>
+     */
     private void unequipPendantOfSpirit() {
         if (pendantOfSpirit != null) {
             pendantOfSpirit.cancel(false);
@@ -9162,6 +9428,13 @@ public class Character extends AbstractCharacterObject {
         pendantExp = 0;
     }
 
+    /**
+     * 获取可升级装备列表。
+     * 
+     * <p>根据服务器配置决定是否包含现金装备。</p>
+     * 
+     * @return 可升级装备集合
+     */
     private Collection<Item> getUpgradeableEquipList() {
         Collection<Item> fullList = getInventory(InventoryType.EQUIPPED).list();
         if (GameConfig.getServerBoolean("use_equipment_level_up_cash")) {
@@ -9179,8 +9452,15 @@ public class Character extends AbstractCharacterObject {
         return eqpList;
     }
 
+    /**
+     * 增加装备经验。
+     * 
+     * <p>只有在允许经验获取的情况下才增加装备经验。</p>
+     * 
+     * @param expGain 获得的经验值
+     */
     public void increaseEquipExp(int expGain) {
-        if (allowExpGain) {     // thanks Vcoc for suggesting equip EXP gain conditionally
+        if (allowExpGain) {
             if (expGain < 0) {
                 expGain = Integer.MAX_VALUE;
             }
@@ -9198,6 +9478,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 显示所有装备特性。
+     * 
+     * <p>遍历已装备物品，显示每个装备的特性信息。</p>
+     */
     public void showAllEquipFeatures() {
         StringBuilder showMsg = new StringBuilder();
 
@@ -9217,6 +9502,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 广播婚姻消息。
+     * 
+     * <p>向公会和家族成员广播结婚消息。</p>
+     */
     public void broadcastMarriageMessage() {
         Guild guild = this.getGuild();
         if (guild != null) {
@@ -9229,10 +9519,18 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 设置CPQ（怪物嘉年华）计时器。
+     * 
+     * @param timer 调度任务
+     */
     public void setCpqTimer(ScheduledFuture<?> timer) {
         this.cpqSchedule = timer;
     }
 
+    /**
+     * 清除CPQ计时器。
+     */
     public void clearCpqTimer() {
         if (cpqSchedule != null) {
             cpqSchedule.cancel(true);
@@ -9240,70 +9538,84 @@ public class Character extends AbstractCharacterObject {
         cpqSchedule = null;
     }
 
+    /**
+     * 清空角色资源（注销时调用）。
+     * 
+     * <p>取消所有定时任务，清理资源引用，防止内存泄漏。</p>
+     * 
+     * @param remove 是否完全移除角色数据（用于断开连接）
+     */
     public final void empty(final boolean remove) {
+        // 取消龙血定时任务
         if (dragonBloodSchedule != null) {
             dragonBloodSchedule.cancel(true);
         }
         dragonBloodSchedule = null;
 
+        // 取消HP减少任务
         if (hpDecreaseTask != null) {
             hpDecreaseTask.cancel(true);
         }
         hpDecreaseTask = null;
 
+        // 取消守望者治疗定时任务
         if (beholderHealingSchedule != null) {
             beholderHealingSchedule.cancel(true);
         }
         beholderHealingSchedule = null;
 
+        // 取消守望者增益定时任务
         if (beholderBuffSchedule != null) {
             beholderBuffSchedule.cancel(true);
         }
         beholderBuffSchedule = null;
 
+        // 取消狂战士定时任务
         if (berserkSchedule != null) {
             berserkSchedule.cancel(true);
         }
         berserkSchedule = null;
 
+        // 取消椅子增益、Buff过期、疾病过期、技能冷却等任务
         unregisterChairBuff();
         cancelBuffExpireTask();
         cancelDiseaseExpireTask();
         cancelSkillCooldownTask();
         cancelExpirationTask();
 
+        // 取消任务过期任务
         if (questExpireTask != null) {
             questExpireTask.cancel(true);
         }
         questExpireTask = null;
 
+        // 取消恢复任务
         if (recoveryTask != null) {
             recoveryTask.cancel(true);
         }
         recoveryTask = null;
 
+        // 取消额外恢复任务
         if (extraRecoveryTask != null) {
             extraRecoveryTask.cancel(true);
         }
         extraRecoveryTask = null;
 
-        // already done on unregisterChairBuff
-        /* if (chairRecoveryTask != null) { chairRecoveryTask.cancel(true); }
-        chairRecoveryTask = null; */
-
+        // 取消精灵吊坠任务
         if (pendantOfSpirit != null) {
             pendantOfSpirit.cancel(true);
         }
         pendantOfSpirit = null;
 
+        // 清除CPQ计时器
         clearCpqTimer();
 
+        // 清理任务过期数据
         evtLock.lock();
         try {
             if (questExpireTask != null) {
                 questExpireTask.cancel(false);
                 questExpireTask = null;
-
                 questExpirations.clear();
                 questExpirations = null;
             }
@@ -9311,28 +9623,33 @@ public class Character extends AbstractCharacterObject {
             evtLock.unlock();
         }
 
+        // 清理坐骑
         if (mapleMount != null) {
             mapleMount.empty();
             mapleMount = null;
         }
+
+        // 如果需要完全移除
         if (remove) {
             partyQuest = null;
             events = null;
             mpc = null;
             mgc = null;
             party = null;
+            
+            // 清理家族关联
             FamilyEntry familyEntry = getFamilyEntry();
             if (familyEntry != null) {
                 familyEntry.setCharacter(null);
                 setFamilyEntry(null);
             }
 
+            // 延迟5分钟后清理客户端和背包引用（避免内存泄漏）
             getWorldServer().registerTimedMapObject(() -> {
-                client = null;  // clients still triggers handlers a few times after disconnecting
+                client = null;
                 map = null;
                 setListener(null);
 
-                // thanks Shavit for noticing a memory leak with inventories holding owner object
                 for (int i = 0; i < inventory.length; i++) {
                     inventory[i].dispose();
                 }
@@ -9341,6 +9658,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 玩家下线处理。
+     * 
+     * <p>更新角色的最后下线时间。</p>
+     */
     public void logOff() {
         this.loggedIn = false;
         characterService.update(CharactersDO.builder()
@@ -9349,47 +9671,97 @@ public class Character extends AbstractCharacterObject {
                 .build());
     }
 
-
+    /**
+     * 获取登录时长。
+     * 
+     * @return 登录时长（毫秒）
+     */
     public long getLoggedInTime() {
         return System.currentTimeMillis() - loginTime;
     }
 
+    /**
+     * 获取白名单聊天权限。
+     * 
+     * <p>只有GM且开启白名单聊天时返回true。</p>
+     * 
+     * @return 是否启用白名单聊天
+     */
     public boolean getWhiteChat() {
         return isGM() && whiteChat;
     }
 
+    /**
+     * 切换白名单聊天状态。
+     */
     public void toggleWhiteChat() {
         whiteChat = !whiteChat;
     }
 
+    /**
+     * 检查是否拥有组队任务物品。
+     * 
+     * @param partyquestchar 物品标识字符
+     * @return 是否拥有该物品
+     */
     public boolean gotPartyQuestItem(String partyquestchar) {
         return dataString.contains(partyquestchar);
     }
 
+    /**
+     * 移除组队任务物品。
+     * 
+     * @param letter 物品标识字符
+     */
     public void removePartyQuestItem(String letter) {
         if (gotPartyQuestItem(letter)) {
             dataString = dataString.substring(0, dataString.indexOf(letter)) + dataString.substring(dataString.indexOf(letter) + letter.length());
         }
     }
 
+    /**
+     * 设置已获得组队任务物品。
+     * 
+     * @param partyquestchar 物品标识字符
+     */
     public void setPartyQuestItemObtained(String partyquestchar) {
         if (!dataString.contains(partyquestchar)) {
             this.dataString += partyquestchar;
         }
     }
 
+    /**
+     * 创建龙（龙神职业专用）。
+     */
     public void createDragon() {
         dragon = new Dragon(this);
     }
 
+    /**
+     * 获取监狱剩余时间。
+     * 
+     * @return 监狱剩余时间（毫秒）
+     */
     public long getJailExpirationTimeLeft() {
         return jailExpiration - System.currentTimeMillis();
     }
 
+    /**
+     * 设置未来监狱过期时间。
+     * 
+     * @param time 监狱时长（毫秒）
+     */
     private void setFutureJailExpiration(long time) {
         jailExpiration = System.currentTimeMillis() + time;
     }
 
+    /**
+     * 添加监狱时间。
+     * 
+     * <p>如果当前不在监狱中，设置新的监狱时间；否则累加时间。</p>
+     * 
+     * @param time 要添加的监狱时间（毫秒）
+     */
     public void addJailExpirationTime(long time) {
         long timeLeft = getJailExpirationTimeLeft();
 
@@ -9400,10 +9772,19 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 移除监狱时间（出狱）。
+     */
     public void removeJailExpirationTime() {
         jailExpiration = 0;
     }
 
+    /**
+     * 注册改名请求。
+     * 
+     * @param newName 新名字
+     * @return 是否注册成功
+     */
     public boolean registerNameChange(String newName) {
         try {
             if (nameChangeService.registerNameChange(this, newName)) {
@@ -9416,6 +9797,11 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
+    /**
+     * 取消待处理的改名请求。
+     * 
+     * @return 是否取消成功
+     */
     public boolean cancelPendingNameChange() {
         try {
             nameChangeService.cancelPendingNameChange(this, true);
@@ -9426,13 +9812,31 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void doPendingNameChange() { //called on logout
+    /**
+     * 执行待处理的改名（在登出时调用）。
+     */
+    public void doPendingNameChange() {
         if (!pendingNameChange) {
             return;
         }
         nameChangeService.applyNameChange(getId(), getName());
     }
 
+    /**
+     * 检查转区资格。
+     * 
+     * <p>返回值说明：
+     * <ul>
+     *   <li>0 - 符合条件</li>
+     *   <li>2 - 等级不足20级</li>
+     *   <li>3 - 临时封禁未解除</li>
+     *   <li>4 - 已婚状态</li>
+     *   <li>5 - 公会职位不足</li>
+     *   <li>8 - 有家族关系</li>
+     * </ul></p>
+     * 
+     * @return 资格检查结果码
+     */
     public int checkWorldTransferEligibility() {
         if (getLevel() < 20) {
             return 2;
@@ -9449,6 +9853,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 注册转区请求。
+     * 
+     * @param newWorld 目标大区
+     * @return 是否注册成功
+     */
     public boolean registerWorldTransfer(int newWorld) {
         try {
             return worldTransferService.registerWorldTransfer(this, newWorld);
@@ -9458,6 +9868,11 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
+    /**
+     * 取消待处理的转区请求。
+     * 
+     * @return 是否取消成功
+     */
     public boolean cancelPendingWorldTransfer() {
         try {
             worldTransferService.cancelPendingWorldTransfer(this, true);
@@ -9468,19 +9883,39 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 获取最后执行的命令消息。
+     * 
+     * @return 最后命令消息
+     */
     public String getLastCommandMessage() {
         return this.commandtext;
     }
 
+    /**
+     * 设置最后执行的命令消息。
+     * 
+     * @param text 命令消息
+     */
     public void setLastCommandMessage(String text) {
         this.commandtext = text;
     }
 
+    /**
+     * 获取奖励点数。
+     * 
+     * @return 奖励点数，如果查询失败返回-1
+     */
     public int getRewardPoints() {
         AccountsDO accountsDO = accountService.findById(accountId);
         return accountsDO == null ? -1 : Optional.ofNullable(accountsDO.getRewardpoints()).orElse(-1);
     }
 
+    /**
+     * 设置奖励点数。
+     * 
+     * @param value 奖励点数
+     */
     public void setRewardPoints(int value) {
         accountService.update(AccountsDO.builder()
                 .id(accountId)
@@ -9488,9 +9923,17 @@ public class Character extends AbstractCharacterObject {
                 .build());
     }
 
+    /**
+     * 设置重生次数。
+     * 
+     * <p>重生系统未启用时会抛出异常。</p>
+     * 
+     * @param value 重生次数
+     * @throws NotEnabledException 如果重生系统未启用
+     */
     public void setReborns(int value) {
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM"));
             throw new NotEnabledException();
         }
 
@@ -9500,13 +9943,24 @@ public class Character extends AbstractCharacterObject {
                 .build());
     }
 
+    /**
+     * 增加重生次数。
+     */
     public void addReborns() {
         setReborns(getReborns() + 1);
     }
 
+    /**
+     * 获取重生次数。
+     * 
+     * <p>重生系统未启用时会抛出异常。</p>
+     * 
+     * @return 重生次数
+     * @throws NotEnabledException 如果重生系统未启用
+     */
     public int getReborns() {
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM"));
             throw new NotEnabledException();
         }
 
@@ -9514,13 +9968,27 @@ public class Character extends AbstractCharacterObject {
         return charactersDO == null ? 0 : Optional.ofNullable(charactersDO.getReborns()).orElse(0);
     }
 
+    /**
+     * 根据职业ID执行重生。
+     * 
+     * @param jobId 职业ID
+     */
     public void executeRebornAsId(int jobId) {
         executeRebornAs(Job.getById(jobId));
     }
 
+    /**
+     * 执行重生。
+     * 
+     * <p>重生系统未启用或等级未达到上限时不会执行。
+     * 重生后等级重置为1，并切换到新职业。</p>
+     * 
+     * @param job 重生后的职业
+     * @throws NotEnabledException 如果重生系统未启用
+     */
     public void executeRebornAs(Job job) {
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM"));
             throw new NotEnabledException();
         }
         if (getLevel() != getMaxClassLevel()) {
@@ -9532,6 +10000,9 @@ public class Character extends AbstractCharacterObject {
         levelUp(true);
     }
 
+    /**
+     * 事件相关属性和方法
+     */
     //EVENTS
     @Getter
     private byte team = 0;
@@ -9543,18 +10014,36 @@ public class Character extends AbstractCharacterObject {
     private Ola ola;
     private long snowballattack;
 
+    /**
+     * 设置队伍编号。
+     * 
+     * @param team 队伍编号
+     */
     public void setTeam(int team) {
         this.team = (byte) team;
     }
 
+    /**
+     * 获取上次雪球攻击时间。
+     * 
+     * @return 上次雪球攻击时间戳（毫秒）
+     */
     public long getLastSnowballAttack() {
         return snowballattack;
     }
 
+    /**
+     * 设置上次雪球攻击时间。
+     * 
+     * @param time 时间戳（毫秒）
+     */
     public void setLastSnowballAttack(long time) {
         this.snowballattack = time;
     }
 
+    /**
+     * 怪物嘉年华（MCPQ）相关属性和方法
+     */
     // MCPQ
 
     @Setter
@@ -9576,14 +10065,31 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private boolean challenged = false;
 
-    public void gainFestivalPoints(int gain) {
-        this.FestivalPoints += gain;
-    }
-
+    /**
+     * 获取当前CP值。
+     * 
+     * @return CP值
+     */
     public int getCP() {
         return cp;
     }
 
+    /**
+     * 增加嘉年华点数（Festival Points）。
+     * 
+     * @param gain 增加的点数
+     */
+    public void gainFestivalPoints(int gain) {
+        this.FestivalPoints += gain;
+    }
+
+    /**
+     * 增加CP值（怪物嘉年华）。
+     * 
+     * <p>更新个人CP和团队CP，并向客户端发送更新包。</p>
+     * 
+     * @param gain 增加的CP值
+     */
     public void gainCP(int gain) {
         if (this.getMonsterCarnival() != null) {
             if (gain > 0) {
@@ -9606,24 +10112,49 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 设置总CP值。
+     * 
+     * @param a 总CP值
+     */
     public void setTotalCP(int a) {
         this.totCP = a;
     }
 
+    /**
+     * 设置当前CP值。
+     * 
+     * @param a 当前CP值
+     */
     public void setCP(int a) {
         this.cp = a;
     }
 
+    /**
+     * 获取总CP值。
+     * 
+     * @return 总CP值
+     */
     public int getTotalCP() {
         return totCP;
     }
 
+    /**
+     * 重置CP值。
+     * 
+     * <p>重置个人CP、总CP，并清除怪物嘉年华实例。</p>
+     */
     public void resetCP() {
         this.cp = 0;
         this.totCP = 0;
         this.monsterCarnival = null;
     }
 
+    /**
+     * 增加阿里安竞技场点数。
+     * 
+     * @param points 增加的点数
+     */
     public void gainAriantPoints(int points) {
         this.ariantPoints += points;
     }

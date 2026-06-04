@@ -28,6 +28,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/common")
 public class CommonController {
+    /** 通用服务 */
     private final CommonService commonService;
 
 

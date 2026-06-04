@@ -22,46 +22,72 @@
 package org.gms.server.quest;
 
 /**
- * @author Matze
- */
-public enum QuestRequirementType {
-    UNDEFINED(-1),
-    JOB(0),
-    ITEM(1),
-    QUEST(2),
-    MIN_LEVEL(3),
-    MAX_LEVEL(4),
-    END_DATE(5),
-    MOB(6),
-    NPC(7),
-    FIELD_ENTER(8),
-    INTERVAL(9),
-    SCRIPT(10),
-    PET(11),
-    MIN_PET_TAMENESS(12),
-    MONSTER_BOOK(13),
-    NORMAL_AUTO_START(14),
-    INFO_NUMBER(15),
-    INFO_EX(16),
-    COMPLETED_QUEST(17),
-    START(18),
-    END(19),
-    DAY_BY_DAY(20),
-    MESO(21),
-    BUFF(22),
-    EXCEPT_BUFF(23);
+     * 【枚举】QuestRequirementType，包 {@code org.gms.server.quest}。
+     * 任务条件类型枚举，定义接取或完成任务所需满足的条件类型。
+     *
+     * <p>该枚举包含了游戏中任务系统可能涉及的所有前置条件类型，
+     * 用于控制任务的接取、完成条件，如职业限制、等级要求、物品需求等。</p>
+     *
+     * @author Matze
+     */
+    public enum QuestRequirementType {
+        UNDEFINED(-1),       // 未定义
+        JOB(0),              // 职业限制
+        ITEM(1),             // 物品需求
+        QUEST(2),            // 前置任务
+        MIN_LEVEL(3),        // 最低等级
+        MAX_LEVEL(4),        // 最高等级
+        END_DATE(5),         // 截止日期
+        MOB(6),              // 击杀怪物
+        NPC(7),              // NPC限制
+        FIELD_ENTER(8),      // 进入地图
+        INTERVAL(9),         // 重复间隔
+        SCRIPT(10),          // 脚本条件
+        PET(11),             // 宠物需求
+        MIN_PET_TAMENESS(12), // 宠物亲密度最低
+        MONSTER_BOOK(13),    // 怪物图鉴
+        NORMAL_AUTO_START(14), // 普通自动开始
+        INFO_NUMBER(15),     // 信息编号
+        INFO_EX(16),         // 扩展信息
+        COMPLETED_QUEST(17), // 已完成任务
+        START(18),           // 开始
+        END(19),             // 结束
+        DAY_BY_DAY(20),      // 每日任务
+        MESO(21),            // 金币需求
+        BUFF(22),            // BUFF需求
+        EXCEPT_BUFF(23);     // 排除BUFF
 
-    final byte type;
+        /** 类型编码：用于标识任务条件类型的字节值 */
+        final byte type;
 
-    QuestRequirementType(int type) {
-        this.type = (byte) type;
-    }
+        /**
+         * 构造函数：初始化任务条件类型。
+         *
+         * @param type 类型编码
+         */
+        QuestRequirementType(int type) {
+            this.type = (byte) type;
+        }
 
-    public byte getType() {
-        return type;
-    }
+        /**
+         * 获取类型编码。
+         *
+         * @return 类型编码
+         */
+        public byte getType() {
+            return type;
+        }
 
-    public static QuestRequirementType getByWZName(String name) {
+        /**
+         * 根据WZ文件中的名称获取对应的条件类型。
+         *
+         * <p>WZ文件是MapleStory游戏资源文件，该方法用于将WZ文件中定义的
+         * 条件名称映射到对应的枚举值，便于任务配置的加载和解析。</p>
+         *
+         * @param name WZ文件中的条件名称
+         * @return 对应的条件类型，未匹配返回UNDEFINED
+         */
+        public static QuestRequirementType getByWZName(String name) {
         switch (name) {
         case "job":
             return JOB;

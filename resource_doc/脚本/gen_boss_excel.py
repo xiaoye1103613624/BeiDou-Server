@@ -208,7 +208,7 @@ for ri, row in enumerate(notes, 1):
 
 ws4.column_dimensions["A"].width = 120
 
-output_path = "E:/pro/BeiDou-Server_xy/resource_doc/BOSS数据汇总.xlsx"
+output_path = "/resource_doc/参考文档/BOSS数据汇总.xlsx"
 wb.save(output_path)
 print(f"Excel已生成: {output_path}")
 print(f"远征BOSS: {len(expedition_data)} 个")

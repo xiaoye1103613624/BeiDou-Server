@@ -25,11 +25,18 @@ import java.awt.*;
 
 /**
  * 【类型】AbstractMapObject（class），包 `org.gms.server.maps`。
+ * <p>地图对象抽象基类，实现 MapObject 接口的通用方法</p>
  */
 public abstract class AbstractMapObject implements MapObject {
+    /** 对象位置 */
     private Point position = new Point();
+    /** 对象ID */
     private int objectId;
 
+    /**
+     * 获取地图对象类型（由子类实现）
+     * @return MapObjectType
+     */
     @Override
     public abstract MapObjectType getType();
 
@@ -53,6 +60,9 @@ public abstract class AbstractMapObject implements MapObject {
         this.objectId = id;
     }
 
+    /**
+     * 清空位置信息
+     */
     @Override
     public void nullifyPosition() {
         this.position = null;

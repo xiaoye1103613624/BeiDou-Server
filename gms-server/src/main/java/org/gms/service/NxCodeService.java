@@ -14,7 +14,9 @@ import static java.util.concurrent.TimeUnit.DAYS;
 @Service
 @AllArgsConstructor
 public class NxCodeService {
+    /** NX兑换码数据访问接口 */
     private final NxcodeMapper nxcodeMapper;
+    /** NX兑换码物品数据访问接口 */
     private final NxcodeItemsMapper nxcodeItemsMapper;
 
     /**

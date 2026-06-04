@@ -1,0 +1,20 @@
+export default {
+  'menu.game.scriptManager': 'Script Manager',
+  'scriptManager.overrideBanner': 'Script override directory active: {path}',
+  'scriptManager.toolbar.newFile': 'New File',
+  'scriptManager.toolbar.newFolder': 'New Folder',
+  'scriptManager.toolbar.refresh': 'Refresh',
+  'scriptManager.contextMenu.rename': 'Rename',
+  'scriptManager.contextMenu.delete': 'Delete',
+  'scriptManager.dialog.createFile': 'Create Script File',
+  'scriptManager.dialog.createFolder': 'Create Folder',
+  'scriptManager.dialog.rename': 'Rename',
+  'scriptManager.dialog.namePlaceholder': 'Enter name (e.g., myScript.js)',
+  'scriptManager.dialog.deleteConfirm':
+    'Are you sure you want to delete "{name}"? This cannot be undone.',
+  'scriptManager.emptyState': 'Select a script file to edit',
+  'scriptManager.message.saveSuccess': 'Saved successfully',
+  'scriptManager.message.createSuccess': 'Created successfully',
+  'scriptManager.message.deleteSuccess': 'Deleted successfully',
+  'scriptManager.message.renameSuccess': 'Renamed successfully',
+};

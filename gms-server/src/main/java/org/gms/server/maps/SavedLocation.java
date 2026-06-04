@@ -23,11 +23,19 @@ package org.gms.server.maps;
 
 /**
  * 【类型】SavedLocation（class），包 `org.gms.server.maps`。
+ * <p>保存位置数据类，记录玩家保存的传送位置（地图ID和传送门）</p>
  */
 public class SavedLocation {
+    /** 地图ID */
     private final int mapId;
+    /** 传送门索引 */
     private final int portal;
 
+    /**
+     * 构造保存位置
+     * @param mapId 地图ID
+     * @param portal 传送门索引
+     */
     public SavedLocation(int mapId, int portal) {
         this.mapId = mapId;
         this.portal = portal;

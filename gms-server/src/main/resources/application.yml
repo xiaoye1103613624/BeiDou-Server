@@ -48,6 +48,8 @@ gms:
   service:
     # zh-CN en-US
     language: zh-CN
+    # 脚本覆盖目录（可选），配置后优先从此目录加载脚本，支持运行时热编辑
+    # script-override-path: /path/to/override
     rate-limit:
       # 是否开启限流
       enabled: false

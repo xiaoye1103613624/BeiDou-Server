@@ -224,6 +224,20 @@ public class World {
     private ScheduledFuture<?> timeoutSchedule;
     private ScheduledFuture<?> hpDecSchedule;
 
+    /**
+     * World 构造函数，初始化游戏世界/大区。
+     *
+     * @param world 世界ID
+     * @param flag 世界状态标志
+     * @param eventmsg 活动公告消息
+     * @param expRate 经验倍率
+     * @param dropRate 掉落倍率
+     * @param bossDropRate BOSS掉落倍率
+     * @param mesoRate 金币倍率
+     * @param questRate 任务倍率
+     * @param travelRate 旅行时间倍率
+     * @param fishingRate 钓鱼倍率
+     */
     public World(int world, int flag, String eventmsg, float expRate, float dropRate, float bossDropRate, float mesoRate,
                  float questRate, float travelRate, float fishingRate) {
         this.id = world;
@@ -275,6 +289,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取频道数量。
+     *
+     * @return 频道数量
+     */
     public int getChannelsSize() {
         chnRLock.lock();
         try {
@@ -284,6 +303,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取所有频道列表。
+     *
+     * @return 频道列表副本
+     */
     public List<Channel> getChannels() {
         chnRLock.lock();
         try {
@@ -293,6 +317,12 @@ public class World {
         }
     }
 
+    /**
+     * 根据频道号获取频道。
+     *
+     * @param channel 频道号（从1开始）
+     * @return 对应的频道对象，如果不存在则返回null
+     */
     public Channel getChannel(int channel) {
         chnRLock.lock();
         try {
@@ -306,6 +336,12 @@ public class World {
         }
     }
 
+    /**
+     * 添加频道到世界。频道ID必须按顺序递增（只能添加当前最大ID+1的频道）。
+     *
+     * @param channel 要添加的频道
+     * @return 添加成功返回true，否则返回false
+     */
     public boolean addChannel(Channel channel) {
         chnWLock.lock();
         try {
@@ -320,6 +356,11 @@ public class World {
         }
     }
 
+    /**
+     * 移除最后一个频道。只有当频道可以卸载（无在线玩家）时才能移除。
+     *
+     * @return 被移除的频道ID，失败返回-1
+     */
     public int removeChannel() {
         Channel ch;
         int chIdx;
@@ -355,6 +396,11 @@ public class World {
         return ch.getId();
     }
 
+    /**
+     * 检查世界是否可以卸载。只有当世界中没有在线玩家且所有频道都可以卸载时才返回true。
+     *
+     * @return 是否可以卸载
+     */
     public boolean canUninstall() {
         if (players.getSize() > 0) {
             return false;
@@ -369,6 +415,11 @@ public class World {
         return true;
     }
 
+    /**
+     * 设置世界状态标志。
+     *
+     * @param b 状态标志值
+     */
     public void setFlag(byte b) {
         this.flag = b;
     }
@@ -381,6 +432,11 @@ public class World {
         this.eventmsg = eventMessage;
     }
 
+    /**
+     * 设置经验倍率，并更新所有在线角色的倍率设置。
+     *
+     * @param exp 新的经验倍率
+     */
     public void setExpRate(float exp) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -399,6 +455,11 @@ public class World {
         }
     }
 
+    /**
+     * 设置掉落倍率，并更新所有在线角色的倍率设置。
+     *
+     * @param drop 新的掉落倍率
+     */
     public void setDropRate(float drop) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -417,6 +478,11 @@ public class World {
         }
     }
 
+    /**
+     * 设置金币倍率，并更新所有在线角色的倍率设置。
+     *
+     * @param meso 新的金币倍率
+     */
     public void setMesoRate(float meso) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -435,10 +501,22 @@ public class World {
         }
     }
 
+    /**
+     * 根据旅行时间倍率计算实际旅行时间。
+     *
+     * @param travelTime 基础旅行时间
+     * @return 实际旅行时间（已应用倍率）
+     */
     public int getTransportationTime(int travelTime) {
         return NumberTool.floatToInt(travelTime * travelRate);//交通工具、旅行时间倍率，由于支持小数，所以需要改为相乘
     }
 
+    /**
+     * 加载账号角色视图，将账号下的所有角色注册到世界中。
+     *
+     * @param accountId 账号ID
+     * @param chars 角色列表
+     */
     public void loadAccountCharactersView(Integer accountId, List<Character> chars) {
         SortedMap<Integer, Character> charsMap = new TreeMap<>();
         for (Character chr : chars) {
@@ -453,6 +531,12 @@ public class World {
         }
     }
 
+    /**
+     * 注册单个角色到账号角色视图。
+     *
+     * @param accountId 账号ID
+     * @param chr 角色对象
+     */
     public void registerAccountCharacterView(Integer accountId, Character chr) {
         accountCharsLock.lock();
         try {
@@ -521,11 +605,21 @@ public class World {
         return list;
     }
 
+    /**
+     * 加载并获取所有账号的角色视图。
+     *
+     * @return 所有角色列表（按账号ID和角色ID排序）
+     */
     public List<Character> loadAndGetAllCharactersView() {
         Server.getInstance().loadAllAccountsCharactersView();
         return getAllCharactersView();
     }
 
+    /**
+     * 获取所有账号的角色视图。
+     *
+     * @return 所有角色列表（按账号ID和角色ID排序）
+     */
     public List<Character> getAllCharactersView() {    // sorting by accountid, charid
         List<Character> chrList = new LinkedList<>();
         Map<Integer, SortedMap<Integer, Character>> accChars;
@@ -544,6 +638,12 @@ public class World {
         return chrList;
     }
 
+    /**
+     * 获取指定账号的角色视图。
+     *
+     * @param accountId 账号ID
+     * @return 该账号下的角色列表，如果账号不存在则返回null
+     */
     public List<Character> getAccountCharactersView(int accountId) {
         final List<Character> chrList;
 
@@ -564,22 +664,47 @@ public class World {
         return chrList;
     }
 
+    /**
+     * 获取玩家存储管理器。
+     *
+     * @return 玩家存储对象
+     */
     public PlayerStorage getPlayerStorage() {
         return players;
     }
 
+    /**
+     * 获取匹配检查协调器。
+     *
+     * @return 匹配检查协调器
+     */
     public MatchCheckerCoordinator getMatchCheckerCoordinator() {
         return matchChecker;
     }
 
+    /**
+     * 获取组队搜索协调器。
+     *
+     * @return 组队搜索协调器
+     */
     public PartySearchCoordinator getPartySearchCoordinator() {
         return partySearch;
     }
 
+    /**
+     * 添加玩家到世界的在线玩家存储。
+     *
+     * @param chr 要添加的玩家角色
+     */
     public void addPlayer(Character chr) {
         players.addPlayer(chr);
     }
 
+    /**
+     * 从世界中移除玩家。先从所属频道移除，如果失败则遍历所有频道查找并移除。
+     *
+     * @param chr 要移除的玩家角色
+     */
     public void removePlayer(Character chr) {
         Channel cserv = chr.getClient().getChannelServer();
 
@@ -598,6 +723,12 @@ public class World {
         players.removePlayer(chr.getId());
     }
 
+    /**
+     * 添加家族到世界。
+     *
+     * @param id 家族ID
+     * @param f 家族对象
+     */
     public void addFamily(int id, Family f) {
         synchronized (families) {
             if (!families.containsKey(id)) {
@@ -606,12 +737,23 @@ public class World {
         }
     }
 
+    /**
+     * 从世界中移除家族。
+     *
+     * @param id 家族ID
+     */
     public void removeFamily(int id) {
         synchronized (families) {
             families.remove(id);
         }
     }
 
+    /**
+     * 获取指定ID的家族。
+     *
+     * @param id 家族ID
+     * @return 家族对象，如果不存在则返回null
+     */
     public Family getFamily(int id) {
         synchronized (families) {
             if (families.containsKey(id)) {
@@ -621,12 +763,23 @@ public class World {
         }
     }
 
+    /**
+     * 获取所有家族的集合视图。
+     *
+     * @return 不可修改的家族集合
+     */
     public Collection<Family> getFamilies() {
         synchronized (families) {
             return Collections.unmodifiableCollection(families.values());
         }
     }
 
+    /**
+     * 根据公会角色获取公会对象，并缓存公会摘要。
+     *
+     * @param mgc 公会角色对象
+     * @return 公会对象，如果不存在则返回null
+     */
     public Guild getGuild(GuildCharacter mgc) {
         if (mgc == null) {
             return null;
@@ -640,10 +793,20 @@ public class World {
         return g;
     }
 
+    /**
+     * 检查世界是否已满员。
+     *
+     * @return 已满员返回true，否则返回false
+     */
     public boolean isWorldCapacityFull() {
         return getWorldCapacityStatus() == 2;
     }
 
+    /**
+     * 获取世界容量状态。
+     *
+     * @return 0=正常, 1=繁忙(80%以上), 2=已满
+     */
     public int getWorldCapacityStatus() {
         int worldCap = getChannelsSize() * GameConfig.getServerInt("channel_capacity");
         int num = players.getSize();
@@ -660,6 +823,13 @@ public class World {
         return status;
     }
 
+    /**
+     * 获取公会摘要。如果缓存中不存在，则从服务器获取并缓存。
+     *
+     * @param gid 公会ID
+     * @param wid 世界ID
+     * @return 公会摘要对象，如果不存在则返回null
+     */
     public GuildSummary getGuildSummary(int gid, int wid) {
         if (gsStore.containsKey(gid)) {
             return gsStore.get(gid);
@@ -672,10 +842,19 @@ public class World {
         }
     }
 
+    /**
+     * 更新公会摘要缓存。
+     *
+     * @param gid 公会ID
+     * @param mgs 公会摘要对象
+     */
     public void updateGuildSummary(int gid, GuildSummary mgs) {
         gsStore.put(gid, mgs);
     }
 
+    /**
+     * 重新加载所有公会摘要缓存。
+     */
     public void reloadGuildSummary() {
         Guild g;
         Server server = Server.getInstance();
@@ -689,6 +868,14 @@ public class World {
         }
     }
 
+    /**
+     * 批量设置角色的公会和职位。
+     *
+     * @param cids 角色ID列表
+     * @param guildid 公会ID
+     * @param rank 职位
+     * @param exception 例外角色ID（跳过该角色）
+     */
     public void setGuildAndRank(List<Integer> cids, int guildid, int rank, int exception) {
         for (int cid : cids) {
             if (cid != exception) {
@@ -741,12 +928,26 @@ public class World {
         }
     }
 
+    /**
+     * 修改公会徽章，并通知所有受影响的玩家。
+     *
+     * @param gid 公会ID
+     * @param affectedPlayers 受影响的玩家ID列表
+     * @param mgs 更新后的公会摘要
+     */
     public void changeEmblem(int gid, List<Integer> affectedPlayers, GuildSummary mgs) {
         updateGuildSummary(gid, mgs);
         sendPacket(affectedPlayers, GuildPackets.guildEmblemChange(gid, mgs.getLogoBG(), mgs.getLogoBGColor(), mgs.getLogo(), mgs.getLogoColor()), -1);
         setGuildAndRank(affectedPlayers, -1, -1, -1);    //respawn player
     }
 
+    /**
+     * 向指定玩家列表发送数据包。
+     *
+     * @param targetIds 目标玩家ID列表
+     * @param packet 要发送的数据包
+     * @param exception 例外玩家ID（跳过该玩家）
+     */
     public void sendPacket(List<Integer> targetIds, Packet packet, int exception) {
         Character chr;
         for (int i : targetIds) {
@@ -760,18 +961,40 @@ public class World {
         }
     }
 
+    /**
+     * 检查公会是否在队列中。
+     *
+     * @param guildId 公会ID
+     * @return 在队列中返回true，否则返回false
+     */
     public boolean isGuildQueued(int guildId) {
         return queuedGuilds.contains(guildId);
     }
 
+    /**
+     * 将公会加入队列。
+     *
+     * @param guildId 公会ID
+     */
     public void putGuildQueued(int guildId) {
         queuedGuilds.add(guildId);
     }
 
+    /**
+     * 将公会从队列中移除。
+     *
+     * @param guildId 公会ID
+     */
     public void removeGuildQueued(int guildId) {
         queuedGuilds.remove(guildId);
     }
 
+    /**
+     * 检查婚礼是否在队列中。
+     *
+     * @param marriageId 婚礼ID
+     * @return 在队列中返回true，否则返回false
+     */
     public boolean isMarriageQueued(int marriageId) {
         return queuedMarriages.containsKey(marriageId);
     }
@@ -897,6 +1120,12 @@ public class World {
         }
     }
 
+    /**
+     * 创建新的队伍。
+     *
+     * @param chrfor 创建队伍的角色
+     * @return 创建的队伍对象
+     */
     public Party createParty(PartyCharacter chrfor) {
         int partyid = runningPartyId.getAndIncrement();
         Party party = new Party(partyid, chrfor);
@@ -913,6 +1142,12 @@ public class World {
         return party;
     }
 
+    /**
+     * 根据队伍ID获取队伍对象。
+     *
+     * @param partyid 队伍ID
+     * @return 队伍对象，如果不存在则返回null
+     */
     public Party getParty(int partyid) {
         partyLock.lock();
         try {
@@ -922,6 +1157,12 @@ public class World {
         }
     }
 
+    /**
+     * 解散队伍。
+     *
+     * @param partyid 队伍ID
+     * @return 被解散的队伍对象
+     */
     private Party disbandParty(int partyid) {
         partyLock.lock();
         try {
@@ -931,6 +1172,14 @@ public class World {
         }
     }
 
+    /**
+     * 更新角色与队伍的关联关系。
+     *
+     * @param party 队伍对象
+     * @param operation 操作类型
+     * @param target 目标角色
+     * @param partyMembers 队伍成员列表
+     */
     private void updateCharacterParty(Party party, PartyOperation operation, PartyCharacter target, Collection<PartyCharacter> partyMembers) {
         switch (operation) {
             case JOIN:
@@ -958,6 +1207,13 @@ public class World {
         }
     }
 
+    /**
+     * 更新队伍状态并通知所有成员。
+     *
+     * @param party 队伍对象
+     * @param operation 操作类型
+     * @param target 目标角色
+     */
     private void updateParty(Party party, PartyOperation operation, PartyCharacter target) {
         Collection<PartyCharacter> partyMembers = party.getMembers();
         updateCharacterParty(party, operation, target, partyMembers);
@@ -989,6 +1245,14 @@ public class World {
         }
     }
 
+    /**
+     * 更新队伍状态。
+     *
+     * @param partyid 队伍ID
+     * @param operation 操作类型
+     * @param target 目标角色
+     * @throws IllegalArgumentException 如果队伍不存在
+     */
     public void updateParty(int partyid, PartyOperation operation, PartyCharacter target) {
         Party party = getParty(partyid);
         if (party == null) {
@@ -1037,6 +1301,11 @@ public class World {
         updateParty(party, operation, target);
     }
 
+    /**
+     * 从所有成员所在地图中移除队伍标记。
+     *
+     * @param partyid 队伍ID
+     */
     public void removeMapPartyMembers(int partyid) {
         Party party = getParty(partyid);
         if (party == null) {
@@ -1054,6 +1323,12 @@ public class World {
         }
     }
 
+    /**
+     * 根据角色名称查找角色所在频道。
+     *
+     * @param name 角色名称
+     * @return 频道号，如果未找到返回-1
+     */
     public int find(String name) {
         int channel = -1;
         Character chr = getPlayerStorage().getCharacterByName(name);
@@ -1063,6 +1338,12 @@ public class World {
         return channel;
     }
 
+    /**
+     * 根据角色ID查找角色所在频道。
+     *
+     * @param id 角色ID
+     * @return 频道号，如果未找到返回-1
+     */
     public int find(int id) {
         int channel = -1;
         Character chr = getPlayerStorage().getCharacterById(id);
@@ -1072,6 +1353,13 @@ public class World {
         return channel;
     }
 
+    /**
+     * 发送队伍聊天消息。
+     *
+     * @param party 队伍对象
+     * @param chattext 聊天内容
+     * @param namefrom 发送者名称
+     */
     public void partyChat(Party party, String chattext, String namefrom) {
         for (PartyCharacter partychar : party.getMembers()) {
             if (!(partychar.getName().equals(namefrom))) {
@@ -1083,6 +1371,14 @@ public class World {
         }
     }
 
+    /**
+     * 发送好友聊天消息。
+     *
+     * @param recipientCharacterIds 接收者角色ID数组
+     * @param cidFrom 发送者角色ID
+     * @param nameFrom 发送者名称
+     * @param chattext 聊天内容
+     */
     public void buddyChat(int[] recipientCharacterIds, int cidFrom, String nameFrom, String chattext) {
         PlayerStorage playerStorage = getPlayerStorage();
         for (int characterId : recipientCharacterIds) {
@@ -1095,6 +1391,13 @@ public class World {
         }
     }
 
+    /**
+     * 批量查找多个角色所在的频道。
+     *
+     * @param charIdFrom 查询者角色ID
+     * @param characterIds 要查找的角色ID数组
+     * @return 角色ID和频道的配对数组
+     */
     public CharacterIdChannelPair[] multiBuddyFind(int charIdFrom, int[] characterIds) {
         List<CharacterIdChannelPair> foundsChars = new ArrayList<>(characterIds.length);
         for (Channel ch : getChannels()) {
@@ -1105,10 +1408,23 @@ public class World {
         return foundsChars.toArray(new CharacterIdChannelPair[foundsChars.size()]);
     }
 
+    /**
+     * 根据信使ID获取信使对象。
+     *
+     * @param messengerid 信使ID
+     * @return 信使对象，如果不存在则返回null
+     */
     public Messenger getMessenger(int messengerid) {
         return messengers.get(messengerid);
     }
 
+    /**
+     * 离开信使会话。
+     *
+     * @param messengerid 信使ID
+     * @param target 要离开的角色
+     * @throws IllegalArgumentException 如果信使不存在
+     */
     public void leaveMessenger(int messengerid, MessengerCharacter target) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1119,6 +1435,14 @@ public class World {
         removeMessengerPlayer(messenger, position);
     }
 
+    /**
+     * 邀请玩家加入信使会话。
+     *
+     * @param sender 发送邀请者名称
+     * @param messengerid 信使ID
+     * @param target 被邀请者名称
+     * @param fromchannel 发送者所在频道
+     */
     public void messengerInvite(String sender, int messengerid, String target, int fromchannel) {
         if (isConnected(target)) {
             Character targetChr = getPlayerStorage().getCharacterByName(target);
@@ -1142,6 +1466,14 @@ public class World {
         }
     }
 
+    /**
+     * 添加信使成员并通知其他成员。
+     *
+     * @param messenger 信使对象
+     * @param namefrom 加入者名称
+     * @param fromchannel 加入者所在频道
+     * @param position 加入者位置
+     */
     public void addMessengerPlayer(Messenger messenger, String namefrom, int fromchannel, int position) {
         for (MessengerCharacter messengerchar : messenger.getMembers()) {
             Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
@@ -1158,6 +1490,12 @@ public class World {
         }
     }
 
+    /**
+     * 移除信使成员并通知其他成员。
+     *
+     * @param messenger 信使对象
+     * @param position 被移除成员的位置
+     */
     public void removeMessengerPlayer(Messenger messenger, int position) {
         for (MessengerCharacter messengerchar : messenger.getMembers()) {
             Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
@@ -1167,6 +1505,13 @@ public class World {
         }
     }
 
+    /**
+     * 发送信使聊天消息。
+     *
+     * @param messenger 信使对象
+     * @param chattext 聊天内容
+     * @param namefrom 发送者名称
+     */
     public void messengerChat(Messenger messenger, String chattext, String namefrom) {
         String from = "";
         String to1 = "";
@@ -1188,6 +1533,12 @@ public class World {
         }
     }
 
+    /**
+     * 拒绝信使邀请。
+     *
+     * @param sender 邀请者名称
+     * @param player 被邀请者角色
+     */
     public void declineChat(String sender, Character player) {
         if (isConnected(sender)) {
             Character senderChr = getPlayerStorage().getCharacterByName(sender);
@@ -1199,12 +1550,27 @@ public class World {
         }
     }
 
+    /**
+     * 更新信使成员信息。
+     *
+     * @param messengerid 信使ID
+     * @param namefrom 更新者名称
+     * @param fromchannel 更新者所在频道
+     */
     public void updateMessenger(int messengerid, String namefrom, int fromchannel) {
         Messenger messenger = getMessenger(messengerid);
         int position = messenger.getPositionByName(namefrom);
         updateMessenger(messenger, namefrom, position, fromchannel);
     }
 
+    /**
+     * 更新信使成员信息（重载方法）。
+     *
+     * @param messenger 信使对象
+     * @param namefrom 更新者名称
+     * @param position 更新者位置
+     * @param fromchannel 更新者所在频道
+     */
     public void updateMessenger(Messenger messenger, String namefrom, int position, int fromchannel) {
         for (MessengerCharacter messengerchar : messenger.getMembers()) {
             Channel ch = getChannel(fromchannel);
@@ -1217,6 +1583,13 @@ public class World {
         }
     }
 
+    /**
+     * 静默离开信使会话（不通知其他成员）。
+     *
+     * @param messengerid 信使ID
+     * @param target 要离开的角色
+     * @throws IllegalArgumentException 如果信使不存在
+     */
     public void silentLeaveMessenger(int messengerid, MessengerCharacter target) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1225,6 +1598,15 @@ public class World {
         messenger.addMember(target, target.getPosition());
     }
 
+    /**
+     * 加入信使会话。
+     *
+     * @param messengerid 信使ID
+     * @param target 要加入的角色
+     * @param from 邀请者名称
+     * @param fromchannel 邀请者所在频道
+     * @throws IllegalArgumentException 如果信使不存在
+     */
     public void joinMessenger(int messengerid, MessengerCharacter target, String from, int fromchannel) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1234,6 +1616,14 @@ public class World {
         addMessengerPlayer(messenger, from, fromchannel, target.getPosition());
     }
 
+    /**
+     * 静默加入信使会话（不通知其他成员）。
+     *
+     * @param messengerid 信使ID
+     * @param target 要加入的角色
+     * @param position 位置
+     * @throws IllegalArgumentException 如果信使不存在
+     */
     public void silentJoinMessenger(int messengerid, MessengerCharacter target, int position) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1242,6 +1632,12 @@ public class World {
         messenger.addMember(target, position);
     }
 
+    /**
+     * 创建新的信使会话。
+     *
+     * @param chrfor 创建信使的角色
+     * @return 创建的信使对象
+     */
     public Messenger createMessenger(MessengerCharacter chrfor) {
         int messengerid = runningMessengerId.getAndIncrement();
         Messenger messenger = new Messenger(messengerid, chrfor);
@@ -1249,26 +1645,53 @@ public class World {
         return messenger;
     }
 
+    /**
+     * 检查角色是否在线。
+     *
+     * @param charName 角色名称
+     * @return 在线返回true，否则返回false
+     */
     public boolean isConnected(String charName) {
         return getPlayerStorage().getCharacterByName(charName) != null;
     }
 
+    /**
+     * 请求添加好友。
+     *
+     * @param addName 被添加者名称
+     * @param channelFrom 添加者所在频道
+     * @param cidFrom 添加者角色ID
+     * @param nameFrom 添加者名称
+     * @return 添加结果
+     */
     public BuddyAddResult requestBuddyAdd(String addName, int channelFrom, int cidFrom, String nameFrom) {
         Character addChar = getPlayerStorage().getCharacterByName(addName);
         if (addChar != null) {
             BuddyList buddylist = addChar.getBuddylist();
+            // 检查好友列表是否已满
             if (buddylist.isFull()) {
                 return BuddyAddResult.BUDDYLIST_FULL;
             }
+            // 如果好友列表中不存在，则发送好友请求
             if (!buddylist.contains(cidFrom)) {
                 buddylist.addBuddyRequest(addChar.getClient(), cidFrom, nameFrom, channelFrom);
             } else if (buddylist.containsVisible(cidFrom)) {
+                // 已在好友列表中
                 return BuddyAddResult.ALREADY_ON_LIST;
             }
         }
         return BuddyAddResult.OK;
     }
 
+    /**
+     * 好友关系变更处理。
+     *
+     * @param cid 目标角色ID
+     * @param cidFrom 变更者角色ID
+     * @param name 变更者名称
+     * @param channel 变更者频道
+     * @param operation 操作类型（添加/删除）
+     */
     public void buddyChanged(int cid, int cidFrom, String name, int channel, BuddyOperation operation) {
         Character addChar = getPlayerStorage().getCharacterById(cid);
         if (addChar != null) {
@@ -1290,16 +1713,41 @@ public class World {
         }
     }
 
+    /**
+     * 处理角色下线，更新好友列表状态。
+     *
+     * @param name 角色名称
+     * @param characterId 角色ID
+     * @param channel 所在频道
+     * @param buddies 好友ID数组
+     */
     public void loggedOff(String name, int characterId, int channel, int[] buddies) {
         updateBuddies(characterId, channel, buddies, true);
     }
 
+    /**
+     * 处理角色上线，更新好友列表状态。
+     *
+     * @param name 角色名称
+     * @param characterId 角色ID
+     * @param channel 所在频道
+     * @param buddies 好友ID数组
+     */
     public void loggedOn(String name, int characterId, int channel, int[] buddies) {
         updateBuddies(characterId, channel, buddies, false);
     }
 
+    /**
+     * 更新好友列表状态。
+     *
+     * @param characterId 角色ID
+     * @param channel 所在频道
+     * @param buddies 好友ID数组
+     * @param offline 是否离线
+     */
     private void updateBuddies(int characterId, int channel, int[] buddies, boolean offline) {
         PlayerStorage playerStorage = getPlayerStorage();
+        // 遍历所有好友，更新他们的好友列表
         for (int buddy : buddies) {
             Character chr = playerStorage.getCharacterById(buddy);
             if (chr != null) {
@@ -1307,9 +1755,11 @@ public class World {
                 if (ble != null && ble.isVisible()) {
                     int mcChannel;
                     if (offline) {
+                        // 离线：频道设为-1
                         ble.setChannel((byte) -1);
                         mcChannel = -1;
                     } else {
+                        // 在线：设置当前频道
                         ble.setChannel(channel);
                         mcChannel = (byte) (channel - 1);
                     }
@@ -1320,10 +1770,23 @@ public class World {
         }
     }
 
-    private static Integer getPetKey(Character chr, byte petSlot) {    // assuming max 3 pets
+    /**
+     * 生成宠物的唯一键值（假设最多3只宠物）。
+     * 使用位运算：角色ID左移2位（乘以4）加上宠物槽位（0-3）。
+     *
+     * @param chr 角色对象
+     * @param petSlot 宠物槽位
+     * @return 宠物唯一键值
+     */
+    private static Integer getPetKey(Character chr, byte petSlot) {
         return (chr.getId() << 2) + petSlot;
     }
 
+    /**
+     * 记录猫头鹰搜索物品。
+     *
+     * @param itemid 物品ID
+     */
     public void addOwlItemSearch(Integer itemid) {
         suggestWLock.lock();
         try {
@@ -1394,16 +1857,23 @@ public class World {
         }
     }
 
+    /**
+     * 获取某个分类下销量最高的物品（取前5名）。
+     *
+     * @param tabSellers 分类物品销量列表
+     * @return 销量最高的物品ID列表
+     */
     private List<Integer> getMostSellerOnTab(List<Pair<Integer, Integer>> tabSellers) {
         List<Integer> tabLeaderboards;
 
-        // descending order
+        // 按销量降序排序
         Comparator<Pair<Integer, Integer>> comparator = (p1, p2) -> p2.getRight().compareTo(p1.getRight());
 
         PriorityQueue<Pair<Integer, Integer>> queue = new PriorityQueue<>(Math.max(1, tabSellers.size()), comparator);
         queue.addAll(tabSellers);
 
         tabLeaderboards = new LinkedList<>();
+        // 取前5名
         for (int i = 0; i < Math.min(tabSellers.size(), 5); i++) {
             tabLeaderboards.add(queue.remove().getLeft());
         }
@@ -1411,6 +1881,11 @@ public class World {
         return tabLeaderboards;
     }
 
+    /**
+     * 获取所有分类下销量最高的现金道具。
+     *
+     * @return 各分类销量前5的物品ID列表
+     */
     public List<List<Integer>> getMostSellerCashItems() {
         List<List<Pair<Integer, Integer>>> mostSellers = this.getBoughtCashItems();
         List<List<Integer>> cashLeaderboards = new ArrayList<>(9);
@@ -1446,7 +1921,15 @@ public class World {
         return cashLeaderboards;
     }
 
+    /**
+     * 注册宠物饱食度追踪。
+     * 如果GM设置了宠物不饿或全局宠物不饿，则不注册。
+     *
+     * @param chr 角色对象
+     * @param petSlot 宠物槽位
+     */
     public void registerPetHunger(Character chr, byte petSlot) {
+        // GM宠物不饿或全局宠物不饿设置
         if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
         }
@@ -1456,6 +1939,7 @@ public class World {
         activePetsLock.lock();
         try {
             int initProc;
+            // 根据上次更新时间决定初始值
             if (Server.getInstance().getCurrentTime() - petUpdate > 55000) {
                 initProc = GameConfig.getServerInt("pet_exhaust_count") - 2;
             } else {
@@ -1468,6 +1952,12 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册宠物饱食度追踪。
+     *
+     * @param chr 角色对象
+     * @param petSlot 宠物槽位
+     */
     public void unregisterPetHunger(Character chr, byte petSlot) {
         Integer key = getPetKey(chr, petSlot);
 
@@ -1479,24 +1969,32 @@ public class World {
         }
     }
 
+    /**
+     * 执行宠物饱食度定时任务。
+     * 遍历所有活跃宠物，更新饱食度计数，达到阈值时触发饱食度恢复。
+     */
     public void runPetSchedule() {
         Map<Integer, Integer> deployedPets;
 
         activePetsLock.lock();
         try {
             petUpdate = Server.getInstance().getCurrentTime();
-            deployedPets = new HashMap<>(activePets);   // exception here found thanks to MedicOP
+            deployedPets = new HashMap<>(activePets);
         } finally {
             activePetsLock.unlock();
         }
 
+        // 遍历所有活跃宠物
         for (Map.Entry<Integer, Integer> dp : deployedPets.entrySet()) {
+            // 从键中提取角色ID（键格式：(角色ID << 2) + 宠物槽位）
             Character chr = this.getPlayerStorage().getCharacterById(dp.getKey() / 4);
             if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 
+            // 饱食度计数+1
             int dpVal = dp.getValue() + 1;
+            // 达到阈值时触发饱食度恢复
             if (dpVal == GameConfig.getServerInt("pet_exhaust_count")) {
                 chr.runFullnessSchedule(dp.getKey() % 4);
                 dpVal = 0;
@@ -1511,6 +2009,11 @@ public class World {
         }
     }
 
+    /**
+     * 注册坐骑疲劳度追踪。
+     *
+     * @param chr 角色对象
+     */
     public void registerMountHunger(Character chr) {
         if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
@@ -1543,6 +2046,10 @@ public class World {
         }
     }
 
+    /**
+     * 执行坐骑疲劳度定时任务。
+     * 遍历所有活跃坐骑，更新疲劳度计数，达到阈值时触发疲劳度恢复。
+     */
     public void runMountSchedule() {
         Map<Integer, Integer> deployedMounts;
         activeMountsLock.lock();
@@ -1553,13 +2060,16 @@ public class World {
             activeMountsLock.unlock();
         }
 
+        // 遍历所有活跃坐骑
         for (Map.Entry<Integer, Integer> dp : deployedMounts.entrySet()) {
             Character chr = this.getPlayerStorage().getCharacterById(dp.getKey());
             if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 
+            // 疲劳度计数+1
             int dpVal = dp.getValue() + 1;
+            // 达到阈值时触发疲劳度恢复
             if (dpVal == GameConfig.getServerInt("mount_exhaust_count")) {
                 if (!chr.runTirednessSchedule()) {
                     continue;
@@ -1576,6 +2086,11 @@ public class World {
         }
     }
 
+    /**
+     * 注册玩家商店。
+     *
+     * @param ps 玩家商店对象
+     */
     public void registerPlayerShop(PlayerShop ps) {
         activePlayerShopsLock.lock();
         try {
@@ -1585,6 +2100,11 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册玩家商店。
+     *
+     * @param ps 玩家商店对象
+     */
     public void unregisterPlayerShop(PlayerShop ps) {
         activePlayerShopsLock.lock();
         try {
@@ -1594,6 +2114,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取所有活跃的玩家商店。
+     *
+     * @return 玩家商店列表
+     */
     public List<PlayerShop> getActivePlayerShops() {
         activePlayerShopsLock.lock();
         try {
@@ -1603,6 +2128,12 @@ public class World {
         }
     }
 
+    /**
+     * 根据店主ID获取玩家商店。
+     *
+     * @param ownerid 店主ID
+     * @return 玩家商店对象，如果不存在返回null
+     */
     public PlayerShop getPlayerShop(int ownerid) {
         activePlayerShopsLock.lock();
         try {
@@ -1612,6 +2143,11 @@ public class World {
         }
     }
 
+    /**
+     * 注册雇佣商人。
+     *
+     * @param hm 雇佣商人对象
+     */
     public void registerHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
@@ -1628,6 +2164,11 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册雇佣商人。
+     *
+     * @param hm 雇佣商人对象
+     */
     public void unregisterHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
@@ -1637,6 +2178,10 @@ public class World {
         }
     }
 
+    /**
+     * 执行雇佣商人定时任务。
+     * 检查雇佣商人运行时间，超过24小时（1440分钟）则强制关闭。
+     */
     public void runHiredMerchantSchedule() {
         Map<Integer, Pair<HiredMerchant, Integer>> deployedMerchants;
         activeMerchantsLock.lock();
@@ -1644,16 +2189,18 @@ public class World {
             merchantUpdate = Server.getInstance().getCurrentTime();
             deployedMerchants = new LinkedHashMap<>(activeMerchants);
 
+            // 遍历所有雇佣商人
             for (Map.Entry<Integer, Pair<HiredMerchant, Integer>> dm : deployedMerchants.entrySet()) {
                 int timeOn = dm.getValue().getRight();
                 HiredMerchant hm = dm.getValue().getLeft();
 
-                if (timeOn <= 144) {   // 1440 minutes == 24hrs
+                // 检查是否超过24小时（1440分钟）
+                if (timeOn <= 144) {
                     activeMerchants.put(hm.getOwnerId(), new Pair<>(dm.getValue().getLeft(), timeOn + 1));
                 } else {
+                    // 超过时间限制，强制关闭
                     hm.forceClose();
                     this.getChannel(hm.getChannel()).removeHiredMerchant(hm.getOwnerId());
-
                     activeMerchants.remove(dm.getKey());
                 }
             }
@@ -1662,6 +2209,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取所有活跃的雇佣商人。
+     *
+     * @return 雇佣商人列表
+     */
     public List<HiredMerchant> getActiveMerchants() {
         List<HiredMerchant> hmList = new ArrayList<>();
         activeMerchantsLock.lock();

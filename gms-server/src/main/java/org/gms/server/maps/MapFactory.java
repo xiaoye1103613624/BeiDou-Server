@@ -50,9 +50,17 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * 【工厂/提供者】MapFactory：创建或提供 `maps` 相关运行时对象。
  */
 public class MapFactory {
+    /** Map名称数据（从String.wz加载） */
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+    /** MAP.wz 数据提供器 */
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
+    /**
+     * 从WZ文件加载地图生物（怪物/NPC）
+     *
+     * @param map     地图
+     * @param mapData 地图数据
+     */
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
         for (Data life : mapData.getChildByPath("life")) {
             life.getName();
@@ -81,6 +89,11 @@ public class MapFactory {
         }
     }
 
+    /**
+     * 从数据库加载地图生物
+     *
+     * @param map 地图
+     */
     private static void loadLifeFromDb(MapleMap map) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM plife WHERE map = ? and world = ?")) {
@@ -110,6 +123,23 @@ public class MapFactory {
         }
     }
 
+    /**
+     * 加载生物并添加到地图
+     *
+     * @param map     地图
+     * @param id      生物ID
+     * @param type    生物类型
+     * @param cy      cy坐标
+     * @param f       方向
+     * @param fh      立足点
+     * @param rx0     左边界
+     * @param rx1     右边界
+     * @param x       x坐标
+     * @param y       y坐标
+     * @param hide    是否隐藏
+     * @param mobTime 刷新时间
+     * @param team    队伍（用于CPQ）
+     */
     private static void loadLifeRaw(MapleMap map, int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide, int mobTime, int team) {
         AbstractLoadedLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
         if (myLife instanceof Monster monster) {
@@ -143,15 +173,24 @@ public class MapFactory {
         }
     }
 
+    /**
+     * 从WZ文件加载地图
+     *
+     * @param mapid  地图ID
+     * @param world  世界ID
+     * @param channel 频道ID
+     * @param event  事件实例管理器（可为null）
+     * @return 地图实例
+     */
     public static MapleMap loadMapFromWz(int mapid, int world, int channel, EventInstanceManager event) {
         MapleMap map;
 
         String mapName = getMapName(mapid);
-        Data mapData = mapSource.getData(mapName);    // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
+        Data mapData = mapSource.getData(mapName);
         Data infoData = mapData.getChildByPath("info");
 
         String link = DataTool.getString(infoData.getChildByPath("link"), "");
-        if (!link.equals("")) { //nexon made hundreds of dojo maps so to reduce the size they added links.
+        if (!link.equals("")) {
             mapName = getMapName(Integer.parseInt(link));
             mapData = mapSource.getData(mapName);
         }
@@ -336,6 +375,21 @@ public class MapFactory {
         return map;
     }
 
+    /**
+     * 加载生物实例
+     *
+     * @param id   生物ID
+     * @param type 生物类型
+     * @param cy   cy坐标
+     * @param f    方向
+     * @param fh   立足点
+     * @param rx0  左边界
+     * @param rx1  右边界
+     * @param x    x坐标
+     * @param y    y坐标
+     * @param hide 是否隐藏
+     * @return 生物实例
+     */
     private static AbstractLoadedLife loadLife(int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide) {
         AbstractLoadedLife myLife = LifeFactory.getLife(id, type);
         myLife.setCy(cy);
@@ -350,6 +404,14 @@ public class MapFactory {
         return myLife;
     }
 
+    /**
+     * 加载反应堆实例
+     *
+     * @param reactor          反应堆数据
+     * @param id               反应堆ID
+     * @param FacingDirection  面向方向
+     * @return 反应堆实例
+     */
     private static Reactor loadReactor(Data reactor, String id, final byte FacingDirection) {
         Reactor myReactor = new Reactor(ReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
         int x = DataTool.getInt(reactor.getChildByPath("x"));
@@ -362,6 +424,12 @@ public class MapFactory {
         return myReactor;
     }
 
+    /**
+     * 获取地图名称路径
+     *
+     * @param mapid 地图ID
+     * @return 地图名称路径
+     */
     private static String getMapName(int mapid) {
         String mapName = StringUtil.getLeftPaddedStr(Integer.toString(mapid), '0', 9);
         StringBuilder builder = new StringBuilder("Map/Map");

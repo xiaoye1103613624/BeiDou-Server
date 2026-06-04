@@ -1,0 +1,9 @@
+ALTER TABLE `xy_boss_config`
+    ADD COLUMN `level` INT DEFAULT NULL COMMENT '等级覆盖（NULL=使用WZ默认值）',
+    ADD COLUMN `hp` INT DEFAULT NULL COMMENT 'HP覆盖（NULL=使用WZ默认值，在倍率之前应用）',
+    ADD COLUMN `mp` INT DEFAULT NULL COMMENT 'MP覆盖（NULL=使用WZ默认值）',
+    ADD COLUMN `exp` INT DEFAULT NULL COMMENT '经验覆盖（NULL=使用WZ默认值，在倍率之前应用）',
+    ADD COLUMN `pdd` INT DEFAULT NULL COMMENT '物理防御覆盖（NULL=使用WZ默认值）',
+    ADD COLUMN `mdd` INT DEFAULT NULL COMMENT '魔法防御覆盖（NULL=使用WZ默认值）',
+    ADD COLUMN `acc` INT DEFAULT NULL COMMENT '命中率覆盖（NULL=使用WZ默认值）',
+    ADD COLUMN `eva` INT DEFAULT NULL COMMENT '闪避率覆盖（NULL=使用WZ默认值）';

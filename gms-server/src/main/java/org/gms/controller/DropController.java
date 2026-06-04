@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/drop")
 public class DropController {
+    /** 掉落服务 */
     private final DropService dropService;
 
     @Tag(name = "/drop/" + ApiConstant.LATEST)

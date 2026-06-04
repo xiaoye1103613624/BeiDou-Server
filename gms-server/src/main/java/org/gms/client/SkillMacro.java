@@ -23,15 +23,31 @@ package org.gms.client;
 
 /**
  * 【类型】SkillMacro（class），包 `org.gms.client`。
+ * <p>技能宏数据类，支持最多绑定3个技能，点击宏可同时释放多个技能</p>
  */
 public class SkillMacro {
+    /** 技能1 ID */
     private int skill1;
+    /** 技能2 ID */
     private int skill2;
+    /** 技能3 ID */
     private int skill3;
+    /** 宏名称 */
     private final String name;
+    /** 是否喊话（0=否, 1=是） */
     private final int shout;
+    /** 在宏栏中的位置 */
     private final int position;
 
+    /**
+     * 构造技能宏
+     * @param skill1 技能1 ID
+     * @param skill2 技能2 ID
+     * @param skill3 技能3 ID
+     * @param name 宏名称
+     * @param shout 是否喊话
+     * @param position 宏栏位置
+     */
     public SkillMacro(int skill1, int skill2, int skill3, String name, int shout, int position) {
         this.skill1 = skill1;
         this.skill2 = skill2;

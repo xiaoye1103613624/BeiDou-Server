@@ -48,22 +48,38 @@ import java.util.List;
 
 /**
  * 【类型】CommandsExecutor（class），包 `org.gms.client.command`。
+ * <p>命令执行器，负责注册和执行所有GM/玩家命令</p>
+ * <p>命令前缀：@ 玩家命令，! GM命令</p>
  */
 public class CommandsExecutor {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(CommandsExecutor.class);
+    /** 单例实例 */
     @Getter
     private static final CommandsExecutor instance = new CommandsExecutor();
+    /** 玩家命令前缀 */
     private static final char USER_HEADING = '@';
+    /** GM命令前缀 */
     private static final char GM_HEADING = '!';
 
+    /** 已注册命令映射（命令名→Command实例） */
     @Getter
     private final HashMap<String, Command> registeredCommands = new HashMap<>();
+    /** 命令名称和描述列表（按GM等级分组） */
     @Getter
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
+    /** 当前等级命令游标 */
     private Pair<List<String>, List<String>> levelCommandsCursor;
 
+    /** 命令服务 */
     private static final CommandService commandService = ServerManager.getApplicationContext().getBean(CommandService.class);
 
+    /**
+     * 判断消息是否为命令
+     * @param client 客户端
+     * @param content 消息内容
+     * @return true=是命令
+     */
     public static boolean isCommand(Client client, String content) {
         char heading = content.charAt(0);
         if (client.getPlayer().isGM()) {
@@ -72,20 +88,19 @@ public class CommandsExecutor {
         return heading == USER_HEADING;
     }
 
+    /**
+     * 加载命令执行器
+     * <p>通过CommandService加载所有命令</p>
+     */
     public void loadCommandsExecutor() {
-//        registeredCommands.clear();
-//        commandsNameDesc.clear();
-//        registerLv0Commands();
-//        registerLv1Commands();
-//        registerLv2Commands();
-//        registerLv3Commands();
-//        registerLv4Commands();
-//        registerLv5Commands();
-//        registerLv6Commands();
-
         commandService.loadCommands(registeredCommands, commandsNameDesc);
     }
 
+    /**
+     * 处理命令（带客户端锁）
+     * @param client 客户端
+     * @param message 命令消息
+     */
     public void handle(Client client, String message) {
         if (client.tryacquireClient()) {
             try {
@@ -98,36 +113,49 @@ public class CommandsExecutor {
         }
     }
 
+    /**
+     * 内部命令处理逻辑
+     * <p>解析命令、验证权限、执行命令</p>
+     */
     private void handleInternal(Client client, String message) {
+        // 监狱限制：非GM玩家在监狱不能使用命令
         if (client.getPlayer().getMapId() == MapId.JAIL && !client.getPlayer().isGM()) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message1"));
             return;
         }
-        // GM commands
+
         char heading = message.charAt(0);
+        // 玩家命令限制检查
         if (!client.getPlayer().isGM() && heading == USER_HEADING && GameConfig.getServerBoolean("deterred_player_command")) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message4"));
             return;
         }
+
+        // 解析命令名和参数
         final String splitRegex = "[ ]";
         String[] splitedMessage = message.substring(1).split(splitRegex, 2);
         if (splitedMessage.length < 2) {
             splitedMessage = new String[]{splitedMessage[0], ""};
         }
 
-        client.getPlayer().setLastCommandMessage(splitedMessage[1]);    // thanks Tochi & Nulliphite for noticing string messages being marshalled lowercase
+        client.getPlayer().setLastCommandMessage(splitedMessage[1]);
         final String commandName = splitedMessage[0].toLowerCase();
         final String[] lowercaseParams = splitedMessage[1].toLowerCase().split(splitRegex);
 
+        // 获取命令实例
         final Command command = registeredCommands.get(commandName);
         if (command == null) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message2", commandName));
             return;
         }
+
+        // 权限检查
         if (client.getPlayer().gmLevel() < command.getRank()) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message3"));
             return;
         }
+
+        // 准备参数
         String[] params;
         if (lowercaseParams.length > 0 && !lowercaseParams[0].isEmpty()) {
             params = Arrays.copyOfRange(lowercaseParams, 0, lowercaseParams.length);
@@ -135,10 +163,14 @@ public class CommandsExecutor {
             params = new String[]{};
         }
 
+        // 执行命令
         command.execute(client, params);
         log.info(I18nUtil.getLogMessage("CommandsExecutor.handleInternal.info1"), client.getPlayer().getName(), command.getClass().getSimpleName());
     }
 
+    /**
+     * 添加命令信息到列表
+     */
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {
         try {
             levelCommandsCursor.getRight().add(commandClass.getDeclaredConstructor().newInstance().getDescription());
@@ -148,24 +180,34 @@ public class CommandsExecutor {
         }
     }
 
+    /**
+     * 添加命令（多个别名，默认等级0）
+     */
     private void addCommand(String[] syntaxs, Class<? extends Command> commandClass) {
         for (String syntax : syntaxs) {
             addCommand(syntax, 0, commandClass);
         }
     }
 
+    /**
+     * 添加命令（单个别名，默认等级0）
+     */
     private void addCommand(String syntax, Class<? extends Command> commandClass) {
-        //for (String syntax : syntaxs){
         addCommand(syntax, 0, commandClass);
-        //}
     }
 
+    /**
+     * 添加命令（多个别名，指定等级）
+     */
     private void addCommand(String[] surtaxes, int rank, Class<? extends Command> commandClass) {
         for (String syntax : surtaxes) {
             addCommand(syntax, rank, commandClass);
         }
     }
 
+    /**
+     * 添加命令（单个别名，指定等级）
+     */
     private void addCommand(String syntax, int rank, Class<? extends Command> commandClass) {
         if (registeredCommands.containsKey(syntax.toLowerCase())) {
             log.warn(I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn1"), syntax);
@@ -176,18 +218,17 @@ public class CommandsExecutor {
         addCommandInfo(commandName, commandClass);
 
         try {
-            Command commandInstance = commandClass.getDeclaredConstructor().newInstance();     // thanks Halcyon for noticing commands getting reinstanced every call
+            Command commandInstance = commandClass.getDeclaredConstructor().newInstance();
             commandInstance.setRank(rank);
-
             registeredCommands.put(commandName, commandInstance);
         } catch (Exception e) {
             log.warn(I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn2"), e);
         }
     }
 
+    /** 注册GM等级0命令（普通玩家可用） */
     private void registerLv0Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand(new String[]{"help", "commands"}, HelpCommand.class);
         addCommand("droplimit", DropLimitCommand.class);
         addCommand("time", TimeCommand.class);
@@ -213,28 +254,24 @@ public class CommandsExecutor {
         addCommand("enableauth", EnableAuthCommand.class);
         addCommand("toggleexp", ToggleExpCommand.class);
         addCommand("mylawn", MapOwnerClaimCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 
-
+    /** 注册GM等级1命令 */
     private void registerLv1Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand("bosshp", 1, BossHpCommand.class);
         addCommand("mobhp", 1, MobHpCommand.class);
         addCommand("whatdropsfrom", 1, WhatDropsFromCommand.class);
         addCommand("whodrops", 1, WhoDropsCommand.class);
         addCommand("buffme", 1, BuffMeCommand.class);
         addCommand("goto", 1, GotoCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 
-
+    /** 注册GM等级2命令 */
     private void registerLv2Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand("recharge", 2, RechargeCommand.class);
         addCommand("whereami", 2, WhereaMiCommand.class);
         addCommand("hide", 2, HideCommand.class);
@@ -274,13 +311,12 @@ public class CommandsExecutor {
         addCommand("mobskill", 2, MobSkillCommand.class);
         addCommand("warpmap", 2, WarpMapCommand.class);
         addCommand("warparea", 2, WarpAreaCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 
+    /** 注册GM等级3命令 */
     private void registerLv3Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand("debuff", 3, DebuffCommand.class);
         addCommand("fly", 3, FlyCommand.class);
         addCommand("spawn", 3, SpawnCommand.class);
@@ -338,13 +374,12 @@ public class CommandsExecutor {
         addCommand("timer", 3, TimerCommand.class);
         addCommand("timermap", 3, TimerMapCommand.class);
         addCommand("timerall", 3, TimerAllCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 
+    /** 注册GM等级4命令 */
     private void registerLv4Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand("servermessage", 4, ServerMessageCommand.class);
         addCommand("proitem", 4, ProItemCommand.class);
         addCommand("seteqstat", 4, SetEqStatCommand.class);
@@ -370,26 +405,24 @@ public class CommandsExecutor {
         addCommand("pmob", 4, PmobCommand.class);
         addCommand("pmobremove", 4, PmobRemoveCommand.class);
         addCommand("warptolife", 4, WarpToLifeCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 
+    /** 注册GM等级5命令 */
     private void registerLv5Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand("debug", 5, DebugCommand.class);
         addCommand("set", 5, SetCommand.class);
         addCommand("showpackets", 5, ShowPacketsCommand.class);
         addCommand("showmovelife", 5, ShowMoveLifeCommand.class);
         addCommand("showsessions", 5, ShowSessionsCommand.class);
         addCommand("iplist", 5, IpListCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 
+    /** 注册GM等级6命令 */
     private void registerLv6Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
-
         addCommand("setgmlevel", 6, SetGmLevelCommand.class);
         addCommand("warpworld", 6, WarpWorldCommand.class);
         addCommand("saveall", 6, SaveAllCommand.class);
@@ -407,7 +440,6 @@ public class CommandsExecutor {
         addCommand("removechannel", 6, ServerRemoveChannelCommand.class);
         addCommand("removeworld", 6, ServerRemoveWorldCommand.class);
         addCommand("devtest", 6, DevtestCommand.class);
-
         commandsNameDesc.add(levelCommandsCursor);
     }
 

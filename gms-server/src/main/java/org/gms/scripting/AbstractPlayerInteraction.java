@@ -1628,8 +1628,39 @@ public class AbstractPlayerInteraction {
         return getPlayer().getCurrentOnlineTime();
     }
 
+    // ==================== 轮回石碑（Samsara Stone）====================
 
+    /**
+     * 召唤轮回石碑NPC并加速当前地图怪物刷新。
+     *
+     * @param npcId           石碑NPC模板ID
+     * @param durationMinutes 持续时间（分钟）
+     * @param accelerationRate 重生加速倍率（如 0.3f = 30%原始重生时间，约3.3倍速）
+     */
+    public void summonSamsaraStone(int npcId, int durationMinutes, float accelerationRate) {
+        getPlayer().getMap().spawnSamsaraStoneNpc(getPlayer(), npcId, durationMinutes, accelerationRate);
+    }
 
+    /** 移除当前地图的轮回石碑，恢复正常刷怪速度 */
+    public void removeSamsaraStone() {
+        getPlayer().getMap().removeSamsaraStoneNpc();
+    }
 
+    /** 当前地图是否有轮回石碑 */
+    public boolean hasSamsaraStone() {
+        return getPlayer().getMap().hasSamsaraStone();
+    }
+
+    /** 获取当前地图轮回石碑所有者（可能为null） */
+    public Character getSamsaraOwner() {
+        return getPlayer().getMap().getSamsaraOwner();
+    }
+
+    /** 获取轮回石碑过期时间戳（毫秒），无石碑时返回0 */
+    public long getSamsaraExpireTime() {
+        return getPlayer().getMap().getSamsaraExpireTime();
+    }
+
+    // ==================== 轮回石碑 END ====================
 
 }

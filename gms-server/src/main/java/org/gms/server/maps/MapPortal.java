@@ -23,8 +23,13 @@ package org.gms.server.maps;
 
 /**
  * 【类型】MapPortal（class），包 `org.gms.server.maps`。
+ * <p>地图传送门，用于地图内的传送点</p>
  */
 public class MapPortal extends GenericPortal {
+
+    /**
+     * 构造地图传送门
+     */
     public MapPortal() {
         super(Portal.MAP_PORTAL);
     }

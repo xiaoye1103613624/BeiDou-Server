@@ -792,6 +792,29 @@ public class PacketCreator {
      * @param channelLoad Load of the channel - 1200 seems to be max.
      * @return The server info packet.
      */
+    /**
+     * 创建服务器列表封包。
+     * 
+     * <p>向客户端发送服务器信息，包括服务器名称、状态标志、活动信息、
+     * 经验/掉率倍率以及可用频道列表。这是客户端显示服务器列表时使用的封包。</p>
+     * 
+     * <p>封包结构：
+     * <ul>
+     *   <li>服务器ID：服务器的唯一标识符</li>
+     *   <li>服务器名称：显示给用户的服务器名字</li>
+     *   <li>状态标志：服务器状态（正常、繁忙、满员等）</li>
+     *   <li>活动信息：当前服务器的活动公告</li>
+     *   <li>倍率信息：经验值和掉率的倍率设置</li>
+     *   <li>频道列表：包含各频道名称、容量和ID信息</li>
+     * </ul></p>
+     * 
+     * @param serverId 服务器ID
+     * @param serverName 服务器名称
+     * @param flag 服务器状态标志
+     * @param eventmsg 活动信息文本
+     * @param channelLoad 频道负载列表
+     * @return SERVERLIST封包，用于发送服务器信息
+     */
     public static Packet getServerList(int serverId, String serverName, int flag, String eventmsg, List<Channel> channelLoad) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERLIST);
         p.writeByte(serverId);
@@ -970,6 +993,24 @@ public class PacketCreator {
      *
      * @param chr The character to get info about.
      * @return The character info packet.
+     */
+    /**
+     * 创建角色信息封包。
+     * 
+     * <p>用于将角色完整信息发送给客户端，包括角色基础属性、装备、技能、
+     * 好友列表等所有数据。这是角色进入游戏世界时的核心封包之一。</p>
+     * 
+     * <p>封包结构：
+     * <ul>
+     *   <li>频道ID：角色所在的服务器频道</li>
+     *   <li>初始化标志：用于客户端初始化流程</li>
+     *   <li>随机数种子：用于客户端某些随机效果</li>
+     *   <li>角色详细信息：通过addCharacterInfo方法写入</li>
+     *   <li>当前时间戳：用于客户端时间同步</li>
+     * </ul></p>
+     * 
+     * @param chr 角色对象，包含所有角色数据
+     * @return SET_FIELD封包，用于角色信息初始化
      */
     public static Packet getCharInfo(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
@@ -1340,6 +1381,25 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 创建NPC生成封包。
+     * 
+     * <p>向客户端发送在指定位置生成NPC的指令，包含NPC的基本信息和位置数据。
+     * 该封包用于在地图上显示一个新的NPC对象，供玩家进行交互。</p>
+     * 
+     * <p>封包结构：
+     * <ul>
+     *   <li>对象ID：NPC在当前地图中的唯一标识符</li>
+     *   <li>NPC模板ID：定义NPC外观和行为的模板</li>
+     *   <li>坐标X/Y：NPC在地图上的位置</li>
+     *   <li>朝向信息：NPC面向方向（左/右）</li>
+     *   <li>碰撞检测：NPC与地面的物理关系</li>
+     *   <li>显示范围：NPC左右移动的边界</li>
+     * </ul></p>
+     * 
+     * @param life NPC对象，包含ID、位置、朝向等信息
+     * @return SPAWN_NPC封包，用于发送给客户端
+     */
     public static Packet spawnNPC(NPC life) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC);
         p.writeInt(life.getObjectId());
@@ -1491,6 +1551,40 @@ public class PacketCreator {
      * @param aggro             Aggressive mob?
      * @param effect            The spawn effect to use.
      * @return The spawn/control packet.
+     */
+    /**
+     * 内部方法：创建怪物生成封包。
+     * 
+     * <p>根据参数生成不同类型的怪物生成封包，包括普通怪物、受控怪物、隐身怪物等。
+     * 该方法是所有怪物生成封包的统一入口，处理怪物的位置、状态、效果等信息。</p>
+     * 
+     * <p>参数说明：
+     * <ul>
+     *   <li>requestController: 是否请求客户端控制怪物（主动怪）</li>
+     *   <li>newSpawn: 是否为新生成的怪物</li>
+     *   <li>aggro: 是否处于攻击状态</li>
+     *   <li>effect: 生成特效ID（不同值代表不同特效）</li>
+     *   <li>makeInvis: 是否制作隐身怪物</li>
+     * </ul></p>
+     * 
+     * <p>特殊效果值含义：
+     * <ul>
+     *   <li>-4: 假怪物</li>
+     *   <li>-3: 在链接怪物死亡后出现</li>
+     *   <li>-2: 淡入效果</li>
+     *   <li>1: 烟雾效果</li>
+     *   <li>3: 国王史莱姆生成</li>
+     *   <li>8: 'The Boss' 效果</li>
+     *   <li>13: 弗兰肯斯坦效果</li>
+     * </ul></p>
+     * 
+     * @param life 怪物对象，包含ID、位置、状态等信息
+     * @param requestController 是否请求控制权
+     * @param newSpawn 是否为新生成
+     * @param aggro 是否处于攻击状态
+     * @param effect 生成特效ID
+     * @param makeInvis 是否制作隐身怪物
+     * @return Monster生成封包，用于发送给客户端
      */
     private static Packet spawnMonsterInternal(Monster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
         if (makeInvis) {

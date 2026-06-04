@@ -22,22 +22,28 @@
 package org.gms.server.maps;
 
 /**
- * 【枚举】SavedLocationType：定义 `maps` 中的一组常量。
+ * 【枚举】SavedLocationType：定义保存位置类型常量。
+ * <p>用于标识玩家保存的各种传送位置类型</p>
  */
 public enum SavedLocationType {
-    FREE_MARKET,
-    WORLDTOUR,
-    FLORINA,
-    INTRO,
-    SUNDAY_MARKET,
-    MIRROR,
-    EVENT,
-    BOSSPQ,
-    HAPPYVILLE,
-    MONSTER_CARNIVAL,
-    DEVELOPER,
-    JAIL;
+    FREE_MARKET,      // 自由市场
+    WORLDTOUR,        // 世界旅游
+    FLORINA,          // 弗洛里娜海滩
+    INTRO,            // 新手引导
+    SUNDAY_MARKET,    // 周日市场
+    MIRROR,           // 镜子世界
+    EVENT,            // 活动地图
+    BOSSPQ,           // BOSS组队任务
+    HAPPYVILLE,       // 幸福村
+    MONSTER_CARNIVAL, // 怪物嘉年华
+    DEVELOPER,        // 开发者区域
+    JAIL;             // 监狱
 
+    /**
+     * 根据字符串获取保存位置类型
+     * @param Str 类型名称字符串
+     * @return 对应的枚举值
+     */
     public static SavedLocationType fromString(String Str) {
         return valueOf(Str);
     }

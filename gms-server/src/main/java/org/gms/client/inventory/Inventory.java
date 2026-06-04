@@ -67,18 +67,25 @@ public class Inventory implements Iterable<Item> {
     private static final Logger log = LoggerFactory.getLogger(Inventory.class);
     /** 物品存储：key=槽位号(short), value=物品实例，LinkedHashMap 保证插入顺序 */
     protected final Map<Short, Item> inventory;
-    /** 背包类型 */
+    /** 背包类型：定义背包的种类（装备栏、消耗栏等） */
     protected final InventoryType type;
-    /** 背包操作锁 */
+    /** 背包操作锁：用于确保多线程环境下的数据一致性 */
     protected final Lock lock = new ReentrantLock(true);
 
-    /** 背包所属角色 */
+    /** 背包所属角色：该背包关联的角色对象 */
     protected Character owner;
-    /** 该背包的最大槽位数 */
+    /** 该背包的最大槽位数：表示背包最多能容纳的物品数量 */
     protected byte slotLimit;
-    /** 是否已完成首次校验 */
+    /** 是否已完成首次校验：标记背包是否已经过初始化校验 */
     protected boolean checked = false;
 
+    /**
+     * 构造函数：创建背包实例。
+     * 
+     * @param mc 背包所属的角色
+     * @param type 背包类型
+     * @param slotLimit 背包的最大槽位数
+     */
     public Inventory(Character mc, InventoryType type, byte slotLimit) {
         this.owner = mc;
         this.inventory = new LinkedHashMap<>();
@@ -86,14 +93,31 @@ public class Inventory implements Iterable<Item> {
         this.slotLimit = slotLimit;
     }
 
+    /**
+     * 检查背包是否可以扩展。
+     * 
+     * <p>某些类型的背包不能扩展，包括未定义、已装备和现金栏。</p>
+     * 
+     * @return 如果可以扩展则返回true，否则返回false
+     */
     public boolean isExtendableInventory() { // not sure about cash, basing this on the previous one.
         return !(type.equals(InventoryType.UNDEFINED) || type.equals(InventoryType.EQUIPPED) || type.equals(InventoryType.CASH));
     }
 
+    /**
+     * 检查是否为装备背包。
+     * 
+     * @return 如果是装备背包或已装备栏则返回true，否则返回false
+     */
     public boolean isEquipInventory() {
         return type.equals(InventoryType.EQUIP) || type.equals(InventoryType.EQUIPPED);
     }
 
+    /**
+     * 获取背包的最大槽位数。
+     * 
+     * @return 最大槽位数
+     */
     public byte getSlotLimit() {
         lock.lock();
         try {
@@ -103,6 +127,13 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 设置背包的最大槽位数。
+     * 
+     * <p>如果新限制小于当前限制，则移除超出新限制的物品槽位。</p>
+     * 
+     * @param newLimit 新的最大槽位数
+     */
     public void setSlotLimit(int newLimit) {
         lock.lock();
         try {
@@ -125,6 +156,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 获取背包中所有物品的不可修改集合。
+     * 
+     * @return 包含所有物品的不可修改集合
+     */
     public Collection<Item> list() {
         lock.lock();
         try {
@@ -134,6 +170,12 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 根据物品ID查找物品。
+     * 
+     * @param itemId 物品ID
+     * @return 找到的物品，如果不存在则返回null
+     */
     public Item findById(int itemId) {
         for (Item item : list()) {
             if (item.getItemId() == itemId) {
@@ -143,6 +185,12 @@ public class Inventory implements Iterable<Item> {
         return null;
     }
 
+    /**
+     * 根据物品名称查找物品。
+     * 
+     * @param name 物品名称（不区分大小写）
+     * @return 找到的物品，如果不存在则返回null
+     */
     public Item findByName(String name) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : list()) {
@@ -159,6 +207,12 @@ public class Inventory implements Iterable<Item> {
         return null;
     }
 
+    /**
+     * 计算指定ID物品的总数量。
+     * 
+     * @param itemId 物品ID
+     * @return 该物品的总数量
+     */
     public int countById(int itemId) {
         int qty = 0;
         for (Item item : list()) {
@@ -169,6 +223,12 @@ public class Inventory implements Iterable<Item> {
         return qty;
     }
 
+    /**
+     * 计算指定ID且未拥有者的物品总数量。
+     * 
+     * @param itemId 物品ID
+     * @return 该物品中未设定拥有者的总数量
+     */
     public int countNotOwnedById(int itemId) {
         int qty = 0;
         for (Item item : list()) {
@@ -244,6 +304,12 @@ public class Inventory implements Iterable<Item> {
         return ret;
     }
 
+    /**
+     * 向背包中添加物品。
+     * 
+     * @param item 要添加的物品
+     * @return 成功时返回物品槽位号，失败时返回-1
+     */
     public short addItem(Item item) {
         short slotId = addSlot(item);
         if (slotId == -1) {
@@ -253,6 +319,13 @@ public class Inventory implements Iterable<Item> {
         return slotId;
     }
 
+    /**
+     * 从数据库添加物品到背包。
+     * 
+     * <p>主要用于加载角色数据时添加物品到背包。</p>
+     * 
+     * @param item 要添加的物品
+     */
     public void addItemFromDB(Item item) {
         if (item.getPosition() < 0 && !type.equals(InventoryType.EQUIPPED)) {
             return;
@@ -260,10 +333,26 @@ public class Inventory implements Iterable<Item> {
         addSlotFromDB(item.getPosition(), item);
     }
 
+    /**
+     * 检查两个物品是否具有相同的拥有者。
+     * 
+     * @param source 源物品
+     * @param target 目标物品
+     * @return 如果拥有者相同则返回true，否则返回false
+     */
     private static boolean isSameOwner(Item source, Item target) {
         return source.getOwner().equals(target.getOwner());
     }
 
+    /**
+     * 移动物品从一个槽位到另一个槽位。
+     * 
+     * <p>处理物品移动、合并和交换等操作，根据物品类型和数量执行相应逻辑。</p>
+     * 
+     * @param sSlot 源槽位
+     * @param dSlot 目标槽位
+     * @param slotMax 槽位最大数量限制
+     */
     public void move(short sSlot, short dSlot, short slotMax) {
         lock.lock();
         try {
@@ -295,6 +384,12 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 交换两个物品的槽位位置。
+     * 
+     * @param source 源物品
+     * @param target 目标物品
+     */
     private void swap(Item source, Item target) {
         inventory.remove(source.getPosition());
         inventory.remove(target.getPosition());
@@ -305,6 +400,12 @@ public class Inventory implements Iterable<Item> {
         inventory.put(target.getPosition(), target);
     }
 
+    /**
+     * 根据槽位号获取物品。
+     * 
+     * @param slot 槽位号
+     * @return 指定槽位的物品，如果不存在则返回null
+     */
     public Item getItem(short slot) {
         lock.lock();
         try {
@@ -314,10 +415,22 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 移除指定槽位的物品（默认移除1个）。
+     * 
+     * @param slot 槽位号
+     */
     public void removeItem(short slot) {
         removeItem(slot, (short) 1, false);
     }
 
+    /**
+     * 移除指定槽位的物品。
+     * 
+     * @param slot 槽位号
+     * @param quantity 要移除的数量
+     * @param allowZero 是否允许物品数量为0（保留物品但数量为0）
+     */
     public void removeItem(short slot, short quantity, boolean allowZero) {
         Item item = getItem(slot);
         if (item == null) {// TODO is it ok not to throw an exception here?
@@ -332,6 +445,12 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 添加物品到下一个可用槽位。
+     * 
+     * @param item 要添加的物品
+     * @return 成功时返回槽位号，失败时返回-1
+     */
     protected short addSlot(Item item) {
         if (item == null) {
             return -1;
@@ -358,6 +477,12 @@ public class Inventory implements Iterable<Item> {
         return slotId;
     }
 
+    /**
+     * 从数据库添加物品到指定槽位。
+     * 
+     * @param slot 槽位号
+     * @param item 要添加的物品
+     */
     protected void addSlotFromDB(short slot, Item item) {
         lock.lock();
         try {
@@ -371,6 +496,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 从背包中移除指定槽位的物品。
+     * 
+     * @param slot 槽位号
+     */
     public void removeSlot(short slot) {
         Item item;
         lock.lock();
@@ -385,6 +515,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 检查背包是否已满。
+     * 
+     * @return 如果背包已满则返回true，否则返回false
+     */
     public boolean isFull() {
         lock.lock();
         try {
@@ -394,6 +529,12 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 检查背包在考虑额外项目的情况下是否已满。
+     * 
+     * @param margin 额外考虑的项目数量
+     * @return 如果背包在添加额外项目后将满则返回true，否则返回false
+     */
     public boolean isFull(int margin) {
         lock.lock();
         try {
@@ -404,6 +545,13 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 检查背包在考虑额外项目和已使用槽位的情况下是否已满。
+     * 
+     * @param margin 额外考虑的项目数量
+     * @param used 已使用的槽位数量
+     * @return 如果背包在添加额外项目后将满则返回true，否则返回false
+     */
     public boolean isFullAfterSomeItems(int margin, int used) {
         lock.lock();
         try {
@@ -414,6 +562,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 获取下一个可用的槽位号。
+     * 
+     * @return 可用槽位号，如果没有可用槽位则返回-1
+     */
     public short getNextFreeSlot() {
         if (isFull()) {
             return -1;
@@ -432,6 +585,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 获取可用槽位的数量。
+     * 
+     * @return 可用槽位的数量
+     */
     public short getNumFreeSlot() {
         if (isFull()) {
             return 0;
@@ -628,6 +786,11 @@ public class Inventory implements Iterable<Item> {
         return true;
     }
 
+    /**
+     * 获取背包类型。
+     * 
+     * @return 背包类型
+     */
     public InventoryType getType() {
         return type;
     }
@@ -637,6 +800,14 @@ public class Inventory implements Iterable<Item> {
         return Collections.unmodifiableCollection(list()).iterator();
     }
 
+    /**
+     * 根据现金ID查找物品。
+     * 
+     * <p>在装备、宠物等物品中搜索匹配的现金ID。</p>
+     * 
+     * @param cashId 现金ID
+     * @return 找到的物品，如果不存在则返回null
+     */
     public Item findByCashId(int cashId) {
         boolean isRing = false;
         Equip equip = null;
@@ -653,6 +824,11 @@ public class Inventory implements Iterable<Item> {
         return null;
     }
 
+    /**
+     * 检查背包是否已完成校验。
+     * 
+     * @return 如果已校验则返回true，否则返回false
+     */
     public boolean checked() {
         lock.lock();
         try {
@@ -662,6 +838,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 设置背包校验状态。
+     * 
+     * @param yes 是否已校验
+     */
     public void checked(boolean yes) {
         lock.lock();
         try {
@@ -671,14 +852,29 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
+    /**
+     * 锁定背包。
+     * 
+     * <p>防止其他线程同时访问背包数据。</p>
+     */
     public void lockInventory() {
         lock.lock();
     }
 
+    /**
+     * 解锁背包。
+     * 
+     * <p>允许其他线程访问背包数据。</p>
+     */
     public void unlockInventory() {
         lock.unlock();
     }
 
+    /**
+     * 释放背包资源。
+     * 
+     * <p>清除背包与角色的关联，以便垃圾回收。</p>
+     */
     public void dispose() {
         owner = null;
     }
