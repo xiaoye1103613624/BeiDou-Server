@@ -57,13 +57,16 @@ public final class WhisperHandler extends AbstractPacketHandler {
         }
 
         switch (request) {
+            // 请求查找目标位置
             case WhisperFlag.LOCATION | WhisperFlag.REQUEST:
                 handleFind(c.getPlayer(), target, WhisperFlag.LOCATION);
                 break;
+            // 发送密语消息
             case WhisperFlag.WHISPER | WhisperFlag.REQUEST:
                 String message = p.readString();
                 handleWhisper(message, c.getPlayer(), target);
                 break;
+            // 好友位置查找
             case WhisperFlag.LOCATION_FRIEND | WhisperFlag.REQUEST:
                 handleFind(c.getPlayer(), target, WhisperFlag.LOCATION_FRIEND);
                 break;

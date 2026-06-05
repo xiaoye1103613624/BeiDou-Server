@@ -45,17 +45,26 @@ public abstract class GachaponItems {
         this.rareItems = getRareItems();
     }
 
+    /**
+     * 根据稀有度等级获取对应的物品列表
+     * @param tier 稀有度等级（0=普通，1=稀有，2=极稀有）
+     * @return 对应稀有度的物品数组
+     */
     public final int[] getItems(int tier) {
+        // 根据稀有度等级返回对应的物品数组
         switch (tier) {
+        // 0: 普通物品
         case 0:
             return commonItems;
+        // 1: 稀有物品
         case 1:
             return uncommonItems;
+        // 2: 极稀有物品
         case 2:
             return rareItems;
+        // 默认: 无效等级返回null
         default:
             return null;
         }
     }
 }
-

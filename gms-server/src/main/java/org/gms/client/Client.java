@@ -393,8 +393,11 @@ public class Client extends ChannelInboundHandlerAdapter {
      * 最后关闭底层 Netty 通道。
      */
     private void closeMapleSession() {
+        // 根据客户端类型关闭对应的会话
         switch (type) {
+            // 登录服务器会话：关闭登录会话
             case LOGIN -> SessionCoordinator.getInstance().closeLoginSession(this);
+            // 频道服务器会话：关闭频道会话
             case CHANNEL -> SessionCoordinator.getInstance().closeSession(this, null);
         }
 
@@ -991,17 +994,24 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (loginok == 0 || loginok == 4) {
             AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);  //loginok == 4，但是会导致限制多开参数 deterred_multi_client == true 时密码错误一次返回REMOTE_REACHED_LIMIT，需要重开客户端
 
+            // 根据多开检测结果返回对应的登录状态码
             return switch (res) {
+                // 登录成功：重置尝试次数，返回原始状态码
                 case SUCCESS -> {
                     if (loginok == 0) {
                         loginattempt = 0;
                     }
                     yield loginok;
                 }
+                // 远程已登录：返回17（账号已在线）
                 case REMOTE_LOGGEDIN -> 17;
+                // 达到在线上限：返回13（已达同时登录上限）
                 case REMOTE_REACHED_LIMIT -> 13;
+                // 远程处理中：返回10
                 case REMOTE_PROCESSING -> 10;
+                // 多次登录尝试：返回16（账号尝试次数过多）
                 case MANY_ACCOUNT_ATTEMPTS -> 16;
+                // 默认情况：返回8（未知错误）
                 default -> 8;
             };
         } else {

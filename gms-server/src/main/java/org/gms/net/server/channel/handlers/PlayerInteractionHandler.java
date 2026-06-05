@@ -312,10 +312,13 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                             if (game.hasFreeSlot() && !game.isVisitor(chr)) {
                                 game.addVisitor(chr);
                                 chr.setMiniGame(game);
+                                // 根据游戏类型发送对应的游戏界面
                                 switch (game.getGameType()) {
+                                    // 围棋游戏
                                     case OMOK:
                                         game.sendOmok(c, game.getPieceType());
                                         break;
+                                    // 记忆卡片游戏
                                     case MATCH_CARD:
                                         game.sendMatchCard(c, game.getPieceType());
                                         break;

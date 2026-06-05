@@ -1181,16 +1181,18 @@ public class World {
      * @param partyMembers 队伍成员列表
      */
     private void updateCharacterParty(Party party, PartyOperation operation, PartyCharacter target, Collection<PartyCharacter> partyMembers) {
+        // 根据队伍操作类型更新角色的队伍信息
         switch (operation) {
+            // JOIN: 注册角色到队伍
             case JOIN:
                 registerCharacterParty(target.getId(), party.getId());
                 break;
-
+            // LEAVE/EXPEL: 注销角色的队伍信息
             case LEAVE:
             case EXPEL:
                 unregisterCharacterParty(target.getId());
                 break;
-
+            // DISBAND: 解散队伍，注销所有成员的队伍信息
             case DISBAND:
                 partyLock.lock();
                 try {
@@ -1231,7 +1233,9 @@ public class World {
                 chr.sendPacket(PacketCreator.updateParty(chr.getClient().getChannel(), party, operation, target));
             }
         }
+        // 通知离开/踢出的成员更新其本地队伍状态
         switch (operation) {
+            // LEAVE/EXPEL: 通知目标角色离开队伍
             case LEAVE:
             case EXPEL:
                 Character chr = getPlayerStorage().getCharacterById(target.getId());
@@ -1258,17 +1262,22 @@ public class World {
         if (party == null) {
             throw new IllegalArgumentException("no party with the specified partyid exists");
         }
+        // 根据队伍操作类型更新队伍成员
         switch (operation) {
+            // JOIN: 添加成员到队伍
             case JOIN:
                 party.addMember(target);
                 break;
+            // EXPEL/LEAVE: 从队伍移除成员
             case EXPEL:
             case LEAVE:
                 party.removeMember(target);
                 break;
+            // DISBAND: 解散队伍
             case DISBAND:
                 disbandParty(partyid);
                 break;
+            // SILENT_UPDATE/LOG_ONOFF: 更新成员信息
             case SILENT_UPDATE:
             case LOG_ONOFF:
                 party.updateMember(target);

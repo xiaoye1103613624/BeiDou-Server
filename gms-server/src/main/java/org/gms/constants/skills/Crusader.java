@@ -29,13 +29,22 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Crusader {
+    /** 改善HP/MP恢复：十字军的被动技能，提升HP/MP自然恢复速度 */
     public static final int IMPROVING_MPREC = 1110000;
+    /** 盾牌精通：十字军的被动技能，提升盾牌格挡率 */
     public static final int SHIELD_MASTERY = 1110001;
+    /** 连击：十字军的被动技能，通过攻击累积连击点数 */
     public static final int COMBO = 1111002;
+    /** 剑恐慌：十字军的攻击技能，降低怪物的攻击力 */
     public static final int SWORD_PANIC = 1111003;
+    /** 斧恐慌：十字军的攻击技能，降低怪物的攻击力 */
     public static final int AXE_PANIC = 1111004;
+    /** 剑昏迷：十字军的攻击技能，有一定几率使怪物昏迷 */
     public static final int SWORD_COMA = 1111005;
+    /** 斧昏迷：十字军的攻击技能，有一定几率使怪物昏迷 */
     public static final int AXE_COMA = 1111006;
+    /** 护甲破坏：十字军的攻击技能，降低怪物的防御力 */
     public static final int ARMOR_CRASH = 1111007;
+    /** 吼叫：十字军的技能，提升周围队友的攻击力 */
     public static final int SHOUT = 1111008;
 }

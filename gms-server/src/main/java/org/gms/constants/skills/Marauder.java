@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Marauder {
+    /** 眩晕精通：斗士的被动技能，提升眩晕技能效果 */
     public static final int STUN_MASTERY = 5110000;
+    /** 能量蓄积：斗士的被动技能，蓄积能量 */
     public static final int ENERGY_CHARGE = 5110001;
+    /** 能量爆：斗士的攻击技能 */
     public static final int ENERGY_BLAST = 5111002;
+    /** 能量抽取：斗士的技能，抽取怪物能量 */
     public static final int ENERGY_DRAIN = 5111004;
+    /** 变形：斗士的变身技能 */
     public static final int TRANSFORMATION = 5111005;
+    /** 震荡波：斗士的攻击技能 */
     public static final int SHOCKWAVE = 5111006;
 }

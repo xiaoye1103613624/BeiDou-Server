@@ -297,8 +297,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
         } else if (itemType == 507) {   //喇叭
             boolean whisper;
+            // 根据喇叭类型处理不同的广播方式
             switch ((itemId / 1000) % 10) {
-                case 1: // Megaphone
+                // 1: 频道广播（只能在当前频道看到）
+                case 1:
                     if (player.getLevel() > 9) {
                         player.getClient().getChannelServer().broadcastPacket(PacketCreator.serverNotice(2, medal + player.getName() + " : " + p.readString()));
                     } else {
@@ -306,10 +308,12 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                         return;
                     }
                     break;
-                case 2: // Super megaphone
+                // 2: 全服广播（超级广播）
+                case 2:
                     Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(3, c.getChannel(), medal + player.getName() + " : " + p.readString(), (p.readByte() != 0)));
                     break;
-                case 5: // Maple TV
+                // 5: 枫叶TV广播
+                case 5:
                     int tvType = itemId % 10;
                     boolean megassenger = false;
                     boolean ear = false;
@@ -349,7 +353,8 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     }
 
                     break;
-                case 6: //item megaphone
+                // 6: 物品广播（可以显示物品信息）
+                case 6:
                     String msg = medal + player.getName() + " : " + p.readString();
                     whisper = p.readByte() == 1;
                     Item item = null;
@@ -364,7 +369,8 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     }
                     Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.itemMegaphone(msg, whisper, c.getChannel(), item));
                     break;
-                case 7: //triple megaphone
+                // 7: 三重广播
+                case 7:
                     int lines = p.readByte();
                     if (lines < 1 || lines > 3) //hack
                     {
@@ -545,11 +551,17 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 return;
             }
 
+            // 根据职业ID创建对应的角色
             int createStatus = switch (jobid) {
+                // 0: 战士
                 case 0 -> WarriorCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
+                // 1: 魔法师
                 case 1 -> MagicianCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
+                // 2: 弓手
                 case 2 -> BowmanCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
+                // 3: 飞侠
                 case 3 -> ThiefCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
+                // 默认: 海盗
                 default -> PirateCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
             };
 

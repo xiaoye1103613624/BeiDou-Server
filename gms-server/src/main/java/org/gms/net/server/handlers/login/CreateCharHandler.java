@@ -103,17 +103,21 @@ public final class CreateCharHandler extends AbstractPacketHandler {
          * 创建角色职业
          * 将禁止创建指定职业群的判断挪到此处进行统一判断，并且向客户端发出禁止创建的提示信息
          */
+        // 根据职业类型创建对应的角色
         switch (job) {
-            case 0: // Knights of Cygnus #骑士团
-                //先判断是否禁止创建该职业，再进行角色创建
+            // 骑士团：检查是否启用骑士团职业
+            case 0:
                 status = !GameConfig.getServerBoolean("enable_knights_of_cygnus") ? -3 : NoblesseCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
                 break;
-            case 1: // Adventurer #冒险家
+            // 冒险家：检查是否启用冒险家职业
+            case 1:
                 status = !GameConfig.getServerBoolean("enable_adventurers") ? -3 : BeginnerCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
                 break;
-            case 2: // Aran #战神
+            // 战神：检查是否启用战神职业
+            case 2:
                 status = !GameConfig.getServerBoolean("enable_the_lord_of_war") ? -3 : LegendCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
                 break;
+            // 无效职业类型
             default:
                 c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
                 return;

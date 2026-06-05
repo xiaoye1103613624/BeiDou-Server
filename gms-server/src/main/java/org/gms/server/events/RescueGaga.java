@@ -41,10 +41,13 @@ public class RescueGaga extends Events {
 
     public void giveSkill(Character chr) {
         int skillid = 0;
+        // 根据职业类型分配对应的技能ID
         switch (chr.getJobType()) {
+            // 0: 战士系技能ID
             case 0:
                 skillid = 1013;
                 break;
+            // 1/2: 魔法师/弓手系技能ID
             case 1:
             case 2:
                 skillid = 10001014;

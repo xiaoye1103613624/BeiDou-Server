@@ -46,6 +46,8 @@ public class AranComboHandler extends AbstractPacketHandler {
                 combo = 0;
             }
             combo++;
+            // 检查连击数是否达到特定阶段（每10点为一个阶段）
+            // 达到阶段阈值时应用连击buff效果
             switch (combo) {
                 case 10:
                 case 20:
@@ -57,9 +59,11 @@ public class AranComboHandler extends AbstractPacketHandler {
                 case 80:
                 case 90:
                 case 100:
+                    // 检查职业和技能等级，非阿尔专用职业需验证技能等级
                     if (player.getJob().getId() != 2000 && (combo / 10) > skillLevel) {
                         break;
                     }
+                    // 应用对应等级的连击buff
                     SkillFactory.getSkill(Aran.COMBO_ABILITY).getEffect(combo / 10).applyComboBuff(player, combo);
                     break;
             }

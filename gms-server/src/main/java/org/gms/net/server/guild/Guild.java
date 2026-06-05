@@ -725,19 +725,31 @@ public class Guild {
         }
     }
 
+    /**
+     * 处理公会邀请响应
+     * @param targetId 目标玩家ID
+     * @param targetName 目标玩家名称
+     * @param guildId 公会ID
+     * @param answer 是否接受邀请
+     * @return true 如果邀请被接受
+     */
     public static boolean answerInvitation(int targetId, String targetName, int guildId, boolean answer) {
         InviteResult res = InviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
 
         GuildResponse mgr;
         Character sender = res.from;
+        // 根据邀请结果处理不同的响应
         switch (res.result) {
+            // 邀请被接受：直接返回true
             case ACCEPTED:
                 return true;
 
+            // 邀请被拒绝：发送拒绝通知
             case DENIED:
                 mgr = GuildResponse.DENIED_INVITE;
                 break;
 
+            // 其他情况：发送未找到邀请通知
             default:
                 mgr = GuildResponse.NOT_FOUND_INVITE;
         }

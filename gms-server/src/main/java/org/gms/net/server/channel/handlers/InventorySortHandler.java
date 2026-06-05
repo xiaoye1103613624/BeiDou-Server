@@ -187,19 +187,21 @@ class PairedQuicksort {
     }
 
     void MapleQuicksort(int Esq, int Dir, ArrayList<Item> A, int sort) {
+        // 根据排序类型选择分区函数
         switch (sort) {
+            // 3: 按等级排序
             case 3:
                 PartitionByLevel(Esq, Dir, A);
                 break;
-
+            // 2: 按名称排序
             case 2:
                 PartitionByName(Esq, Dir, A);
                 break;
-
+            // 1: 按数量排序
             case 1:
                 PartitionByQuantity(Esq, Dir, A);
                 break;
-
+            // 默认: 按物品ID排序
             default:
                 PartitionByItemId(Esq, Dir, A);
         }

@@ -59,23 +59,32 @@ public final class SkillEffectHandler extends AbstractPacketHandler {
         byte flags = p.readByte();
         int speed = p.readByte();
         byte aids = p.readByte();//Mmmk
+        // 处理需要广播到地图的技能效果
         switch (skillId) {
+            // 魔法师：爆炸/超级火箭/链式闪电
             case FPMage.EXPLOSION:
             case FPArchMage.BIG_BANG:
             case ILArchMage.BIG_BANG:
             case Bishop.BIG_BANG:
+            // 弓手：箭座风暴/穿透箭
             case Bowmaster.HURRICANE:
             case Marksman.PIERCING_ARROW:
+            // 飞侠：chakra/螺旋注射
             case ChiefBandit.CHAKRA:
             case Brawler.CORKSCREW_BLOW:
+            // 海盗：手雷/速射
             case Gunslinger.GRENADE:
             case Corsair.RAPID_FIRE:
+            // 箭神：暴风弓
             case WindArcher.HURRICANE:
+            // 夜行者：毒炸弹
             case NightWalker.POISON_BOMB:
             case ThunderBreaker.CORKSCREW_BLOW:
+            // 圣/暗/英雄：怪物吸引
             case Paladin.MONSTER_MAGNET:
             case DarkKnight.MONSTER_MAGNET:
             case Hero.MONSTER_MAGNET:
+            // 龙之子：火焰/冰息
             case Evan.FIRE_BREATH:
             case Evan.ICE_BREATH:
                 c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.skillEffect(c.getPlayer(), skillId, level, flags, speed, aids), false);

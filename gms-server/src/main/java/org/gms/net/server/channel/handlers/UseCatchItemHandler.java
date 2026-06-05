@@ -58,7 +58,9 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
         if (mob == null) {
             return;
         }
+        // 根据捕捉道具ID处理不同的捕捉逻辑
         switch (itemId) {
+            // 费洛蒙香水：捕捉可驯服的野猪
             case ItemId.PHEROMONE_PERFUME:
                 if (mob.getId() == MobId.TAMABLE_HOG) {
                     chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
@@ -68,6 +70,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
+            // 袋子：捕捉幽灵（需怪物血量低于40%）
             case ItemId.POUCH:
                 if (mob.getId() == MobId.GHOST) {
                     if ((abm.getLastSpam(10) + 1000) < currentServerTime()) {
@@ -84,6 +87,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
+            // 元素石：捕捉弓箭手训练所蝎子（50%概率获得灵魂宝石）
             case ItemId.ARPQ_ELEMENT_ROCK:
                 if (mob.getId() == MobId.ARPQ_SCORPION) {
                     if ((abm.getLastSpam(10) + 800) < currentServerTime()) {
@@ -110,6 +114,8 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
+                
+            // 魔法糖：捕捉走失的驯鹿
             case ItemId.MAGIC_CANE:
                 if (mob.getId() == MobId.LOST_RUDOLPH) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
@@ -123,6 +129,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
+            // 透明玻璃弹珠1：捕捉武陵道场史莱姆王
             case ItemId.TRANSPARENT_MARBLE_1:
                 if (mob.getId() == MobId.KING_SLIME_DOJO) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
@@ -136,6 +143,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
+            // 透明玻璃弹珠2：捕捉武陵道场浮士德
             case ItemId.TRANSPARENT_MARBLE_2:
                 if (mob.getId() == MobId.FAUST_DOJO) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
@@ -149,6 +157,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
+            // 透明玻璃弹珠3：捕捉武陵道场蘑菇mom
             case ItemId.TRANSPARENT_MARBLE_3:
                 if (mob.getId() == MobId.MUSHMOM_DOJO) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
@@ -162,6 +171,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
+            // 净化弹珠：捕捉毒花
             case ItemId.EPQ_PURIFICATION_MARBLE:
                 if (mob.getId() == MobId.POISON_FLOWER) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
@@ -175,6 +185,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
+            // 渔网：捕捉P_JUNIOR（3秒冷却）
             case ItemId.FISH_NET:
                 if (mob.getId() == MobId.P_JUNIOR) {
                     if ((abm.getLastSpam(10) + 3000) < currentServerTime()) {
@@ -189,8 +200,8 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
+            // 默认: 通用捕捉逻辑（从道具配置表读取捕捉条件）
             default:
-                // proper Fish catch, thanks to Dragohe4rt
 
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 int itemGanho = ii.getCreateItem(itemId);

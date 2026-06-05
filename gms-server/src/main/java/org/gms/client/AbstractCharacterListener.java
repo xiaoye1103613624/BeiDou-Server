@@ -28,8 +28,40 @@ package org.gms.client;
  * @author Ronan
  */
 public interface AbstractCharacterListener {
+    /**
+     * 当角色生命值发生变化时调用
+     * <p>
+     * 此方法在角色的HP（生命值）发生改变时被触发，用于处理与生命值变化相关的逻辑，
+     * 如血量变化动作、状态更新等。
+     * </p>
+     *
+     * @param oldHp 变化前的生命值
+     */
     void onHpChanged(int oldHp);
+    
+    /**
+     * 当角色HP/MP池需要更新时调用
+     * <p>
+     * 此方法在角色的HP/MP（生命值/魔法值）池需要重新计算时被触发，
+     * 用于重新计算本地角色的统计数据，并确保HP/MP值不超过最大限制。
+     * </p>
+     */
     void onHpMpPoolUpdate();
+    
+    /**
+     * 当角色属性需要更新时调用
+     * <p>
+     * 此方法在角色的统计数据需要更新时被触发，通常会重新计算本地角色的属性统计信息。
+     * </p>
+     */
     void onStatUpdate();
+    
+    /**
+     * 当需要广播属性池更新时调用
+     * <p>
+     * 此方法用于向客户端发送玩家状态更新数据包，将角色的属性变更通知给客户端，
+     * 使客户端能够显示最新的角色状态。
+     * </p>
+     */
     void onAnnounceStatPoolUpdate();
 }

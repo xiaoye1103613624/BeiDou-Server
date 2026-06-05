@@ -1013,16 +1013,25 @@ public class PacketCreator {
      * @return SET_FIELD封包，用于角色信息初始化
      */
     public static Packet getCharInfo(Character chr) {
+        // 创建设置字段数据包
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
+        // 写入频道索引（从0开始）
         p.writeInt(chr.getClient().getChannel() - 1);
+        // 写入未知标识（通常为1）
         p.writeByte(1);
+        // 写入另一个标识（通常为1）
         p.writeByte(1);
+        // 写入预留字段（通常为0）
         p.writeShort(0);
+        // 写入3个随机整数作为安全验证
         for (int i = 0; i < 3; i++) {
             p.writeInt(Randomizer.nextInt());
         }
+        // 添加角色详细信息到数据包
         addCharacterInfo(p, chr);
+        // 写入当前时间戳
         p.writeLong(getTime(System.currentTimeMillis()));
+        // 返回构建完成的数据包
         return p;
     }
 
@@ -1044,13 +1053,19 @@ public class PacketCreator {
      * @return The stat update packet.
      */
     public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
+        // 创建状态变更数据包
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
+        // 写入启用操作标志
         p.writeBool(enableActions);
+        // 初始化更新掩码
         int updateMask = 0;
+        // 遍历所有状态更新项，构建更新掩码
         for (Pair<Stat, Integer> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
+        // 保持原列表引用
         List<Pair<Stat, Integer>> mystats = stats;
+        // 如果有多于一个状态更新项，则按值排序以确保一致的顺序
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -1058,30 +1073,43 @@ public class PacketCreator {
                 return (val1 < val2 ? -1 : (val1 == val2 ? 0 : 1));
             });
         }
+        // 写入更新掩码到数据包
         p.writeInt(updateMask);
+        // 遍历排序后的状态更新项并写入数据包
         for (Pair<Stat, Integer> statupdate : mystats) {
+            // 检查状态值是否有效
             if (statupdate.getLeft().getValue() >= 1) {
+                // 皮肤状态：写入字节值
                 if (statupdate.getLeft().getValue() == 0x1) {
                     p.writeByte(statupdate.getRight().byteValue());
+                // 面部/头发状态：写入整数值
                 } else if (statupdate.getLeft().getValue() <= 0x4) {
                     p.writeInt(statupdate.getRight());
+                // 等级/职业状态：写入短整数值
                 } else if (statupdate.getLeft().getValue() < 0x20) {
                     p.writeByte(statupdate.getRight().shortValue());
+                // 可用技能点状态：根据职业类型写入不同格式
                 } else if (statupdate.getLeft().getValue() == 0x8000) {
                     if (GameConstants.hasSPTable(chr.getJob())) {
+                        // 对于有技能表的职业，添加剩余技能信息
                         addRemainingSkillInfo(p, chr);
                     } else {
+                        // 对于其他职业，直接写入短整数值
                         p.writeShort(statupdate.getRight().shortValue());
                     }
+                // 其他一般状态：写入短整数值
                 } else if (statupdate.getLeft().getValue() < 0xFFFF) {
                     p.writeShort(statupdate.getRight().shortValue());
+                // 人气状态：写入短整数值
                 } else if (statupdate.getLeft().getValue() == 0x20000) {
                     p.writeShort(statupdate.getRight().shortValue());
+                // 默认情况：写入整数值
                 } else {
                     p.writeInt(statupdate.getRight());
                 }
             }
         }
+        // 返回构建完成的数据包
         return p;
     }
 
@@ -1518,8 +1546,11 @@ public class PacketCreator {
             if (mobSkill != null) {
                 writeMobSkillId(p, mobSkill.getId());
 
+                // 根据怪物状态类型设置对应的反击值
                 switch (s.getKey()) {
+                    // 物理反击：从技能参数X获取反击伤害
                     case WEAPON_REFLECT -> pCounter = mobSkill.getX();
+                    // 魔法反击：从技能参数Y获取反击伤害
                     case MAGIC_REFLECT -> mCounter = mobSkill.getY();
                 }
             } else {
@@ -2153,16 +2184,20 @@ public class PacketCreator {
     public static Packet onNewYearCardRes(Character user, NewYearCardRecord newyear, int mode, int msg) {
         OutPacket p = OutPacket.create(SendOpcode.NEW_YEAR_CARD_RES);
         p.writeByte(mode);
+        // 根据模式处理新年贺卡响应
         switch (mode) {
+            // 成功发送/接收贺卡：编码贺卡信息
             case 4: // Successfully sent a New Year Card\r\n to %s.
             case 6: // Successfully received a New Year Card.
                 encodeNewYearCard(newyear, p);
                 break;
 
+            // 成功删除贺卡：写入贺卡ID
             case 8: // Successfully deleted a New Year Card.
                 p.writeInt(newyear.getId());
                 break;
 
+            // 各种错误情况：写入错误消息
             case 5: // Nexon's stupid and makes 4 modes do the same operation..
             case 7:
             case 9:
@@ -2178,6 +2213,7 @@ public class PacketCreator {
                 p.writeByte(msg);
                 break;
 
+            // 获取未接收贺卡列表：写入贺卡信息
             case 0xA:   // GetUnreceivedList_Done
                 int nSN = 1;
                 p.writeInt(nSN);
@@ -2190,6 +2226,7 @@ public class PacketCreator {
                 }
                 break;
 
+            // 贺卡到达通知：写入贺卡ID和发送者信息
             case 0xC:   // NotiArrived
                 p.writeInt(newyear.getId());
                 p.writeString(newyear.getSenderName());
@@ -2556,31 +2593,42 @@ public class PacketCreator {
             p.writeByte(mod.getMode());
             p.writeByte(mod.getInventoryType());
             p.writeShort(mod.getMode() == 2 ? mod.getOldPosition() : mod.getPosition());
+            // 根据操作类型处理库存变更封包数据
             switch (mod.getMode()) {
-                case 0: {//add item
+                case 0: {
+                    // 【新增物品】模式：向封包写入新增物品的详细信息
                     addItemInfo(p, mod.getItem(), true);
                     break;
                 }
-                case 1: {//update quantity
+                case 1: {
+                    // 【更新数量】模式：向封包写入更新后的物品数量
                     p.writeShort(mod.getQuantity());
                     break;
                 }
-                case 2: {//move
+                case 2: {
+                    // 【移动物品】模式：向封包写入目标位置
                     p.writeShort(mod.getPosition());
+                    // 判断是否需要添加移动动画标志
                     if (mod.getPosition() < 0 || mod.getOldPosition() < 0) {
+                        // 旧位置为负数表示从装备栏移动，标记为1
+                        // 否则表示从背包移动，标记为2
                         addMovement = mod.getOldPosition() < 0 ? 1 : 2;
                     }
                     break;
                 }
-                case 3: {//remove
+                case 3: {
+                    // 【移除物品】模式：判断是否需要添加移动动画标志
                     if (mod.getPosition() < 0) {
+                        // 位置为负数表示移除的是装备，标记为2
                         addMovement = 2;
                     }
                     break;
                 }
             }
+            // 清除已处理的库存修改记录，释放内存
             mod.clear();
         }
+        // 如果存在移动动画，则将动画标志写入封包
         if (addMovement > -1) {
             p.writeByte(addMovement);
         }
@@ -3990,44 +4038,72 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 更新队伍信息封包
+     * @param forChannel 频道ID
+     * @param party 队伍对象
+     * @param op 队伍操作类型
+     * @param target 目标角色
+     * @return 队伍更新封包
+     */
     public static Packet updateParty(int forChannel, Party party, PartyOperation op, PartyCharacter target) {
+        // 创建队伍操作封包
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
+        // 根据队伍操作类型处理不同的封包格式
         switch (op) {
+            // 【解散/驱逐/离开】队伍：处理队伍成员离开或队伍解散的情况
             case DISBAND:
             case EXPEL:
             case LEAVE:
+                // 写入操作类型标识：0x0C表示离开相关操作
                 p.writeByte(0x0C);
-                p.writeInt(party.getId());
-                p.writeInt(target.getId());
+                p.writeInt(party.getId());  // 写入队伍ID
+                p.writeInt(target.getId()); // 写入目标角色ID
+                // 判断是否为队伍解散操作
                 if (op == PartyOperation.DISBAND) {
+                    // 队伍解散：写入解散标志0和队伍ID
                     p.writeByte(0);
                     p.writeInt(party.getId());
                 } else {
-                    p.writeByte(1);
+                    // 非解散操作（驱逐或离开）
+                    p.writeByte(1); // 写入成员离开标志1
+                    // 进一步区分是驱逐还是主动离开
                     if (op == PartyOperation.EXPEL) {
+                        // 驱逐操作：写入驱逐标志1
                         p.writeByte(1);
                     } else {
+                        // 主动离开：写入离开标志0
                         p.writeByte(0);
                     }
+                    // 写入离开成员的名字
                     p.writeString(target.getName());
+                    // 添加队伍状态信息（不包括当前离开的成员）
                     addPartyStatus(forChannel, party, p, false);
                 }
                 break;
+            // 【加入队伍】：处理新成员加入队伍的情况
             case JOIN:
+                // 写入操作类型标识：0x0F表示加入操作
                 p.writeByte(0xF);
-                p.writeInt(party.getId());
-                p.writeString(target.getName());
+                p.writeInt(party.getId());      // 写入队伍ID
+                p.writeString(target.getName()); // 写入新成员名字
+                // 添加队伍状态信息
                 addPartyStatus(forChannel, party, p, false);
                 break;
+            // 【静默更新/登录状态变更】：处理队伍成员状态变化
             case SILENT_UPDATE:
             case LOG_ONOFF:
+                // 写入操作类型标识：0x07表示状态更新操作
                 p.writeByte(0x7);
-                p.writeInt(party.getId());
+                p.writeInt(party.getId()); // 写入队伍ID
+                // 添加队伍状态信息
                 addPartyStatus(forChannel, party, p, false);
                 break;
+            // 【更换队长】：处理队伍 leader 变更
             case CHANGE_LEADER:
+                // 写入操作类型标识：0x1B表示更换队长操作
                 p.writeByte(0x1B);
-                p.writeInt(target.getId());
+                p.writeInt(target.getId()); // 写入新队长ID
                 p.writeByte(0);
                 break;
         }

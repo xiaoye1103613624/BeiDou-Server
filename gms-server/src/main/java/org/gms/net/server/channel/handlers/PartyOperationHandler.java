@@ -50,12 +50,15 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
         Character player = c.getPlayer();
         World world = c.getWorldServer();
         Party party = player.getParty();
+        // 根据操作类型执行相应的组队操作
         switch (operation) {
-            case 1: { // 创建队伍
+            // 1: 创建队伍
+            case 1: {
                 Party.createParty(player, false);
                 break;
             }
-            case 2: { // 离开/解散队伍
+            // 2: 离开/解散队伍
+            case 2: {
                 if (party != null) {
                     List<Character> partymembers = player.getPartyMembersOnline();
 
@@ -65,7 +68,8 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 3: { // 接受邀请加入队伍
+            // 3: 接受邀请加入队伍
+            case 3: {
                 int partyid = p.readInt();
 
                 // 验证邀请是否有效
@@ -78,7 +82,8 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 4: { // 邀请玩家入队
+            // 4: 邀请玩家入队
+            case 4: {
                 String name = p.readString();
                 Character invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
@@ -119,12 +124,14 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 5: { // 踢出队伍
+            // 5: 踢出队伍
+            case 5: {
                 int cid = p.readInt();
                 Party.expelFromParty(party, c, cid);
                 break;
             }
-            case 6: { // 转移队长
+            // 6: 转移队长
+            case 6: {
                 int newLeader = p.readInt();
                 PartyCharacter newLeadr = party.getMemberById(newLeader);
                 world.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeadr);

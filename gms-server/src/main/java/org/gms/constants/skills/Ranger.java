@@ -29,11 +29,18 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Ranger {
+    /** 疾风：游侠的被动技能，提升移动速度 */
     public static final int THRUST = 3110000;
+    /** 致命一击：游侠的攻击技能，有一定几率一击必杀 */
     public static final int MORTAL_BLOW = 3110001;
+    /** 木偶：游侠的召唤技能，召唤木偶协助战斗 */
     public static final int PUPPET = 3111002;
+    /** 炼狱：游侠的范围攻击技能 */
     public static final int INFERNO = 3111003;
+    /** 箭雨：游侠的范围攻击技能 */
     public static final int ARROW_RAIN = 3111004;
+    /** 银鹰：游侠的召唤技能，召唤银鹰协助战斗 */
     public static final int SILVER_HAWK = 3111005;
+    /** 扫射：游侠的连续攻击技能 */
     public static final int STRAFE = 3111006;
 }

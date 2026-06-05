@@ -29,12 +29,20 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Fighter {
+    /** 剑精通：剑客的被动技能，提升剑攻击力 */
     public static final int SWORD_MASTERY = 1100000;
+    /** 斧头精通：剑客的被动技能，提升斧头攻击力 */
     public static final int AXE_MASTERY = 1100001;
+    /** 最终攻击-剑：剑客的被动技能，有一定几率进行额外攻击 */
     public static final int FINAL_ATTACK_SWORD = 1100002;
+    /** 最终攻击-斧头：剑客的被动技能，有一定几率进行额外攻击 */
     public static final int FINAL_ATTACK_AXE = 1100003;
+    /** 剑加速：剑客的被动技能，提升攻击速度 */
     public static final int SWORD_BOOSTER = 1101004;
+    /** 斧头加速：剑客的被动技能，提升攻击速度 */
     public static final int AXE_BOOSTER = 1101005;
+    /** 愤怒：剑客的增益技能，提升攻击力和防御力 */
     public static final int RAGE = 1101006;
+    /** 力量守护：剑客的技能，将部分伤害转换为MP */
     public static final int POWER_GUARD = 1101007;
 }

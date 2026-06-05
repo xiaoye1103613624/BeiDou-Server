@@ -132,13 +132,17 @@ public class Snowball {
 
         if (this.hits == 0) {
             this.position += 1;
+            // 根据雪球位置触发特殊事件
             switch (this.position) {
+            // 45: 触发第一个特殊事件
             case 45:
                 map.getSnowball(team == 0 ? 1 : 0).message(1);
                 break;
+            // 290: 触发第二个特殊事件
             case 290:
                 map.getSnowball(team == 0 ? 1 : 0).message(2);
                 break;
+            // 560: 触发第三个特殊事件
             case 560:
                 map.getSnowball(team == 0 ? 1 : 0).message(3);
                 break;

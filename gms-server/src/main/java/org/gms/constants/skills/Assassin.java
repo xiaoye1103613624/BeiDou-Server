@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Assassin {
+    /** 爪子精通：刺客的被动技能，提升爪子攻击力 */
     public static final int CLAW_MASTERY = 4100000;
+    /** 暗器暴击：刺客的被动技能，提升暗器暴击率 */
     public static final int CRITICAL_THROW = 4100001;
+    /** 忍耐：刺客的被动技能，提升物理防御力 */
     public static final int ENDURE = 4100002;
+    /** 爪子加速：刺客的被动技能，提升攻击速度 */
     public static final int CLAW_BOOSTER = 4101003;
+    /** 急速：刺客的增益技能，提升移动速度 */
     public static final int HASTE = 4101004;
+    /** 汲取：刺客的技能，攻击时恢复HP */
     public static final int DRAIN = 4101005;
 }

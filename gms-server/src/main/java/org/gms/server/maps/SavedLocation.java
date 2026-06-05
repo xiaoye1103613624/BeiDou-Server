@@ -23,7 +23,15 @@ package org.gms.server.maps;
 
 /**
  * 【类型】SavedLocation（class），包 `org.gms.server.maps`。
- * <p>保存位置数据类，记录玩家保存的传送位置（地图ID和传送门）</p>
+ * 
+ * <p>保存位置数据类，记录玩家保存的传送位置（地图ID和传送门）。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>存储玩家保存的地图位置</li>
+ *   <li>提供对地图ID和传送门的访问</li>
+ *   <li>不可变数据结构</li>
+ * </ul>
  */
 public class SavedLocation {
     /** 地图ID */
@@ -32,7 +40,8 @@ public class SavedLocation {
     private final int portal;
 
     /**
-     * 构造保存位置
+     * 构造函数：创建保存位置实例
+     * 
      * @param mapId 地图ID
      * @param portal 传送门索引
      */
@@ -41,10 +50,20 @@ public class SavedLocation {
         this.portal = portal;
     }
 
+    /**
+     * 获取地图ID
+     * 
+     * @return 地图ID
+     */
     public int getMapId() {
         return mapId;
     }
 
+    /**
+     * 获取传送门索引
+     * 
+     * @return 传送门索引
+     */
     public int getPortal() {
         return portal;
     }

@@ -47,19 +47,45 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 【工厂/提供者】MapFactory：创建或提供 `maps` 相关运行时对象。
- */
-public class MapFactory {
-    /** Map名称数据（从String.wz加载） */
-    private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
-    /** MAP.wz 数据提供器 */
-    private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
+     * 【工厂/提供者】MapFactory：创建或提供 `maps` 相关运行时对象。
+     * 
+     * <p>MapFactory 是地图工厂类，负责从 WZ 文件和数据库加载和创建游戏中的地图对象。
+     * 它提供了创建地图实例的核心功能，包括加载地图的基本信息、生物（怪物/NPC）、
+     * 传送门、立足点、反应堆等地图元素。</p>
+     * 
+     * <p>主要职责包括：</p>
+     * <ul>
+     *   <li>从 WZ 文件加载地图数据</li>
+     *   <li>创建并初始化地图实例</li>
+     *   <li>加载地图上的生物（怪物/NPC）</li>
+     *   <li>设置地图属性（边界、限制、名称等）</li>
+     *   <li>处理特殊地图类型（如 CPQ、怪物嘉年华等）</li>
+     * </ul>
+     */
+    public class MapFactory {
+        /** Map名称数据（从String.wz加载） */
+        private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+        /** MAP.wz 数据提供器 */
+        private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
     /**
      * 从WZ文件加载地图生物（怪物/NPC）
+     * 
+     * <p>从WZ文件中解析并加载地图上的生物信息，包括怪物和NPC。
+     * 对于CPQ（怪物嘉年华）地图，会根据生物ID分配团队（红队或蓝队）。</p>
+     * 
+     * <p>生物数据包含以下属性：</p>
+     * <ul>
+     *   <li>id: 生物唯一标识符</li>
+     *   <li>type: 生物类型（'m'代表怪物，'n'代表NPC）</li>
+     *   <li>position: 位置坐标（x, y）</li>
+     *   <li>bounds: 移动边界（rx0, rx1）</li>
+     *   <li>appearance: 外观属性（方向f、立绘点fh、隐藏状态hide）</li>
+     *   <li>respawn: 刷新时间（mobTime）</li>
+     * </ul>
      *
-     * @param map     地图
-     * @param mapData 地图数据
+     * @param map     要加载生物的目标地图
+     * @param mapData 地图的WZ数据
      */
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
         for (Data life : mapData.getChildByPath("life")) {
@@ -91,8 +117,21 @@ public class MapFactory {
 
     /**
      * 从数据库加载地图生物
+     * 
+     * <p>从数据库的plife表中加载自定义地图生物信息。
+     * 这允许服务器管理员添加自定义的怪物和NPC到特定地图。</p>
+     * 
+     * <p>数据库表plife包含以下字段：</p>
+     * <ul>
+     *   <li>map: 地图ID</li>
+     *   <li>world: 世界ID</li>
+     *   <li>life: 生物ID</li>
+     *   <li>type: 生物类型（'m'代表怪物，'n'代表NPC）</li>
+     *   <li>位置和外观属性（x, y, cy, f, fh, rx0, rx1, hide）</li>
+     *   <li>刷新时间（mobtime）和团队（team）</li>
+     * </ul>
      *
-     * @param map 地图
+     * @param map 要加载生物的目标地图
      */
     private static void loadLifeFromDb(MapleMap map) {
         try (Connection con = DatabaseConnection.getConnection();
@@ -125,20 +164,31 @@ public class MapFactory {
 
     /**
      * 加载生物并添加到地图
+     * 
+     * <p>根据提供的参数创建生物实例并将其添加到地图中。
+     * 对于怪物类型，会根据配置设置刷新率和刷新时间，
+     * 特别处理BOSS怪物和事件地图的情况。</p>
+     * 
+     * <p>对于怪物，会根据配置调整其刷新行为：</p>
+     * <ul>
+     *   <li>普通怪物：根据mob_respawn_rate配置倍增刷新数量</li>
+     *   <li>BOSS怪物：使用专门的刷新时间倍率调整刷新间隔</li>
+     *   <li>事件地图：忽略刷新率配置，保持原始刷新行为</li>
+     * </ul>
      *
-     * @param map     地图
+     * @param map     要添加生物的地图
      * @param id      生物ID
-     * @param type    生物类型
-     * @param cy      cy坐标
-     * @param f       方向
-     * @param fh      立足点
-     * @param rx0     左边界
-     * @param rx1     右边界
-     * @param x       x坐标
-     * @param y       y坐标
-     * @param hide    是否隐藏
-     * @param mobTime 刷新时间
-     * @param team    队伍（用于CPQ）
+     * @param type    生物类型（'m'代表怪物，'n'代表NPC）
+     * @param cy      cy坐标（垂直位置）
+     * @param f       方向（朝向）
+     * @param fh      立足点ID
+     * @param rx0     左移动边界
+     * @param rx1     右移动边界
+     * @param x       x坐标（水平位置）
+     * @param y       y坐标（垂直位置）
+     * @param hide    是否隐藏（1为隐藏，0为显示）
+     * @param mobTime 刷新时间（毫秒，-1表示不刷新）
+     * @param team    团队ID（主要用于CPQ地图区分队伍）
      */
     private static void loadLifeRaw(MapleMap map, int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide, int mobTime, int team) {
         AbstractLoadedLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
@@ -175,12 +225,30 @@ public class MapFactory {
 
     /**
      * 从WZ文件加载地图
+     * 
+     * <p>从WZ文件系统中加载指定地图的所有数据并创建MapleMap实例。
+     * 此方法是地图加载的核心方法，负责解析地图的各种元素，
+     * 包括基本信息、传送门、立足点、生物、反应堆等。</p>
+     * 
+     * <p>主要加载流程包括：</p>
+     * <ol>
+     *   <li>解析地图基本信息（返回地图、怪物率、限制等）</li>
+     *   <li>创建MapleMap实例并设置基本属性</li>
+     *   <li>加载传送门信息</li>
+     *   <li>设置地图边界和限制</li>
+     *   <li>构建立足点树结构</li>
+     *   <li>加载地图区域和座位信息</li>
+     *   <li>加载生物（怪物/NPC）</li>
+     *   <li>加载反应堆</li>
+     *   <li>设置地图名称和街道名</li>
+     *   <li>配置特殊地图属性（时钟、永久战、城镇、HP减少等）</li>
+     * </ol>
      *
-     * @param mapid  地图ID
+     * @param mapid  要加载的地图ID
      * @param world  世界ID
      * @param channel 频道ID
-     * @param event  事件实例管理器（可为null）
-     * @return 地图实例
+     * @param event  事件实例管理器（可为null，用于事件地图）
+     * @return 创建好的MapleMap实例
      */
     public static MapleMap loadMapFromWz(int mapid, int world, int channel, EventInstanceManager event) {
         MapleMap map;
@@ -377,18 +445,28 @@ public class MapFactory {
 
     /**
      * 加载生物实例
+     * 
+     * <p>根据给定的参数创建并初始化生物实例（怪物或NPC）。
+     * 通过LifeFactory获取基础生物对象，然后设置其位置、外观和其他属性。</p>
+     * 
+     * <p>生物实例包含以下关键属性：</p>
+     * <ul>
+     *   <li>位置信息：坐标(x,y)和cy值</li>
+     *   <li>外观信息：方向(f)、面向方向(FacingDirection)、隐藏状态(hide)</li>
+     *   <li>活动范围：左右边界(rx0, rx1)和立足点(fh)</li>
+     * </ul>
      *
-     * @param id   生物ID
-     * @param type 生物类型
-     * @param cy   cy坐标
-     * @param f    方向
-     * @param fh   立足点
-     * @param rx0  左边界
-     * @param rx1  右边界
-     * @param x    x坐标
-     * @param y    y坐标
-     * @param hide 是否隐藏
-     * @return 生物实例
+     * @param id   生物ID（在WZ文件中定义的唯一标识符）
+     * @param type 生物类型（'m'代表怪物，'n'代表NPC）
+     * @param cy   cy坐标（垂直位置参考值）
+     * @param f    方向（0为右，1为左）
+     * @param fh   立足点ID（用于确定生物可以站立的位置）
+     * @param rx0  左移动边界
+     * @param rx1  右移动边界
+     * @param x    x坐标（水平位置）
+     * @param y    y坐标（垂直位置）
+     * @param hide 是否隐藏（1为隐藏，0为显示）
+     * @return 初始化后的AbstractLoadedLife实例
      */
     private static AbstractLoadedLife loadLife(int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide) {
         AbstractLoadedLife myLife = LifeFactory.getLife(id, type);
@@ -406,11 +484,22 @@ public class MapFactory {
 
     /**
      * 加载反应堆实例
+     * 
+     * <p>根据WZ数据创建并初始化反应堆对象。
+     * 反应堆是地图上的可交互对象，玩家可以通过技能或道具与其互动，
+     * 触发预设的动作序列（如开启宝箱、触发剧情等）。</p>
+     * 
+     * <p>反应堆包含以下关键属性：</p>
+     * <ul>
+     *   <li>位置：在地图上的坐标(x,y)</li>
+     *   <li>外观：面向方向和名称</li>
+     *   <li>行为：触发延迟时间和动作序列</li>
+     * </ul>
      *
-     * @param reactor          反应堆数据
-     * @param id               反应堆ID
-     * @param FacingDirection  面向方向
-     * @return 反应堆实例
+     * @param reactor          反应堆的WZ数据节点
+     * @param id               反应堆ID（在WZ文件中定义的唯一标识符）
+     * @param FacingDirection  面向方向（控制反应堆的朝向）
+     * @return 初始化后的Reactor实例
      */
     private static Reactor loadReactor(Data reactor, String id, final byte FacingDirection) {
         Reactor myReactor = new Reactor(ReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
@@ -426,9 +515,20 @@ public class MapFactory {
 
     /**
      * 获取地图名称路径
+     * 
+     * <p>根据地图ID构建对应WZ文件中的地图路径。
+     * 地图ID被分为不同的区域（基于亿位数字），每个区域对应WZ文件中的不同子目录。</p>
+     * 
+     * <p>路径格式为："Map/Map{区域}/{补零后的地图ID}.img"</p>
+     * <ul>
+     *   <li>区域0: Maple (ID < 100000000)</li>
+     *   <li>区域1: Victoria (ID >= 100000000, < Orbis)</li>
+     *   <li>区域2: Ossyria (ID >= Orbis, < ELLIN_FOREST)</li>
+     *   <li>等等...</li>
+     * </ul>
      *
-     * @param mapid 地图ID
-     * @return 地图名称路径
+     * @param mapid 地图ID（整数形式）
+     * @return 构建的地图文件路径字符串
      */
     private static String getMapName(int mapid) {
         String mapName = StringUtil.getLeftPaddedStr(Integer.toString(mapid), '0', 9);
@@ -481,6 +581,17 @@ public class MapFactory {
         return builder.toString();
     }
 
+    /**
+     * 加载地图地点名称
+     * 
+     * <p>从WZ文件的Map.img中获取指定地图的地点名称。
+     * 地点名称通常是地图的正式名称（如"金银岛"、"射手村"等）。</p>
+     * 
+     * <p>如果无法找到或加载地图名称，则返回空字符串。</p>
+     *
+     * @param mapid 地图ID
+     * @return 地图的地点名称，如果不存在则返回空字符串
+     */
     public static String loadPlaceName(int mapid) {
         try {
             return DataTool.getString("mapName", nameData.getChildByPath(getMapStringName(mapid)), "");
@@ -489,6 +600,17 @@ public class MapFactory {
         }
     }
 
+    /**
+     * 加载地图街道名称
+     * 
+     * <p>从WZ文件的Map.img中获取指定地图的街道名称。
+     * 街道名称通常是地图所属的区域或街道名称（如"冒险家大道"等）。</p>
+     * 
+     * <p>如果无法找到或加载街道名称，则返回空字符串。</p>
+     *
+     * @param mapid 地图ID
+     * @return 地图的街道名称，如果不存在则返回空字符串
+     */
     public static String loadStreetName(int mapid) {
         try {
             return DataTool.getString("streetName", nameData.getChildByPath(getMapStringName(mapid)), "");

@@ -22,13 +22,35 @@
 package org.gms.server.maps;
 
 /**
- * 【类型】MapPortal（class），包 `org.gms.server.maps`。
- * <p>地图传送门，用于地图内的传送点</p>
+ * 【类型】MapPortal（class），包 {@code org.gms.server.maps}。
+ * 
+ * <p>地图传送门类，继承自GenericPortal，专门用于处理同一地图内的传送点功能，允许玩家在地图内不同位置间传送。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>表示地图内的传送门节点</li>
+ *   <li>处理地图内的位置跳转</li>
+ *   <li>提供地图内导航功能</li>
+ * </ul>
+ * 
+ * <p>使用示例：</p>
+ * <pre>{@code
+ * MapPortal portal = new MapPortal();
+ * portal.setPosition(x, y);
+ * portal.setTargetMapId(targetMapId);
+ * portal.setTargetPortal(targetPortalName);
+ * }</pre>
+ * 
+ * @author OdinMS (original)
+ * @author Xergon (adaptation)
+ * @since 2024-07-18
  */
 public class MapPortal extends GenericPortal {
 
     /**
-     * 构造地图传送门
+     * 构造函数：创建地图传送门实例
+     * 
+     * <p>初始化传送门类型为MAP_PORTAL，设置基本的传送门属性。</p>
      */
     public MapPortal() {
         super(Portal.MAP_PORTAL);

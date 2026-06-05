@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Rogue {
+    /** 敏捷身躯：飞侠1转前的被动技能，提升敏捷和回避率 */
     public static final int NIMBLE_BODY = 4001000;
+    /** 锐利之眼：飞侠1转前的被动技能，提升命中率 */
     public static final int KEEN_EYES = 4001001;
+    /** 暗影视觉：飞侠1转前的被动技能，隐身并提升移动速度 */
     public static final int DARK_SIGHT = 4001003;
+    /** 混乱：飞侠1转前的技能，降低怪物的攻击力和防御力 */
     public static final int DISORDER = 4001002;
+    /** 双飞刺：飞侠1转前的攻击技能 */
     public static final int DOUBLE_STAB = 4001334;
+    /** 幸运七：飞侠1转前的攻击技能 */
     public static final int LUCKY_SEVEN = 4001344;
 }

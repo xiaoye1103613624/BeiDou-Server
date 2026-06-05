@@ -40,19 +40,45 @@ import java.awt.*;
 
 /**
  * 【类】Mist（class），包 {@code org.gms.server.maps}。
- * 迷雾/区域效果系统，表示地图中的持续性范围效果（毒雾、烟雾弹、回复光环等）。
+ * 
+ * <p>迷雾/区域效果系统，表示地图中的持续性范围效果（毒雾、烟雾弹、回复光环等）。
+ * 此类管理游戏中的各种区域效果，包括玩家技能产生的效果和怪物技能产生的效果。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>管理区域效果的显示和作用</li>
+ *   <li>区分玩家和怪物产生的效果</li>
+ *   <li>处理不同类型的效果（毒雾、回复雾等）</li>
+ *   <li>控制效果的持续时间和延迟</li>
+ * </ul>
  */
 public class Mist extends AbstractMapObject {
-    private final Rectangle mistPosition; // 迷雾区域
-    private Character owner = null; // 施放者
-    private Monster mob = null; // 怪物施放者
-    private StatEffect source; // 来源技能效果
-    private MobSkill skill; // 怪物技能
-    private final boolean isMobMist; // 是否怪物迷雾
-    private boolean isPoisonMist; // 是否毒雾
-    private boolean isRecoveryMist; // 是否回复迷雾
-    private final int skillDelay; // 技能延迟
+    /** 迷雾覆盖的区域矩形 */
+    private final Rectangle mistPosition; 
+    /** 迷雾的创建者（玩家） */
+    private Character owner = null; 
+    /** 迷雾的创建者（怪物） */
+    private Monster mob = null; 
+    /** 来源技能效果 */
+    private StatEffect source; 
+    /** 怪物技能 */
+    private MobSkill skill; 
+    /** 是否为怪物迷雾 */
+    private final boolean isMobMist; 
+    /** 是否为毒雾 */
+    private boolean isPoisonMist; 
+    /** 是否为回复雾 */
+    private boolean isRecoveryMist; 
+    /** 技能延迟 */
+    private final int skillDelay; 
 
+    /**
+     * 构造函数：创建怪物迷雾实例
+     * 
+     * @param mistPosition 迷雾覆盖的区域
+     * @param mob 迷雾的创建怪物
+     * @param skill 怪物使用的技能
+     */
     public Mist(Rectangle mistPosition, Monster mob, MobSkill skill) {
         this.mistPosition = mistPosition;
         this.mob = mob;
@@ -63,6 +89,13 @@ public class Mist extends AbstractMapObject {
         skillDelay = 0;
     }
 
+    /**
+     * 构造函数：创建玩家迷雾实例
+     * 
+     * @param mistPosition 迷雾覆盖的区域
+     * @param owner 迷雾的创建玩家
+     * @param source 来源技能效果
+     */
     public Mist(Rectangle mistPosition, Character owner, StatEffect source) {
         this.mistPosition = mistPosition;
         this.owner = owner;
@@ -71,18 +104,22 @@ public class Mist extends AbstractMapObject {
         this.isMobMist = false;
         this.isRecoveryMist = false;
         this.isPoisonMist = false;
+        // 根据技能ID设置迷雾类型
         switch (source.getSourceId()) {
+            // 圣光闪耀：恢复迷雾
             case Evan.RECOVERY_AURA:
                 isRecoveryMist = true;
                 break;
 
-            case Shadower.SMOKE_SCREEN: // Smoke Screen
+            // 烟雾弹：非中毒迷雾
+            case Shadower.SMOKE_SCREEN:
                 isPoisonMist = false;
                 break;
 
-            case FPMage.POISON_MIST: // FP mist
-            case BlazeWizard.FLAME_GEAR: // Flame Gear
-            case NightWalker.POISON_BOMB: // Poison Bomb
+            // 中毒迷雾：毒雾/火焰齿轮/毒炸弾
+            case FPMage.POISON_MIST:
+            case BlazeWizard.FLAME_GEAR:
+            case NightWalker.POISON_BOMB:
                 isPoisonMist = true;
                 break;
         }
@@ -98,34 +135,74 @@ public class Mist extends AbstractMapObject {
         return mistPosition.getLocation();
     }
 
+    /**
+     * 获取来源技能
+     * 
+     * @return 来源技能
+     */
     public Skill getSourceSkill() {
         return SkillFactory.getSkill(source.getSourceId());
     }
 
+    /**
+     * 检查是否为怪物迷雾
+     * 
+     * @return 如果是怪物迷雾则返回true，否则返回false
+     */
     public boolean isMobMist() {
         return isMobMist;
     }
 
+    /**
+     * 检查是否为毒雾
+     * 
+     * @return 如果是毒雾则返回true，否则返回false
+     */
     public boolean isPoisonMist() {
         return isPoisonMist;
     }
 
+    /**
+     * 检查是否为回复雾
+     * 
+     * @return 如果是回复雾则返回true，否则返回false
+     */
     public boolean isRecoveryMist() {
         return isRecoveryMist;
     }
 
+    /**
+     * 获取技能延迟
+     * 
+     * @return 技能延迟
+     */
     public int getSkillDelay() {
         return skillDelay;
     }
 
+    /**
+     * 获取怪物所有者
+     * 
+     * @return 怪物所有者
+     */
     public Monster getMobOwner() {
         return mob;
     }
 
+    /**
+     * 获取玩家所有者
+     * 
+     * @return 玩家所有者
+     */
     public Character getOwner() {
         return owner;
     }
 
+    /**
+     * 获取迷雾区域
+     * 
+     * @return 迷雾区域矩形
+     */
     public Rectangle getBox() {
         return mistPosition;
     }
@@ -135,10 +212,20 @@ public class Mist extends AbstractMapObject {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * 创建销毁数据包
+     * 
+     * @return 迷雾销毁数据包
+     */
     public final Packet makeDestroyData() {
         return PacketCreator.removeMist(getObjectId());
     }
 
+    /**
+     * 创建生成数据包
+     * 
+     * @return 迷雾生成数据包
+     */
     public final Packet makeSpawnData() {
         if (owner != null) {
             return PacketCreator.spawnMist(getObjectId(), owner.getId(), getSourceSkill().getId(), owner.getSkillLevel(SkillFactory.getSkill(source.getSourceId())), this);
@@ -146,6 +233,12 @@ public class Mist extends AbstractMapObject {
         return PacketCreator.spawnMobMist(getObjectId(), mob.getId(), skill.getId(), this);
     }
 
+    /**
+     * 创建假生成数据包
+     * 
+     * @param level 技能等级
+     * @return 迷雾假生成数据包
+     */
     public final Packet makeFakeSpawnData(int level) {
         if (owner != null) {
             return PacketCreator.spawnMist(getObjectId(), owner.getId(), getSourceSkill().getId(), level, this);
@@ -163,6 +256,11 @@ public class Mist extends AbstractMapObject {
         client.sendPacket(makeDestroyData());
     }
 
+    /**
+     * 执行随机结果判定
+     * 
+     * @return 如果随机判定成功则返回true，否则返回false
+     */
     public boolean makeChanceResult() {
         return source.makeChanceResult();
     }

@@ -70,7 +70,9 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
         }
         for (byte i = 0; i < numCommands; i++) {
             byte command = p.readByte();
+            // 根据移动命令类型解析不同的移动数据
             switch (command) {
+                // 0/5/17: 绝对移动（普通移动/跳跃移动/漂浮）
                 case 0: // normal move
                 case 5:
                 case 17: { // Float
@@ -88,6 +90,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     res.add(alm);
                     break;
                 }
+                // 1/2/6/12/13/16/18/19/20/22: 相对移动（跳跃/击退/自由跳跃/射箭跳跃/弹簧等）
                 case 1: // jump
                 case 2: // knockback
                 case 6: // fj
@@ -107,6 +110,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     res.add(rlm);
                     break;
                 }
+                // 3/4/7/8/9/11: 传送移动（瞬移/刺客/冲刺/椅子）
                 case 3: // teleport disappear
                 case 4: // teleport appear
                 case 7: // assaulter
@@ -114,7 +118,6 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 9: // rush
                 case 11: // chair
                 {
-                    // case 14: {
                     short xpos = p.readShort();
                     short ypos = p.readShort();
                     short xwobble = p.readShort();
@@ -125,9 +128,11 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     res.add(tm);
                     break;
                 }
+                // 14: 跳下（跳过9字节）
                 case 14:
                     p.skip(9); // jump down (?)
                     break;
+                // 10: 更换装备
                 case 10: // Change Equip
                     res.add(new ChangeEquip(p.readByte()));
                     break;
@@ -202,12 +207,12 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
         }
         for (byte i = 0; i < numCommands; i++) {
             byte command = p.readByte();
+            // 根据移动命令类型更新对象位置/姿态
             switch (command) {
+                // 0/5/17: 绝对移动（普通移动/跳跃移动/漂浮）- 服务端需要精确位置
                 case 0: // normal move
                 case 5:
                 case 17: { // Float
-                    // Absolute movement - only this is important for the server, other movement can
-                    // be passed to the client
                     short xpos = p.readShort(); // is signed fine here?
                     short ypos = p.readShort();
                     target.setPosition(new Point(xpos, ypos + yOffset));
@@ -217,6 +222,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     p.readShort(); // duration
                     break;
                 }
+                // 1/2/6/12/13/16/18/19/20/22: 相对移动 - 服务端只关心姿态变化
                 case 1:
                 case 2:
                 case 6: // fj
@@ -227,13 +233,13 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 19: // Springs on maps
                 case 20: // Aran Combat Step
                 case 22: {
-                    // Relative movement - server only cares about stance
                     p.skip(4); // xpos = lea.readShort(); ypos = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
                     p.readShort(); // duration
                     break;
                 }
+                // 3/4/7/8/9/11: 传送移动 - 瞬移/刺客/冲刺/椅子等
                 case 3:
                 case 4: // tele... -.-
                 case 7: // assaulter
@@ -241,19 +247,18 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 9: // rush
                 case 11: // chair
                 {
-                    // case 14: {
-                    // Teleport movement - same as above
                     p.skip(8); // xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort();
                                // ywobble = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
                     break;
                 }
+                // 14: 跳下（跳过9字节）
                 case 14:
                     p.skip(9); // jump down (?)
                     break;
+                // 10: 更换装备（服务端忽略）
                 case 10: // Change Equip
-                    // ignored server-side
                     p.readByte();
                     break;
                 /*

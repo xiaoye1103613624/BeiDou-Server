@@ -41,30 +41,79 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 【类】Reactor（class），包 {@code org.gms.server.maps}。
- * 反应器系统，管理地图中可交互对象的生命周期，包括击中、状态转换、物品掉落、重生等逻辑。
+ * 
+ * <p>反应器类，表示地图上可交互的动态对象（如可破坏的罐子、开关、机关等），
+ * 管理反应器的生命周期、状态转换、物品掉落和重生逻辑。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>管理反应器的多种状态（未激活、激活、破坏等）</li>
+ *   <li>处理玩家与反应器的交互（点击、攻击等）</li>
+ *   <li>控制物品掉落机制</li>
+ *   <li>处理反应器的自动重生</li>
+ *   <li>支持脚本化的反应器行为</li>
+ * </ul>
+ * 
+ * <p>设计特点：</p>
+ * <ul>
+ *   <li>线程安全：使用ReentrantLock保护状态变更</li>
+ *   <li>状态驱动：通过状态机管理反应器行为</li>
+ *   <li>可扩展：支持自定义脚本和事件处理</li>
+ * </ul>
+ * 
+ * @author OdinMS (original)
+ * @author Xergon (adaptation)
+ * @since 2024-07-18
  */
 public class Reactor extends AbstractMapObject {
-    private final int rid;  // 反应器ID
-    private final ReactorStats stats;  // 反应器状态统计
-    private byte state;  // 当前状态
-    private byte evstate;  // 事件状态
-    private int delay;  // 延迟时间
-    private MapleMap map;  // 所属地图
-    private String name;  // 名称
-    private boolean alive;  // 是否存活
-    private boolean shouldCollect;  // 是否应该收集物品
-    private boolean attackHit;  // 是否被攻击击中
-    private ScheduledFuture<?> timeoutTask = null;  // 超时任务
-    private Runnable delayedRespawnRun = null;  // 延迟重生任务
-    private GuardianSpawnPoint guardian = null;  // 守卫生成点
-    private byte facingDirection = 0;  // 面向方向
-    private final Lock reactorLock = new ReentrantLock(true);  // 反应器锁
-    private final Lock hitLock = new ReentrantLock(true);  // 击中锁
+    /** 反应器模板ID */
+    private final int rid;
+    /** 反应器状态统计信息 */
+    private final ReactorStats stats;
+    /** 当前状态（用于状态转换） */
+    private byte state;
+    /** 事件状态（用于事件系统） */
+    private byte evstate;
+    /** 状态转换延迟时间 */
+    private int delay;
+    /** 所属地图引用 */
+    private MapleMap map;
+    /** 反应器名称 */
+    private String name;
+    /** 是否存活状态 */
+    private boolean alive;
+    /** 是否应该收集物品 */
+    private boolean shouldCollect;
+    /** 是否被攻击击中 */
+    private boolean attackHit;
+    /** 状态超时任务 */
+    private ScheduledFuture<?> timeoutTask = null;
+    /** 延迟重生任务 */
+    private Runnable delayedRespawnRun = null;
+    /** 守卫生成点（用于特定事件） */
+    private GuardianSpawnPoint guardian = null;
+    /** 面向方向 */
+    private byte facingDirection = 0;
+    /** 反应器操作锁（保护状态变更） */
+    private final Lock reactorLock = new ReentrantLock(true);
+    /** 击中操作锁（保护击中逻辑） */
+    private final Lock hitLock = new ReentrantLock(true);
 
     /**
-     * 构造函数
-     * @param stats 反应器状态统计
-     * @param rid 反应器ID
+     * 构造函数：创建反应器实例
+     * 
+     * <p>初始化反应器的基本属性，设置初始状态为存活。</p>
+     * 
+     * <p>此构造函数会：</p>
+     * <ul>
+     *   <li>初始化事件状态为0</li>
+     *   <li>设置反应器状态统计信息</li>
+     *   <li>设置反应器模板ID</li>
+     *   <li>设置初始存活状态</li>
+     * </ul>
+     * 
+     * @param stats 反应器状态统计信息
+     * @param rid 反应器模板ID
      */
     public Reactor(ReactorStats stats, int rid) {
         this.evstate = (byte) 0;  // 初始化事件状态为0
@@ -75,7 +124,10 @@ public class Reactor extends AbstractMapObject {
 
     /**
      * 设置是否应该收集物品
-     * @param collect 是否收集
+     * 
+     * <p>控制反应器被破坏后是否自动收集掉落的物品。</p>
+     * 
+     * @param collect 是否自动收集物品
      */
     public void setShouldCollect(boolean collect) {
         this.shouldCollect = collect;  // 设置收集标志
@@ -83,7 +135,10 @@ public class Reactor extends AbstractMapObject {
 
     /**
      * 获取是否应该收集物品
-     * @return 是否收集
+     * 
+     * <p>检查反应器是否设置为自动收集掉落物品。</p>
+     * 
+     * @return 如果应该收集物品则返回true，否则返回false
      */
     public boolean getShouldCollect() {
         return shouldCollect;  // 返回收集标志
@@ -285,6 +340,23 @@ public class Reactor extends AbstractMapObject {
      * 重置反应器动作
      * @param newState 新状态
      */
+    /**
+     * 重置反应器动作到指定状态
+     * 
+     * <p>将反应器重置到指定的新状态，包括更新状态值、取消现有超时任务、
+     * 设置可收集标志，并重新安排新的超时任务。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>设置反应器到新状态</li>
+     *   <li>取消现有的超时任务</li>
+     *   <li>启用物品收集功能</li>
+     *   <li>重新安排超时任务</li>
+     *   <li>在地图上搜索相关的物品反应器</li>
+     * </ul>
+     * 
+     * @param newState 要设置的新状态值
+     */
     public void resetReactorActions(int newState) {
         setState((byte) newState);  // 设置新状态
         cancelReactorTimeout();  // 取消超时任务
@@ -298,7 +370,19 @@ public class Reactor extends AbstractMapObject {
 
     /**
      * 强制击中反应器
-     * @param newState 新状态
+     * 
+     * <p>强制将反应器设置到指定状态，通常用于系统控制或特殊事件触发。
+     * 此方法会绕过正常的击中逻辑，直接改变反应器状态并广播触发消息。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>锁定反应器以确保线程安全</li>
+     *   <li>重置反应器动作为指定状态</li>
+     *   <li>向地图上的玩家广播反应器触发消息</li>
+     *   <li>解锁反应器</li>
+     * </ul>
+     * 
+     * @param newState 要强制设置的新状态
      */
     public void forceHitReactor(final byte newState) {
         this.lockReactor();  // 锁定反应器
@@ -330,6 +414,19 @@ public class Reactor extends AbstractMapObject {
     /**
      * 取消反应器超时
      */
+    /**
+     * 取消反应器超时任务
+     * 
+     * <p>取消当前注册的反应器超时任务，释放相关的定时器资源。
+     * 此方法用于在反应器状态变更或清理时停止之前的超时任务。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>检查是否存在超时任务</li>
+     *   <li>取消定时任务的执行</li>
+     *   <li>清空任务引用以避免内存泄漏</li>
+     * </ul>
+     */
     public void cancelReactorTimeout() {
         if (timeoutTask != null) {
             timeoutTask.cancel(false);  // 取消任务
@@ -338,7 +435,18 @@ public class Reactor extends AbstractMapObject {
     }
 
     /**
-     * 刷新反应器超时
+     * 刷新反应器超时任务
+     * 
+     * <p>根据当前状态重新安排反应器的超时任务。如果当前状态配置了超时时间，
+     * 则安排一个定时任务在指定时间后将反应器转换到超时后的状态。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>获取当前状态的超时时间</li>
+     *   <li>检查是否需要安排超时任务</li>
+     *   <li>安排新的超时任务</li>
+     *   <li>设置任务完成后的行为</li>
+     * </ul>
      */
     private void refreshReactorTimeout() {
         int timeOut = stats.getTimeout(state);  // 获取超时时间
@@ -370,12 +478,26 @@ public class Reactor extends AbstractMapObject {
     }
 
     /**
-     * 击中反应器(完整参数)
-     * @param wHit 是否为武器击中
-     * @param charPos 角色位置
-     * @param stance 姿态
-     * @param skillid 技能ID
-     * @param c 客户端
+     * 击中反应器（完整参数）
+     * 
+     * <p>处理玩家对反应器的击中操作，根据击中类型和参数执行相应的状态转换和物品掉落逻辑。
+     * 此方法是反应器交互的核心，处理玩家攻击、点击等操作。</p>
+     * 
+     * <p>处理流程：</p>
+     * <ol>
+     *   <li>检查反应器是否处于可击中状态</li>
+     *   <li>尝试获取击中锁以确保线程安全</li>
+     *   <li>根据击中类型和技能ID确定下一个状态</li>
+     *   <li>执行状态转换和物品掉落</li>
+     *   <li>触发反应器脚本</li>
+     *   <li>处理重生逻辑（如果需要）</li>
+     * </ol>
+     * 
+     * @param wHit 是否为武器击中（而非鼠标点击）
+     * @param charPos 角色位置（用于确定击中方向）
+     * @param stance 姿态（角色当前姿态）
+     * @param skillid 使用的技能ID（可能影响击中效果）
+     * @param c 执行击中操作的客户端
      */
     public void hitReactor(boolean wHit, int charPos, short stance, int skillid, Client c) {
         try {

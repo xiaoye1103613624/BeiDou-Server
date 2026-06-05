@@ -107,19 +107,24 @@ public class CashShop {
         this.accountId = accountId;
         this.characterId = characterId;
 
+        // 根据职业类型选择对应的商城物品工厂
         if (!GameConfig.getServerBoolean("use_joint_cash_shop_inventory")) {
             switch (jobType) {
+                // 冒险家职业
                 case 0:
                     factory = ItemFactory.CASH_EXPLORER;
                     break;
+                // 骑士团职业
                 case 1:
                     factory = ItemFactory.CASH_CYGNUS;
                     break;
+                // 战神职业
                 case 2:
                     factory = ItemFactory.CASH_ARAN;
                     break;
             }
         } else {
+            // 使用通用商城物品工厂（所有职业共享）
             factory = ItemFactory.CASH_OVERALL;
         }
 
@@ -299,20 +304,37 @@ public class CashShop {
     public record CashShopSurpriseResult(Item usedCashShopSurprise, Item reward) {
     }
 
+    /**
+     * 获取指定类型的现金/点数
+     * @param type 现金类型（NX_CREDIT/MAPLE_POINT/NX_PREPAID）
+     * @return 对应类型的现金数值
+     */
     public int getCash(int type) {
         return switch (type) {
+            // NX信用点（充值点数）
             case NX_CREDIT -> nxCredit;
+            // 枫叶点数
             case MAPLE_POINT -> maplePoint;
+            // NX预付费
             case NX_PREPAID -> nxPrepaid;
+            // 默认返回0
             default -> 0;
         };
 
     }
 
+    /**
+     * 增加指定类型的现金/点数
+     * @param type 现金类型
+     * @param cash 增加的数额
+     */
     public void gainCash(int type, int cash) {
         switch (type) {
+            // 增加NX信用点
             case NX_CREDIT -> nxCredit += cash;
+            // 增加枫叶点数
             case MAPLE_POINT -> maplePoint += cash;
+            // 增加NX预付费
             case NX_PREPAID -> nxPrepaid += cash;
         }
     }

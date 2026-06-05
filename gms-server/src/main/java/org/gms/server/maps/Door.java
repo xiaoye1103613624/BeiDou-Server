@@ -32,20 +32,46 @@ import java.util.Collection;
 
 /**
  * 【类】Door（class），包 {@code org.gms.server.maps}。
- * 神秘之门系统，实现角色技能创建的双向传送门，连接城镇与狩猎地图。
+ * 
+ * <p>神秘之门系统，实现角色技能创建的双向传送门，连接城镇与狩猎地图。
+ * 此类管理由玩家技能（如魔法密法师的"神秘之门"）创建的传送门，
+ * 允许玩家在城镇和狩猎地图之间快速往返。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>创建双向传送门系统</li>
+ *   <li>管理传送门的生命周期</li>
+ *   <li>处理传送门的部署和移除</li>
+ *   <li>控制传送门的激活状态</li>
+ * </ul>
  */
 public class Door {
-    private int ownerId; // 所有者ID
-    private MapleMap town; // 城镇地图
-    private Portal townPortal; // 城镇传送点
-    private final MapleMap target; // 目标地图
-    private Pair<String, Integer> posStatus = null; // 位置状态
-    private long deployTime; // 部署时间
-    private boolean active; // 是否活跃
+    /** 传送门所有者ID */
+    private int ownerId; 
+    /** 城镇地图 */
+    private MapleMap town; 
+    /** 城镇传送点 */
+    private Portal townPortal; 
+    /** 目标地图（狩猎地图） */
+    private final MapleMap target; 
+    /** 位置状态（用于验证传送门位置的有效性） */
+    private Pair<String, Integer> posStatus = null; 
+    /** 部署时间戳 */
+    private long deployTime; 
+    /** 是否活跃状态 */
+    private boolean active; 
 
-    private DoorObject townDoor; // 城镇侧门对象
-    private DoorObject areaDoor; // 狩猎侧门对象
+    /** 城镇侧门对象 */
+    private DoorObject townDoor; 
+    /** 狩猎侧门对象 */
+    private DoorObject areaDoor; 
 
+    /**
+     * 构造函数：创建神秘之门实例
+     * 
+     * @param owner 传送门创建者
+     * @param targetPosition 传送门在目标地图的位置
+     */
     public Door(Character owner, Point targetPosition) {
         this.ownerId = owner.getId();
         this.target = owner.getMap();
@@ -78,6 +104,11 @@ public class Door {
         }
     }
 
+    /**
+     * 更新传送门的城镇传送点
+     * 
+     * @param owner 传送门所有者
+     */
     public void updateDoorPortal(Character owner) {
         int slot = owner.fetchDoorSlot();
 
@@ -88,6 +119,11 @@ public class Door {
         }
     }
 
+    /**
+     * 广播移除传送门
+     * 
+     * @param owner 传送门所有者
+     */
     private void broadcastRemoveDoor(Character owner) {
         DoorObject areaDoor = this.getAreaDoor();
         DoorObject townDoor = this.getTownDoor();
@@ -124,6 +160,11 @@ public class Door {
         }
     }
 
+    /**
+     * 尝试移除传送门
+     * 
+     * @param owner 传送门所有者
+     */
     public static void attemptRemoveDoor(final Character owner) {
         final Door destroyDoor = owner.getPlayerDoor();
         if (destroyDoor != null && destroyDoor.dispose()) {
@@ -141,42 +182,93 @@ public class Door {
         }
     }
 
+    /**
+     * 获取城镇传送点
+     * 
+     * @param doorid 传送点ID
+     * @return 传送点对象
+     */
     private Portal getTownDoorPortal(int doorid) {
         return town.getDoorPortal(doorid);
     }
 
+    /**
+     * 获取传送门所有者ID
+     * 
+     * @return 传送门所有者ID
+     */
     public int getOwnerId() {
         return ownerId;
     }
 
+    /**
+     * 获取城镇侧门对象
+     * 
+     * @return 城镇侧门对象
+     */
     public DoorObject getTownDoor() {
         return townDoor;
     }
 
+    /**
+     * 获取狩猎侧门对象
+     * 
+     * @return 狩猎侧门对象
+     */
     public DoorObject getAreaDoor() {
         return areaDoor;
     }
 
+    /**
+     * 获取城镇地图
+     * 
+     * @return 城镇地图
+     */
     public MapleMap getTown() {
         return town;
     }
 
+    /**
+     * 获取城镇传送点
+     * 
+     * @return 城镇传送点
+     */
     public Portal getTownPortal() {
         return townPortal;
     }
 
+    /**
+     * 获取目标地图
+     * 
+     * @return 目标地图
+     */
     public MapleMap getTarget() {
         return target;
     }
 
+    /**
+     * 获取传送门状态
+     * 
+     * @return 传送门状态
+     */
     public Pair<String, Integer> getDoorStatus() {
         return posStatus;
     }
 
+    /**
+     * 获取已部署的时间
+     * 
+     * @return 已部署的时间（毫秒）
+     */
     public long getElapsedDeployTime() {
         return System.currentTimeMillis() - deployTime;
     }
 
+    /**
+     * 标记传送门为非活跃状态
+     * 
+     * @return 如果传送门原本是活跃的则返回true，否则返回false
+     */
     private boolean dispose() {
         if (active) {
             active = false;
@@ -186,6 +278,11 @@ public class Door {
         }
     }
 
+    /**
+     * 检查传送门是否活跃
+     * 
+     * @return 如果传送门活跃则返回true，否则返回false
+     */
     public boolean isActive() {
         return active;
     }

@@ -72,12 +72,16 @@ public class Pyramid extends PartyQuest {
         byte plus = (byte) mode.getMode();
         coolAdd += plus;
         missSub += plus;
+        // 根据模式设置减少速率
         switch (plus) {
+            // 0: 降低速度为1
             case 0:
                 decrease = 1;
+            // 1/2: 降低速度为2
             case 1:
             case 2:
                 decrease = 2;
+            // 3: 降低速度为3
             case 3:
                 decrease = 3;
         }
@@ -270,5 +274,3 @@ public class Pyramid extends PartyQuest {
         chr.gainExp(exp, true, true);
     }
 }
-
-

@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Magician {
+    /** 改善MP恢复：魔法师1转前的被动技能，提升MP自然恢复速度 */
     public static final int IMPROVED_MP_RECOVERY = 2000000;
+    /** 提升最大MP：魔法师1转前的被动技能，提升最大MP值 */
     public static final int IMPROVED_MAX_MP_INCREASE = 2000001;
+    /** 魔法护盾：魔法师1转前的被动技能，用MP抵消部分伤害 */
     public static final int MAGIC_GUARD = 2001002;
+    /** 魔法装甲：魔法师1转前的被动技能，提升魔法防御力 */
     public static final int MAGIC_ARMOR = 2001003;
+    /** 能量爆：魔法师1转前的攻击技能 */
     public static final int ENERGY_BOLT = 2001004;
+    /** 魔法爪：魔法师1转前的攻击技能 */
     public static final int MAGIC_CLAW = 2001005;
 }

@@ -68,15 +68,17 @@ public class IntervalRequirement extends AbstractQuestRequirement {
             }
         }
 
+        // 根据时间模式构建剩余时间字符串
         switch (mode) {
+            // 2: 包含小时，显示小时+分钟+秒
             case 2:
                 int hours = (int) ((leftTime / HOURS.toMillis(1)));
                 str.append(hours + " hours, ");
-
+            // 1: 包含分钟，显示分钟+秒
             case 1:
                 int minutes = (int) ((leftTime / MINUTES.toMillis(1)) % 60);
                 str.append(minutes + " minutes, ");
-
+            // 默认: 仅显示秒
             default:
                 int seconds = (int) (leftTime / 1000) % 60;
                 str.append(seconds + " seconds");

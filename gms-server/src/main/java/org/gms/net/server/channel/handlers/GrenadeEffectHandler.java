@@ -45,7 +45,9 @@ public class GrenadeEffectHandler extends AbstractPacketHandler {
         int keyDown = p.readInt();
         int skillId = p.readInt();
 
+        // 根据手雷技能类型广播投掷效果
         switch (skillId) {
+            // 夜行者毒炸弹/海盗手雷
             case NightWalker.POISON_BOMB:
             case Gunslinger.GRENADE:
                 int skillLevel = chr.getSkillLevel(skillId);

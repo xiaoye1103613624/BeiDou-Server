@@ -134,10 +134,13 @@ public class MonsterCarnival {
                 team = 1;
             }
             String teamS = "";
+            // 根据队伍ID获取队伍名称
             switch (team) {
+                // 0: 红队
                 case 0:
                     teamS = LanguageConstants.getMessage(chrMap, LanguageConstants.CPQRed);
                     break;
+                // 1: 蓝队
                 case 1:
                     teamS = LanguageConstants.getMessage(chrMap, LanguageConstants.CPQBlue);
                     break;
@@ -439,10 +442,18 @@ public class MonsterCarnival {
         this.leader2 = leader2;
     }
 
+    /**
+     * 获取敌方队伍的队长
+     * @param team 当前队伍ID
+     * @return 敌方队伍的队长角色
+     */
     public Character getEnemyLeader(int team) {
+        // 根据当前队伍返回敌方队长
         switch (team) {
+            // 0: 当前为红队，返回蓝队队长
             case 0:
                 return leader2;
+            // 1: 当前为蓝队，返回红队队长
             case 1:
                 return leader1;
         }

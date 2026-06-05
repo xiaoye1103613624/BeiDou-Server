@@ -61,13 +61,24 @@ public enum InventoryType {
         return UNDEFINED;
     }
 
+    /**
+     * 根据WZ文件中的名称获取对应的背包类型
+     * @param name WZ中的背包类型名称
+     * @return 对应的背包类型枚举
+     */
     public static InventoryType getByWZName(String name) {
         return switch (name) {
+            // 装饰/装置类物品
             case "Install" -> SETUP;
+            // 消耗类物品
             case "Consume" -> USE;
+            // 其他杂项物品
             case "Etc" -> ETC;
+            // 现金类物品
             case "Cash" -> CASH;
+            // 宠物类物品（归类为现金类）
             case "Pet" -> CASH;
+            // 未知类型
             default -> UNDEFINED;
         };
     }

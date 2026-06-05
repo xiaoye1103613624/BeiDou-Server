@@ -29,12 +29,20 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Brawler {
+    /** 提升最大HP：拳手的被动技能，提升最大HP值 */
     public static final int IMPROVE_MAX_HP = 5100000;
+    /** 拳套精通：拳手的被动技能，提升拳套攻击力 */
     public static final int KNUCKLER_MASTERY = 5100001;
+    /** 后旋击：拳手的攻击技能 */
     public static final int BACK_SPIN_BLOW = 5101002;
+    /** 双重冲顶：拳手的攻击技能 */
     public static final int DOUBLE_UPPERCUT = 5101003;
+    /** 螺旋击：拳手的攻击技能 */
     public static final int CORKSCREW_BLOW = 5101004;
+    /** MP恢复：拳手的被动技能，提升MP自然恢复速度 */
     public static final int MP_RECOVERY = 5101005;
+    /** 拳套加速：拳手的被动技能，提升攻击速度 */
     public static final int KNUCKLER_BOOSTER = 5101006;
+    /** 橡木桶：拳手的技能，进入橡木桶状态 */
     public static final int OAK_BARREL = 5101007;
 }

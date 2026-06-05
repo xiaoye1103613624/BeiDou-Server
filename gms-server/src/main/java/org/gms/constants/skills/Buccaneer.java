@@ -29,14 +29,24 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Buccaneer {
+    /** 枫叶战士：冲锋队长的终极技能，大幅提升各项属性 */
     public static final int MAPLE_WARRIOR = 5121000;
-    public static final int ENERGY_ORB = 5121002;
-    public static final int SUPER_TRANSFORMATION = 5121003;
-    public static final int DEMOLITION = 5121004;
-    public static final int SNATCH = 5121005;
-    public static final int BARRAGE = 5121007;
-    public static final int PIRATES_RAGE = 5121008;
-    public static final int SPEED_INFUSION = 5121009;
-    public static final int TIME_LEAP = 5121010;
+    /** 龙卷攻击：冲锋队长的攻击技能，产生龙卷风攻击怪物 */
     public static final int DRAGON_STRIKE = 5121001;
+    /** 能量球：冲锋队长的攻击技能，发射能量球 */
+    public static final int ENERGY_ORB = 5121002;
+    /** 超级变形：冲锋队长的变身技能，大幅提升战斗力 */
+    public static final int SUPER_TRANSFORMATION = 5121003;
+    /** 爆破：冲锋队长的范围攻击技能 */
+    public static final int DEMOLITION = 5121004;
+    /** 抢夺：冲锋队长的攻击技能，有一定几率偷取物品 */
+    public static final int SNATCH = 5121005;
+    /** 弹幕：冲锋队长的连续攻击技能 */
+    public static final int BARRAGE = 5121007;
+    /** 海盗之怒：冲锋队长的增益技能，提升攻击力 */
+    public static final int PIRATES_RAGE = 5121008;
+    /** 速度注入：冲锋队长的增益技能，提升移动速度 */
+    public static final int SPEED_INFUSION = 5121009;
+    /** 时间跳跃：冲锋队长的特殊技能，返回到几秒前的状态 */
+    public static final int TIME_LEAP = 5121010;
 }

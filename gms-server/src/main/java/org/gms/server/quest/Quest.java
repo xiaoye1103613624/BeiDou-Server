@@ -181,11 +181,14 @@ public class Quest {
         if (startReqData != null) {
             for (Data startReq : startReqData.getChildren()) {
                 QuestRequirementType type = QuestRequirementType.getByWZName(startReq.getName());
+                // 处理任务开始需求类型
                 switch (type) {
-                case INTERVAL:
-                    repeatable = true;
-                    break;
-                case MOB:
+                    // 间隔需求：标记为可重复任务
+                    case INTERVAL:
+                        repeatable = true;
+                        break;
+                    // 怪物需求：收集任务需要的怪物ID
+                    case MOB:
                     for (Data mob : startReq.getChildren()) {
                         relevantMobs.add(DataTool.getInt(mob.getChildByPath("id")));
                     }
@@ -696,69 +699,97 @@ public class Quest {
         quests.clear();
     }
 
+    /**
+     * 根据需求类型获取对应的需求处理器
+     * @param type 任务需求类型
+     * @param data 需求数据
+     * @return 任务需求处理器实例
+     */
     private AbstractQuestRequirement getRequirement(QuestRequirementType type, Data data) {
         AbstractQuestRequirement ret = null;
+        // 根据需求类型创建对应的需求处理器
         switch (type) {
+            // END_DATE: 结束日期需求
             case END_DATE:
                 ret = new EndDateRequirement(this, data);
                 break;
+            // JOB: 职业需求
             case JOB:
                 ret = new JobRequirement(this, data);
                 break;
+            // QUEST: 前置任务需求
             case QUEST:
                 ret = new QuestRequirement(this, data);
                 break;
+            // FIELD_ENTER: 地图进入需求
             case FIELD_ENTER:
                 ret = new FieldEnterRequirement(this, data);
                 break;
+            // INFO_NUMBER: 信息数值需求
             case INFO_NUMBER:
                 ret = new InfoNumberRequirement(this, data);
                 break;
+            // INFO_EX: 扩展信息需求
             case INFO_EX:
                 ret = new InfoExRequirement(this, data);
                 break;
+            // 任务间隔需求
             case INTERVAL:
                 ret = new IntervalRequirement(this, data);
                 break;
+            // 已完成任务需求
             case COMPLETED_QUEST:
                 ret = new CompletedQuestRequirement(this, data);
                 break;
+            // 物品需求
             case ITEM:
                 ret = new ItemRequirement(this, data);
                 break;
+            // 最大等级需求
             case MAX_LEVEL:
                 ret = new MaxLevelRequirement(this, data);
                 break;
+            // 金币需求
             case MESO:
                 ret = new MesoRequirement(this, data);
                 break;
+            // 最低等级需求
             case MIN_LEVEL:
                 ret = new MinLevelRequirement(this, data);
                 break;
+            // 最低宠物驯服度需求
             case MIN_PET_TAMENESS:
                 ret = new MinTamenessRequirement(this, data);
                 break;
+            // 怪物需求
             case MOB:
                 ret = new MobRequirement(this, data);
                 break;
+            // 怪物手册需求
             case MONSTER_BOOK:
                 ret = new MonsterBookCountRequirement(this, data);
                 break;
+            // NPC需求
             case NPC:
                 ret = new NpcRequirement(this, data);
                 break;
+            // 宠物需求
             case PET:
                 ret = new PetRequirement(this, data);
                 break;
+            // BUFF需求
             case BUFF:
                 ret = new BuffRequirement(this, data);
                 break;
+            // 除外BUFF需求
             case EXCEPT_BUFF:
                 ret = new BuffExceptRequirement(this, data);
                 break;
+            // 脚本需求
             case SCRIPT:
                 ret = new ScriptRequirement(this, data);
                 break;
+            // 自动开始/普通开始/结束需求：无特殊处理
             case NORMAL_AUTO_START:
             case START:
             case END:
@@ -770,42 +801,61 @@ public class Quest {
         return ret;
     }
 
+    /**
+     * 根据动作类型获取对应的动作处理器
+     * @param type 任务动作类型
+     * @param data 动作数据
+     * @return 任务动作处理器实例
+     */
     private AbstractQuestAction getAction(QuestActionType type, Data data) {
         AbstractQuestAction ret = null;
+        // 根据动作类型创建对应的动作处理器
         switch (type) {
+            // BUFF: BUFF动作
             case BUFF:
                 ret = new BuffAction(this, data);
                 break;
+            // EXP: 经验值动作
             case EXP:
                 ret = new ExpAction(this, data);
                 break;
+            // FAME: 名声动作
             case FAME:
                 ret = new FameAction(this, data);
                 break;
+            // ITEM: 物品动作
             case ITEM:
                 ret = new ItemAction(this, data);
                 break;
+            // MESO: 金币动作
             case MESO:
                 ret = new MesoAction(this, data);
                 break;
+            // NEXTQUEST: 下一任务动作
             case NEXTQUEST:
                 ret = new NextQuestAction(this, data);
                 break;
+            // PETSKILL: 宠物技能动作
             case PETSKILL:
                 ret = new PetSkillAction(this, data);
                 break;
+            // QUEST: 任务动作
             case QUEST:
                 ret = new QuestAction(this, data);
                 break;
+            // SKILL: 技能动作
             case SKILL:
                 ret = new SkillAction(this, data);
                 break;
+            // PETTAMENESS: 宠物亲密度动作
             case PETTAMENESS:
                 ret = new PetTamenessAction(this, data);
                 break;
+            // PETSPEED: 宠物速度动作
             case PETSPEED:
                 ret = new PetSpeedAction(this, data);
                 break;
+            // INFO: 信息动作
             case INFO:
                 ret = new InfoAction(this, data);
                 break;

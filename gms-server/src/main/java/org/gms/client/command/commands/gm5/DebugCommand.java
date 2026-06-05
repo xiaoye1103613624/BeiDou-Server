@@ -67,7 +67,9 @@ public class DebugCommand extends Command {
             return;
         }
 
+        // 根据调试命令类型执行相应的调试操作
         switch (params[0]) {
+            // 显示帮助信息/调试类型列表
             case "type":
             case "help":
                 String msgTypes = I18nUtil.getMessage("DebugCommand.message3") + "\r\n\r\n";
@@ -78,6 +80,7 @@ public class DebugCommand extends Command {
                 c.getAbstractPlayerInteraction().npcTalk(NpcId.STEWARD, msgTypes);
                 break;
 
+            // 显示当前地图所有怪物的信息
             case "monster":
                 List<MapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.MONSTER));
                 for (MapObject monstermo : monsters) {
@@ -87,10 +90,12 @@ public class DebugCommand extends Command {
                 }
                 break;
 
+            // 封包调试（已注释）
             case "packet":
                 //player.getMap().broadcastMessage(PacketCreator.customPacket(joinStringFrom(params, 1)));
                 break;
 
+            // 显示最近传送门的信息
             case "portal":
                 Portal portal = player.getMap().findClosestPortal(player.getPosition());
                 if (portal != null) {
@@ -100,6 +105,7 @@ public class DebugCommand extends Command {
                 }
                 break;
 
+            // 显示最近刷新点的信息
             case "spawnpoint":
                 SpawnPoint sp = player.getMap().findClosestSpawnpoint(player.getPosition());
                 if (sp != null) {
@@ -109,18 +115,22 @@ public class DebugCommand extends Command {
                 }
                 break;
 
+            // 显示玩家当前位置
             case "pos":
                 player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message10", (int) player.getPosition().getX(), (int) player.getPosition().getY()));
                 break;
 
+            // 显示当前地图信息
             case "map":
                 player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message11", player.getMap().getId(), player.getMap().getEventInstance() != null ? player.getMap().getEventInstance().getName() : "null", player.getMap().getAllPlayers().size(), player.getMap().countMonsters(), player.getMap().countReactors(), player.getMap().countItems(), player.getMap().getMapObjects().size()));
                 break;
 
+            // 报告怪物刷新点问题
             case "mobsp":
                 player.getMap().reportMonsterSpawnPoints(player);
                 break;
 
+            // 显示事件信息
             case "event":
                 if (player.getEventInstance() == null) {
                     player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message12"));

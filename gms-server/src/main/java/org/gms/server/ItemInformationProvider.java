@@ -1224,42 +1224,60 @@ public class ItemInformationProvider {
         return equip; // 返回处理后的装备
     }
 
+    /**
+     * 根据属性键值提升装备属性
+     * @param nEquip 目标装备
+     * @param stats 属性映射表
+     */
     public static void improveEquipStats(Equip nEquip, Map<String, Integer> stats) {
         for (Entry<String, Integer> stat : stats.entrySet()) {
+            // 根据属性名称设置对应的装备属性
             switch (stat.getKey()) {
+                // 力量属性
                 case "STR":
                     nEquip.setStr(getShortMaxIfOverflow(nEquip.getStr() + stat.getValue().intValue()));
                     break;
+                // 敏捷属性
                 case "DEX":
                     nEquip.setDex(getShortMaxIfOverflow(nEquip.getDex() + stat.getValue().intValue()));
                     break;
+                // 智力属性
                 case "INT":
                     nEquip.setInt(getShortMaxIfOverflow(nEquip.getInt() + stat.getValue().intValue()));
                     break;
+                // 运气属性
                 case "LUK":
                     nEquip.setLuk(getShortMaxIfOverflow(nEquip.getLuk() + stat.getValue().intValue()));
                     break;
+                // 物理攻击属性
                 case "PAD":
                     nEquip.setWatk(getShortMaxIfOverflow(nEquip.getWatk() + stat.getValue().intValue()));
                     break;
+                // 物理防御属性
                 case "PDD":
                     nEquip.setWdef(getShortMaxIfOverflow(nEquip.getWdef() + stat.getValue().intValue()));
                     break;
+                // 魔法攻击属性
                 case "MAD":
                     nEquip.setMatk(getShortMaxIfOverflow(nEquip.getMatk() + stat.getValue().intValue()));
                     break;
+                // 魔法防御属性
                 case "MDD":
                     nEquip.setMdef(getShortMaxIfOverflow(nEquip.getMdef() + stat.getValue().intValue()));
                     break;
+                // 命中率属性
                 case "ACC":
                     nEquip.setAcc(getShortMaxIfOverflow(nEquip.getAcc() + stat.getValue().intValue()));
                     break;
+                // 回避率属性
                 case "EVA":
                     nEquip.setAvoid(getShortMaxIfOverflow(nEquip.getAvoid() + stat.getValue().intValue()));
                     break;
+                // 移动速度属性
                 case "Speed":
                     nEquip.setSpeed(getShortMaxIfOverflow(nEquip.getSpeed() + stat.getValue().intValue()));
                     break;
+                // 跳跃力属性
                 case "Jump":
                     nEquip.setJump(getShortMaxIfOverflow(nEquip.getJump() + stat.getValue().intValue()));
                     break;

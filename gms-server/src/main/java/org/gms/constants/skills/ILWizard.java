@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class ILWizard {
+    /** MP吸收：冰雷巫师的技能，吸收怪物的MP */
     public static final int MP_EATER = 2200000;
+    /** 冥想：冰雷巫师的被动技能，提升魔法攻击力 */
     public static final int MEDITATION = 2201001;
+    /** 传送：冰雷巫师的移动技能 */
     public static final int TELEPORT = 2201002;
+    /** 缓速：冰雷巫师的控制技能，降低怪物速度 */
     public static final int SLOW = 2201003;
+    /** 寒冰光束：冰雷巫师的攻击技能 */
     public static final int COLD_BEAM = 2201004;
+    /** 雷击：冰雷巫师的攻击技能 */
     public static final int THUNDERBOLT = 2201005;
 }

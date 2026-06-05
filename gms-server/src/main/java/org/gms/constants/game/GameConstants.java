@@ -21,41 +21,94 @@ import java.util.*;
  * @author Ronan
  */
 /**
- * 【类型】GameConstants（class），包 `org.gms.constants.game`。游戏常量：数字格式化、职业判断、技能检查、地图判断、掉率/经验倍率等通用工具方法。
+ * 【类】GameConstants，包 {@code org.gms.constants.game}。
+ * 游戏通用常量定义类。
+ *
+ * <p>该类定义了MapleStory游戏中使用的各种常量，包括：</p>
+ * <ul>
+ *   <li>世界服务器名称列表</li>
+ *   <li>装备属性字段名称</li>
+ *   <li>掉宝率/金币率/经验率加成表</li>
+ *   <li>职业升级经验门槛</li>
+ *   <li>GM传送命令地图映射</li>
+ *   <li>游戏背景音乐列表</li>
+ *   <li>默认按键配置</li>
+ *   <li>怪物HP计算参数</li>
+ * </ul>
+ *
+ * @author kevintjuh93
+ * @author Ronan
  */
 public class GameConstants {
+    /** 世界服务器名称列表，包含多个MapleStory服务器名称 */
     public static String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};
+
+    /** 装备属性字段名称数组，用于装备属性解析 */
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
+
+    /** 现金物品ID数组，用于现金商店系统 */
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
-    // Ronan's rates upgrade system
+    /** 掉宝率加成表，每个索引对应不同的加成等级 */
     private static final int[] DROP_RATE_GAIN = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-    private static final int[] MESO_RATE_GAIN = {1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105};
-    private static final int[] EXP_RATE_GAIN = {1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610};    //fibonacci :3
 
+    /** 金币获取率加成表，索引对应加成等级 */
+    private static final int[] MESO_RATE_GAIN = {1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105};
+
+    /** 经验获取率加成表，使用斐波那契数列实现 */
+    private static final int[] EXP_RATE_GAIN = {1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610};
+
+    /** 职业升级经验门槛数组，用于判断是否可以进行一转、二转等 */
     private static final int[] jobUpgradeBlob = {1, 20, 60, 110, 190};
+
+    /** 职业技能点数加成数组 */
     private static final int[] jobUpgradeSpUp = {0, 1, 2, 3, 6};
+
+    /** 职业ID到职业名称的映射表 */
     private final static Map<Integer, String> jobNames = new HashMap<>();
+
+    /** 数字格式化解析器，根据配置选择法国或英国区域格式 */
     private final static NumberFormat nfParser = NumberFormat.getInstance(GameConfig.getServerBoolean("use_unit_price_with_comma") ? Locale.FRANCE : Locale.UK);
 
+    /** CPQ（组队任务）可用的异常状态数组 */
     public static final Disease[] CPQ_DISEASES = {Disease.SLOW, Disease.SEDUCE, Disease.STUN, Disease.POISON,
             Disease.SEAL, Disease.DARKNESS, Disease.WEAKEN, Disease.CURSE};
 
+    /** 地图怪物最大伤害值，固定为WZ配置值的两倍 */
     public static final int MAX_FIELD_MOB_DAMAGE = getMaxObstacleMobDamageFromWz() * 2;
 
+    /**
+     * 获取玩家掉宝率加成值
+     * @param slot 加成等级索引
+     * @return 对应等级的掉宝率加成值
+     */
     public static int getPlayerBonusDropRate(int slot) {
         return (DROP_RATE_GAIN[slot]);
     }
 
+    /**
+     * 获取玩家金币获取率加成值
+     * @param slot 加成等级索引
+     * @return 对应等级的金币获取率加成值
+     */
     public static int getPlayerBonusMesoRate(int slot) {
         return (MESO_RATE_GAIN[slot]);
     }
 
+    /**
+     * 获取玩家经验获取率加成值
+     * @param slot 加成等级索引
+     * @return 对应等级的经验获取率加成值
+     */
     public static int getPlayerBonusExpRate(int slot) {
         return (EXP_RATE_GAIN[slot]);
     }
 
-    // "goto" command for players
+    /**
+     * 玩家使用的goto传送命令地图映射表
+     * <p>key为传送命令名称，value为对应的地图ID。
+     * 玩家可以使用"@goto 地图名"命令传送到对应地图。</p>
+     */
     public static final Map<String, Integer> GOTO_TOWNS = new HashMap<>() {{
         put("southperry", MapId.SOUTHPERRY);
         put("amherst", MapId.AMHERST);
@@ -95,7 +148,11 @@ public class GameConstants {
         put("mushking", MapId.MUSHROOM_KINGDOM);
     }};
 
-    // "goto" command for only-GMs
+    /**
+     * GM专用goto传送命令地图映射表
+     * <p>key为传送命令名称，value为对应的地图ID。
+     * 只有GM权限才能使用这些传送命令。</p>
+     */
     public static final Map<String, Integer> GOTO_AREAS = new HashMap<>() {{
         put("gmmap", MapId.GM_MAP);
         put("excavation", MapId.EXCAVATION_SITE);
@@ -273,28 +330,61 @@ public class GameConstants {
         add("BgmUI/Title");
     }};
 
-    // MapleStory default keyset
+    /**
+     * MapleStory默认按键配置数组
+     * <p>定义默认键盘快捷键映射，用于新创建角色的默认设置</p>
+     */
     private static final int[] DEFAULT_KEY = {18, 65, 2, 23, 3, 4, 5, 6, 16, 17, 19, 25, 26, 27, 31, 34, 35, 37, 38, 40, 43, 44, 45, 46, 50, 56, 59, 60, 61, 62, 63, 64, 57, 48, 29, 7, 24, 33, 41, 39};
+
+    /** 默认按键类型配置数组 */
     private static final int[] DEFAULT_TYPE = {4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 5, 6, 6, 6, 6, 6, 6, 5, 4, 5, 4, 4, 4, 4, 4};
+
+    /** 默认按键动作配置数组 */
     private static final int[] DEFAULT_ACTION = {0, 106, 10, 1, 12, 13, 18, 24, 8, 5, 4, 19, 14, 15, 2, 17, 11, 3, 20, 16, 9, 50, 51, 6, 7, 53, 100, 101, 102, 103, 104, 105, 54, 22, 52, 21, 25, 26, 23, 27};
 
-    // HeavenMS custom keyset
+    /**
+     * HeavenMS自定义按键配置数组
+     * <p>提供替代的键盘快捷键配置方案</p>
+     */
     private static final int[] CUSTOM_KEY = {2, 3, 4, 5, 31, 56, 59, 32, 42, 6, 17, 29, 30, 41, 50, 60, 61, 62, 63, 64, 65, 16, 7, 9, 13, 8};
+
+    /** 自定义按键类型配置数组 */
     private static final int[] CUSTOM_TYPE = {4, 4, 4, 4, 5, 5, 6, 5, 5, 4, 4, 4, 5, 4, 4, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4};
+
+    /** 自定义按键动作配置数组 */
     private static final int[] CUSTOM_ACTION = {1, 0, 3, 2, 53, 54, 100, 52, 51, 19, 5, 9, 50, 7, 22, 101, 102, 103, 104, 105, 106, 8, 17, 26, 20, 4};
 
+    /**
+     * 获取键盘按键配置
+     * @param customKeyset 是否使用自定义按键配置
+     * @return 按键配置数组
+     */
     public static int[] getCustomKey(boolean customKeyset) {
         return (customKeyset ? CUSTOM_KEY : DEFAULT_KEY);
     }
 
+    /**
+     * 获取按键类型配置
+     * @param customKeyset 是否使用自定义按键类型
+     * @return 按键类型配置数组
+     */
     public static int[] getCustomType(boolean customKeyset) {
         return (customKeyset ? CUSTOM_TYPE : DEFAULT_TYPE);
     }
 
+    /**
+     * 获取按键动作配置
+     * @param customKeyset 是否使用自定义按键动作
+     * @return 按键动作配置数组
+     */
     public static int[] getCustomAction(boolean customKeyset) {
         return (customKeyset ? CUSTOM_ACTION : DEFAULT_ACTION);
     }
 
+    /**
+     * 怪物HP计算参数数组
+     * <p>用于根据怪物等级计算HP的基准值，配合等级系数计算最终HP</p>
+     */
     private static final int[] mobHpVal = {0, 15, 20, 25, 35, 50, 65, 80, 95, 110, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350,
             375, 405, 435, 465, 495, 525, 580, 650, 720, 790, 900, 990, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800,
             1900, 2000, 2100, 2200, 2300, 2400, 2520, 2640, 2760, 2880, 3000, 3200, 3400, 3600, 3800, 4000, 4300, 4600, 4900, 5200,
@@ -306,6 +396,11 @@ public class GameConstants {
             330000, 340000, 350000, 360000, 370000, 380000, 390000, 400000, 410000, 420000, 430000, 440000, 450000, 460000, 470000, 480000, 490000, 500000, 510000, 520000,
             530000, 550000, 570000, 590000, 610000, 630000, 650000, 670000, 690000, 710000, 730000, 750000, 770000, 790000, 810000, 830000, 850000, 870000, 890000, 910000};
 
+    /**
+     * 获取职业名称
+     * @param jobid 职业ID
+     * @return 职业名称字符串
+     */
     public static String getJobName(int jobid) {
         String name = jobNames.get(jobid);
 
@@ -326,14 +421,29 @@ public class GameConstants {
         return name;
     }
 
+    /**
+     * 获取职业升级等级范围
+     * @param jobbranch 职业分支索引
+     * @return 升级所需等级
+     */
     public static int getJobUpgradeLevelRange(int jobbranch) {
         return jobUpgradeBlob[jobbranch];
     }
 
+    /**
+     * 获取转职技能点数加成
+     * @param jobbranch 职业分支索引
+     * @return SP加成值
+     */
     public static int getChangeJobSpUpgrade(int jobbranch) {
         return jobUpgradeSpUp[jobbranch];
     }
 
+    /**
+     * 判断地图是否为名人堂地图
+     * @param mapid 地图ID
+     * @return 是否为名人堂地图
+     */
     public static boolean isHallOfFameMap(int mapid) {
         switch (mapid) {
             case MapId.HALL_OF_WARRIORS:     // warrior
@@ -353,13 +463,18 @@ public class GameConstants {
         }
     }
 
+    /**
+     * 判断地图是否为讲台名人堂地图
+     * @param mapid 地图ID
+     * @return 是否为讲台名人堂地图
+     */
     public static boolean isPodiumHallOfFameMap(int mapid) {
         switch (mapid) {
             case MapId.HALL_OF_WARRIORS:
-            case MapId.HALL_OF_MAGICIANS:     // magician
-            case MapId.HALL_OF_BOWMEN:     // bowman
-            case MapId.HALL_OF_THIEVES:     // thief
-            case MapId.NAUTILUS_TRAINING_ROOM:     // pirate
+            case MapId.HALL_OF_MAGICIANS:
+            case MapId.HALL_OF_BOWMEN:
+            case MapId.HALL_OF_THIEVES:
+            case MapId.NAUTILUS_TRAINING_ROOM:
                 return true;
 
             default:
@@ -367,6 +482,12 @@ public class GameConstants {
         }
     }
 
+    /**
+     * 获取名人堂分支编号
+     * @param job 角色职业
+     * @param mapid 地图ID
+     * @return 名人堂分支编号
+     */
     public static byte getHallOfFameBranch(Job job, int mapid) {
         if (!isHallOfFameMap(mapid)) {
             return (byte) (26 + 4 * (mapid / 100000000));   // custom, 400 pnpcs available per continent

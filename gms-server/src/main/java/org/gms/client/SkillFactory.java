@@ -86,16 +86,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 【类型】SkillFactory（class），包 `org.gms.client`。
- *
- * 技能工厂，负责从 Skill.wz 加载全部技能数据并缓存。
- * 使用 volatile 保证多线程可见性。服务器启动时调用 {@link #loadAllSkills()} 一次性全量加载，
- * 运行时通过 {@link #getSkill(int)} 按 ID 查询。
+ * 【类型】SkillFactory（class），包 {@code org.gms.client}。
+ * 
+ * <p>技能工厂类，负责从WZ文件中加载游戏中的所有技能数据，并提供高效的
+ * 缓存机制供运行时查询使用。此类采用单例模式的静态工厂实现，确保整个
+ * 服务器进程中只有一个技能数据缓存实例。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>从WZ文件中加载所有技能定义数据</li>
+ *   <li>建立技能ID到技能对象的快速查询映射</li>
+ *   <li>提供运行时技能数据的高效访问接口</li>
+ *   <li>处理技能的动画时间和效果数据</li>
+ * </ul>
+ * 
+ * <p>设计特点：</p>
+ * <ul>
+ *   <li>单例模式：使用静态变量确保全局唯一实例</li>
+ *   <li>懒加载：技能数据在服务器启动时一次性加载</li>
+ *   <li>线程安全：使用volatile关键字确保多线程环境下的可见性</li>
+ *   <li>高效查询：基于哈希表的O(1)复杂度查询</li>
+ * </ul>
+ * 
+ * <p>使用方式：</p>
+ * <pre>{@code
+ * // 服务器启动时加载所有技能
+ * SkillFactory.loadAllSkills();
+ * 
+ * // 运行时按ID查询技能
+ * Skill skill = SkillFactory.getSkill(1001001);
+ * 
+ * // 获取技能效果
+ * StatEffect effect = skill.getEffect(1);
+ * }</pre>
+ * 
+ * @author OdinMS (original)
+ * @author Xergon (adaptation)
+ * @since 2024-07-18
  */
 public class SkillFactory {
-    /** 全量技能缓存（volatile 保证多线程可见） */
+    /** 
+     * 全局技能缓存映射，存储技能ID到技能对象的映射关系。
+     * 使用volatile关键字确保多线程环境下的内存可见性。
+     */
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
-    /** Skill.wz 数据源 */
+    /** 
+     * Skill.wz数据源提供器，用于从WZ文件中读取原始技能数据 
+     */
     private static final DataProvider datasource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
 
     /** 按 ID 获取技能对象 */

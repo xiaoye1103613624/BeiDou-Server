@@ -39,8 +39,10 @@ public final class NPCShopHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         byte bmode = p.readByte();
+        // 根据商店操作类型执行相应操作
         switch (bmode) {
-        case 0: { // mode 0 = buy :)
+        // 0: 购买物品
+        case 0: {
             short slot = p.readShort();// slot
             int itemId = p.readInt();
             short quantity = p.readShort();
@@ -54,20 +56,22 @@ public final class NPCShopHandler extends AbstractPacketHandler {
             c.getPlayer().getShop().buy(c, slot, itemId, quantity);
             break;
         }
-        case 1: { // sell ;)
+        // 1: 出售物品
+        case 1: {
             short slot = p.readShort();
             int itemId = p.readInt();
             short quantity = p.readShort();
             c.getPlayer().getShop().sell(c, ItemConstants.getInventoryType(itemId), slot, quantity);
             break;
         }
-        case 2: { // recharge ;)
-
+        // 2: 充值（为弹药/箭矢等补充）
+        case 2: {
             byte slot = (byte) p.readShort();
             c.getPlayer().getShop().recharge(c, slot);
             break;
         }
-        case 3: // leaving :(
+        // 3: 离开商店
+        case 3:
             c.getPlayer().setShop(null);
             break;
         }

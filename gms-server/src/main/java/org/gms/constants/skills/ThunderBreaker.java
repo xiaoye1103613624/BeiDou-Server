@@ -30,26 +30,46 @@ package org.gms.constants.skills;
  */
 public class ThunderBreaker {
     // 1st job
+    /** 快速移动：奇袭者1转前的被动技能，提升移动速度 */
     public static final int QUICK_MOTION = 15000000;
+    /** 先发制人：奇袭者1转前的攻击技能 */
     public static final int FIRST_STRIKE = 15001001;
+    /** 空翻踢：奇袭者1转前的攻击技能 */
     public static final int SOMERSAULT_KICK = 15001002;
+    /** 疾风：奇袭者1转前的移动技能，提升移动速度和跳跃力 */
     public static final int DASH = 15001003;
+    /** 闪电：奇袭者1转前的攻击技能 */
     public static final int LIGHTNING = 15001004;
     // 2nd job
+    /** 提升最大HP：奇袭者1转后的被动技能，提升最大HP值 */
     public static final int IMPROVE_MAX_HP = 15100000;
+    /** 拳套精通：奇袭者1转后的被动技能，提升拳套攻击力 */
     public static final int KNUCKLER_MASTERY = 15100001;
+    /** 拳套加速：奇袭者1转后的被动技能，提升攻击速度 */
     public static final int KNUCKLER_BOOSTER = 15101002;
+    /** 螺旋击：奇袭者1转后的攻击技能 */
     public static final int CORKSCREW_BLOW = 15101003;
+    /** 能量蓄积：奇袭者1转后的被动技能，蓄积能量 */
     public static final int ENERGY_CHARGE = 15100004;
+    /** 能量爆：奇袭者1转后的攻击技能 */
     public static final int ENERGY_BLAST = 15101005;
+    /** 闪电蓄积：奇袭者1转后的技能，蓄积闪电能量 */
     public static final int LIGHTNING_CHARGE = 15101006;
     // 3rd job
+    /** 暴击拳：奇袭者2转后的被动技能，提升暴击率 */
     public static final int CRITICAL_PUNCH = 15110000;
+    /** 变形：奇袭者2转后的变身技能 */
     public static final int TRANSFORMATION = 15111002;
+    /** 弹幕：奇袭者2转后的连续攻击技能 */
     public static final int BARRAGE = 15111004;
+    /** 速度注入：奇袭者2转后的增益技能，提升移动速度 */
     public static final int SPEED_INFUSION = 15111005;
+    /** 冲击波：奇袭者2转后的攻击技能 */
     public static final int SHOCK_WAVE = 15111003;
+    /** 能量抽取：奇袭者2转后的技能，抽取怪物能量 */
     public static final int ENERGY_DRAIN = 15111001;
+    /** 电光石火：奇袭者2转后的攻击技能 */
     public static final int SPARK = 15111006;
+    /** 鲨鱼波浪：奇袭者2转后的攻击技能 */
     public static final int SHARK_WAVE = 15111007;
 }

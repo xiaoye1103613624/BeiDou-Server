@@ -29,12 +29,20 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Spearman {
+    /** 长矛精通：枪战士的被动技能，提升长矛攻击力 */
     public static final int SPEAR_MASTERY = 1300000;
+    /** 长枪精通：枪战士的被动技能，提升长枪攻击力 */
     public static final int POLEARM_MASTERY = 1300001;
+    /** 最终攻击-长矛：枪战士的被动技能，有一定几率进行额外攻击 */
     public static final int FINAL_ATTACK_SPEAR = 1300002;
+    /** 最终攻击-长枪：枪战士的被动技能，有一定几率进行额外攻击 */
     public static final int FINAL_ATTACK_POLEARM = 1300003;
+    /** 长矛加速：枪战士的被动技能，提升攻击速度 */
     public static final int SPEAR_BOOSTER = 1301004;
+    /** 长枪加速：枪战士的被动技能，提升攻击速度 */
     public static final int POLEARM_BOOSTER = 1301005;
+    /** 钢铁意志：枪战士的被动技能，提升魔法防御力 */
     public static final int IRON_WILL = 1301006;
+    /** 超级身体：枪战士的增益技能，大幅提升HP和MP */
     public static final int HYPER_BODY = 1301007;
 }

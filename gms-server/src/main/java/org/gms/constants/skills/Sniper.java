@@ -29,11 +29,18 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Sniper {
+    /** 疾风：狙击手的被动技能，提升移动速度 */
     public static final int THRUST = 3210000;
+    /** 致命一击：狙击手的攻击技能，有一定几率一击必杀 */
     public static final int MORTAL_BLOW = 3210001;
+    /** 木偶：狙击手的召唤技能，召唤木偶协助战斗 */
     public static final int PUPPET = 3211002;
+    /** 暴风雪：狙击手的范围攻击技能 */
     public static final int BLIZZARD = 3211003;
+    /** 箭矢喷发：狙击手的攻击技能，对前方区域造成伤害 */
     public static final int ARROW_ERUPTION = 3211004;
+    /** 金鹰：狙击手的召唤技能，召唤金鹰协助战斗 */
     public static final int GOLDEN_EAGLE = 3211005;
+    /** 扫射：狙击手的连续攻击技能 */
     public static final int STRAFE = 3211006;
 }

@@ -65,10 +65,13 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
         Character mc = c.getPlayer();
         byte type = p.readByte();
         int allianceId = -1;
+        // 根据公会操作类型执行相应操作
         switch (type) {
+            // 0x00: 显示公会信息（已注释）
             case 0x00:
                 //c.sendPacket(PacketCreator.showGuildInfo(mc));
                 break;
+            // 0x02: 创建公会
             case 0x02:
                 if (mc.getGuildId() > 0) {
                     mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message1"));
@@ -110,6 +113,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
 
                 c.getWorldServer().getMatchCheckerCoordinator().createMatchConfirmation(MatchCheckerType.GUILD_CREATION, c.getWorld(), mc.getId(), eligibleCids, guildName);
                 break;
+            // 0x05: 邀请玩家加入公会
             case 0x05:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() > 2) {
                     return;
@@ -123,6 +127,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 } // already sent invitation, do nothing
 
                 break;
+            // 0x06: 接受公会邀请加入公会
             case 0x06:
                 if (mc.getGuildId() > 0) {
                     log.warn("[Hack] Chr {} attempted to join a guild when s/he is already in one.", mc.getName());
@@ -161,6 +166,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 mc.getMap().broadcastPacket(mc, GuildPackets.guildNameChanged(mc.getId(), mc.getGuild().getName())); // thanks Vcoc for pointing out an issue with updating guild tooltip to players in the map
                 mc.getMap().broadcastPacket(mc, GuildPackets.guildMarkChanged(mc.getId(), mc.getGuild()));
                 break;
+            // 0x07: 退出公会
             case 0x07:
                 cid = p.readInt();
                 String name = p.readString();
@@ -199,6 +205,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     Server.getInstance().getAlliance(allianceId).updateAlliancePackets(mc);
                 }
                 break;
+            // 0x0d: 修改公会称号
             case 0x0d:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() != 1) {
                     log.warn("[Hack] Chr {} tried to change guild rank titles when s/he does not have permission", mc.getName());
@@ -211,6 +218,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
 
                 Server.getInstance().changeRankTitle(mc.getGuildId(), ranks);
                 break;
+            // 0x0e: 更改成员等级
             case 0x0e:
                 cid = p.readInt();
                 byte newRank = p.readByte();
@@ -223,6 +231,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 Server.getInstance().changeRank(mc.getGuildId(), cid, newRank);
                 break;
+            // 0x0f: 更改公会图标
             case 0x0f:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() != 1 || mc.getMapId() != MapId.GUILD_HQ) {
                     log.warn("[Hack] Chr {} tried to change guild emblem without being the guild leader", mc.getName());
@@ -260,6 +269,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 Server.getInstance().setGuildNotice(mc.getGuildId(), notice);
                 break;
+            // 0x1E: 公会组队创建确认
             case 0x1E:
                 p.readInt();
                 World wserv = c.getWorldServer();

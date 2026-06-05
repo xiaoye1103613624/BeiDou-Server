@@ -28,9 +28,11 @@ public final class RPSActionHandler extends AbstractPacketHandler {
                     return;
                 }
                 final byte mode = p.readByte();
+                // 根据猜拳游戏操作类型执行相应操作
                 switch (mode) {
-                    case 0: // start game
-                    case 5: // retry
+                    // 0/5: 开始/重试游戏
+                    case 0:
+                    case 5:
                         if (rps != null) {
                             rps.reward(c);
                         }
@@ -40,22 +42,26 @@ public final class RPSActionHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.rpsMesoError(-1));
                         }
                         break;
-                    case 1: // answer
+                    // 1: 回答（出拳）
+                    case 1:
                         if (rps == null || !rps.answer(c, p.readByte())) {
                             c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));// 13
                         }
                         break;
-                    case 2: // time over
+                     // 2: 超时（自动判负）
+                    case 2:
                         if (rps == null || !rps.timeOut(c)) {
                             c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));
                         }
                         break;
-                    case 3: // continue
+                    // 3: 继续下一轮
+                    case 3:
                         if (rps == null || !rps.nextRound(c)) {
                             c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));
                         }
                         break;
-                    case 4: // leave
+                    // 4: 离开游戏
+                    case 4:
                         if (rps != null) {
                             rps.dispose(c);
                         } else {

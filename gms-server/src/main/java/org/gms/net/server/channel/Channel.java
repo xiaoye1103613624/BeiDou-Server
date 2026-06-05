@@ -940,15 +940,19 @@ public final class Channel {
             }
         }
 
+        // 根据模式格式化剩余时间（支持小时/分钟/秒的组合）
         switch (mode) {
+            // 模式2：包含小时、分钟和秒
             case 2:
                 int hours = (int) ((leftTime / (HOURS.toMillis(1))));
                 str.append(hours + " hours, ");
 
+            // 模式1：包含分钟和秒（无break，继续执行default）
             case 1:
                 int minutes = (int) ((leftTime / (MINUTES.toMillis(1))) % 60);
                 str.append(minutes + " minutes, ");
 
+            // 默认：只包含秒
             default:
                 int seconds = (int) (leftTime / SECONDS.toMillis(1)) % 60;
                 str.append(seconds + " seconds");

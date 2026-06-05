@@ -46,7 +46,9 @@ public final class CancelBuffHandler extends AbstractPacketHandler implements Pa
     public final void handlePacket(InPacket p, Client c) {
         int sourceid = p.readInt();
 
+        // 根据技能ID处理BUFF取消（需要广播到地图/单独取消）
         switch (sourceid) {
+            // 需要广播到地图的技能效果：法师大爆炸/弓手暴风弓/海盗速射/龙之子气息
             case FPArchMage.BIG_BANG:
             case ILArchMage.BIG_BANG:
             case Bishop.BIG_BANG:
@@ -58,7 +60,7 @@ public final class CancelBuffHandler extends AbstractPacketHandler implements Pa
             case Evan.ICE_BREATH:
                 c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.skillCancel(c.getPlayer(), sourceid), false);
                 break;
-
+            // 其他技能：单独取消效果
             default:
                 c.getPlayer().cancelEffect(SkillFactory.getSkill(sourceid).getEffect(1), false, -1);
                 break;

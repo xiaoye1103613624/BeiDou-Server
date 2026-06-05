@@ -165,19 +165,20 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
     }
 
     private static int parseCouponResult(int res) {
+        // 将礼品券结果码转换为客户端消息码
         switch (res) {
+            // -1: 礼品券无效
             case -1:
                 return 0xB0;
-
+            // -2: 礼品券已使用
             case -2:
                 return 0xB3;
-
+            // -3: 礼品券已过期
             case -3:
                 return 0xB2;
-
+            // -4: 礼品券正在处理中
             case -4:
                 return 0xBB;
-
             default:
                 return 0xB1;
         }
@@ -207,23 +208,29 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                         int quantity = pair.getRight().getRight();
 
                         CashShop cs = c.getPlayer().getCashShop();
+                        // 根据奖励类型处理不同的虚拟物品
                         switch (type) {
+                            // 0: 游戏金币
                             case 0:
-                                c.getPlayer().gainMeso(quantity, false); //mesos
+                                c.getPlayer().gainMeso(quantity, false);
                                 mesos += quantity;
                                 break;
+                            // 4: NEXON点数
                             case 4:
-                                cs.gainCash(1, quantity);    //nxCredit
+                                cs.gainCash(1, quantity);
                                 nxCredit += quantity;
                                 break;
+                            // 1: 枫叶点
                             case 1:
-                                cs.gainCash(2, quantity);    //maplePoint
+                                cs.gainCash(2, quantity);
                                 maplePoints += quantity;
                                 break;
+                            // 2: NEXON预付款
                             case 2:
-                                cs.gainCash(4, quantity);    //nxPrepaid
+                                cs.gainCash(4, quantity);
                                 nxPrepaid += quantity;
                                 break;
+                            // 3: NEXON点数+预付款混合
                             case 3:
                                 cs.gainCash(1, quantity);
                                 nxCredit += quantity;

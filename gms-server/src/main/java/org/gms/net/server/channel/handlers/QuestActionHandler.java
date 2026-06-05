@@ -79,13 +79,16 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             player.dropMessage(1,I18nUtil.getMessage("ActionHandler.map.message1"));
             return;
         }
+        // 根据任务动作类型执行相应操作
         switch (action) {
-            case 0: // Restore lost item, Credits Darter ( Rajan )
+            // 0: 恢复丢失的物品
+            case 0:
                 p.readInt();
                 int itemid = p.readInt();
                 quest.restoreLostItem(player, itemid);
                 break;
-            case 1: { // Start Quest
+            // 1: 开始任务
+            case 1: {
                 int npc = p.readInt();
                 if (!isNpcNearby(p, player, quest, npc)) {
                     return;
@@ -101,7 +104,8 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 2: { // Complete Quest
+            // 2: 完成任务
+            case 2: {
                 int npc = p.readInt();
                 if (!isNpcNearby(p, player, quest, npc)) {
                     return;
@@ -122,10 +126,12 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 3: // forfeit quest
+            // 3: 放弃任务
+            case 3:
                 quest.forfeit(player);
                 break;
-            case 4: { // scripted start quest
+            // 4: 脚本化开始任务
+            case 4: {
                 int npc = p.readInt();
                 if (!isNpcNearby(p, player, quest, npc)) {
                     return;
@@ -135,7 +141,8 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 }
                 break;
             }
-            case 5: { // scripted end quests
+            // 5: 脚本化结束任务
+            case 5: {
                 int npc = p.readInt();
                 if (!isNpcNearby(p, player, quest, npc)) {
                     return;

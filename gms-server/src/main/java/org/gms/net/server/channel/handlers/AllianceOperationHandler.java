@@ -72,11 +72,14 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
         }
 
         // "alliance" is only null at case 0x04
+        // 根据联盟操作类型执行相应操作
         switch (b) {
+            // 0x01: 显示联盟信息
             case 0x01:
                 Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.sendShowInfo(chr.getGuild().getAllianceId(), chr.getId()), -1, -1);
                 break;
-            case 0x02: { // Leave Alliance
+            // 0x02: 离开联盟
+            case 0x02: {
                 if (chr.getGuild().getAllianceId() == 0 || chr.getGuildId() < 1 || chr.getGuildRank() != 1) {
                     return;
                 }
@@ -84,7 +87,8 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 Alliance.removeGuildFromAlliance(chr.getGuild().getAllianceId(), chr.getGuildId(), chr.getWorld());
                 break;
             }
-            case 0x03: // Send Invite
+            // 0x03: 发送联盟邀请
+            case 0x03:
                 String guildName = p.readString();
 
                 if (alliance.getGuilds().size() == alliance.getCapacity()) {
@@ -94,7 +98,8 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 }
 
                 break;
-            case 0x04: { // Accept Invite
+            // 0x04: 接受联盟邀请
+            case 0x04: {
                 Guild guild = chr.getGuild();
                 if (guild.getAllianceId() != 0 || chr.getGuildRank() != 1 || chr.getGuildId() < 1) {
                     return;
@@ -137,7 +142,8 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
 
                 break;
             }
-            case 0x06: { // Expel Guild
+            // 0x06: 开除公会
+            case 0x06: {
                 int guildid = p.readInt();
                 int allianceid = p.readInt();
                 if (chr.getGuild().getAllianceId() == 0 || chr.getGuild().getAllianceId() != allianceid) {
@@ -154,7 +160,8 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 alliance.dropMessage("[" + Server.getInstance().getGuild(guildid).getName() + "] guild has been expelled from the union.");
                 break;
             }
-            case 0x07: { // Change Alliance Leader
+            // 0x07: 更改联盟首领
+            case 0x07: {
                 if (chr.getGuild().getAllianceId() == 0 || chr.getGuildId() < 1) {
                     return;
                 }
@@ -168,6 +175,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 changeLeaderAllianceRank(alliance, player);
                 break;
             }
+            // 0x08: 更改联盟称号
             case 0x08:
                 String[] ranks = new String[5];
                 for (int i = 0; i < 5; i++) {
@@ -176,6 +184,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 Server.getInstance().setAllianceRanks(alliance.getId(), ranks);
                 Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.changeAllianceRankTitle(alliance.getId(), ranks), -1, -1);
                 break;
+            // 0x09: 更改成员联盟等级
             case 0x09: {
                 int int1 = p.readInt();
                 byte byte1 = p.readByte();
@@ -186,6 +195,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
 
                 break;
             }
+            // 0x0A: 更改联盟公告
             case 0x0A:
                 String notice = p.readString();
                 Server.getInstance().setAllianceNotice(alliance.getId(), notice);

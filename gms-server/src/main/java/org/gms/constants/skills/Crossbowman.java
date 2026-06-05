@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Crossbowman {
+    /** 弩精通：弩弓手的被动技能，提升弩攻击力 */
     public static final int CROSSBOW_MASTERY = 3200000;
+    /** 最终攻击：弩弓手的被动技能，有一定几率进行额外攻击 */
     public static final int FINAL_ATTACK = 3200001;
+    /** 弩加速：弩弓手的被动技能，提升攻击速度 */
     public static final int CROSSBOW_BOOSTER = 3201002;
+    /** 力量击退：弩弓手的攻击技能，击退怪物 */
     public static final int POWER_KNOCKBACK = 3201003;
+    /** 灵魂箭：弩弓手的技能，无需消耗箭矢 */
     public static final int SOUL_ARROW = 3201004;
+    /** 铁箭：弩弓手的攻击技能 */
     public static final int IRON_ARROW = 3201005;
 }

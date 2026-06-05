@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class FPWizard {
+    /** MP吸收：火毒巫师的技能，吸收怪物的MP */
     public static final int MP_EATER = 2100000;
+    /** 冥想：火毒巫师的被动技能，提升魔法攻击力 */
     public static final int MEDITATION = 2101001;
+    /** 传送：火毒巫师的移动技能 */
     public static final int TELEPORT = 2101002;
+    /** 缓慢：火毒巫师的控制技能，降低怪物速度 */
     public static final int SLOW = 2101003;
+    /** 火箭：火毒巫师的攻击技能 */
     public static final int FIRE_ARROW = 2101004;
+    /** 毒气：火毒巫师的攻击技能 */
     public static final int POISON_BREATH = 2101005;
 }

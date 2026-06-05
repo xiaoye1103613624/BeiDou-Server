@@ -29,13 +29,22 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Shadower {
+    /** 枫叶战士：独行客的终极技能，大幅提升各项属性 */
     public static final int MAPLE_WARRIOR = 4221000;
+    /** 暗杀：独行客的强力攻击技能 */
     public static final int ASSASSINATE = 4221001;
+    /** 暗影转换：独行客的被动技能，提升暗器攻击力 */
     public static final int SHADOW_SHIFTER = 4220002;
+    /** 挑衅：独行客的技能，降低怪物防御力 */
     public static final int TAUNT = 4221003;
+    /** 忍者伏击：独行客的强力攻击技能 */
     public static final int NINJA_AMBUSH = 4221004;
+    /** 剧毒刺：独行客的被动技能，使武器带有毒性 */
     public static final int VENOMOUS_STAB = 4220005;
+    /** 烟雾术：独行客的技能，在指定区域制造烟雾 */
     public static final int SMOKE_SCREEN = 4221006;
+    /** 回旋步：独行客的移动技能，快速移动到指定位置 */
     public static final int BOOMERANG_STEP = 4221007;
+    /** 英雄意志：独行客的终极技能，恢复HP/MP并移除异常状态 */
     public static final int HEROS_WILL = 4221008;
 }

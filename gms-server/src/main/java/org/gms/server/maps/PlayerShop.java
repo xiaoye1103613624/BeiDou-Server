@@ -46,26 +46,55 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 【类型】PlayerShop，class，包 {@code org.gms.server.maps}。
  *
- * 玩家个人商店地图对象，提供玩家间实时点对点交易功能。支持访客进入/离开、物品上架/下架、购买、聊天记录、黑名单和交易记录查询。
+ * <p>玩家个人商店地图对象，提供玩家间实时点对点交易功能。支持访客进入/离开、物品上架/下架、购买、聊天记录、黑名单和交易记录查询。</p>
+ *
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>创建和管理玩家个人商店</li>
+ *   <li>处理访客进入和离开</li>
+ *   <li>管理商品上架和销售</li>
+ *   <li>维护商店聊天记录</li>
+ *   <li>处理黑名单功能</li>
+ *   <li>保护并发访问安全</li>
+ * </ul>
  *
  * @author Matze
  * @author Ronan - concurrency protection
  */
 public class PlayerShop extends AbstractMapObject {
+    /** 商店开放状态标志 */
     private final AtomicBoolean open = new AtomicBoolean(false);
+    /** 商店所有者 */
     private final Character owner;
+    /** 商店道具ID */
     private final int itemid;
 
+    /** 访客数组（最多3个） */
     private final Character[] visitors = new Character[3];
+    /** 商店商品列表 */
     private final List<PlayerShopItem> items = new ArrayList<>();
+    /** 已售商品列表 */
     private final List<SoldItem> sold = new LinkedList<>();
+    /** 商店描述 */
     private String description;
+    /** 已售出商品数量 */
     private int boughtnumber = 0;
+    /** 黑名单列表 */
     private final List<String> bannedList = new ArrayList<>();
+    /** 聊天记录列表 */
     private final List<Pair<Character, String>> chatLog = new LinkedList<>();
+    /** 聊天槽位映射 */
     private final Map<Integer, Byte> chatSlot = new LinkedHashMap<>();
+    /** 访客操作锁 */
     private final Lock visitorLock = new ReentrantLock(true);
 
+    /**
+     * 构造函数：创建玩家商店实例
+     * 
+     * @param owner 商店所有者
+     * @param description 商店描述
+     * @param itemid 商店道具ID
+     */
     public PlayerShop(Character owner, String description, int itemid) {
         this.setPosition(owner.getPosition());
         this.owner = owner;
@@ -73,26 +102,56 @@ public class PlayerShop extends AbstractMapObject {
         this.itemid = itemid;
     }
 
+    /**
+     * 获取频道号
+     * 
+     * @return 频道号
+     */
     public int getChannel() {
         return owner.getClient().getChannel();
     }
 
+    /**
+     * 获取地图ID
+     * 
+     * @return 地图ID
+     */
     public int getMapId() {
         return owner.getMapId();
     }
 
+    /**
+     * 获取商店道具ID
+     * 
+     * @return 商店道具ID
+     */
     public int getItemId() {
         return itemid;
     }
 
+    /**
+     * 检查商店是否开放
+     * 
+     * @return 如果商店开放则返回true，否则返回false
+     */
     public boolean isOpen() {
         return open.get();
     }
 
+    /**
+     * 设置商店开放状态
+     * 
+     * @param openShop 开放状态
+     */
     public void setOpen(boolean openShop) {
         open.set(openShop);
     }
 
+    /**
+     * 检查是否有空闲槽位
+     * 
+     * @return 如果有空闲槽位则返回true，否则返回false
+     */
     public boolean hasFreeSlot() {
         visitorLock.lock();
         try {
@@ -102,6 +161,11 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 获取商店房间信息
+     * 
+     * @return 商店房间信息字节数组
+     */
     public byte[] getShopRoomInfo() {
         visitorLock.lock();
         try {
@@ -122,10 +186,21 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 检查是否为商店所有者
+     * 
+     * @param chr 要检查的角色
+     * @return 如果是所有者则返回true，否则返回false
+     */
     public boolean isOwner(Character chr) {
         return owner.equals(chr);
     }
 
+    /**
+     * 添加访客
+     * 
+     * @param visitor 要添加的访客
+     */
     private void addVisitor(Character visitor) {
         for (int i = 0; i < 3; i++) {
             if (visitors[i] == null) {
@@ -139,6 +214,11 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 强制移除访客
+     * 
+     * @param visitor 要移除的访客
+     */
     public void forceRemoveVisitor(Character visitor) {
         if (visitor == owner) {
             owner.getMap().removeMapObject(this);
@@ -163,6 +243,11 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 移除访客
+     * 
+     * @param visitor 要移除的访客
+     */
     public void removeVisitor(Character visitor) {
         if (visitor == owner) {
             owner.getMap().removeMapObject(this);
@@ -203,6 +288,12 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 检查是否为商店访客
+     * 
+     * @param visitor 要检查的访客
+     * @return 如果是访客则返回true，否则返回false
+     */
     public boolean isVisitor(Character visitor) {
         visitorLock.lock();
         try {
@@ -212,6 +303,12 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 添加商品到商店
+     * 
+     * @param item 要添加的商品
+     * @return 如果添加成功则返回true，否则返回false
+     */
     public boolean addItem(PlayerShopItem item) {
         synchronized (items) {
             if (items.size() >= 16) {
@@ -223,14 +320,32 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 从槽位移除商品
+     * 
+     * @param slot 要移除的槽位
+     */
     private void removeFromSlot(int slot) {
         items.remove(slot);
     }
 
+    /**
+     * 检查客户是否可以购买商品
+     * 
+     * @param c 客户
+     * @param newItem 要购买的新商品
+     * @return 如果可以购买则返回true，否则返回false
+     */
     private static boolean canBuy(Client c, Item newItem) {
         return InventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && InventoryManipulator.addFromDrop(c, newItem, false);
     }
 
+    /**
+     * 取回商品
+     * 
+     * @param slot 商品槽位
+     * @param chr 取回商品的角色
+     */
     public void takeItemBack(int slot, Character chr) {
         synchronized (items) {
             PlayerShopItem shopItem = items.get(slot);
@@ -255,11 +370,12 @@ public class PlayerShop extends AbstractMapObject {
     }
 
     /**
-     * no warnings for now o.o
-     *
-     * @param c
-     * @param item
-     * @param quantity
+     * 购买商品
+     * 
+     * @param c 客户
+     * @param item 商品索引
+     * @param quantity 购买数量
+     * @return 如果购买成功则返回true，否则返回false
      */
     public boolean buy(Client c, int item, short quantity) {
         synchronized (items) {
@@ -332,6 +448,11 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 向访客广播数据包
+     * 
+     * @param packet 要广播的数据包
+     */
     public void broadcastToVisitors(Packet packet) {
         visitorLock.lock();
         try {
@@ -345,6 +466,11 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 广播恢复到访客
+     * 
+     * @return 如果恢复成功则返回true，否则返回false
+     */
     public void broadcastRestoreToVisitors() {
         visitorLock.lock();
         try {
@@ -366,6 +492,9 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 移除所有访客
+     */
     public void removeVisitors() {
         List<Character> visitorList = new ArrayList<>(3);
 
@@ -393,6 +522,11 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 广播数据包
+     * 
+     * @param packet 要广播的数据包
+     */
     public void broadcast(Packet packet) {
         Client client = owner.getClient();
         if (client != null) {
@@ -401,6 +535,12 @@ public class PlayerShop extends AbstractMapObject {
         broadcastToVisitors(packet);
     }
 
+    /**
+     * 获取访客槽位
+     * 
+     * @param chr 角色
+     * @return 访客槽位
+     */
     private byte getVisitorSlot(Character chr) {
         byte s = 0;
         for (Character mc : getVisitors()) {
@@ -417,6 +557,12 @@ public class PlayerShop extends AbstractMapObject {
         return s;
     }
 
+    /**
+     * 商店聊天
+     * 
+     * @param c 客户端
+     * @param chat 聊天内容
+     */
     public void chat(Client c, String chat) {
         byte s = getVisitorSlot(c.getPlayer());
 
@@ -431,6 +577,9 @@ public class PlayerShop extends AbstractMapObject {
         broadcast(PacketCreator.getPlayerShopChat(c.getPlayer(), chat, s));
     }
 
+    /**
+     * 恢复聊天记录
+     */
     private void recoverChatLog() {
         synchronized (chatLog) {
             for (Pair<Character, String> it : chatLog) {
@@ -442,18 +591,29 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 清除聊天记录
+     */
     private void clearChatLog() {
         synchronized (chatLog) {
             chatLog.clear();
         }
     }
 
+    /**
+     * 关闭商店
+     */
     public void closeShop() {
         clearChatLog();
         removeVisitors();
         owner.getMap().broadcastMessage(PacketCreator.removePlayerShopBox(this));
     }
 
+    /**
+     * 发送商店信息
+     * 
+     * @param c 客户端
+     */
     public void sendShop(Client c) {
         visitorLock.lock();
         try {
@@ -463,10 +623,20 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 获取商店所有者
+     * 
+     * @return 商店所有者
+     */
     public Character getOwner() {
         return owner;
     }
 
+    /**
+     * 获取访客数组
+     * 
+     * @return 访客数组
+     */
     public Character[] getVisitors() {
         visitorLock.lock();
         try {
@@ -481,12 +651,23 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 获取商品列表
+     * 
+     * @return 商品列表
+     */
     public List<PlayerShopItem> getItems() {
         synchronized (items) {
             return Collections.unmodifiableList(items);
         }
     }
 
+    /**
+     * 检查商店是否包含指定商品
+     * 
+     * @param itemid 商品ID
+     * @return 如果包含该商品则返回true，否则返回false
+     */
     public boolean hasItem(int itemid) {
         for (PlayerShopItem mpsi : getItems()) {
             if (mpsi.getItem().getItemId() == itemid && mpsi.isExist() && mpsi.getBundles() > 0) {
@@ -497,14 +678,29 @@ public class PlayerShop extends AbstractMapObject {
         return false;
     }
 
+    /**
+     * 获取商店描述
+     * 
+     * @return 商店描述
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * 设置商店描述
+     * 
+     * @param description 新的商店描述
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * 禁止玩家访问商店
+     * 
+     * @param name 要禁止的玩家名称
+     */
     public void banPlayer(String name) {
         if (!bannedList.contains(name)) {
             bannedList.add(name);
@@ -529,10 +725,22 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 检查玩家是否被禁止
+     * 
+     * @param name 要检查的玩家名称
+     * @return 如果被禁止则返回true，否则返回false
+     */
     public boolean isBanned(String name) {
         return bannedList.contains(name);
     }
 
+    /**
+     * 访问商店
+     * 
+     * @param chr 要访问的角色
+     * @return 如果访问成功则返回true，否则返回false
+     */
     public synchronized boolean visitShop(Character chr) {
         if (this.isBanned(chr.getName())) {
             chr.dropMessage(1, "You have been banned from this store.");
@@ -560,6 +768,12 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    /**
+     * 发送可用的商品捆绑包
+     * 
+     * @param itemid 商品ID
+     * @return 可用商品捆绑包列表
+     */
     public List<PlayerShopItem> sendAvailableBundles(int itemid) {
         List<PlayerShopItem> list = new LinkedList<>();
         List<PlayerShopItem> all = new ArrayList<>();
@@ -576,6 +790,11 @@ public class PlayerShop extends AbstractMapObject {
         return list;
     }
 
+    /**
+     * 获取已售商品列表
+     * 
+     * @return 已售商品列表
+     */
     public List<SoldItem> getSold() {
         synchronized (sold) {
             return Collections.unmodifiableList(sold);
@@ -597,12 +816,28 @@ public class PlayerShop extends AbstractMapObject {
         return MapObjectType.SHOP;
     }
 
+    /**
+     * 已售商品内部类
+     */
     public class SoldItem {
 
-        int itemid, mesos;
+        /** 商品ID */
+        int itemid;
+        /** 售价（金币） */
+        int mesos;
+        /** 数量 */
         short quantity;
+        /** 买家姓名 */
         String buyer;
 
+        /**
+         * 构造函数：创建已售商品实例
+         * 
+         * @param buyer 买家姓名
+         * @param itemid 商品ID
+         * @param quantity 数量
+         * @param mesos 售价（金币）
+         */
         public SoldItem(String buyer, int itemid, short quantity, int mesos) {
             this.buyer = buyer;
             this.itemid = itemid;
@@ -610,18 +845,38 @@ public class PlayerShop extends AbstractMapObject {
             this.mesos = mesos;
         }
 
+        /**
+         * 获取买家姓名
+         * 
+         * @return 买家姓名
+         */
         public String getBuyer() {
             return buyer;
         }
 
+        /**
+         * 获取商品ID
+         * 
+         * @return 商品ID
+         */
         public int getItemId() {
             return itemid;
         }
 
+        /**
+         * 获取数量
+         * 
+         * @return 数量
+         */
         public short getQuantity() {
             return quantity;
         }
 
+        /**
+         * 获取售价（金币）
+         * 
+         * @return 售价（金币）
+         */
         public int getMesos() {
             return mesos;
         }

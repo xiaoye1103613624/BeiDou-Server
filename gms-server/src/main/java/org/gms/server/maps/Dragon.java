@@ -28,10 +28,27 @@ import org.gms.util.PacketCreator;
 
 /**
  * 【类型】Dragon（class），包 `org.gms.server.maps`。
+ * 
+ * <p>龙类，表示玩家角色身上的龙形态或龙相关效果。
+ * 此类继承自AbstractAnimatedMapObject，具有动画效果和姿态管理功能，
+ * 用于在游戏中显示龙相关的视觉效果。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>管理龙形态的显示</li>
+ *   <li>处理龙的生成和销毁数据包</li>
+ *   <li>关联龙与其拥有者角色</li>
+ * </ul>
  */
 public class Dragon extends AbstractAnimatedMapObject {
+    /** 龙的所有者角色 */
     private final Character owner;
 
+    /**
+     * 构造函数：创建龙实例
+     * 
+     * @param chr 龙的所有者角色
+     */
     public Dragon(Character chr) {
         super();
         this.owner = chr;
@@ -60,6 +77,11 @@ public class Dragon extends AbstractAnimatedMapObject {
         c.sendPacket(PacketCreator.removeDragon(owner.getId()));
     }
 
+    /**
+     * 获取龙的所有者
+     * 
+     * @return 龙的所有者角色
+     */
     public Character getOwner() {
         return owner;
     }

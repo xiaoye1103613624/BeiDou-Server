@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Archer {
+    /** 亚马逊的祝福：弓箭手1转前的被动技能，提升力量和敏捷 */
     public static final int BLESSING_OF_AMAZON = 3000000;
+    /** 亚马逊之眼：弓箭手1转前的被动技能，提升命中率 */
     public static final int EYE_OF_AMAZON = 3000002;
+    /** 致命射击：弓箭手1转前的被动技能，提升暴击率 */
     public static final int CRITICAL_SHOT = 3000001;
+    /** 专注：弓箭手1转前的被动技能，提升回避率和命中率 */
     public static final int FOCUS = 3001003;
+    /** 二连射：弓箭手1转前的攻击技能 */
     public static final int DOUBLE_SHOT = 3001005;
+    /** 箭矢冲击：弓箭手1转前的攻击技能 */
     public static final int ARROW_BLOW = 3001004;
 }

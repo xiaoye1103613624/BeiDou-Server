@@ -553,57 +553,94 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private long lastAttackTime = 0;
 
+     /**
+     * 私有构造函数，初始化角色的基本属性和组件
+     * 
+     * <p>此构造函数仅由内部方法调用，用于创建一个新的角色实例并初始化其基本组件，
+     * 包括监听器、姿态、库存系统和保存位置等。所有属性都设置为默认值。</p>
+     */
     private Character() {
-        super.setListener(new CharacterListener(this));
-        useCS = false;
-        setStance(0);
-        inventory = new Inventory[InventoryType.values().length];
-        savedLocations = new SavedLocation[SavedLocationType.values().length];
+        super.setListener(new CharacterListener(this));  // 设置角色事件监听器
+        useCS = false;                                  // 默认不使用混沌卷轴
+        setStance(0);                                   // 设置初始姿态为站立
+        inventory = new Inventory[InventoryType.values().length];  // 初始化库存数组
+        savedLocations = new SavedLocation[SavedLocationType.values().length];  // 初始化保存位置数组
 
+        // 为每种库存类型创建相应的库存实例
         for (InventoryType type : InventoryType.values()) {
-            byte b = 24;
-            if (type == InventoryType.CASH) {
+            byte b = 24;                                // 默认库存槽位数量
+            if (type == InventoryType.CASH) {           // 现金物品库存有更多槽位
                 b = 96;
             }
-            inventory[type.ordinal()] = new Inventory(this, type, b);
+            inventory[type.ordinal()] = new Inventory(this, type, b);  // 创建库存实例
         }
+        // 创建证明库存（用于验证角色持有物品的能力）
         inventory[InventoryType.CANHOLD.ordinal()] = new InventoryProof(this);
 
+        // 初始化保存位置数组为null
         for (int i = 0; i < SavedLocationType.values().length; i++) {
             savedLocations[i] = null;
         }
+        // 初始化任务映射
         quests = new LinkedHashMap<>();
+        // 设置初始位置为原点
         setPosition(new Point(0, 0));
     }
 
+    /**
+     * 根据指定选项获取职业风格
+     * 
+     * <p>此方法根据提供的选项字节值确定角色的职业风格，通常用于计算
+     * 不同职业类型的属性加成和技能效果。</p>
+     * 
+     * @param opt 职业风格选项字节值
+     * @return 对应的职业风格枚举
+     */
     public Job getJobStyle(byte opt) {
         return Job.getJobStyleInternal(this.getJob().getId(), opt);
     }
 
+    /**
+     * 获取默认职业风格
+     * 
+     * <p>此方法根据角色的力量和敏捷值自动确定职业风格，
+     * 如果力量值大于敏捷值则返回力量型风格，否则返回敏捷型风格。</p>
+     * 
+     * @return 角色的默认职业风格
+     */
     public Job getJobStyle() {
         return getJobStyle((byte) ((this.getStr() > this.getDex()) ? 0x80 : 0x40));
     }
 
+    /**
+     * 获取默认角色实例
+     * 
+     * <p>此静态工厂方法创建一个具有默认属性的新角色实例，用于新角色创建或
+     * 测试目的。所有基本属性都被设置为新手角色的标准值。</p>
+     * 
+     * @param c 关联的客户端实例
+     * @return 具有默认属性的角色实例
+     */
     public static Character getDefault(Client c) {
-        Character ret = new Character();
-        ret.client = c;
-        ret.setGMLevel(0);
-        ret.hp = 50;
-        ret.setMaxHp(50);
-        ret.mp = 5;
-        ret.setMaxMp(5);
-        ret.attrStr = 12;
-        ret.attrDex = 5;
-        ret.attrInt = 4;
-        ret.attrLuk = 4;
-        ret.map = null;
-        ret.job = Job.BEGINNER;
-        ret.level = 1;
-        ret.accountId = c.getAccID();
-        ret.buddylist = new BuddyList(20);
-        ret.mapleMount = null;
-        ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);
-        ret.getInventory(InventoryType.USE).setSlotLimit(24);
+        Character ret = new Character();        // 创建新角色实例
+        ret.client = c;                         // 设置关联客户端
+        ret.setGMLevel(0);                      // 设置GM等级为普通玩家
+        ret.hp = 50;                           // 设置初始HP
+        ret.setMaxHp(50);                      // 设置最大HP
+        ret.mp = 5;                            // 设置初始MP
+        ret.setMaxMp(5);                       // 设置最大MP
+        ret.attrStr = 12;                      // 设置初始力量值
+        ret.attrDex = 5;                       // 设置初始敏捷值
+        ret.attrInt = 4;                       // 设置初始智力值
+        ret.attrLuk = 4;                       // 设置初始运气值
+        ret.map = null;                        // 初始地图为空
+        ret.job = Job.BEGINNER;                // 设置初始职业为新手
+        ret.level = 1;                         // 设置初始等级
+        ret.accountId = c.getAccID();          // 设置账户ID
+        ret.buddylist = new BuddyList(20);     // 创建好友列表（容量20）
+        ret.mapleMount = null;                 // 初始无坐骑
+        ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);  // 设置装备库存槽位
+        ret.getInventory(InventoryType.USE).setSlotLimit(24);    // 设置消耗品库存槽位
         ret.getInventory(InventoryType.SETUP).setSlotLimit(24);
         ret.getInventory(InventoryType.ETC).setSlotLimit(24);
 
@@ -1142,6 +1179,26 @@ public class Character extends AbstractCharacterObject {
         }, 777);
     }
 
+    /**
+     * 更改角色职业
+     * 
+     * <p>此方法处理角色职业变更的完整流程，包括分配技能点数、属性点数、库存槽位，
+     * 更新角色的最大生命值和魔法值，以及通知其他玩家职业变更等。这是一个线程安全
+     * 的方法，确保在多人游戏中职业变更的一致性。</p>
+     * 
+     * <p>职业变更的主要步骤：</p>
+     * <ol>
+     *   <li>更新角色职业信息</li>
+     *   <li>根据新职业分配技能点数（SP）和属性点数（AP）</li>
+     *   <li>增加各类型库存的槽位数量</li>
+     *   <li>根据职业类型调整最大生命值和魔法值</li>
+     *   <li>更新角色属性并发送状态更新包</li>
+     *   <li>刷新队伍信息和公会信息</li>
+     *   <li>触发职业变更的视觉效果</li>
+     * </ol>
+     * 
+     * @param newJob 新的职业枚举值
+     */
     public synchronized void changeJob(Job newJob) {
         if (newJob == null) {
             return;//the fuck you doing idiot!
@@ -1427,6 +1484,12 @@ public class Character extends AbstractCharacterObject {
             dropMessage(5, "该城镇暂未开放，您已被传送至射手村。");
         }
 
+        // 根据传入参数类型获取对应的传送门
+        // null: 随机传送门
+        // Integer: 通过传送门索引获取
+        // String: 通过传送门名称获取
+        // Portal: 直接使用传入的传送门对象
+        // default: 使用索引为0的默认传送门
         Portal portal = switch (pt) {
             case null -> warpMap.getRandomPlayerSpawnpoint();
             case Integer i -> warpMap.getPortal(i);
@@ -1445,6 +1508,27 @@ public class Character extends AbstractCharacterObject {
         changeMap(to, to.getPortal(portal));
     }
 
+    /**
+     * 更改角色所在地图（通过指定传送门）
+     * 
+     * <p>此方法将角色从当前地图传送到目标地图的指定传送门位置。在传送过程中，
+     * 会处理与事件相关的逻辑，并确保传送操作的安全性。此方法支持在活动事件
+     * 中进行地图切换，玩家可能会因为传送而离开当前事件。</p>
+     * 
+     * <p>传送流程：</p>
+     * <ol>
+     *   <li>增加传送计数器，防止同时多次传送</li>
+     *   <li>通知当前事件地图发生变化</li>
+     *   <li>获取目标地图实例</li>
+     *   <li>如果传送门为null，则使用默认传送门（索引0）</li>
+     *   <li>执行内部传送操作</li>
+     *   <li>减少传送计数器并更新传送状态</li>
+     *   <li>通知事件传送完成</li>
+     * </ol>
+     * 
+     * @param target 目标地图对象
+     * @param pto 目标传送门对象，如果为null则使用默认传送门
+     */
     public void changeMap(final MapleMap target, Portal pto) {
         canWarpCounter++;
 
@@ -1464,6 +1548,16 @@ public class Character extends AbstractCharacterObject {
         eventAfterChangedMap(this.getMapId());
     }
 
+    /**
+     * 更改角色所在地图（通过指定坐标点）
+     * 
+     * <p>此方法将角色从当前地图传送到目标地图的指定坐标位置。与通过传送门传送
+     * 不同，此方法直接将角色放置在指定的坐标点上，适用于某些特殊场景或
+     * 脚本驱动的传送需求。</p>
+     * 
+     * @param target 目标地图对象
+     * @param pos 目标坐标点
+     */
     public void changeMap(final MapleMap target, final Point pos) {
         canWarpCounter++;
 
@@ -1849,6 +1943,25 @@ public class Character extends AbstractCharacterObject {
         this.currentPage = page;
     }
 
+    /**
+     * 更改技能等级
+     * 
+     * <p>此方法用于修改角色的技能等级、精通等级和有效期。可以升级、降级或移除技能，
+     * 并相应地更新客户端显示和数据库记录。此方法支持永久技能和临时技能的管理。</p>
+     * 
+     * <p>技能等级变更流程：</p>
+     * <ul>
+     *   <li>如果新等级大于-1：添加或更新技能信息到技能映射</li>
+     *   <li>向客户端发送技能更新包（隐藏技能除外）</li>
+     *   <li>如果新等级为-1：从技能映射中移除技能</li>
+     *   <li>从数据库中移除对应的技能记录</li>
+     * </ul>
+     * 
+     * @param skill 要修改的技能对象
+     * @param newLevel 新的技能等级（-1表示移除技能）
+     * @param newMasterlevel 新的精通等级（最高等级限制）
+     * @param expiration 技能有效期（毫秒时间戳，-1表示永久）
+     */
     public void changeSkillLevel(Skill skill, byte newLevel, int newMasterlevel, long expiration) {
         if (newLevel > -1) {
             skills.put(skill, new SkillEntry(newLevel, newMasterlevel, expiration));
@@ -2472,6 +2585,15 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 检查角色是否患有指定的异常状态
+     * 
+     * <p>此方法检查角色当前是否处于指定的异常状态（疾病/负面效果）中。
+     * 使用字符锁确保线程安全，防止在多线程环境中出现竞态条件。</p>
+     * 
+     * @param dis 要检查的异常状态枚举
+     * @return 如果角色处于指定异常状态则返回true，否则返回false
+     */
     public final boolean hasDisease(final Disease dis) {
         chrLock.lock();
         try {
@@ -2571,6 +2693,26 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 给角色施加异常状态（负面效果/Debuff）
+     * 
+     * <p>此方法将指定的异常状态施加到角色身上，包括检查角色是否已经处于相同
+     * 或过多的异常状态、验证防护技能（如神圣之盾）是否存在，然后将异常状态
+     * 添加到角色的状态列表中。此方法还处理相关的客户端显示和地图广播。</p>
+     * 
+     * <p>异常状态处理流程：</p>
+     * <ul>
+     *   <li>检查角色是否已有相同异常状态</li>
+     *   <li>验证异常状态数量限制（最多2个）</li>
+     *   <li>检查防护技能（如神圣之盾）是否生效</li>
+     *   <li>添加异常状态到角色状态列表</li>
+     *   <li>向客户端发送异常状态效果</li>
+     *   <li>向地图上的其他玩家广播异常状态</li>
+     * </ul>
+     * 
+     * @param disease 要施加的异常状态枚举
+     * @param skill 施加异常状态的怪物技能对象
+     */
     public void giveDebuff(final Disease disease, MobSkill skill) {
         if (!hasDisease(disease) && getDiseasesSize() < 2) {
             if (!(disease == Disease.SEDUCE || disease == Disease.STUN)) {
@@ -2663,7 +2805,19 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 判断技能是否可以被驱散
+     * <p>某些召唤类技能无法被驱散，需要特殊处理</p>
+     * @param skillid 技能ID
+     * @return true 如果技能可以被驱散
+     */
     private static boolean dispelSkills(int skillid) {
+        // 以下召唤类技能不可驱散：
+        // 黑暗灵气 - 黑暗骑士召唤
+        // 火焰喷射/冰雷暴风雪 - 魔法师召唤
+        // 神龙/冰风魔导师召唤 - 主教/龙之传人召唤
+        // 傀儡/银鹰/金鹰 - 弓手召唤
+        // 影子搭档 - 飞侠召唤
         return switch (skillid) {
             case DarkKnight.BEHOLDER, FPArchMage.ELQUINES, ILArchMage.IFRIT, Priest.SUMMON_DRAGON, Bishop.BAHAMUT,
                  Ranger.PUPPET, Ranger.SILVER_HAWK, Sniper.PUPPET, Sniper.GOLDEN_EAGLE, Hermit.SHADOW_PARTNER -> true;
@@ -2944,10 +3098,40 @@ public class Character extends AbstractCharacterObject {
         gainExp(gain, show, inChat, true);
     }
 
+    /**
+     * 获得经验值（简化版）
+     * 
+     * <p>此方法允许角色获得指定数量的经验值，使用默认参数显示经验获取效果。
+     * 此方法会自动计算装备奖励经验和队伍奖励经验，并应用相应的效果。</p>
+     * 
+     * @param gain 要获得的基础经验值
+     * @param show 是否显示经验获取动画效果
+     * @param inChat 是否在聊天窗口显示经验获取信息
+     * @param white 是否使用白色文本显示经验获取信息
+     */
     public void gainExp(int gain, boolean show, boolean inChat, boolean white) {
         gainExp(gain, 0, show, inChat, white);
     }
 
+    /**
+     * 获得经验值（完整版）
+     * 
+     * <p>此方法允许角色获得指定数量的基础经验、装备奖励经验和队伍奖励经验。
+     * 会根据角色状态（如诅咒疾病）调整经验获取量，并处理整数溢出情况。</p>
+     * 
+     * <p>经验获取机制：</p>
+     * <ul>
+     *   <li>如果角色处于诅咒状态，经验获取量减半</li>
+     *   <li>装备奖励经验 = 基础经验 / 10 * 项链经验倍率</li>
+     *   <li>处理整数溢出情况，防止数值异常</li>
+     * </ul>
+     * 
+     * @param gain 要获得的基础经验值
+     * @param party 队伍奖励经验
+     * @param show 是否显示经验获取动画效果
+     * @param inChat 是否在聊天窗口显示经验获取信息
+     * @param white 是否使用白色文本显示经验获取信息
+     */
     public void gainExp(int gain, int party, boolean show, boolean inChat, boolean white) {
         if (hasDisease(Disease.CURSE)) {
             gain *= 0.5;
@@ -3180,6 +3364,16 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 获取指定增益状态的数值
+     * 
+     * <p>此方法获取角色身上指定增益状态（Buff）的具体数值，例如攻击力、
+     * 魔法攻击力、速度等增益效果的具体数值。如果角色没有该增益状态，
+     * 则返回null。此方法使用效果锁和字符锁确保线程安全。</p>
+     * 
+     * @param effect 要获取数值的增益状态类型
+     * @return 增益状态的数值，如果不存在该状态则返回null
+     */
     public Integer getBuffedValue(BuffStat effect) {
         effLock.lock();
         chrLock.lock();
@@ -3274,6 +3468,16 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 检查角色是否拥有指定来源的激活增益状态
+     * 
+     * <p>此方法检查角色当前是否拥有指定技能ID的激活增益状态（Buff）。
+     * 通过遍历角色身上的所有增益效果，比较技能来源ID来确定是否存在
+     * 对应的增益状态。此方法使用效果锁和字符锁确保线程安全。</p>
+     * 
+     * @param sourceid 要检查的增益状态来源ID（通常是技能ID）
+     * @return 如果角色拥有指定来源的激活增益状态则返回true，否则返回false
+     */
     public boolean hasActiveBuff(int sourceid) {
         LinkedList<BuffStatValueHolder> allBuffs;
 
@@ -3729,6 +3933,24 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 取消指定的增益状态（Buff）
+     * 
+     * <p>此方法取消角色身上指定类型的增益状态，包括移除状态效果、清理
+     * 相关计时器任务，并向客户端发送取消状态的通知。此方法使用效果锁
+     * 和字符锁确保线程安全。</p>
+     * 
+     * <p>取消增益状态流程：</p>
+     * <ul>
+     *   <li>获取效果锁和字符锁以确保线程安全</li>
+     *   <li>遍历所有增益效果，找到匹配的状态</li>
+     *   <li>将匹配的状态添加到取消列表</li>
+     *   <li>逐个取消列表中的状态效果</li>
+     *   <li>向客户端发送状态取消通知</li>
+     * </ul>
+     * 
+     * @param stat 要取消的增益状态类型
+     */
     public void cancelBuffStats(BuffStat stat) {
         effLock.lock();
         try {
@@ -4751,6 +4973,16 @@ public class Character extends AbstractCharacterObject {
         return null;
     }
 
+    /**
+     * 获取指定类型的库存
+     * 
+     * <p>此方法返回角色的指定类型库存实例，包括装备库、消耗品库、设置库、
+     * 其他库和现金库等。库存系统用于管理角色拥有的各类物品，是游戏
+     * 经济系统的重要组成部分。</p>
+     * 
+     * @param type 库存类型枚举
+     * @return 指定类型的库存实例
+     */
     public Inventory getInventory(InventoryType type) {
         return inventory[type.ordinal()];
     }
@@ -5693,6 +5925,24 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 角色升级处理
+     * 
+     * <p>此方法处理角色升级的完整流程，包括分配属性点、计算生命值和魔法值增长、
+     * 更新角色状态并通知相关系统。此方法是线程安全的，确保在多人游戏中
+     * 升级操作的一致性。</p>
+     * 
+     * <p>升级流程：</p>
+     * <ul>
+     *   <li>根据职业和等级分配属性点(AP)</li>
+     *   <li>根据职业类型计算HP/MP增长值</li>
+     *   <li>应用职业技能对HP/MP的加成</li>
+     *   <li>更新角色各项属性和状态</li>
+     *   <li>通知公会、队伍等相关系统</li>
+     * </ul>
+     * 
+     * @param takeexp 是否扣除升级所需经验值
+     */
     public synchronized void levelUp(boolean takeexp) {
         Skill improvingMaxHP = null;
         Skill improvingMaxMP = null;
@@ -7440,6 +7690,13 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
+    /**
+     * 保存角色数据到数据库（异步版本）
+     * 
+     * <p>此方法根据服务器配置决定是否启用自动保存功能。如果启用，
+     * 则将保存操作提交到后台服务异步执行；否则立即同步执行保存操作。
+     * 异步保存可以避免阻塞主线程，提高服务器响应性能。</p>
+     */
     public void saveCharToDB() {
         if (GameConfig.getServerBoolean("use_autosave")) {
             Runnable r = () -> saveCharToDB(true);
@@ -7451,7 +7708,17 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    //ItemFactory saveItems and monsterbook.saveCards are the most time consuming here.
+    /**
+     * 同步保存角色数据到数据库
+     * 
+     * <p>此方法以同步方式将角色的所有数据持久化到数据库中，包括角色属性、
+     * 装备、技能、任务进度等所有相关信息。此方法是线程安全的，使用
+     * synchronized关键字防止并发访问问题。这是实际执行数据库保存操作的方法。</p>
+     * 
+     * <p>重要说明：ItemFactory saveItems 和 monsterbook.saveCards 是这里最耗时的操作。</p>
+     * 
+     * @param notAutosave 指示此次保存是否为非自动保存（手动保存），影响日志记录
+     */
     public synchronized void saveCharToDB(boolean notAutosave) {
         if (!loggedIn) {
             return;
@@ -8939,9 +9206,21 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * 更新单个属性值。
+     * 更新单个角色属性值
      * 
-     * @param stat 属性类型
+     * <p>此方法用于更新角色的单一属性值，例如HP、MP、经验值、金币等，
+     * 并向客户端发送相应的状态更新包。此方法是线程安全的，确保在
+     * 多线程环境中正确更新角色状态。此方法使用默认的非物品反应模式。</p>
+     * 
+     * <p>常用属性更新场景：</p>
+     * <ul>
+     *   <li>生命值和魔法值的变化</li>
+     *   <li>经验值的增减</li>
+     *   <li>金币数量的变动</li>
+     *   <li>声望值的调整</li>
+     * </ul>
+     * 
+     * @param stat 要更新的属性枚举类型
      * @param newval 新的属性值
      */
     public void updateSingleStat(Stat stat, int newval) {
@@ -8949,11 +9228,14 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * 更新单个属性值（内部方法）。
+     * 更新单个角色属性值（内部方法）
      * 
-     * @param stat 属性类型
+     * <p>此私有方法是属性更新的实际执行者，支持物品反应模式。
+     * 物品反应模式会影响客户端显示效果，例如使用药水时的特效。</p>
+     * 
+     * @param stat 要更新的属性枚举类型
      * @param newval 新的属性值
-     * @param itemReaction 是否为物品反应（影响显示效果）
+     * @param itemReaction 是否为物品反应模式，影响客户端显示效果
      */
     private void updateSingleStat(Stat stat, int newval, boolean itemReaction) {
         sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Integer.valueOf(newval))), itemReaction, this));

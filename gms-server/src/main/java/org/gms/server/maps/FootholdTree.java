@@ -29,30 +29,68 @@ import java.util.List;
 /**
  * 【类型】FootholdTree，class，包 {@code org.gms.server.maps}。
  *
- * 立足点空间索引树，使用四叉树结构管理地图上的所有立足点（Foothold），支持高效的空间查询（如 findBelow 查找脚下立足点、findWall 查找墙壁）。
+ * <p>立足点空间索引树，使用四叉树结构管理地图上的所有立足点（Foothold），
+ * 支持高效的空间查询（如 findBelow 查找脚下立足点、findWall 查找墙壁）。</p>
+ * 
+ * <p>FootholdTree 实现了一个四叉树数据结构，用于快速定位地图上的立足点。
+ * 它将地图空间递归地划分为四个象限，直到达到最大深度或满足特定条件，
+ * 从而实现高效的碰撞检测和物理计算。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>组织和索引地图上的立足点</li>
+ *   <li>支持快速查找指定位置的立足点</li>
+ *   <li>提供碰撞检测功能</li>
+ *   <li>优化物理计算性能</li>
+ * </ul>
  *
  * @author Matze
  */
 public class FootholdTree {
+    /** 西北象限的子树 */
     private FootholdTree nw = null;
+    /** 东北象限的子树 */
     private FootholdTree ne = null;
+    /** 西南象限的子树 */
     private FootholdTree sw = null;
+    /** 东南象限的子树 */
     private FootholdTree se = null;
+    /** 当前节点包含的立足点列表 */
     private final List<Foothold> footholds = new LinkedList<>();
+    /** 区域左上角点 */
     private final Point p1;
+    /** 区域右下角点 */
     private final Point p2;
+    /** 区域中心点 */
     private final Point center;
+    /** 当前节点的深度 */
     private int depth = 0;
+    /** 最大深度限制 */
     private static final int maxDepth = 8;
+    /** 最大X坐标（用于掉落物范围） */
     private int maxDropX;
+    /** 最小X坐标（用于掉落物范围） */
     private int minDropX;
 
+    /**
+     * 构造函数：创建四叉树根节点
+     * 
+     * @param p1 区域的左上角点
+     * @param p2 区域的右下角点
+     */
     public FootholdTree(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
+    /**
+     * 构造函数：创建指定深度的四叉树节点
+     * 
+     * @param p1 区域的左上角点
+     * @param p2 区域的右下角点
+     * @param depth 节点的深度
+     */
     public FootholdTree(Point p1, Point p2, int depth) {
         this.p1 = p1;
         this.p2 = p2;
@@ -60,6 +98,17 @@ public class FootholdTree {
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
+    /**
+     * 插入立足点到四叉树中
+     * 
+     * <p>将指定的立足点插入到四叉树的适当位置。如果当前节点达到最大深度，
+     * 或者立足点完全位于当前区域内，则将其添加到当前节点的列表中；
+     * 否则，根据立足点的位置递归插入到适当的子象限中。</p>
+     * 
+     * <p>同时更新最大和最小X坐标值，用于确定掉落物的有效范围。</p>
+     * 
+     * @param f 要插入的立足点
+     */
     public void insert(Foothold f) {
         if (depth == 0) {
             if (f.getX1() > maxDropX) {
@@ -153,6 +202,18 @@ public class FootholdTree {
         return null;
     }
 
+    /**
+     * 查找指定区域内的墙体立足点
+     * 
+     * <p>查找指定区域内是否存在墙体类型的立足点。
+     * 此方法要求两个点的Y坐标相同（即水平线段），
+     * 用于检测水平方向上的墙体障碍。</p>
+     * 
+     * @param p1 区域起始点
+     * @param p2 区域结束点
+     * @return 找到的墙体立足点，如果不存在则返回null
+     * @throws IllegalArgumentException 如果两点的Y坐标不相等
+     */
     public Foothold findWall(Point p1, Point p2) {
         if (p1.y != p2.y) {
             throw new IllegalArgumentException();
@@ -160,6 +221,25 @@ public class FootholdTree {
         return findWallR(p1, p2);
     }
 
+    /**
+     * 查找指定点下方的立足点
+     * 
+     * <p>查找指定点正下方的立足点，用于碰撞检测和物理计算。
+     * 此方法会遍历所有相关的立足点，找出位于指定点X坐标范围内，
+     * 且在该点下方（Y坐标更大）的立足点。</p>
+     * 
+     * <p>算法步骤：</p>
+     * <ol>
+     *   <li>获取与指定点相关的所有立足点</li>
+     *   <li>筛选出X坐标范围内（fh.getX1() <= p.x && fh.getX2() >= p.x）的立足点</li>
+     *   <li>对筛选结果进行排序</li>
+     *   <li>检查每个立足点是否为非墙面且位于指定点下方</li>
+     *   <li>对于倾斜的立足点，计算其在指定X坐标处的实际高度</li>
+     * </ol>
+     * 
+     * @param p 要查找的点
+     * @return 位于指定点下方的立足点，如果不存在则返回null
+     */
     public Foothold findBelow(Point p) {
         List<Foothold> relevants = getRelevants(p);
         List<Foothold> xMatches = new LinkedList<>();
@@ -197,26 +277,62 @@ public class FootholdTree {
         return null;
     }
 
+    /**
+     * 获取区域左上角的X坐标
+     * 
+     * @return 区域左上角的X坐标值
+     */
     public int getX1() {
         return p1.x;
     }
 
+    /**
+     * 获取区域右下角的X坐标
+     * 
+     * @return 区域右下角的X坐标值
+     */
     public int getX2() {
         return p2.x;
     }
 
+    /**
+     * 获取区域左上角的Y坐标
+     * 
+     * @return 区域左上角的Y坐标值
+     */
     public int getY1() {
         return p1.y;
     }
 
+    /**
+     * 获取区域右下角的Y坐标
+     * 
+     * @return 区域右下角的Y坐标值
+     */
     public int getY2() {
         return p2.y;
     }
 
+    /**
+     * 获取最大掉落X坐标
+     * 
+     * <p>返回区域内所有立足点的最大X坐标值，
+     * 用于确定掉落物的有效范围。</p>
+     * 
+     * @return 最大掉落X坐标值
+     */
     public int getMaxDropX() {
         return maxDropX;
     }
 
+    /**
+     * 获取最小掉落X坐标
+     * 
+     * <p>返回区域内所有立足点的最小X坐标值，
+     * 用于确定掉落物的有效范围。</p>
+     * 
+     * @return 最小掉落X坐标值
+     */
     public int getMinDropX() {
         return minDropX;
     }

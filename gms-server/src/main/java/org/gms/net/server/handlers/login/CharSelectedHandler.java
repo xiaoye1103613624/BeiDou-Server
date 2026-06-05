@@ -44,12 +44,22 @@ import java.net.UnknownHostException;
 public final class CharSelectedHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(CharSelectedHandler.class);
 
+    /**
+     * 解析多开检测结果对应的错误码
+     * @param res 多开检测结果
+     * @return 对应的客户端错误码
+     */
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {
         return switch (res) {
+            // 远程处理中：返回10
             case REMOTE_PROCESSING -> 10;
+            // 远程已登录：返回7（账号已在游戏中）
             case REMOTE_LOGGEDIN -> 7;
+            // 远程无匹配：返回17
             case REMOTE_NO_MATCH -> 17;
+            // 协调器错误：返回8
             case COORDINATOR_ERROR -> 8;
+            // 默认错误：返回9
             default -> 9;
         };
     }

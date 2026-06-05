@@ -240,12 +240,16 @@ public class MobSkill {
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
         List<Integer> reflection = new ArrayList<>();
+        // 根据技能类型设置对应的怪物状态或异常状态
         switch (id.type()) {
+            // 属性提升类：提升攻击/防御
             case ATTACK_UP, ATTACK_UP_M, PAD -> stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
             case MAGIC_ATTACK_UP, MAGIC_ATTACK_UP_M, MAD -> stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
             case DEFENSE_UP, DEFENSE_UP_M, PDR -> stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
             case MAGIC_DEFENSE_UP, MAGIC_DEFENSE_UP_M, MDR -> stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
+            // 治疗：恢复怪物HP
             case HEAL_M -> applyHealEffect(skill, monster);
+            // 异常状态类：封印/黑暗/虚弱/眩晕/诅咒/中毒/减速/混乱/僵尸
             case SEAL -> disease = Disease.SEAL;
             case DARKNESS -> disease = Disease.DARKNESS;
             case WEAKNESS -> disease = Disease.WEAKEN;
@@ -253,32 +257,43 @@ public class MobSkill {
             case CURSE -> disease = Disease.CURSE;
             case POISON -> disease = Disease.POISON;
             case SLOW -> disease = Disease.SLOW;
+            // 驱散：移除玩家BUFF
             case DISPEL -> applyDispelEffect(skill, monster, player);
+            // 诱惑：使玩家无法控制角色
             case SEDUCE -> disease = Disease.SEDUCE;
+            // 传送：强制移动玩家到其他地图
             case BANISH -> applyBanishEffect(skill, monster, player, banishPlayersOutput);
+            // 毒雾：生成范围毒区域
             case AREA_POISON -> spawnMonsterMist(monster);
+            // 混乱：使玩家操作反向
             case REVERSE_INPUT -> disease = Disease.CONFUSE;
+            // 僵尸化：怪物死亡后复活
             case UNDEAD -> disease = Disease.ZOMBIFY;
+            // 物理免疫：减少物理伤害
             case PHYSICAL_IMMUNE -> {
                 if (!monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
                     stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 }
             }
+            // 魔法免疫：减少魔法伤害
             case MAGIC_IMMUNE -> {
                 if (!monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
                     stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 }
             }
+            // 物理反击：反弹物理伤害
             case PHYSICAL_COUNTER -> {
                 stats.put(MonsterStatus.WEAPON_REFLECT, 10);
                 stats.put(MonsterStatus.WEAPON_IMMUNITY, 10);
                 reflection.add(x);
             }
+            // 魔法反击：反弹魔法伤害
             case MAGIC_COUNTER -> {
                 stats.put(MonsterStatus.MAGIC_REFLECT, 10);
                 stats.put(MonsterStatus.MAGIC_IMMUNITY, 10);
                 reflection.add(x);
             }
+            // 双重反击：同时反弹物理和魔法伤害
             case PHYSICAL_AND_MAGIC_COUNTER -> {
                 stats.put(MonsterStatus.WEAPON_REFLECT, 10);
                 stats.put(MonsterStatus.WEAPON_IMMUNITY, 10);
@@ -392,17 +407,21 @@ public class MobSkill {
                         int ypos, xpos;
                         xpos = (int) monster.getPosition().getX();
                         ypos = (int) monster.getPosition().getY();
+                        // 根据召唤怪物的ID设置特殊位置
                         switch (mobId) {
+                            // 高级黑暗之星：设置随机楼层高度，Y坐标固定
                             case MobId.HIGH_DARKSTAR:
                                 toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
                                 ypos = -590;
                                 break;
+                            // 低级黑暗之星：X坐标在怪物周围随机
                             case MobId.LOW_DARKSTAR:
                                 xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
                                 if (ypos != -590) {
                                     ypos = (int) monster.getPosition().getY();
                                 }
                                 break;
+                            // 血腥爆炸：20%概率出现在特定位置
                             case MobId.BLOODY_BOOM:
                                 if (Math.ceil(Math.random() * 5) == 1) {
                                     ypos = 78;
@@ -412,7 +431,9 @@ public class MobSkill {
                                 }
                                 break;
                         }
+                        // 根据地图ID调整召唤位置，防止超出边界
                         switch (map.getId()) {
+                            // 时钟塔：X坐标限制在-890到230之间
                             case MapId.ORIGIN_OF_CLOCKTOWER:
                                 if (xpos < -890) {
                                     xpos = (int) (Math.ceil(Math.random() * 150) - 890);
@@ -420,6 +441,7 @@ public class MobSkill {
                                     xpos = (int) (230 - Math.ceil(Math.random() * 150));
                                 }
                                 break;
+                            // 皮诺斯洞穴：X坐标限制在-239到371之间
                             case MapId.CAVE_OF_PIANUS:
                                 if (xpos < -239) {
                                     xpos = (int) (Math.ceil(Math.random() * 150) - 239);

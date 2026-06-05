@@ -37,11 +37,32 @@ import java.util.Map;
 
 /**
  * 【工厂/提供者】ReactorFactory：创建或提供 `maps` 相关运行时对象。
+ * 
+ * <p>反应堆工厂类，负责从WZ数据文件创建和缓存反应堆统计数据。
+ * 工厂模式的实现，用于创建反应堆实例并根据数据文件加载其属性。</p>
+ * 
+ * <p>主要功能：</p>
+ * <ul>
+ *   <li>从WZ文件加载反应堆数据</li>
+ *   <li>缓存已加载的反应堆统计数据</li>
+ *   <li>提供反应堆数据的访问接口</li>
+ * </ul>
  */
 public class ReactorFactory {
+    /** 反应堆数据提供者 */
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
+    /** 反应堆统计数据缓存映射表 */
     private static final Map<Integer, ReactorStats> reactorStats = new HashMap<>();
 
+    /**
+     * 获取反应堆统计数据（方法S版本）
+     * 
+     * <p>根据反应堆ID获取对应的反应堆统计数据。
+     * 如果缓存中不存在，则从WZ数据文件加载并缓存。</p>
+     * 
+     * @param rid 反应堆ID
+     * @return 反应堆统计数据
+     */
     public static final ReactorStats getReactorS(int rid) {
         ReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
@@ -96,6 +117,16 @@ public class ReactorFactory {
         return stats;
     }
 
+    /**
+     * 获取反应堆统计数据
+     * 
+     * <p>根据反应堆ID获取对应的反应堆统计数据。
+     * 如果缓存中不存在，则从WZ数据文件加载并缓存。
+     * 此方法与getReactorS类似，但在处理细节上有所不同。</p>
+     * 
+     * @param rid 反应堆ID
+     * @return 反应堆统计数据
+     */
     public static ReactorStats getReactor(int rid) {
         ReactorStats stats = reactorStats.get(rid);
         if (stats == null) {

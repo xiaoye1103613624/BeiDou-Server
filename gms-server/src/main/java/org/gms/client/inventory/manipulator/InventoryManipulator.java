@@ -572,8 +572,10 @@ public class InventoryManipulator {
 
             itemChanged = true;
         }
+        // 根据目标装备栏处理特殊装备冲突
         switch (dst) {
-        case -6: // unequip the overall
+        // 穿戴套服时：如果有上衣则卸下
+        case -6:
             Item top = eqpdInv.getItem((short) -5);
             if (top != null && ItemConstants.isOverall(top.getItemId())) {
                 if (eqpInv.isFull()) {
@@ -584,6 +586,7 @@ public class InventoryManipulator {
                 unequip(c, (byte) -5, eqpInv.getNextFreeSlot());
             }
             break;
+        // 穿戴上衣时：如果有套服则卸下
         case -5:
             final Item bottom = eqpdInv.getItem((short) -6);
             if (bottom != null && ItemConstants.isOverall(source.getItemId())) {
@@ -595,7 +598,8 @@ public class InventoryManipulator {
                 unequip(c, (byte) -6, eqpInv.getNextFreeSlot());
             }
             break;
-        case -10: // check if weapon is two-handed
+        // 穿戴武器时：如果是双手武器则卸下盾牌
+        case -10:
             Item weapon = eqpdInv.getItem((short) -11);
             if (weapon != null && ii.isTwoHanded(weapon.getItemId())) {
                 if (eqpInv.isFull()) {
@@ -606,6 +610,7 @@ public class InventoryManipulator {
                 unequip(c, (byte) -11, eqpInv.getNextFreeSlot());
             }
             break;
+        // 穿戴盾牌时：如果是双手武器则卸下武器
         case -11:
             Item shield = eqpdInv.getItem((short) -10);
             if (shield != null && ii.isTwoHanded(source.getItemId())) {
@@ -617,6 +622,7 @@ public class InventoryManipulator {
                 unequip(c, (byte) -10, eqpInv.getNextFreeSlot());
             }
             break;
+        // 骑宠装备：更新骑宠物品ID
         case -18:
             if (chr.getMapleMount() != null) {
                 chr.getMapleMount().setItemId(source.getItemId());

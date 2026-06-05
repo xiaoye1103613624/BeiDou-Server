@@ -29,14 +29,24 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class GM {
+    /** GM咆哮1：GM管理员的咆哮技能 */
     public static final int GM_ROAR1 = 9001001;
+    /** GM传送：GM管理员的传送技能 */
     public static final int GM_TELEPORT = 9001002;
+    /** 隐藏：GM管理员的隐藏技能 */
     public static final int HIDE = 9001004;
+    /** 复活：GM管理员的复活技能 */
     public static final int RESURRECTION = 9001005;
+    /** GM咆哮2：GM管理员的咆哮技能 */
     public static final int GM_ROAR2 = 9001006;
+    /** GM传送2：GM管理员的传送技能 */
     public static final int GM_TELEPORT2 = 9001007;
+    /** 超级身体：GM管理员的属性增强技能 */
     public static final int HYPER_BODY = 9001008;
+    /** 反外挂：GM管理员的反外挂检测技能 */
     public static final int ANTI_MACRO = 9001009;
+    /** 急速：GM管理员的速度增强技能 */
     public static final int HASTE = 9101000;
+    /** 祝福：GM管理员的祝福技能 */
     public static final int BLESS = 9101003;
 }

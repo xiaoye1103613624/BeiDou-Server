@@ -43,14 +43,18 @@ public class FredrickHandler extends AbstractPacketHandler {
         Character chr = c.getPlayer();
         byte operation = p.readByte();
 
+        // 根据弗雷德里克操作类型执行相应操作
         switch (operation) {
-            case 0x19: //Will never come...
+            // 0x19: 未知操作（已注释）
+            case 0x19:
                 //c.sendPacket(PacketCreator.getFredrick((byte) 0x24));
                 break;
+            // 0x1A: 取出仓库物品
             case 0x1A:
                 fredrickProcessor.fredrickRetrieveItems(c);
                 break;
-            case 0x1C: //Exit
+            // 0x1C: 退出仓库
+            case 0x1C:
                 break;
             default:
         }

@@ -314,18 +314,20 @@ public final class RingActionHandler extends AbstractPacketHandler {
         byte mode = p.readByte();
         String name;
         byte slot;
+        // 根据戒指/求婚操作类型执行相应操作
         switch (mode) {
-            case 0: // Send Proposal
+            // 0: 发送求婚请求
+            case 0:
                 sendEngageProposal(c, p.readString(), p.readInt());
                 break;
-
-            case 1: // Cancel Proposal
+            // 1: 取消求婚请求
+            case 1:
                 if (c.getPlayer().getMarriageItemId() / 1000000 != 4) {
                     c.getPlayer().setMarriageItemId(-1);
                 }
                 break;
-
-            case 2: // Accept/Deny Proposal
+            // 2: 接受/拒绝求婚
+            case 2:
                 final boolean accepted = p.readByte() > 0;
                 name = p.readString();
                 final int id = p.readInt();
@@ -380,11 +382,12 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 }
                 break;
 
-            case 3: // Break Engagement
+            // 3: 解除婚约
+            case 3:
                 breakMarriageRing(c.getPlayer(), p.readInt());
                 break;
-
-            case 5: // Invite %s to Wedding
+            // 5: 邀请玩家参加婚礼
+            case 5:
                 name = p.readString();
                 int marriageId = p.readInt();
                 slot = p.readByte(); // this is an int
@@ -458,8 +461,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
 
                 c.getAbstractPlayerInteraction().gainItem(itemId, (short) -1);
                 break;
-
-            case 6: // Open Wedding Invitation
+            // 6: 打开婚礼邀请函
+            case 6:
                 slot = (byte) p.readInt();
                 int invitationid = p.readInt();
 
@@ -479,7 +482,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 }
 
                 break;
-
+            // 9: 设置/查看婚礼愿望清单
             case 9:
                 try {
                     // By -- Dragoso (Drago)

@@ -176,15 +176,16 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             // 尝试生成守护者，失败时根据返回码发送对应错误提示
                             int success = c.getPlayer().getMap().spawnGuardian(c.getPlayer().getTeam(), num);
                             if (success != 1) {
+                                // 根据生成结果发送错误消息
                                 switch (success) {
+                                    // -1: 生成失败（守护者数量已满）
                                     case -1:
                                         c.sendPacket(PacketCreator.CPQMessage((byte) 3));
                                         break;
-
+                                    // 0: 生成失败（其他原因）
                                     case 0:
                                         c.sendPacket(PacketCreator.CPQMessage((byte) 4));
                                         break;
-
                                     default:
                                         c.sendPacket(PacketCreator.CPQMessage((byte) 3));
                                 }

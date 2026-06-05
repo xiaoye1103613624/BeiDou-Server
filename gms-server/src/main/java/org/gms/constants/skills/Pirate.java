@@ -29,9 +29,14 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Pirate {
+    /** 弹药时间：海盗1转前的被动技能，提升弹药容量 */
     public static final int BULLET_TIME = 5000000;
+    /** 闪光拳：海盗1转前的攻击技能 */
     public static final int FLASH_FIST = 5001001;
+    /** 空翻踢：海盗1转前的攻击技能 */
     public static final int SOMERSAULT_KICK = 5001002;
+    /** 二连击：海盗1转前的攻击技能 */
     public static final int DOUBLE_SHOT = 5001003;
+    /** 疾风：海盗1转前的移动技能，提升移动速度和跳跃力 */
     public static final int DASH = 5001005;
 }

@@ -532,6 +532,24 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         }
     }
 
+    /**
+     * 增加角色的最大生命值和最大魔法值
+     * 
+     * <p>此方法用于同时增加角色的最大HP和最大MP值，通常在角色升级或
+     * 装备属性变化时调用。此方法是线程安全的，使用读写锁确保在
+     * 多线程环境中的数据一致性。</p>
+     * 
+     * <p>方法特点：</p>
+     * <ul>
+     *   <li>线程安全：使用effLock和statWlock确保原子操作</li>
+     *   <li>批量更新：同时更新最大HP和最大MP</li>
+     *   <li>静默模式：可选择是否触发客户端状态更新通知</li>
+     * </ul>
+     * 
+     * @param hpdelta 要增加的最大生命值数量
+     * @param mpdelta 要增加的最大魔法值数量
+     * @param silent 是否静默更新（不触发客户端状态更新通知）
+     */
     protected void addMaxMPMaxHP(int hpdelta, int mpdelta, boolean silent) {
         effLock.lock();
         statWlock.lock();

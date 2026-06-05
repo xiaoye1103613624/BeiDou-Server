@@ -49,6 +49,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                 World world = c.getWorldServer();
                 Messenger messenger = player.getMessenger();
                 switch (mode) {
+                    // 0x00: 加入/创建聊天频道
                     case 0x00:
                         int messengerid = p.readInt();
                         if (messenger == null) {
@@ -81,9 +82,11 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, false);
                         }
                         break;
+                    // 0x02: 关闭聊天频道
                     case 0x02:
                         player.closePlayerMessenger();
                         break;
+                    // 0x03: 邀请玩家加入聊天
                     case 0x03:
                         if (messenger == null) {
                             c.sendPacket(PacketCreator.messengerChat(player.getName() + " : This Maple Messenger is currently unavailable. Please quit this chat."));
@@ -112,10 +115,12 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.messengerChat(player.getName() + " : You cannot have more than 3 people in the Maple Messenger"));
                         }
                         break;
+                    // 0x05: 拒绝聊天邀请
                     case 0x05:
                         String targeted = p.readString();
                         world.declineChat(targeted, player);
                         break;
+                    // 0x06: 聊天消息
                     case 0x06:
                         if (messenger != null) {
                             MessengerCharacter messengerplayer = new MessengerCharacter(player, player.getMessengerPosition());

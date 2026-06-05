@@ -106,25 +106,36 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * 【类型】MapleMap（class），包 `org.gms.server.maps`。
- *
- * 游戏地图的核心类，每个实例代表一个具体的地图（如"射手村"、"魔法密林"等）。
+ * 【类型】MapleMap（class），包 {@code org.gms.server.maps}。
+ * 
+ * <p>游戏地图的核心类，每个实例代表一个具体的地图（如"射手村"、"魔法密林"等），
  * 负责管理地图内的所有对象（玩家、怪物、NPC、掉落物、反应堆、传送门等）及其生命周期，
- * 处理怪物刷新、掉落物、传送、战斗伤害、BOSS 战、事件（雪球、椰子、OX 问答等）。
- *
- * 关键职责：
+ * 处理怪物刷新、掉落物、传送、战斗伤害、BOSS战、事件（雪球、椰子、OX问答等）。</p>
+ * 
+ * <p>主要功能：</p>
  * <ul>
  *   <li><b>生命周期管理</b>：地图加载/卸载、怪物刷新调度、物品过期清理</li>
  *   <li><b>玩家管理</b>：玩家进入/离开、广播消息、队伍追踪</li>
- *   <li><b>怪物系统</b>：怪物生成/死亡/伤害、BOSS 血条广播、仇恨追踪</li>
+ *   <li><b>怪物系统</b>：怪物生成/死亡/伤害、BOSS血条广播、仇恨追踪</li>
  *   <li><b>掉落系统</b>：物品掉落定位、拾取校验、掉落物过期清理</li>
- *   <li><b>事件系统</b>：GM 事件（雪球、椰子、OX）、PQ、地图特效</li>
+ *   <li><b>事件系统</b>：GM事件（雪球、椰子、OX）、PQ、地图特效</li>
  *   <li><b>安全机制</b>：读写锁保护玩家/对象集合、伤害/传送校验</li>
  * </ul>
- *
- * 每个地图绑定到特定的 world + channel，由 {@link org.gms.server.maps.MapManager} 的 MapFactory 创建和管理。
- *
+ * 
+ * <p>设计特点：</p>
+ * <ul>
+ *   <li>线程安全：使用读写锁保护关键数据结构</li>
+ *   <li>事件驱动：响应玩家动作、怪物死亡、物品拾取等事件</li>
+ *   <li>定时任务：处理物品过期、怪物刷新、状态更新等周期性操作</li>
+ *   <li>对象管理：统一管理地图上的各种对象类型</li>
+ * </ul>
+ * 
+ * <p>每个地图绑定到特定的world + channel，由{@link org.gms.server.maps.MapManager}的MapFactory创建和管理。</p>
+ * 
  * @author Matze
+ * @author OdinMS (original)
+ * @author Xergon (adaptation)
+ * @since 2024-07-18
  */
 public class MapleMap {
     private static final Logger log = LoggerFactory.getLogger(MapleMap.class);
@@ -308,13 +319,46 @@ public class MapleMap {
     private static final Lock bndLock = new ReentrantLock(true);
 
     /**
-     * 构造函数，创建地图实例
-     *
-     * @param mapid       地图ID
-     * @param world       所属大区号
-     * @param channel     所属频道号
-     * @param returnMapId 返回地图ID
-     * @param monsterRate 怪物刷新倍率
+     * 构造函数：创建新的地图实例
+     * 
+     * <p>初始化一个新的MapleMap对象，设置地图的基本属性和同步锁。
+     * 地图是游戏世界的基本单位，包含玩家、怪物、NPC等游戏对象。</p>
+     * 
+     * <p>主要初始化内容包括：</p>
+     * <ul>
+     *   <li>地图ID、世界ID、频道ID等标识信息</li>
+     *   <li>返回地图ID（用于死亡后传送）</li>
+     *   <li>怪物生成率（经过向上取整处理，确保至少为1）</li>
+     *   <li>用于线程安全的读写锁（玩家和对象访问锁）</li>
+     *   <li>怪物仇恨协调器（用于管理怪物攻击目标）</li>
+     * </ul>
+     * 
+     * @param mapid 地图ID（唯一标识地图）
+     * @param world 世界ID（标识所属世界）
+     * @param channel 频道ID（标识所属频道）
+     * @param returnMapId 返回地图ID（死亡或特定情况下的返回目的地）
+     * @param monsterRate 怪物生成率（影响怪物刷新频率，0表示无怪物）
+     */
+    /**
+     * 构造函数：创建地图实例
+     * 
+     * <p>初始化地图对象的基本属性，包括地图ID、世界、频道、返回地图ID和怪物刷新率，
+     * 并设置读写锁以保证多线程环境下的数据安全。</p>
+     * 
+     * <p>此构造函数会：</p>
+     * <ul>
+     *   <li>初始化地图基本信息（ID、世界、频道等）</li>
+     *   <li>设置怪物刷新率（最低为1）</li>
+     *   <li>创建玩家集合的读写锁</li>
+     *   <li>创建地图对象的读写锁</li>
+     *   <li>初始化怪物仇恨协调器</li>
+     * </ul>
+     * 
+     * @param mapid 地图ID
+     * @param world 世界编号
+     * @param channel 频道编号
+     * @param returnMapId 返回地图ID（当玩家掉出地图边界时传送至此）
+     * @param monsterRate 怪物刷新率（影响怪物刷新频率）
      */
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {
         this.mapid = mapid;
@@ -617,6 +661,14 @@ public class MapleMap {
         return -1;
     }
 
+    /**
+     * 添加玩家NPC对象到地图
+     * 
+     * <p>将指定的玩家NPC对象添加到地图对象集合中，使其在地图上可见。
+     * 此方法用于添加由玩家控制的NPC角色。</p>
+     * 
+     * @param pnpcobject 要添加的玩家NPC对象
+     */
     public void addPlayerNPCMapObject(PlayerNPC pnpcobject) {
         objectWLock.lock();
         try {
@@ -626,6 +678,14 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 添加地图对象到地图
+     * 
+     * <p>为指定的地图对象分配唯一的对象ID，并将其添加到地图对象集合中。
+     * 此方法用于添加各种类型的地图对象，如怪物、NPC、物品等。</p>
+     * 
+     * @param mapobject 要添加的地图对象
+     */
     public void addMapObject(MapObject mapobject) {
         int curOID = getUsableOID();
 
@@ -638,20 +698,55 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 添加自毁怪物到自毁集合
+     * 
+     * <p>将具有自毁能力的怪物添加到自毁集合中进行跟踪。
+     * 自毁怪物会在特定条件下自动销毁自身，通常用于某些特殊怪物。</p>
+     * 
+     * @param mob 要添加的怪物对象
+     */
     public void addSelfDestructive(Monster mob) {
         if (mob.getStats().selfDestruction() != null) {
             this.selfDestructives.add(mob.getObjectId());
         }
     }
 
+    /**
+     * 从自毁集合中移除指定对象
+     * 
+     * <p>将指定对象从自毁集合中移除，停止对其自毁行为的跟踪。</p>
+     * 
+     * @param mapobjectid 要移除的对象ID
+     * @return 如果集合中包含该元素则返回true，否则返回false
+     */
     public boolean removeSelfDestructive(int mapobjectid) {
         return this.selfDestructives.remove(mapobjectid);
     }
 
+    /**
+     * 添加范围地图对象并通知范围内玩家
+     * 
+     * <p>将指定的地图对象添加到地图中，并向范围内符合条件的玩家发送生成数据包。
+     * 此方法用于添加需要立即对周围玩家产生视觉效果的对象。</p>
+     * 
+     * @param mapobject 要添加的地图对象
+     * @param packetbakery 数据包生成器，用于创建和发送对象生成数据包
+     */
     private void spawnAndAddRangedMapObject(MapObject mapobject, DelayedPacketCreation packetbakery) {
         spawnAndAddRangedMapObject(mapobject, packetbakery, null);
     }
 
+    /**
+     * 添加范围地图对象并通知范围内玩家（带条件）
+     * 
+     * <p>将指定的地图对象添加到地图中，并向范围内符合条件的玩家发送生成数据包。
+     * 此方法支持额外的生成条件检查，以确定是否对特定玩家显示对象。</p>
+     * 
+     * @param mapobject 要添加的地图对象
+     * @param packetbakery 数据包生成器，用于创建和发送对象生成数据包
+     * @param condition 生成条件，用于过滤哪些玩家可以看到对象，可以为null表示无条件
+     */
     private void spawnAndAddRangedMapObject(MapObject mapobject, DelayedPacketCreation packetbakery, SpawnCondition condition) {
         List<Character> inRangeCharacters = new LinkedList<>();
         int curOID = getUsableOID();
@@ -1046,6 +1141,12 @@ public class MapleMap {
         characterStatUpdateTask = null;
     }
 
+    /**
+     * 清理物品监控器
+     * 
+     * <p>清理已注册的掉落物列表中的空引用（null引用），
+     * 释放不再有效的弱引用对象，避免内存泄漏。</p>
+     */
     private void cleanItemMonitor() {
         objectWLock.lock();
         try {
@@ -1055,6 +1156,21 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 启动物品监控器
+     * 
+     * <p>启动一个定时任务，用于监控地图上的掉落物品。
+     * 该任务会定期检查地图上是否有玩家，如果没有玩家且超时，
+     * 则停止物品监控器和怪物仇恨协调器，以节省资源。</p>
+     * 
+     * <p>当地图上有玩家时，会重置超时计数器，保持监控器运行；
+     * 当地图上没有玩家时，会递减超时计数器，达到零时停止监控器。</p>
+     * 
+     * <p>同时还会启动其他相关的定时任务，包括：
+     * - 过期物品清理任务
+     * - 怪物掉落物生成任务（如果启用）
+     * - 角色状态更新任务</p>
+     */
     private void startItemMonitor() {
         chrWLock.lock();
         try {
@@ -1096,9 +1212,11 @@ public class MapleMap {
                 }
             }, GameConfig.getServerLong("item_monitor_time"), GameConfig.getServerLong("item_monitor_time"));
 
+            // 注册过期物品清理任务，定期清理超过保存时间的掉落物
             expireItemsTask = TimerManager.getInstance().register(this::makeDisappearExpiredItemDrops, GameConfig.getServerLong("item_expire_check"), GameConfig.getServerLong("item_expire_check"));
 
             if (GameConfig.getServerBoolean("use_spawn_loot_on_animation")) {
+                // 如果启用动画掉落功能，则清空怪物掉落条目并启动掉落生成任务
                 lootLock.lock();
                 try {
                     mobLootEntries.clear();
@@ -1106,9 +1224,11 @@ public class MapleMap {
                     lootLock.unlock();
                 }
 
+                // 启动怪物掉落物生成任务，每200毫秒执行一次
                 mobSpawnLootTask = TimerManager.getInstance().register(this::spawnMobItemDrops, 200, 200);
             }
 
+            // 启动角色状态更新任务，每200毫秒执行一次
             characterStatUpdateTask = TimerManager.getInstance().register(this::runCharacterStatUpdate, 200, 200);
 
             itemMonitorTimeout = 1;
@@ -1117,6 +1237,14 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 检查是否已启动物品监控器
+     * 
+     * <p>检查当前地图是否已经启动了物品监控器，
+     * 用于判断地图上是否正在进行掉落物监控。</p>
+     * 
+     * @return 如果已启动物品监控器则返回true，否则返回false
+     */
     private boolean hasItemMonitor() {
         chrRLock.lock();
         try {
@@ -1126,6 +1254,14 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 获取掉落物品计数
+     * 
+     * <p>返回当前地图上的掉落物品总数，
+     * 该数值由原子整数维护，保证线程安全。</p>
+     * 
+     * @return 当前地图上的掉落物品总数
+     */
     public int getDroppedItemCount() {
         return droppedItemCount.get();
     }
@@ -1566,6 +1702,26 @@ public class MapleMap {
         return count;
     }
 
+    /**
+     * 对怪物造成伤害
+     * 
+     * <p>处理玩家对怪物的攻击，计算伤害并对怪物状态进行相应更新。
+     * 特殊处理扎昆相关逻辑：如果攻击扎昆本体，会检查是否还有扎昆手臂存在。
+     * 如果怪物设置了自爆机制且血量低于阈值，则触发自爆。</p>
+     * 
+     * <p>处理流程：</p>
+     * <ol>
+     *   <li>特殊怪物处理（如扎昆相关逻辑）</li>
+     *   <li>对怪物造成伤害</li>
+     *   <li>检查怪物是否触发自爆机制</li>
+     *   <li>如果怪物死亡则进行击杀处理</li>
+     * </ol>
+     * 
+     * @param chr 攻击者角色
+     * @param monster 被攻击的怪物
+     * @param damage 造成的伤害值
+     * @return 如果成功处理伤害则返回true，否则返回false
+     */
     public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
         if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
@@ -1637,10 +1793,53 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 击杀怪物（使用默认动画）
+     * 
+     * <p>击杀指定的怪物，使用默认的死亡动画效果，并根据参数决定是否生成掉落物。</p>
+     * 
+     * @param monster 要击杀的怪物对象
+     * @param chr 执行击杀操作的角色，如果是系统击杀则传入null
+     * @param withDrops 是否生成掉落物
+     */
+    /**
+     * 击杀怪物（使用默认动画）
+     * 
+     * <p>击杀指定的怪物，使用默认的死亡动画效果，并根据参数决定是否生成掉落物。</p>
+     * 
+     * <p>此方法是killMonster的便捷方法，使用默认的死亡动画（值为1）。
+     * 它会调用带有动画参数的完整版本来执行实际的击杀逻辑。</p>
+     * 
+     * @param monster 要击杀的怪物对象
+     * @param chr 执行击杀操作的角色，如果是系统击杀则传入null
+     * @param withDrops 是否生成掉落物
+     */
     public void killMonster(final Monster monster, final Character chr, final boolean withDrops) {
         killMonster(monster, chr, withDrops, 1);
     }
 
+    /**
+     * 击杀怪物（指定动画效果）
+     * 
+     * <p>击杀指定的怪物，使用指定的死亡动画效果，并根据参数决定是否生成掉落物。
+     * 如果指定了角色，则会进行等级检查以防止作弊，处理特殊奖励（如CP值），
+     * 应用怪物给予的增益效果，处理扎昆相关逻辑，以及掉落物生成等。</p>
+     * 
+     * <p>主要处理逻辑包括：</p>
+     * <ul>
+     *   <li>反作弊检查：如果怪物等级远高于角色等级则发出警告</li>
+     *   <li>CP值奖励：在CPQ地图击杀怪物时给予CP值</li>
+     *   <li>增益效果：应用怪物死亡时给予玩家的增益效果</li>
+     *   <li>扎昆逻辑：处理扎昆手臂被击杀后的实体化逻辑</li>
+     *   <li>掉落物生成：根据参数决定是否生成掉落物</li>
+     *   <li>BOSS处理：重置玩家对BOSS的仇恨目标</li>
+     * </ul>
+     * 
+     * @param monster 要击杀的怪物对象
+     * @param chr 执行击杀操作的角色，如果是系统击杀则传入null
+     * @param withDrops 是否生成掉落物
+     * @param animation 死亡动画效果类型
+     */
     public void killMonster(final Monster monster, final Character chr, final boolean withDrops, int animation) {
         if (monster == null) {
             return;
@@ -1655,6 +1854,7 @@ public class MapleMap {
         } else {
             if (removeKilledMonsterObject(monster)) {
                 try {
+                    // 检查是否击杀远高于自身等级的怪物（防刷经验）
                     if (monster.getStats().getLevel() >= chr.getLevel() + 30 && !chr.isGM()) {
                         AutobanFactory.GENERAL.alert(chr, "因击杀超过自身30级的怪物[" + monster.getName() + "]被系统警告");
                     }
@@ -1666,10 +1866,12 @@ public class MapleMap {
                      }
                      }*/
 
+                    // 如果是CPQ地图且怪物提供CP值，则给予玩家CP
                     if (monster.getCP() > 0 && chr.getMap().isCPQMap()) {
                         chr.gainCP(monster.getCP());
                     }
 
+                    // 应用怪物死亡时给予玩家的增益效果
                     int buff = monster.getBuffToGive();
                     if (buff > -1) {
                         ItemInformationProvider mii = ItemInformationProvider.getInstance();
@@ -1684,6 +1886,7 @@ public class MapleMap {
                         }
                     }
 
+                    // 处理扎昆手臂相关逻辑：当所有手臂都被击杀时，使扎昆实体化
                     if (MobId.isZakumArm(monster.getId())) {
                         boolean makeZakReal = true;
                         Collection<MapObject> objects = getMapObjects();
@@ -1711,6 +1914,7 @@ public class MapleMap {
                         }
                     }
 
+                    // 记录击杀者并处理掉落物
                     Character dropOwner = monster.killBy(chr);
                     if (withDrops && !monster.dropsDisabled()) {
                         if (dropOwner == null) {
@@ -1719,6 +1923,7 @@ public class MapleMap {
                         dropFromMonster(dropOwner, monster, false);
                     }
 
+                    // 如果是BOSS怪物，重置玩家的仇恨目标
                     if (monster.hasBossHPBar()) {
                         for (Character mc : this.getAllPlayers()) {
                             if (mc.getTargetHpBarHash() == monster.hashCode()) {
@@ -1736,10 +1941,26 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 击杀友好怪物
+     * 
+     * <p>击杀指定的友好怪物（NPC类型的怪物），使用地图上的第一个玩家作为击杀者，
+     * 不生成掉落物。通常用于处理特殊事件或任务相关的友好怪物。</p>
+     * 
+     * @param mob 要击杀的友好怪物对象
+     */
     public void killFriendlies(Monster mob) {
         this.killMonster(mob, (Character) getPlayers().get(0), false);
     }
 
+    /**
+     * 根据怪物ID击杀地图上的怪物
+     * 
+     * <p>根据指定的怪物ID在当前地图上查找并击杀对应的怪物，
+     * 使用地图上第一个玩家作为击杀者，并不生成掉落物。</p>
+     * 
+     * @param mobId 要击杀的怪物ID
+     */
     public void killMonster(int mobId) {
         Character chr = (Character) getPlayers().get(0);
         List<Monster> mobList = getAllMonsters();
@@ -1751,6 +1972,15 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 根据怪物ID击杀地图上的怪物（带掉落物）
+     * 
+     * <p>根据指定的怪物ID在当前地图上查找并击杀对应的怪物，
+     * 优先选择对该怪物造成最高伤害的玩家作为击杀者，如果找不到则使用默认玩家，
+     * 并生成掉落物。</p>
+     * 
+     * @param mobId 要击杀的怪物ID
+     */
     public void killMonsterWithDrops(int mobId) {
         Map<Integer, Character> mapChars = this.getMapPlayers();
 
@@ -2087,11 +2317,30 @@ public class MapleMap {
         return null;
     }
 
+    /**
+     * 在指定位置生成怪物
+     * 
+     * <p>根据给定的怪物ID和坐标位置，在地面下方生成一个怪物。
+     * 此方法会自动计算合适的地面位置，确保怪物站在地面上。</p>
+     * 
+     * @param id 怪物ID
+     * @param x X坐标
+     * @param y Y坐标
+     */
     public void spawnMonsterOnGroundBelow(int id, int x, int y) {
         Monster mob = LifeFactory.getMonster(id);
         spawnMonsterOnGroundBelow(mob, new Point(x, y));
     }
 
+    /**
+     * 在指定位置生成怪物
+     * 
+     * <p>根据给定的怪物对象和位置，在地面下方生成怪物。
+     * 通过计算合适的地面位置，确保怪物站在地面上。</p>
+     * 
+     * @param mob 怪物对象
+     * @param pos 期望生成的位置
+     */
     public void spawnMonsterOnGroundBelow(Monster mob, Point pos) {
         Point spos = new Point(pos.x, pos.y - 1);
         spos = calcPointBelow(spos);
@@ -2100,6 +2349,16 @@ public class MapleMap {
         spawnMonster(mob);
     }
 
+    /**
+     * 在CPQ（怪物嘉年华）地图生成怪物
+     * 
+     * <p>在怪物嘉年华（Monster Carnival）地图中生成怪物，并设置其团队归属。
+     * 此方法用于CPQ活动，确保怪物生成在合适的位置并分配到正确的团队。</p>
+     * 
+     * @param mob 怪物对象
+     * @param pos 期望生成的位置
+     * @param team 团队ID（用于区分红队或蓝队）
+     */
     public void spawnCPQMonster(Monster mob, Point pos, int team) {
         Point spos = new Point(pos.x, pos.y - 1);
         spos = calcPointBelow(spos);
@@ -2207,10 +2466,50 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 在地图上生成怪物（使用默认难度）
+     * 
+     * <p>将指定的怪物对象添加到当前地图中，设置怪物的基本属性，
+     * 并向地图上的玩家广播怪物生成消息。此方法使用默认难度（1）和非组队任务模式。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>将怪物添加到地图对象集合</li>
+     *   <li>向地图上的玩家广播怪物生成数据</li>
+     *   <li>更新怪物的仇恨目标控制器</li>
+     *   <li>处理BOSS怪物的特殊逻辑</li>
+     *   <li>应用怪物的自毁机制</li>
+     * </ul>
+     * 
+     * @param monster 要生成的怪物对象
+     */
     public void spawnMonster(final Monster monster) {
         spawnMonster(monster, 1, false);
     }
 
+    /**
+     * 在地图上生成怪物（指定难度和是否为组队任务）
+     * 
+     * <p>将指定的怪物对象添加到当前地图中，根据指定的难度和组队任务标志调整怪物属性，
+     * 并向地图上的玩家广播怪物生成消息。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>检查地图怪物容量限制</li>
+     *   <li>调整怪物的难度属性</li>
+     *   <li>应用BOSS配置（HP/EXP/伤害倍率）</li>
+     *   <li>将怪物添加到地图对象集合</li>
+     *   <li>向地图上的玩家广播怪物生成数据</li>
+     *   <li>更新怪物的仇恨目标控制器</li>
+     *   <li>处理CPQ（怪物嘉年华）相关逻辑</li>
+     *   <li>处理定时掉落逻辑</li>
+     *   <li>更新怪物计数并应用自毁机制</li>
+     * </ul>
+     * 
+     * @param monster 要生成的怪物对象
+     * @param difficulty 怪物难度系数
+     * @param isPq 是否为组队任务怪物
+     */
     public void spawnMonster(final Monster monster, int difficulty, boolean isPq) {
         if (mobCapacity != -1 && mobCapacity == spawnedMonstersOnMap.get()) {
             return;//PyPQ
@@ -2313,11 +2612,42 @@ public class MapleMap {
         updateBossSpawn(monster);
     }
 
+    /**
+     * 在地图上生成反应器
+     * 
+     * <p>将指定的反应器对象添加到当前地图中，并向地图上的玩家广播反应器生成消息。
+     * 反应器是地图上可以被玩家交互的动态对象，例如可破坏的罐子、开关等。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>设置反应器的地图引用</li>
+     *   <li>将反应器添加到地图对象集合</li>
+     *   <li>向地图上的玩家广播反应器生成数据</li>
+     * </ul>
+     * 
+     * @param reactor 要生成的反应器对象
+     */
     public void spawnReactor(final Reactor reactor) {
         reactor.setMap(this);
         spawnAndAddRangedMapObject(reactor, c -> c.sendPacket(reactor.makeSpawnData()));
     }
 
+    /**
+     * 在地图上生成门对象
+     * 
+     * <p>将指定的门对象添加到当前地图中，并向地图上的玩家广播门的生成消息。
+     * 门对象通常是技能产生的临时障碍物，只对特定地图的玩家可见。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>将门对象添加到地图对象集合</li>
+     *   <li>向指定范围内的玩家广播门的生成数据</li>
+     *   <li>确保只有来自相同地图的玩家才能看到门</li>
+     *   <li>将门添加到玩家的可见对象列表中</li>
+     * </ul>
+     * 
+     * @param door 要生成的门对象
+     */
     public void spawnDoor(final DoorObject door) {
         spawnAndAddRangedMapObject(door, c -> {
             Character chr = c.getPlayer();
@@ -2338,10 +2668,45 @@ public class MapleMap {
         return doorPortal;
     }
 
+    /**
+     * 在地图上生成召唤兽
+     * 
+     * <p>将指定的召唤兽对象添加到当前地图中，并向地图上的玩家广播召唤兽生成消息。
+     * 召唤兽是玩家技能产生的临时伙伴，具有特定的行为模式和持续时间。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>将召唤兽添加到地图对象集合</li>
+     *   <li>向地图上的玩家广播召唤兽的生成数据</li>
+     *   <li>使召唤兽对玩家可见</li>
+     * </ul>
+     * 
+     * @param summon 要生成的召唤兽对象
+     */
     public void spawnSummon(final Summon summon) {
         spawnAndAddRangedMapObject(summon, c -> c.sendPacket(PacketCreator.spawnSummon(summon, true)), null);
     }
 
+    /**
+     * 在地图上生成迷雾效果
+     * 
+     * <p>将指定的迷雾对象添加到当前地图中，用于实现毒雾、治疗雾等区域效果。
+     * 迷雾是技能产生的区域效果，会对范围内的角色产生持续影响。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>将迷雾添加到地图对象集合</li>
+     *   <li>向地图上的玩家广播迷雾的生成数据</li>
+     *   <li>根据参数设置迷雾的类型（毒性、虚假、恢复等）</li>
+     *   <li>启动相应的定时任务处理迷雾效果</li>
+     * </ul>
+     * 
+     * @param mist 要生成的迷雾对象
+     * @param duration 持续时间（毫秒）
+     * @param poison 是否为毒性迷雾
+     * @param fake 是否为虚假迷雾（不产生实际效果）
+     * @param recovery 是否为恢复性迷雾
+     */
     public void spawnMist(final Mist mist, final int duration, boolean poison, boolean fake, boolean recovery) {
         addMapObject(mist);
         broadcastMessage(fake ? mist.makeFakeSpawnData(30) : mist.makeSpawnData());
@@ -2387,6 +2752,22 @@ public class MapleMap {
         service.registerMobMistCancelAction(mapid, mistSchedule, duration);
     }
 
+    /**
+     * 在地图上生成风筝
+     * 
+     * <p>将指定的风筝对象添加到当前地图中，并向地图上的玩家广播风筝生成消息。
+     * 风筝是弓箭手技能产生的特殊对象，会在一段时间后自动消失。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>将风筝添加到地图对象集合</li>
+     *   <li>向地图上的玩家广播风筝的生成数据</li>
+     *   <li>注册定时任务在指定时间后移除风筝</li>
+     *   <li>向玩家广播风筝的销毁数据</li>
+     * </ul>
+     * 
+     * @param kite 要生成的风筝对象
+     */
     public void spawnKite(final Kite kite) {
         addMapObject(kite);
         broadcastMessage(kite.makeSpawnData());
@@ -2626,6 +3007,36 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 添加玩家到地图
+     * 
+     * <p>将指定的角色添加到当前地图中，执行必要的初始化操作，
+     * 包括队伍管理、效果更新、脚本执行、定时器启动等。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>将玩家添加到地图的角色集合中</li>
+     *   <li>处理队伍成员关系</li>
+     *   <li>更新玩家的地图ID和激活效果</li>
+     *   <li>根据地图设置启动或停止HP减少效果</li>
+     *   <li>执行地图进入脚本（首次进入或每次进入）</li>
+     *   <li>处理地图限制（如坐骑限制）</li>
+     *   <li>启动定时任务（如旅行计时器）</li>
+     * </ul>
+     * 
+     * <p>重要流程：</p>
+     * <ol>
+     *   <li>将玩家添加到地图角色集合</li>
+     *   <li>处理队伍相关逻辑</li>
+     *   <li>检查是否为地图第一个玩家并执行首次进入脚本</li>
+     *   <li>处理宠物显示</li>
+     *   <li>处理隐藏状态玩家的特殊显示</li>
+     *   <li>向地图其他玩家广播新玩家进入</li>
+     *   <li>发送现有地图对象给新玩家</li>
+     * </ol>
+     * 
+     * @param chr 要添加到地图的角色
+     */
     public void addPlayer(final Character chr) {
         int chrSize;
         Party party = chr.getParty();
@@ -2941,6 +3352,35 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 移除玩家从地图
+     * 
+     * <p>将指定的角色从当前地图中移除，执行必要的清理操作，
+     * 包括队伍管理、召唤物处理、龙处理、广播消息等。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>从地图的角色集合中移除玩家</li>
+     *   <li>处理队伍成员关系</li>
+     *   <li>处理迷你地下城相关逻辑</li>
+     *   <li>移除玩家相关的地图对象（召唤物、龙等）</li>
+     *   <li>向地图上的其他玩家广播玩家离开消息</li>
+     *   <li>清理玩家的椅子BUFF</li>
+     * </ul>
+     * 
+     * <p>重要流程：</p>
+     * <ol>
+     *   <li>处理队伍相关逻辑</li>
+     *   <li>从地图角色集合中移除玩家</li>
+     *   <li>处理迷你地下城注销</li>
+     *   <li>移除玩家对象</li>
+     *   <li>广播玩家离开消息</li>
+     *   <li>处理玩家召唤物</li>
+     *   <li>处理玩家龙</li>
+     * </ol>
+     * 
+     * @param chr 要从地图移除的角色
+     */
     public void removePlayer(Character chr) {
         Channel cserv = chr.getClient().getChannelServer();
         chr.unregisterChairBuff();
@@ -2996,9 +3436,12 @@ public class MapleMap {
     /**
      * 无条件地将消息广播给所有玩家。
      *
-     * Broadcasts a message to all players without any conditions.
+     * <p>将指定的数据包广播给当前地图上的所有玩家，不受距离和角色权限限制。</p>
      *
-     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * <p>此方法是广播系统的入口点之一，会将消息发送给地图上的所有在线玩家，
+     * 适用于需要向所有玩家同步状态或信息的场景。</p>
+     *
+     * @param packet 要广播的数据包
      */
     public void broadcastMessage(Packet packet) {
         broadcastMessage(null, packet, Double.POSITIVE_INFINITY, null);
@@ -3007,9 +3450,12 @@ public class MapleMap {
     /**
      * 无条件地将管理员消息广播给所有玩家。
      *
-     * Broadcasts an admin message to all players without any conditions.
+     * <p>将指定的数据包仅广播给当前地图上的管理员玩家，普通玩家不会接收到此消息。</p>
      *
-     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * <p>此方法用于向地图上的GM（游戏管理员）发送特殊信息，
+     * 如调试信息、管理指令反馈等，普通玩家不会看到这些消息。</p>
+     *
+     * @param packet 要广播的数据包
      */
     public void broadcastGMMessage(Packet packet) {
         broadcastGMMessage(null, packet, Double.POSITIVE_INFINITY, null);
@@ -3253,7 +3699,15 @@ public class MapleMap {
         broadcastMessage(PacketCreator.serverNotice(type, message));
     }
 
+    /**
+     * 判断地图对象类型是否为近程类型
+     * <p>近程类型的对象在广播消息时需要考虑距离限制</p>
+     * @param type 地图对象类型
+     * @return true 如果是近程类型
+     */
     private static boolean isNonRangedType(MapObjectType type) {
+        // NPC、玩家、雇佣商店、玩家创建的NPC、龙、迷雾、风筝属于近程类型
+        // 这些对象在广播时需要计算与接收者的距离
         switch (type) {
             case NPC:
             case PLAYER:
@@ -3318,6 +3772,17 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 获取指定范围内的地图对象
+     * 
+     * <p>根据给定的位置点和距离平方值，在地图中查找指定类型的对象。
+     * 此方法用于检测玩家周围一定范围内的可交互对象，如怪物、物品、反应堆等。</p>
+     * 
+     * @param from 起始位置点
+     * @param rangeSq 距离的平方值（避免开方运算提高性能）
+     * @param types 要查找的对象类型列表
+     * @return 在指定范围内的地图对象列表
+     */
     public List<MapObject> getMapObjectsInRange(Point from, double rangeSq, List<MapObjectType> types) {
         List<MapObject> ret = new LinkedList<>();
         objectRLock.lock();
@@ -3335,6 +3800,16 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 获取指定矩形区域内的地图对象
+     * 
+     * <p>在指定的矩形区域内查找特定类型的地图对象。
+     * 此方法常用于范围技能检测或区域事件触发。</p>
+     * 
+     * @param box 检测的矩形区域
+     * @param types 要查找的对象类型列表
+     * @return 在指定矩形区域内的地图对象列表
+     */
     public List<MapObject> getMapObjectsInBox(Rectangle box, List<MapObjectType> types) {
         List<MapObject> ret = new LinkedList<>();
         objectRLock.lock();
@@ -3352,10 +3827,26 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 添加传送门到地图
+     * 
+     * <p>将指定的传送门对象添加到地图的传送门集合中，使其可以在地图上使用。</p>
+     * 
+     * @param myPortal 要添加的传送门对象
+     */
     public void addPortal(Portal myPortal) {
         portals.put(myPortal.getId(), myPortal);
     }
 
+    /**
+     * 根据名称获取传送门
+     * 
+     * <p>通过传送门的名称在地图中查找对应的传送门对象。
+     * 如果找不到匹配的传送门，则返回null。</p>
+     * 
+     * @param portalname 传送门的名称
+     * @return 对应名称的传送门对象，如果不存在则返回null
+     */
     public Portal getPortal(String portalname) {
         for (Portal port : portals.values()) {
             if (port.getName().equals(portalname)) {
@@ -3365,26 +3856,76 @@ public class MapleMap {
         return null;
     }
 
+    /**
+     * 根据ID获取传送门
+     * 
+     * <p>通过传送门的ID直接从地图的传送门集合中获取对应的传送门对象。
+     * 如果不存在对应ID的传送门，则返回null。</p>
+     * 
+     * @param portalid 传送门的ID
+     * @return 对应ID的传送门对象，如果不存在则返回null
+     */
     public Portal getPortal(int portalid) {
         return portals.get(portalid);
     }
 
+    /**
+     * 添加枫叶区域到地图
+     * 
+     * <p>将指定的矩形区域添加到地图的区域集合中。
+     * 枫叶区域通常用于定义地图上的特殊区域，如安全区、战斗区等。</p>
+     * 
+     * @param rec 要添加的矩形区域
+     */
     public void addMapleArea(Rectangle rec) {
         areas.add(rec);
     }
 
+    /**
+     * 获取地图的所有区域
+     * 
+     * <p>返回地图中所有定义的区域的副本列表。
+     * 返回的是原始列表的副本，以防止外部代码直接修改内部区域数据。</p>
+     * 
+     * @return 地图中所有区域的副本列表
+     */
     public List<Rectangle> getAreas() {
         return new ArrayList<>(areas);
     }
 
+    /**
+     * 根据索引获取指定区域
+     * 
+     * <p>通过索引从地图的区域列表中获取对应的矩形区域。
+     * 索引从0开始，必须小于区域列表的大小。</p>
+     * 
+     * @param index 区域的索引
+     * @return 指定索引处的矩形区域
+     */
     public Rectangle getArea(int index) {
         return areas.get(index);
     }
 
+    /**
+     * 设置地图的落脚点树
+     * 
+     * <p>为地图设置落脚点树，该树用于处理角色在地图上的移动和跳跃逻辑。
+     * 落脚点树包含了地图上的所有可行走平台和路径。</p>
+     * 
+     * @param footholds 地图的落脚点树
+     */
     public void setFootholds(FootholdTree footholds) {
         this.footholds = footholds;
     }
 
+    /**
+     * 获取地图的落脚点树
+     * 
+     * <p>返回地图的落脚点树，该树包含了地图上的所有可行走平台和路径信息，
+     * 用于角色移动、跳跃和碰撞检测。</p>
+     * 
+     * @return 地图的落脚点树
+     */
     public FootholdTree getFootholds() {
         return footholds;
     }
@@ -3501,6 +4042,21 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 获取当前地图上的所有角色集合
+     * 
+     * <p>返回当前地图上所有在线角色的不可修改集合视图。此方法使用读锁确保
+     * 在获取角色集合时不会有并发修改，保证返回数据的一致性。</p>
+     * 
+     * <p>注意事项：</p>
+     * <ul>
+     *   <li>返回的是不可修改的集合视图，任何试图修改集合的操作都会抛出异常</li>
+     *   <li>使用读锁保护，允许多个线程同时读取角色列表</li>
+     *   <li>适用于需要遍历地图上所有角色的场景（如广播消息、统计信息等）</li>
+     * </ul>
+     * 
+     * @return 当前地图上的所有角色集合（不可修改）
+     */
     public Collection<Character> getCharacters() {
         chrRLock.lock();
         try {
@@ -3977,6 +4533,31 @@ public class MapleMap {
         return maxNumShouldSpawn - spawnedMonstersOnMap.get();
     }
 
+    /**
+     * 执行地图怪物刷新操作
+     * 
+     * <p>根据当前地图上的玩家数量和预设的刷新规则，计算需要生成的怪物数量，
+     * 并从可用的刷新点中随机选择位置生成怪物。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>检查是否允许召唤（allowSummons标志）</li>
+     *   <li>检查轮回石碑是否过期并进行清理</li>
+     *   <li>获取当前地图上的玩家数量</li>
+     *   <li>计算应该生成的怪物数量</li>
+     *   <li>随机化刷新点顺序以平衡生成位置</li>
+     *   <li>生成符合刷新条件的怪物</li>
+     * </ul>
+     * 
+     * <p>刷新策略：</p>
+     * <ul>
+     *   <li>基于地图上的玩家数量动态调整刷新率</li>
+     *   <li>随机化刷新点以避免怪物聚集在同一位置</li>
+     *   <li>考虑刷新间隔和怪物存活情况</li>
+     * </ul>
+     * 
+     * @since 2024-07-18
+     */
     public void respawn() {
         if (!allowSummons) {
             return;
@@ -4067,30 +4648,92 @@ public class MapleMap {
         boolean canSpawn(Character chr);
     }
 
+    /**
+     * 获取地图HP减少值
+     * 
+     * <p>返回当前地图每秒对玩家造成的HP减少值。
+     * 某些特殊地图（如危险区域）会持续对玩家造成伤害。</p>
+     * 
+     * @return 地图每秒HP减少值
+     */
     public int getHPDec() {
         return decHP;
     }
 
+    /**
+     * 设置地图HP减少值
+     * 
+     * <p>设置当前地图每秒对玩家造成的HP减少值。
+     * 某些特殊地图（如危险区域）会持续对玩家造成伤害。</p>
+     * 
+     * @param delta 要设置的HP减少值
+     */
     public void setHPDec(int delta) {
         decHP = delta;
     }
 
+    /**
+     * 获取地图HP减少保护物品ID
+     * 
+     * <p>返回能够保护玩家免受地图HP减少效果的物品ID。
+     * 如果玩家持有此物品，则不会受到地图的持续伤害。</p>
+     * 
+     * @return 地图HP减少保护物品ID，0表示无保护物品
+     */
     public int getHPDecProtect() {
         return protectItem;
     }
 
+    /**
+     * 设置地图HP减少保护物品ID
+     * 
+     * <p>设置能够保护玩家免受地图HP减少效果的物品ID。
+     * 如果玩家持有此物品，则不会受到地图的持续伤害。</p>
+     * 
+     * @param delta 要设置的保护物品ID
+     */
     public void setHPDecProtect(int delta) {
         this.protectItem = delta;
     }
 
+    /**
+     * 获取地图恢复率
+     * 
+     * <p>返回当前地图的HP/MP自然恢复倍率。
+     * 此值影响玩家在地图上的自然恢复速度。</p>
+     * 
+     * @return 地图恢复倍率，默认为1.0f
+     */
     public float getRecovery() {
         return recovery;
     }
 
+    /**
+     * 设置地图恢复率
+     * 
+     * <p>设置当前地图的HP/MP自然恢复倍率。
+     * 此值影响玩家在地图上的自然恢复速度。</p>
+     * 
+     * @param recRate 要设置的恢复倍率
+     */
     public void setRecovery(float recRate) {
         recovery = recRate;
     }
 
+    /**
+     * 检查地图船只状态
+     * 
+     * <p>返回当前地图的船只状态，用于判断地图上是否有船只以及船只的状态。</p>
+     * 
+     * <p>返回值含义：</p>
+     * <ul>
+     *   <li>0 - 地图上没有船只</li>
+     *   <li>1 - 地图上有船只且已靠岸</li>
+     *   <li>2 - 地图上有船只但未靠岸</li>
+     * </ul>
+     * 
+     * @return 地图船只状态码
+     */
     private int hasBoat() {
         return !boat ? 0 : (docked ? 1 : 2);
     }
@@ -4250,26 +4893,42 @@ public class MapleMap {
     }
 
     // BEGIN EVENTS
+    /**
+     * 设置雪球对象到指定队伍
+     * @param team 队伍编号（0或1）
+     * @param ball 雪球对象
+     */
     public void setSnowball(int team, Snowball ball) {
         switch (team) {
             case 0:
+                // 队伍0的雪球
                 this.snowball0 = ball;
                 break;
             case 1:
+                // 队伍1的雪球
                 this.snowball1 = ball;
                 break;
             default:
+                // 无效队伍，不处理
                 break;
         }
     }
 
+    /**
+     * 获取指定队伍的雪球对象
+     * @param team 队伍编号（0或1）
+     * @return 对应队伍的雪球对象
+     */
     public Snowball getSnowball(int team) {
         switch (team) {
             case 0:
+                // 返回队伍0的雪球
                 return snowball0;
             case 1:
+                // 返回队伍1的雪球
                 return snowball1;
             default:
+                // 无效队伍，返回null
                 return null;
         }
     }
@@ -4498,6 +5157,21 @@ public class MapleMap {
 
     // ==================== 轮回石碑 END ====================
 
+    /**
+     * 清理地图上的所有对象
+     * 
+     * <p>清理地图上的所有动态对象，包括掉落物、怪物和反应器等。
+     * 此方法用于重置地图状态或在地图清理时使用。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>清理所有掉落物品</li>
+     *   <li>击杀所有怪物</li>
+     *   <li>重置所有反应器状态</li>
+     * </ul>
+     * 
+     * @since 2024-07-18
+     */
     public void clearMapObjects() {
         clearDrops();
         killAllMonsters();
@@ -4680,8 +5354,14 @@ public class MapleMap {
         return getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER));
     }
 
+    /**
+     * 判断当前地图是否为CPQ（组队任务）比赛地图
+     * <p>CPQ比赛地图包括多个地图ID，用于不同的比赛场地</p>
+     * @return true 如果是CPQ比赛地图
+     */
     public boolean isCPQMap() {
         switch (this.getId()) {
+            // CPQ比赛地图：射手训练场、林中之城训练场等
             case 980000101:
             case 980000201:
             case 980000301:
@@ -4696,8 +5376,14 @@ public class MapleMap {
         return false;
     }
 
+    /**
+     * 判断当前地图是否为CPQ第二轮比赛地图
+     * <p>只有特定的三个地图ID属于第二轮比赛</p>
+     * @return true 如果是CPQ第二轮比赛地图
+     */
     public boolean isCPQMap2() {
         switch (this.getId()) {
+            // CPQ第二轮比赛地图
             case 980031100:
             case 980032100:
             case 980033100:
@@ -4706,8 +5392,14 @@ public class MapleMap {
         return false;
     }
 
+    /**
+     * 判断当前地图是否为CPQ大厅地图
+     * <p>大厅地图是比赛开始前的等待区域</p>
+     * @return true 如果是CPQ大厅地图
+     */
     public boolean isCPQLobby() {
         switch (this.getId()) {
+            // CPQ大厅地图
             case 980000100:
             case 980000200:
             case 980000300:
@@ -4719,8 +5411,14 @@ public class MapleMap {
         return false;
     }
 
+    /**
+     * 判断当前地图是否为CPQ蓝队比赛地图
+     * <p>蓝队比赛地图用于蓝方队伍的比赛</p>
+     * @return true 如果是CPQ蓝队比赛地图
+     */
     public boolean isBlueCPQMap() {
         switch (this.getId()) {
+            // CPQ蓝队比赛地图
             case 980000501:
             case 980000601:
             case 980031200:
@@ -4731,8 +5429,14 @@ public class MapleMap {
         return false;
     }
 
+    /**
+     * 判断当前地图是否为CPQ紫队比赛地图
+     * <p>紫队比赛地图用于紫方队伍的比赛</p>
+     * @return true 如果是CPQ紫队比赛地图
+     */
     public boolean isPurpleCPQMap() {
         switch (this.getId()) {
+            // CPQ紫队比赛地图
             case 980000301:
             case 980000401:
             case 980031200:
@@ -4907,6 +5611,33 @@ public class MapleMap {
         statUpdateRunnables.add(r);
     }
 
+    /**
+     * 释放地图资源并执行清理操作
+     * 
+     * <p>清理地图对象占用的所有资源，包括怪物、物品、定时任务等，
+     * 以防止内存泄漏并确保资源的正确回收。</p>
+     * 
+     * <p>此方法会：</p>
+     * <ul>
+     *   <li>释放所有怪物资源</li>
+     *   <li>清除地图上的所有对象</li>
+     *   <li>取消并清理所有定时任务（物品监控、过期清理、怪物掉落生成、角色状态更新等）</li>
+     *   <li>清理轮回石碑相关资源</li>
+     *   <li>清理事件管理器、地形数据、传送门等引用</li>
+     *   <li>释放怪物仇恨协调器资源</li>
+     * </ul>
+     * 
+     * <p>资源清理顺序：</p>
+     * <ol>
+     *   <li>清理怪物资源</li>
+     *   <li>清理地图对象</li>
+     *   <li>清理轮回石碑资源</li>
+     *   <li>清理定时任务</li>
+     *   <li>清理其他引用</li>
+     * </ol>
+     * 
+     * @since 2024-07-18
+     */
     public void dispose() {
         for (Monster mm : this.getAllMonsters()) {
             mm.dispose();

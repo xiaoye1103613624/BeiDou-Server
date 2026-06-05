@@ -53,7 +53,9 @@ public final class BBSOperationHandler extends AbstractPacketHandler {
         }
         byte mode = p.readByte();
         int localthreadid = 0;
+        // 根据BBS操作类型执行相应操作
         switch (mode) {
+            // 0: 新建/编辑帖子
             case 0:
                 boolean bEdit = p.readByte() == 1;
                 if (bEdit) {
@@ -76,24 +78,29 @@ public final class BBSOperationHandler extends AbstractPacketHandler {
                     editBBSThread(c, title, text, icon, localthreadid);
                 }
                 break;
+            // 1: 删除帖子
             case 1:
                 localthreadid = p.readInt();
                 deleteBBSThread(c, localthreadid);
                 break;
+            // 2: 获取帖子列表
             case 2:
                 int start = p.readInt();
                 listBBSThreads(c, start * 10);
                 break;
-            case 3: // list thread + reply, following by id (int)
+            // 3: 查看帖子详情（含回复）
+            case 3:
                 localthreadid = p.readInt();
                 displayThread(c, localthreadid);
                 break;
-            case 4: // reply
+            // 4: 回复帖子
+            case 4:
                 localthreadid = p.readInt();
                 text = correctLength(p.readString(), 25);
                 newBBSReply(c, localthreadid, text);
                 break;
-            case 5: // delete reply
+            // 5: 删除回复
+            case 5:
                 p.readInt(); // we don't use this
                 int replyid = p.readInt();
                 deleteBBSReply(c, replyid);

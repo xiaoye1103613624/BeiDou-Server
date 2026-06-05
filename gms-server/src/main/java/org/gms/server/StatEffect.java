@@ -136,28 +136,51 @@ import java.util.Map;
  * @author Ronan
  */
 public class StatEffect {
+    /** 物理攻击力提升值 */
     private short watk, matk, wdef, mdef, acc, avoid, speed, jump;
+    /** 魔法攻击力提升值 */
     private short hp, mp;
+    /** HP恢复比例 */
     private double hpR, mpR;
+    /** MP恢复比例 */
     private short mhpRRate, mmpRRate, mobSkill, mobSkillLevel;
+    /** HP恢复值 */
     private byte mhpR, mmpR;
+    /** MP消耗值 */
     private short mpCon, hpCon;
+    /** 持续时间（毫秒） */
     private int duration, target, barrier, mob;
+    /** 是否为持续效果 */
     private boolean overTime, repeatEffect;
+    /** 技能/物品ID */
     private int sourceid,expbuff;
+    /** 传送目标地图ID（-1表示不传送） */
     private int moveTo;
+    /** CP点数（怪物嘉年华） */
     private int cp, nuffSkill;
+    /** 可治愈的负面状态列表 */
     private List<Disease> cureDebuffs;
+    /** 是否为技能而非物品 */
     private boolean skill;
+    /** 增益状态列表 */
     private List<Pair<BuffStat, Integer>> statups;
+    /** 怪物状态效果映射 */
     private Map<MonsterStatus, Integer> monsterStatus;
+    /** 效果参数X值 */
     private int x, y, mobCount, moneyCon, cooldown, morphId = 0, ghost, fatigue, berserk, booster;
+    /** 触发概率（0.0-1.0） */
     private double prop;
+    /** 消耗物品ID */
     private int itemCon, itemConNo;
+    /** 伤害倍率 */
     private int damage, attackCount, fixdamage;
+    /** 左上角坐标（用于矩形范围） */
     private Point lt, rb;
+    /** 子弹数量限制 */
     private short bulletCount, bulletConsume;
+    /** 地图保护类型 */
     private byte mapProtection;
+    /** 卡片效果统计信息 */
     private CardItemupStats cardStats;
 
     private static class CardItemupStats {
@@ -245,6 +268,14 @@ public class StatEffect {
         }
     }
 
+    /**
+     * 从数据源加载技能或物品效果
+     * @param source 数据源
+     * @param sourceid 效果源ID
+     * @param skill 是否为技能效果
+     * @param overTime 是否为持续效果
+     * @return 加载的效果对象
+     */
     private static StatEffect loadFromData(Data source, int sourceid, boolean skill, boolean overTime) {
         StatEffect ret = new StatEffect();
         ret.duration = DataTool.getIntConvert("time", source, -1);
@@ -347,34 +378,43 @@ public class StatEffect {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.MPREC, (int) ret.mmpR);
 
                 } else if (ItemId.isRateCoupon(sourceid)) {
+                    // 根据经验倍率等级设置对应的经验加成状态
                     switch (DataTool.getInt("expR", source, 0)) {
                         case 1:
+                            // 经验倍率等级1：添加1级经验加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP1, 1);
                             break;
 
                         case 2:
+                            // 经验倍率等级2：添加2级经验加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP2, 1);
                             break;
 
                         case 3:
+                            // 经验倍率等级3：添加3级经验加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
                             break;
 
                         case 4:
+                            // 经验倍率等级4：添加4级经验加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP4, 1);
                             break;
                     }
 
+                    // 根据掉宝倍率等级设置对应的掉宝加成状态
                     switch (DataTool.getInt("drpR", source, 0)) {
                         case 1:
+                            // 掉宝倍率等级1：添加1级掉宝加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_DRP1, 1);
                             break;
 
                         case 2:
+                            // 掉宝倍率等级2：添加2级掉宝加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_DRP2, 1);
                             break;
 
                         case 3:
+                            // 掉宝倍率等级3：添加3级掉宝加成券状态
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_DRP3, 1);
                             break;
                     }
@@ -501,20 +541,24 @@ public class StatEffect {
         ret.moveTo = DataTool.getInt("moveTo", source, -1);
         Map<MonsterStatus, Integer> monsterStatus = new EnumMap<>(MonsterStatus.class);
         if (skill) {
+            // 根据技能ID设置对应的增益状态
             switch (sourceid) {
-                // BEGINNER
+                // ========== 初心者/新手技能 ==========
+                // 恢复技能：战士、魔法师、飞侠、林之灵、冒险家通用
                 case Beginner.RECOVERY:
                 case Noblesse.RECOVERY:
                 case Legend.RECOVERY:
                 case Evan.RECOVERY:
                     statups.add(new Pair<>(BuffStat.RECOVERY, x));
                     break;
+                // 英雄回响：全职业经验加成效果
                 case Beginner.ECHO_OF_HERO:
                 case Noblesse.ECHO_OF_HERO:
                 case Legend.ECHO_OF_HERO:
                 case Evan.ECHO_OF_HERO:
                     statups.add(new Pair<>(BuffStat.ECHO_OF_HERO, ret.x));
                     break;
+                // 骑乘技能：各种坐骑和飞船
                 case Beginner.MONSTER_RIDER:
                 case Noblesse.MONSTER_RIDER:
                 case Legend.MONSTER_RIDER:
@@ -535,26 +579,32 @@ public class StatEffect {
                 case Legend.BALROG_MOUNT:
                     statups.add(new Pair<>(BuffStat.MONSTER_RIDING, sourceid));
                     break;
+                // 神圣之躯：无敌状态
                 case Beginner.INVINCIBLE_BARRIER:
                 case Noblesse.INVINCIBLE_BARRIER:
                 case Legend.INVICIBLE_BARRIER:
                 case Evan.INVINCIBLE_BARRIER:
                     statups.add(new Pair<>(BuffStat.DIVINE_BODY, 1));
                     break;
+                // ========== 战士技能 ==========
+                // 能量护盾：反弹部分伤害
                 case Fighter.POWER_GUARD:
                 case Page.POWER_GUARD:
                     statups.add(new Pair<>(BuffStat.POWERGUARD, x));
                     break;
+                // 超越强化：HP和MP上限提升
                 case Spearman.HYPER_BODY:
                 case GM.HYPER_BODY:
                 case SuperGM.HYPER_BODY:
                     statups.add(new Pair<>(BuffStat.HYPERBODYHP, x));
                     statups.add(new Pair<>(BuffStat.HYPERBODYMP, ret.y));
                     break;
+                // 组合攻击：连击计数器
                 case Crusader.COMBO:
                 case DawnWarrior.COMBO:
                     statups.add(new Pair<>(BuffStat.COMBO, 1));
                     break;
+                // 元素冲击：火/冰/雷/圣属性攻击强化
                 case WhiteKnight.BW_FIRE_CHARGE:
                 case WhiteKnight.BW_ICE_CHARGE:
                 case WhiteKnight.BW_LIT_CHARGE:
@@ -567,64 +617,80 @@ public class StatEffect {
                 case ThunderBreaker.LIGHTNING_CHARGE:
                     statups.add(new Pair<>(BuffStat.WK_CHARGE, x));
                     break;
+                // 龙之血脉：攻击力提升BUFF
                 case DragonKnight.DRAGON_BLOOD:
                     statups.add(new Pair<>(BuffStat.DRAGONBLOOD, ret.x));
                     break;
+                // 稳如泰山：免疫击退效果
                 case Hero.STANCE:
                 case Paladin.STANCE:
                 case DarkKnight.STANCE:
                 case Aran.FREEZE_STANDING:
                     statups.add(new Pair<>(BuffStat.STANCE, iprop));
                     break;
+                // 最终攻击：普攻触发额外伤害
                 case DawnWarrior.FINAL_ATTACK:
                 case WindArcher.FINAL_ATTACK:
                     statups.add(new Pair<>(BuffStat.FINALATTACK, x));
                     break;
-                // MAGICIAN
+                // ========== 魔法师技能 ==========
+                // 魔法盾：用MP抵消部分伤害
                 case Magician.MAGIC_GUARD:
                 case BlazeWizard.MAGIC_GUARD:
                 case Evan.MAGIC_GUARD:
                     statups.add(new Pair<>(BuffStat.MAGIC_GUARD, x));
                     break;
+                // 圣甲术：物理伤害免疫
                 case Cleric.INVINCIBLE:
                     statups.add(new Pair<>(BuffStat.INVINCIBLE, x));
                     break;
+                // 神圣符号：组队经验加成
                 case Priest.HOLY_SYMBOL:
                 case SuperGM.HOLY_SYMBOL:
                     statups.add(new Pair<>(BuffStat.HOLY_SYMBOL, x));
                     break;
+                // 无限魔力：魔法消耗减少
                 case FPArchMage.INFINITY:
                 case ILArchMage.INFINITY:
                 case Bishop.INFINITY:
                     statups.add(new Pair<>(BuffStat.INFINITY, x));
                     break;
+                // 魔法反射：反弹魔法伤害
                 case FPArchMage.MANA_REFLECTION:
                 case ILArchMage.MANA_REFLECTION:
                 case Bishop.MANA_REFLECTION:
                     statups.add(new Pair<>(BuffStat.MANA_REFLECTION, 1));
                     break;
+                // 神圣护盾：神圣伤害减免
                 case Bishop.HOLY_SHIELD:
                     statups.add(new Pair<>(BuffStat.HOLY_SHIELD, x));
                     break;
+                // 元素重置：解除异常状态
                 case BlazeWizard.ELEMENTAL_RESET:
                 case Evan.ELEMENTAL_RESET:
                     statups.add(new Pair<>(BuffStat.ELEMENTAL_RESET, x));
                     break;
+                // 魔法护盾：MP抵消伤害
                 case Evan.MAGIC_SHIELD:
                     statups.add(new Pair<>(BuffStat.MAGIC_SHIELD, x));
                     break;
+                // 魔法抵抗：受到魔法伤害减少
                 case Evan.MAGIC_RESISTANCE:
                     statups.add(new Pair<>(BuffStat.MAGIC_RESISTANCE, x));
                     break;
+                // 缓速术：移动速度降低
                 case Evan.SLOW:
                     statups.add(new Pair<>(BuffStat.SLOW, x));
                     // BOWMAN
+                // 神秘门：创建传送门
                 case Priest.MYSTIC_DOOR:
+                // 灵魂箭：弓/弩发射强化
                 case Hunter.SOUL_ARROW:
                 case Crossbowman.SOUL_ARROW:
                 case WindArcher.SOUL_ARROW:
                     statups.add(new Pair<>(BuffStat.SOULARROW, x));
                     break;
+                // 傀儡：召唤怪物仇恨吸引
                 case Ranger.PUPPET:
                 case Sniper.PUPPET:
                 case WindArcher.PUPPET:
@@ -632,45 +698,57 @@ public class StatEffect {
                 case Corsair.WRATH_OF_THE_OCTOPI:
                     statups.add(new Pair<>(BuffStat.PUPPET, 1));
                     break;
+                // 集中：命中率/回避率提升
                 case Bowmaster.CONCENTRATE:
                     statups.add(new Pair<>(BuffStat.CONCENTRATE, x));
                     break;
+                // 断筋：降低怪物移动速度
                 case Bowmaster.HAMSTRING:
                     statups.add(new Pair<>(BuffStat.HAMSTRING, x));
                     monsterStatus.put(MonsterStatus.SPEED, x);
                     break;
+                // 箭雨：降低怪物命中率
                 case Marksman.BLIND:
                     statups.add(new Pair<>(BuffStat.BLIND, x));
                     monsterStatus.put(MonsterStatus.ACC, x);
                     break;
+                // 锐利眼：暴击率/暴击伤害提升
                 case Bowmaster.SHARP_EYES:
                 case Marksman.SHARP_EYES:
                     statups.add(new Pair<>(BuffStat.SHARP_EYES, ret.x << 8 | ret.y));
                     break;
+                // 风灵移动：提升移动速度
                 case WindArcher.WIND_WALK:
                     statups.add(new Pair<>(BuffStat.WIND_WALK, x));
                     //break;    thanks Vcoc for noticing WW not showing for other players when changing maps
+                // 暗影：隐身移动
                 case Rogue.DARK_SIGHT:
                 case NightWalker.DARK_SIGHT:
                     statups.add(new Pair<>(BuffStat.DARKSIGHT, x));
                     break;
+                // 金币加成：打怪获得更多金币
                 case Hermit.MESO_UP:
                     statups.add(new Pair<>(BuffStat.MESOUP, x));
                     break;
+                // 影子搭档：分身后攻击
                 case Hermit.SHADOW_PARTNER:
                 case NightWalker.SHADOW_PARTNER:
                     statups.add(new Pair<>(BuffStat.SHADOWPARTNER, x));
                     break;
+                // 金币护盾：用金币抵消部分伤害
                 case ChiefBandit.MESO_GUARD:
                     statups.add(new Pair<>(BuffStat.MESOGUARD, x));
                     break;
+                // 偷窃：打怪额外获得金币
                 case ChiefBandit.PICKPOCKET:
                     statups.add(new Pair<>(BuffStat.PICKPOCKET, x));
                     break;
+                // 暗影星：飞镖强化攻击
                 case NightLord.SHADOW_STARS:
                     statups.add(new Pair<>(BuffStat.SHADOW_CLAW, 0));
                     break;
                 // PIRATE
+                // 突进：快速移动
                 case Pirate.DASH:
                 case ThunderBreaker.DASH:
                 case Beginner.SPACE_DASH:
@@ -678,19 +756,23 @@ public class StatEffect {
                     statups.add(new Pair<>(BuffStat.DASH2, ret.x));
                     statups.add(new Pair<>(BuffStat.DASH, ret.y));
                     break;
+                // 速度激发：提升队友移动/攻击速度
                 case Corsair.SPEED_INFUSION:
                 case Buccaneer.SPEED_INFUSION:
                 case ThunderBreaker.SPEED_INFUSION:
                     statups.add(new Pair<>(BuffStat.SPEED_INFUSION, x));
                     break;
+                // 追踪目标：召唤物优先攻击特定目标
                 case Outlaw.HOMING_BEACON:
                 case Corsair.BULLSEYE:
                     statups.add(new Pair<>(BuffStat.HOMING_BEACON, x));
                     break;
+                // 火花：电属性攻击强化
                 case ThunderBreaker.SPARK:
                     statups.add(new Pair<>(BuffStat.SPARK, x));
                     break;
-                // MULTIPLE
+                // ========== 战士/弓手/飞侠/海盗通用 ==========
+                // 武器加速：提升攻击速度
                 case Aran.POLEARM_BOOSTER:
                 case Fighter.AXE_BOOSTER:
                 case Fighter.SWORD_BOOSTER:
@@ -717,6 +799,7 @@ public class StatEffect {
                 case Legend.POWER_EXPLOSION:
                     statups.add(new Pair<>(BuffStat.BOOSTER, x));
                     break;
+                // 枫叶之刃：全属性提升
                 case Hero.MAPLE_WARRIOR:
                 case Paladin.MAPLE_WARRIOR:
                 case DarkKnight.MAPLE_WARRIOR:
@@ -733,17 +816,20 @@ public class StatEffect {
                 case Evan.MAPLE_WARRIOR:
                     statups.add(new Pair<>(BuffStat.MAPLE_WARRIOR, ret.x));
                     break;
-                // SUMMON
+                // ========== 召唤技能 ==========
+                // 银鹰/金鹰召唤：附带眩晕效果
                 case Ranger.SILVER_HAWK:
                 case Sniper.GOLDEN_EAGLE:
                     statups.add(new Pair<>(BuffStat.SUMMON, 1));
                     monsterStatus.put(MonsterStatus.STUN, 1);
                     break;
+                // 火焰放射/寒冰急冻：附带冰冻效果
                 case FPArchMage.ELQUINES:
                 case Marksman.FROST_PREY:
                     statups.add(new Pair<>(BuffStat.SUMMON, 1));
                     monsterStatus.put(MonsterStatus.FREEZE, 1);
                     break;
+                // 各种召唤兽：龙/凤凰/冰火蜥蜴/黑暗灵气等
                 case Priest.SUMMON_DRAGON:
                 case Bowmaster.PHOENIX:
                 case ILArchMage.IFRIT:
@@ -758,31 +844,38 @@ public class StatEffect {
                 case BlazeWizard.IFRIT:
                     statups.add(new Pair<>(BuffStat.SUMMON, 1));
                     break;
-                // ----------------------------- MONSTER STATUS ---------------------------------- //
+                // ----------------------------- 怪物状态效果 ---------------------------------- //
+                // 护甲破碎：封印怪物技能
                 case Crusader.ARMOR_CRASH:
                 case DragonKnight.POWER_CRASH:
                 case WhiteKnight.MAGIC_CRASH:
                     monsterStatus.put(MonsterStatus.SEAL_SKILL, 1);
                     break;
+                // 病毒扩散：降低怪物攻击/防御
                 case Rogue.DISORDER:
                     monsterStatus.put(MonsterStatus.WATK, ret.x);
                     monsterStatus.put(MonsterStatus.WDEF, ret.y);
                     break;
+                // 催眠：使怪物无法移动
                 case Corsair.HYPNOTIZE:
                     monsterStatus.put(MonsterStatus.INERTMOB, 1);
                     break;
+                // 忍者伏击：造成持续伤害
                 case NightLord.NINJA_AMBUSH:
                 case Shadower.NINJA_AMBUSH:
                     monsterStatus.put(MonsterStatus.NINJA_AMBUSH, ret.damage);
                     break;
+                // 威胁：降低怪物攻击/防御
                 case Page.THREATEN:
                     monsterStatus.put(MonsterStatus.WATK, ret.x);
                     monsterStatus.put(MonsterStatus.WDEF, ret.y);
                     break;
+                // 龙咆哮：造成伤害并眩晕
                 case DragonKnight.DRAGON_ROAR:
                     ret.hpR = -x / 100.0;
                     monsterStatus.put(MonsterStatus.STUN, 1);
                     break;
+                // 昏迷/冲锋打击：造成额外伤害
                 case Crusader.AXE_COMA:
                 case Crusader.SWORD_COMA:
                 case Crusader.SHOUT:
@@ -889,6 +982,12 @@ public class StatEffect {
      * @param obj
      * @param attack  damage done by the skill
      */
+    /**
+     * 应用被动效果，如MP吸收等
+     * @param applyto 效果应用目标角色
+     * @param obj 相关对象（通常是怪物）
+     * @param attack 攻击力
+     */
     public void applyPassive(Character applyto, MapObject obj, int attack) {
         if (makeChanceResult()) {
             switch (sourceid) { // MP eater
@@ -913,6 +1012,11 @@ public class StatEffect {
         }
     }
 
+    /**
+     * 应用英雄回响效果，对地图上的所有玩家应用效果
+     * @param applyfrom 施放技能的角色
+     * @return 应用效果的结果
+     */
     public boolean applyEchoOfHero(Character applyfrom) {
         Map<Integer, Character> mapPlayers = applyfrom.getMap().getMapPlayers();
         mapPlayers.remove(applyfrom.getId());
@@ -939,58 +1043,73 @@ public class StatEffect {
 
     // primary: the player caster of the buff
     private boolean applyTo(Character applyfrom, Character applyto, boolean primary, Point pos, boolean useMaxRange, int affectedPlayers) {
+        // 特殊处理：如果是GM隐藏技能，则切换目标的隐藏状态
         if (skill && (sourceid == GM.HIDE || sourceid == SuperGM.HIDE)) {
             applyto.toggleHide(false);
             return true;
         }
 
+        // 如果是主要施法者且为治疗技能，则应用增益效果
         if (primary && isHeal()) {
             affectedPlayers = applyBuff(applyfrom, useMaxRange);
         }
 
+        // 计算HP和MP变化值
         int hpchange = calcHPChange(applyfrom, primary, affectedPlayers);
         int mpchange = calcMPChange(applyfrom, primary);
+        // 处理主要施法者的情况
         if (primary) {
+            // 检查并消耗所需物品
             if (itemConNo != 0) {
                 if (!applyto.getAbstractPlayerInteraction().hasItem(itemCon, itemConNo)) {
                     applyto.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
+                // 从角色库存中移除消耗品
                 InventoryManipulator.removeById(applyto.getClient(), ItemConstants.getInventoryType(itemCon), itemCon, itemConNo, false, true);
             }
         } else {
+            // 处理非主要施法者的情况，如果是复活技能则特殊处理
             if (isResurrection()) {
                 hpchange = applyto.getCurrentMaxHp();
                 applyto.broadcastStance(applyto.isFacingLeft() ? 5 : 4);
             }
         }
 
+        // 根据技能类型处理特殊效果
         if (isDispel() && makeChanceResult()) {
+            // 驱散负面状态
             applyto.dispelDebuffs();
         } else if (isCureAllAbnormalStatus()) {
+            // 清除所有异常状态
             applyto.purgeDebuffs();
         } else if (isComboReset()) {
+            // 重置连击数
             applyto.setCombo((short) 0);
         }
         /*if (applyfrom.getMp() < getMpCon()) {
          AutobanFactory.MPCON.addPoint(applyfrom.getAutobanManager(), "mpCon hack for skill:" + sourceid + "; Player MP: " + applyto.getMp() + " MP Needed: " + getMpCon());
          } */
 
+        // 应用HP和MP变化
         if (!applyto.applyHpMpChange(hpCon, hpchange, mpchange)) {
             applyto.sendPacket(PacketCreator.enableActions());
             return false;
         }
 
+        // 处理传送效果
         if (moveTo != -1) {
             if (moveTo != applyto.getMapId()) {
                 MapleMap target;
                 Portal pt;
 
                 if (moveTo == MapId.NONE) {
+                    // 处理反禁传效果
                     if (sourceid != ItemId.ANTI_BANISH_SCROLL) {
                         target = applyto.getMap().getReturnMap();
                         pt = target.getRandomPlayerSpawnpoint();
                     } else {
+                        // 检查是否可以恢复上次被禁传的位置
                         if (!applyto.canRecoverLastBanish()) {
                             return false;
                         }
@@ -1000,8 +1119,10 @@ public class StatEffect {
                         pt = target.getPortal(lastBanishInfo.getRight());
                     }
                 } else {
+                    // 获取目标地图和传送点
                     target = applyto.getClient().getWorldServer().getChannel(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
                     int targetid = target.getId() / 10000000;
+                    // 检查地图类型是否允许传送
                     if (targetid != 60 && applyto.getMapId() / 10000000 != 61 && targetid != applyto.getMapId() / 10000000 && targetid != 21 && targetid != 20 && targetid != 12 && (applyto.getMapId() / 10000000 != 10 && applyto.getMapId() / 10000000 != 12)) {
                         return false;
                     }
@@ -1009,11 +1130,13 @@ public class StatEffect {
                     pt = target.getRandomPlayerSpawnpoint();
                 }
 
+                // 执行地图切换
                 applyto.changeMap(target, pt);
             } else {
                 return false;
             }
         }
+        // 处理影爪技能：消耗飞镖
         if (isShadowClaw()) {
             short projectileConsume = this.getBulletConsume();  // noticed by shavit
 
@@ -1021,27 +1144,34 @@ public class StatEffect {
             use.lockInventory();
             try {
                 Item projectile = null;
+                // 遍历使用栏物品，查找符合条件的飞镖
                 for (int i = 1; i <= use.getSlotLimit(); i++) { // impose order...
                     Item item = use.getItem((short) i);
                     if (item != null) {
+                        // 检查是否为飞镖类型且数量足够
                         if (ItemConstants.isThrowingStar(item.getItemId()) && item.getQuantity() >= projectileConsume) {
                             projectile = item;
                             break;
                         }
                     }
                 }
+                // 如果找不到足够的飞镖则返回失败
                 if (projectile == null) {
                     return false;
                 } else {
+                    // 从库存中移除使用的飞镖
                     InventoryManipulator.removeFromSlot(applyto.getClient(), InventoryType.USE, projectile.getPosition(), projectileConsume, false, true);
                 }
             } finally {
                 use.unlockInventory();
             }
         }
+        // 获取召唤物移动类型
         SummonMovementType summonMovementType = getSummonMovementType();
+        // 如果是持续效果、 Cygnus FA 或有召唤物，则应用效果
         if (overTime || isCygnusFA() || summonMovementType != null) {
             if (summonMovementType != null && pos != null) {
+                // 根据召唤物移动类型取消相应的增益状态
                 if (summonMovementType.getValue() == SummonMovementType.STATIONARY.getValue()) {
                     applyto.cancelBuffStats(BuffStat.PUPPET);
                 } else {
@@ -1051,9 +1181,11 @@ public class StatEffect {
                 applyto.sendPacket(PacketCreator.enableActions());
             }
 
+            // 应用增益效果
             applyBuffEffect(applyfrom, applyto, primary);
         }
 
+        // 处理主要施法者的额外效果
         if (primary) {
             if (overTime) {
                 applyBuff(applyfrom, useMaxRange);
@@ -1064,10 +1196,12 @@ public class StatEffect {
             }
         }
 
+        // 处理疲劳度变化
         if (this.getFatigue() != 0) {
             applyto.getMapleMount().setTiredness(applyto.getMapleMount().getTiredness() + this.getFatigue());
         }
 
+        // 如果有召唤物移动类型且位置有效，则创建召唤物
         if (summonMovementType != null && pos != null) {
             final Summon tosummon = new Summon(applyfrom, sourceid, pos, summonMovementType);
             applyfrom.getMap().spawnSummon(tosummon);
@@ -1077,6 +1211,7 @@ public class StatEffect {
                 tosummon.addHP(1);
             }
         }
+        // 处理魔法门技能
         if (isMagicDoor() && !FieldLimit.DOOR.check(applyto.getMap().getFieldLimit())) { // Magic Door
             int y = applyto.getFh();
             if (y == 0) {
@@ -1104,12 +1239,15 @@ public class StatEffect {
                 applyto.cancelBuffStats(BuffStat.SOULARROW);  // cancel door buff
             }
         } else if (isMist()) {
+            // 创建迷雾效果
             Rectangle bounds = calculateBoundingBox(sourceid == NightWalker.POISON_BOMB ? pos : applyfrom.getPosition(), applyfrom.isFacingLeft());
             Mist mist = new Mist(bounds, applyfrom, this);
             applyfrom.getMap().spawnMist(mist, getDuration(), mist.isPoisonMist(), false, mist.isRecoveryMist());
         } else if (isTimeLeap()) {
+            // 时间跳跃技能：移除除了时间跳跃外的所有冷却
             applyto.removeAllCooldownsExcept(Buccaneer.TIME_LEAP, true);
         } else if (cp != 0 && applyto.getMonsterCarnival() != null) {
+            // 怪物嘉年华：获得CP点数
             applyto.gainCP(cp);
         } else if (nuffSkill != 0 && applyto.getParty() != null && applyto.getMap().isCPQMap()) { // added by Drago (Dragohe4rt)
             final MCSkill skill = CarnivalFactory.getInstance().getSkill(nuffSkill);
@@ -1117,6 +1255,7 @@ public class StatEffect {
                 final Disease dis = skill.getDisease();
                 Party opposition = applyfrom.getParty().getEnemy();
                 if (skill.targetsAll()) {
+                    // 对所有敌人应用负面效果
                     for (PartyCharacter enemyChrs : opposition.getPartyMembers()) {
                         Character chrApp = enemyChrs.getPlayer();
                         if (chrApp != null && chrApp.getMap().isCPQMap()) {
@@ -1129,6 +1268,7 @@ public class StatEffect {
                         }
                     }
                 } else {
+                    // 随机选择一个敌人应用负面效果
                     int amount = opposition.getMembers().size();
                     int randd = (int) Math.floor(Math.random() * amount);
                     Character chrApp = applyfrom.getMap().getCharacterById(opposition.getMemberByPos(randd).getId());
@@ -1143,24 +1283,29 @@ public class StatEffect {
                 }
             }
         } else if (cureDebuffs.size() > 0) { // added by Drago (Dragohe4rt)
+            // 治愈指定的负面状态
             for (final Disease debuff : cureDebuffs) {
                 applyfrom.dispelDebuff(debuff);
             }
         } else if (mobSkill > 0 && mobSkillLevel > 0) {
+            // 应用怪物技能效果
             MobSkillType mobSkillType = MobSkillType.from(mobSkill).orElseThrow();
             MobSkill ms = MobSkillFactory.getMobSkillOrThrow(mobSkillType, mobSkillLevel);
             Disease dis = Disease.getBySkill(mobSkillType);
 
             if (target > 0) {
+                // 对地图上的其他玩家应用负面效果
                 for (Character chr : applyto.getMap().getAllPlayers()) {
                     if (chr.getId() != applyto.getId()) {
                         chr.giveDebuff(dis, ms);
                     }
                 }
             } else {
+                // 对目标应用负面效果
                 applyto.giveDebuff(dis, ms);
             }
         }
+        // 返回成功标志
         return true;
     }
 
@@ -1241,6 +1386,11 @@ public class StatEffect {
         return !GameConfig.getServerBoolean("use_buff_everlasting") ? duration : Integer.MAX_VALUE;
     }
 
+    /**
+     * 静默应用增益效果，不发送任何提示消息
+     * @param chr 应用效果的角色
+     * @param localStartTime 效果开始时间
+     */
     public void silentApplyBuff(Character chr, long localStartTime) {
         int localDuration = getBuffLocalDuration();
         localDuration = alchemistModifyVal(chr, localDuration, false);
@@ -1261,6 +1411,11 @@ public class StatEffect {
         }
     }
 
+    /**
+     * 应用连击增益效果
+     * @param applyto 应用效果的角色
+     * @param combo 连击数
+     */
     public final void applyComboBuff(final Character applyto, int combo) {
         final List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.ARAN_COMBO, combo));
         applyto.sendPacket(PacketCreator.giveBuff(sourceid, 99999, stat));
@@ -1271,6 +1426,11 @@ public class StatEffect {
         applyto.registerEffect(this, starttime, Long.MAX_VALUE, false);
     }
 
+    /**
+     * 应用追踪信标增益效果
+     * @param applyto 应用效果的角色
+     * @param objectid 对象ID
+     */
     public final void applyBeaconBuff(final Character applyto, int objectid) { // thanks Thora & Hyun for reporting an issue with homing beacon autoflagging mobs when changing maps
         final List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.HOMING_BEACON, objectid));
         applyto.sendPacket(PacketCreator.giveBuff(1, sourceid, stat));
@@ -1279,6 +1439,12 @@ public class StatEffect {
         applyto.registerEffect(this, starttime, Long.MAX_VALUE, false);
     }
 
+    /**
+     * 更新增益效果显示
+     * @param target 目标角色
+     * @param activeStats 激活的增益状态列表
+     * @param starttime 开始时间
+     */
     public void updateBuffEffect(Character target, List<Pair<BuffStat, Integer>> activeStats, long starttime) {
         int localDuration = getBuffLocalDuration();
         localDuration = alchemistModifyVal(target, localDuration, false);
@@ -1585,18 +1751,38 @@ public class StatEffect {
         return sourceid == Buccaneer.TIME_LEAP;
     }
 
+    /**
+     * 判断是否为龙血技能效果
+     * @return true 如果是龙血技能效果，false 否则
+     */
+    /**
+     * 判断是否为龙血技能效果
+     * @return true 如果是龙血技能效果，false 否则
+     */
     public boolean isDragonBlood() {
         return skill && sourceid == DragonKnight.DRAGON_BLOOD;
     }
 
+    /**
+     * 判断是否为狂暴技能效果
+     * @return true 如果是狂暴技能效果，false 否则
+     */
     public boolean isBerserk() {
         return skill && sourceid == DarkKnight.BERSERK;
     }
 
+    /**
+     * 判断是否为恢复技能效果
+     * @return true 如果是恢复技能效果，false 否则
+     */
     public boolean isRecovery() {
         return sourceid == Beginner.RECOVERY || sourceid == Noblesse.RECOVERY || sourceid == Legend.RECOVERY || sourceid == Evan.RECOVERY;
     }
 
+    /**
+     * 判断是否为地图椅子效果
+     * @return true 如果是地图椅子效果，false 否则
+     */
     public boolean isMapChair() {
         return sourceid == Beginner.MAP_CHAIR || sourceid == Noblesse.MAP_CHAIR || sourceid == Legend.MAP_CHAIR;
     }
@@ -1629,6 +1815,10 @@ public class StatEffect {
         return skill && sourceid == Hero.ENRAGE;
     }
 
+    /**
+     * 判断是否为召唤兽（Beholder）效果
+     * @return true 如果是召唤兽效果，false 否则
+     */
     public boolean isBeholder() {
         return skill && sourceid == DarkKnight.BEHOLDER;
     }
@@ -1654,6 +1844,10 @@ public class StatEffect {
         return skill && sourceid == Priest.MYSTIC_DOOR;
     }
 
+    /**
+     * 判断是否为骑宠效果
+     * @return true 如果是骑宠效果，false 否则
+     */
     public boolean isMonsterRiding() {
         return skill && (sourceid % 10000000 == 1004 || sourceid == Corsair.BATTLE_SHIP || sourceid == Beginner.SPACESHIP || sourceid == Noblesse.SPACESHIP
                 || sourceid == Beginner.YETI_MOUNT1 || sourceid == Beginner.YETI_MOUNT2 || sourceid == Beginner.WITCH_BROOMSTICK || sourceid == Beginner.BALROG_MOUNT
@@ -1661,18 +1855,34 @@ public class StatEffect {
                 || sourceid == Legend.YETI_MOUNT1 || sourceid == Legend.YETI_MOUNT2 || sourceid == Legend.WITCH_BROOMSTICK || sourceid == Legend.BALROG_MOUNT);
     }
 
+    /**
+     * 判断是否为魔法门效果
+     * @return true 如果是魔法门效果，false 否则
+     */
     public boolean isMagicDoor() {
         return skill && sourceid == Priest.MYSTIC_DOOR;
     }
 
+    /**
+     * 判断是否为中毒效果
+     * @return true 如果是中毒效果，false 否则
+     */
     public boolean isPoison() {
         return skill && (sourceid == FPMage.POISON_MIST || sourceid == FPWizard.POISON_BREATH || sourceid == FPMage.ELEMENT_COMPOSITION || sourceid == NightWalker.POISON_BOMB || sourceid == BlazeWizard.FLAME_GEAR);
     }
 
+    /**
+     * 判断是否为变形效果
+     * @return true 如果是变形效果，false 否则
+     */
     public boolean isMorph() {
         return morphId > 0;
     }
 
+    /**
+     * 判断是否为无攻击变形效果
+     * @return true 如果是无攻击变形效果，false 否则
+     */
     public boolean isMorphWithoutAttack() {
         return morphId > 0 && morphId < 100; // Every morph item I have found has been under 100, pirate skill transforms start at 1000.
     }
@@ -1709,6 +1919,11 @@ public class StatEffect {
         }
     }
 
+    /**
+     * 判断技能是否为英雄意志技能
+     * @param skillid 技能ID
+     * @return true 如果是英雄意志技能，false 否则
+     */
     public static boolean isHerosWill(int skillid) {
         switch (skillid) {
             case Hero.HEROS_WILL:
@@ -1816,22 +2031,52 @@ public class StatEffect {
         return null;
     }
 
+    /**
+     * 判断此效果是否为技能效果
+     * @return true 如果是技能效果，false 如果是物品效果
+     */
     public boolean isSkill() {
         return skill;
     }
-
+    
+    /**
+     * 获取效果源ID（技能ID或物品ID）
+     * @return 效果源ID
+     */
     public int getSourceId() {
         return sourceid;
     }
+    
+    /**
+     * 设置效果源ID
+     * @param id 新的效果源ID
+     */
     public void setSourceId(int id) {
         sourceid = id;
     }
+    
+    /**
+     * 获取增益效果源ID（如果是技能则返回正数，如果是物品则返回负数）
+     * @return 增益效果源ID
+     */
     public int getBuffSourceId() {
         return skill ? sourceid : -sourceid;
     }
 
+    /**
+     * 根据概率判断是否触发效果
+     * @return true 如果效果触发，false 如果未触发
+     */
     public boolean makeChanceResult() {
         return prop == 1.0 || Math.random() < prop;
+    }
+
+    /**
+     * 判断是否为持续效果
+     * @return true 如果是持续效果，false 否则
+     */
+    public boolean isOverTime() {
+        return overTime;
     }
 
     /*
@@ -1856,106 +2101,211 @@ public class StatEffect {
      }
      }
      */
+    /**
+     * 获取HP增益值
+     * @return HP增益值
+     */
     public short getHp() {
         return hp;
     }
 
+    /**
+     * 获取MP增益值
+     * @return MP增益值
+     */
     public short getMp() {
         return mp;
     }
 
+    /**
+     * 获取HP恢复比率
+     * @return HP恢复比率
+     */
     public double getHpRate() {
         return hpR;
     }
 
+    /**
+     * 获取MP恢复比率
+     * @return MP恢复比率
+     */
     public double getMpRate() {
         return mpR;
     }
 
+    /**
+     * 获取HP恢复值
+     * @return HP恢复值
+     */
     public byte getHpR() {
         return mhpR;
     }
 
+    /**
+     * 获取MP恢复值
+     * @return MP恢复值
+     */
     public byte getMpR() {
         return mmpR;
     }
 
+    /**
+     * 获取HP恢复速率
+     * @return HP恢复速率
+     */
     public short getHpRRate() {
         return mhpRRate;
     }
 
+    /**
+     * 获取MP恢复速率
+     * @return MP恢复速率
+     */
     public short getMpRRate() {
         return mmpRRate;
     }
 
+    /**
+     * 获取HP消耗值
+     * @return HP消耗值
+     */
     public short getHpCon() {
         return hpCon;
     }
 
+    /**
+     * 获取MP消耗值
+     * @return MP消耗值
+     */
     public short getMpCon() {
         return mpCon;
     }
 
+    /**
+     * 获取魔法攻击力增益值
+     * @return 魔法攻击力增益值
+     */
     public short getMatk() {
         return matk;
     }
 
+    /**
+     * 获取物理攻击力增益值
+     * @return 物理攻击力增益值
+     */
     public short getWatk() {
         return watk;
     }
 
+    /**
+     * 获取效果持续时间
+     * @return 效果持续时间（毫秒）
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * 获取增益状态列表
+     * @return 增益状态列表
+     */
     public List<Pair<BuffStat, Integer>> getStatups() {
         return statups;
     }
 
+    /**
+     * 判断两个效果是否来自同一个源
+     * @param effect 要比较的效果
+     * @return true 如果两个效果来自同一个源，false 否则
+     */
     public boolean sameSource(StatEffect effect) {
         return this.sourceid == effect.sourceid && this.skill == effect.skill;
     }
 
+    /**
+     * 获取效果参数X值
+     * @return 效果参数X值
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * 获取效果参数Y值
+     * @return 效果参数Y值
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * 获取伤害百分比
+     * @return 伤害百分比
+     */
     public int getDamage() {
         return damage;
     }
 
+    /**
+     * 获取攻击次数
+     * @return 攻击次数
+     */
     public int getAttackCount() {
         return attackCount;
     }
 
+    /**
+     * 获取可攻击怪物数量
+     * @return 可攻击怪物数量
+     */
     public int getMobCount() {
         return mobCount;
     }
 
+    /**
+     * 获取固定伤害值
+     * @return 固定伤害值
+     */
     public int getFixDamage() {
         return fixdamage;
     }
 
+    /**
+     * 获取子弹数量限制
+     * @return 子弹数量限制
+     */
     public short getBulletCount() {
         return bulletCount;
     }
 
+    /**
+     * 获取子弹消耗数量
+     * @return 子弹消耗数量
+     */
     public short getBulletConsume() {
         return bulletConsume;
     }
 
+    /**
+     * 获取金钱消耗
+     * @return 金钱消耗
+     */
     public int getMoneyCon() {
         return moneyCon;
     }
 
+    /**
+     * 获取冷却时间
+     * @return 冷却时间（毫秒）
+     */
     public int getCooldown() {
         return cooldown;
     }
 
+    /**
+     * 获取怪物状态效果映射
+     * @return 怪物状态效果映射
+     */
     public Map<MonsterStatus, Integer> getMonsterStati() {
         return monsterStatus;
     }

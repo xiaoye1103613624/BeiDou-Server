@@ -40,12 +40,15 @@ public final class UseTreasureChestHandler extends AbstractPacketHandler {
         String box;
         String keyname = "";
 
+        // 根据宝箱类型设置奖励和钥匙ID
         switch (toUse.getItemId()) {
+            // 4280000: 金宝箱
             case 4280000:
                 reward = GameConstants.selectRandomReward(GameConstants.goldrewards);
                 keyIDforRemoval = 5490000;
                 box = "金宝箱";
                 break;
+            // 4280001: 银宝箱
             case 4280001:
                 reward = GameConstants.selectRandomReward(GameConstants.goldrewards);
                 keyIDforRemoval = 5490001;
@@ -55,13 +58,15 @@ public final class UseTreasureChestHandler extends AbstractPacketHandler {
                 return;
         }
 
-        // 得到的數量
+        // 根据奖励物品ID设置奖励数量
         int amount = 1;
         keyname = ItemInformationProvider.getInstance().getName(keyIDforRemoval);
         switch (reward) {
+            // 2000004: 获得200个
             case 2000004:
                 amount = 200;
                 break;
+            // 2000005: 获得100个
             case 2000005:
                 amount = 100;
                 break;

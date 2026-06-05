@@ -29,10 +29,16 @@ package org.gms.constants.skills;
  * @author 萧曵
  */
 public class Outlaw {
+    /** 连发：侠客的被动技能，提升连续射击能力 */
     public static final int BURST_FIRE = 5210000;
+    /** 章鱼：侠客的召唤技能，召唤章鱼协助战斗 */
     public static final int OCTOPUS = 5211001;
+    /** 海鸥：侠客的召唤技能，召唤海鸥协助战斗 */
     public static final int GAVIOTA = 5211002;
+    /** 火焰喷射器：侠客的范围攻击技能 */
     public static final int FLAME_THROWER = 5211004;
+    /** 制导导弹：侠客的技能，锁定怪物进行追踪攻击 */
     public static final int HOMING_BEACON = 5211006;
+    /** 冰分裂器：侠客的攻击技能 */
     public static final int ICE_SPLITTER = 5211005;
 }

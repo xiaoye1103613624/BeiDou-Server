@@ -1669,11 +1669,14 @@ public class Monster extends AbstractLoadedLife {
      * @return true表示应用成功
      */
     public boolean applyStatus(Character from, final MonsterStatusEffect status, boolean poison, long duration, boolean venom) {
+        // 根据怪物的元素抗性判断状态能否应用
         switch (getMonsterEffectiveness(status.getSkill().getElement())) {
+            // 免疫/抵抗/中性：状态无效
             case IMMUNE:
             case STRONG:
             case NEUTRAL:
                 return false;
+            // 正常/弱点：可以应用状态
             case NORMAL:
             case WEAK:
                 break;
@@ -2103,6 +2106,7 @@ public class Monster extends AbstractLoadedLife {
      * @return true表示是反射技能
      */
     private boolean isReflectSkill(MobSkill mobSkill) {
+        // 物理反击/魔法反击/物理魔法反击都属于反射技能
         return switch (mobSkill.getType()) {
             case PHYSICAL_COUNTER, MAGIC_COUNTER, PHYSICAL_AND_MAGIC_COUNTER -> true;
             default -> false;
@@ -2416,20 +2420,32 @@ public class Monster extends AbstractLoadedLife {
         this.mp = ostats.getMp();
     }
 
+    /**
+     * 根据难度等级获取怪物属性倍率
+     * <p>难度等级越高，怪物属性提升越多</p>
+     * @param difficulty 难度等级（2-6）
+     * @return 属性倍率值
+     */
     private float getDifficultyRate(final int difficulty) {
         switch (difficulty) {
+            // 最高难度：7.7倍属性
             case 6:
                 return (7.7f);
+            // 高难度：5.6倍属性
             case 5:
                 return (5.6f);
+            // 中高难度：3.2倍属性
             case 4:
                 return (3.2f);
+            // 中等难度：2.1倍属性
             case 3:
                 return (2.1f);
+            // 低难度：1.4倍属性
             case 2:
                 return (1.4f);
         }
 
+        // 默认难度：1.0倍属性（不变）
         return (1.0f);
     }
 

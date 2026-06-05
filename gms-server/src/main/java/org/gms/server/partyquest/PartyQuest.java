@@ -79,33 +79,48 @@ public class PartyQuest {
     }
 
     public static int getExp(String PQ, int level) {
+        // 根据不同组队任务类型返回经验值
         switch (PQ) {
+        // 亨利市任务
         case "HenesysPQ":
             return 1250 * level / 5;
+        // 玛吉岛任务最终关
         case "KerningPQFinal":
             return 500 * level / 5;
+        // 玛吉岛任务第四关
         case "KerningPQ4th":
             return 400 * level / 5;
+        // 玛吉岛任务第三关
         case "KerningPQ3rd":
             return 300 * level / 5;
+        // 玛吉岛任务第二关
         case "KerningPQ2nd":
             return 200 * level / 5;
+        // 玛吉岛任务第一关
         case "KerningPQ1st":
             return 100 * level / 5;
+        // 卢迪迷宫任务
         case "LudiMazePQ":
             return 2000 * level / 5;
+        // 卢迪任务第一关
         case "LudiPQ1st":
             return 100 * level / 5;
+        // 卢迪任务第二关
         case "LudiPQ2nd":
             return 250 * level / 5;
+        // 卢迪任务第三关
         case "LudiPQ3rd":
             return 350 * level / 5;
+        // 卢迪任务第四关
         case "LudiPQ4th":
             return 350 * level / 5;
+        // 卢迪任务第五关
         case "LudiPQ5th":
             return 400 * level / 5;
+        // 卢迪任务第六关
         case "LudiPQ6th":
             return 450 * level / 5;
+        // 卢迪任务第七关
         case "LudiPQ7th":
             return 500 * level / 5;
         case "LudiPQ8th":
