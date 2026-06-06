@@ -12,6 +12,7 @@ export default {
   'informationSearch.type.npc': 'npc',
   'informationSearch.type.pet': 'pet',
   'informationSearch.type.skill': 'skill',
+  'informationSearch.type.quest': 'quest',
 
   'informationSearch.column.type': 'Type',
   'informationSearch.column.id': 'ID',

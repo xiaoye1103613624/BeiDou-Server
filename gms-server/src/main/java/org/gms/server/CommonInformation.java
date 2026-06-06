@@ -25,9 +25,12 @@ import java.util.List;
 public class CommonInformation {
     private static CommonInformation instance;
     private final DataProvider stringData;
+    // Quest.wz 数据提供器，用于查询任务名称
+    private final DataProvider questData;
 
     private CommonInformation() {
         stringData = DataProviderFactory.getDataProvider(WZFiles.STRING);
+        questData = DataProviderFactory.getDataProvider(WZFiles.QUEST);
     }
 
     public static CommonInformation getInstance() {
@@ -101,6 +104,11 @@ public class CommonInformation {
                 data = stringData.getData("Skill.img");
                 addResult(results, infType, data, filter, filterType, fullMatch);
             }
+            case QUEST -> {
+                // 任务数据来自 Quest.wz/QuestInfo.img（含 name + parent 字段）
+                data = questData.getData("QuestInfo.img");
+                addQuestResult(results, infType, data, filter, filterType, fullMatch);
+            }
         }
     }
 
@@ -133,6 +141,31 @@ public class CommonInformation {
                         .id(Integer.parseInt(id))
                         .name(name)
                         .desc(desc)
+                        .build());
+            }
+        }
+    }
+
+    /**
+     * 搜索任务数据（Quest.wz/QuestInfo.img）
+     * 任务节点包含 name（任务名称）和 parent（父任务组名称）字段，
+     * 匹配时同时搜索 name 和 parent，parent 存入 desc 供前端展示。
+     */
+    private void addQuestResult(List<InformationResult> results, InformationType infType, Data data, String filter, int filterType, boolean fullMatch) {
+        RequireUtil.requireNotNull(data, I18nUtil.getExceptionMessage("MISSING_RESOURCE", infType.getType()));
+        for (Data child : data.getChildren()) {
+            String id = child.getName();
+            String name = DataTool.getString("name", child, "");
+            String parent = DataTool.getString("parent", child, "");
+            // 同时按 name 和 parent 匹配
+            boolean match = isMatch(id, name, filter, filterType, fullMatch)
+                    || (fullMatch ? filter.equals(parent) : parent.contains(filter));
+            if (match) {
+                results.add(InformationResult.builder()
+                        .type(infType.getType())
+                        .id(Integer.parseInt(id))
+                        .name(name)
+                        .desc(parent)  // parent 存入描述字段，表示任务所属组
                         .build());
             }
         }

@@ -180,13 +180,13 @@ public class EquipEnhanceService {
     private void deleteLevelsByConfigId(Long configId) {
         // 查询该配置下所有等级
         List<EquipEnhanceLevelDO> existingLevels = levelMapper.selectListByQuery(
-                QueryWrapper.create().where("config_id", configId));
+                QueryWrapper.create().where("config_id = ?", configId));
         // 先删除等级下的消耗物品，再删除等级
         for (EquipEnhanceLevelDO lv : existingLevels) {
             costMapper.deleteByQuery(
-                    QueryWrapper.create().where("level_id", lv.getId()));
+                    QueryWrapper.create().where("level_id = ?", lv.getId()));
         }
-        levelMapper.deleteByQuery(QueryWrapper.create().where("config_id", configId));
+        levelMapper.deleteByQuery(QueryWrapper.create().where("config_id = ?", configId));
     }
 
     /**

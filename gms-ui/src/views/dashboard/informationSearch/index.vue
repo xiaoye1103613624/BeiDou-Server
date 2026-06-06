@@ -45,6 +45,9 @@
           <a-option value="skill">
             {{ $t('informationSearch.type.skill') }}
           </a-option>
+          <a-option value="quest">
+            {{ $t('informationSearch.type.quest') }}
+          </a-option>
         </a-select>
         <a-input
           v-model="condition.filter"
@@ -175,6 +178,7 @@
       case 'npc':
       case 'pet':
       case 'skill':
+      case 'quest':
         tag = t(`informationSearch.type.${type}`);
         break;
       default:

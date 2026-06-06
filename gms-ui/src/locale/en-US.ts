@@ -18,6 +18,7 @@ import catchUpExpConfig from '@/views/catchUpExpConfig/locale/en-US';
 import scriptManager from '@/views/game/scriptManager/locale/en-US';
 import cardCollection from '@/views/game/cardCollection/locale/en-US';
 import equipEnhance from '@/views/game/equipEnhance/locale/en-US';
+import equipAdvance from '@/views/game/equipAdvance/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -39,6 +40,7 @@ export default {
   'menu.game.catchUpExp': 'Catch-up EXP',
   'menu.game.cardCollection': 'Card Collection',
   'menu.game.equipEnhance': 'Equip Enhance',
+  'menu.game.equipAdvance': 'Equip Advance',
   'menu.boss': 'BOSS',
   'menu.boss.config': 'BOSS Config',
   'menu.family': 'Family',
@@ -85,4 +87,5 @@ export default {
   ...scriptManager,
   ...cardCollection,
   ...equipEnhance,
+  ...equipAdvance,
 };

@@ -292,37 +292,45 @@
             }}</span>
             <a-space size="mini" wrap>
               <!-- 力量增加值输入框 -->
-              <a-input-number
-                v-model="lv.strAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.strAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.strAdd')">
+                <a-input-number
+                  v-model="lv.strAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.strAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 敏捷增加值输入框 -->
-              <a-input-number
-                v-model="lv.dexAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.dexAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.dexAdd')">
+                <a-input-number
+                  v-model="lv.dexAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.dexAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 智力增加值输入框 -->
-              <a-input-number
-                v-model="lv.intAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.intAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.intAdd')">
+                <a-input-number
+                  v-model="lv.intAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.intAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 运气增加值输入框 -->
-              <a-input-number
-                v-model="lv.lukAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.lukAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.lukAdd')">
+                <a-input-number
+                  v-model="lv.lukAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.lukAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
             </a-space>
           </div>
           <!-- 属性加成：攻击属性 -->
@@ -332,21 +340,25 @@
             }}</span>
             <a-space size="mini" wrap>
               <!-- 物理攻击力增加值输入框 -->
-              <a-input-number
-                v-model="lv.watkAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.watkAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.watkAdd')">
+                <a-input-number
+                  v-model="lv.watkAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.watkAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 魔法攻击力增加值输入框 -->
-              <a-input-number
-                v-model="lv.matkAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.matkAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.matkAdd')">
+                <a-input-number
+                  v-model="lv.matkAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.matkAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
             </a-space>
           </div>
           <!-- 属性加成：防御属性 -->
@@ -356,21 +368,25 @@
             }}</span>
             <a-space size="mini" wrap>
               <!-- 物理防御力增加值输入框 -->
-              <a-input-number
-                v-model="lv.wdefAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.wdefAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.wdefAdd')">
+                <a-input-number
+                  v-model="lv.wdefAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.wdefAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 魔法防御力增加值输入框 -->
-              <a-input-number
-                v-model="lv.mdefAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.mdefAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.mdefAdd')">
+                <a-input-number
+                  v-model="lv.mdefAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.mdefAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
             </a-space>
           </div>
           <!-- 属性加成：其他属性 -->
@@ -380,53 +396,65 @@
             }}</span>
             <a-space size="mini" wrap>
               <!-- 生命值增加值输入框 -->
-              <a-input-number
-                v-model="lv.hpAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.hpAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.hpAdd')">
+                <a-input-number
+                  v-model="lv.hpAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.hpAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 魔法值增加值输入框 -->
-              <a-input-number
-                v-model="lv.mpAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.mpAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.mpAdd')">
+                <a-input-number
+                  v-model="lv.mpAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.mpAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 命中率增加值输入框 -->
-              <a-input-number
-                v-model="lv.accAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.accAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.accAdd')">
+                <a-input-number
+                  v-model="lv.accAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.accAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 回避率增加值输入框 -->
-              <a-input-number
-                v-model="lv.avoidAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.avoidAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.avoidAdd')">
+                <a-input-number
+                  v-model="lv.avoidAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.avoidAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 速度增加值输入框 -->
-              <a-input-number
-                v-model="lv.speedAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.speedAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.speedAdd')">
+                <a-input-number
+                  v-model="lv.speedAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.speedAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
               <!-- 跳跃力增加值输入框 -->
-              <a-input-number
-                v-model="lv.jumpAdd"
-                :min="0"
-                :placeholder="$t('equipEnhance.form.field.jumpAdd')"
-                style="width: 78px"
-                size="mini"
-              />
+              <a-tooltip :content="$t('equipEnhance.form.field.jumpAdd')">
+                <a-input-number
+                  v-model="lv.jumpAdd"
+                  :min="0"
+                  :placeholder="$t('equipEnhance.form.field.jumpAdd')"
+                  style="width: 78px"
+                  size="mini"
+                />
+              </a-tooltip>
             </a-space>
           </div>
 
@@ -447,6 +475,14 @@
                     style="width: 120px"
                     size="mini"
                   />
+                  <!-- 物品查找按钮 -->
+                  <a-button
+                    size="mini"
+                    type="text"
+                    @click="openItemSearch(ci, lv)"
+                  >
+                    <template #icon><icon-search /></template>
+                  </a-button>
                   <span style="color: #999">×</span>
                   <!-- 消耗道具数量输入框 -->
                   <a-input-number
@@ -500,6 +536,52 @@
         </a-space>
       </template>
     </a-drawer>
+
+    <!-- 物品搜索弹窗（用于消耗道具ID查找） -->
+    <a-modal
+      v-model:visible="itemSearchVisible"
+      :title="$t('equipEnhance.form.searchItem')"
+      :width="500"
+      :footer="false"
+      @cancel="itemSearchVisible = false"
+    >
+      <a-input-search
+        v-model="itemSearchKeyword"
+        :placeholder="$t('equipEnhance.form.searchItemPlaceholder')"
+        search-button
+        style="margin-bottom: 12px"
+        @search="doItemSearch"
+      />
+      <a-table
+        v-if="itemSearchResults.length > 0"
+        :data="itemSearchResults"
+        :pagination="false"
+        :bordered="{ cell: true }"
+        size="small"
+        style="max-height: 360px; overflow-y: auto"
+        row-key="id"
+      >
+        <template #columns>
+          <a-table-column
+            title="ID"
+            data-index="id"
+            :width="80"
+            align="center"
+          />
+          <a-table-column
+            :title="$t('equipEnhance.form.itemName')"
+            data-index="name"
+            align="center"
+          >
+            <template #cell="{ record }">
+              <a-button type="text" size="mini" @click="selectCostItem(record)">
+                {{ record.name }}
+              </a-button>
+            </template>
+          </a-table-column>
+        </template>
+      </a-table>
+    </a-modal>
   </div>
 </template>
 
@@ -521,9 +603,14 @@
   // 导入Arco Design的消息提示组件
   import { Message } from '@arco-design/web-vue';
   // 导入问号圆圈填充图标
-  import { IconQuestionCircleFill } from '@arco-design/web-vue/es/icon';
+  import {
+    IconQuestionCircleFill,
+    IconSearch,
+  } from '@arco-design/web-vue/es/icon';
   // 导入国际化相关功能
   import { useI18n } from 'vue-i18n';
+  // 导入物品搜索API
+  import { itemSearch, ItemSearchResult } from '@/api/item';
 
   // 获取国际化函数
   const { t } = useI18n();
@@ -705,6 +792,48 @@
       // 显示删除失败消息
       Message.error(e?.message || t('equipEnhance.message.deleteFailed'));
     }
+  };
+
+  // ========== 消耗道具搜索 ==========
+  const itemSearchVisible = ref(false);
+  const itemSearchKeyword = ref('');
+  const itemSearchResults = ref<ItemSearchResult[]>([]);
+  // 当前正在编辑的消耗道具引用（用于回填选择结果）
+  let currentCostRef: { level: EquipEnhanceLevel; costIndex: number } | null =
+    null;
+
+  /**
+   * 打开物品搜索弹窗
+   */
+  const openItemSearch = (costIndex: number, level: EquipEnhanceLevel) => {
+    currentCostRef = { level, costIndex };
+    itemSearchKeyword.value = '';
+    itemSearchResults.value = [];
+    itemSearchVisible.value = true;
+  };
+
+  /**
+   * 执行物品搜索
+   */
+  const doItemSearch = async () => {
+    if (!itemSearchKeyword.value) return;
+    try {
+      const res: any = await itemSearch(itemSearchKeyword.value);
+      // 响应拦截器返回的是 HttpResponse { code, message, data } 对象
+      itemSearchResults.value = res?.data ?? [];
+    } catch {
+      itemSearchResults.value = [];
+    }
+  };
+
+  /**
+   * 选择搜索结果中的物品，回填到消耗道具ID输入框
+   */
+  const selectCostItem = (record: ItemSearchResult) => {
+    if (currentCostRef) {
+      currentCostRef.level.costs[currentCostRef.costIndex].itemId = record.id;
+    }
+    itemSearchVisible.value = false;
   };
 
   /**

@@ -12,6 +12,7 @@ export default {
   'informationSearch.type.npc': 'NPC',
   'informationSearch.type.pet': '宠物',
   'informationSearch.type.skill': '技能',
+  'informationSearch.type.quest': '任务',
 
   'informationSearch.column.type': '类型',
   'informationSearch.column.id': 'ID',

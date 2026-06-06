@@ -48,6 +48,10 @@ export default {
   'equipEnhance.form.field.costs': 'Item Costs',
   'equipEnhance.form.field.costItemId': 'Item ID',
   'equipEnhance.form.field.costCount': 'Qty',
+  // Item search
+  'equipEnhance.form.searchItem': 'Search Item',
+  'equipEnhance.form.searchItemPlaceholder': 'Enter item name or ID',
+  'equipEnhance.form.itemName': 'Item Name',
   // Action buttons
   'equipEnhance.form.addLevel': 'Add Level',
   'equipEnhance.form.addCost': 'Add Item Cost',

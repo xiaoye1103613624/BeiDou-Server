@@ -62,7 +62,8 @@ function action(mode, type, selection) {
         // ======================== 经济交易 ========================
         text += "#d========== 经济交易 ==========#k\r\n";
         text += "#L80#拍卖行#l \t #L81#金币商城#l \t #L82#装备回收#l\r\n";
-        text += "#L83#制作合成#l \t #L97#售卖装备#l \t #L98#售卖其他#l\r\n";
+        text += "#L83#制作合成#l \t #L110#装备进阶#l\r\n";
+        text += "#L97#售卖装备#l \t #L98#售卖其他#l\r\n";
         text += "\r\n";
 
         // ======================== 社交活动 ========================
@@ -108,6 +109,7 @@ function action(mode, type, selection) {
             text += "\t\t\t\t#r===== 待测试功能（need_test）=====#k\r\n";
             text += "#L103#抽奖#l \t #L104#装备强化#l \t #L105#装备合成#l\r\n";
             text += "#L106#时装强化#l \t #L107#时装洗练#l \t #L108#勋章强化#l\r\n";
+            text += "#L111#装备进阶#l\r\n";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -180,6 +182,9 @@ function doSelect(selection) {
             break;
         case 83:
             openNpc("制作合成");
+            break;
+        case 110:
+            openNpc("装备进阶");
             break;
         case 97:
             openNpc("一键售卖装备");
@@ -306,6 +311,9 @@ function doSelect(selection) {
             break;
         case 108:
             openNpc("gm/xy_勋章强化");
+            break;
+        case 111:
+            openNpc("装备进阶");
             break;
 
         default:

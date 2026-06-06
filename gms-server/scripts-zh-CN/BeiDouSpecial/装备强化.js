@@ -68,6 +68,11 @@ function levelStart() {
 
     _configList = [];
     var configMap = EquipEnhanceManager.getConfigMap();
+    // 如果缓存为空，尝试从数据库重新加载（自愈机制）
+    if (configMap.isEmpty()) {
+        EquipEnhanceManager.reload();
+        configMap = EquipEnhanceManager.getConfigMap();
+    }
     var itemIds = configMap.keySet().toArray();
     for (var i = 0; i < itemIds.length; i++) {
         var cfg = configMap.get(itemIds[i]);

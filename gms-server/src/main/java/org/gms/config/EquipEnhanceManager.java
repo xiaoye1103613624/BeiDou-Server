@@ -3,6 +3,9 @@ package org.gms.config;
 import org.gms.dao.entity.EquipEnhanceConfigDO;
 import org.gms.dao.entity.EquipEnhanceLevelDO;
 import org.gms.dao.entity.EquipEnhanceCostDO;
+import org.gms.manager.ServerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 供 GraalVM JS 脚本通过 {@code Java.type()} 调用查询强化规则。
  */
 public class EquipEnhanceManager {
+
+    private static final Logger log = LoggerFactory.getLogger(EquipEnhanceManager.class);
 
     /** 物品ID → 配置实体映射（仅包含启用的配置） */
     private static final Map<Integer, EquipEnhanceConfigDO> configMap = new ConcurrentHashMap<>();
@@ -37,10 +42,12 @@ public class EquipEnhanceManager {
         levelMap.clear();
         costMap.clear();
 
+        int enabledCount = 0;
         // 加载配置（仅启用的），key为物品ID
         for (EquipEnhanceConfigDO c : configs) {
             if (c.getEnabled() != null && c.getEnabled() == 1) {
                 configMap.put(c.getItemId(), c);
+                enabledCount++;
             }
         }
         // 加载等级映射
@@ -54,6 +61,29 @@ public class EquipEnhanceManager {
         // 等级列表按强化等级排序
         for (List<EquipEnhanceLevelDO> list : levelMap.values()) {
             list.sort(Comparator.comparingInt(EquipEnhanceLevelDO::getEnhanceLevel));
+        }
+        log.info("EquipEnhanceManager 缓存已刷新：总配置 {} 条，启用的 {} 条，等级 {} 条，消耗 {} 条",
+                configs.size(), enabledCount, levels.size(), costs.size());
+    }
+
+    /**
+     * 手动强制刷新缓存（从数据库重新加载）。
+     * 适用于数据库配置变更后无需重启服务器的场景。
+     * 脚本中可调用: {@code EquipEnhanceManager.reload()}
+     */
+    public static void reload() {
+        try {
+            var context = ServerManager.getApplicationContext();
+            if (context != null) {
+                var configMapper = context.getBean(org.gms.dao.mapper.EquipEnhanceConfigMapper.class);
+                var levelMapper = context.getBean(org.gms.dao.mapper.EquipEnhanceLevelMapper.class);
+                var costMapper = context.getBean(org.gms.dao.mapper.EquipEnhanceCostMapper.class);
+                load(configMapper.selectAll(), levelMapper.selectAll(), costMapper.selectAll());
+            } else {
+                log.warn("Spring 上下文不可用，无法重新加载装备强化配置");
+            }
+        } catch (Exception e) {
+            log.error("重新加载装备强化配置失败", e);
         }
     }
 

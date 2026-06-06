@@ -48,6 +48,10 @@ export default {
   'equipEnhance.form.field.costs': '消耗道具',
   'equipEnhance.form.field.costItemId': '道具ID',
   'equipEnhance.form.field.costCount': '数量',
+  // 物品搜索
+  'equipEnhance.form.searchItem': '搜索物品',
+  'equipEnhance.form.searchItemPlaceholder': '输入物品名称或ID搜索',
+  'equipEnhance.form.itemName': '物品名称',
   // 操作按钮
   'equipEnhance.form.addLevel': '增加强化等级',
   'equipEnhance.form.addCost': '添加消耗道具',

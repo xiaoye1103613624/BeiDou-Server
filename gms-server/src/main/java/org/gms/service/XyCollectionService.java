@@ -182,14 +182,14 @@ public class XyCollectionService {
     private void deleteStagesByTypeId(Long typeId) {
         // 查询该类型下所有阶段
         List<XyCollectionStageDO> existingStages = stageMapper.selectListByQuery(
-                QueryWrapper.create().where("type_id", typeId));
+                QueryWrapper.create().where("type_id = ?", typeId));
         // 先删除阶段下的物品，再删除阶段
         for (XyCollectionStageDO stage : existingStages) {
             itemMapper.deleteByQuery(
-                    QueryWrapper.create().where("stage_id", stage.getId()));
+                    QueryWrapper.create().where("stage_id = ?", stage.getId()));
         }
         stageMapper.deleteByQuery(
-                QueryWrapper.create().where("type_id", typeId));
+                QueryWrapper.create().where("type_id = ?", typeId));
     }
 
     /**

@@ -28,6 +28,8 @@ public enum InformationType {
     PET("pet"),
     /** 技能 */
     SKILL("skill"),
+    /** 任务 */
+    QUEST("quest"),
     ;
 
     /** 类型标识 */

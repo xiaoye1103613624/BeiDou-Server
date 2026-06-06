@@ -19,6 +19,7 @@ import scriptManager from '@/views/game/scriptManager/locale/zh-CN';
 import cardCollection from '@/views/game/cardCollection/locale/zh-CN';
 import equipEnhance from '@/views/game/equipEnhance/locale/zh-CN';
 import xyCollection from '@/views/game/xyCollection/locale/zh-CN';
+import equipAdvance from '@/views/game/equipAdvance/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -42,6 +43,7 @@ export default {
   'menu.game.cardCollection': '卡片收集',
   'menu.game.equipEnhance': '装备强化',
   'menu.game.xyCollection': 'XY收集',
+  'menu.game.equipAdvance': '装备进阶',
   'menu.boss': 'BOSS管理',
   'menu.boss.config': 'BOSS配置',
   'menu.family': '家族管理',
@@ -91,4 +93,5 @@ export default {
   ...cardCollection,
   ...equipEnhance,
   ...xyCollection,
+  ...equipAdvance,
 };
