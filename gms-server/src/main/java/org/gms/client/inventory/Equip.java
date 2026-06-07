@@ -77,6 +77,8 @@ public class Equip extends Item {
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
     private float itemExp;
     private int ringid = -1;
+    /** 强化等级（0=未强化，N=已强化N次） */
+    private short enhanceLevel;
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -114,6 +116,7 @@ public class Equip extends Item {
         ret.jump = jump;
         ret.flag = flag;
         ret.vicious = vicious;
+        ret.enhanceLevel = enhanceLevel;
         ret.upgradeSlots = upgradeSlots;
         ret.itemLevel = itemLevel;
         ret.itemExp = itemExp;
@@ -786,6 +789,14 @@ public class Equip extends Item {
 
     public void setRingId(int id) {
         this.ringid = id;
+    }
+
+    public short getEnhanceLevel() {
+        return enhanceLevel;
+    }
+
+    public void setEnhanceLevel(short level) {
+        this.enhanceLevel = level;
     }
 
     public boolean isWearing() {

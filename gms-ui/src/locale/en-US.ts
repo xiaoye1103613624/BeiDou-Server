@@ -10,6 +10,8 @@ import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
+import equipEnhance from '@/views/game/equipEnhance/locale/en-US';
+import equipAdvance from '@/views/game/equipAdvance/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -27,6 +29,8 @@ export default {
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
   'menu.game.autoban': 'Autoban',
+  'menu.game.equipEnhance': 'Equip Enhance',
+  'menu.game.equipAdvance': 'Equip Advance',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -58,4 +62,6 @@ export default {
   ...inventory,
   ...config,
   ...autoban,
+  ...equipEnhance,
+  ...equipAdvance,
 };

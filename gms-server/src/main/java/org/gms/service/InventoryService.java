@@ -203,6 +203,7 @@ public class InventoryService {
                     .itemLevel(obj.getByte("itemlevel"))
                     .itemExp(obj.getInt("itemexp"))
                     .ringId(obj.getInt("ringid"))
+                    .enhanceLevel(obj.containsKey("enhance_level") ? obj.getShort("enhance_level") : null)
                     .build());
         }
         return rtnDTO;
@@ -256,6 +257,7 @@ public class InventoryService {
                         .itemLevel(equip.getItemLevel())
                         .itemExp(equip.getItemExp())
                         .ringId(equip.getRingId())
+                        .enhanceLevel(equip.getEnhanceLevel())
                         .build());
             }
             return rtnDTO;
@@ -308,6 +310,7 @@ public class InventoryService {
             if (equipment.getSpeed() != null) equip.setSpeed(equipment.getSpeed());
             if (equipment.getJump() != null) equip.setJump(equipment.getJump());
             if (equipment.getVicious() != null) equip.setVicious(equipment.getVicious());
+            if (equipment.getEnhanceLevel() != null) equip.setEnhanceLevel(equipment.getEnhanceLevel());
         }
         character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
     }

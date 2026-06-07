@@ -109,6 +109,7 @@ public class InventorySearchRtnDTO {
             equip.setItemLevel(Optional.ofNullable(getInventoryEquipment().getItemLevel()).orElse((byte) 0));
             equip.setItemExp(Optional.ofNullable(getInventoryEquipment().getItemExp()).orElse(0));
             equip.setRingId(Optional.ofNullable(getInventoryEquipment().getRingId()).orElse(0));
+            equip.setEnhanceLevel(Optional.ofNullable(getInventoryEquipment().getEnhanceLevel()).orElse((short) 0));
             item = equip;
         } else {
             item = new Item(getItemId(), getPosition(), getQuantity(), getPetId());

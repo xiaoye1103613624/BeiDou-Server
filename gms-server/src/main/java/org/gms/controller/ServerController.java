@@ -29,11 +29,12 @@ public class ServerController {
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "停止所有")
     @GetMapping("/" + ApiConstant.LATEST + "/shutdown")
-    public void shutdown() {
+    public ResultBody<Object> shutdown() {
         // 这里只能触发destroy，但服务不能正常停止
         SpringApplication.exit(applicationContext);
         // 这里才能正常的停止
         System.exit(0);
+        return ResultBody.success();
     }
 
     @Tag(name = "/server/" + ApiConstant.LATEST)

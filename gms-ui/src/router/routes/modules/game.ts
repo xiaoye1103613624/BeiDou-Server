@@ -112,6 +112,26 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'equipEnhance',
+      name: 'EquipEnhance',
+      component: () => import('@/views/game/equipEnhance/index.vue'),
+      meta: {
+        locale: 'menu.game.equipEnhance',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'equipAdvance',
+      name: 'EquipAdvance',
+      component: () => import('@/views/game/equipAdvance/index.vue'),
+      meta: {
+        locale: 'menu.game.equipAdvance',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 
