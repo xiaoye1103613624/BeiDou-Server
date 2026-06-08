@@ -88,6 +88,11 @@ export function saveConfig(data: EquipEnhanceForm) {
   return axios.post<EquipEnhanceState>('/equipEnhance/v1/saveConfig', data);
 }
 
+/** 切换装备强化配置的启用/禁用状态 */
+export function toggleEnabled(id: number, enabled: number) {
+  return axios.put(`/equipEnhance/v1/toggleEnabled/${id}`, { enabled });
+}
+
 /** 删除装备强化配置（级联删除关联的等级和消耗物品） */
 export function deleteConfig(id: number) {
   return axios.delete(`/equipEnhance/v1/deleteConfig/${id}`);

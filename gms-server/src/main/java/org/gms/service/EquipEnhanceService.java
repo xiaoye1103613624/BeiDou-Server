@@ -129,6 +129,17 @@ public class EquipEnhanceService {
         return getConfigById(config.getId());
     }
 
+    /** 切换装备强化配置的启用/禁用状态，仅更新 enabled 字段并刷新缓存 */
+    @Transactional
+    public void toggleEnabled(Long id, Integer enabled) {
+        EquipEnhanceConfigDO config = EquipEnhanceConfigDO.builder()
+                .id(id)
+                .enabled(enabled)
+                .build();
+        configMapper.update(config);
+        refreshCache();
+    }
+
     /** 删除装备强化配置（级联删除等级和消耗物品） */
     @Transactional
     public void deleteConfig(Long id) {

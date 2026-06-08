@@ -12,6 +12,8 @@ import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
 import equipEnhance from '@/views/game/equipEnhance/locale/en-US';
 import equipAdvance from '@/views/game/equipAdvance/locale/en-US';
+import levelReward from '@/views/game/levelReward/locale/en-US';
+import newbieGift from '@/views/game/newbieGift/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -31,6 +33,8 @@ export default {
   'menu.game.autoban': 'Autoban',
   'menu.game.equipEnhance': 'Equip Enhance',
   'menu.game.equipAdvance': 'Equip Advance',
+  'menu.game.levelReward': 'Level Reward',
+  'menu.game.newbieGift': 'Newbie Gift',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -64,4 +68,6 @@ export default {
   ...autoban,
   ...equipEnhance,
   ...equipAdvance,
+  ...levelReward,
+  ...newbieGift,
 };

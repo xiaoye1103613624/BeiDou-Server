@@ -132,6 +132,26 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'newbieGift',
+      name: 'NewbieGift',
+      component: () => import('@/views/game/newbieGift/index.vue'),
+      meta: {
+        locale: 'menu.game.newbieGift',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'levelReward',
+      name: 'LevelReward',
+      component: () => import('@/views/game/levelReward/index.vue'),
+      meta: {
+        locale: 'menu.game.levelReward',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

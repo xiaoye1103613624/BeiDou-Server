@@ -49,17 +49,42 @@ function isEquipment(itemId) {
 }
 
 /**
- * 根据职业ID判断职业群
+ * 根据职业ID匹配进阶路线标识。
+ * 细化到具体4转职业，使不同武器路线（英雄剑/龙骑枪/神射弓/箭神弩等）独立。
+ * 未4转的职业向前匹配本职业群第一个路线作为兜底。
  * @param jobId 职业ID
- * @return 职业群字符串（warrior/archer/mage/thief/pirate），初心者兜底warrior
+ * @return 路线匹配的 job_group 字符串（如 '112'=英雄, '132'=龙骑士）
  */
-function getJobGroup(jobId) {
-    if (jobId >= 100 && jobId <= 132) return "warrior";
-    if (jobId >= 200 && jobId <= 232) return "archer";
-    if (jobId >= 300 && jobId <= 332) return "mage";
-    if (jobId >= 400 && jobId <= 432) return "thief";
-    if (jobId >= 500 && jobId <= 532) return "pirate";
-    return "warrior";  // 初心者兜底
+function getRouteKey(jobId) {
+    // 战士系
+    if (jobId === 112 || (jobId >= 110 && jobId <= 111)) return "112"; // 英雄(剑)
+    if (jobId === 122 || (jobId >= 120 && jobId <= 121)) return "122"; // 圣骑士(钝器)
+    if (jobId === 132 || (jobId >= 130 && jobId <= 131)) return "132"; // 龙骑士(枪)
+    if (jobId >= 100 && jobId < 110) return "112";   // 未转职战士 → 英雄路线
+
+    // 弓箭手系
+    if (jobId === 312 || (jobId >= 310 && jobId <= 311)) return "312"; // 神射手(弓)
+    if (jobId === 322 || (jobId >= 320 && jobId <= 321)) return "322"; // 箭神(弩)
+    if (jobId >= 300 && jobId < 310) return "312";   // 未转职弓箭手 → 神射手路线
+
+    // 法师系
+    if (jobId === 212 || (jobId >= 210 && jobId <= 211)) return "212"; // 火毒(长杖)
+    if (jobId === 222 || (jobId >= 220 && jobId <= 221)) return "222"; // 冰雷(短杖)
+    if (jobId === 232 || (jobId >= 230 && jobId <= 231)) return "232"; // 主教(长杖)
+    if (jobId >= 200 && jobId < 210) return "212";   // 未转职法师 → 火毒路线
+
+    // 飞侠系
+    if (jobId === 412 || (jobId >= 410 && jobId <= 411)) return "412"; // 隐士(拳套)
+    if (jobId === 422 || (jobId >= 420 && jobId <= 421)) return "422"; // 侠盗(短刀)
+    if (jobId >= 400 && jobId < 410) return "412";   // 未转职飞侠 → 隐士路线
+
+    // 海盗系
+    if (jobId === 512 || (jobId >= 510 && jobId <= 511)) return "512"; // 冲锋队长(指节)
+    if (jobId === 522 || (jobId >= 520 && jobId <= 521)) return "522"; // 船长(手枪)
+    if (jobId >= 500 && jobId < 510) return "512";   // 未转职海盗 → 冲锋队长路线
+
+    // 初心者兜底
+    return "112";
 }
 
 /**
@@ -125,7 +150,7 @@ function levelStart() {
     loadAdvanceData();
 
     var jobId = cm.getPlayer().getJob().getId();
-    var jobGroup = getJobGroup(jobId);
+    var jobGroup = getRouteKey(jobId);
 
     // 始终从数据库刷新缓存，确保拿到最新配置
     EquipAdvanceManager.reload();
@@ -133,7 +158,7 @@ function levelStart() {
 
     selectedRoute = EquipAdvanceManager.getRoute(jobGroup);
     if (!selectedRoute || selectedRoute.id == null) {
-        var msg = "当前职业群 #b" + getJobGroupName(jobGroup) + "#k 暂未配置装备进阶路线。\r\n\r\n";
+        var msg = "当前职业群 #b" + getRouteDisplayName(jobGroup) + "#k 暂未配置装备进阶路线。\r\n\r\n";
         msg += "当前已配置的职业群:\r\n";
         var routeCount = routeMap.size();
         if (routeCount === 0) {
@@ -142,9 +167,9 @@ function levelStart() {
             var keySet = routeMap.keySet().toArray();
             for (var k = 0; k < keySet.length; k++) {
                 var r = routeMap.get(keySet[k]);
-                msg += "  #b" + getJobGroupName(keySet[k]) + "#k - " + r.routeName + "\r\n";
+                msg += "  #b" + getRouteDisplayName(keySet[k]) + "#k - " + r.routeName + "\r\n";
             }
-            msg += "\r\n#r你的职业群 (" + getJobGroupName(jobGroup) + ") 不在上述列表中#k";
+            msg += "\r\n#r你的职业群 (" + getRouteDisplayName(jobGroup) + ") 不在上述列表中#k";
         }
         cm.sendOk(msg);
         cm.dispose();
@@ -332,7 +357,7 @@ function levelAdvanceResult(selection) {
 
     // === 扣除金币 ===
     if (nextStage.mesoCost > 0) {
-        cm.getPlayer().gainMeso(-nextStage.mesoCost, true, false);
+        cm.gainMeso(-nextStage.mesoCost); // 修复：gainMeso无3参数重载，改用单参数版本
     }
 
     // === 扣除点卷 ===
@@ -433,15 +458,27 @@ function formatStatText(stats) {
     return parts.length > 0 ? parts.join(", ") : "无属性加成";
 }
 
-/** 获取职业群中文名称 */
-function getJobGroupName(jobGroup) {
-    switch (jobGroup) {
-        case "warrior": return "战士";
-        case "archer":  return "弓箭手";
-        case "mage":    return "法师";
-        case "thief":   return "飞侠";
-        case "pirate":  return "海盗";
-        default:        return jobGroup;
+/** 获取路线中文名称（基于职业ID） */
+function getRouteDisplayName(routeKey) {
+    switch (routeKey) {
+        // 战士系
+        case "112": return "英雄(剑/斧)";
+        case "122": return "圣骑士(钝器)";
+        case "132": return "龙骑士(枪/矛)";
+        // 弓箭手系
+        case "312": return "神射手(弓)";
+        case "322": return "箭神(弩)";
+        // 法师系
+        case "212": return "火毒法师(长杖)";
+        case "222": return "冰雷法师(短杖)";
+        case "232": return "主教(长杖)";
+        // 飞侠系
+        case "412": return "隐士(拳套)";
+        case "422": return "侠盗(短刀)";
+        // 海盗系
+        case "512": return "冲锋队长(指节)";
+        case "522": return "船长(手枪)";
+        default:    return routeKey;
     }
 }
 

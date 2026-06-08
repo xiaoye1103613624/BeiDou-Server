@@ -44,6 +44,14 @@ public class EquipEnhanceController {
     }
 
     @Tag(name = "/equipEnhance/" + ApiConstant.LATEST)
+    @Operation(summary = "切换装备强化配置的启用/禁用状态")
+    @PutMapping("/" + ApiConstant.LATEST + "/toggleEnabled/{id}")
+    public ResultBody<Object> toggleEnabled(@PathVariable("id") Long id, @RequestBody SubmitBody<java.util.Map<String, Integer>> request) {
+        equipEnhanceService.toggleEnabled(id, request.getData().get("enabled"));
+        return ResultBody.success(null);
+    }
+
+    @Tag(name = "/equipEnhance/" + ApiConstant.LATEST)
     @Operation(summary = "删除装备强化配置")
     @DeleteMapping("/" + ApiConstant.LATEST + "/deleteConfig/{id}")
     public ResultBody<Object> deleteConfig(@PathVariable("id") Long id) {

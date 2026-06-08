@@ -80,16 +80,14 @@
           </a-table-column>
           <a-table-column
             :title="$t('equipEnhance.column.enabled')"
-            :width="60"
+            :width="80"
             align="center"
           >
             <template #cell="{ record }">
-              <a-tag v-if="record.enabled === 1" color="green">
-                {{ $t('equipEnhance.yes') }}
-              </a-tag>
-              <a-tag v-else color="gray">
-                {{ $t('equipEnhance.no') }}
-              </a-tag>
+              <a-switch
+                :model-value="record.enabled === 1"
+                @change="(v: boolean) => onToggleEnabled(record, v)"
+              />
             </template>
           </a-table-column>
           <a-table-column
@@ -460,6 +458,7 @@
     getConfig,
     getConfigList,
     saveConfig,
+    toggleEnabled,
   } from '@/api/equipEnhance';
   import type {
     EquipEnhanceForm,
@@ -589,6 +588,18 @@
       await loadData();
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 快速切换启用/禁用状态
+  const onToggleEnabled = async (record: EquipEnhanceForm, v: boolean) => {
+    const newEnabled = v ? 1 : 0;
+    try {
+      await toggleEnabled(record.id!, newEnabled);
+      record.enabled = newEnabled;
+      Message.success(v ? '已启用' : '已禁用');
+    } catch {
+      Message.error('操作失败');
     }
   };
 
