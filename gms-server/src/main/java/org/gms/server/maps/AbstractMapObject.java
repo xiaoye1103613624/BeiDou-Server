@@ -23,8 +23,15 @@ package org.gms.server.maps;
 
 import java.awt.*;
 
+/**
+ * 抽象地图对象
+ * 实现{@link MapObject}接口，提供地图对象的基础属性管理
+ * 包括位置、对象ID的管理，是所有地图对象的基类
+ */
 public abstract class AbstractMapObject implements MapObject {
+    /** 地图对象位置 */
     private Point position = new Point();
+    /** 地图对象唯一ID */
     private int objectId;
 
     @Override

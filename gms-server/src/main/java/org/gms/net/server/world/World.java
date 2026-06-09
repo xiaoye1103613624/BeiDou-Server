@@ -117,109 +117,192 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.gms.dao.entity.table.PlayernpcsFieldDOTableDef.PLAYERNPCS_FIELD_D_O;
 
 /**
- * @author kevintjuh93
- * @author Ronan - thread-oriented (world schedules + guild queue + marriages + party chars)
+ * 世界
+ * 管理一个世界内的所有频道、在线角色、组队、信使和好友关系等状态
  */
 public class World {
     private static final Logger log = LoggerFactory.getLogger(World.class);
 
+    /** 世界ID */
     @Getter
     private final int id;
+    /** 世界标志 */
     @Getter
     private int flag;
+    /** 经验倍率 */
     @Getter
     private float expRate;
+    /** 掉落倍率 */
     @Getter
     private float dropRate;
+    /** BOSS掉落倍率 */
     // boss rate concept thanks to Lapeiro
     @Setter
     @Getter
     private float bossDropRate;
+    /** 金币倍率 */
     @Getter
     private float mesoRate;
+    /** 任务经验倍率 */
     @Setter
     @Getter
     private float questRate;
+    /** 旅行时间倍率 */
     @Setter
     @Getter
     private float travelRate;
+    /** 钓鱼倍率 */
     @Setter
     @Getter
     private float fishingRate;
+    /** 活动消息 */
     private String eventmsg;
+    /** 频道列表 */
     private final List<Channel> channels = new ArrayList<>();
+    /** 玩家NPC步骤映射 */
     private final Map<Integer, Byte> pnpcStep = new HashMap<>();
+    /** 玩家NPC podium位置映射 */
     private final Map<Integer, Short> pnpcPodium = new HashMap<>();
+    /** 信使映射 */
     private final Map<Integer, Messenger> messengers = new HashMap<>();
+    /** 信使ID生成器 */
     private final AtomicInteger runningMessengerId = new AtomicInteger();
+    /** 家族映射 */
     private final Map<Integer, Family> families = new LinkedHashMap<>();
+    /** 玩家关系映射（玩家ID -> 关系ID） */
     private final Map<Integer, Integer> relationships = new HashMap<>();
+    /** 关系ID -> (新郎ID, 新娘ID)映射 */
     private final Map<Integer, Pair<Integer, Integer>> relationshipCouples = new HashMap<>();
+    /** 公会摘要存储 */
     private final Map<Integer, GuildSummary> gsStore = new HashMap<>();
+    /** 玩家存储 */
     private PlayerStorage players = new PlayerStorage();
+    /** 世界服务管理器 */
     private final ServicesManager services = new ServicesManager(WorldServices.SAVE_CHARACTER);
+    /** 匹配检查协调器 */
     private final MatchCheckerCoordinator matchChecker = new MatchCheckerCoordinator();
+    /** 组队搜索协调器 */
     private final PartySearchCoordinator partySearch = new PartySearchCoordinator();
 
+    /** 频道读锁 */
     private final Lock chnRLock;
+    /** 频道写锁 */
     private final Lock chnWLock;
 
+    /** 账号角色视图映射（账号ID -> 角色排序映射） */
     private final Map<Integer, SortedMap<Integer, Character>> accountChars = new HashMap<>();
+    /** 账号仓库映射 */
     private final Map<Integer, Storage> accountStorages = new HashMap<>();
+    /** 账号角色锁 */
     private final Lock accountCharsLock = new ReentrantLock(true);
 
+    /** 排队中的公会 */
     private final Set<Integer> queuedGuilds = new HashSet<>();
+    /** 排队中的婚礼映射 */
     private final Map<Integer, Pair<Pair<Boolean, Boolean>, Pair<Integer, Integer>>> queuedMarriages = new HashMap<>();
+    /** 婚礼嘉宾映射 */
     private final Map<Integer, Set<Integer>> marriageGuests = new ConcurrentHashMap<>();
 
+    /** 角色队伍映射（角色ID -> 队伍ID） */
     private final Map<Integer, Integer> partyChars = new HashMap<>();
+    /** 队伍映射 */
     private final Map<Integer, Party> parties = new HashMap<>();
+    /** 队伍ID生成器 */
     private final AtomicInteger runningPartyId = new AtomicInteger();
+    /** 队伍操作锁 */
     private final Lock partyLock = new ReentrantLock(true);
 
+    /** 猫头鹰搜索记录 */
     private final Map<Integer, Integer> owlSearched = new LinkedHashMap<>();
+    /** 现金物品购买记录（9个分类） */
     private final List<Map<Integer, Integer>> cashItemBought = new ArrayList<>(9);
 
+    /** 推荐系统读锁 */
     private final Lock suggestRLock;
+    /** 推荐系统写锁 */
     private final Lock suggestWLock;
 
-    private final Map<Integer, Integer> disabledServerMessages = new HashMap<>();    // reuse owl lock
+    /** 禁用服务器消息的玩家映射 */
+    // reuse owl lock
+    private final Map<Integer, Integer> disabledServerMessages = new HashMap<>();
+    /** 服务器消息锁 */
     private final Lock srvMessagesLock = new ReentrantLock();
+    /** 服务器消息定时任务 */
     private ScheduledFuture<?> srvMessagesSchedule;
 
+    /** 活跃宠物锁 */
     private final Lock activePetsLock = new ReentrantLock(true);
+    /** 活跃宠物映射 */
     private final Map<Integer, Integer> activePets = new LinkedHashMap<>();
+    /** 宠物定时任务 */
     private ScheduledFuture<?> petsSchedule;
+    /** 宠物更新时间 */
     private long petUpdate;
 
+    /** 活跃坐骑锁 */
     private final Lock activeMountsLock = new ReentrantLock(true);
+    /** 活跃坐骑映射 */
     private final Map<Integer, Integer> activeMounts = new LinkedHashMap<>();
+    /** 坐骑定时任务 */
     private ScheduledFuture<?> mountsSchedule;
+    /** 坐骑更新时间 */
     private long mountUpdate;
 
+    /** 活跃玩家商店锁 */
     private final Lock activePlayerShopsLock = new ReentrantLock(true);
+    /** 活跃玩家商店映射 */
     private final Map<Integer, PlayerShop> activePlayerShops = new LinkedHashMap<>();
 
+    /** 活跃雇佣商人锁 */
     private final Lock activeMerchantsLock = new ReentrantLock(true);
+    /** 活跃雇佣商人映射 */
     private final Map<Integer, Pair<HiredMerchant, Integer>> activeMerchants = new LinkedHashMap<>();
+    /** 雇佣商人定时任务 */
     private ScheduledFuture<?> merchantSchedule;
+    /** 雇佣商人更新时间 */
     private long merchantUpdate;
 
+    /** 注册的定时地图对象映射 */
     private final Map<Runnable, Long> registeredTimedMapObjects = new LinkedHashMap<>();
+    /** 定时地图对象任务 */
     private ScheduledFuture<?> timedMapObjectsSchedule;
+    /** 定时地图对象锁 */
     private final Lock timedMapObjectLock = new ReentrantLock(true);
 
+    /** 钓鱼尝试者映射 */
     private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
+    /** 玩家HP减少映射 */
     private final Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
 
+    /** 角色自动保存任务 */
     private ScheduledFuture<?> charactersSchedule;
+    /** 婚礼预约任务 */
     private ScheduledFuture<?> marriagesSchedule;
+    /** 地图占用检查任务 */
     private ScheduledFuture<?> mapOwnershipSchedule;
+    /** 钓鱼定时任务 */
     private ScheduledFuture<?> fishingSchedule;
+    /** 组队搜索定时任务 */
     private ScheduledFuture<?> partySearchSchedule;
+    /** 超时检查任务 */
     private ScheduledFuture<?> timeoutSchedule;
+    /** HP减少定时任务 */
     private ScheduledFuture<?> hpDecSchedule;
 
+    /**
+     * 构造世界
+     *
+     * @param world         世界ID
+     * @param flag          标志
+     * @param eventmsg      活动消息
+     * @param expRate       经验倍率
+     * @param dropRate      掉落倍率
+     * @param bossDropRate  BOSS掉落倍率
+     * @param mesoRate      金币倍率
+     * @param questRate     任务经验倍率
+     * @param travelRate    旅行时间倍率
+     * @param fishingRate   钓鱼倍率
+     */
     public World(int world, int flag, String eventmsg, float expRate, float dropRate, float bossDropRate, float mesoRate,
                  float questRate, float travelRate, float fishingRate) {
         this.id = world;
@@ -232,7 +315,8 @@ public class World {
         this.questRate = questRate;
         this.travelRate = travelRate;
         this.fishingRate = fishingRate;
-        runningPartyId.set(1000000001); // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
+        // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
+        runningPartyId.set(1000000001);
         runningMessengerId.set(1);
 
         ReadWriteLock channelLock = new ReentrantReadWriteLock(true);
@@ -271,6 +355,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取频道数量
+     *
+     * @return 频道数量
+     */
     public int getChannelsSize() {
         chnRLock.lock();
         try {
@@ -280,6 +369,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取频道列表
+     *
+     * @return 频道列表副本
+     */
     public List<Channel> getChannels() {
         chnRLock.lock();
         try {
@@ -289,6 +383,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取指定频道
+     *
+     * @param channel 频道号
+     * @return 频道对象，不存在返回null
+     */
     public Channel getChannel(int channel) {
         chnRLock.lock();
         try {
@@ -302,6 +402,12 @@ public class World {
         }
     }
 
+    /**
+     * 添加频道
+     *
+     * @param channel 频道对象
+     * @return 是否成功添加
+     */
     public boolean addChannel(Channel channel) {
         chnWLock.lock();
         try {
@@ -316,6 +422,11 @@ public class World {
         }
     }
 
+    /**
+     * 移除最后一个频道
+     *
+     * @return 移除的频道ID，-1表示无频道可移除
+     */
     public int removeChannel() {
         Channel ch;
         int chIdx;
@@ -351,6 +462,11 @@ public class World {
         return ch.getId();
     }
 
+    /**
+     * 是否可以卸载世界
+     *
+     * @return 是否可卸载
+     */
     public boolean canUninstall() {
         if (players.getSize() > 0) {
             return false;
@@ -365,18 +481,38 @@ public class World {
         return true;
     }
 
+    /**
+     * 设置标志
+     *
+     * @param b 标志值
+     */
     public void setFlag(byte b) {
         this.flag = b;
     }
 
+    /**
+     * 获取活动消息
+     *
+     * @return 活动消息
+     */
     public String getEventMessage() {
         return eventmsg;
     }
 
+    /**
+     * 设置活动消息
+     *
+     * @param eventMessage 活动消息
+     */
     public void setEventMessage(String eventMessage) {
         this.eventmsg = eventMessage;
     }
 
+    /**
+     * 设置经验倍率
+     *
+     * @param exp 经验倍率
+     */
     public void setExpRate(float exp) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -395,6 +531,11 @@ public class World {
         }
     }
 
+    /**
+     * 设置掉落倍率
+     *
+     * @param drop 掉落倍率
+     */
     public void setDropRate(float drop) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -413,6 +554,11 @@ public class World {
         }
     }
 
+    /**
+     * 设置金币倍率
+     *
+     * @param meso 金币倍率
+     */
     public void setMesoRate(float meso) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -431,17 +577,31 @@ public class World {
         }
     }
 
+    /**
+     * 获取交通工具实际旅行时间
+     *
+     * @param travelTime 基础旅行时间
+     * @return 实际旅行时间
+     */
+    // 交通工具、旅行时间倍率，由于支持小数，所以需要改为相乘
     public int getTransportationTime(int travelTime) {
-        return NumberTool.floatToInt(travelTime * travelRate);//交通工具、旅行时间倍率，由于支持小数，所以需要改为相乘
+        return NumberTool.floatToInt(travelTime * travelRate);
     }
 
+    /**
+     * 加载账号角色视图
+     *
+     * @param accountId 账号ID
+     * @param chars     角色列表
+     */
     public void loadAccountCharactersView(Integer accountId, List<Character> chars) {
         SortedMap<Integer, Character> charsMap = new TreeMap<>();
         for (Character chr : chars) {
             charsMap.put(chr.getId(), chr);
         }
 
-        accountCharsLock.lock();    // accountCharsLock should be used after server's lgnWLock for compliance
+        // accountCharsLock should be used after server's lgnWLock for compliance
+        accountCharsLock.lock();
         try {
             accountChars.put(accountId, charsMap);
         } finally {
@@ -449,6 +609,12 @@ public class World {
         }
     }
 
+    /**
+     * 注册账号角色视图
+     *
+     * @param accountId 账号ID
+     * @param chr       角色
+     */
     public void registerAccountCharacterView(Integer accountId, Character chr) {
         accountCharsLock.lock();
         try {
@@ -458,6 +624,12 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册账号角色视图
+     *
+     * @param accountId 账号ID
+     * @param chrId     角色ID
+     */
     public void unregisterAccountCharacterView(Integer accountId, Integer chrId) {
         accountCharsLock.lock();
         try {
@@ -467,6 +639,11 @@ public class World {
         }
     }
 
+    /**
+     * 清除账号角色视图
+     *
+     * @param accountId 账号ID
+     */
     public void clearAccountCharacterView(Integer accountId) {
         accountCharsLock.lock();
         try {
@@ -479,12 +656,22 @@ public class World {
         }
     }
 
+    /**
+     * 加载账号仓库
+     *
+     * @param accountId 账号ID
+     */
     public void loadAccountStorage(Integer accountId) {
         if (getAccountStorage(accountId) == null) {
             registerAccountStorage(accountId);
         }
     }
 
+    /**
+     * 注册账号仓库
+     *
+     * @param accountId 账号ID
+     */
     private void registerAccountStorage(Integer accountId) {
         Storage storage = Storage.loadOrCreateFromDB(accountId, this.id);
         accountCharsLock.lock();
@@ -495,6 +682,11 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册账号仓库
+     *
+     * @param accountId 账号ID
+     */
     public void unregisterAccountStorage(Integer accountId) {
         accountCharsLock.lock();
         try {
@@ -504,10 +696,22 @@ public class World {
         }
     }
 
+    /**
+     * 获取账号仓库
+     *
+     * @param accountId 账号ID
+     * @return 仓库对象
+     */
     public Storage getAccountStorage(Integer accountId) {
         return accountStorages.get(accountId);
     }
 
+    /**
+     * 获取按账号ID排序的角色视图列表
+     *
+     * @param map 账号角色视图映射
+     * @return 排序后的列表
+     */
     private static List<Entry<Integer, SortedMap<Integer, Character>>> getSortedAccountCharacterView(Map<Integer, SortedMap<Integer, Character>> map) {
         List<Entry<Integer, SortedMap<Integer, Character>>> list = new ArrayList<>(map.size());
         list.addAll(map.entrySet());
@@ -517,12 +721,23 @@ public class World {
         return list;
     }
 
+    /**
+     * 加载并获取所有角色视图
+     *
+     * @return 角色列表
+     */
     public List<Character> loadAndGetAllCharactersView() {
         Server.getInstance().loadAllAccountsCharactersView();
         return getAllCharactersView();
     }
 
-    public List<Character> getAllCharactersView() {    // sorting by accountid, charid
+    /**
+     * 获取所有角色视图（按账号ID和角色ID排序）
+     *
+     * @return 角色列表
+     */
+    // sorting by accountid, charid
+    public List<Character> getAllCharactersView() {
         List<Character> chrList = new LinkedList<>();
         Map<Integer, SortedMap<Integer, Character>> accChars;
 
@@ -540,6 +755,12 @@ public class World {
         return chrList;
     }
 
+    /**
+     * 获取账号角色视图
+     *
+     * @param accountId 账号ID
+     * @return 角色列表
+     */
     public List<Character> getAccountCharactersView(int accountId) {
         final List<Character> chrList;
 
@@ -560,29 +781,53 @@ public class World {
         return chrList;
     }
 
+    /**
+     * 获取玩家存储
+     *
+     * @return 玩家存储
+     */
     public PlayerStorage getPlayerStorage() {
         return players;
     }
 
+    /**
+     * 获取匹配检查协调器
+     *
+     * @return 匹配检查协调器
+     */
     public MatchCheckerCoordinator getMatchCheckerCoordinator() {
         return matchChecker;
     }
 
+    /**
+     * 获取组队搜索协调器
+     *
+     * @return 组队搜索协调器
+     */
     public PartySearchCoordinator getPartySearchCoordinator() {
         return partySearch;
     }
 
+    /**
+     * 添加玩家
+     *
+     * @param chr 角色对象
+     */
     public void addPlayer(Character chr) {
         players.addPlayer(chr);
     }
 
+    /**
+     * 移除玩家
+     *
+     * @param chr 角色对象
+     */
     public void removePlayer(Character chr) {
         Channel cserv = chr.getClient().getChannelServer();
 
         if (cserv != null) {
             if (!cserv.removePlayer(chr)) {
                 // oy the player is not where they should be, find this mf
-
                 for (Channel ch : getChannels()) {
                     if (ch.removePlayer(chr)) {
                         break;
@@ -594,6 +839,12 @@ public class World {
         players.removePlayer(chr.getId());
     }
 
+    /**
+     * 添加家族
+     *
+     * @param id 家族ID
+     * @param f  家族对象
+     */
     public void addFamily(int id, Family f) {
         synchronized (families) {
             if (!families.containsKey(id)) {
@@ -602,12 +853,23 @@ public class World {
         }
     }
 
+    /**
+     * 移除家族
+     *
+     * @param id 家族ID
+     */
     public void removeFamily(int id) {
         synchronized (families) {
             families.remove(id);
         }
     }
 
+    /**
+     * 获取家族
+     *
+     * @param id 家族ID
+     * @return 家族对象，不存在返回null
+     */
     public Family getFamily(int id) {
         synchronized (families) {
             if (families.containsKey(id)) {
@@ -617,12 +879,23 @@ public class World {
         }
     }
 
+    /**
+     * 获取所有家族
+     *
+     * @return 不可修改的家族集合
+     */
     public Collection<Family> getFamilies() {
         synchronized (families) {
             return Collections.unmodifiableCollection(families.values());
         }
     }
 
+    /**
+     * 获取公会
+     *
+     * @param mgc 公会角色
+     * @return 公会对象
+     */
     public Guild getGuild(GuildCharacter mgc) {
         if (mgc == null) {
             return null;
@@ -636,10 +909,20 @@ public class World {
         return g;
     }
 
+    /**
+     * 世界容量是否已满
+     *
+     * @return 是否已满
+     */
     public boolean isWorldCapacityFull() {
         return getWorldCapacityStatus() == 2;
     }
 
+    /**
+     * 获取世界容量状态
+     *
+     * @return 0正常，1超过80%，2已满
+     */
     public int getWorldCapacityStatus() {
         int worldCap = getChannelsSize() * GameConfig.getServerInt("channel_capacity");
         int num = players.getSize();
@@ -647,7 +930,8 @@ public class World {
         int status;
         if (num >= worldCap) {
             status = 2;
-        } else if (num >= worldCap * .8) { // More than 80 percent o___o
+        // More than 80 percent o___o
+        } else if (num >= worldCap * .8) {
             status = 1;
         } else {
             status = 0;
@@ -656,6 +940,13 @@ public class World {
         return status;
     }
 
+    /**
+     * 获取公会摘要
+     *
+     * @param gid 公会ID
+     * @param wid 世界ID
+     * @return 公会摘要
+     */
     public GuildSummary getGuildSummary(int gid, int wid) {
         if (gsStore.containsKey(gid)) {
             return gsStore.get(gid);
@@ -668,10 +959,19 @@ public class World {
         }
     }
 
+    /**
+     * 更新公会摘要
+     *
+     * @param gid 公会ID
+     * @param mgs 公会摘要
+     */
     public void updateGuildSummary(int gid, GuildSummary mgs) {
         gsStore.put(gid, mgs);
     }
 
+    /**
+     * 重新加载公会摘要
+     */
     public void reloadGuildSummary() {
         Guild g;
         Server server = Server.getInstance();
@@ -685,6 +985,14 @@ public class World {
         }
     }
 
+    /**
+     * 批量设置公会和等级
+     *
+     * @param cids      角色ID列表
+     * @param guildid   公会ID
+     * @param rank      等级
+     * @param exception 排除的角色ID
+     */
     public void setGuildAndRank(List<Integer> cids, int guildid, int rank, int exception) {
         for (int cid : cids) {
             if (cid != exception) {
@@ -693,6 +1001,13 @@ public class World {
         }
     }
 
+    /**
+     * 设置离线角色公会状态
+     *
+     * @param guildid   公会ID
+     * @param guildrank 公会等级
+     * @param cid       角色ID
+     */
     public void setOfflineGuildStatus(int guildid, int guildrank, int cid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = ?, guildrank = ? WHERE id = ?")) {
@@ -705,6 +1020,13 @@ public class World {
         }
     }
 
+    /**
+     * 设置角色公会和等级
+     *
+     * @param cid     角色ID
+     * @param guildid 公会ID
+     * @param rank    等级
+     */
     public void setGuildAndRank(int cid, int guildid, int rank) {
         Character mc = getPlayerStorage().getCharacterById(cid);
         if (mc == null) {
@@ -737,12 +1059,27 @@ public class World {
         }
     }
 
+    /**
+     * 变更徽章
+     *
+     * @param gid             公会ID
+     * @param affectedPlayers 受影响的玩家ID列表
+     * @param mgs             公会摘要
+     */
     public void changeEmblem(int gid, List<Integer> affectedPlayers, GuildSummary mgs) {
         updateGuildSummary(gid, mgs);
         sendPacket(affectedPlayers, GuildPackets.guildEmblemChange(gid, mgs.getLogoBG(), mgs.getLogoBGColor(), mgs.getLogo(), mgs.getLogoColor()), -1);
-        setGuildAndRank(affectedPlayers, -1, -1, -1);    //respawn player
+        // respawn player
+        setGuildAndRank(affectedPlayers, -1, -1, -1);
     }
 
+    /**
+     * 向目标玩家列表发送数据包
+     *
+     * @param targetIds 目标角色ID列表
+     * @param packet    数据包
+     * @param exception 排除的角色ID
+     */
     public void sendPacket(List<Integer> targetIds, Packet packet, int exception) {
         Character chr;
         for (int i : targetIds) {
@@ -756,37 +1093,86 @@ public class World {
         }
     }
 
+    /**
+     * 公会是否在排队中
+     *
+     * @param guildId 公会ID
+     * @return 是否在排队
+     */
     public boolean isGuildQueued(int guildId) {
         return queuedGuilds.contains(guildId);
     }
 
+    /**
+     * 添加公会排队
+     *
+     * @param guildId 公会ID
+     */
     public void putGuildQueued(int guildId) {
         queuedGuilds.add(guildId);
     }
 
+    /**
+     * 移除公会排队
+     *
+     * @param guildId 公会ID
+     */
     public void removeGuildQueued(int guildId) {
         queuedGuilds.remove(guildId);
     }
 
+    /**
+     * 婚礼是否在排队中
+     *
+     * @param marriageId 婚礼ID
+     * @return 是否在排队
+     */
     public boolean isMarriageQueued(int marriageId) {
         return queuedMarriages.containsKey(marriageId);
     }
 
+    /**
+     * 获取婚礼排队地点信息
+     *
+     * @param marriageId 婚礼ID
+     * @return 地点信息（是否大教堂，是否高级）
+     */
     public Pair<Boolean, Boolean> getMarriageQueuedLocation(int marriageId) {
         Pair<Pair<Boolean, Boolean>, Pair<Integer, Integer>> qm = queuedMarriages.get(marriageId);
         return (qm != null) ? qm.getLeft() : null;
     }
 
+    /**
+     * 获取婚礼排队新人ID
+     *
+     * @param marriageId 婚礼ID
+     * @return 新人ID对（新郎ID, 新娘ID）
+     */
     public Pair<Integer, Integer> getMarriageQueuedCouple(int marriageId) {
         Pair<Pair<Boolean, Boolean>, Pair<Integer, Integer>> qm = queuedMarriages.get(marriageId);
         return (qm != null) ? qm.getRight() : null;
     }
 
+    /**
+     * 添加婚礼排队
+     *
+     * @param marriageId 婚礼ID
+     * @param cathedral  是否大教堂
+     * @param premium    是否高级
+     * @param groomId    新郎ID
+     * @param brideId    新娘ID
+     */
     public void putMarriageQueued(int marriageId, boolean cathedral, boolean premium, int groomId, int brideId) {
         queuedMarriages.put(marriageId, new Pair<>(new Pair<>(cathedral, premium), new Pair<>(groomId, brideId)));
         marriageGuests.put(marriageId, new HashSet<>());
     }
 
+    /**
+     * 移除婚礼排队
+     *
+     * @param marriageId 婚礼ID
+     * @return 婚礼类型和嘉宾集合
+     */
     public Pair<Boolean, Set<Integer>> removeMarriageQueued(int marriageId) {
         Boolean type = queuedMarriages.remove(marriageId).getLeft().getRight();
         Set<Integer> guests = marriageGuests.remove(marriageId);
@@ -794,6 +1180,13 @@ public class World {
         return new Pair<>(type, guests);
     }
 
+    /**
+     * 添加婚礼嘉宾
+     *
+     * @param marriageId 婚礼ID
+     * @param playerId   玩家ID
+     * @return 是否添加成功
+     */
     public boolean addMarriageGuest(int marriageId, int playerId) {
         Set<Integer> guests = marriageGuests.get(marriageId);
         if (guests != null) {
@@ -808,6 +1201,13 @@ public class World {
         return false;
     }
 
+    /**
+     * 获取嘉宾对应的婚礼新人ID
+     *
+     * @param guestId   嘉宾ID
+     * @param cathedral 是否大教堂
+     * @return 新人ID对
+     */
     public Pair<Integer, Integer> getWeddingCoupleForGuest(int guestId, Boolean cathedral) {
         for (Channel ch : getChannels()) {
             Pair<Integer, Integer> p = ch.getWeddingCoupleForGuest(guestId, cathedral);
@@ -857,11 +1257,20 @@ public class World {
         return getMarriageQueuedCouple(possibleWeddings.getFirst());
     }
 
+    /**
+     * 调试婚礼状态
+     */
     public void debugMarriageStatus() {
         log.debug("Queued marriages: {}", queuedMarriages);
         log.debug("Guest list: {}", marriageGuests);
     }
 
+    /**
+     * 注册角色队伍
+     *
+     * @param chrid   角色ID
+     * @param partyid 队伍ID
+     */
     private void registerCharacterParty(Integer chrid, Integer partyid) {
         partyLock.lock();
         try {
@@ -871,10 +1280,20 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册角色队伍（内部方法，不加锁）
+     *
+     * @param chrid 角色ID
+     */
     private void unregisterCharacterPartyInternal(Integer chrid) {
         partyChars.remove(chrid);
     }
 
+    /**
+     * 取消注册角色队伍
+     *
+     * @param chrid 角色ID
+     */
     private void unregisterCharacterParty(Integer chrid) {
         partyLock.lock();
         try {
@@ -884,6 +1303,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取角色所属队伍ID
+     *
+     * @param chrid 角色ID
+     * @return 队伍ID
+     */
     public Integer getCharacterPartyid(Integer chrid) {
         partyLock.lock();
         try {
@@ -893,6 +1318,12 @@ public class World {
         }
     }
 
+    /**
+     * 创建队伍
+     *
+     * @param chrfor 队长
+     * @return 创建的队伍
+     */
     public Party createParty(PartyCharacter chrfor) {
         int partyid = runningPartyId.getAndIncrement();
         Party party = new Party(partyid, chrfor);
@@ -909,6 +1340,12 @@ public class World {
         return party;
     }
 
+    /**
+     * 获取队伍
+     *
+     * @param partyid 队伍ID
+     * @return 队伍对象
+     */
     public Party getParty(int partyid) {
         partyLock.lock();
         try {
@@ -918,6 +1355,12 @@ public class World {
         }
     }
 
+    /**
+     * 解散队伍
+     *
+     * @param partyid 队伍ID
+     * @return 被解散的队伍
+     */
     private Party disbandParty(int partyid) {
         partyLock.lock();
         try {
@@ -927,6 +1370,14 @@ public class World {
         }
     }
 
+    /**
+     * 更新角色队伍关系
+     *
+     * @param party        队伍
+     * @param operation    操作类型
+     * @param target       目标角色
+     * @param partyMembers 队伍成员列表
+     */
     private void updateCharacterParty(Party party, PartyOperation operation, PartyCharacter target, Collection<PartyCharacter> partyMembers) {
         switch (operation) {
             case JOIN:
@@ -954,6 +1405,13 @@ public class World {
         }
     }
 
+    /**
+     * 更新队伍状态
+     *
+     * @param party      队伍
+     * @param operation  操作类型
+     * @param target     目标角色
+     */
     private void updateParty(Party party, PartyOperation operation, PartyCharacter target) {
         Collection<PartyCharacter> partyMembers = party.getMembers();
         updateCharacterParty(party, operation, target, partyMembers);
@@ -985,6 +1443,14 @@ public class World {
         }
     }
 
+    /**
+     * 更新队伍（公共接口）
+     *
+     * @param partyid   队伍ID
+     * @param operation 操作类型
+     * @param target    目标角色
+     * @throws IllegalArgumentException 队伍不存在时抛出
+     */
     public void updateParty(int partyid, PartyOperation operation, PartyCharacter target) {
         Party party = getParty(partyid);
         if (party == null) {
@@ -1033,6 +1499,11 @@ public class World {
         updateParty(party, operation, target);
     }
 
+    /**
+     * 从地图中移除队伍成员
+     *
+     * @param partyid 队伍ID
+     */
     public void removeMapPartyMembers(int partyid) {
         Party party = getParty(partyid);
         if (party == null) {
@@ -1050,6 +1521,12 @@ public class World {
         }
     }
 
+    /**
+     * 按名称查找角色所在频道
+     *
+     * @param name 角色名称
+     * @return 频道号，-1表示未找到
+     */
     public int find(String name) {
         int channel = -1;
         Character chr = getPlayerStorage().getCharacterByName(name);
@@ -1059,6 +1536,12 @@ public class World {
         return channel;
     }
 
+    /**
+     * 按ID查找角色所在频道
+     *
+     * @param id 角色ID
+     * @return 频道号，-1表示未找到
+     */
     public int find(int id) {
         int channel = -1;
         Character chr = getPlayerStorage().getCharacterById(id);
@@ -1068,6 +1551,13 @@ public class World {
         return channel;
     }
 
+    /**
+     * 队伍聊天
+     *
+     * @param party     队伍
+     * @param chattext  聊天内容
+     * @param namefrom  发送者名称
+     */
     public void partyChat(Party party, String chattext, String namefrom) {
         for (PartyCharacter partychar : party.getMembers()) {
             if (!(partychar.getName().equals(namefrom))) {
@@ -1079,6 +1569,14 @@ public class World {
         }
     }
 
+    /**
+     * 好友聊天
+     *
+     * @param recipientCharacterIds 接收者角色ID数组
+     * @param cidFrom               发送者角色ID
+     * @param nameFrom              发送者名称
+     * @param chattext              聊天内容
+     */
     public void buddyChat(int[] recipientCharacterIds, int cidFrom, String nameFrom, String chattext) {
         PlayerStorage playerStorage = getPlayerStorage();
         for (int characterId : recipientCharacterIds) {
@@ -1091,6 +1589,13 @@ public class World {
         }
     }
 
+    /**
+     * 多头像查找好友（跨频道）
+     *
+     * @param charIdFrom   发起查找的角色ID
+     * @param characterIds 目标角色ID数组
+     * @return 角色ID频道对数组
+     */
     public CharacterIdChannelPair[] multiBuddyFind(int charIdFrom, int[] characterIds) {
         List<CharacterIdChannelPair> foundsChars = new ArrayList<>(characterIds.length);
         for (Channel ch : getChannels()) {
@@ -1101,10 +1606,23 @@ public class World {
         return foundsChars.toArray(new CharacterIdChannelPair[foundsChars.size()]);
     }
 
+    /**
+     * 获取信使
+     *
+     * @param messengerid 信使ID
+     * @return 信使对象
+     */
     public Messenger getMessenger(int messengerid) {
         return messengers.get(messengerid);
     }
 
+    /**
+     * 离开信使
+     *
+     * @param messengerid 信使ID
+     * @param target      离开的角色
+     * @throws IllegalArgumentException 信使不存在时抛出
+     */
     public void leaveMessenger(int messengerid, MessengerCharacter target) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1115,6 +1633,14 @@ public class World {
         removeMessengerPlayer(messenger, position);
     }
 
+    /**
+     * 信使邀请
+     *
+     * @param sender       发送者名称
+     * @param messengerid  信使ID
+     * @param target       目标名称
+     * @param fromchannel  来源频道
+     */
     public void messengerInvite(String sender, int messengerid, String target, int fromchannel) {
         if (isConnected(target)) {
             Character targetChr = getPlayerStorage().getCharacterByName(target);
@@ -1138,6 +1664,14 @@ public class World {
         }
     }
 
+    /**
+     * 添加信使玩家
+     *
+     * @param messenger   信使
+     * @param namefrom    发起者名称
+     * @param fromchannel 来源频道
+     * @param position    位置
+     */
     public void addMessengerPlayer(Messenger messenger, String namefrom, int fromchannel, int position) {
         for (MessengerCharacter messengerchar : messenger.getMembers()) {
             Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
@@ -1154,6 +1688,12 @@ public class World {
         }
     }
 
+    /**
+     * 移除信使玩家
+     *
+     * @param messenger 信使
+     * @param position  移除位置
+     */
     public void removeMessengerPlayer(Messenger messenger, int position) {
         for (MessengerCharacter messengerchar : messenger.getMembers()) {
             Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
@@ -1163,6 +1703,13 @@ public class World {
         }
     }
 
+    /**
+     * 信使聊天
+     *
+     * @param messenger 信使
+     * @param chattext  聊天内容
+     * @param namefrom  发送者名称
+     */
     public void messengerChat(Messenger messenger, String chattext, String namefrom) {
         String from = "";
         String to1 = "";
@@ -1184,6 +1731,12 @@ public class World {
         }
     }
 
+    /**
+     * 拒绝聊天
+     *
+     * @param sender 发送者名称
+     * @param player 拒绝的玩家
+     */
     public void declineChat(String sender, Character player) {
         if (isConnected(sender)) {
             Character senderChr = getPlayerStorage().getCharacterByName(sender);
@@ -1195,12 +1748,27 @@ public class World {
         }
     }
 
+    /**
+     * 更新信使
+     *
+     * @param messengerid 信使ID
+     * @param namefrom    发起者名称
+     * @param fromchannel 来源频道
+     */
     public void updateMessenger(int messengerid, String namefrom, int fromchannel) {
         Messenger messenger = getMessenger(messengerid);
         int position = messenger.getPositionByName(namefrom);
         updateMessenger(messenger, namefrom, position, fromchannel);
     }
 
+    /**
+     * 更新信使
+     *
+     * @param messenger   信使
+     * @param namefrom    发起者名称
+     * @param position    位置
+     * @param fromchannel 来源频道
+     */
     public void updateMessenger(Messenger messenger, String namefrom, int position, int fromchannel) {
         for (MessengerCharacter messengerchar : messenger.getMembers()) {
             Channel ch = getChannel(fromchannel);
@@ -1213,6 +1781,13 @@ public class World {
         }
     }
 
+    /**
+     * 静默离开信使
+     *
+     * @param messengerid 信使ID
+     * @param target      目标角色
+     * @throws IllegalArgumentException 信使不存在时抛出
+     */
     public void silentLeaveMessenger(int messengerid, MessengerCharacter target) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1221,6 +1796,15 @@ public class World {
         messenger.addMember(target, target.getPosition());
     }
 
+    /**
+     * 加入信使
+     *
+     * @param messengerid 信使ID
+     * @param target      目标角色
+     * @param from        发起者名称
+     * @param fromchannel 来源频道
+     * @throws IllegalArgumentException 信使不存在时抛出
+     */
     public void joinMessenger(int messengerid, MessengerCharacter target, String from, int fromchannel) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1230,6 +1814,14 @@ public class World {
         addMessengerPlayer(messenger, from, fromchannel, target.getPosition());
     }
 
+    /**
+     * 静默加入信使
+     *
+     * @param messengerid 信使ID
+     * @param target      目标角色
+     * @param position    位置
+     * @throws IllegalArgumentException 信使不存在时抛出
+     */
     public void silentJoinMessenger(int messengerid, MessengerCharacter target, int position) {
         Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
@@ -1238,6 +1830,12 @@ public class World {
         messenger.addMember(target, position);
     }
 
+    /**
+     * 创建信使
+     *
+     * @param chrfor 创建者
+     * @return 创建的信使
+     */
     public Messenger createMessenger(MessengerCharacter chrfor) {
         int messengerid = runningMessengerId.getAndIncrement();
         Messenger messenger = new Messenger(messengerid, chrfor);
@@ -1245,10 +1843,25 @@ public class World {
         return messenger;
     }
 
+    /**
+     * 角色是否连接
+     *
+     * @param charName 角色名称
+     * @return 是否连接
+     */
     public boolean isConnected(String charName) {
         return getPlayerStorage().getCharacterByName(charName) != null;
     }
 
+    /**
+     * 请求添加好友
+     *
+     * @param addName     目标名称
+     * @param channelFrom 来源频道
+     * @param cidFrom     来源角色ID
+     * @param nameFrom    来源名称
+     * @return 好友添加结果
+     */
     public BuddyAddResult requestBuddyAdd(String addName, int channelFrom, int cidFrom, String nameFrom) {
         Character addChar = getPlayerStorage().getCharacterByName(addName);
         if (addChar != null) {
@@ -1265,6 +1878,15 @@ public class World {
         return BuddyAddResult.OK;
     }
 
+    /**
+     * 好友变更通知
+     *
+     * @param cid       角色ID
+     * @param cidFrom   来源角色ID
+     * @param name      名称
+     * @param channel   频道
+     * @param operation 操作类型
+     */
     public void buddyChanged(int cid, int cidFrom, String name, int channel, BuddyOperation operation) {
         Character addChar = getPlayerStorage().getCharacterById(cid);
         if (addChar != null) {
@@ -1286,14 +1908,38 @@ public class World {
         }
     }
 
+    /**
+     * 玩家下线通知
+     *
+     * @param name        名称
+     * @param characterId 角色ID
+     * @param channel     频道
+     * @param buddies     好友ID数组
+     */
     public void loggedOff(String name, int characterId, int channel, int[] buddies) {
         updateBuddies(characterId, channel, buddies, true);
     }
 
+    /**
+     * 玩家上线通知
+     *
+     * @param name        名称
+     * @param characterId 角色ID
+     * @param channel     频道
+     * @param buddies     好友ID数组
+     */
     public void loggedOn(String name, int characterId, int channel, int[] buddies) {
         updateBuddies(characterId, channel, buddies, false);
     }
 
+    /**
+     * 更新好友状态
+     *
+     * @param characterId 角色ID
+     * @param channel     频道
+     * @param buddies     好友ID数组
+     * @param offline     是否离线
+     */
     private void updateBuddies(int characterId, int channel, int[] buddies, boolean offline) {
         PlayerStorage playerStorage = getPlayerStorage();
         for (int buddy : buddies) {
@@ -1316,10 +1962,23 @@ public class World {
         }
     }
 
-    private static Integer getPetKey(Character chr, byte petSlot) {    // assuming max 3 pets
+    /**
+     * 获取宠物键值
+     *
+     * @param chr     角色
+     * @param petSlot 宠物槽位
+     * @return 宠物键值
+     */
+    // assuming max 3 pets
+    private static Integer getPetKey(Character chr, byte petSlot) {
         return (chr.getId() << 2) + petSlot;
     }
 
+    /**
+     * 添加猫头鹰物品搜索记录
+     *
+     * @param itemid 物品ID
+     */
     public void addOwlItemSearch(Integer itemid) {
         suggestWLock.lock();
         try {
@@ -1329,6 +1988,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取猫头鹰搜索物品列表
+     *
+     * @return 物品搜索计数列表
+     */
     public List<Pair<Integer, Integer>> getOwlSearchedItems() {
         if (GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
             return new ArrayList<>(0);
@@ -1348,6 +2012,11 @@ public class World {
         }
     }
 
+    /**
+     * 添加现金物品购买记录
+     *
+     * @param snid 物品SN ID
+     */
     public void addCashItemBought(Integer snid) {
         suggestWLock.lock();
         try {
@@ -1358,6 +2027,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取购买现金物品统计
+     *
+     * @return 分类物品购买统计列表
+     */
     private List<List<Pair<Integer, Integer>>> getBoughtCashItems() {
         if (GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
             List<List<Pair<Integer, Integer>>> boughtCounts = new ArrayList<>(9);
@@ -1390,6 +2064,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取分类中最畅销物品
+     *
+     * @param tabSellers 分类销售列表
+     * @return 畅销物品ID列表
+     */
     private List<Integer> getMostSellerOnTab(List<Pair<Integer, Integer>> tabSellers) {
         List<Integer> tabLeaderboards;
 
@@ -1407,6 +2087,11 @@ public class World {
         return tabLeaderboards;
     }
 
+    /**
+     * 获取最畅销现金物品排行榜
+     *
+     * @return 分类畅销物品排行
+     */
     public List<List<Integer>> getMostSellerCashItems() {
         List<List<Pair<Integer, Integer>>> mostSellers = this.getBoughtCashItems();
         List<List<Integer>> cashLeaderboards = new ArrayList<>(9);
@@ -1442,6 +2127,12 @@ public class World {
         return cashLeaderboards;
     }
 
+    /**
+     * 注册宠物饥饿度
+     *
+     * @param chr     角色
+     * @param petSlot 宠物槽位
+     */
     public void registerPetHunger(Character chr, byte petSlot) {
         if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
@@ -1464,6 +2155,12 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册宠物饥饿度
+     *
+     * @param chr     角色
+     * @param petSlot 宠物槽位
+     */
     public void unregisterPetHunger(Character chr, byte petSlot) {
         Integer key = getPetKey(chr, petSlot);
 
@@ -1475,13 +2172,17 @@ public class World {
         }
     }
 
+    /**
+     * 运行宠物饥饿度定时任务
+     */
     public void runPetSchedule() {
         Map<Integer, Integer> deployedPets;
 
         activePetsLock.lock();
         try {
             petUpdate = Server.getInstance().getCurrentTime();
-            deployedPets = new HashMap<>(activePets);   // exception here found thanks to MedicOP
+            // exception here found thanks to MedicOP
+            deployedPets = new HashMap<>(activePets);
         } finally {
             activePetsLock.unlock();
         }
@@ -1507,6 +2208,11 @@ public class World {
         }
     }
 
+    /**
+     * 注册坐骑疲劳度
+     *
+     * @param chr 角色
+     */
     public void registerMountHunger(Character chr) {
         if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
@@ -1528,6 +2234,11 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册坐骑疲劳度
+     *
+     * @param chr 角色
+     */
     public void unregisterMountHunger(Character chr) {
         Integer key = chr.getId();
 
@@ -1539,6 +2250,9 @@ public class World {
         }
     }
 
+    /**
+     * 运行坐骑疲劳度定时任务
+     */
     public void runMountSchedule() {
         Map<Integer, Integer> deployedMounts;
         activeMountsLock.lock();
@@ -1572,6 +2286,11 @@ public class World {
         }
     }
 
+    /**
+     * 注册玩家商店
+     *
+     * @param ps 玩家商店
+     */
     public void registerPlayerShop(PlayerShop ps) {
         activePlayerShopsLock.lock();
         try {
@@ -1581,6 +2300,11 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册玩家商店
+     *
+     * @param ps 玩家商店
+     */
     public void unregisterPlayerShop(PlayerShop ps) {
         activePlayerShopsLock.lock();
         try {
@@ -1590,6 +2314,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取活跃玩家商店列表
+     *
+     * @return 活跃玩家商店列表
+     */
     public List<PlayerShop> getActivePlayerShops() {
         activePlayerShopsLock.lock();
         try {
@@ -1599,6 +2328,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取玩家商店
+     *
+     * @param ownerid 所有者ID
+     * @return 玩家商店
+     */
     public PlayerShop getPlayerShop(int ownerid) {
         activePlayerShopsLock.lock();
         try {
@@ -1608,6 +2343,11 @@ public class World {
         }
     }
 
+    /**
+     * 注册雇佣商人
+     *
+     * @param hm 雇佣商人
+     */
     public void registerHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
@@ -1624,6 +2364,11 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册雇佣商人
+     *
+     * @param hm 雇佣商人
+     */
     public void unregisterHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
@@ -1633,6 +2378,9 @@ public class World {
         }
     }
 
+    /**
+     * 运行雇佣商人管理定时任务
+     */
     public void runHiredMerchantSchedule() {
         Map<Integer, Pair<HiredMerchant, Integer>> deployedMerchants;
         activeMerchantsLock.lock();
@@ -1644,7 +2392,8 @@ public class World {
                 int timeOn = dm.getValue().getRight();
                 HiredMerchant hm = dm.getValue().getLeft();
 
-                if (timeOn <= 144) {   // 1440 minutes == 24hrs
+                // 1440 minutes == 24hrs
+                if (timeOn <= 144) {
                     activeMerchants.put(hm.getOwnerId(), new Pair<>(dm.getValue().getLeft(), timeOn + 1));
                 } else {
                     hm.forceClose();
@@ -1658,6 +2407,11 @@ public class World {
         }
     }
 
+    /**
+     * 获取活跃雇佣商人列表
+     *
+     * @return 活跃雇佣商人列表
+     */
     public List<HiredMerchant> getActiveMerchants() {
         List<HiredMerchant> hmList = new ArrayList<>();
         activeMerchantsLock.lock();
@@ -1675,6 +2429,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取雇佣商人
+     *
+     * @param ownerid 所有者ID
+     * @return 雇佣商人，不存在返回null
+     */
     public HiredMerchant getHiredMerchant(int ownerid) {
         activeMerchantsLock.lock();
         try {
@@ -1688,6 +2448,12 @@ public class World {
         }
     }
 
+    /**
+     * 注册定时地图对象
+     *
+     * @param r        可执行任务
+     * @param duration 持续时间
+     */
     public void registerTimedMapObject(Runnable r, long duration) {
         timedMapObjectLock.lock();
         try {
@@ -1698,6 +2464,9 @@ public class World {
         }
     }
 
+    /**
+     * 运行定时地图对象清理任务
+     */
     public void runTimedMapObjectSchedule() {
         List<Runnable> toRemove = new LinkedList<>();
 
@@ -1723,14 +2492,27 @@ public class World {
         }
     }
 
+    /**
+     * 添加玩家HP减少
+     *
+     * @param chr 角色
+     */
     public void addPlayerHpDecrease(Character chr) {
         playerHpDec.putIfAbsent(chr, 0);
     }
 
+    /**
+     * 移除玩家HP减少
+     *
+     * @param chr 角色
+     */
     public void removePlayerHpDecrease(Character chr) {
         playerHpDec.remove(chr);
     }
 
+    /**
+     * 运行玩家HP减少定时任务
+     */
     public void runPlayerHpDecreaseSchedule() {
         Map<Character, Integer> m = new HashMap<>(playerHpDec);
 
@@ -1749,6 +2531,9 @@ public class World {
         }
     }
 
+    /**
+     * 重置禁用服务器消息
+     */
     public void resetDisabledServerMessages() {
         srvMessagesLock.lock();
         try {
@@ -1758,6 +2543,12 @@ public class World {
         }
     }
 
+    /**
+     * 注册禁用服务器消息
+     *
+     * @param chrid 角色ID
+     * @return 是否已经禁用
+     */
     public boolean registerDisabledServerMessage(int chrid) {
         srvMessagesLock.lock();
         try {
@@ -1770,6 +2561,12 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册禁用服务器消息
+     *
+     * @param chrid 角色ID
+     * @return 是否取消成功
+     */
     public boolean unregisterDisabledServerMessage(int chrid) {
         srvMessagesLock.lock();
         try {
@@ -1779,6 +2576,10 @@ public class World {
         }
     }
 
+    /**
+     * 运行禁用服务器消息定时任务
+     */
+    // ~35sec duration, 10sec update
     public void runDisabledServerMessagesSchedule() {
         List<Integer> toRemove = new LinkedList<>();
 
@@ -1786,7 +2587,7 @@ public class World {
         try {
             for (Entry<Integer, Integer> dsm : disabledServerMessages.entrySet()) {
                 int b = dsm.getValue();
-                if (b >= 4) {   // ~35sec duration, 10sec update
+                if (b >= 4) {
                     toRemove.add(dsm.getKey());
                 } else {
                     disabledServerMessages.put(dsm.getKey(), ++b);
@@ -1811,18 +2612,46 @@ public class World {
         }
     }
 
+    /**
+     * 设置玩家NPC地图步骤
+     *
+     * @param mapid 地图ID
+     * @param step  步骤
+     */
     public void setPlayerNpcMapStep(int mapid, int step) {
         setPlayerNpcMapData(mapid, step, -1, false);
     }
 
+    /**
+     * 设置玩家NPC地图podium数据
+     *
+     * @param mapid  地图ID
+     * @param podium podium值
+     */
     public void setPlayerNpcMapPodiumData(int mapid, int podium) {
         setPlayerNpcMapData(mapid, -1, podium, false);
     }
 
+    /**
+     * 设置玩家NPC地图数据
+     *
+     * @param mapid 地图ID
+     * @param step  步骤
+     * @param podium podium值
+     */
     public void setPlayerNpcMapData(int mapid, int step, int podium) {
         setPlayerNpcMapData(mapid, step, podium, true);
     }
 
+    /**
+     * 执行玩家NPC地图数据数据库更新
+     *
+     * @param isPodium      是否podium数据
+     * @param pnpcData      缓存数据
+     * @param value         值
+     * @param worldId       世界ID
+     * @param mapId         地图ID
+     */
     private static void executePlayerNpcMapDataUpdate(boolean isPodium, Map<Integer, ?> pnpcData, int value, int worldId, int mapId) {
         PlayernpcsFieldMapper playernpcsFieldMapper = ServerManager.getApplicationContext().getBean(PlayernpcsFieldMapper.class);
         PlayernpcsFieldDO playernpcsFieldDO = new PlayernpcsFieldDO();
@@ -1844,6 +2673,14 @@ public class World {
         }
     }
 
+    /**
+     * 设置玩家NPC地图数据
+     *
+     * @param mapId  地图ID
+     * @param step   步骤
+     * @param podium podium值
+     * @param silent 是否静默（不写入数据库）
+     */
     private void setPlayerNpcMapData(int mapId, int step, int podium, boolean silent) {
         if (!silent) {
             if (step != -1) {
@@ -1862,6 +2699,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取玩家NPC地图步骤
+     *
+     * @param mapid 地图ID
+     * @return 步骤值
+     */
     public int getPlayerNpcMapStep(int mapid) {
         try {
             return pnpcStep.get(mapid);
@@ -1870,6 +2713,12 @@ public class World {
         }
     }
 
+    /**
+     * 获取玩家NPC地图podium数据
+     *
+     * @param mapid 地图ID
+     * @return podium值
+     */
     public int getPlayerNpcMapPodiumData(int mapid) {
         try {
             return pnpcPodium.get(mapid);
@@ -1878,23 +2727,42 @@ public class World {
         }
     }
 
+    /**
+     * 重置所有玩家NPC地图数据
+     */
     public void resetPlayerNpcMapData() {
         pnpcStep.clear();
         pnpcPodium.clear();
     }
 
+    /**
+     * 设置服务器消息
+     *
+     * @param msg 消息内容
+     */
     public void setServerMessage(String msg) {
         for (Channel ch : getChannels()) {
             ch.setServerMessage(msg);
         }
     }
 
+    /**
+     * 向全世界广播数据包
+     *
+     * @param packet 数据包
+     */
     public void broadcastPacket(Packet packet) {
         for (Character chr : players.getAllCharacters()) {
             chr.sendPacket(packet);
         }
     }
 
+    /**
+     * 获取可用物品捆绑列表
+     *
+     * @param itemid 物品ID
+     * @return 物品捆绑列表
+     */
     public List<Pair<PlayerShopItem, AbstractMapObject>> getAvailableItemBundles(int itemid) {
         List<Pair<PlayerShopItem, AbstractMapObject>> hmsAvailable = new ArrayList<>();
 
@@ -1916,10 +2784,16 @@ public class World {
 
         hmsAvailable.sort((p1, p2) -> p1.getLeft().getPrice() - p2.getLeft().getPrice());
 
-        hmsAvailable.subList(0, Math.min(hmsAvailable.size(), 200));    //truncates the list to have up to 200 elements
+        // truncates the list to have up to 200 elements
+        hmsAvailable.subList(0, Math.min(hmsAvailable.size(), 200));
         return hmsAvailable;
     }
 
+    /**
+     * 推送关系对
+     *
+     * @param couple 关系对（关系ID, (新郎ID, 新娘ID)）
+     */
     private void pushRelationshipCouple(Pair<Integer, Pair<Integer, Integer>> couple) {
         int mid = couple.getLeft(), hid = couple.getRight().getLeft(), wid = couple.getRight().getRight();
         relationshipCouples.put(mid, couple.getRight());
@@ -1927,6 +2801,12 @@ public class World {
         relationships.put(wid, mid);
     }
 
+    /**
+     * 获取关系新人ID对
+     *
+     * @param relationshipId 关系ID
+     * @return 新人ID对
+     */
     public Pair<Integer, Integer> getRelationshipCouple(int relationshipId) {
         Pair<Integer, Integer> rc = relationshipCouples.get(relationshipId);
 
@@ -1943,6 +2823,12 @@ public class World {
         return rc;
     }
 
+    /**
+     * 获取玩家关系ID
+     *
+     * @param playerId 玩家ID
+     * @return 关系ID，-1表示无
+     */
     public int getRelationshipId(int playerId) {
         Integer ret = relationships.get(playerId);
 
@@ -1959,6 +2845,13 @@ public class World {
         return ret;
     }
 
+    /**
+     * 从数据库获取关系新人信息
+     *
+     * @param id              依据ID
+     * @param usingMarriageId 是否按婚姻ID查询
+     * @return 关系新人对
+     */
     private static Pair<Integer, Pair<Integer, Integer>> getRelationshipCoupleFromDb(int id, boolean usingMarriageId) {
         try (Connection con = DatabaseConnection.getConnection()) {
             Integer mid = null, hid = null, wid = null;
@@ -1990,6 +2883,13 @@ public class World {
         }
     }
 
+    /**
+     * 创建关系（婚姻）
+     *
+     * @param groomId 新郎ID
+     * @param brideId 新娘ID
+     * @return 关系ID
+     */
     public int createRelationship(int groomId, int brideId) {
         int ret = addRelationshipToDb(groomId, brideId);
 
@@ -1997,6 +2897,13 @@ public class World {
         return ret;
     }
 
+    /**
+     * 向数据库添加关系
+     *
+     * @param groomId 新郎ID
+     * @param brideId 新娘ID
+     * @return 关系ID
+     */
     private static int addRelationshipToDb(int groomId, int brideId) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO marriages (husbandid, wifeid) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -2014,6 +2921,12 @@ public class World {
         }
     }
 
+    /**
+     * 删除关系（婚姻）
+     *
+     * @param playerId  玩家ID
+     * @param partnerId 伴侣ID
+     */
     public void deleteRelationship(int playerId, int partnerId) {
         int relationshipId = relationships.get(playerId);
         deleteRelationshipFromDb(relationshipId);
@@ -2023,6 +2936,11 @@ public class World {
         relationships.remove(partnerId);
     }
 
+    /**
+     * 从数据库删除关系
+     *
+     * @param playerId 关系ID
+     */
     private static void deleteRelationshipFromDb(int playerId) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM marriages WHERE marriageid = ?")) {
@@ -2033,12 +2951,25 @@ public class World {
         }
     }
 
+    /**
+     * 向全世界广播消息
+     *
+     * @param type    消息类型
+     * @param message 消息内容
+     */
     public void dropMessage(int type, String message) {
         for (Character player : getPlayerStorage().getAllCharacters()) {
             player.dropMessage(type, message);
         }
     }
 
+    /**
+     * 注册钓鱼玩家
+     *
+     * @param chr       角色
+     * @param baitLevel 鱼饵等级
+     * @return 是否注册成功
+     */
     public boolean registerFisherPlayer(Character chr, int baitLevel) {
         synchronized (fishingAttempters) {
             if (fishingAttempters.containsKey(chr)) {
@@ -2050,6 +2981,12 @@ public class World {
         }
     }
 
+    /**
+     * 取消注册钓鱼玩家
+     *
+     * @param chr 角色
+     * @return 鱼饵等级
+     */
     public int unregisterFisherPlayer(Character chr) {
         Integer baitLevel = fishingAttempters.remove(chr);
         if (baitLevel != null) {
@@ -2059,6 +2996,9 @@ public class World {
         }
     }
 
+    /**
+     * 运行钓鱼检查定时任务
+     */
     public void runCheckFishingSchedule() {
         double[] fishingLikelihoods = Fishing.fetchFishingLikelihood();
         double yearLikelihood = fishingLikelihoods[0], timeLikelihood = fishingLikelihoods[1];
@@ -2077,19 +3017,34 @@ public class World {
         }
     }
 
+    /**
+     * 运行组队搜索定时任务
+     */
     public void runPartySearchUpdateSchedule() {
         partySearch.updatePartySearchStorage();
         partySearch.runPartySearch();
     }
 
+    /**
+     * 获取世界服务
+     *
+     * @param sv 服务类型
+     * @return 服务实例
+     */
     public BaseService getServiceAccess(WorldServices sv) {
         return services.getAccess(sv).getService();
     }
 
+    /**
+     * 关闭世界服务
+     */
     private void closeWorldServices() {
         services.shutdown();
     }
 
+    /**
+     * 清除世界数据
+     */
     private void clearWorldData() {
         List<Party> pList;
         partyLock.lock();
@@ -2102,6 +3057,9 @@ public class World {
         closeWorldServices();
     }
 
+    /**
+     * 关闭世界
+     */
     public final void shutdown() {
         for (Channel ch : getChannels()) {
             ch.shutdown();

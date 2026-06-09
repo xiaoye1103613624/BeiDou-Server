@@ -29,9 +29,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
 
 /**
+ * Buff奖励动作
+ * 给玩家施加指定道具效果，作为任务奖励
+ *
  * @author Tyler (Twdtwd)
  */
 public class BuffAction extends AbstractQuestAction {
+    /** 道具效果ID */
     int itemEffect;
 
     public BuffAction(Quest quest, Data data) {
@@ -53,4 +57,4 @@ public class BuffAction extends AbstractQuestAction {
     public void run(Character chr, Integer extSelection) {
         ItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
     }
-} 
+}

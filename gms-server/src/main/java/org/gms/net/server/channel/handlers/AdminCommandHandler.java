@@ -42,7 +42,12 @@ import org.gms.util.Randomizer;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * GM管理命令处理器
+ * 处理管理员（GM）命令，包括召唤怪物、封禁、隐藏、击杀、传送等操作
+ */
 public final class AdminCommandHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(AdminCommandHandler.class);
 
     @Override

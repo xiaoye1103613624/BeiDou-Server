@@ -32,15 +32,32 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
+/**
+ * 便签操作处理器
+ * 处理便签（Note）的发送和删除操作，包括商城感谢回复和游戏内便签丢弃
+ */
 public final class NoteActionHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(NoteActionHandler.class);
 
+    /** 便签服务 */
     private final NoteService noteService;
 
+    /**
+     * 构造便签操作处理器
+     *
+     * @param noteService 便签服务实例
+     */
     public NoteActionHandler(NoteService noteService) {
         this.noteService = noteService;
     }
 
+    /**
+     * 处理便签操作包，根据操作类型执行发送（商城感谢回复）或丢弃（获得声望）操作
+     *
+     * @param p 输入数据包，包含操作类型和便签数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         int action = p.readByte();

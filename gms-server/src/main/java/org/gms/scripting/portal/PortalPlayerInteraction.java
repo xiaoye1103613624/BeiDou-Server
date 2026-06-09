@@ -33,7 +33,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 传送门玩家交互
+ * 封装传送门相关的玩家交互操作，继承自AbstractPlayerInteraction
+ */
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
+    /** 关联的传送门对象 */
     private final Portal portal;
 
     public PortalPlayerInteraction(Client c, Portal portal) {
@@ -41,15 +46,29 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
         this.portal = portal;
     }
 
+    /**
+     * 获取关联的传送门
+     *
+     * @return 传送门对象
+     */
     public Portal getPortal() {
         return portal;
     }
 
+    /**
+     * 执行地图进入脚本
+     */
     public void runMapScript() {
         MapScriptManager msm = MapScriptManager.getInstance();
         msm.runMapScript(c, "onUserEnter/" + portal.getScriptName(), false);
     }
 
+    /**
+     * 判断玩家账号下是否有等级≥30的角色
+     * 先查数据库，再检查当前角色等级
+     *
+     * @return 是否有30级以上角色
+     */
     public boolean hasLevel30Character() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT `level` FROM `characters` WHERE accountid = ?")) {
@@ -69,14 +88,23 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
         return getPlayer().getLevel() >= 30;
     }
 
+    /**
+     * 封锁当前传送门，禁止该玩家使用
+     */
     public void blockPortal() {
         c.getPlayer().blockPortal(getPortal().getScriptName());
     }
 
+    /**
+     * 解除当前传送门封锁
+     */
     public void unblockPortal() {
         c.getPlayer().unblockPortal(getPortal().getScriptName());
     }
 
+    /**
+     * 播放传送门生效音效
+     */
     public void playPortalSound() {
         c.sendPacket(PacketCreator.playPortalSound());
     }

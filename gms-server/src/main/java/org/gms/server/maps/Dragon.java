@@ -26,9 +26,19 @@ import org.gms.client.Client;
 import org.gms.util.PacketCreator;
 
 
+/**
+ * 龙
+ * 表示玩家召唤的龙（Evan职业），继承自AbstractAnimatedMapObject，跟随玩家位置和姿态
+ */
 public class Dragon extends AbstractAnimatedMapObject {
+    /** 龙所属玩家 */
     private final Character owner;
 
+    /**
+     * 构造方法，创建龙并同步玩家的位置和姿态，立即发送生成数据
+     *
+     * @param chr 龙所属玩家
+     */
     public Dragon(Character chr) {
         super();
         this.owner = chr;
@@ -47,6 +57,9 @@ public class Dragon extends AbstractAnimatedMapObject {
         client.sendPacket(PacketCreator.spawnDragon(this));
     }
 
+    /**
+     * 龙的对象ID使用拥有者的角色ID
+     */
     @Override
     public int getObjectId() {
         return owner.getId();
@@ -57,6 +70,9 @@ public class Dragon extends AbstractAnimatedMapObject {
         c.sendPacket(PacketCreator.removeDragon(owner.getId()));
     }
 
+    /**
+     * 获取龙所属玩家
+     */
     public Character getOwner() {
         return owner;
     }

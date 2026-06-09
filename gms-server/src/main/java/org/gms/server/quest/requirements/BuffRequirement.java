@@ -26,9 +26,14 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * Buff需求
+ * 检查玩家是否拥有指定来源的Buff效果
+ * 不满足条件则无法接取或完成任务
+ *
  * @author Ronan
  */
 public class BuffRequirement extends AbstractQuestRequirement {
+    /** Buff ID，道具Buff为负数 */
     private int buffId = 1;
 
     public BuffRequirement(Quest quest, Data data) {

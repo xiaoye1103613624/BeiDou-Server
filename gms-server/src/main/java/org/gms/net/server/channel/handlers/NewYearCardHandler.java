@@ -37,12 +37,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 新年贺卡处理器
+ * 处理新年贺卡的发送和接收操作
+ *
  * @author Ronan
  * <p>
  * Header layout thanks to Eric
  */
 public final class NewYearCardHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理新年贺卡包，根据请求模式（发送/接收）执行对应的贺卡操作逻辑
+     *
+     * @param p 输入数据包，包含贺卡操作模式和贺卡数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         final Character player = c.getPlayer();
@@ -128,6 +137,13 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 根据接收者名称查找角色ID
+     *
+     * @param receiver 接收者角色名称
+     * @param world    所在世界ID
+     * @return 接收者角色ID，如果未找到返回-1
+     */
     private static int getReceiverId(String receiver, int world) {
         try (Connection con = DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement("SELECT id, world FROM characters WHERE name LIKE ?")) {
@@ -147,6 +163,14 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
         return -1;
     }
 
+    /**
+     * 验证新年贺卡物品状态是否有效
+     *
+     * @param itemid 物品ID
+     * @param player 玩家角色
+     * @param slot   物品栏位
+     * @return 0表示有效，其他值表示错误码
+     */
     private static int getValidNewYearCardStatus(int itemid, Character player, short slot) {
         if (!ItemConstants.isNewYearCardUse(itemid)) {
             return 0x14;

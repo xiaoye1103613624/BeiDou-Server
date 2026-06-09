@@ -25,7 +25,24 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 生命体移动片段接口
+ * 定义移动片段的基础行为：序列化到数据包和获取位置
+ *
+ * @author Patrick Huy
+ */
 public interface LifeMovementFragment {
-    void serialize(OutPacket p);
+    /**
+     * 序列化移动片段到输出包
+     *
+     * @param outPacket 输出包
+     */
+    void serialize(OutPacket outPacket);
+
+    /**
+     * 获取移动终点位置
+     *
+     * @return 终点位置
+     */
     Point getPosition();
 }

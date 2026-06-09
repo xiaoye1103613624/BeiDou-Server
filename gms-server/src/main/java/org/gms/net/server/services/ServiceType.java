@@ -20,6 +20,9 @@
 package org.gms.net.server.services;
 
 /**
+ * 服务类型接口
+ * 定义游戏服务类型的通用行为：创建服务实例和枚举值访问
+ *
  * @author Ronan
  */
 public interface ServiceType<T extends Enum<?>> {

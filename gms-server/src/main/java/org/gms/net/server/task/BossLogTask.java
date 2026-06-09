@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.server.expeditions.ExpeditionBossLog;
 
 /**
+ * Boss日志重置定时任务
+ * 定期重置Boss击杀日志表，用于控制Boss副本的进入次数限制
+ *
  * @author Ronan
  */
 public class BossLogTask implements Runnable {

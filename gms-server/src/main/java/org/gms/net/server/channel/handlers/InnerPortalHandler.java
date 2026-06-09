@@ -31,11 +31,14 @@ import org.gms.server.maps.Portal;
 import java.awt.Point;
 
 /**
+ * 内传送门处理器
+ * 处理玩家通过内传送门（同图传送点）的传送操作
+ *
  * @author BubblesDev
  */
 public final class InnerPortalHandler extends AbstractPacketHandler {
-    // 玩家需要处在内传送门附近，才认为这是一次有效“树洞/内传送”触发
-    private static final double INNER_PORTAL_TRIGGER_DISTANCE_SQ = 90000.0; // 约 300 像素
+    /** 内传送门触发距离阈值（平方），约300像素 */
+    private static final double INNER_PORTAL_TRIGGER_DISTANCE_SQ = 90000.0;
 
     @Override
     public final void handlePacket(InPacket p, Client c) {

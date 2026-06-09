@@ -21,12 +21,22 @@
 */
 package org.gms.client;
 
+/**
+ * 技能宏
+ * 封装玩家自定义的技能宏配置：绑定3个技能、名称、快捷喊话和位置
+ */
 public class SkillMacro {
+    /** 宏绑定的技能1 */
     private int skill1;
+    /** 宏绑定的技能2 */
     private int skill2;
+    /** 宏绑定的技能3 */
     private int skill3;
+    /** 宏名称 */
     private final String name;
+    /** 喊话内容 */
     private final int shout;
+    /** 宏位置 */
     private final int position;
 
     public SkillMacro(int skill1, int skill2, int skill3, String name, int shout, int position) {

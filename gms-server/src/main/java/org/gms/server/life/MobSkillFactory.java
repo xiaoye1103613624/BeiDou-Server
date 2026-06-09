@@ -40,22 +40,48 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 怪物技能工厂
+ * 从WZ文件中加载和缓存怪物技能配置，使用读写锁保证线程安全
+ * 支持按类型和等级获取技能，缓存未命中时动态加载
+ *
  * @author Danny (Leifde)
  */
 public class MobSkillFactory {
+    /** 怪物技能缓存 */
     private static final Map<String, MobSkill> mobSkills = new HashMap<>();
+    /** WZ技能数据源 */
     private static final DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
+    /** 技能根数据 */
     private static final Data skillRoot = dataSource.getData("MobSkill.img");
+    /** 读写锁 */
     private static final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    /** 读锁 */
     private static final Lock readLock = readWriteLock.readLock();
+    /** 写锁 */
     private static final Lock writeLock = readWriteLock.writeLock();
 
+    /**
+     * 获取怪物技能，不存在时抛出异常
+     *
+     * @param type 技能类型
+     * @param level 技能等级
+     * @return 怪物技能
+     * @throws IllegalArgumentException 技能不存在时抛出
+     */
     public static MobSkill getMobSkillOrThrow(MobSkillType type, int level) {
         return getMobSkill(type, level).orElseThrow(
                 () -> new IllegalArgumentException("No MobSkill exists for type %s, level %d".formatted(type, level))
         );
     }
 
+    /**
+     * 获取怪物技能
+     * 先使用读锁从缓存查找，未命中则使用写锁从WZ文件加载
+     *
+     * @param type 技能类型
+     * @param level 技能等级
+     * @return 包含怪物技能的Optional
+     */
     public static Optional<MobSkill> getMobSkill(final MobSkillType type, final int level) {
         readLock.lock();
         try {
@@ -70,6 +96,14 @@ public class MobSkillFactory {
         return loadMobSkill(type, level);
     }
 
+    /**
+     * 从WZ文件加载怪物技能
+     * 使用写锁和双重检查锁定，避免重复加载
+     *
+     * @param type 技能类型
+     * @param level 技能等级
+     * @return 包含已加载技能的Optional
+     */
     private static Optional<MobSkill> loadMobSkill(final MobSkillType type, final int level) {
         writeLock.lock();
         try {
@@ -93,9 +127,9 @@ public class MobSkillFactory {
             }
             int effect = DataTool.getInt("summonEffect", skillData, 0);
             int hp = DataTool.getInt("hp", skillData, 100);
-            int x = DataTool.getInt("x", skillData, 1);
-            int y = DataTool.getInt("y", skillData, 1);
-            int count = DataTool.getInt("count", skillData, 1);
+            int x = DataTool.getInt("x", skillData, 100);
+            int y = DataTool.getInt("y", skillData, 100);
+            int count = DataTool.getInt("count", skillData, 100);
             long duration = SECONDS.toMillis(DataTool.getInt("time", skillData, 0));
             long cooltime = SECONDS.toMillis(DataTool.getInt("interval", skillData, 0));
             int iprop = DataTool.getInt("prop", skillData, 100);
@@ -133,6 +167,13 @@ public class MobSkillFactory {
         }
     }
 
+    /**
+     * 生成缓存键
+     *
+     * @param type 技能类型
+     * @param skillLevel 技能等级
+     * @return 缓存键字符串
+     */
     private static String createKey(MobSkillType type, int skillLevel) {
         return type.getId() + "" + skillLevel;
     }

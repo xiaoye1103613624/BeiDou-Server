@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 坐骑疲劳度定时任务
+ * 定期更新在线玩家坐骑的疲劳度状态
+ *
  * @author Ronan
  */
 public class MountTirednessTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class MountTirednessTask extends BaseTask implements Runnable {
         wserv.runMountSchedule();
     }
 
+    /**
+     * 构造坐骑疲劳度定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public MountTirednessTask(World world) {
         super(world);
     }

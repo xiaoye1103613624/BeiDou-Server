@@ -67,10 +67,19 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 抽象伤害处理基类
+ * 提供近战和魔法攻击的通用伤害解析、距离检测和攻击应用逻辑
+ */
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
 
+    /**
+     * 攻击信息容器
+     * 存储一次攻击的所有相关数据，包括攻击目标、伤害值、技能信息等
+     */
     public static class AttackInfo {
 
         public int numAttacked, numDamage, numAttackedAndDamage, skill, skilllevel, stance, direction, rangedirection, charge, display;
@@ -79,6 +88,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         public int speed = 4;
         public Point position = new Point();
 
+        /**
+         * 获取本次攻击对应的技能效果
+         *
+         * @param chr 角色
+         * @param theSkill 技能，为null时根据attack.skill查找
+         * @return 技能效果，等级为0时返回null
+         */
         public StatEffect getAttackEffect(Character chr, Skill theSkill) {
             Skill mySkill = theSkill;
             if (mySkill == null) {
@@ -123,6 +139,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 应用攻击伤害到怪物，包含距离检测、元素计算、技能特殊效果等逻辑
+     *
+     * @param attack 攻击信息
+     * @param player 攻击者
+     * @param attackCount 攻击次数
+     */
     protected void applyAttack(AttackInfo attack, final Character player, int attackCount) {
         final MapleMap map = player.getMap();
         if (map.isOwnershipRestricted(player)) {
@@ -636,6 +659,16 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 使用特定技能对怪物造成伤害（支持动画延迟）
+     *
+     * @param attacker 攻击者
+     * @param map 当前地图
+     * @param monster 目标怪物
+     * @param damage 伤害值
+     * @param skillid 技能ID
+     * @param fixedTime 固定动画时间，0表示使用技能的默认动画时间
+     */
     private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final int damage, int skillid, int fixedTime) {
         int animationTime;
 
@@ -656,6 +689,15 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 解析客户端攻击包，提取伤害、技能、目标等攻击信息
+     *
+     * @param p 输入数据包
+     * @param chr 攻击角色
+     * @param ranged 是否为远程攻击
+     * @param magic 是否为魔法攻击
+     * @return 解析后的攻击信息
+     */
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {
         //2C 00 00 01 91 A1 12 00 A5 57 62 FC E2 75 99 10 00 47 80 01 04 01 C6 CC 02 DD FF 5F 00
 

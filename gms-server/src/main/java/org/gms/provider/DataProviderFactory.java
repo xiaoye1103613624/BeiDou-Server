@@ -26,11 +26,27 @@ import org.gms.provider.wz.XMLWZFile;
 
 import java.nio.file.Path;
 
+/**
+ * 数据提供者工厂类
+ * 根据WZ文件枚举创建对应的XML数据提供者
+ */
 public class DataProviderFactory {
+    /**
+     * 从WZ文件路径创建数据提供者
+     *
+     * @param in WZ文件路径
+     * @return XMLWZFile数据提供者
+     */
     private static DataProvider getWZ(Path in) {
         return new XMLWZFile(in);
     }
 
+    /**
+     * 根据WZ文件枚举获取数据提供者
+     *
+     * @param in WZ文件枚举
+     * @return 数据提供者实例
+     */
     public static DataProvider getDataProvider(WZFiles in) {
         return getWZ(in.getFile());
     }

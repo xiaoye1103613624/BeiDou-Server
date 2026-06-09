@@ -39,17 +39,39 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 婚礼
+ * 管理婚礼事件流程，包括订婚戒指交换、愿望清单、结婚证制作等
+ * 继承EventInstanceManager，在独立事件实例中运行
+ *
  * @author Ronan
  */
 public class Marriage extends EventInstanceManager {
+    /**
+     * 构造函数
+     *
+     * @param em   事件管理器
+     * @param name 事件名称
+     */
     public Marriage(EventManager em, String name) {
         super(em, name);
     }
 
+    /**
+     * 向配偶赠送物品
+     *
+     * @param cid 角色ID
+     * @return 是否为愿望清单模式（非转账模式）
+     */
     public boolean giftItemToSpouse(int cid) {
         return this.getIntProperty("wishlistSelection") == 0;
     }
 
+    /**
+     * 获取愿望清单物品列表
+     *
+     * @param groom true=新郎, false=新娘
+     * @return 愿望清单行数组
+     */
     public List<String> getWishlistItems(boolean groom) {
         String strItems = this.getProperty(groom ? "groomWishlist" : "brideWishlist");
         if (strItems != null) {
@@ -59,6 +81,9 @@ public class Marriage extends EventInstanceManager {
         return new LinkedList<>();
     }
 
+    /**
+     * 初始化礼物列表
+     */
     public void initializeGiftItems() {
         List<Item> groomGifts = new ArrayList<>();
         this.setObjectProperty("groomGiftlist", groomGifts);
@@ -67,6 +92,13 @@ public class Marriage extends EventInstanceManager {
         this.setObjectProperty("brideGiftlist", brideGifts);
     }
 
+    /**
+     * 获取礼物列表
+     *
+     * @param c     客户端
+     * @param groom true=新郎, false=新娘
+     * @return 礼物列表副本
+     */
     public List<Item> getGiftItems(Client c, boolean groom) {
         List<Item> gifts = getGiftItemsList(groom);
         synchronized (gifts) {
@@ -74,10 +106,24 @@ public class Marriage extends EventInstanceManager {
         }
     }
 
+    /**
+     * 获取礼物列表（内部方法，直接返回原列表）
+     *
+     * @param groom true=新郎, false=新娘
+     * @return 礼物列表
+     */
     private List<Item> getGiftItemsList(boolean groom) {
         return (List<Item>) this.getObjectProperty(groom ? "groomGiftlist" : "brideGiftlist");
     }
 
+    /**
+     * 获取指定索引的礼物
+     *
+     * @param c     客户端
+     * @param groom true=新郎, false=新娘
+     * @param idx   索引
+     * @return 礼物，不存在返回null
+     */
     public Item getGiftItem(Client c, boolean groom, int idx) {
         try {
             return getGiftItems(c, groom).get(idx);
@@ -86,6 +132,12 @@ public class Marriage extends EventInstanceManager {
         }
     }
 
+    /**
+     * 添加礼物
+     *
+     * @param groom true=新郎, false=新娘
+     * @param item  礼物物品
+     */
     public void addGiftItem(boolean groom, Item item) {
         List<Item> gifts = getGiftItemsList(groom);
         synchronized (gifts) {
@@ -93,6 +145,12 @@ public class Marriage extends EventInstanceManager {
         }
     }
 
+    /**
+     * 移除礼物
+     *
+     * @param groom true=新郎, false=新娘
+     * @param item  要移除的礼物
+     */
     public void removeGiftItem(boolean groom, Item item) {
         List<Item> gifts = getGiftItemsList(groom);
         synchronized (gifts) {
@@ -100,6 +158,12 @@ public class Marriage extends EventInstanceManager {
         }
     }
 
+    /**
+     * 判断角色是否为婚礼新郎
+     *
+     * @param chr 角色
+     * @return true=新郎, false=新娘, null=非参与者
+     */
     public Boolean isMarriageGroom(Character chr) {
         Boolean groom = null;
         try {
@@ -115,6 +179,13 @@ public class Marriage extends EventInstanceManager {
         return groom;
     }
 
+    /**
+     * 领取数据库中的婚礼礼物
+     *
+     * @param c   客户端
+     * @param chr 角色
+     * @return 领取成功返回true
+     */
     public static boolean claimGiftItems(Client c, Character chr) {
         List<Item> gifts = loadGiftItemsFromDb(c, chr.getId());
         if (Inventory.checkSpot(chr, gifts)) {
@@ -134,6 +205,13 @@ public class Marriage extends EventInstanceManager {
         return false;
     }
 
+    /**
+     * 从数据库加载礼物列表
+     *
+     * @param c   客户端
+     * @param cid 角色ID
+     * @return 礼物列表
+     */
     public static List<Item> loadGiftItemsFromDb(Client c, int cid) {
         List<Item> items = new LinkedList<>();
 
@@ -148,10 +226,24 @@ public class Marriage extends EventInstanceManager {
         return items;
     }
 
+    /**
+     * 保存礼物到数据库
+     *
+     * @param c     客户端
+     * @param groom true=新郎, false=新娘
+     * @param cid   角色ID
+     */
     public void saveGiftItemsToDb(Client c, boolean groom, int cid) {
         Marriage.saveGiftItemsToDb(c, getGiftItems(c, groom), cid);
     }
 
+    /**
+     * 保存礼物列表到数据库（静态方法）
+     *
+     * @param c         客户端
+     * @param giftItems 礼物列表
+     * @param cid       角色ID
+     */
     public static void saveGiftItemsToDb(Client c, List<Item> giftItems, int cid) {
         List<Pair<Item, InventoryType>> items = new LinkedList<>();
         for (Item it : giftItems) {

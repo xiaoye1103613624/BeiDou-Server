@@ -27,6 +27,10 @@ import org.gms.server.life.MobSkill;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 怪物状态效果
+ * 管理施加在怪物身上的异常状态效果，包括状态值、怪物技能和持续时间
+ */
 public class MonsterStatusEffect {
 
     private final Map<MonsterStatus, Integer> stati;

@@ -36,22 +36,39 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 
 /**
+ * 远征队Boss日志
+ * 管理每个玩家的Boss击败记录，实现Boss冷却时间机制
+ * 支持按角色、按频道控制Boss进入频率
+ *
  * @author Conrad
  * @author Ronan
  */
 public class ExpeditionBossLog {
 
+    /**
+     * Boss日志条目枚举
+     */
     public enum BossLogEntry {
+        /** 扎昆 */
         ZAKUM(2, 1, false),
+        /** 黑龙 */
         HORNTAIL(2, 1, false),
+        /** 品客缤 */
         PINKBEAN(1, 1, false),
+        /** 斯卡加 */
         SCARGA(1, 1, false),
+        /** 帕普拉图斯 */
         PAPULATUS(2, 1, false);
 
+        /** 条目数 */
         private final int entries;
+        /** 时间长度 */
         private final int timeLength;
+        /** 最小频道 */
         private final int minChannel;
+        /** 最大频道 */
         private final int maxChannel;
+        /** 是否按周计算 */
         private final boolean week;
 
         BossLogEntry(int entries, int timeLength, boolean week) {
@@ -139,6 +156,12 @@ public class ExpeditionBossLog {
         }
     }
 
+    /**
+     * 获取Boss日志表名
+     *
+     * @param week 是否周日志表
+     * @return 表名
+     */
     private static String getBossLogTable(boolean week) {
         return week ? "bosslog_weekly" : "bosslog_daily";
     }
@@ -164,6 +187,12 @@ public class ExpeditionBossLog {
         }
     }
 
+    /**
+     * 向数据库插入玩家Boss条目
+     *
+     * @param cid  角色ID
+     * @param boss Boss日志条目
+     */
     private static void insertPlayerEntry(int cid, BossLogEntry boss) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO " + getBossLogTable(boss.week) + " (characterid, bosstype) VALUES (?,?)")) {

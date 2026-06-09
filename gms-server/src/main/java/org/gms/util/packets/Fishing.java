@@ -33,16 +33,29 @@ import org.gms.util.PacketCreator;
 import java.util.Calendar;
 
 /**
+ * 钓鱼系统（根据年份和时间动态计算成功率，含稀有掉落概率表）
+ *
  * @author FateJiki (RaGeZONE)
  * @author Ronan - timing pattern
  */
 public class Fishing {
     private static final Logger log = LoggerFactory.getLogger(Fishing.class);
 
+    /**
+     * 三角函数计算钓鱼概率曲线（正弦余弦组合产生周期性波动）
+     *
+     * @param x 归一化输入（日序号或小时分秒）
+     * @return 基础概率值（约 40~60）
+     */
     private static double getFishingLikelihood(int x) {
         return 50.0 + 7.0 * (7.0 * Math.sin(x)) * (Math.cos(Math.pow(x, 0.777)));
     }
 
+    /**
+     * 根据当前日期时间获取钓鱼成功率因子（年份因子 + 时间因子）
+     *
+     * @return [yearLikelihood, timeLikelihood]
+     */
     public static double[] fetchFishingLikelihood() {
         Calendar calendar = Calendar.getInstance();
         int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
@@ -57,6 +70,15 @@ public class Fishing {
         return new double[]{yearLikelihood, timeLikelihood};
     }
 
+    /**
+     * 判断本次钓鱼是否成功（年份因子 + 时间因子 + 鱼饵等级加成 > 阈值）
+     *
+     * @param chr            角色
+     * @param baitLevel      鱼饵等级（等级越高成功概率越高）
+     * @param yearLikelihood 年份概率因子
+     * @param timeLikelihood 时间概率因子
+     * @return 是否命中钓鱼成功
+     */
     private static boolean hitFishingTime(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
         double baitLikelihood = 0.0002 * chr.getWorldServer().getFishingRate() * baitLevel;   // can improve 10.0 at "max level 50000" on rate 1x
 
@@ -69,6 +91,14 @@ public class Fishing {
         return (0.23 * yearLikelihood) + (0.77 * timeLikelihood) + (baitLikelihood) > 57.777;
     }
 
+    /**
+     * 执行一次钓鱼操作（校验地图/等级 → 判定成功/失败 → 计算奖励）
+     *
+     * @param chr            角色
+     * @param baitLevel      鱼饵等级（影响成功率）
+     * @param yearLikelihood 年份概率因子
+     * @param timeLikelihood 时间概率因子
+     */
     public static void doFishing(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
         // thanks Fadi, Vcoc for suggesting a custom fishing system
 
@@ -127,6 +157,11 @@ public class Fishing {
         chr.getMap().broadcastMessage(chr, PacketCreator.showForeignInfo(chr.getId(), fishingEffect), false);
     }
 
+    /**
+     * 随机获取钓鱼奖品物品 ID（按 75% 普通 / 5% 稀有 / 20% 史诗的分布抽取）
+     *
+     * @return 物品ID
+     */
     public static int getRandomItem() {
         int rand = (int) (100.0 * Math.random());
         int[] commons = {1002851, 2002020, 2002020, ItemId.MANA_ELIXIR, 2000018, 2002018, 2002024, 2002027, 2002027, 2000018, 2000018, 2000018, 2000018, 2002030, 2002018, 2000016}; // filler' up
@@ -142,6 +177,9 @@ public class Fishing {
         }
     }
 
+    /**
+     * 调试用：年/月/日/时钓鱼概率统计打印
+     */
     private static void debugFishingLikelihood() {
         long[] a = new long[365], b = new long[365];
         long hits = 0, hits10 = 0, total = 0;
@@ -200,4 +238,4 @@ public class Fishing {
         log.debug("Diary10 min {} max {}", minhit10, maxhit10);
         log.debug("Hits: {}, Hits10: {}, Total: {} -- %1000 {}, +10 %1000: {}", hits, hits10, total, (hits * 1000 / total), (hits10 * 1000 / total));
     }
-} 
+}

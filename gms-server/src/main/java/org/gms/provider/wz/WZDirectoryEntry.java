@@ -28,6 +28,10 @@ import org.gms.provider.DataFileEntry;
 
 import java.util.*;
 
+/**
+ * WZ目录条目实现
+ * 表示WZ文件中的目录节点，维护子目录和文件列表的关系映射
+ */
 public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
     private final List<DataDirectoryEntry> subdirs = new ArrayList<>();
     private final List<DataFileEntry> files = new ArrayList<>();

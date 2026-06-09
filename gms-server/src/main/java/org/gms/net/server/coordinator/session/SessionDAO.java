@@ -13,7 +13,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 会话数据访问对象
+ * 管理硬件ID与账号关联的数据库操作
+ */
 public class SessionDAO {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(SessionDAO.class);
 
     public static void deleteExpiredHwidAccounts() {

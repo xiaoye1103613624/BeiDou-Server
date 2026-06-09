@@ -30,15 +30,29 @@ import org.gms.util.PacketCreator;
 import java.util.concurrent.ScheduledFuture;
 
 /**
+ * 体能训练场活动
+ * 单人限时挑战，玩家需要在规定时间内通过所有关卡到达终点
+ * 记录开始时间，超时自动传出地图
+ *
  * @author kevintjuh93
  */
 public class Fitness {
+    /** 参与玩家 */
     private final Character chr;
+    /** 剩余时间 */
     private long time = 0;
+    /** 开始时间戳 */
     private long timeStarted = 0;
+    /** 结束定时器 */
     private ScheduledFuture<?> schedule = null;
+    /** 消息定时器 */
     private ScheduledFuture<?> schedulemsg = null;
 
+    /**
+     * 构造体能训练场活动
+     *
+     * @param chr 参与玩家
+     */
     public Fitness(final Character chr) {
         this.chr = chr;
         this.schedule = TimerManager.getInstance().schedule(() -> {
@@ -48,6 +62,10 @@ public class Fitness {
         }, 900000);
     }
 
+    /**
+     * 开始体能训练
+     * 打开入场传送门，启动15分钟倒计时，开始定时提示消息
+     */
     public void startFitness() {
         chr.getMap().startEvent();
         chr.getClient().sendPacket(PacketCreator.getClock(900));
@@ -59,14 +77,28 @@ public class Fitness {
         chr.sendPacket(PacketCreator.serverNotice(0, "The portal has now opened. Press the up arrow key at the portal to enter."));
     }
 
+    /**
+     * 判断计时是否已开始
+     *
+     * @return true已开始，false未开始
+     */
     public boolean isTimerStarted() {
         return time > 0 && timeStarted > 0;
     }
 
+    /**
+     * 获取总时间
+     *
+     * @return 总时间毫秒数
+     */
     public long getTime() {
         return time;
     }
 
+    /**
+     * 重置计时器
+     * 将时间和开始时间置零，取消定时任务
+     */
     public void resetTimes() {
         this.time = 0;
         this.timeStarted = 0;
@@ -74,10 +106,19 @@ public class Fitness {
         schedulemsg.cancel(false);
     }
 
+    /**
+     * 获取剩余时间
+     *
+     * @return 剩余毫秒数
+     */
     public long getTimeLeft() {
         return time - (System.currentTimeMillis() - timeStarted);
     }
 
+    /**
+     * 定时检查并发送提示消息
+     * 每5秒检测一次，在特定时间节点向玩家发送阶段提示
+     */
     public void checkAndMessage() {
         this.schedulemsg = TimerManager.getInstance().register(() -> {
             if (chr.getFitness() == null) {

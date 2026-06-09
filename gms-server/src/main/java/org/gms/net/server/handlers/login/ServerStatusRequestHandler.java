@@ -28,8 +28,19 @@ import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.util.PacketCreator;
 
+/**
+ * 服务器状态请求处理器
+ * 处理客户端查询指定世界服务器容量状态
+ */
 public final class ServerStatusRequestHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理服务器状态查询
+     * 根据世界ID获取服务器容量状态并返回给客户端
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte world = (byte) p.readShort();

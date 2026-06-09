@@ -21,19 +21,38 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 地图对象类型枚举
+ * 定义地图上所有可交互对象的类型，用于区分NPC、怪物、物品、玩家等
+ * 在进行地图对象查询和范围搜索时使用
+ */
 public enum MapObjectType {
+    /** NPC */
     NPC,
+    /** 怪物 */
     MONSTER,
+    /** 掉落物品 */
     ITEM,
+    /** 玩家 */
     PLAYER,
+    /** 传送门 */
     DOOR,
+    /** 召唤兽 */
     SUMMON,
+    /** 商店 */
     SHOP,
+    /** 小游戏 */
     MINI_GAME,
+    /** 迷雾 */
     MIST,
+    /** 反应器 */
     REACTOR,
+    /** 雇佣商人 */
     HIRED_MERCHANT,
+    /** 玩家NPC */
     PLAYER_NPC,
+    /** 龙 */
     DRAGON,
+    /** 风筝 */
     KITE
 }

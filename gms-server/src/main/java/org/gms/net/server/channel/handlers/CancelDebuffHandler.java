@@ -25,7 +25,11 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
-public final class CancelDebuffHandler extends AbstractPacketHandler {//TIP: BAD STUFF LOL!
+/**
+ * 取消减益处理器
+ * 处理玩家手动取消减益效果（Debuff）的操作，当前为空实现
+ */
+public final class CancelDebuffHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {

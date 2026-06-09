@@ -22,13 +22,24 @@
 package org.gms.net.server;
 
 /**
- * @author Danny
+ * 玩家技能冷却值持有者
+ * 记录技能冷却的开始时间和持续时长
  */
 public class PlayerCoolDownValueHolder {
+    /** 技能ID */
     public int skillId;
+    /** 冷却开始时间 */
     public long startTime;
+    /** 冷却持续时长 */
     public long length;
 
+    /**
+     * 构造冷却值持有者
+     *
+     * @param skillId   技能ID
+     * @param startTime 冷却开始时间
+     * @param length    冷却持续时长
+     */
     public PlayerCoolDownValueHolder(int skillId, long startTime, long length) {
         this.skillId = skillId;
         this.startTime = startTime;

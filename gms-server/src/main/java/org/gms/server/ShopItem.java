@@ -22,12 +22,19 @@
 package org.gms.server;
 
 /**
+ * 商店物品
+ * 表示NPC商店中出售的物品，包含购买限制、价格和展示位信息
+ *
  * @author Matze
  */
 public class ShopItem {
+    /** 可购买数量（0表示无限） */
     private final short buyable;
+    /** 物品ID */
     private final int itemId;
+    /** 价格 */
     private final int price;
+    /** 展示位（排序位置） */
     private final int pitch;
 
     public ShopItem(short buyable, int itemId, int price, int pitch) {
@@ -49,6 +56,11 @@ public class ShopItem {
         return price;
     }
 
+    /**
+     * 获取展示位（排序位置）
+     *
+     * @return 展示位
+     */
     public int getPitch() {
         return pitch;
     }

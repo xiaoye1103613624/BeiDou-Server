@@ -36,11 +36,21 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 怪物图鉴
+ * 管理玩家的怪物卡片收集，记录每种怪物的击杀次数
+ * 支持卡组奖励和数据库持久化，使用ReentrantLock保证线程安全
+ */
 public final class MonsterBook {
+    /** 特殊卡片数量 */
     private int specialCard = 0;
+    /** 普通卡片数量 */
     private int normalCard = 0;
+    /** 图鉴等级 */
     private int bookLevel = 1;
+    /** 怪物ID -> 卡牌数量 */
     private final Map<Integer, Integer> cards = new LinkedHashMap<>();
+    /** 线程锁 */
     private final Lock lock = new ReentrantLock();
     private static final MonsterBookService monsterBookService = ServerManager.getApplicationContext().getBean(MonsterBookService.class);
 

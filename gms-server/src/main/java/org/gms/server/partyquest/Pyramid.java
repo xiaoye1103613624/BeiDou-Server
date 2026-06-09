@@ -35,9 +35,16 @@ import java.util.concurrent.ScheduledFuture;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 金字塔组队任务
+ * 玩家在金字塔中击杀怪物，通过连击积累能量，获取经验和奖励
+ * 支持4种难度模式：简单、普通、困难、地狱
+ *
  * @author kevintjuh93
  */
 public class Pyramid extends PartyQuest {
+    /**
+     * 金字塔难度模式枚举
+     */
     public enum PyramidMode {
         EASY(0), NORMAL(1), HARD(2), HELL(3);
         int mode;
@@ -51,15 +58,48 @@ public class Pyramid extends PartyQuest {
         }
     }
 
-    int kill = 0, miss = 0, cool = 0, exp = 0, map, count;
-    byte coolAdd = 5, missSub = 4, decrease = 1;//hmmm
+    /** 击杀数 */
+    int kill = 0;
+    /** 失误数 */
+    int miss = 0;
+    /** 冷却数 */
+    int cool = 0;
+    /** 经验值 */
+    int exp = 0;
+    /** 当前地图 */
+    int map;
+    /** 倒计时 */
+    int count;
+    /** 冷却增加量 */
+    byte coolAdd = 5;
+    /** 失误扣除量 */
+    byte missSub = 4;
+    /** 衰减量 */
+    byte decrease = 1;
+    /** 能量槽 */
     short gauge;
-    byte rank, skill = 0, stage = 0, buffcount = 0;//buffcount includes buffs + skills
+    /** 等级 */
+    byte rank;
+    /** 技能 */
+    byte skill = 0;
+    /** 当前阶段 */
+    byte stage = 0;
+    /** Buff计数 */
+    byte buffcount = 0;
+    /** 难度模式 */
     PyramidMode mode;
 
+    /** 定时器 */
     ScheduledFuture<?> timer = null;
     ScheduledFuture<?> gaugeSchedule = null;
 
+    /**
+     * 构造金字塔任务
+     *
+     * @param party 队伍
+     * @param mode  难度模式
+     * @param mapid 起始地图ID
+     */
     public Pyramid(Party party, PyramidMode mode, int mapid) {
         super(party);
         this.mode = mode;
@@ -79,6 +119,9 @@ public class Pyramid extends PartyQuest {
         }
     }
 
+    /**
+     * 启动能量槽定时衰减任务
+     */
     public void startGaugeSchedule() {
         if (gaugeSchedule == null) {
             gauge = 100;
@@ -93,6 +136,9 @@ public class Pyramid extends PartyQuest {
         }
     }
 
+    /**
+     * 击杀怪物，增加击杀计数和能量槽
+     */
     public void kill() {
         kill++;
         if (gauge < 100) {
@@ -106,6 +152,9 @@ public class Pyramid extends PartyQuest {
         checkBuffs();
     }
 
+    /**
+     * 冷却操作，增加冷却计数和能量槽
+     */
     public void cool() {
         cool++;
         int plus = coolAdd;
@@ -122,6 +171,9 @@ public class Pyramid extends PartyQuest {
 
     }
 
+    /**
+     * 失误操作，扣除能量槽
+     */
     public void miss() {
         miss++;
         count -= missSub;
@@ -129,6 +181,11 @@ public class Pyramid extends PartyQuest {
         broadcastInfo("miss", miss);
     }
 
+    /**
+     * 启动阶段定时器，广播当前状态并启动能量槽
+     *
+     * @return 当前阶段的时间限制（秒）
+     */
     public int timer() {
         int value;
         if (stage > 0) {
@@ -139,8 +196,9 @@ public class Pyramid extends PartyQuest {
 
         timer = TimerManager.getInstance().schedule(() -> {
             stage++;
-            warp(map + (stage * 100));//Should work :D
-        }, SECONDS.toMillis(value));//, 4000
+            // Should work :D
+            warp(map + (stage * 100));
+        }, SECONDS.toMillis(value));
         broadcastInfo("party", getParticipants().size() > 1 ? 1 : 0);
         broadcastInfo("hit", kill);
         broadcastInfo("miss", miss);
@@ -151,6 +209,11 @@ public class Pyramid extends PartyQuest {
         return value;
     }
 
+    /**
+     * 传送所有参与者到指定地图
+     *
+     * @param mapid 目标地图ID
+     */
     public void warp(int mapid) {
         for (Character chr : getParticipants()) {
             chr.changeMap(mapid, 0);
@@ -165,6 +228,12 @@ public class Pyramid extends PartyQuest {
         }
     }
 
+    /**
+     * 向所有参与者广播指定信息和数值
+     *
+     * @param info   信息类型
+     * @param amount 数值
+     */
     public void broadcastInfo(String info, int amount) {
         for (Character chr : getParticipants()) {
             chr.sendPacket(PacketCreator.getEnergy("massacre_" + info, amount));
@@ -172,6 +241,11 @@ public class Pyramid extends PartyQuest {
         }
     }
 
+    /**
+     * 使用技能，消耗一次技能使用次数
+     *
+     * @return true表示技能使用成功
+     */
     public boolean useSkill() {
         if (skill < 1) {
             return false;
@@ -182,6 +256,10 @@ public class Pyramid extends PartyQuest {
         return true;
     }
 
+    /**
+     * 检查是否达到Buff触发阈值
+     * 根据（击杀+冷却）总数分段给玩家施加祝福效果和技能
+     */
     public void checkBuffs() {
         int total = (kill + cool);
         if (buffcount == 0 && total >= 250) {
@@ -227,6 +305,11 @@ public class Pyramid extends PartyQuest {
         }
     }
 
+    /**
+     * 根据击杀数和阶段计算得分并发放经验
+     *
+     * @param chr 玩家
+     */
     public void sendScore(Character chr) {
         if (exp == 0) {
             int totalkills = (kill + cool);
@@ -266,5 +349,3 @@ public class Pyramid extends PartyQuest {
         chr.gainExp(exp, true, true);
     }
 }
-
-

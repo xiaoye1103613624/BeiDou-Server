@@ -122,12 +122,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 属性效果
+ * 表示技能或物品的属性加成效果，包含攻击力、防御力、属性增益、持续时间、异常状态等
+ * 用于技能施放效果计算和物品属性加成
+ *
  * @author Matze
  * @author Frz
  * @author Ronan
  */
 public class StatEffect {
+    /** 物理攻击力 */
     private short watk, matk, wdef, mdef, acc, avoid, speed, jump;
+    /** 生命值/魔法值 */
     private short hp, mp;
     private double hpR, mpR;
     private short mhpRRate, mmpRRate, mobSkill, mobSkillLevel;
@@ -228,9 +234,11 @@ public class StatEffect {
 
     private static byte mapProtection(int sourceid) {
         if (sourceid == ItemId.RED_BEAN_PORRIDGE || sourceid == ItemId.SOFT_WHITE_BUN) {
-            return 1;   //elnath cold
+            // elnath cold
+            return 1;
         } else if (sourceid == ItemId.AIR_BUBBLE) {
-            return 2;   //aqua road underwater
+            // aqua road underwater
+            return 2;
         } else {
             return 0;
         }
@@ -885,7 +893,8 @@ public class StatEffect {
             if (sourceid == FPWizard.MP_EATER || sourceid == ILWizard.MP_EATER || sourceid == Cleric.MP_EATER) { // MP eater
                 if (obj == null || obj.getType() != MapObjectType.MONSTER) return;
 
-                Monster mob = (Monster) obj; // x is absorb percentage
+                // x is absorb percentage
+                Monster mob = (Monster) obj;
                 if (!mob.isBoss()) {
                     int absorbMp = Math.min((int) (mob.getMaxMp() * (getX() / 100.0)), mob.getMp());
                     if (absorbMp > 0) {
@@ -1001,7 +1010,8 @@ public class StatEffect {
             }
         }
         if (isShadowClaw()) {
-            short projectileConsume = this.getBulletConsume();  // noticed by shavit
+            // noticed by shavit
+            short projectileConsume = this.getBulletConsume();
 
             Inventory use = applyto.getInventory(InventoryType.USE);
             use.lockInventory();
@@ -1226,7 +1236,8 @@ public class StatEffect {
             mylt = new Point(lt.x + posFrom.x, lt.y + posFrom.y);
             myrb = new Point(rb.x + posFrom.x, rb.y + posFrom.y);
         } else {
-            myrb = new Point(-lt.x + posFrom.x, rb.y + posFrom.y);  // thanks Conrad, April for noticing a disturbance in AoE skill behavior after a hitched refactor here
+            // thanks Conrad, April for noticing a disturbance in AoE skill behavior after a hitched refactor here
+            myrb = new Point(-lt.x + posFrom.x, rb.y + posFrom.y);
             mylt = new Point(-rb.x + posFrom.x, lt.y + posFrom.y);
         }
         Rectangle bounds = new Rectangle(mylt.x, mylt.y, myrb.x - mylt.x, myrb.y - mylt.y);
@@ -1670,7 +1681,8 @@ public class StatEffect {
     }
 
     public boolean isMorphWithoutAttack() {
-        return morphId > 0 && morphId < 100; // Every morph item I have found has been under 100, pirate skill transforms start at 1000.
+        // Every morph item I have found has been under 100, pirate skill transforms start at 1000.
+        return morphId > 0 && morphId < 100;
     }
 
     private boolean isMist() {

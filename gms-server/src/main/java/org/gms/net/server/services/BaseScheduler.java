@@ -35,7 +35,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Ronan
+ * 基础调度器
+ * 管理定时任务的注册、调度和分发，支持监听器回调
  */
 public abstract class BaseScheduler {
     private int idleProcs = 0;

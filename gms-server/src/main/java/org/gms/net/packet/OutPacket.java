@@ -5,6 +5,10 @@ import org.gms.net.opcodes.SendOpcode;
 
 import java.awt.*;
 
+/**
+ * 出站数据包接口
+ * 定义向客户端发送数据包的写入操作，支持各种基本类型的序列化
+ */
 public interface OutPacket extends Packet {
     void writeByte(byte value);
     void writeByte(int value);

@@ -40,23 +40,37 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 阿里安特竞技场
+ * 远征队进入竞技场挑战怪物，通过击杀获取积分和碎片奖励
+ * 支持多层级奖励等级和定时计分板
+ *
  * @author Ronan
  */
 public class AriantColiseum {
 
+    /** 关联的远征队 */
     private Expedition exped;
+    /** 竞技场地图 */
     private MapleMap map;
 
+    /** 玩家积分映射 */
     private final Map<Character, Integer> score;
+    /** 玩家奖励等级映射 */
     private final Map<Character, Integer> rewardTier;
+    /** 积分是否已变更 */
     private boolean scoreDirty = false;
 
+    /** 定时更新任务 */
     private ScheduledFuture<?> ariantUpdate;
+    /** 定时结束任务 */
     private ScheduledFuture<?> ariantFinish;
+    /** 定时计分板任务 */
     private ScheduledFuture<?> ariantScoreboard;
 
+    /** 丢失的碎片数 */
     private int lostShards = 0;
 
+    /** 事件是否已通关 */
     private boolean eventClear = false;
 
     public AriantColiseum(MapleMap eventMap, Expedition expedition) {
@@ -129,15 +143,32 @@ public class AriantColiseum {
         cancelAriantScoreBoard();
     }
 
+    /**
+     * 获取玩家当前积分
+     *
+     * @param chr 玩家
+     * @return 积分值
+     */
     public int getAriantScore(Character chr) {
         Integer chrScore = score.get(chr);
         return chrScore != null ? chrScore : 0;
     }
 
+    /**
+     * 清除玩家积分
+     *
+     * @param chr 玩家
+     */
     public void clearAriantScore(Character chr) {
         score.remove(chr);
     }
 
+    /**
+     * 更新玩家积分
+     *
+     * @param chr    玩家
+     * @param points 新的积分值
+     */
     public void updateAriantScore(Character chr, int points) {
         if (map != null) {
             score.put(chr, points);
@@ -145,6 +176,9 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 向所有玩家广播积分更新
+     */
     private void broadcastAriantScoreUpdate() {
         if (scoreDirty) {
             for (Character chr : score.keySet()) {
@@ -154,25 +188,51 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 获取玩家奖励等级
+     *
+     * @param chr 玩家
+     * @return 奖励等级
+     */
     public int getAriantRewardTier(Character chr) {
         Integer reward = rewardTier.get(chr);
         return reward != null ? reward : 0;
     }
 
+    /**
+     * 清除玩家奖励等级
+     *
+     * @param chr 玩家
+     */
     public void clearAriantRewardTier(Character chr) {
         rewardTier.remove(chr);
     }
 
+    /**
+     * 增加丢失的碎片计数
+     *
+     * @param quantity 丢失数量
+     */
     public void addLostShards(int quantity) {
         lostShards += quantity;
     }
 
+    /**
+     * 玩家离开竞技场
+     *
+     * @param chr 玩家
+     */
     public void leaveArena(Character chr) {
         if (!(eventClear && GameConstants.isAriantColiseumArena(chr.getMapId()))) {
             leaveArenaInternal(chr);
         }
     }
 
+    /**
+     * 内部离开竞技场逻辑，同步移除并回收碎片
+     *
+     * @param chr 玩家
+     */
     private synchronized void leaveArenaInternal(Character chr) {
         if (exped != null) {
             if (exped.removeMember(chr)) {
@@ -189,10 +249,18 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 玩家断线处理
+     *
+     * @param chr 玩家
+     */
     public void playerDisconnected(Character chr) {
         leaveArenaInternal(chr);
     }
 
+    /**
+     * 展示竞技场结果，清除怪物并分配积分
+     */
     private void showArenaResults() {
         eventClear = true;
 
@@ -204,6 +272,16 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 判断比赛是否不公平
+     * 根据冠军分数与其他参赛者分数比例判断
+     *
+     * @param winnerScore     冠军积分
+     * @param secondScore     亚军积分
+     * @param lostShardsScore 丢失碎片积分
+     * @param runnerupsScore  其他参赛者积分
+     * @return true表示比赛不公平
+     */
     private static boolean isUnfairMatch(Integer winnerScore, Integer secondScore, Integer lostShardsScore, List<Integer> runnerupsScore) {
         if (winnerScore <= 0) {
             return false;
@@ -223,6 +301,10 @@ public class AriantColiseum {
         return matchRes < 0.81770726891980117713114871015349 && (runnerupsScoreCount < 7 || runnerupRes < 0.5929);
     }
 
+    /**
+     * 分配竞技场积分奖励
+     * 根据各玩家得分确定奖励等级，检测不公平比赛
+     */
     public void distributeAriantPoints() {
         int firstTop = -1, secondTop = -1;
         Character winner = null;
@@ -248,6 +330,11 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 根据当前地图ID获取远征队类型
+     *
+     * @return 远征队类型
+     */
     private ExpeditionType getExpeditionType() {
         switch (map.getId()) {
         case MapId.ARPQ_ARENA_1:
@@ -259,6 +346,9 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 进入国王房间，移除频道远征队并取消所有定时任务
+     */
     private void enterKingsRoom() {
         exped.removeChannelExpedition(map.getChannelServer());
         cancelAriantSchedules();
@@ -268,6 +358,9 @@ public class AriantColiseum {
         }
     }
 
+    /**
+     * 清理竞技场资源，5分钟后释放地图
+     */
     private synchronized void dispose() {
         if (exped != null) {
             exped.dispose(false);

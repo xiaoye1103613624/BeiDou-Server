@@ -30,9 +30,19 @@ import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.util.PacketCreator;
 
 /**
+ * 设置性别处理器
+ * 处理新账号首次登录设置性别
+ *
  * @author kevintjuh93
  */
 public class SetGenderHandler extends AbstractPacketHandler {
+    /**
+     * 处理设置性别请求
+     * 如果用户确认则设置性别并完成登录，否则关闭会话
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         if (c.getGender() == 10) { //Packet shouldn't come if Gender isn't 10.

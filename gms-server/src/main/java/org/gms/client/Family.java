@@ -36,6 +36,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 家族系统
+ * 管理家族成员、家族声望、家族称号、家族Buff等
+ * 使用ConcurrentHashMap保证线程安全，支持家族消息广播和数据库同步
+ *
  * @author Jay Estrella - Mr.Trash :3
  * @author Ubaware
  */

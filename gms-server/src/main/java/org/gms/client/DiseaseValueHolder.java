@@ -21,10 +21,16 @@
 package org.gms.client;
 
 /**
+ * 异常状态值持有者
+ * 记录异常状态的开始时间和持续时间，用于计算状态是否过期
+ *
  * @author anybody can do this
  */
 public class DiseaseValueHolder {
-    public long startTime, length;
+    /** 开始时间 */
+    public long startTime;
+    /** 持续时间 */
+    public long length;
 
     public DiseaseValueHolder(long start, long length) {
         this.startTime = start;

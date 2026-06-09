@@ -23,6 +23,9 @@ import org.gms.net.packet.InPacket;
 
 
 /**
+ * 空移动路径异常
+ * 当玩家移动数据包中的移动路径为空时抛出
+ *
  * @author Ronan
  */
 public class EmptyMovementException extends Exception {

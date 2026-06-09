@@ -26,6 +26,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
+ * 冒险岛生活道具使用处理器
+ * 处理玩家使用冒险岛生活相关道具
+ *
  * @author RonanLana
  */
 public class UseMapleLifeHandler extends AbstractPacketHandler {

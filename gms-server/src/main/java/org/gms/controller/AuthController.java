@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * 认证控制器
+ * 处理用户登录和Token刷新请求
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

@@ -26,6 +26,10 @@ import org.gms.client.processor.stat.AssignSPProcessor;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 分配技能点处理器
+ * 处理玩家手动分配技能点（SP）的操作
+ */
 public final class DistributeSPHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

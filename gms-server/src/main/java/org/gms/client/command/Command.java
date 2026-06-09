@@ -17,23 +17,43 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-/*
-   @Author: Arthur L - Refactored command content into modules
-*/
 package org.gms.client.command;
 
-import lombok.Data;
 import org.gms.client.Client;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+/**
+ * 命令抽象基类
+ * 所有GM命令和玩家命令的基类
+ * 子类需实现execute()方法执行具体命令逻辑
+ *
+ * @Author: Arthur L - Refactored command content into modules
+ */
+@Getter
+@Setter
 public abstract class Command {
 
+    /** 命令所需GM等级 */
     protected int rank;
+    /** 命令描述 */
     protected String description;
 
+    /**
+     * 执行命令
+     *
+     * @param client 客户端会话
+     * @param params 命令参数数组
+     */
     public abstract void execute(Client client, String[] params);
 
+    /**
+     * 将字符串数组从指定位置开始拼接为单个字符串
+     *
+     * @param arr   字符串数组
+     * @param start 起始索引
+     * @return 拼接后的字符串
+     */
     protected String joinStringFrom(String[] arr, int start) {
         StringBuilder builder = new StringBuilder();
         for (int i = start; i < arr.length; i++) {
@@ -45,4 +65,3 @@ public abstract class Command {
         return builder.toString();
     }
 }
-

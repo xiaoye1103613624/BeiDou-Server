@@ -32,18 +32,38 @@ import java.awt.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 通用传送门
+ * 实现Portal接口的通用传送门类，支持脚本传送和直接地图传送，
+ * 使用ReentrantLock保证脚本执行的线程安全
+ */
 public class GenericPortal implements Portal {
+    /** 传送门名称 */
     private String name;
+    /** 目标传送门名称 */
     private String target;
+    /** 传送门位置 */
     private Point position;
+    /** 目标地图ID */
     private int targetmap;
+    /** 传送门类型 */
     private final int type;
+    /** 传送门状态（开启/关闭） */
     private boolean status = true;
+    /** 传送门ID */
     private int id;
+    /** 关联的脚本名称 */
     private String scriptName;
+    /** 传送门状态（用于脚本控制） */
     private boolean portalState;
+    /** 脚本执行锁，保证同一传送门脚本不会被并发执行 */
     private Lock scriptLock = null;
 
+    /**
+     * 构造方法
+     *
+     * @param type 传送门类型
+     */
     public GenericPortal(int type) {
         this.type = type;
     }
@@ -53,6 +73,11 @@ public class GenericPortal implements Portal {
         return id;
     }
 
+    /**
+     * 设置传送门ID
+     *
+     * @param id 传送门ID
+     */
     public void setId(int id) {
         this.id = id;
     }
@@ -97,22 +122,45 @@ public class GenericPortal implements Portal {
         return scriptName;
     }
 
+    /**
+     * 设置传送门名称
+     *
+     * @param name 传送门名称
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * 设置传送门位置
+     *
+     * @param position 传送门位置
+     */
     public void setPosition(Point position) {
         this.position = position;
     }
 
+    /**
+     * 设置目标传送门名称
+     *
+     * @param target 目标传送门名称
+     */
     public void setTarget(String target) {
         this.target = target;
     }
 
+    /**
+     * 设置目标地图ID
+     *
+     * @param targetmapid 目标地图ID
+     */
     public void setTargetMapId(int targetmapid) {
         this.targetmap = targetmapid;
     }
 
+    /**
+     * 设置脚本名称，若不为null则初始化脚本锁
+     */
     @Override
     public void setScriptName(String scriptName) {
         this.scriptName = scriptName;
@@ -126,6 +174,10 @@ public class GenericPortal implements Portal {
         }
     }
 
+    /**
+     * 玩家进入传送门
+     * 优先执行关联脚本，若脚本不存在则直接传送到目标地图
+     */
     @Override
     public void enterPortal(Client c) {
         boolean changed = false;
@@ -145,10 +197,12 @@ public class GenericPortal implements Portal {
             if (!(chr.getChalkboard() != null && GameConstants.isFreeMarketRoom(getTargetMapId()))) {
                 MapleMap to = chr.getEventInstance() == null ? c.getChannelServer().getMapFactory().getMap(getTargetMapId()) : chr.getEventInstance().getMapInstance(getTargetMapId());
                 Portal pto = to.getPortal(getTarget());
-                if (pto == null) {// fallback for missing portals - no real life case anymore - interesting for not implemented areas
+                if (pto == null) {
+                    // fallback for missing portals - no real life case anymore - interesting for not implemented areas
                     pto = to.getPortal(0);
                 }
-                chr.changeMap(to, pto); //late resolving makes this harder but prevents us from loading the whole world at once
+                // late resolving makes this harder but prevents us from loading the whole world at once
+                chr.changeMap(to, pto);
                 changed = true;
             } else {
                 chr.dropMessage(5, "You cannot enter this map with the chalkboard opened.");

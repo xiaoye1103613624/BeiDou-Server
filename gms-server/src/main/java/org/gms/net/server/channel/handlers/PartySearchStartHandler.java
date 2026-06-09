@@ -30,11 +30,21 @@ import org.gms.net.server.world.World;
 import org.gms.util.PacketCreator;
 
 /**
+ * 组队搜索开始处理器
+ * 处理玩家开始组队搜索的操作
+ *
  * @author XoticStory
  * @author BubblesDev
  * @author Ronan
  */
 public class PartySearchStartHandler extends AbstractPacketHandler {
+
+    /**
+     * 处理组队搜索开始包，验证等级范围和职业条件后注册队伍队长到组队搜索协调器
+     *
+     * @param p 输入数据包，包含最小/最大等级、成员数和职业过滤条件
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         int min = p.readInt();

@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 
 /**
+ * 邀请超时定时任务
+ * 定期检查并清理过期的玩家邀请
+ *
  * @author Ronan
  */
 public class InvitationTask implements Runnable {

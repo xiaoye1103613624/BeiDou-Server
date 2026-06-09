@@ -55,12 +55,18 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 数据包处理器
+ * 管理登录服务器和频道服务器的数据包处理器注册与分发
+ * 每个服务器实例（world+channel）拥有独立的处理器实例
+ */
 public final class PacketProcessor {
     private static final Logger log = LoggerFactory.getLogger(PacketProcessor.class);
+    /** 服务器实例映射，key为"world-channel"格式 */
     private static final Map<String, PacketProcessor> instances = new LinkedHashMap<>();
-
+    /** 频道依赖 */
     private static ChannelDependencies channelDeps;
-
+    /** 处理器数组，按操作码索引 */
     private PacketHandler[] handlers;
 
     private PacketProcessor() {
@@ -73,14 +79,31 @@ public final class PacketProcessor {
         handlers = new PacketHandler[maxRecvOp + 1];
     }
 
+    /**
+     * 注册频道处理器依赖
+     *
+     * @param channelDependencies 频道依赖
+     */
     public static void registerGameHandlerDependencies(ChannelDependencies channelDependencies) {
         PacketProcessor.channelDeps = channelDependencies;
     }
 
+    /**
+     * 获取登录服务器处理器实例
+     *
+     * @return 登录服务器处理器
+     */
     public static PacketProcessor getLoginServerProcessor() {
         return getProcessor(LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
     }
 
+    /**
+     * 获取频道服务器处理器实例
+     *
+     * @param world   世界ID
+     * @param channel 频道ID
+     * @return 频道服务器处理器
+     */
     public static PacketProcessor getChannelServerProcessor(int world, int channel) {
         if (channelDeps == null) {
             throw new IllegalStateException("Unable to get channel server processor - dependencies are not registered");
@@ -89,6 +112,12 @@ public final class PacketProcessor {
         return getProcessor(world, channel);
     }
 
+    /**
+     * 根据数据包ID获取处理器
+     *
+     * @param packetId 数据包操作码
+     * @return 对应的处理器，不存在返回null
+     */
     public PacketHandler getHandler(short packetId) {
         if (packetId > handlers.length) {
             return null;
@@ -97,6 +126,12 @@ public final class PacketProcessor {
         return handler;
     }
 
+    /**
+     * 注册数据包处理器
+     *
+     * @param code    操作码
+     * @param handler 处理器
+     */
     public void registerHandler(Opcode code, PacketHandler handler) {
         try {
             handlers[code.getValue()] = handler;
@@ -105,6 +140,14 @@ public final class PacketProcessor {
         }
     }
 
+    /**
+     * 获取指定服务器实例的处理器
+     * 使用双重校验锁确保线程安全
+     *
+     * @param world   世界ID
+     * @param channel 频道ID
+     * @return 数据包处理器
+     */
     public synchronized static PacketProcessor getProcessor(int world, int channel) {
         final String processorId = world + " " + channel;
         PacketProcessor processor = instances.get(processorId);
@@ -116,6 +159,12 @@ public final class PacketProcessor {
         return processor;
     }
 
+    /**
+     * 重置处理器数组并注册对应类型的处理器
+     * 根据channel值判断注册登录处理器还是频道处理器
+     *
+     * @param channel 频道ID，负值表示登录服务器
+     */
     public void reset(int channel) {
         handlers = new PacketHandler[handlers.length];
 

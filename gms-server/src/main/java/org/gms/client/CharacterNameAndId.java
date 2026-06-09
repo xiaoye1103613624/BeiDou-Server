@@ -21,8 +21,14 @@
 */
 package org.gms.client;
 
+/**
+ * 角色名称与ID
+ * 简单POJO，封装角色ID和名称的关联关系
+ */
 public class CharacterNameAndId {
+    /** 角色ID */
     private final int id;
+    /** 角色名称 */
     private final String name;
 
     public CharacterNameAndId(int id, String name) {

@@ -40,12 +40,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 装备
+ * 继承{@link Item}，管理装备物品的卷轴强化、属性升级、等级和经验系统
+ * 支持卷轴成功率、诅咒概率、装备升级次数和潜在属性
+ */
 public class Equip extends Item {
     private static final Logger log = LoggerFactory.getLogger(Equip.class);
 
+    /**
+     * 卷轴结果枚举
+     */
     public enum ScrollResult {
-
-        FAIL(0), SUCCESS(1), CURSE(2);
+        /** 失败 */
+        FAIL(0),
+        /** 成功 */
+        SUCCESS(1),
+        /** 诅咒（装备消失） */
+        CURSE(2);
         private int value = -1;
 
         ScrollResult(int value) {

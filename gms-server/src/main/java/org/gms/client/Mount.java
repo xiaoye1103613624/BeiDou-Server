@@ -22,15 +22,26 @@
 package org.gms.client;
 
 /**
+ * 坐骑
+ * 管理玩家的坐骑信息：道具ID、技能ID、疲劳度、经验值和等级
+ * 疲劳度越高移动速度越快，需要喂食胡萝卜恢复
+ *
  * @author PurpleMadness < Patrick :O >
  */
 public class Mount {
+    /** 坐骑道具ID */
     private int itemid;
+    /** 坐骑技能ID */
     private int skillid;
+    /** 疲劳度 */
     private int tiredness;
+    /** 坐骑经验值 */
     private int exp;
+    /** 坐骑等级 */
     private int level;
+    /** 所属玩家 */
     private Character owner;
+    /** 是否激活 */
     private boolean active;
 
     public Mount(Character owner, int id, int skillid) {

@@ -21,22 +21,39 @@
 */
 package org.gms.client;
 
+/**
+ * Buff状态枚举
+ * 使用位掩码标识角色身上的Buff效果，如变形、恢复、神箭等
+ * 每个Buff对应一个唯一的位掩码值，用于网络包中标识Buff状态
+ */
 public enum BuffStat {
-    //SLOW(0x1L),
+    /** 变形 */
     MORPH(0x2L),
+    /** 恢复 */
     RECOVERY(0x4L),
+    /** 枫叶战士 */
     MAPLE_WARRIOR(0x8L),
+    /** 格挡 */
     STANCE(0x10L),
+    /** 神箭眼 */
     SHARP_EYES(0x20L),
+    /** 魔法反射 */
     MANA_REFLECTION(0x40L),
-    //ALWAYS_RIGHT(0X80L),
+    /** 暗影爪 */
     SHADOW_CLAW(0x100L),
+    /** 无限 */
     INFINITY(0x200L),
+    /** 圣盾 */
     HOLY_SHIELD(0x400L),
+    /** 枷锁 */
     HAMSTRING(0x800L),
+    /** 致盲 */
     BLIND(0x1000L),
+    /** 集中 */
     CONCENTRATE(0x2000L),
+    /** 替身 */
     PUPPET(0x4000L),
+    /** 英雄回响 */
     ECHO_OF_HERO(0x8000L),
     MESO_UP_BY_ITEM(0x10000L),
     GHOST_MORPH(0x20000L),

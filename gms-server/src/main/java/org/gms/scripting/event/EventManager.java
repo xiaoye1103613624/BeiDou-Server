@@ -60,28 +60,48 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class EventManager {
     private static final Logger log = LoggerFactory.getLogger(EventManager.class);
-    private Invocable iv;  // 可调用的脚本引擎
-    private Channel cserv;  // 频道服务器
-    private World wserv;  // 世界服务器
-    private Server server;  // 主服务器
-    private final EventScriptScheduler ess = new EventScriptScheduler();  // 事件脚本调度器
-    private final Map<String, EventInstanceManager> instances = new HashMap<>();  // 事件实例映射表
-    private final Map<String, Integer> instanceLocks = new HashMap<>();  // 实例锁定映射表
-    private final Queue<Integer> queuedGuilds = new LinkedList<>();  // 排队中的公会队列
-    private final Map<Integer, Integer> queuedGuildLeaders = new HashMap<>();  // 排队公会及其会长映射
+    /** 可调用的脚本引擎接口 */
+    private Invocable iv;
+    /** 所属频道服务器 */
+    private Channel cserv;
+    /** 所属世界服务器 */
+    private World wserv;
+    /** 主服务器实例 */
+    private Server server;
+    /** 事件脚本调度器，管理延时任务 */
+    private final EventScriptScheduler ess = new EventScriptScheduler();
+    /** 事件实例映射表，key为实例名称 */
+    private final Map<String, EventInstanceManager> instances = new HashMap<>();
+    /** 实例大厅锁定映射表，key为实例名称，value为大厅ID */
+    private final Map<String, Integer> instanceLocks = new HashMap<>();
+    /** 排队中的公会ID队列 */
+    private final Queue<Integer> queuedGuilds = new LinkedList<>();
+    /** 排队公会及会长映射，key为公会ID */
+    private final Map<Integer, Integer> queuedGuildLeaders = new HashMap<>();
+    /** 大厅状态列表，左值表示是否被占用，右值为占用起始时间戳 */
     private final List<Pair<Boolean, Long>> openedLobbys;
-    private final List<EventInstanceManager> readyInstances = new LinkedList<>();  // 准备就绪的实例队列
-    private Integer readyId = 0, onLoadInstances = 0;  // 准备ID和加载中的实例数
-    private final Properties props = new Properties();  // 属性配置
-    private final String name;  // 事件名称
-    private final Lock lobbyLock = new ReentrantLock();  // 大厅锁
-    private final Lock queueLock = new ReentrantLock();  // 队列锁
-    private final Lock startLock = new ReentrantLock();  // 启动锁
+    /** 准备就绪的事件实例队列，用于实例复用 */
+    private final List<EventInstanceManager> readyInstances = new LinkedList<>();
+    /** 准备ID和加载中的实例数（负数表示释放中） */
+    private Integer readyId = 0, onLoadInstances = 0;
+    /** 事件属性配置 */
+    private final Properties props = new Properties();
+    /** 事件名称 */
+    private final String name;
+    /** 大厅锁，保护openedLobbys的并发访问 */
+    private final Lock lobbyLock = new ReentrantLock();
+    /** 队列锁，保护readyInstances和onLoadInstances的并发访问 */
+    private final Lock queueLock = new ReentrantLock();
+    /** 启动锁，防止多个实例同时创建 */
+    private final Lock startLock = new ReentrantLock();
 
-    private final Set<Integer> playerPermit = new HashSet<>();  // 玩家许可集合
-    private final Semaphore startSemaphore = new Semaphore(7);  // 启动信号量
+    /** 玩家许可集合，防止同一玩家并发创建多个事件实例 */
+    private final Set<Integer> playerPermit = new HashSet<>();
+    /** 启动信号量，限制同时创建事件实例的最大并发数（默认7个） */
+    private final Semaphore startSemaphore = new Semaphore(7);
 
-    private static final int maxLobbys = 8;     // 一个事件管理器最多支持同时运行的大厅数量
+    /** 一个事件管理器最多支持同时运行的大厅数量 */
+    private static final int maxLobbys = 8;
 
     /**
      * 构造函数
@@ -114,14 +134,17 @@ public class EventManager {
      * 取消事件管理器（确保在没有玩家在线时调用）
      */
     public void cancel() {
+        // 停止脚本调度，清除所有延时任务
         ess.dispose();
 
+        // 调用脚本层cancelSchedule进行自定义清理
         try {
             iv.invokeFunction("cancelSchedule", (Object) null);
         } catch (ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }
 
+        // 销毁所有运行中的事件实例
         Collection<EventInstanceManager> eimList;
         synchronized (instances) {
             eimList = getInstances();
@@ -132,11 +155,13 @@ public class EventManager {
             eim.dispose(true);
         }
 
+        // 销毁所有就绪队列中的实例
         List<EventInstanceManager> readyEims;
         queueLock.lock();
         try {
             readyEims = new ArrayList<>(readyInstances);
             readyInstances.clear();
+            // 将onLoadInstances设置为极小值，标记为已释放
             onLoadInstances = Integer.MIN_VALUE / 2;
         } finally {
             queueLock.unlock();
@@ -146,6 +171,7 @@ public class EventManager {
             eim.dispose(true);
         }
 
+        // 清理所有引用，帮助GC回收
         props.clear();
         cserv = null;
         wserv = null;
@@ -183,7 +209,8 @@ public class EventManager {
     private int getMaxLobbies() {
         try {
             return (int) iv.invokeFunction("getMaxLobbies");
-        } catch (ScriptException | NoSuchMethodException ex) { // 如果没有定义大厅范围
+        } catch (ScriptException | NoSuchMethodException ex) {
+            // 脚本未定义大厅范围时使用默认值
             return maxLobbys;
         }
     }
@@ -405,6 +432,7 @@ public class EventManager {
     private boolean startLobbyInstance(int lobbyId) {
         lobbyLock.lock();
         try {
+            // 修正大厅ID范围
             if (lobbyId < 0) {
                 lobbyId = 0;
             } else if (lobbyId >= maxLobbys) {
@@ -412,8 +440,9 @@ public class EventManager {
             }
 
             Pair<Boolean, Long> pair = openedLobbys.get(lobbyId);
+            // 大厅空闲、超时未使用、或PQ中无人时，允许启动
             if (!pair.left || System.currentTimeMillis() - pair.right > getEventTimeout() || isNobodyInPQ()) {
-                openedLobbys.set(lobbyId, new  Pair<>(true, System.currentTimeMillis()));
+                openedLobbys.set(lobbyId, new Pair<>(true, System.currentTimeMillis()));
                 return true;
             }
 
@@ -543,44 +572,52 @@ public class EventManager {
         }
 
         try {
+            // 检查玩家是否已有进行中的创建请求，同时获取信号量许可
             if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, MILLISECONDS)) {
                 playerPermit.add(leader.getId());
 
                 startLock.lock();
                 try {
                     try {
+                        // 未指定大厅时自动分配可用大厅
                         if (lobbyId == -1) {
                             lobbyId = availableLobbyInstance();
                             if (lobbyId == -1) {
                                 return false;
                             }
                         } else {
+                            // 指定大厅模式下检查大厅是否可用
                             if (!startLobbyInstance(lobbyId)) {
                                 return false;
                             }
                         }
 
+                        // 调用脚本层setup函数创建事件实例
                         EventInstanceManager eim;
                         try {
                             eim = createInstance("setup", leader.getClient().getChannel());
                             registerEventInstance(eim.getName(), lobbyId);
                         } catch (ScriptException | NullPointerException e) {
+                            // IIP异常表示该实例正在被其他进程创建中，不是真正的错误
                             String message = getInternalScriptExceptionMessage(e);
                             if (message != null && !message.startsWith(EventInstanceInProgressException.EIIP_KEY)) {
                                 throw e;
                             }
 
+                            // 创建失败，释放大厅锁
                             if (lobbyId > -1) {
                                 setLockLobby(lobbyId, false);
                             }
                             return false;
                         }
 
+                        // 设置队长并注册远征队所有成员
                         eim.setLeader(leader);
 
                         exped.start();
                         eim.registerExpedition(exped);
 
+                        // 启动事件，调用脚本afterSetup初始化
                         eim.startEvent();
                     } catch (ScriptException | NoSuchMethodException ex) {
                         log.error("Event script startInstance（事件脚本startInstance）", ex);
@@ -1019,11 +1056,17 @@ public class EventManager {
         }
     }
 
+    /**
+     * 获取事件超时时间
+     * 默认2小时，可在事件脚本中通过getEventTimeout函数自定义
+     *
+     * @return 超时时间（毫秒）
+     */
     public long getEventTimeout() {
-        // 默认2h
+        // 默认超时时间 2 小时
         long timeout = 7200000L;
         try {
-            // 可以在事件脚本定义事件超时时间，如果超过超时时间锁仍未失效，则锁失效
+            // 可在事件脚本中定义超时时间，超过该时间锁自动失效
             timeout = (long) iv.invokeFunction("getEventTimeout");
         } catch (ScriptException | NoSuchMethodException ignored) {
 
@@ -1031,10 +1074,16 @@ public class EventManager {
         return timeout;
     }
 
+    /**
+     * 检查PQ中是否无人
+     * 遍历事件地图列表，检查所有地图上是否有玩家
+     *
+     * @return true表示PQ中无人
+     */
     public boolean isNobodyInPQ() {
         try {
             boolean nobody = true;
-            // 可以在事件脚本定义事件地图，如果地图上没人，则锁失效
+            // 可在事件脚本中定义事件地图列表，检查地图上是否有人
             Object o = iv.invokeFunction("getEventMaps");
             if (o instanceof List<?> mapIds) {
                 for (Object mapId : mapIds) {
@@ -1044,7 +1093,7 @@ public class EventManager {
                     } else {
                         id = Integer.parseInt(mapId.toString());
                     }
-                    // 无效的mapId
+                    // 跳过无效的地图ID
                     if (id <= 0) {
                         continue;
                     }
@@ -1259,7 +1308,8 @@ public class EventManager {
      * 填充EIM队列
      */
     private void fillEimQueue() {
-        ThreadManager.getInstance().newTask(new EventManagerTask());  // 调用新线程填充准备就绪的实例队列
+        // 启动新线程异步填充就绪实例队列
+        ThreadManager.getInstance().newTask(new EventManagerTask());
     }
 
     /**
@@ -1304,7 +1354,8 @@ public class EventManager {
         EventInstanceManager eim = new EventInstanceManager(this, "sampleName" + nextEventId);
         queueLock.lock();
         try {
-            if (this.isDisposed()) {  // 事件管理器已释放
+            // 事件管理器已释放则不再继续填充
+            if (this.isDisposed()) {
                 return;
             }
 
@@ -1314,7 +1365,8 @@ public class EventManager {
             queueLock.unlock();
         }
 
-        instantiateQueuedInstance();    // 持续填充队列直到达到阈值
+        // 持久填充队列直到达到预设阈值
+        instantiateQueuedInstance();
     }
 
     /**

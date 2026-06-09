@@ -38,6 +38,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
+ * 雇佣商人处理器
+ * 处理雇佣商人（Hired Merchant）的开启请求，检测周围是否有其他商店和传送门
+ *
  * @author XoticStory
  */
 public final class HiredMerchantRequest extends AbstractPacketHandler {

@@ -28,9 +28,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 怪物手册卡牌数量需求
+ * 检查玩家怪物手册中收集的卡牌总数是否达到要求
+ *
  * @author Tyler (Twdtwd)
  */
 public class MonsterBookCountRequirement extends AbstractQuestRequirement {
+    /** 需要的卡牌数量 */
     private int reqCards;
 
 

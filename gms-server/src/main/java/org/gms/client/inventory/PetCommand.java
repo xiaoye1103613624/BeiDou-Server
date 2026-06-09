@@ -21,13 +21,20 @@
 */
 package org.gms.client.inventory;
 
-/*
+/**
+ * 宠物命令
+ * 封装宠物的命令技能：宠物ID、技能ID、触发概率和亲密度增量
+ *
  * @author Leifde
  */
 public class PetCommand {
+    /** 宠物ID */
     private final int petId;
+    /** 技能ID */
     private final int skillId;
+    /** 命令触发概率 */
     private final int prob;
+    /** 亲密度增量 */
     private final int inc;
 
     public PetCommand(int petId, int skillId, int prob, int inc) {

@@ -37,9 +37,20 @@ import org.gms.util.Randomizer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 查看所有角色后选择角色处理器（无PIC验证）
+ * 处理在"查看所有角色"界面选择角色后进入游戏世界的请求
+ */
 public final class ViewAllCharSelectedHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(ViewAllCharSelectedHandler.class);
 
+    /**
+     * 将防多客户端检测结果映射为客户端错误码
+     *
+     * @param res 防多客户端检测结果
+     * @return 客户端错误码
+     */
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {
         return switch (res) {
             case REMOTE_PROCESSING -> 10;
@@ -50,6 +61,13 @@ public final class ViewAllCharSelectedHandler extends AbstractPacketHandler {
         };
     }
 
+    /**
+     * 处理跨世界角色选择请求
+     * 验证硬件ID和角色归属后随机分配频道并重定向到游戏世界服务器
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int charId = p.readInt();

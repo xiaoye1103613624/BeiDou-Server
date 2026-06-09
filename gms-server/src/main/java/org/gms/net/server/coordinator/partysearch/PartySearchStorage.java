@@ -32,14 +32,19 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * @author Ronan
+ * 队伍搜索存储
+ * 按等级梯队存储正在搜索队伍的玩家，提供查询和管理功能
  */
 public class PartySearchStorage {
 
+    /** 按等级排序的搜索角色列表 */
     private final List<PartySearchCharacter> storage = new ArrayList<>(20);
+    /** 空区间记录，用于快速判断等级区间是否无匹配玩家 */
     private final IntervalBuilder emptyIntervals = new IntervalBuilder();
 
+    /** 存储读锁 */
     private final Lock psRLock;
+    /** 存储写锁 */
     private final Lock psWLock;
 
     public PartySearchStorage() {
@@ -48,6 +53,11 @@ public class PartySearchStorage {
         this.psWLock = readWriteLock.writeLock();
     }
 
+    /**
+     * 获取存储列表的副本（线程安全）
+     *
+     * @return 存储列表副本
+     */
     public List<PartySearchCharacter> getStorageList() {
         psRLock.lock();
         try {
@@ -57,6 +67,11 @@ public class PartySearchStorage {
         }
     }
 
+    /**
+     * 获取仍在排队中的玩家
+     *
+     * @return 角色ID到角色的映射
+     */
     private Map<Integer, Character> fetchRemainingPlayers() {
         List<PartySearchCharacter> players = getStorageList();
         Map<Integer, Character> remainingPlayers = new HashMap<>(players.size());
@@ -73,6 +88,12 @@ public class PartySearchStorage {
         return remainingPlayers;
     }
 
+    /**
+     * 更新存储
+     * 将梯队中的玩家与当前排队玩家合并后重新排序
+     *
+     * @param echelon 新加入的玩家集合
+     */
     public void updateStorage(Collection<Character> echelon) {
         Map<Integer, Character> newcomers = new HashMap<>();
         for (Character chr : echelon) {
@@ -103,6 +124,13 @@ public class PartySearchStorage {
         emptyIntervals.clear();
     }
 
+    /**
+     * 二分查找，找到存储列表中等级小于等于给定值的最大索引
+     *
+     * @param storage 已排序的存储列表
+     * @param level   目标等级
+     * @return 等级小于等于目标值的最大索引
+     */
     private static int bsearchStorage(List<PartySearchCharacter> storage, int level) {
         int st = 0, en = storage.size() - 1;
 
@@ -123,6 +151,15 @@ public class PartySearchStorage {
         return en;
     }
 
+    /**
+     * 查找并呼叫等级范围内的匹配玩家
+     *
+     * @param callerCid   呼叫的领袖角色ID
+     * @param callerMapid 呼叫的地图ID
+     * @param minLevel    最小等级
+     * @param maxLevel    最大等级
+     * @return 匹配的玩家，未找到则返回null
+     */
     public Character callPlayer(int callerCid, int callerMapid, int minLevel, int maxLevel) {
         if (emptyIntervals.inInterval(minLevel, maxLevel)) {
             return null;
@@ -151,6 +188,11 @@ public class PartySearchStorage {
         return null;
     }
 
+    /**
+     * 从存储中移除玩家
+     *
+     * @param chr 要移除的玩家
+     */
     public void detachPlayer(Character chr) {
         PartySearchCharacter toRemove = null;
         for (PartySearchCharacter psc : getStorageList()) {

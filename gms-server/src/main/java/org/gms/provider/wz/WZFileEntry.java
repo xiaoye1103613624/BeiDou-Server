@@ -24,6 +24,10 @@ package org.gms.provider.wz;
 import org.gms.provider.DataEntity;
 import org.gms.provider.DataFileEntry;
 
+/**
+ * WZ文件条目实现
+ * 表示WZ文件中的单个文件条目，包含偏移量信息
+ */
 public class WZFileEntry extends WZEntry implements DataFileEntry {
     private int offset;
 

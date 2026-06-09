@@ -29,6 +29,13 @@ public final class ViewAllCharRegisterPicHandler extends AbstractPacketHandler {
         };
     }
 
+    /**
+     * 处理跨世界注册PIC请求
+     * 验证硬件ID后注册PIC，随机分配频道并重定向到游戏世界服务器
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();

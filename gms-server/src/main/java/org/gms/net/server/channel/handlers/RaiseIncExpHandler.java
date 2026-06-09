@@ -16,6 +16,9 @@ import org.gms.util.PacketCreator;
 import java.util.Map;
 
 /**
+ * 经验加成处理器
+ * 处理玩家经验加成相关的操作
+ *
  * @author Xari
  * @author Ronan - added concurrency protection and quest progress limit
  */

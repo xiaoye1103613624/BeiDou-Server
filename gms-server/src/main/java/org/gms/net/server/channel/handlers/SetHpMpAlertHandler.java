@@ -8,6 +8,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.service.HpMpAlertService;
 
 /**
+ * HP/MP告警设置处理器
+ * 处理玩家设置HP/MP告警阈值的操作
+ *
  * @author lee
  */
 public class SetHpMpAlertHandler extends AbstractPacketHandler {

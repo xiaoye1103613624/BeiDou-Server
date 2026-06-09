@@ -29,15 +29,32 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 
 /**
+ * 召唤兽
+ * 表示玩家召唤的战斗伙伴，具有生命值、攻击力和自动攻击逻辑
+ *
  * @author Jan
  */
 public class Summon extends AbstractAnimatedMapObject {
+    /** 召唤兽所属玩家 */
     private final Character owner;
+    /** 技能等级 */
     private final byte skillLevel;
+    /** 技能ID */
     private final int skill;
+    /** 生命值 */
     private int hp;
+    /** 移动类型 */
     private final SummonMovementType movementType;
 
+    /**
+     * 构造召唤兽
+     *
+     * @param owner        召唤兽所属玩家
+     * @param skill        技能ID
+     * @param pos          召唤位置
+     * @param movementType 移动类型
+     * @throws RuntimeException 如果玩家未学习该技能
+     */
     public Summon(Character owner, int skill, Point pos, SummonMovementType movementType) {
         this.owner = owner;
         this.skill = skill;

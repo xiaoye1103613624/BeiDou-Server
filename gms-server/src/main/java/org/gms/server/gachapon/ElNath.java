@@ -1,13 +1,20 @@
 package org.gms.server.gachapon;
 
 /**
+ * 冰封雪域扭蛋机奖品
+ * 包含该城镇专属的扭蛋奖池物品，分为普通、稀有、罕见三个等级
+ *
  * @author Ronan - parsed MapleSEA loots
  * <p>
  * MapleSEA-like loots thanks to AyumiLove - src: https://ayumilovemaple.wordpress.com/maplestory-gachapon-guide/
  */
-
 public class ElNath extends GachaponItems {
 
+    /**
+     * 获取普通品质物品
+     *
+     * @return 物品ID数组
+     */
     @Override
     public int[] getCommonItems() {
         return new int[]{
@@ -51,11 +58,22 @@ public class ElNath extends GachaponItems {
         };
     }
 
+    /**
+     * 获取稀有品质物品
+     *
+     * @return 物品ID数组
+     */
     @Override
     public int[] getUncommonItems() {
         return new int[]{2022439, 2040804, 2040805, 2340000};
     }
 
+
+    /**
+     * 获取罕见品质物品
+     *
+     * @return 物品ID数组
+     */
     @Override
     public int[] getRareItems() {
         return new int[]{2043803, 1102085};

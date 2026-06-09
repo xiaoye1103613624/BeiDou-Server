@@ -7,6 +7,10 @@ import org.gms.util.ThreadLocalUtil;
 
 import java.awt.*;
 
+/**
+ * ByteBuf入站数据包实现
+ * 基于Netty ByteBuf的InPacket实现，负责从客户端接收数据的反序列化
+ */
 public class ByteBufInPacket implements InPacket {
     private final ByteBuf byteBuf;
 

@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 定时地图对象任务
+ * 定期执行地图中需要定时更新的对象逻辑
+ *
  * @author Ronan
  */
 public class TimedMapObjectTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class TimedMapObjectTask extends BaseTask implements Runnable {
         wserv.runTimedMapObjectSchedule();
     }
 
+    /**
+     * 构造定时地图对象任务
+     *
+     * @param world 关联的世界实例
+     */
     public TimedMapObjectTask(World world) {
         super(world);
     }

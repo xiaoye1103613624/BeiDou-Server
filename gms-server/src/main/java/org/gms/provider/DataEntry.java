@@ -22,6 +22,9 @@
 package org.gms.provider;
 
 /**
+ * 数据条目接口
+ * WZ文件中的条目，包含文件大小、校验和、偏移量等元数据
+ *
  * @author Matze
  */
 public interface DataEntry extends DataEntity {

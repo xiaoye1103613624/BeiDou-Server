@@ -24,11 +24,22 @@ import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
 
 /**
+ * 玩家NPC工厂
+ * 负责验证脚本ID是否存在于WZ数据中，防止因引用不存在的脚本ID导致客户端崩溃
+ *
  * @author RonanLana
  */
 public class PlayerNPCFactory {
+    /** NPC数据提供者 */
     private static final DataProvider npcData = DataProviderFactory.getDataProvider(WZFiles.NPC);
 
+    /**
+     * 检查脚本ID是否存在于WZ数据中
+     * 使用synchronized确保线程安全的数据访问
+     *
+     * @param scriptid 脚本ID
+     * @return true表示WZ中存在对应的NPC数据
+     */
     public synchronized static boolean isExistentScriptid(int scriptid) {
         return npcData.getData(scriptid + ".img") != null;
     }

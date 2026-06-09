@@ -23,30 +23,57 @@
 package org.gms.server.events.gm;
 
 /**
+ * GM活动基类
+ * 管理活动地图和参与人数限制
+ *
  * @author kevintjuh93
  */
 public class Event {
+    /** 活动地图ID */
     private final int mapid;
+    /** 参与人数限制 */
     private int limit;
 
+    /**
+     * 构造GM活动
+     *
+     * @param mapid 活动地图ID
+     * @param limit 参与人数限制
+     */
     public Event(int mapid, int limit) {
         this.mapid = mapid;
         this.limit = limit;
     }
 
+    /**
+     * 获取活动地图ID
+     *
+     * @return 地图ID
+     */
     public int getMapId() {
         return mapid;
     }
 
+    /**
+     * 获取参与人数限制
+     *
+     * @return 人数限制
+     */
     public int getLimit() {
         return limit;
     }
 
+    /**
+     * 减少参与人数限制
+     */
     public void minusLimit() {
         this.limit--;
     }
 
+    /**
+     * 增加参与人数限制
+     */
     public void addLimit() {
         this.limit++;
     }
-}  
+}

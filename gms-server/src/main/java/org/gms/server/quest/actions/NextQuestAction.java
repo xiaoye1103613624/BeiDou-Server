@@ -30,9 +30,13 @@ import org.gms.server.quest.QuestActionType;
 import org.gms.util.PacketCreator;
 
 /**
+ * 下一个任务动作
+ * 自动为玩家接取下一个任务，形成任务链
+ *
  * @author Tyler (Twdtwd)
  */
 public class NextQuestAction extends AbstractQuestAction {
+    /** 下一个任务ID */
     int nextQuest;
 
     public NextQuestAction(Quest quest, Data data) {
@@ -51,4 +55,4 @@ public class NextQuestAction extends AbstractQuestAction {
         QuestStatus status = chr.getQuest(Quest.getInstance(questID));
         chr.sendPacket(PacketCreator.updateQuestFinish((short) questID, status.getNpc(), (short) nextQuest));
     }
-} 
+}

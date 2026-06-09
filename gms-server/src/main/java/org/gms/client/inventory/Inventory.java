@@ -44,6 +44,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 背包
+ * 管理角色的物品背包，使用LinkedHashMap按槽位存储物品
+ * 支持物品查找、添加、删除、合并等操作，使用ReentrantLock保证线程安全
+ *
  * @author Matze, Ronan
  */
 public class Inventory implements Iterable<Item> {

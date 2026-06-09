@@ -12,12 +12,22 @@ import java.io.BufferedReader;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * 统一响应体
+ * 封装API返回结果，包含状态码、消息、响应ID和数据
+ *
+ * @param <T> 数据类型
+ */
 @Data
 @Slf4j
 public class ResultBody<T> {
+    /** 状态码 */
     private Integer code;
+    /** 提示消息 */
     private String message;
+    /** 响应ID，用于追踪请求 */
     private String responseId;
+    /** 响应数据 */
     private T data;
 
     public ResultBody() {
@@ -28,10 +38,23 @@ public class ResultBody<T> {
         this.message = errorInfo.getResultMsg();
     }
 
+    /**
+     * 创建成功响应（无数据）
+     *
+     * @param <T> 数据类型
+     * @return 成功响应体
+     */
     public static <T> ResultBody<T> success() {
         return success(null);
     }
 
+    /**
+     * 创建成功响应
+     *
+     * @param data 响应数据
+     * @param <T>  数据类型
+     * @return 成功响应体
+     */
     public static <T> ResultBody<T> success(T data) {
         ResultBody<T> rb = new ResultBody<>();
         rb.setResponseId(UUID.randomUUID().toString());
@@ -41,6 +64,14 @@ public class ResultBody<T> {
         return rb;
     }
 
+    /**
+     * 创建成功响应，复用请求ID
+     *
+     * @param request 请求体
+     * @param data    响应数据
+     * @param <T>     数据类型
+     * @return 成功响应体
+     */
     public static <T> ResultBody<T> success(SubmitBody<?> request, T data) {
         ResultBody<T> rb = new ResultBody<>();
         rb.setResponseId(request.getRequestId());
@@ -50,14 +81,39 @@ public class ResultBody<T> {
         return rb;
     }
 
+    /**
+     * 创建错误响应，使用错误信息接口
+     *
+     * @param req      HTTP请求
+     * @param errorInfo 错误信息接口
+     * @param <T>      数据类型
+     * @return 错误响应体
+     */
     public static <T> ResultBody<T> error(HttpServletRequest req, BaseErrorInfoInterface errorInfo) {
         return error(req, errorInfo.getResultCode(), errorInfo.getResultMsg());
     }
 
+    /**
+     * 创建错误响应，自定义错误消息
+     *
+     * @param req     HTTP请求
+     * @param message 错误消息
+     * @param <T>     数据类型
+     * @return 错误响应体
+     */
     public static <T> ResultBody<T> error(HttpServletRequest req, String message) {
         return error(req, -1, message);
     }
 
+    /**
+     * 创建错误响应，自定义状态码和错误消息
+     *
+     * @param req     HTTP请求
+     * @param code    状态码
+     * @param message 错误消息
+     * @param <T>     数据类型
+     * @return 错误响应体
+     */
     public static <T> ResultBody<T> error(HttpServletRequest req, Integer code, String message) {
         String method = req.getMethod();
         String contentType = req.getContentType();

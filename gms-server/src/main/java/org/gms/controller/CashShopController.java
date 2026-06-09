@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 现金商城控制器
+ * 处理商城商品查询、分类列表和批量上下架请求
+ */
 @RestController
 @RequestMapping("/cashShop")
 @AllArgsConstructor

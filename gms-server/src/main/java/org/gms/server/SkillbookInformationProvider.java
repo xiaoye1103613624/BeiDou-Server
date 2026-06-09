@@ -42,28 +42,43 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 技能书信息提供者
+ * 扫描怪物掉落数据，提供技能书的获取途径信息（任务、反应器、掉落等）
+ * 仅用于一个脚本中向玩家展示技能书来源
+ *
  * @author RonanLana
- */
-
-/**
- * Only used in 1 script that gives players information about where skillbooks can be found
  */
 public class SkillbookInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(SkillbookInformationProvider.class);
+    /** 技能书来源缓存 */
     private static volatile Map<Integer, SkillBookEntry> foundSkillbooks = new HashMap<>();
 
+    /**
+     * 技能书获取途径枚举
+     */
     public enum SkillBookEntry {
+        /** 不可获取 */
         UNAVAILABLE,
+        /** 任务获取 */
         QUEST,
+        /** 任务书获取 */
         QUEST_BOOK,
+        /** 任务奖励 */
         QUEST_REWARD,
+        /** 反应器掉落 */
         REACTOR,
+        /** 脚本获取 */
         SCRIPT
     }
 
+    /** 技能书范围：起始 */ 
     private static final int SKILLBOOK_MIN_ITEMID = 2280000;
+    /** 技能书范围：结束（不含） */
     private static final int SKILLBOOK_MAX_ITEMID = 2300000;  // exclusively
 
+    /**
+     * 加载所有技能书来源信息
+     */
     public static void loadAllSkillbookInformation() {
         Map<Integer, SkillBookEntry> loadedSkillbooks = new HashMap<>();
         loadedSkillbooks.putAll(fetchSkillbooksFromQuests());
@@ -72,10 +87,22 @@ public class SkillbookInformationProvider {
         SkillbookInformationProvider.foundSkillbooks = loadedSkillbooks;
     }
 
+    /**
+     * 判断是否为4转技能
+     *
+     * @param itemid 物品/技能ID
+     * @return 是4转技能返回true
+     */
     private static boolean is4thJobSkill(int itemid) {
         return itemid / 10000 % 10 == 2;
     }
 
+    /**
+     * 判断物品ID是否为技能书
+     *
+     * @param itemid 物品ID
+     * @return 是技能书返回true
+     */
     private static boolean isSkillBook(int itemid) {
         return itemid >= SKILLBOOK_MIN_ITEMID && itemid < SKILLBOOK_MAX_ITEMID;
     }
@@ -84,6 +111,13 @@ public class SkillbookInformationProvider {
         return itemid >= 4001107 && itemid <= 4001114 || itemid >= 4161015 && itemid <= 4161023;
     }
 
+    /**
+     * 递归查找任务关联的任务书物品ID
+     *
+     * @param checkData 任务检查数据（Check.img）
+     * @param quest     任务ID
+     * @return 任务书物品ID，未找到返回-1
+     */
     private static int fetchQuestbook(Data checkData, String quest) {
         Data questStartData = checkData.getChildByPath(quest).getChildByPath("0");
 
@@ -119,6 +153,11 @@ public class SkillbookInformationProvider {
         return -1;
     }
 
+    /**
+     * 扫描任务奖励中的技能书
+     *
+     * @return 技能书ID -> 获取途径
+     */
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromQuests() {
         DataProvider questDataProvider = DataProviderFactory.getDataProvider(WZFiles.QUEST);
         Data actData = questDataProvider.getData("Act.img");
@@ -165,6 +204,11 @@ public class SkillbookInformationProvider {
         return loadedSkillbooks;
     }
 
+    /**
+     * 扫描反应器掉落中的技能书
+     *
+     * @return 技能书ID -> 获取途径
+     */
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromReactors() {
         Map<Integer, SkillBookEntry> loadedSkillbooks = new HashMap<>();
 
@@ -206,7 +250,13 @@ public class SkillbookInformationProvider {
         }
     }
 
-	private static List<Path> listFilesFromDirectoryRecursively(String directory) {
+	/**
+     * 递归列出目录中所有文件
+     *
+     * @param directory 目录路径
+     * @return 文件路径列表
+     */
+    private static List<Path> listFilesFromDirectoryRecursively(String directory) {
 		ArrayList<Path> files = new ArrayList<>();
 		listFiles(directory, files);
 
@@ -226,6 +276,14 @@ public class SkillbookInformationProvider {
         return skillbookIds;
     }
 
+    /**
+     * 读取文件内容为字符串
+     *
+     * @param file     文件路径
+     * @param encoding 编码
+     * @return 文件内容
+     * @throws IOException 读取异常
+     */
     private static String readFileToString(Path file, String encoding) throws IOException {
         Scanner scanner = new Scanner(file, encoding);
         String text = "";
@@ -239,6 +297,12 @@ public class SkillbookInformationProvider {
         return text;
     }
 
+    /**
+     * 在脚本文件中搜索技能书引用
+     *
+     * @param file 脚本文件路径
+     * @return 技能书ID -> SCRIPT
+     */
     private static Map<Integer, SkillBookEntry> fileSearchMatchingData(Path file) {
         Map<Integer, SkillBookEntry> scriptFileSkillbooks = new HashMap<>();
 
@@ -256,6 +320,11 @@ public class SkillbookInformationProvider {
         return scriptFileSkillbooks;
     }
 
+    /**
+     * 扫描所有脚本文件中的技能书引用
+     *
+     * @return 技能书ID -> 获取途径
+     */
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
@@ -268,11 +337,23 @@ public class SkillbookInformationProvider {
         return scriptSkillbooks;
     }
 
+    /**
+     * 获取技能书的获取途径
+     *
+     * @param itemId 技能书物品ID
+     * @return 获取途径枚举
+     */
     public static SkillBookEntry getSkillbookAvailability(int itemId) {
         SkillBookEntry sbe = foundSkillbooks.get(itemId);
         return sbe != null ? sbe : SkillBookEntry.UNAVAILABLE;
     }
 
+    /**
+     * 获取角色可学习的技能列表（通过四转任务直接获得）
+     *
+     * @param chr 角色
+     * @return 可学习技能ID列表（负值表示技能奖励）
+     */
     public static List<Integer> getTeachableSkills(Character chr) {
         List<Integer> list = new ArrayList<>();
 

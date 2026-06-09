@@ -31,6 +31,12 @@ public class KeepAliveHandler implements PacketHandler {
         c.pongReceived();
     }
 
+    /**
+     * 验证客户端状态
+     *
+     * @param c 客户端会话
+     * @return 始终返回true，允许任何状态
+     */
     @Override
     public boolean validateState(Client c) {
         return true;

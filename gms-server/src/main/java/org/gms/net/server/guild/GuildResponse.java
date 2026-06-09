@@ -23,20 +23,42 @@ package org.gms.net.server.guild;
 
 import org.gms.net.packet.Packet;
 
+/**
+ * 公会操作响应码枚举
+ * 定义公会操作的各种响应类型及对应的数据包
+ */
 public enum GuildResponse {
+    /** 目标不在频道中 */
     NOT_IN_CHANNEL(0x2a),
+    /** 已在公会中 */
     ALREADY_IN_GUILD(0x28),
+    /** 不在公会中 */
     NOT_IN_GUILD(0x2d),
+    /** 未找到邀请 */
     NOT_FOUND_INVITE(0x2e),
+    /** 正在管理邀请 */
     MANAGING_INVITE(0x36),
+    /** 拒绝邀请 */
     DENIED_INVITE(0x37);
 
+    /** 响应码值 */
     private final int value;
 
+    /**
+     * 构造响应码
+     *
+     * @param val 响应码值
+     */
     GuildResponse(int val) {
         value = val;
     }
 
+    /**
+     * 获取对应的数据包
+     *
+     * @param targetName 目标角色名称
+     * @return 响应数据包
+     */
     public final Packet getPacket(String targetName) {
         if (value >= MANAGING_INVITE.value) {
             return GuildPackets.responseGuildMessage((byte) value, targetName);

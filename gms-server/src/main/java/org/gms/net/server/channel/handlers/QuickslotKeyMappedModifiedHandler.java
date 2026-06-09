@@ -6,6 +6,9 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
+ * 快捷栏按键映射修改处理器
+ * 处理玩家修改快捷栏按键映射的操作
+ *
  * @author Shavit
  */
 public class QuickslotKeyMappedModifiedHandler extends AbstractPacketHandler {

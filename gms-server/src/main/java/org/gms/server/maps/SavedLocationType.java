@@ -21,20 +21,43 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 保存位置类型枚举
+ * 定义玩家可保存的位置类型，用于回城、传送等场景
+ * 每种类型对应一个特定的保存位置，供玩家在不同场景间切换
+ */
 public enum SavedLocationType {
+    /** 自由市场 */
     FREE_MARKET,
+    /** 世界旅行 */
     WORLDTOUR,
+    /** 弗洛里纳海滩 */
     FLORINA,
+    /** 教程入口 */
     INTRO,
+    /** 周日市场 */
     SUNDAY_MARKET,
+    /** 镜像 */
     MIRROR,
+    /** 活动 */
     EVENT,
+    /** BOSS组队 */
     BOSSPQ,
+    /** 幸福村 */
     HAPPYVILLE,
+    /** 怪物嘉年华 */
     MONSTER_CARNIVAL,
+    /** 开发者 */
     DEVELOPER,
+    /** 监狱 */
     JAIL;
 
+    /**
+     * 从字符串解析保存位置类型
+     *
+     * @param Str 类型字符串
+     * @return 对应的枚举值
+     */
     public static SavedLocationType fromString(String Str) {
         return valueOf(Str);
     }

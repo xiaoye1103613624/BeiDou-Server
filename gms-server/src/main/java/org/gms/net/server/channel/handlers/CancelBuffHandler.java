@@ -36,6 +36,10 @@ import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 取消增益处理器
+ * 处理玩家手动取消增益效果（Buff）的操作
+ */
 public final class CancelBuffHandler extends AbstractPacketHandler implements PacketHandler {
 
     @Override

@@ -27,10 +27,12 @@ import static org.gms.dao.entity.table.AutobanConfigDOTableDef.AUTOBAN_CONFIG_D_
 @AllArgsConstructor
 @Slf4j
 public class AutobanConfigService {
+    /** 自动封禁配置数据访问对象 */
     private final AutobanConfigMapper autobanConfigMapper;
 
     /**
      * 服务启动时加载配置到内存（初始化到 AutobanFactory）
+     * 从数据库读取所有自动封禁配置并注册到AutobanFactory缓存中
      */
     public void loadConfigs() {
         List<AutobanConfigDO> configs = autobanConfigMapper.selectAll();
@@ -47,6 +49,9 @@ public class AutobanConfigService {
 
     /**
      * 获取所有配置列表（包含枚举默认值）
+     * 遍历所有AutobanFactory枚举类型，将数据库配置与枚举默认值合并返回
+     *
+     * @return 自动封禁配置DTO列表
      */
     public List<AutobanConfigDTO> getConfigList() {
         List<AutobanConfigDTO> result = new ArrayList<>();
@@ -91,6 +96,9 @@ public class AutobanConfigService {
 
     /**
      * 更新配置
+     * 根据DTO中的配置项，更新或插入数据库记录并同步到AutobanFactory缓存
+     *
+     * @param dto 自动封禁配置DTO，包含type、points、expireTimeSeconds等配置项
      */
     @Transactional(rollbackFor = Exception.class)
     public void updateConfig(AutobanConfigDTO dto) {

@@ -21,15 +21,33 @@
 package org.gms.server.movement;
 
 import org.gms.net.packet.OutPacket;
-
 import java.awt.*;
 
+/**
+ * 传送移动
+ * 瞬间传送到目标位置，无持续时间
+ * 继承AbsoluteLifeMovement使用绝对坐标
+ */
 public class TeleportMovement extends AbsoluteLifeMovement {
 
+    /**
+     * 构造传送移动
+     *
+     * @param type      移动类型
+     * @param position  目标位置
+     * @param newstate  传送后状态
+     */
     public TeleportMovement(int type, Point position, int newstate) {
         super(type, position, 0, newstate);
     }
 
+    /**
+     * 序列化传送移动到数据包
+     * <p>
+     * 与父类相比省略了 fh 和 duration 字段，因为传送是瞬时的
+     *
+     * @param p 输出包
+     */
     @Override
     public void serialize(OutPacket p) {
         p.writeByte(getType());

@@ -30,9 +30,13 @@ import org.gms.server.quest.QuestActionType;
 import org.gms.util.NumberTool;
 
 /**
+ * 经验奖励动作
+ * 给玩家增加经验值奖励，支持经验倍率设置
+ *
  * @author Tyler (Twdtwd)
  */
 public class ExpAction extends AbstractQuestAction {
+    /** 奖励经验值 */
     int exp;
 
     public ExpAction(Quest quest, Data data) {
@@ -58,4 +62,4 @@ public class ExpAction extends AbstractQuestAction {
             chr.gainExp(NumberTool.floatToInt(gain * chr.getQuestExpRate()), true, true);
         }
     }
-} 
+}

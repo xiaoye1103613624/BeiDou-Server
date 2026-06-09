@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 装备信息查询请求参数
+ */
 @Setter
 @Getter
 public class EquipmentInfoReqDTO {
-//    private Integer worldId;
-//    private Integer playerId;
-//    private String player;
-//    private Byte type;
-    private Integer id;//装备的ID 物品的ID
+    /** 装备ID（物品ID） */
+    private Integer id;
 //    private Integer quantity;
 //    private Integer rate;
 //    private Short str;

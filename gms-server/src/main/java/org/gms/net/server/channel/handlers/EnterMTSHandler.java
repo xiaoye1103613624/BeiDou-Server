@@ -45,6 +45,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * 进入交易市场处理器
+ * 处理玩家进入市场交易系统（MTS）的操作
+ */
 public final class EnterMTSHandler extends AbstractPacketHandler {
 
     @Override

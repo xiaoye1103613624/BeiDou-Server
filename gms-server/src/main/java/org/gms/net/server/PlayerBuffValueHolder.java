@@ -24,12 +24,21 @@ package org.gms.net.server;
 import org.gms.server.StatEffect;
 
 /**
- * @author Danny
+ * 玩家Buff值持有者
+ * 记录Buff效果的持续时间和来源效果
  */
 public class PlayerBuffValueHolder {
+    /** 已使用时间 */
     public int usedTime;
+    /** Buff效果对象 */
     public StatEffect effect;
 
+    /**
+     * 构造Buff值持有者
+     *
+     * @param usedTime 已使用时间
+     * @param effect   Buff效果对象
+     */
     public PlayerBuffValueHolder(int usedTime, StatEffect effect) {
         this.usedTime = usedTime;
         this.effect = effect;

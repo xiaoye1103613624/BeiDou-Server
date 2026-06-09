@@ -21,6 +21,32 @@
 */
 package org.gms.net.server.world;
 
+/**
+ * 组队操作枚举
+ * 定义组队的各种操作类型
+ * <ul>
+ *   <li>JOIN - 加入队伍</li>
+ *   <li>LEAVE - 离开队伍</li>
+ *   <li>EXPEL - 踢出队伍</li>
+ *   <li>DISBAND - 解散队伍</li>
+ *   <li>SILENT_UPDATE - 静默更新</li>
+ *   <li>LOG_ONOFF - 上线/下线通知</li>
+ *   <li>CHANGE_LEADER - 更换队长</li>
+ * </ul>
+ */
 public enum PartyOperation {
-    JOIN, LEAVE, EXPEL, DISBAND, SILENT_UPDATE, LOG_ONOFF, CHANGE_LEADER
+    /** 加入队伍 */
+    JOIN,
+    /** 离开队伍 */
+    LEAVE,
+    /** 踢出队伍 */
+    EXPEL,
+    /** 解散队伍 */
+    DISBAND,
+    /** 静默更新 */
+    SILENT_UPDATE,
+    /** 上线/下线通知 */
+    LOG_ONOFF,
+    /** 更换队长 */
+    CHANGE_LEADER
 }

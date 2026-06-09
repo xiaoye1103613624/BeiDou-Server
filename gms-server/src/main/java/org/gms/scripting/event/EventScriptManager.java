@@ -39,22 +39,35 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Matze
  */
 public class EventScriptManager extends AbstractScriptManager {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(EventScriptManager.class); // SLF4J 日志实例
-    private static final String INJECTED_VARIABLE_NAME = "em"; // 注入到 JS 引擎的变量名
-    private static EventEntry fallback; // 后备事件（如默认事件）
-    private final Map<String, EventEntry> events = new ConcurrentHashMap<>(); // 存储事件名与事件实体的映射
-    private boolean active = false; // 管理器是否激活
+    /** SLF4J 日志实例 */
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(EventScriptManager.class);
+    /** 注入到 JS 引擎的变量名 */
+    private static final String INJECTED_VARIABLE_NAME = "em";
+    /** 后备事件（如默认事件 0_EXAMPLE） */
+    private static EventEntry fallback;
+    /** 存储事件名与事件实体的映射，使用ConcurrentHashMap保证线程安全 */
+    private final Map<String, EventEntry> events = new ConcurrentHashMap<>();
+    /** 管理器是否激活 */
+    private boolean active = false;
 
     /**
      * 事件实体类，封装 JS 调用接口和事件管理器
      */
     private static class EventEntry {
-        public Invocable iv; // 可调用的 JS 引擎接口
-        public EventManager em; // 事件管理器
+        /** 可调用的 JS 引擎接口（线程安全包装） */
+        public Invocable iv;
+        /** 事件管理器 */
+        public EventManager em;
 
+        /**
+         * 构造函数
+         *
+         * @param iv 可调用的 JS 引擎接口
+         * @param em 事件管理器
+         */
         public EventEntry(Invocable iv, EventManager em) {
-            this.iv = iv; // 初始化 JS 调用接口
-            this.em = em; // 初始化事件管理器
+            this.iv = iv;
+            this.em = em;
         }
     }
 
@@ -66,12 +79,15 @@ public class EventScriptManager extends AbstractScriptManager {
     public EventScriptManager(final Channel channel, String[] scripts) {
         for (String script : scripts) {
             if (!script.isEmpty()) {
-                events.put(script, initializeEventEntry(script, channel)); // 加载并存储每个脚本
+                // 加载每个事件脚本并创建对应的EventEntry
+                events.put(script, initializeEventEntry(script, channel));
             }
         }
 
-        init(); // 初始化所有事件
-        fallback = events.remove("0_EXAMPLE"); // 移除并保留后备事件
+        // 初始化所有事件（调用每个脚本的init函数）
+        init();
+        // 移除示例事件作为后备
+        fallback = events.remove("0_EXAMPLE");
     }
 
     /**
@@ -80,11 +96,12 @@ public class EventScriptManager extends AbstractScriptManager {
      * @return 对应的事件管理器，若不存在则返回后备事件
      */
     public EventManager getEventManager(String event) {
-        EventEntry entry = events.get(event); // 查找事件
+        EventEntry entry = events.get(event);
         if (entry == null) {
-            return fallback.em; // 返回后备事件
+            // 未找到时返回后备事件
+            return fallback.em;
         }
-        return entry.em; // 返回找到的事件
+        return entry.em;
     }
 
     /**
@@ -92,7 +109,7 @@ public class EventScriptManager extends AbstractScriptManager {
      * @return true 表示已激活
      */
     public boolean isActive() {
-        return active; // 返回激活状态
+        return active;
     }
 
     /**
@@ -101,28 +118,33 @@ public class EventScriptManager extends AbstractScriptManager {
     public final void init() {
         for (EventEntry entry : events.values()) {
             try {
-                entry.iv.invokeFunction("init", (Object) null); // 调用 JS 的 init 方法
+                // 调用每个JS脚本的init函数进行初始化
+                entry.iv.invokeFunction("init", (Object) null);
             } catch (Exception ex) {
-                log.error("Error on script（事件脚本初始化出错）: {}", entry.em.getName(), ex); // 记录错误日志
+                log.error("Error on script（事件脚本初始化出错）: {}", entry.em.getName(), ex);
             }
         }
 
-        active = events.size() > 1; // 如果事件数 >1，标记为激活状态
+        // 事件数大于1时标记为激活状态（单个示例事件不算激活）
+        active = events.size() > 1;
     }
 
     /**
      * 重新加载所有事件脚本
      */
     private void reloadScripts() {
-        Set<Entry<String, EventEntry>> eventEntries = new HashSet<>(events.entrySet()); // 复制当前事件集合
+        // 复制当前事件集合，避免遍历时修改
+        Set<Entry<String, EventEntry>> eventEntries = new HashSet<>(events.entrySet());
         if (eventEntries.isEmpty()) {
-            return; // 无事件时直接返回
+            return;
         }
 
-        Channel channel = eventEntries.iterator().next().getValue().em.getChannelServer(); // 获取频道上下文
+        // 从任意事件获取频道上下文（所有事件共用同一频道）
+        Channel channel = eventEntries.iterator().next().getValue().em.getChannelServer();
         for (Entry<String, EventEntry> entry : eventEntries) {
             String script = entry.getKey();
-            events.put(script, initializeEventEntry(script, channel)); // 重新加载每个脚本
+            // 重新加载每个脚本文件并替换旧实体
+            events.put(script, initializeEventEntry(script, channel));
         }
     }
 
@@ -133,29 +155,36 @@ public class EventScriptManager extends AbstractScriptManager {
      * @return 事件实体（包含 JS 引擎和事件管理器）
      */
     private EventEntry initializeEventEntry(String script, Channel channel) {
-        ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js"); // 获取 JS 引擎
-        Invocable iv = SynchronizedInvocable.of((Invocable) engine); // 包装为线程安全的调用接口
-        EventManager eventManager = new EventManager(channel, iv, script); // 创建事件管理器
-        engine.put(INJECTED_VARIABLE_NAME, eventManager); // 向 JS 引擎注入变量 "em"
-        return new EventEntry(iv, eventManager); // 返回事件实体
+        // 加载JS脚本并包装为线程安全的调用接口
+        ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
+        Invocable iv = SynchronizedInvocable.of((Invocable) engine);
+        // 创建事件管理器并注入到JS引擎的全局变量"em"中
+        EventManager eventManager = new EventManager(channel, iv, script);
+        engine.put(INJECTED_VARIABLE_NAME, eventManager);
+        return new EventEntry(iv, eventManager);
     }
 
     /**
      * 重新加载所有事件脚本（外部调用入口）
      */
     public void reload() {
-        cancel(); // 取消当前所有事件
-        reloadScripts(); // 重新加载脚本
-        init(); // 重新初始化
+        // 先取消所有运行中的事件
+        cancel();
+        // 重新加载脚本文件
+        reloadScripts();
+        // 重新初始化所有事件
+        init();
     }
 
     /**
      * 取消所有事件执行
      */
     public void cancel() {
-        active = false; // 标记为未激活
+        // 标记为非激活状态
+        active = false;
         for (EventEntry entry : events.values()) {
-            entry.em.cancel(); // 调用每个事件的取消方法
+            // 调用每个事件的取消方法清理资源
+            entry.em.cancel();
         }
     }
 
@@ -164,15 +193,17 @@ public class EventScriptManager extends AbstractScriptManager {
      */
     public void dispose() {
         if (events.isEmpty()) {
-            return; // 无事件时直接返回
+            return;
         }
 
-        Set<EventEntry> eventEntries = new HashSet<>(events.values()); // 复制事件集合
-        events.clear(); // 清空映射表
+        // 复制后立即清空原映射，防止并发修改
+        Set<EventEntry> eventEntries = new HashSet<>(events.values());
+        events.clear();
 
-        active = false; // 标记为未激活
+        // 标记非激活并取消所有事件
+        active = false;
         for (EventEntry entry : eventEntries) {
-            entry.em.cancel(); // 取消所有事件
+            entry.em.cancel();
         }
     }
 }

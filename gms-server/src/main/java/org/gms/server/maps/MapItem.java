@@ -31,16 +31,50 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 地图物品
+ * 表示地图上的掉落物品或金币，管理物品的归属权、拾取条件和过期时间
+ * 使用{@link ReentrantLock}保证拾取操作的线程安全
+ */
 public class MapItem extends AbstractMapObject {
+    /** 掉落者客户端 */
     protected Client ownerClient;
+    /** 物品对象 */
     protected Item item;
+    /** 掉落者 */
     protected MapObject dropper;
-    protected int character_ownerid, party_ownerid, meso, questid = -1;
+    /** 物品所有者角色ID */
+    protected int character_ownerid;
+    /** 物品所有者队伍ID */
+    protected int party_ownerid;
+    /** 金币数量（>0表示金币） */
+    protected int meso;
+    /** 关联任务ID */
+    protected int questid = -1;
+    /** 掉落类型 */
     protected byte type;
-    protected boolean pickedUp = false, playerDrop, partyDrop;
+    /** 是否已被拾取 */
+    protected boolean pickedUp = false;
+    /** 是否玩家丢弃 */
+    protected boolean playerDrop;
+    /** 是否队伍掉落 */
+    protected boolean partyDrop;
+    /** 掉落时间戳 */
     protected long dropTime;
+    /** 物品锁，保证拾取操作的线程安全 */
     private final Lock itemLock = new ReentrantLock();
 
+    /**
+     * 构造物品掉落（无任务关联）
+     *
+     * @param item        物品
+     * @param position    掉落位置
+     * @param dropper     掉落者
+     * @param owner       所有者
+     * @param ownerClient 所有者客户端
+     * @param type        掉落类型
+     * @param playerDrop  是否玩家丢弃
+     */
     public MapItem(Item item, Point position, MapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);
         this.item = item;
@@ -68,6 +102,17 @@ public class MapItem extends AbstractMapObject {
         this.questid = questid;
     }
 
+    /**
+     * 构造金币掉落
+     *
+     * @param meso        金币数量
+     * @param position    掉落位置
+     * @param dropper     掉落者
+     * @param owner       所有者
+     * @param ownerClient 所有者客户端
+     * @param type        掉落类型
+     * @param playerDrop  是否玩家丢弃
+     */
     public MapItem(int meso, Point position, MapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);
         this.item = null;
@@ -112,7 +157,8 @@ public class MapItem extends AbstractMapObject {
         party_ownerid = partyid;
     }
 
-    public final int getClientsideOwnerId() {   // thanks nozphex (RedHat) for noting an issue with collecting party items
+    public final int getClientsideOwnerId() {
+        // thanks nozphex (RedHat) for noting an issue with collecting party items
         if (this.party_ownerid == -1) {
             return this.character_ownerid;
         } else {
@@ -120,6 +166,13 @@ public class MapItem extends AbstractMapObject {
         }
     }
 
+    /**
+     * 检查玩家是否拥有客户端显示所有权
+     * 满足以下任一条件即有所有权：角色ID匹配、队伍ID匹配、或物品已过期
+     *
+     * @param player 玩家
+     * @return true表示有所有权
+     */
     public final boolean hasClientsideOwnership(Character player) {
         return this.character_ownerid == player.getId() || this.party_ownerid == player.getPartyId() || hasExpiredOwnershipTime();
     }
@@ -132,6 +185,14 @@ public class MapItem extends AbstractMapObject {
         return System.currentTimeMillis() - dropTime >= SECONDS.toMillis(15);
     }
 
+    /**
+     * 检查物品是否可被指定玩家拾取
+     * 拾取规则：无所有者、FFA掉落、角色ID匹配、队伍ID匹配、或已过期
+     * 若同队拾取，则自动将物品标记为队伍掉落
+     *
+     * @param chr 玩家
+     * @return true表示可拾取
+     */
     public final boolean canBePickedBy(Character chr) {
         if (character_ownerid <= 0 || isFFADrop()) {
             return true;

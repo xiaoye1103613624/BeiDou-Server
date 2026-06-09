@@ -21,9 +21,22 @@
 package org.gms.server.life;
 
 /**
+ * 怪物全局掉落条目
+ * 存储全局掉落配置，不限于特定怪物，可按大陆区分掉落
+ *
  * @author LightPepsi
  */
 public class MonsterGlobalDropEntry {
+    /**
+     * 构造全局掉落条目
+     *
+     * @param itemId 物品ID
+     * @param chance 掉落概率
+     * @param continent 大陆ID（-1表示所有大陆）
+     * @param Minimum 最小掉落数量
+     * @param Maximum 最大掉落数量
+     * @param questid 关联任务ID
+     */
     public MonsterGlobalDropEntry(int itemId, int chance, int continent, int Minimum, int Maximum, short questid) {
         this.itemId = itemId;
         this.chance = chance;
@@ -33,6 +46,16 @@ public class MonsterGlobalDropEntry {
         this.Maximum = Maximum;
     }
 
-    public int itemId, chance, Minimum, Maximum, continentid;
+    /** 物品ID */
+    public int itemId;
+    /** 掉落概率 */
+    public int chance;
+    /** 最小掉落数量 */
+    public int Minimum;
+    /** 最大掉落数量 */
+    public int Maximum;
+    /** 大陆ID（-1表示所有大陆） */
+    public int continentid;
+    /** 关联任务ID */
     public short questid;
 }

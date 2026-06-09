@@ -44,22 +44,37 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 玩家商店
+ * 管理玩家开设的商店，包括物品上架、购买和关闭，线程安全
+ *
  * @author Matze
  * @author Ronan - concurrency protection
  */
 public class PlayerShop extends AbstractMapObject {
+    /** 商店是否开放 */
     private final AtomicBoolean open = new AtomicBoolean(false);
+    /** 商店所有者 */
     private final Character owner;
+    /** 商店外观物品ID */
     private final int itemid;
 
+    /** 访问者数组（最多3人） */
     private final Character[] visitors = new Character[3];
+    /** 上架物品列表 */
     private final List<PlayerShopItem> items = new ArrayList<>();
+    /** 已售出物品列表 */
     private final List<SoldItem> sold = new LinkedList<>();
+    /** 商店描述 */
     private String description;
+    /** 已购买数量 */
     private int boughtnumber = 0;
+    /** 黑名单列表 */
     private final List<String> bannedList = new ArrayList<>();
+    /** 聊天记录 */
     private final List<Pair<Character, String>> chatLog = new LinkedList<>();
+    /** 聊天槽位映射 */
     private final Map<Integer, Byte> chatSlot = new LinkedHashMap<>();
+    /** 访问者锁，保证多线程安全 */
     private final Lock visitorLock = new ReentrantLock(true);
 
     public PlayerShop(Character owner, String description, int itemid) {
@@ -168,7 +183,8 @@ public class PlayerShop extends AbstractMapObject {
             try {
                 for (int i = 0; i < 3; i++) {
                     if (visitors[i] != null && visitors[i].getId() == visitor.getId()) {
-                        visitor.setSlot(-1);    //absolutely cant remove player slot for late players without dc'ing them... heh
+                        // absolutely cant remove player slot for late players without dc'ing them... heh
+                        visitor.setSlot(-1);
 
                         for (int j = i; j < 2; j++) {
                             if (visitors[j] != null) {
@@ -287,7 +303,8 @@ public class PlayerShop extends AbstractMapObject {
 
                         if (canBuy(c, newItem)) {
                             c.getPlayer().gainMeso(-price, false);
-                            price -= Trade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
+                            // thanks BHB for pointing out trade fees not applying here
+                            price -= Trade.getFee(price);
                             owner.gainMeso(price, true);
 
                             SoldItem soldItem = new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), quantity, price);

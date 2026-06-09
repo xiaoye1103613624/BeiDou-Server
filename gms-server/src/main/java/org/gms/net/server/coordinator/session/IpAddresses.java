@@ -5,7 +5,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * IP地址工具类
+ * 判断IP地址是否为本地地址或局域网地址
+ */
 public class IpAddresses {
+    /** 局域网地址匹配模式 */
     private static final List<Pattern> LOCAL_ADDRESS_PATTERNS = loadLocalAddressPatterns();
 
     private static List<Pattern> loadLocalAddressPatterns() {

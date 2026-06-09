@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 服务器信息请求参数
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ServerInfoReqDto {
+    /** 世界ID列表 */
     private List<Integer> worldIdList;
-
 }

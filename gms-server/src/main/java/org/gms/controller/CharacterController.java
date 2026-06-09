@@ -13,6 +13,10 @@ import org.gms.model.dto.SubmitBody;
 import org.gms.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 角色控制器
+ * 处理角色倍率调整、在线列表查询、排行榜等请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/character")

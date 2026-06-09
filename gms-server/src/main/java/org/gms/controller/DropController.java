@@ -11,6 +11,10 @@ import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 掉落控制器
+ * 处理怪物掉落和全局掉落的查询、修改和删除请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/drop")

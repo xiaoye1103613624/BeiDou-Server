@@ -33,10 +33,13 @@ import org.gms.util.Pair;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 角色自动保存定时任务
+ * 定期将所有在线玩家角色数据自动保存到数据库，防止数据丢失
+ *
  * @author Ronan
  */
 @Slf4j
-public class CharacterAutosaverTask extends BaseTask implements Runnable {  // thanks Alex09 (Alex-0000) for noticing these runnable classes are tasks, "workers" runs them
+public class CharacterAutosaverTask extends BaseTask implements Runnable {
 
     @Override
     public void run() {
@@ -59,6 +62,11 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
         }
     }
 
+    /**
+     * 构造角色自动保存定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public CharacterAutosaverTask(World world) {
         super(world);
     }

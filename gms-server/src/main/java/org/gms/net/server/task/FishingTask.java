@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 钓鱼定时任务
+ * 定期检查在线玩家的钓鱼状态
+ *
  * @author Ronan
  */
 public class FishingTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class FishingTask extends BaseTask implements Runnable {
         wserv.runCheckFishingSchedule();
     }
 
+    /**
+     * 构造钓鱼定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public FishingTask(World world) {
         super(world);
     }

@@ -32,10 +32,15 @@ import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * 间隔时间需求
+ * 检查玩家上次完成任务后是否已过指定间隔时间（防止重复刷任务）
+ *
  * @author Tyler (Twdtwd)
  */
 public class IntervalRequirement extends AbstractQuestRequirement {
+    /** 间隔时间（毫秒） */
     private long interval = -1;
+    /** 任务ID */
     private final int questID;
 
     public IntervalRequirement(Quest quest, Data data) {

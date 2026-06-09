@@ -22,6 +22,9 @@
 package org.gms.provider;
 
 /**
+ * 数据实体接口
+ * WZ数据树中的基本节点，提供名称和父节点访问
+ *
  * @author Matze
  */
 public interface DataEntity {

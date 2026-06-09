@@ -18,12 +18,27 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 掉落数据服务类
+ * 提供怪物掉落和全局掉落的查询、修改和删除功能
+ */
 @Service
 @AllArgsConstructor
 public class DropService {
+    /** 怪物掉落数据访问对象 */
     private final DropDataMapper dropDataMapper;
+
+    /** 全局掉落数据访问对象 */
     private final DropDataGlobalMapper dropDataGlobalMapper;
 
+    /**
+     * 获取掉落列表
+     * 支持按怪物ID、物品ID、任务ID、怪物名称、物品名称进行筛选
+     *
+     * @param data     查询条件
+     * @param isGlobal 是否为全局掉落
+     * @return 分页的掉落列表
+     */
     public Page<DropSearchRtnDTO> getDropList(DropSearchReqDTO data, boolean isGlobal) {
         if (isGlobal) {
             DropDataGlobalDO dropDataGlobalDO = new DropDataGlobalDO();
@@ -123,6 +138,15 @@ public class DropService {
         }
     }
 
+    /**
+     * 修改或删除掉落数据
+     * 修改完成后会清除掉落缓存
+     *
+     * @param data     掉落数据
+     * @param isGlobal 是否为全局掉落
+     * @param isDelete 是否为删除操作
+     * @return 操作的掉落数据ID
+     */
     public Long modifyDropData(DropSearchRtnDTO data, boolean isGlobal, boolean isDelete) {
         Long dropDataId;
         if (isDelete) {
@@ -160,14 +184,32 @@ public class DropService {
         return dropDataId;
     }
 
+    /**
+     * 获取物品名称
+     *
+     * @param itemId 物品ID
+     * @return 物品名称
+     */
     private String getItemName(Integer itemId) {
         return itemId == null ? null : ItemInformationProvider.getInstance().getName(itemId);
     }
 
+    /**
+     * 获取怪物名称
+     *
+     * @param mobId 怪物ID
+     * @return 怪物名称
+     */
     private String getMobName(Integer mobId) {
         return mobId == null ? null : MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
     }
 
+    /**
+     * 获取任务名称
+     *
+     * @param questId 任务ID
+     * @return 任务名称
+     */
     private String getQuestName(Integer questId) {
         return questId == null ? null : Quest.getInstance(questId).getName();
     }

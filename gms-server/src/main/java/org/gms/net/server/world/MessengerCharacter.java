@@ -23,13 +23,30 @@ package org.gms.net.server.world;
 
 import org.gms.client.Character;
 
+/**
+ * 聊天信使角色
+ * 封装聊天信使（messenger）中角色的基本信息
+ *
+ * @author kevintjuh93
+ */
 public class MessengerCharacter {
+    /** 角色名称 */
     private final String name;
+    /** 角色ID */
     private final int id;
+    /** 在信使中的位置 */
     private int position;
+    /** 所在频道 */
     private final int channel;
+    /** 是否在线 */
     private final boolean online;
 
+    /**
+     * 构造信使角色
+     *
+     * @param maplechar 角色对象
+     * @param position  在信使中的位置
+     */
     public MessengerCharacter(Character maplechar, int position) {
         this.name = maplechar.getName();
         this.channel = maplechar.getClient().getChannel();
@@ -38,26 +55,56 @@ public class MessengerCharacter {
         this.position = position;
     }
 
+    /**
+     * 获取角色ID
+     *
+     * @return 角色ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * 获取所在频道
+     *
+     * @return 频道号
+     */
     public int getChannel() {
         return channel;
     }
 
+    /**
+     * 获取角色名称
+     *
+     * @return 角色名称
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 是否在线
+     *
+     * @return 在线状态
+     */
     public boolean isOnline() {
         return online;
     }
 
+    /**
+     * 获取在信使中的位置
+     *
+     * @return 位置索引
+     */
     public int getPosition() {
         return position;
     }
 
+    /**
+     * 设置在信使中的位置
+     *
+     * @param position 位置索引
+     */
     public void setPosition(int position) {
         this.position = position;
     }

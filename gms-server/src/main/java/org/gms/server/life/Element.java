@@ -21,10 +21,34 @@
 */
 package org.gms.server.life;
 
+/**
+ * 元素属性枚举
+ * 定义冒险岛中的8种元素类型：无属性、物理、火、冰、雷、毒、圣、暗
+ * 与{@link ElementalEffectiveness}配合使用，决定怪物对不同元素攻击的抵抗效果
+ *
+ * @author OdinMS Team
+ */
 public enum Element {
-    NEUTRAL(0), PHYSICAL(1), FIRE(2, true), ICE(3, true), LIGHTING(4), POISON(5), HOLY(6, true), DARKNESS(7);
+    /** 无属性 */
+    NEUTRAL(0),
+    /** 物理属性 */
+    PHYSICAL(1),
+    /** 火属性（特殊元素） */
+    FIRE(2, true),
+    /** 冰属性（特殊元素） */
+    ICE(3, true),
+    /** 雷属性 */
+    LIGHTING(4),
+    /** 毒属性 */
+    POISON(5),
+    /** 圣属性（特殊元素） */
+    HOLY(6, true),
+    /** 暗属性 */
+    DARKNESS(7);
 
+    /** 元素编号 */
     private final int value;
+    /** 是否特殊元素（火/冰/圣有特殊效果） */
     private boolean special = false;
 
     Element(int v) {
@@ -36,10 +60,22 @@ public enum Element {
         this.special = special;
     }
 
+    /**
+     * 是否为特殊元素（火/冰/圣）
+     *
+     * @return true表示特殊元素
+     */
     public boolean isSpecial() {
         return special;
     }
 
+    /**
+     * 根据字符查找对应元素类型
+     *
+     * @param c 元素字符（F=火, I=冰, L=雷, S=毒, H=圣, D=暗, P=物理）
+     * @return 对应的Element枚举值
+     * @throws IllegalArgumentException 当字符无效时
+     */
     public static Element getFromChar(char c) {
         switch (Character.toUpperCase(c)) {
             case 'F':
@@ -60,6 +96,11 @@ public enum Element {
         throw new IllegalArgumentException("unknown elemnt char " + c);
     }
 
+    /**
+     * 获取元素编号
+     *
+     * @return 元素编号（0-7）
+     */
     public int getValue() {
         return value;
     }

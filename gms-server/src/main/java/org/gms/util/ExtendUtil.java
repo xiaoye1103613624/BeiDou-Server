@@ -9,9 +9,22 @@ import java.sql.Date;
 
 import static org.gms.dao.entity.table.ExtendValueDOTableDef.EXTEND_VALUE_D_O;
 
+/**
+ * 扩展值工具类
+ * 提供扩展键值对的查询和保存功能，支持动态扩展数据存储
+ */
 public class ExtendUtil {
+    /** 扩展值数据访问对象 */
     private static final ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
 
+    /**
+     * 根据扩展ID、类型和名称查询扩展值
+     *
+     * @param extendId   扩展ID
+     * @param extendType 扩展类型
+     * @param extendName 扩展名称
+     * @return 扩展值对象，不存在返回null
+     */
     public static ExtendValueDO getExtendValue(String extendId, String extendType, String extendName) {
         return extendValueMapper.selectOneByQuery(QueryWrapper.create()
                 .where(EXTEND_VALUE_D_O.EXTEND_ID.eq(extendId))
@@ -20,6 +33,15 @@ public class ExtendUtil {
 
     }
 
+    /**
+     * 保存或更新扩展值
+     * 存在则更新，不存在则新增
+     *
+     * @param extendId    扩展ID
+     * @param extendType  扩展类型
+     * @param extendName  扩展名称
+     * @param extendValue 扩展值
+     */
     public static void saveOrUpdateExtendValue(String extendId, String extendType, String extendName, String extendValue) {
         ExtendValueDO extendValueDO = getExtendValue(extendId, extendType, extendName);
         if (extendValueDO == null) {

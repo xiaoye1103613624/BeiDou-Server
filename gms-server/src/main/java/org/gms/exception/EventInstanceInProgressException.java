@@ -21,6 +21,9 @@ package org.gms.exception;
 
 
 /**
+ * 事件实例进行中异常
+ * 当尝试启动一个已在运行的事件实例时抛出
+ *
  * @author Ronan
  */
 public class EventInstanceInProgressException extends Exception {

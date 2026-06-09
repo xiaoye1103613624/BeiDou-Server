@@ -30,9 +30,20 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
+/**
+ * 宠物聊天处理器
+ * 处理宠物的聊天消息
+ */
 public final class PetChatHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(PetChatHandler.class);
 
+    /**
+     * 处理宠物聊天包，验证宠物索引和动作类型后广播宠物聊天消息给地图中的其他玩家
+     *
+     * @param p 输入数据包，包含宠物ID、动作类型和聊天文本
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         int petId = p.readInt();

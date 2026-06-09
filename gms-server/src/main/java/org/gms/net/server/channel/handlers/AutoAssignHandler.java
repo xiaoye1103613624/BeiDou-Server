@@ -27,6 +27,9 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
+ * 自动分配处理器
+ * 处理玩家自动分配能力点（AP）的操作
+ *
  * @author Generic, Ronan
  */
 public class AutoAssignHandler extends AbstractPacketHandler {

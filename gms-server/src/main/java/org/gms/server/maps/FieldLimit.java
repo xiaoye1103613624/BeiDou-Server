@@ -21,48 +21,61 @@
 package org.gms.server.maps;
 
 /**
+ * 地图字段限制枚举
+ * 定义地图的各种功能限制，使用位掩码形式组合多种限制
+ * 从WZ文件的fieldLimit字段读取，通过位运算检查特定限制
+ *
  * @author AngelSL
  */
 public enum FieldLimit {
+    /** 禁止跳跃 */
     JUMP(0x01),
+    /** 禁止移动技能 */
     MOVEMENTSKILLS(0x02),
+    /** 禁止召唤兽 */
     SUMMON(0x04),
+    /** 禁止传送门 */
     DOOR(0x08),
-    CANNOTMIGRATE(0x10),    //change channel, town portal scroll, access cash shop, etc etc
-    //NO_NOTES(0x20),
+    /** 禁止切换频道/使用回城卷轴/进入商城 */
+    CANNOTMIGRATE(0x10),
+    /** 禁止使用VIP传送石 */
     CANNOTVIPROCK(0x40),
+    /** 禁止小游戏 */
     CANNOTMINIGAME(0x80),
-    //SPECIFIC_PORTAL_SCROLL_LIMIT(0x100), // APQ and a couple quest maps have this
+    /** 禁止使用坐骑 */
     CANNOTUSEMOUNTS(0x200),
-    //STAT_CHANGE_ITEM_CONSUME_LIMIT(0x400), // Monster carnival?
-    //PARTY_BOSS_CHANGE_LIMIT(0x800), // Monster carnival?
+    /** 禁止使用药剂 */
     CANNOTUSEPOTION(0x1000),
-    //WEDDING_INVITATION_LIMIT(0x2000), // No notes
-    //CASH_WEATHER_CONSUME_LIMIT(0x4000),
-    //NO_PET(0x8000), // Ariant colosseum-related?
-    //ANTI_MACRO_LIMIT(0x10000), // No notes
+    /** 禁止向下跳 */
     CANNOTJUMPDOWN(0x20000),
-    //SUMMON_NPC_LIMIT(0x40000); // Seems to .. disable Rush if 0x2 is set
-
-    //......... EVEN MORE LIMITS ............
-    //SUMMON_NPC_LIMIT(0x40000),
+    /** 死亡不掉经验 */
     NO_EXP_DECREASE(0x80000),
-    //NO_DAMAGE_ON_FALLING(0x100000),
-    //PARCEL_OPEN_LIMIT(0x200000),
+    /** 禁止掉落物品 */
     DROP_LIMIT(0x400000);
-    //ROCKETBOOSTER_LIMIT(0x800000)     //lol we don't even have mechanics <3
 
+    /** 位掩码值 */
     private final long i;
 
     FieldLimit(long i) {
         this.i = i;
     }
 
+    /**
+     * 获取位掩码值
+     *
+     * @return 位掩码
+     */
     public long getValue() {
         return i;
     }
 
-    public boolean check(int fieldlimit) {
-        return (fieldlimit & i) == i;
+    /**
+     * 检查fieldLimit中是否包含当前限制
+     *
+     * @param fieldLimit 地图的fieldLimit值
+     * @return true表示包含该限制
+     */
+    public boolean check(int fieldLimit) {
+        return (fieldLimit & i) == i;
     }
 }

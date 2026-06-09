@@ -30,13 +30,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 反应器属性
+ * 存储反应器的碰撞框、状态数据和超时配置
+ * 支持多状态切换，每个状态可配置触发条件和掉落物品
+ *
  * @author Lerk
  * @author Ronan
  */
 public class ReactorStats {
+    /** 左上角坐标 */
     private Point tl;
+    /** 右下角坐标 */
     private Point br;
+    /** 状态数据映射（状态 -> 状态数据列表） */
     private final Map<Byte, List<StateData>> stateInfo = new HashMap<>();
+    /** 超时信息映射（状态 -> 超时时间） */
     private final Map<Byte, Integer> timeoutInfo = new HashMap<>();
 
     public void setTL(Point tl) {
@@ -55,6 +63,13 @@ public class ReactorStats {
         return br;
     }
 
+    /**
+     * 添加状态数据（含超时）
+     *
+     * @param state   状态编号
+     * @param data    状态数据列表
+     * @param timeOut 超时时间（毫秒），-1表示无超时
+     */
     public void addState(byte state, List<StateData> data, int timeOut) {
         stateInfo.put(state, data);
         if (timeOut > -1) {
@@ -121,10 +136,18 @@ public class ReactorStats {
     }
 
 
+    /**
+     * 反应器状态数据（内部类）
+     * 存储单个状态的反应类型、反应物品、激活技能和下一状态
+     */
     public static class StateData {
+        /** 反应类型 */
         private final int type;
+        /** 反应物品（物品ID, 数量） */
         private final Pair<Integer, Integer> reactItem;
+        /** 激活技能ID列表 */
         private final List<Integer> activeSkills;
+        /** 下一状态编号 */
         private final byte nextState;
 
         public StateData(int type, Pair<Integer, Integer> reactItem, List<Integer> activeSkills, byte nextState) {

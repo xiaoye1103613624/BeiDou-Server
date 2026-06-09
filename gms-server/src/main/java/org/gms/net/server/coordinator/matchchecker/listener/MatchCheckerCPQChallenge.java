@@ -32,7 +32,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Ronan
+ * CPQ挑战匹配检查监听器
+ * 处理CPQ（嘉年华派对任务）挑战的匹配确认逻辑
  */
 public class MatchCheckerCPQChallenge implements MatchCheckerListenerRecipe {
 

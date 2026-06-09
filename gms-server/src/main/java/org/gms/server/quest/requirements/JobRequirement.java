@@ -32,9 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 职业需求
+ * 检查玩家职业是否符合任务要求的职业列表
+ *
  * @author Tyler (Twdtwd)
  */
 public class JobRequirement extends AbstractQuestRequirement {
+    /** 允许的职业列表 */
     List<Integer> jobs = new ArrayList<>();
 
     public JobRequirement(Quest quest, Data data) {
@@ -43,7 +47,9 @@ public class JobRequirement extends AbstractQuestRequirement {
     }
 
     /**
-     * @param data
+     * 从WZ数据中解析允许的职业列表
+     *
+     * @param data WZ数据
      */
     @Override
     public void processData(Data data) {

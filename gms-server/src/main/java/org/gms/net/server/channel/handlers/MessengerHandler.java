@@ -34,6 +34,10 @@ import org.gms.net.server.world.MessengerCharacter;
 import org.gms.net.server.world.World;
 import org.gms.util.PacketCreator;
 
+/**
+ * 聊天室处理器
+ * 处理Maple Messenger的创建、加入、邀请、聊天、退出等操作
+ */
 public final class MessengerHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

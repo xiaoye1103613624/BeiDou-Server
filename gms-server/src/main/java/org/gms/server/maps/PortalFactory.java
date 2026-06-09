@@ -26,13 +26,25 @@ import org.gms.provider.DataTool;
 
 import java.awt.*;
 
+/**
+ * 传送门工厂
+ * 从WZ数据中加载地图传送门，支持多种传送门类型
+ */
 public class PortalFactory {
+    /** 下一个神秘之门传送门ID，从0x80开始分配 */
     private int nextDoorPortal;
 
     public PortalFactory() {
         nextDoorPortal = 0x80;
     }
 
+    /**
+     * 根据类型创建传送门并从WZ数据加载属性
+     *
+     * @param type   传送门类型
+     * @param portal WZ数据节点
+     * @return 创建的传送门
+     */
     public Portal makePortal(int type, Data portal) {
         GenericPortal ret = null;
         if (type == Portal.MAP_PORTAL) {
@@ -44,6 +56,10 @@ public class PortalFactory {
         return ret;
     }
 
+    /**
+     * 从WZ数据中加载传送门属性
+     * 包括名称、目标、坐标、脚本名称等，DOOR_PORTAL类型使用自增ID
+     */
     private void loadPortal(GenericPortal myPortal, Data portal) {
         myPortal.setName(DataTool.getString(portal.getChildByPath("pn")));
         myPortal.setTarget(DataTool.getString(portal.getChildByPath("tn")));

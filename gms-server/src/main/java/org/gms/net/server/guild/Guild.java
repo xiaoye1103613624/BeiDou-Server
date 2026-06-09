@@ -52,23 +52,63 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 公会
+ * 管理公会成员、等级头衔、徽章、公告以及邀请和升级等公会核心功能
+ */
 public class Guild {
     private static final Logger log = LoggerFactory.getLogger(Guild.class);
 
+    /** 广播操作类型：无、解散、徽章变更 */
     private enum BCOp {
         NONE, DISBAND, EMBLEMCHANGE
     }
 
+    /** 公会成员列表 */
     private final List<GuildCharacter> members;
+    /** 成员列表线程锁 */
     private final Lock membersLock = new ReentrantLock(true);
 
-    private final String[] rankTitles = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
-    private String name, notice;
-    private int id, gp, logo, logoColor, leader, capacity, logoBG, logoBGColor, signature, allianceId;
+    // 1 = master, 2 = jr, 5 = lowest member
+    /** 公会等级头衔数组 */
+    private final String[] rankTitles = new String[5];
+    /** 公会名称 */
+    private String name;
+    /** 公会公告 */
+    private String notice;
+    /** 公会ID */
+    private int id;
+    /** 公会GP值 */
+    private int gp;
+    /** 公会徽标 */
+    private int logo;
+    /** 公会徽标颜色 */
+    private int logoColor;
+    /** 会长ID */
+    private int leader;
+    /** 公会容量 */
+    private int capacity;
+    /** 徽标背景 */
+    private int logoBG;
+    /** 徽标背景颜色 */
+    private int logoBGColor;
+    /** 公会签名 */
+    private int signature;
+    /** 联盟ID */
+    private int allianceId;
+    /** 所在世界 */
     private final int world;
+    /** 频道通知映射（频道号 -> 角色ID列表） */
     private final Map<Integer, List<Integer>> notifications = new LinkedHashMap<>();
+    /** 通知数据是否需要重建 */
     private boolean bDirty = true;
 
+    /**
+     * 构造公会（从数据库加载）
+     *
+     * @param guildid 公会ID
+     * @param world   世界ID
+     */
     public Guild(int guildid, int world) {
         this.world = world;
         members = new ArrayList<>();
@@ -115,6 +155,10 @@ public class Guild {
         }
     }
 
+    /**
+     * 构建频道通知映射
+     * 按频道分组在线成员，用于广播消息
+     */
     private void buildNotifications() {
         if (!bDirty) {
             return;
@@ -147,7 +191,7 @@ public class Guild {
                 if (chl != null) {
                     chl.add(mgc.getId());
                 }
-                //Unable to connect to Channel... error was here
+                // Unable to connect to Channel... error was here
             }
         } finally {
             membersLock.unlock();
@@ -156,6 +200,11 @@ public class Guild {
         bDirty = false;
     }
 
+    /**
+     * 写入数据库
+     *
+     * @param bDisband 是否解散公会
+     */
     public void writeToDB(boolean bDisband) {
         try (Connection con = DatabaseConnection.getConnection()) {
 
@@ -203,54 +252,120 @@ public class Guild {
         }
     }
 
+    /**
+     * 获取公会ID
+     *
+     * @return 公会ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * 获取会长ID
+     *
+     * @return 会长ID
+     */
     public int getLeaderId() {
         return leader;
     }
 
+    /**
+     * 设置会长ID
+     *
+     * @param charId 角色ID
+     * @return 新会长ID
+     */
     public int setLeaderId(int charId) {
         return leader = charId;
     }
 
+    /**
+     * 获取公会GP值
+     *
+     * @return GP值
+     */
     public int getGP() {
         return gp;
     }
 
+    /**
+     * 获取徽标
+     *
+     * @return 徽标
+     */
     public int getLogo() {
         return logo;
     }
 
+    /**
+     * 设置徽标
+     *
+     * @param l 徽标
+     */
     public void setLogo(int l) {
         logo = l;
     }
 
+    /**
+     * 获取徽标颜色
+     *
+     * @return 徽标颜色
+     */
     public int getLogoColor() {
         return logoColor;
     }
 
+    /**
+     * 设置徽标颜色
+     *
+     * @param c 颜色
+     */
     public void setLogoColor(int c) {
         logoColor = c;
     }
 
+    /**
+     * 获取徽标背景
+     *
+     * @return 徽标背景
+     */
     public int getLogoBG() {
         return logoBG;
     }
 
+    /**
+     * 设置徽标背景
+     *
+     * @param bg 徽标背景
+     */
     public void setLogoBG(int bg) {
         logoBG = bg;
     }
 
+    /**
+     * 获取徽标背景颜色
+     *
+     * @return 徽标背景颜色
+     */
     public int getLogoBGColor() {
         return logoBGColor;
     }
 
+    /**
+     * 设置徽标背景颜色
+     *
+     * @param c 颜色
+     */
     public void setLogoBGColor(int c) {
         logoBGColor = c;
     }
 
+    /**
+     * 获取公会公告
+     *
+     * @return 公告内容
+     */
     public String getNotice() {
         if (notice == null) {
             return "";
@@ -258,10 +373,20 @@ public class Guild {
         return notice;
     }
 
+    /**
+     * 获取公会名称
+     *
+     * @return 公会名称
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 获取公会成员列表
+     *
+     * @return 成员列表
+     */
     public List<GuildCharacter> getMembers() {
         membersLock.lock();
         try {
@@ -271,14 +396,27 @@ public class Guild {
         }
     }
 
+    /**
+     * 获取公会容量
+     *
+     * @return 容量
+     */
     public int getCapacity() {
         return capacity;
     }
 
+    /**
+     * 获取公会签名
+     *
+     * @return 签名
+     */
     public int getSignature() {
         return signature;
     }
 
+    /**
+     * 广播公会名称变更
+     */
     public void broadcastNameChanged() {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
@@ -293,6 +431,9 @@ public class Guild {
         }
     }
 
+    /**
+     * 广播公会徽章变更
+     */
     public void broadcastEmblemChanged() {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
@@ -307,6 +448,9 @@ public class Guild {
         }
     }
 
+    /**
+     * 广播公会信息变更
+     */
     public void broadcastInfoChanged() {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
@@ -320,16 +464,35 @@ public class Guild {
         }
     }
 
+    /**
+     * 广播数据包到所有在线成员
+     *
+     * @param packet 数据包
+     */
     public void broadcast(Packet packet) {
         broadcast(packet, -1, BCOp.NONE);
     }
 
+    /**
+     * 广播数据包到所有在线成员（排除指定角色）
+     *
+     * @param packet    数据包
+     * @param exception 排除的角色ID
+     */
     public void broadcast(Packet packet, int exception) {
         broadcast(packet, exception, BCOp.NONE);
     }
 
+    /**
+     * 广播数据包（支持操作类型）
+     * membersLock awareness thanks to ProjectNano dev team
+     *
+     * @param packet      数据包
+     * @param exceptionId 排除的角色ID
+     * @param bcop        广播操作类型
+     */
     public void broadcast(Packet packet, int exceptionId, BCOp bcop) {
-        membersLock.lock(); // membersLock awareness thanks to ProjectNano dev team
+        membersLock.lock();
         try {
             synchronized (notifications) {
                 if (bDirty) {
@@ -356,6 +519,11 @@ public class Guild {
         }
     }
 
+    /**
+     * 向所有在线成员发送公会消息
+     *
+     * @param serverNotice 消息数据包
+     */
     public void guildMessage(Packet serverNotice) {
         membersLock.lock();
         try {
@@ -372,10 +540,21 @@ public class Guild {
         }
     }
 
+    /**
+     * 向在线成员发送聊天消息
+     *
+     * @param message 消息内容
+     */
     public void dropMessage(String message) {
         dropMessage(5, message);
     }
 
+    /**
+     * 向在线成员发送指定类型的消息
+     *
+     * @param type    消息类型
+     * @param message 消息内容
+     */
     public void dropMessage(int type, String message) {
         membersLock.lock();
         try {
@@ -389,10 +568,22 @@ public class Guild {
         }
     }
 
+    /**
+     * 广播消息到所有频道
+     *
+     * @param packet 数据包
+     */
     public void broadcastMessage(Packet packet) {
         Server.getInstance().guildMessage(id, packet);
     }
 
+    /**
+     * 设置成员在线状态
+     *
+     * @param cid     角色ID
+     * @param online  是否在线
+     * @param channel 所在频道
+     */
     public final void setOnline(int cid, boolean online, int channel) {
         membersLock.lock();
         try {
@@ -416,6 +607,13 @@ public class Guild {
         }
     }
 
+    /**
+     * 发送公会聊天
+     *
+     * @param name    发送者名称
+     * @param cid     发送者ID
+     * @param message 聊天内容
+     */
     public void guildChat(String name, int cid, String message) {
         membersLock.lock();
         try {
@@ -425,10 +623,23 @@ public class Guild {
         }
     }
 
+    /**
+     * 获取指定等级的头衔
+     *
+     * @param rank 等级（1-5）
+     * @return 头衔名称
+     */
     public String getRankTitle(int rank) {
         return rankTitles[rank - 1];
     }
 
+    /**
+     * 创建公会
+     *
+     * @param leaderId 会长ID
+     * @param name     公会名称
+     * @return 公会ID，0表示失败
+     */
     public static int createGuild(int leaderId, String name) {
         try (Connection con = DatabaseConnection.getConnection()) {
 
@@ -471,6 +682,13 @@ public class Guild {
         }
     }
 
+    /**
+     * 添加公会成员
+     *
+     * @param mgc 公会角色
+     * @param chr 在线角色
+     * @return 1成功，0容量已满
+     */
     public int addGuildMember(GuildCharacter mgc, Character chr) {
         membersLock.lock();
         try {
@@ -493,6 +711,11 @@ public class Guild {
         }
     }
 
+    /**
+     * 成员退出公会
+     *
+     * @param mgc 公会角色
+     */
     public void leaveGuild(GuildCharacter mgc) {
         membersLock.lock();
         try {
@@ -504,6 +727,14 @@ public class Guild {
         }
     }
 
+    /**
+     * 踢出成员
+     *
+     * @param initiator   发起者
+     * @param name        被踢成员名称
+     * @param cid         被踢成员ID
+     * @param noteService 信件服务
+     */
     public void expelMember(GuildCharacter initiator, String name, int cid, NoteService noteService) {
         membersLock.lock();
         try {
@@ -535,6 +766,12 @@ public class Guild {
         }
     }
 
+    /**
+     * 变更成员等级
+     *
+     * @param cid     角色ID
+     * @param newRank 新等级
+     */
     public void changeRank(int cid, int newRank) {
         membersLock.lock();
         try {
@@ -549,6 +786,12 @@ public class Guild {
         }
     }
 
+    /**
+     * 变更成员等级
+     *
+     * @param mgc     公会角色
+     * @param newRank 新等级
+     */
     public void changeRank(GuildCharacter mgc, int newRank) {
         try {
             if (mgc.isOnline()) {
@@ -571,6 +814,11 @@ public class Guild {
         }
     }
 
+    /**
+     * 设置公会公告
+     *
+     * @param notice 公告内容
+     */
     public void setGuildNotice(String notice) {
         this.notice = notice;
         this.writeToDB(false);
@@ -583,6 +831,11 @@ public class Guild {
         }
     }
 
+    /**
+     * 更新成员等级和职业
+     *
+     * @param mgc 公会角色
+     */
     public void memberLevelJobUpdate(GuildCharacter mgc) {
         membersLock.lock();
         try {
@@ -615,6 +868,11 @@ public class Guild {
         return hash;
     }
 
+    /**
+     * 变更等级头衔
+     *
+     * @param ranks 头衔数组
+     */
     public void changeRankTitle(String[] ranks) {
         System.arraycopy(ranks, 0, rankTitles, 0, 5);
 
@@ -628,6 +886,10 @@ public class Guild {
         this.writeToDB(false);
     }
 
+    /**
+     * 解散公会
+     * 同时处理联盟关联
+     */
     public void disbandGuild() {
         if (allianceId > 0) {
             if (!Alliance.removeGuildFromAlliance(allianceId, id, world)) {
@@ -644,6 +906,14 @@ public class Guild {
         }
     }
 
+    /**
+     * 设置公会徽章
+     *
+     * @param bg        徽标背景
+     * @param bgcolor   徽标背景颜色
+     * @param logo      徽标
+     * @param logocolor 徽标颜色
+     */
     public void setGuildEmblem(short bg, byte bgcolor, short logo, byte logocolor) {
         this.logoBG = bg;
         this.logoBGColor = bgcolor;
@@ -659,6 +929,12 @@ public class Guild {
         }
     }
 
+    /**
+     * 根据角色ID获取公会角色
+     *
+     * @param cid 角色ID
+     * @return 公会角色对象，未找到返回null
+     */
     public GuildCharacter getMGC(int cid) {
         membersLock.lock();
         try {
@@ -673,6 +949,11 @@ public class Guild {
         }
     }
 
+    /**
+     * 扩容公会
+     *
+     * @return 是否扩容成功
+     */
     public boolean increaseCapacity() {
         if (capacity > 99) {
             return false;
@@ -690,6 +971,11 @@ public class Guild {
         return true;
     }
 
+    /**
+     * 增加公会GP
+     *
+     * @param amount 增加数量
+     */
     public void gainGP(int amount) {
         this.gp += amount;
         this.writeToDB(false);
@@ -697,12 +983,24 @@ public class Guild {
         this.guildMessage(PacketCreator.getGPMessage(amount));
     }
 
+    /**
+     * 减少公会GP
+     *
+     * @param amount 减少数量
+     */
     public void removeGP(int amount) {
         this.gp -= amount;
         this.writeToDB(false);
         this.guildMessage(GuildPackets.updateGP(this.id, this.gp));
     }
 
+    /**
+     * 发送公会邀请
+     *
+     * @param c          发送邀请的客户端
+     * @param targetName 目标角色名称
+     * @return 公会响应码，null表示成功发送
+     */
     public static GuildResponse sendInvitation(Client c, String targetName) {
         Character mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
@@ -721,6 +1019,15 @@ public class Guild {
         }
     }
 
+    /**
+     * 答复公会邀请
+     *
+     * @param targetId   目标玩家ID
+     * @param targetName 目标角色名称
+     * @param guildId    公会ID
+     * @param answer     是否接受
+     * @return 是否接受邀请
+     */
     public static boolean answerInvitation(int targetId, String targetName, int guildId, boolean answer) {
         InviteResult res = InviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
 
@@ -744,6 +1051,12 @@ public class Guild {
         return false;
     }
 
+    /**
+     * 获取可加入公会的合格玩家
+     *
+     * @param guildLeader 公会会长
+     * @return 合格玩家集合
+     */
     public static Set<Character> getEligiblePlayersForGuild(Character guildLeader) {
         Set<Character> guildMembers = new HashSet<>();
         guildMembers.add(guildLeader);
@@ -758,6 +1071,12 @@ public class Guild {
         return guildMembers;
     }
 
+    /**
+     * 显示公会排行榜
+     *
+     * @param c     客户端
+     * @param npcid NPC ID
+     */
     public static void displayGuildRanks(Client c, int npcid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT `name`, `GP`, `logoBG`, `logoBGColor`, `logo`, `logoColor` FROM guilds ORDER BY `GP` DESC LIMIT 50", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -768,10 +1087,20 @@ public class Guild {
         }
     }
 
+    /**
+     * 获取联盟ID
+     *
+     * @return 联盟ID
+     */
     public int getAllianceId() {
         return allianceId;
     }
 
+    /**
+     * 设置联盟ID
+     *
+     * @param aid 联盟ID
+     */
     public void setAllianceId(int aid) {
         this.allianceId = aid;
         try (Connection con = DatabaseConnection.getConnection();
@@ -784,6 +1113,9 @@ public class Guild {
         }
     }
 
+    /**
+     * 重置公会所有成员的联盟等级
+     */
     public void resetAllianceGuildPlayersRank() {
         try {
             membersLock.lock();
@@ -808,6 +1140,12 @@ public class Guild {
         }
     }
 
+    /**
+     * 获取扩容公会所需费用
+     *
+     * @param size 当前容量
+     * @return 所需费用
+     */
     public static int getIncreaseGuildCost(int size) {
         int cost = GameConfig.getServerInt("expand_guild_base_cost") + Math.max(0, (size - 15) / 5) * GameConfig.getServerInt("expand_guild_tier_cost");
 

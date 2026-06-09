@@ -24,7 +24,8 @@ import org.gms.client.Character;
 import java.util.Set;
 
 /**
- * @author Ronan
+ * 抽象匹配检查器监听器接口
+ * 定义匹配检查器需要回调的确认和超时方法
  */
 public interface AbstractMatchCheckerListener {
     void onMatchCreated(Character leader, Set<Character> nonLeaderMatchPlayers, String message);

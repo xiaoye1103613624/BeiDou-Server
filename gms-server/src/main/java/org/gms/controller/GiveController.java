@@ -12,6 +12,10 @@ import org.gms.service.GiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 资源发放控制器
+ * GM后台向玩家发放物品、金币、经验等资源的接口
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/give")

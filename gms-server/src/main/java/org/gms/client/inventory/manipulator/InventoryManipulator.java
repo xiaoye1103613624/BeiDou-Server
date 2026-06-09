@@ -48,6 +48,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * 背包操作工具类
+ * 提供背包物品的增删改查、合并、移动等操作
+ * 所有静态方法处理物品添加、移除、装备/卸下、卷轴强化等核心逻辑
+ *
  * @author Matze
  * @author Ronan - improved check space feature and removed redundant object calls
  */

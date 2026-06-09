@@ -25,23 +25,43 @@ import org.gms.net.server.services.ServiceType;
 import org.gms.net.server.services.task.world.CharacterSaveService;
 
 /**
+ * 世界服务枚举
+ * 定义世界级别的服务类型及其对应的服务实现类
+ *
  * @author Ronan
  */
 public enum WorldServices implements ServiceType {
 
+    /** 角色保存服务 */
     SAVE_CHARACTER(CharacterSaveService.class);
 
+    /** 服务实现类 */
     private final Class<? extends BaseService> s;
 
+    /**
+     * 构造方法
+     *
+     * @param service 服务实现类
+     */
     WorldServices(Class<? extends BaseService> service) {
         s = service;
     }
 
+    /**
+     * 创建服务实例
+     *
+     * @return 服务包装实例
+     */
     @Override
     public Service createService() {
         return new Service(s);
     }
 
+    /**
+     * 获取所有枚举值
+     *
+     * @return 枚举值数组
+     */
     @Override
     public WorldServices[] enumValues() {
         return WorldServices.values();

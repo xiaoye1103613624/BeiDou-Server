@@ -27,15 +27,30 @@ import java.util.Objects;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.WorldtransfersDOTableDef.WORLDTRANSFERS_D_O;
 
+/**
+ * 世界转移服务类
+ * 提供角色跨世界转移的申请、校验和执行功能
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class WorldTransferService {
+    /** 世界转移记录数据访问对象 */
     private final WorldtransfersMapper worldtransfersMapper;
+
+    /** 角色数据访问对象 */
     private final CharactersMapper charactersMapper;
+
+    /** 账号服务 */
     private final AccountService accountService;
+
+    /** 好友数据访问对象 */
     private final BuddiesMapper buddiesMapper;
 
+    /**
+     * 应用所有待处理的转区请求
+     * 服务器启动时调用，处理所有未完成的转区记录
+     */
     public void applyAllWorldTransfer() {
         List<WorldtransfersDO> worldtransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create()
                 .where(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull()));
@@ -114,6 +129,14 @@ public class WorldTransferService {
         log.info(I18nUtil.getLogMessage("CharacterService.doWorldTransfer.info1"), data.getFrom(), data.getTo());
     }
 
+    /**
+     * 注册转区请求
+     * 检查是否有未完成的转区或转区冷却时间未到
+     *
+     * @param chr      角色
+     * @param newWorld 目标世界ID
+     * @return 是否注册成功
+     */
     public boolean registerWorldTransfer(Character chr, int newWorld) {
         List<WorldtransfersDO> worldTransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create()
                 .where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId())));
@@ -126,6 +149,12 @@ public class WorldTransferService {
         return true;
     }
 
+    /**
+     * 取消待处理的转区请求
+     *
+     * @param chr        角色
+     * @param needFinish 是否只取消未完成的转区
+     */
     public void cancelPendingWorldTransfer(Character chr, boolean needFinish) {
         QueryWrapper queryWrapper = QueryWrapper.create().where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId()));
         if (needFinish) queryWrapper.and(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull());

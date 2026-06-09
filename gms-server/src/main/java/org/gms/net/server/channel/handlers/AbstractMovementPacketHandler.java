@@ -156,6 +156,14 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
         return res;
     }
 
+    /**
+     * 更新动画对象位置
+     *
+     * @param p 输入数据包
+     * @param target 目标动画对象
+     * @param yOffset Y轴偏移
+     * @throws EmptyMovementException 移动指令为空时抛出
+     */
     protected void updatePosition(InPacket p, AnimatedMapObject target, int yOffset) throws EmptyMovementException {
 
         byte numCommands = p.readByte();

@@ -22,18 +22,26 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 服务器消息定时任务
+ * 定期检查并恢复因Boss血条显示而被暂时禁用的服务器消息
+ *
  * @author Ronan
  */
 public class ServerMessageTask extends BaseTask implements Runnable {
 
     @Override
     public void run() {
-        // It's purpose is for tracking whether the player client currently displays a boss HPBar and, if so,
+        // Its purpose is for tracking whether the player client currently displays a boss HPBar and, if so,
         // temporarily disable the server message for that player.
 
         wserv.runDisabledServerMessagesSchedule();
     }
 
+    /**
+     * 构造服务器消息定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public ServerMessageTask(World world) {
         super(world);
     }

@@ -43,6 +43,10 @@ import java.util.List;
  * @author Ronan
  */
 
+/**
+ * 配对快速排序辅助类
+ * 用于道具排序，支持按ID、名称、数量、等级排列，并对箭矢/飞镖/子弹按攻击力反向排序
+ */
 class PairedQuicksort {
     private int i = 0;
     private int j = 0;
@@ -288,6 +292,13 @@ class PairedQuicksort {
     }
 }
 
+/**
+ * 道具排序处理器
+ * 处理玩家对背包道具按指定条件排序的操作，使用PairedQuicksort算法
+ *
+ * @author BubblesDev
+ * @author Ronan
+ */
 public final class InventorySortHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

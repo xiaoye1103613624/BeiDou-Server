@@ -6,6 +6,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
+ * 接受服务条款（ToS）处理器
+ * 处理客户端在接受服务条款后的登录请求，完成登录流程的最后一步
+ *
  * @author kevintjuh93
  */
 public final class AcceptToSHandler extends AbstractPacketHandler {

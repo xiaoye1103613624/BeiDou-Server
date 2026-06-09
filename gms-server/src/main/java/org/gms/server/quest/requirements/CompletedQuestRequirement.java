@@ -28,9 +28,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 已完成任务数量需求
+ * 检查玩家已完成的任务总数是否达到要求的最低数量
+ *
  * @author Tyler (Twdtwd)
  */
 public class CompletedQuestRequirement extends AbstractQuestRequirement {
+    /** 要求的已完成任务数量 */
     private int reqQuest;
 
 

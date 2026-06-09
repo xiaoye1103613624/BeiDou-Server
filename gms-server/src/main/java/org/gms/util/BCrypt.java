@@ -65,11 +65,24 @@ import java.util.Arrays;
 public class BCrypt {
     // BCrypt parameters
 
+    /**
+     * 默认的哈希轮数（log2值），默认10即2^10=1024轮
+     */
     private static final int GENSALT_DEFAULT_LOG2_ROUNDS = 10;
+
+    /**
+     * BCrypt盐值的字节长度
+     */
     private static final int BCRYPT_SALT_LEN = 16;
-    // Blowfish parameters
+
+    /**
+     * Blowfish加密轮数
+     */
     private static final int BLOWFISH_NUM_ROUNDS = 16;
-    // Initial contents of key schedule
+
+    /**
+     * Blowfish P数组初始值（密钥调度表）
+     */
     private static final int[] P_orig = {
             0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344,
             0xa4093822, 0x299f31d0, 0x082efa98, 0xec4e6c89,
@@ -77,6 +90,9 @@ public class BCrypt {
             0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917,
             0x9216d5d9, 0x8979fb1b
     };
+    /**
+     * Blowfish S盒初始值（替换盒）
+     */
     private static final int[] S_orig = {
             0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7,
             0xb8e1afed, 0x6a267e96, 0xba7c9045, 0xf12c7f99,
@@ -338,11 +354,17 @@ public class BCrypt {
     // bcrypt IV: "OrpheanBeholderScryDoubt". The C implementation calls
     // this "ciphertext", but it is really plaintext or an IV. We keep
     // the name to make code comparison easier.
+    /**
+     * BCrypt固定密文块："OrpheanBeholderScryDoubt"，用作初始化向量（IV）
+     */
     static private final int[] bf_crypt_ciphertext = {
             0x4f727068, 0x65616e42, 0x65686f6c,
             0x64657253, 0x63727944, 0x6f756274
     };
     // Table for Base64 encoding
+    /**
+     * BCrypt自定义Base64编码表
+     */
     static private final char[] base64_code = {
             '.', '/', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
@@ -352,6 +374,9 @@ public class BCrypt {
             '6', '7', '8', '9'
     };
     // Table for Base64 decoding
+    /**
+     * BCrypt自定义Base64解码表
+     */
     static private final byte[] index_64 = {
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -367,8 +392,14 @@ public class BCrypt {
             41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
             51, 52, 53, -1, -1, -1, -1, -1
     };
-    // Expanded Blowfish key
+    /**
+     * 扩展后的Blowfish P数组（密钥调度表）
+     */
     private int[] P;
+
+    /**
+     * 扩展后的Blowfish S盒（替换盒）
+     */
     private int[] S;
 
     /**
@@ -971,6 +1002,13 @@ public class BCrypt {
         return ret == 0;
     }
 
+    /**
+     * 使用SHA-512算法对密码进行哈希处理
+     *
+     * @param pwd 待哈希的密码
+     * @return 哈希后的十六进制字符串（小写）
+     * @throws NoSuchAlgorithmException 如果SHA-512算法不可用
+     */
     public static String hashpwSHA512(String pwd) throws NoSuchAlgorithmException {
         MessageDigest digester = MessageDigest.getInstance("SHA-512");
         digester.update(pwd.getBytes(StandardCharsets.UTF_8), 0, pwd.length());

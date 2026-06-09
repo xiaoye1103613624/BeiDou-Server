@@ -27,10 +27,20 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.util.PacketCreator;
 
-/*
+/**
+ * 注册PIN处理器
+ * 处理客户端注册PIN码请求，保存PIN后返回登录界面
+ *
  * @author Rob
  */
 public final class RegisterPinHandler extends AbstractPacketHandler {
+    /**
+     * 处理PIN注册请求
+     * 如果用户取消则关闭会话更新登录状态，否则保存PIN并返回登录界面
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte c2 = p.readByte();

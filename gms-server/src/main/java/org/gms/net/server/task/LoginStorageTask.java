@@ -23,6 +23,9 @@ import org.gms.net.server.coordinator.login.LoginBypassCoordinator;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
 
 /**
+ * 登录存储定时任务
+ * 定期更新登录历史记录和登录绕过白名单
+ *
  * @author Ronan
  */
 public class LoginStorageTask implements Runnable {

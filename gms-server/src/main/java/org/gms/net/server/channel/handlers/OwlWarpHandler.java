@@ -27,11 +27,20 @@ import org.gms.server.maps.HiredMerchant;
 import org.gms.server.maps.PlayerShop;
 import org.gms.util.PacketCreator;
 
-/*
+/**
+ * 猫头鹰搜索传送处理器
+ * 处理玩家通过猫头鹰搜索后传送到目标商店的操作
+ *
  * @author Ronan
  */
 public final class OwlWarpHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理猫头鹰传送包，根据店主ID和地图ID查找目标商店（雇佣商人和玩家商店），验证后传送玩家到目标地图
+     *
+     * @param p 输入数据包，包含店主ID和地图ID
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int ownerid = p.readInt();

@@ -25,18 +25,30 @@ import lombok.Getter;
 import org.gms.util.I18nUtil;
 
 /**
+ * 背包类型枚举
+ * 定义8种背包类型：装备、消耗、装饰、其他、现金、容器、已装备、未定义
+ * 每种类型有对应的槽位ID范围
+ *
  * @author Matze
  */
 @Getter
 public enum InventoryType {
+    /** 未定义 */
     UNDEFINED(0, I18nUtil.getMessage("InventoryType.UNDEFINED")),
+    /** 装备 */
     EQUIP(1, I18nUtil.getMessage("InventoryType.EQUIP")),
+    /** 消耗品 */
     USE(2, I18nUtil.getMessage("InventoryType.USE")),
+    /** 装饰品 */
     SETUP(3, I18nUtil.getMessage("InventoryType.SETUP")),
+    /** 其他 */
     ETC(4, I18nUtil.getMessage("InventoryType.ETC")),
+    /** 现金物品 */
     CASH(5, I18nUtil.getMessage("InventoryType.CASH")),
-    CANHOLD(6, I18nUtil.getMessage("InventoryType.CANHOLD")),   //Proof-guard for inserting after removal checks
-    EQUIPPED(-1, I18nUtil.getMessage("InventoryType.EQUIPPED")); //Seems nexon screwed something when removing an item T_T
+    /** 容器（用于物品移动前验证） */
+    CANHOLD(6, I18nUtil.getMessage("InventoryType.CANHOLD")),
+    /** 已装备 */
+    EQUIPPED(-1, I18nUtil.getMessage("InventoryType.EQUIPPED"));
 
     private final byte type;
     private final String name;

@@ -29,8 +29,19 @@ import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
 import org.gms.util.PacketCreator;
 
+/**
+ * 角色列表请求处理器
+ * 处理客户端请求查看指定世界和频道的角色列表
+ */
 public final class CharlistRequestHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理角色列表请求
+     * 验证世界和频道有效性后，返回该账号在该世界的角色列表
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();

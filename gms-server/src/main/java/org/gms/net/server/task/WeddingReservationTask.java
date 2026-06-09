@@ -26,6 +26,9 @@ import org.gms.util.Pair;
 import java.util.Set;
 
 /**
+ * 婚礼预约定时任务
+ * 定期检查并启动婚礼预约，分别处理教堂和小礼拜堂的婚礼
+ *
  * @author Ronan
  */
 public class WeddingReservationTask extends BaseTask implements Runnable {
@@ -51,6 +54,11 @@ public class WeddingReservationTask extends BaseTask implements Runnable {
         }
     }
 
+    /**
+     * 构造婚礼预约定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public WeddingReservationTask(World world) {
         super(world);
     }

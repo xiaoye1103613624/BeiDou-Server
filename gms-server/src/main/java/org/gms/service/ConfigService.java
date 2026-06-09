@@ -44,18 +44,36 @@ import static com.mybatisflex.core.query.QueryMethods.distinct;
 import static org.gms.dao.entity.table.GameConfigDOTableDef.GAME_CONFIG_D_O;
 import static org.gms.dao.entity.table.LangResourcesDOTableDef.LANG_RESOURCES_D_O;
 
+/**
+ * 游戏配置服务类
+ * 提供游戏配置的查询、增删改、导入导出功能
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class ConfigService {
+    /** 游戏配置数据访问对象 */
     private final GameConfigMapper gameConfigMapper;
+    /** 服务配置属性 */
     private final ServiceProperty serviceProperty;
+    /** 多语言资源服务 */
     private final LangResourceService langResourceService;
 
+    /**
+     * 加载所有游戏配置
+     *
+     * @return 游戏配置列表
+     */
     public List<GameConfigDO> loadGameConfigs() {
         return gameConfigMapper.selectAll();
     }
 
+    /**
+     * 获取配置类型和子类型列表
+     * 查询数据库中所有不重复的配置类型和子类型
+     *
+     * @return 配置类型DTO，包含类型和子类型列表
+     */
     public ConfigTypeDTO getConfigTypeList() {
         List<GameConfigDO> typeDOList = gameConfigMapper.selectListByQuery(QueryWrapper.create().select(distinct(GAME_CONFIG_D_O.CONFIG_TYPE)));
         List<GameConfigDO> subTypeDOList = gameConfigMapper.selectListByQuery(QueryWrapper.create().select(distinct(GAME_CONFIG_D_O.CONFIG_SUB_TYPE)));
@@ -65,6 +83,13 @@ public class ConfigService {
                 .build();
     }
 
+    /**
+     * 分页查询配置列表
+     * 联合多语言表查询，支持按类型、子类型和关键词筛选
+     *
+     * @param condition 查询条件
+     * @return 分页的配置列表
+     */
     public Page<GameConfigDO> getConfigList(GameConfigReqDTO condition) {
         // join i18n表
         QueryWrapper queryWrapper = QueryWrapper.create()
@@ -86,6 +111,12 @@ public class ConfigService {
         return gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
     }
 
+    /**
+     * 新增配置
+     * 同时插入配置记录和多语言描述，并同步到内存缓存
+     *
+     * @param condition 配置数据
+     */
     @Transactional(rollbackFor = Exception.class)
     public void addConfig(GameConfigDO condition) {
         RequireUtil.requireNotEmpty(condition.getConfigType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configType"));
@@ -113,6 +144,12 @@ public class ConfigService {
         GameConfig.add(condition);
     }
 
+    /**
+     * 更新配置
+     * 更新配置值和对应的多语言描述
+     *
+     * @param condition 配置数据
+     */
     @Transactional(rollbackFor = Exception.class)
     public void updateConfig(GameConfigDO condition) {
         RequireUtil.requireNotNull(condition.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
@@ -133,6 +170,12 @@ public class ConfigService {
         GameConfig.update(gameConfigDO);
     }
 
+    /**
+     * 删除配置
+     * 删除配置记录及所有关联的多语言描述
+     *
+     * @param id 配置ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteConfig(Long id) {
         RequireUtil.requireNotNull(id, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
@@ -147,12 +190,25 @@ public class ConfigService {
         GameConfig.remove(gameConfigDO);
     }
 
+    /**
+     * 批量删除配置
+     * 逐个调用deleteConfig删除每个配置
+     *
+     * @param ids 配置ID列表
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteConfigList(List<Long> ids) {
         RequireUtil.requireNotEmpty(ids, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "ids"));
         ids.forEach(this::deleteConfig);
     }
 
+    /**
+     * 导入YML配置文件
+     * 解析YML文件中的world和server配置，生成SQL批量更新数据库
+     *
+     * @param file 上传的YML文件
+     * @return 成功数量（固定返回1）
+     */
     public int importYml(MultipartFile file) {
         String filename = file.getOriginalFilename();
         RequireUtil.requireNotEmpty(filename, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "file"));
@@ -224,6 +280,13 @@ public class ConfigService {
         return 1;
     }
 
+    /**
+     * 解析对象值
+     * 对Float/Double类型格式化为无科学计数法的字符串
+     *
+     * @param obj 原始对象
+     * @return 解析后的值
+     */
     private Object parseObject(Object obj) {
         String typeName = obj.getClass().getTypeName();
         // 为避免科学计数，进行格式化输出，以double为标准最多精确到16位
@@ -233,6 +296,14 @@ public class ConfigService {
         return obj;
     }
 
+    /**
+     * 精确匹配替换字符串
+     * 如果源字符串与ft[0]相等则替换为ft[1]
+     *
+     * @param src 源字符串
+     * @param fts 替换对数组（[from, to]）
+     * @return 替换后的字符串
+     */
     private String replaceWithEquals(String src, String[]... fts) {
         for (String[] ft : fts) {
             if (ft[0].equals(src)) {
@@ -243,6 +314,14 @@ public class ConfigService {
         return src;
     }
 
+    /**
+     * 包含匹配替换字符串
+     * 如果源字符串包含ft[0]则替换其中的ft[0]为ft[1]
+     *
+     * @param src 源字符串
+     * @param fts 替换对数组（[from, to]）
+     * @return 替换后的字符串
+     */
     private String replaceWithContains(String src, String[]... fts) {
         for (String[] ft : fts) {
             if (src.contains(ft[0])) {
@@ -252,6 +331,12 @@ public class ConfigService {
         return src;
     }
 
+    /**
+     * 导出YML配置文件
+     * 将所有配置按world和server分组导出为YML格式的文件下载
+     *
+     * @return 包含文件流和头信息的ResponseEntity
+     */
     public ResponseEntity<Resource> exportYml() {
         List<GameConfigDO> gameConfigDOS = loadGameConfigs();
         // 转成yml格式
@@ -302,6 +387,12 @@ public class ConfigService {
 
     }
 
+    /**
+     * 配置到Map的收集器
+     * 将配置列表转换为configCode -> configValue的Map，根据配置类型做不同转换
+     *
+     * @return 配置Map收集器
+     */
     public Collector<GameConfigDO, ?, Map<String, Object>> toMap() {
         return Collectors.toMap(GameConfigDO::getConfigCode, config -> {
             if ("java.util.Map".equals(config.getConfigClazz())) {

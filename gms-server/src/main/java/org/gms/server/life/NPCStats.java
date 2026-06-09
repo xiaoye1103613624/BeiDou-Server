@@ -22,19 +22,38 @@
 package org.gms.server.life;
 
 /**
+ * NPC属性
+ * 存储NPC的基础属性信息，如名称等
+ *
  * @author Matze
  */
 public class NPCStats {
+    /** NPC名称 */
     private String name;
 
+    /**
+     * 构造NPC属性对象
+     *
+     * @param name NPC名称
+     */
     public NPCStats(String name) {
         this.name = name;
     }
 
+    /**
+     * 获取NPC名称
+     *
+     * @return NPC名称
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 设置NPC名称
+     *
+     * @param name NPC名称
+     */
     public void setName(String name) {
         this.name = name;
     }

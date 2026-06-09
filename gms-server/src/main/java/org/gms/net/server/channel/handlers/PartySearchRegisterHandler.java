@@ -26,10 +26,19 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
+ * 组队搜索注册处理器
+ * 处理玩家注册组队搜索的操作
+ *
  * @author Quasar
  */
 public class PartySearchRegisterHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理组队搜索注册包（当前为空实现，预留扩展）
+     *
+     * @param p 输入数据包
+     * @param c 客户端连接
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {}
 }

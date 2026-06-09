@@ -22,14 +22,23 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 基础任务抽象类
+ * 所有与World绑定的定时任务的基类，封装World引用
+ *
  * @author Ronan
  */
 public abstract class BaseTask implements Runnable {
+    /** 关联的世界实例 */
     protected World wserv;
 
     @Override
     public void run() {}
 
+    /**
+     * 构造基础任务
+     *
+     * @param world 关联的世界实例
+     */
     public BaseTask(World world) {
         wserv = world;
     }

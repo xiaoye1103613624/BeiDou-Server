@@ -55,9 +55,15 @@ import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
+/**
+ * 商城操作处理器
+ * 处理现金商城（Cash Shop）的购买、赠送、背包扩容、改名卡、转区等操作
+ */
 public final class CashOperationHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(CashOperationHandler.class);
 
+    /** 便签服务 */
     private final NoteService noteService;
 
     public CashOperationHandler(NoteService noteService) {

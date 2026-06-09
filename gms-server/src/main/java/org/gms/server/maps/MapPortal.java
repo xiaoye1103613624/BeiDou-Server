@@ -21,7 +21,14 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 地图传送门
+ * 继承自GenericPortal，表示地图间传送门，使用默认的MAP_PORTAL类型
+ */
 public class MapPortal extends GenericPortal {
+    /**
+     * 构造地图传送门，默认类型为 MAP_PORTAL
+     */
     public MapPortal() {
         super(Portal.MAP_PORTAL);
     }

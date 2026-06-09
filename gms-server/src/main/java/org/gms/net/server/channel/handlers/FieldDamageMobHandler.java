@@ -31,7 +31,12 @@ import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 
+/**
+ * 场景伤害怪物处理器
+ * 处理场景伤害（如毒雾、陷阱）对怪物的影响
+ */
 public class FieldDamageMobHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(FieldDamageMobHandler.class);
 
     @Override

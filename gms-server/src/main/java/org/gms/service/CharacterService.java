@@ -59,45 +59,118 @@ import static org.gms.dao.entity.table.SkillsDOTableDef.SKILLS_D_O;
 import static org.gms.dao.entity.table.TrocklocationsDOTableDef.TROCKLOCATIONS_D_O;
 import static org.gms.dao.entity.table.WishlistsDOTableDef.WISHLISTS_D_O;
 
+/**
+ * 角色服务类
+ * 提供角色的查询、修改、删除、排行榜等管理功能
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class CharacterService {
+    /** 扩展值数据访问对象 */
     private final ExtendValueMapper extendValueMapper;
+
+    /** 角色数据访问对象 */
     private final CharactersMapper charactersMapper;
+
+    /** 技能数据访问对象 */
     private final SkillsMapper skillsMapper;
+
+    /** 技能宏数据访问对象 */
     private final SkillmacrosMapper skillmacrosMapper;
+
+    /** 公会数据访问对象 */
     private final GuildsMapper guildsMapper;
+
+    /** 好友数据访问对象 */
     private final BuddiesMapper buddiesMapper;
+
+    /** BBS帖子数据访问对象 */
     private final BbsThreadsMapper bbsThreadsMapper;
+
+    /** BBS回复数据访问对象 */
     private final BbsRepliesMapper bbsRepliesMapper;
+
+    /** 愿望清单数据访问对象 */
     private final WishlistsMapper wishlistsMapper;
+
+    /** 冷却时间数据访问对象 */
     private final CooldownsMapper cooldownsMapper;
+
+    /** 玩家状态数据访问对象 */
     private final PlayerdiseasesMapper playerdiseasesMapper;
+
+    /** 区域信息数据访问对象 */
     private final AreaInfoMapper areaInfoMapper;
+
+    /** 怪物图鉴数据访问对象 */
     private final MonsterbookMapper monsterbookMapper;
+
+    /** 家族角色数据访问对象 */
     private final FamilyCharacterMapper familyCharacterMapper;
+
+    /** 声望日志数据访问对象 */
     private final FamelogMapper famelogMapper;
+
+    /** 背包服务 */
     private final InventoryService inventoryService;
+
+    /** 任务服务 */
     private final QuestService questService;
+
+    /** 仓库数据访问对象 */
     private final FredstorageMapper fredstorageMapper;
+
+    /** 拍卖行服务 */
     private final MtsService mtsService;
+
+    /** 按键映射数据访问对象 */
     private final KeymapMapper keymapMapper;
+
+    /** 保存位置数据访问对象 */
     private final SavedlocationsMapper savedlocationsMapper;
+
+    /** 存储位置数据访问对象 */
     private final TrocklocationsMapper trocklocationsMapper;
+
+    /** 事件统计数据访问对象 */
     private final EventstatsMapper eventstatsMapper;
+
+    /** 服务器队列数据访问对象 */
     private final ServerQueueMapper serverQueueMapper;
+
+    /** 改名服务 */
     private final NameChangeService nameChangeService;
+
+    /** 世界转移服务 */
     private final WorldTransferService worldTransferService;
 
+    /**
+     * 根据角色ID获取角色实体
+     *
+     * @param id 角色ID
+     * @return 角色实体
+     */
     public CharactersDO findById(int id) {
         return charactersMapper.selectOneById(id);
     }
 
+    /**
+     * 更新角色信息
+     *
+     * @param condition 角色实体
+     */
     public void update(CharactersDO condition) {
         charactersMapper.update(condition);
     }
 
+    /**
+     * 获取在线角色列表
+     * 支持按角色ID、角色名、地图进行筛选
+     *
+     * @param request 查询条件
+     * @return 分页的在线角色列表
+     */
     public Page<ChrOnlineListRtnDTO> getChrOnlineList(ChrOnlineListReqDTO request) {
         Collection<Character> chrList = Server.getInstance().getWorld(request.getWorld()).getPlayerStorage().getAllCharacters();
         return BasePageUtil.create(chrList, request)
@@ -115,6 +188,12 @@ public class CharacterService {
                         .build());
     }
 
+    /**
+     * 更新角色倍率
+     * 支持经验倍率、掉落倍率、金币倍率等扩展值的设置
+     *
+     * @param data 扩展值数据
+     */
     public void updateRate(ExtendValueDO data) {
         checkName(data);
         data.setExtendType(ExtendType.CHARACTER_EXTEND.getType());
@@ -128,11 +207,17 @@ public class CharacterService {
         }
 
         Character character = getCharacter(data);
+        // 重置玩家倍率并应用世界倍率和优惠券倍率
         character.resetPlayerRates();
         character.setWorldRates();
         character.setCouponRates();
     }
 
+    /**
+     * 重置单个角色倍率
+     *
+     * @param data 扩展值数据
+     */
     public void resetRate(ExtendValueDO data) {
         checkName(data);
         extendValueMapper.deleteByQuery(QueryWrapper.create()
@@ -145,6 +230,11 @@ public class CharacterService {
         character.setCouponRates();
     }
 
+    /**
+     * 重置角色所有倍率（经验、掉落、金币）
+     *
+     * @param data 扩展值数据
+     */
     public void resetRates(ExtendValueDO data) {
         check(data);
         extendValueMapper.deleteByQuery(QueryWrapper.create()
@@ -157,15 +247,25 @@ public class CharacterService {
         character.setCouponRates();
     }
 
+    /**
+     * 重置所有角色的商店状态
+     */
     public void resetMerchant() {
         charactersMapper.updateAllHasMerchant(0);
     }
 
+    /**
+     * 获取全服排行榜
+     * 根据配置决定是全服统一排行还是各世界分别排行
+     *
+     * @param worldSize 世界数量
+     * @return 排行榜列表
+     */
     public List<List<CharactersDO>> getWorldsRankPlayers(int worldSize) {
         boolean wholeServerRanking = GameConfig.getServerBoolean("use_whole_server_ranking");
         List<List<CharactersDO>> worldsRankingList = new ArrayList<>();
         if (wholeServerRanking) {
-            // 全服前50
+            // 全服排行：不分服务器，全局取前 50
             QueryWrapper queryWrapper = QueryWrapper.create()
                     .select(CHARACTERS_D_O.NAME, CHARACTERS_D_O.LEVEL, CHARACTERS_D_O.WORLD)
                     .from(CHARACTERS_D_O)
@@ -179,7 +279,7 @@ public class CharacterService {
             worldsRankingList.add(charactersDOList);
         } else {
             for (int i = 0; i < worldSize; i++) {
-                // 每个区前50
+                // 单区排行：每个服务器各自取前 50
                 List<CharactersDO> charactersDOList = getWorldRankPlayers(i);
                 worldsRankingList.add(charactersDOList);
             }
@@ -187,6 +287,12 @@ public class CharacterService {
         return worldsRankingList;
     }
 
+    /**
+     * 获取单个世界的排行榜
+     *
+     * @param worldId 世界ID
+     * @return 角色排行榜列表
+     */
     public List<CharactersDO> getWorldRankPlayers(int worldId) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(CHARACTERS_D_O.NAME, CHARACTERS_D_O.LEVEL, CHARACTERS_D_O.WORLD)
@@ -200,32 +306,57 @@ public class CharacterService {
         return charactersMapper.selectListByQuery(queryWrapper);
     }
 
+    /**
+     * 根据角色名获取角色实体
+     *
+     * @param name 角色名
+     * @return 角色实体
+     */
     public CharactersDO findByName(String name) {
         List<CharactersDO> charactersDOS = charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(name)));
         return charactersDOS.isEmpty() ? null : charactersDOS.getFirst();
     }
 
+    /**
+     * 删除角色技能
+     *
+     * @param skillsDO 技能数据
+     */
     public void removeSkill(SkillsDO skillsDO) {
         skillsMapper.deleteByQuery(QueryWrapper.create(skillsDO));
     }
 
+    /**
+     * 删除公会
+     * 将公会成员的公会信息重置后删除公会记录
+     *
+     * @param guildsDO 公会数据
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteGuild(GuildsDO guildsDO) {
         charactersMapper.updateByQuery(CharactersDO.builder().guildid(0).guildrank(5).build(), QueryWrapper.create().where(CHARACTERS_D_O.GUILDID.eq(guildsDO.getGuildid())));
         guildsMapper.deleteById(guildsDO.getGuildid());
     }
 
+    /**
+     * 从数据库中删除角色
+     * 级联删除角色相关的所有数据：好友、公会、背包、技能、任务等
+     *
+     * @param player      玩家角色
+     * @param senderAccId 发送者账号ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteCharFromDB(Character player, int senderAccId) {
         int cid = player.getId();
-        if (!Server.getInstance().haveCharacterEntry(senderAccId, cid)) {    // thanks zera (EpiphanyMS) for pointing a critical exploit with non-authed character deletion request
+        if (!Server.getInstance().haveCharacterEntry(senderAccId, cid)) {
+            // 验证角色归属：防止未授权角色删除请求的严重漏洞
             throw new BizException(I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
         }
         int world;
         CharactersDO charactersDO = findById(cid);
         if (charactersDO != null) {
             world = charactersDO.getWorld();
-            // 删除guild
+            // 级联删除公会信息
             if (charactersDO.getGuildid() > 0 && Objects.equals(senderAccId, charactersDO.getAccountid())) {
                 Server.getInstance().deleteGuildCharacter(new GuildCharacter(player, cid, 0, charactersDO.getName(),
                         (byte) -1, (byte) -1, 0, Optional.ofNullable(charactersDO.getGuildrank()).orElse(0),
@@ -235,7 +366,7 @@ public class CharacterService {
         } else {
             world = 0;
         }
-        // 删除buddies
+        // 删除好友关系
         QueryWrapper buddiesQueryWrapper = QueryWrapper.create().where(BUDDIES_D_O.CHARACTERID.eq(cid));
         List<BuddiesDO> buddiesDOS = buddiesMapper.selectListByQuery(buddiesQueryWrapper);
         buddiesDOS.forEach(buddiesDO -> {
@@ -245,7 +376,7 @@ public class CharacterService {
             }
         });
         buddiesMapper.deleteByQuery(buddiesQueryWrapper);
-        // 删除bbs_threads bbs_replies
+        // 删除论坛主题和回复
         QueryWrapper bbsThreadsQueryWrapper = QueryWrapper.create().where(BBS_THREADS_D_O.POSTERCID.eq(cid));
         List<BbsThreadsDO> bbsThreadsDOS = bbsThreadsMapper.selectListByQuery(bbsThreadsQueryWrapper);
         List<Long> threadIds = bbsThreadsDOS.stream().map(BbsThreadsDO::getThreadid).toList();
@@ -253,60 +384,66 @@ public class CharacterService {
             bbsRepliesMapper.deleteByQuery(QueryWrapper.create().where(BBS_REPLIES_D_O.THREADID.in(threadIds)));
             bbsThreadsMapper.deleteByQuery(bbsThreadsQueryWrapper);
         }
-        // 删除wishlists
+        // 批量清理角色关联数据：心愿单、冷却、状态、区域信息、怪物图鉴
         wishlistsMapper.deleteByQuery(QueryWrapper.create().where(WISHLISTS_D_O.CHARID.eq(cid)));
-        // 删除cooldowns
         cooldownsMapper.deleteByQuery(QueryWrapper.create().where(COOLDOWNS_D_O.CHARID.eq(cid)));
-        // 删除playerdiseases
         playerdiseasesMapper.deleteByQuery(QueryWrapper.create().where(PLAYERDISEASES_D_O.CHARID.eq(cid)));
-        // 删除area_info
         areaInfoMapper.deleteByQuery(QueryWrapper.create().where(AREA_INFO_D_O.CHARID.eq(cid)));
-        // 删除monsterbook
         monsterbookMapper.deleteByQuery(QueryWrapper.create().where(MONSTERBOOK_D_O.CHARID.eq(cid)));
-        // 删除characters
         charactersMapper.deleteById(cid);
-        // 删除family_character
+        // 清理家族相关数据
         familyCharacterMapper.deleteByQuery(QueryWrapper.create().where(FAMILY_CHARACTER_D_O.CID.eq(cid)));
-        // 删除famelog
         famelogMapper.deleteByQuery(QueryWrapper.create().where(FAMELOG_D_O.CHARACTERID_TO.eq(cid).or(FAMELOG_D_O.CHARACTERID.eq(cid))));
-        // 删除背包库存
+        // 清理背包库存
         inventoryService.deleteInventoryByCharacterId(cid);
-        // 删除任务进度
+        // 清理任务进度
         questService.deleteQuestProgressByCharacter(cid);
-        // 删除fredstorage
+        // 清理仓库和拍卖行数据
         fredstorageMapper.deleteByQuery(QueryWrapper.create().where(FREDSTORAGE_D_O.CID.eq(cid)));
-        // 删除拍卖行
         mtsService.deleteMtsByCharacterId(cid);
-        // 删除keymap
+        // 清理快捷键和位置记录
         keymapMapper.deleteByQuery(QueryWrapper.create().where(KEYMAP_D_O.CHARACTERID.eq(cid)));
-        // 删除savedlocations
         savedlocationsMapper.deleteByQuery(QueryWrapper.create().where(SAVEDLOCATIONS_D_O.CHARACTERID.eq(cid)));
-        // 删除trocklocations
         trocklocationsMapper.deleteByQuery(QueryWrapper.create().where(TROCKLOCATIONS_D_O.CHARACTERID.eq(cid)));
-        // 删除技能
+        // 清理技能数据
         skillsMapper.deleteByQuery(QueryWrapper.create().where(SKILLS_D_O.CHARACTERID.eq(cid)));
         skillmacrosMapper.deleteByQuery(QueryWrapper.create().where(SKILLMACROS_D_O.CHARACTERID.eq(cid)));
-        // 删除eventstats
+        // 清理事件和队列数据
         eventstatsMapper.deleteByQuery(QueryWrapper.create().where(EVENTSTATS_D_O.CHARACTERID.eq(cid)));
-        // 删除server_queue
         serverQueueMapper.deleteByQuery(QueryWrapper.create().where(SERVER_QUEUE_D_O.CHARACTERID.eq(cid)));
-        // 补充heaven没有删除的2张表
+        // 取消待处理的名字变更和世界转移请求
         nameChangeService.cancelPendingNameChange(player, false);
         worldTransferService.cancelPendingWorldTransfer(player, false);
     }
 
+    /**
+     * 保存角色到数据库
+     *
+     * @param player      玩家角色
+     * @param notAutosave 是否为手动保存（非自动保存）
+     */
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
     public void saveCharToDB(Character player, boolean notAutosave) {
         if (!player.isLoggedIn()) {
             return;
         }
         log.info(I18nUtil.getLogMessage(notAutosave ? "Character.saveCharToDB.info1" : "Character.saveCharToDB.info2"), player.getName());
+        // 更新角色在内存中的条目信息
         Server.getInstance().updateCharacterEntry(player);
 
         CharactersDO cdo = Character.toCharactersDO(player);
         charactersMapper.insertSelective(cdo);
     }
 
+    /**
+     * 从数据库加载角色
+     * 加载角色的基本信息、地图位置、组队信息、好友列表、技能等
+     *
+     * @param cid          角色ID
+     * @param client       客户端连接
+     * @param channelServer 是否为频道服务器
+     * @return 玩家角色
+     */
     public Character loadCharFromDB(int cid, Client client, boolean channelServer) {
         CharactersDO charactersDO = findById(cid);
         RequireUtil.requireNotNull(charactersDO, I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
@@ -317,6 +454,7 @@ public class CharacterService {
         MapManager mapManager = client.getChannelServer().getMapFactory();
         MapleMap mapleMap = mapManager.getMap(chr.getMapId());
         if (mapleMap == null) {
+            // 地图不存在时使用默认出生地图
             mapleMap = mapManager.getMap(MapId.HENESYS);
         }
         chr.setMap(mapleMap);
@@ -364,6 +502,7 @@ public class CharacterService {
         QueryWrapper cdQueryWrapper = QueryWrapper.create().where(COOLDOWNS_D_O.CHARID.eq(cid));
         List<CooldownsDO> cooldownsDOList = cooldownsMapper.selectListByQuery(cdQueryWrapper);
         cooldownsDOList.forEach(cooldownsDO -> {
+            // 对于非特定技能的冷却，如果已过期则跳过
             if (cooldownsDO.getSkillid() != 5221999 && cooldownsDO.getLength() + cooldownsDO.getStarttime() < System.currentTimeMillis()) {
                 return;
             }
@@ -385,6 +524,7 @@ public class CharacterService {
         });
         playerdiseasesMapper.deleteByQuery(pdWrapper);
         if (!loadedDiseases.isEmpty()) {
+            // 将加载的异常状态存储到缓冲中
             Server.getInstance().getPlayerBuffStorage().addDiseasesToStorage(cid, loadedDiseases);
         }
 
@@ -419,46 +559,96 @@ public class CharacterService {
             accountStorage = world.getAccountStorage(charactersDO.getAccountid());
         }
         chr.setStorage(accountStorage);
+        // 重新应用本地属性值
         chr.reapplyLocalStats();
         chr.changeHpMp(charactersDO.getHp(), charactersDO.getMp(), true);
         return chr;
     }
 
+    /**
+     * 获取角色的存储位置列表
+     *
+     * @param cid 角色ID
+     * @return 存储位置列表
+     */
     public List<TrocklocationsDO> getTrockLocationByCharacter(Integer cid) {
         return trocklocationsMapper.selectListByQuery(QueryWrapper.create().where(TROCKLOCATIONS_D_O.CHARACTERID.eq(cid)));
     }
 
+    /**
+     * 获取角色的区域信息列表
+     *
+     * @param cid 角色ID
+     * @return 区域信息列表
+     */
     public List<AreaInfoDO> getAreaInfoByCharacter(Integer cid) {
         return areaInfoMapper.selectListByQuery(QueryWrapper.create().where(AREA_INFO_D_O.CHARID.eq(cid)));
     }
 
+    /**
+     * 获取角色的事件统计列表
+     *
+     * @param cid 角色ID
+     * @return 事件统计列表
+     */
     public List<EventstatsDO> getEventStatsByCharacter(Integer cid) {
         return eventstatsMapper.selectListByQuery(QueryWrapper.create().where(EVENTSTATS_D_O.CHARACTERID.eq(cid)));
     }
 
+    /**
+     * 获取角色的愿望清单列表
+     *
+     * @param cid 角色ID
+     * @return 愿望清单列表
+     */
     public List<WishlistsDO> getWishlistsByCharacter(Integer cid) {
         return wishlistsMapper.selectListByQuery(QueryWrapper.create().where(WISHLISTS_D_O.CHARID.eq(cid)));
     }
 
+    /**
+     * 根据账号ID获取角色列表
+     *
+     * @param accountId 账号ID
+     * @return 角色列表
+     */
     public List<CharactersDO> getCharacterByAccountId(int accountId) {
         return charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.ACCOUNTID.eq(accountId)));
     }
 
+    /**
+     * 校验扩展值名称
+     * 只允许修改经验倍率、掉落倍率、金币倍率
+     *
+     * @param data 扩展值数据
+     */
     private void checkName(ExtendValueDO data) {
         check(data);
-        // 非法请求篡改其他字段
+        // 白名单校验：只允许 expRate / dropRate / mesoRate 三种倍率类型
         if ("expRate".equals(data.getExtendName()) || "dropRate".equals(data.getExtendName()) || "mesoRate".equals(data.getExtendName())) {
             return;
         }
         throw BizException.illegalArgument();
     }
 
+    /**
+     * 校验扩展值数据
+     * 检查extendId、extendType、extendName不能为空
+     *
+     * @param data 扩展值数据
+     */
     private void check(ExtendValueDO data) {
         RequireUtil.requireNotEmpty(data.getExtendId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "extendId"));
         RequireUtil.requireNotEmpty(data.getExtendType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "extendType"));
         RequireUtil.requireNotEmpty(data.getExtendName(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "extendName"));
     }
 
+    /**
+     * 根据扩展值数据获取在线角色
+     * 支持按账号ID或角色ID查找
+     *
+     * @param data 扩展值数据
+     * @return 在线角色
+     */
     private Character getCharacter(ExtendValueDO data) {
         for (World world : Server.getInstance().getWorlds()) {
             for (Character character : world.getPlayerStorage().getAllCharacters()) {

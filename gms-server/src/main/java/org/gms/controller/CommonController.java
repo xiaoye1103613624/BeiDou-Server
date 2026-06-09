@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 通用控制器
+ * 处理装备信息查询、在线人数统计、游戏资料搜索等通用请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/common")

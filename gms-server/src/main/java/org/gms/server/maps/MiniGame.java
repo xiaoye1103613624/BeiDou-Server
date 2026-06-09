@@ -34,31 +34,61 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * 小游戏
+ * 管理玩家之间的小游戏对战，如五子棋（Omok）和记忆配对，线程安全
+ *
  * @author Matze
  * @author Ronan (HeavenMS)
  */
 public class MiniGame extends AbstractMapObject {
+    /** 商店所有者 */
     private Character owner;
+    /** 访问者 */
     private Character visitor;
+    /** 进入密码 */
     private final String password;
+    /** 游戏类型 */
     private MiniGameType GameType = MiniGameType.UNDEFINED;
+    /** 棋子类型 */
     private int piecetype;
+    /** 游戏进行状态（0=等待, 1=进行中, 2=结束） */
     private int inprogress = 0;
+    /** 棋子位置数组 */
     private final int[] piece = new int[250];
+    /** 4x3棋盘可用位置 */
     private final List<Integer> list4x3 = new ArrayList<>();
+    /** 5x4棋盘可用位置 */
     private final List<Integer> list5x4 = new ArrayList<>();
+    /** 6x5棋盘可用位置 */
     private final List<Integer> list6x5 = new ArrayList<>();
+    /** 商店描述 */
     private final String description;
+    /** 输家标记 */
     private int loser = 1;
+    /** 先手标记 */
     private int firstslot = 0;
+    /** 访问者分数 */
     private int visitorpoints = 0, visitorscore = 0, visitorforfeits = 0, lastvisitor = -1;
+    /** 所有者分数 */
     private int ownerpoints = 0, ownerscore = 0, ownerforfeits = 0;
+    /** 访问者是否退出 */
     private boolean visitorquit, ownerquit;
+    /** 下次可平局的时间 */
     private long nextavailabletie = 0;
+    /** 需要赢的局数 */
     private int matchestowin = 0;
 
+    /**
+     * 小游戏类型枚举
+     */
     public enum MiniGameType {
-        UNDEFINED(0), OMOK(1), MATCH_CARD(2);
+        /** 未定义 */
+        UNDEFINED(0),
+        /** 五子棋 */
+        OMOK(1),
+        /** 记忆配对 */
+        MATCH_CARD(2);
+
         private int value = 0;
 
         MiniGameType(int value) {
@@ -70,6 +100,9 @@ public class MiniGame extends AbstractMapObject {
         }
     }
 
+    /**
+     * 小游戏结果枚举
+     */
     public enum MiniGameResult {
         WIN, LOSS, TIE
     }

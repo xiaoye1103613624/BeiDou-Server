@@ -31,11 +31,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 宠物数据工厂
+ * 从WZ文件加载宠物数据：命令技能和饥饿度，以HashMap缓存
+ * 提供宠物命令技能和饥饿度查询
+ *
  * @author Danny (Leifde)
  */
 public class PetDataFactory {
+    /** WZ数据源 */
     private static final DataProvider dataRoot = DataProviderFactory.getDataProvider(WZFiles.ITEM);
+    /** 宠物命令缓存（宠物ID_技能ID -> PetCommand） */
     private static final Map<String, PetCommand> petCommands = new HashMap<>();
+    /** 宠物饥饿度缓存（宠物ID -> 饥饿度） */
     private static final Map<Integer, Integer> petHunger = new HashMap<>();
 
     public static PetCommand getPetCommand(int petId, int skillId) {

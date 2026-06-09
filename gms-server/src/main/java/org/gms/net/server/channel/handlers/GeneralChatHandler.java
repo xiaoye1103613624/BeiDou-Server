@@ -32,7 +32,12 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
+/**
+ * 普通聊天处理器
+ * 处理玩家的普通聊天消息、GM命令解析以及防刷屏检测
+ */
 public final class GeneralChatHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(GeneralChatHandler.class);
 
     @Override

@@ -30,6 +30,9 @@ import org.gms.server.maps.HiredMerchant;
 import org.gms.util.PacketCreator;
 
 /**
+ * 远程仓库处理器
+ * 处理玩家远程访问仓库的操作
+ *
  * @author kevintjuh93 - :3
  */
 public class RemoteStoreHandler extends AbstractPacketHandler {

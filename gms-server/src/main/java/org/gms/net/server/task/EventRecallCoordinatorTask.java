@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.coordinator.world.EventRecallCoordinator;
 
 /**
+ * 事件召回协调器定时任务
+ * 定期管理事件实例，清理过期的事件副本
+ *
  * @author Ronan
  */
 public class EventRecallCoordinatorTask implements Runnable {

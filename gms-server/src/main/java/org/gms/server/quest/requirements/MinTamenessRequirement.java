@@ -29,9 +29,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 最低宠物亲密度需求
+ * 检查玩家宠物亲密度是否达到任务要求的最低值
+ *
  * @author Tyler (Twdtwd)
  */
 public class MinTamenessRequirement extends AbstractQuestRequirement {
+    /** 最低亲密度 */
     private int minTameness;
 
 
@@ -41,7 +45,9 @@ public class MinTamenessRequirement extends AbstractQuestRequirement {
     }
 
     /**
-     * @param data
+     * 从WZ数据中解析最低亲密度要求
+     *
+     * @param data WZ数据
      */
     @Override
     public void processData(Data data) {

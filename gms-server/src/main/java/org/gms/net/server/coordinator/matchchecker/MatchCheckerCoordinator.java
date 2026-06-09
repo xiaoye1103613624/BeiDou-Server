@@ -36,15 +36,22 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Ronan
+ * 匹配检查协调器
+ * 管理玩家匹配检查的生命周期，用于CPQ挑战和公会创建等需要双人确认的场景
  */
 public class MatchCheckerCoordinator {
 
+    /** 匹配条目表，key为匹配ID */
     private final Map<Integer, MatchCheckingElement> matchEntries = new HashMap<>();
 
+    /** 已池化的角色ID集合 */
     private final Set<Integer> pooledCids = new HashSet<>();
+    /** 信号量池，限制并发匹配数 */
     private final Semaphore semaphorePool = new Semaphore(7);
 
+    /**
+     * 匹配检查条目
+     */
     private class MatchCheckingEntry {
         private boolean accepted;
         private final int cid;
@@ -68,6 +75,10 @@ public class MatchCheckerCoordinator {
         }
     }
 
+    /**
+     * 匹配检查元素
+     * 封装一次匹配操作的所有信息
+     */
     private class MatchCheckingElement {
         private final int leaderCid;
         private final int world;
@@ -180,6 +191,9 @@ public class MatchCheckerCoordinator {
         }
     }
 
+    /**
+     * 从匹配池中释放单个玩家
+     */
     private void unpoolMatchPlayer(Integer cid) {
         unpoolMatchPlayers(Collections.singleton(cid));
     }
@@ -236,6 +250,12 @@ public class MatchCheckerCoordinator {
         }
     }
 
+    /**
+     * 获取匹配确认的领袖角色ID
+     *
+     * @param cid 查询的角色ID
+     * @return 领袖角色ID，未找到则返回-1
+     */
     public int getMatchConfirmationLeaderid(int cid) {
         MatchCheckingElement mmce = matchEntries.get(cid);
         if (mmce != null) {
@@ -245,6 +265,12 @@ public class MatchCheckerCoordinator {
         }
     }
 
+    /**
+     * 获取匹配确认的类型
+     *
+     * @param cid 查询的角色ID
+     * @return 匹配类型，未找到则返回null
+     */
     public MatchCheckerType getMatchConfirmationType(int cid) {
         MatchCheckingElement mmce = matchEntries.get(cid);
         if (mmce != null) {
@@ -254,6 +280,12 @@ public class MatchCheckerCoordinator {
         }
     }
 
+    /**
+     * 判断匹配确认是否处于活跃状态
+     *
+     * @param cid 查询的角色ID
+     * @return 是否活跃
+     */
     public boolean isMatchConfirmationActive(int cid) {
         MatchCheckingElement mmce = matchEntries.get(cid);
         if (mmce != null) {
@@ -274,6 +306,17 @@ public class MatchCheckerCoordinator {
         return mmce;
     }
 
+    /**
+     * 创建匹配确认
+     * 使用信号量控制并发，确保匹配的原子性
+     *
+     * @param matchType  匹配类型
+     * @param world      世界ID
+     * @param leaderCid  领袖角色ID
+     * @param players    参与玩家ID集合
+     * @param message    匹配消息
+     * @return 是否创建成功
+     */
     public boolean createMatchConfirmation(MatchCheckerType matchType, int world, int leaderCid, Set<Integer> players, String message) {
         MatchCheckingElement mmce = null;
         try {
@@ -347,6 +390,13 @@ public class MatchCheckerCoordinator {
         disposeMatchElement(mmce);
     }
 
+    /**
+     * 玩家对匹配确认的响应
+     *
+     * @param cid    角色ID
+     * @param accept 是否接受
+     * @return 始终返回false（由onMatchAccepted/onMatchDeclined回调处理结果）
+     */
     public boolean answerMatchConfirmation(int cid, boolean accept) {
         MatchCheckingElement mmce = null;
         try {
@@ -395,6 +445,13 @@ public class MatchCheckerCoordinator {
         return false;
     }
 
+    /**
+     * 解散匹配确认
+     * 由系统或玩家主动取消匹配时调用
+     *
+     * @param cid 角色ID
+     * @return 是否成功解散
+     */
     public boolean dismissMatchConfirmation(int cid) {
         MatchCheckingElement mmce = null;
         try {

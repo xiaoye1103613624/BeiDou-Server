@@ -33,9 +33,20 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
+/**
+ * 创建角色处理器
+ * 处理客户端创建新角色的请求，验证外观参数合法性并根据职业创建角色
+ */
 @Slf4j
 public final class CreateCharHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理创建角色请求
+     * 验证外观参数是否在默认范围内，检查职业是否启用，通过后创建角色
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         String name = p.readString();
@@ -94,10 +105,8 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         }
 
         int status;
-        /**
-         * 创建角色职业
-         * 将禁止创建指定职业群的判断挪到此处进行统一判断，并且向客户端发出禁止创建的提示信息
-         */
+        // 创建角色职业
+        // 将禁止创建指定职业群的判断挪到此处进行统一判断，并且向客户端发出禁止创建的提示信息
         switch (job) {
             case 0: // Knights of Cygnus #骑士团
                 //先判断是否禁止创建该职业，再进行角色创建

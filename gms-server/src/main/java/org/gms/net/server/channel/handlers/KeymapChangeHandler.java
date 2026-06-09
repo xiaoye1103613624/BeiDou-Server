@@ -30,6 +30,10 @@ import org.gms.constants.game.GameConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 快捷键变更处理器
+ * 处理玩家修改快捷键设置的操作，包括技能绑定、自动HP/MP药水设置
+ */
 public final class KeymapChangeHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

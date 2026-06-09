@@ -35,6 +35,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 抽象角色对象基类
+ * 继承{@link AbstractAnimatedMapObject}，为角色提供地图定位、属性监听和读写锁支持
+ * 管理角色的HP/MP/金币/经验等核心属性，使用读写锁保证地图切换的线程安全
+ *
  * @author RonanLana
  */
 public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject {

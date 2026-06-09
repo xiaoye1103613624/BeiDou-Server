@@ -10,8 +10,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
+/**
+ * 服务器配置类
+ * 配置过滤器注册和OpenAPI文档
+ */
 @Configuration
 public class ServerConfig {
+    /**
+     * 注册业务过滤器
+     *
+     * @param serverFilter 业务过滤器
+     * @return 过滤器注册Bean
+     */
     @Bean
     public FilterRegistrationBean<ServerFilter> filterRegistrationBean(ServerFilter serverFilter) {
         FilterRegistrationBean<ServerFilter> filterRegistrationBean = new FilterRegistrationBean<>();
@@ -20,6 +30,12 @@ public class ServerConfig {
         return filterRegistrationBean;
     }
 
+    /**
+     * 创建OpenAPI配置Bean
+     * 配置API文档信息和安全认证
+     *
+     * @return OpenAPI配置
+     */
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()

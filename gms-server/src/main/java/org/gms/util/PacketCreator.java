@@ -114,16 +114,61 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
+ * 封包构造器（PacketCreator）
+ * <p>
+ * 游戏服务端的核心封包工厂类，所有发往客户端的封包均由此类的静态方法构造。
+ * 涵盖登录认证、角色信息、地图对象生成、战斗逻辑、社交功能、商城等全部业务封包。
+ * 所有方法均为静态方法，返回 {@link Packet} 对象供 Netty 网络层发送。
+ * </p>
+ * <p>
+ * GMS v83 时间戳编码：
+ * <ul>
+ *   <li>{@code -1} → 远期未来（DEFAULT_TIME），表示永久有效</li>
+ *   <li>{@code -2} → 纪元零值（ZERO_TIME），表示初始状态</li>
+ *   <li>{@code -3} → 固定永久值（PERMANENT），常用于现金装备</li>
+ *   <li>正值 → UTC 时间戳 × 10000 + FT_UT_OFFSET（Windows FILETIME 到 Java 毫秒的转换）</li>
+ * </ul>
+ * </p>
+ *
  * @author Frz
  */
 public class PacketCreator {
 
+    /**
+     * 空的属性更新列表常量
+     */
     public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
-    private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
-    private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
-    public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
-    private final static long PERMANENT = 150841440000000000L; // 00 C0 9B 90 7D E5 17 02
 
+    /**
+     * FILETIME 转换偏移量，将 Java 毫秒时间戳转换为 Windows FILETIME 格式
+     * 加上时区偏移进行归一化处理
+     */
+    private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis()));
+
+    /**
+     * 默认时间（远期未来），表示永久有效
+     */
+    private final static long DEFAULT_TIME = 150842304000000000L;
+
+    /**
+     * 零时间（纪元起始），表示初始状态
+     */
+    public final static long ZERO_TIME = 94354848000000000L;
+
+    /**
+     * 永久固定时间，常用于现金装备永久有效
+     */
+    private final static long PERMANENT = 150841440000000000L;
+
+    /**
+     * 将 UTC 时间戳转换为客户端可识别的 FILETIME 格式
+     * <p>
+     * 特殊值：-1=远期未来, -2=纪元零值, -3=永久固定值
+     * </p>
+     *
+     * @param utcTimestamp UTC 时间戳（毫秒）或特殊标记
+     * @return 客户端格式的 64 位时间值
+     */
     public static long getTime(long utcTimestamp) {
         if (utcTimestamp < 0 && utcTimestamp >= -3) {
             if (utcTimestamp == -1) {
@@ -138,11 +183,20 @@ public class PacketCreator {
         return utcTimestamp * 10000 + FT_UT_OFFSET;
     }
 
+    /**
+     * 写入怪物技能 ID（类型 + 等级）
+     */
     private static void writeMobSkillId(OutPacket packet, MobSkillId msId) {
         packet.writeShort(msId.type().getId());
         packet.writeShort(msId.level());
     }
 
+    /**
+     * 发送 HP 恢复效果封包
+     *
+     * @param cid    角色 ID
+     * @param amount 恢复量
+     */
     public static Packet showHpHealed(int cid, int amount) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(cid);
@@ -151,6 +205,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入剩余技能点信息，按技能页分组
+     */
     private static void addRemainingSkillInfo(final OutPacket p, Character chr) {
         int[] remainingSp = chr.getRemainingSps();
         int effectiveLength = 0;
@@ -169,6 +226,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入角色基础属性（等级/职业/力量/敏捷/智力/运气/HP/MP/EXP等）
+     */
     private static void addCharStats(OutPacket p, Character chr) {
         p.writeInt(chr.getId()); // character id
         p.writeFixedString(StringUtil.getRightPaddedStr(chr.getName(), '\0', 13));
@@ -211,15 +271,24 @@ public class PacketCreator {
         p.writeInt(0);
     }
 
+    /**
+     * 写入角色外观数据（性别/肤色/脸型/发型/装备）
+     *
+     * @param mega true=显示现金装备，false=不显示现金装备
+     */
     protected static void addCharLook(final OutPacket p, Character chr, boolean mega) {
         p.writeByte(chr.getGender());
-        p.writeByte(chr.getSkinColor().getId()); // skin color
-        p.writeInt(chr.getFace()); // face
+        p.writeByte(chr.getSkinColor().getId());
+        p.writeInt(chr.getFace());
+        // mega 为 true 时表示 Avatar Mega 聊天框展示，此时不压缩现金装备
         p.writeBool(!mega);
-        p.writeInt(chr.getHair()); // hair
+        p.writeInt(chr.getHair());
         addCharEquips(p, chr);
     }
 
+    /**
+     * 写入角色完整信息（属性 + 背包 + 技能 + 任务 + 社交）
+     */
     private static void addCharacterInfo(OutPacket p, Character chr) {
         p.writeLong(-1);
         p.writeByte(0);
@@ -246,6 +315,9 @@ public class PacketCreator {
         p.writeShort(0);
     }
 
+    /**
+     * 写入新年贺卡信息
+     */
     private static void addNewYearInfo(OutPacket p, Character chr) {
         Set<NewYearCardRecord> received = chr.getReceivedNewYearRecords();
 
@@ -255,6 +327,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入传送信息（普通传送点和VIP传送点）
+     */
     private static void addTeleportInfo(OutPacket p, Character chr) {
         final List<Integer> tele = chr.getTrockMaps();
         final List<Integer> viptele = chr.getVipTrockMaps();
@@ -266,6 +341,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入小游戏信息（当前保留未使用）
+     */
     private static void addMiniGameInfo(OutPacket p, Character chr) {
         p.writeShort(0);
                 /*for (int m = size; m > 0; m--) {//nexon does this :P
@@ -277,6 +355,9 @@ public class PacketCreator {
                  }*/
     }
 
+    /**
+     * 写入区域信息（游戏地图区域状态）
+     */
     private static void addAreaInfo(OutPacket p, Character chr) {
         Map<Short, String> areaInfos = chr.getAreaInfos();
         p.writeShort(areaInfos.size());
@@ -286,16 +367,22 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入角色装备信息（可见装备 + 被现金覆盖的装备 + 宠物装备）
+     */
     private static void addCharEquips(final OutPacket p, Character chr) {
         Inventory equip = chr.getInventory(InventoryType.EQUIPPED);
         Collection<Item> ii = ItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
-            short pos = (short) (item.getPosition() * -1);  //修复其他角色无法看到现金勋章
+            // pos < 100 为普通装备位，pos > 100（除勋章位 111）为现金装备位
+            // (针对游戏出现修复其他角色无法看到现金勋章的情况)
+            short pos = (short) (item.getPosition() * -1);
             if (pos < 100 && myEquip.get(pos) == null) {
                 myEquip.put(pos, item.getItemId());
-            } else if (pos > 100 && pos != 111) { // don't ask. o.o
+            } else if (pos > 100 && pos != 111) {
+                // 现金装备覆盖普通装备时，将原普通装备 ID 移入 maskedEquip
                 pos -= 100;
                 if (myEquip.get(pos) != null) {
                     maskedEquip.put(pos, myEquip.get(pos));
@@ -305,18 +392,22 @@ public class PacketCreator {
                 maskedEquip.put(pos, item.getItemId());
             }
         }
+        // 写入可见装备列表，以 0xFF 结尾
         for (Entry<Short, Integer> entry : myEquip.entrySet()) {
             p.writeByte(entry.getKey());
             p.writeInt(entry.getValue());
         }
         p.writeByte(0xFF);
+        // 写入被现金装备覆盖的原始装备 ID
         for (Entry<Short, Integer> entry : maskedEquip.entrySet()) {
             p.writeByte(entry.getKey());
             p.writeInt(entry.getValue());
         }
         p.writeByte(0xFF);
+        // 写入现金武器 ID（位 -111），若没有现金武器则为 0
         Item cWeapon = equip.getItem((short) -111);
         p.writeInt(cWeapon != null ? cWeapon.getItemId() : 0);
+        // 写入 3 个宠物的装备 ID
         for (int i = 0; i < 3; i++) {
             if (chr.getPet(i) != null) {
                 p.writeInt(chr.getPet(i).getItemId());
@@ -326,12 +417,23 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 设置额外吊坠槽位开关
+     *
+     * @param toggleExtraSlot true=开启额外吊坠槽，false=关闭
+     * @return 封包
+     */
     public static Packet setExtraPendantSlot(boolean toggleExtraSlot) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_EXTRA_PENDANT_SLOT);
         p.writeBool(toggleExtraSlot);
         return p;
     }
 
+    /**
+     * 写入角色条目（基础属性 + 外观 + 排名信息）
+     *
+     * @param viewall true=查看全部模式，false=普通模式
+     */
     private static void addCharEntry(OutPacket p, Character chr, boolean viewall) {
         addCharStats(p, chr);
         addCharLook(p, chr, false);
@@ -349,6 +451,9 @@ public class PacketCreator {
         p.writeInt(chr.getJobRankMove()); // move (negative is downwards)
     }
 
+    /**
+     * 写入任务信息（进行中任务 + 已完成任务）
+     */
     private static void addQuestInfo(OutPacket p, Character chr) {
         List<QuestStatus> started = chr.getStartedQuests();
         int startedSize = 0;
@@ -378,14 +483,31 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入物品过期时间（转换为FILETIME格式）
+     *
+     * @param time UTC时间戳（毫秒）
+     */
     private static void addExpirationTime(final OutPacket p, long time) {
         p.writeLong(getTime(time)); // offset expiration time issue found thanks to Thora
     }
 
+    /**
+     * 写入物品信息（默认写入位置）
+     *
+     * @param item 物品对象
+     */
     private static void addItemInfo(OutPacket p, Item item) {
         addItemInfo(p, item, false);
     }
 
+    /**
+     * 写入物品详细信息（位置、类型、属性等）
+     * 支持普通物品、装备、宠物、现金物品的序列化
+     *
+     * @param item         物品对象
+     * @param zeroPosition true=不写入位置信息
+     */
     protected static void addItemInfo(final OutPacket p, Item item, boolean zeroPosition) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         boolean isCash = ii.isCash(item.getItemId());
@@ -398,6 +520,7 @@ public class PacketCreator {
             equip = (Equip) item;
             isRing = equip.getRingId() > -1;
         }
+        // 写入物品位置：装备位取绝对值，现金装备位 > 100 时减去 100 偏移
         if (!zeroPosition) {
             if (equip != null) {
                 if (pos < 0) {
@@ -415,6 +538,7 @@ public class PacketCreator {
             p.writeLong(isPet ? item.getPetId() : isRing ? equip.getRingId() : item.getCashId());
         }
         addExpirationTime(p, item.getExpiration());
+        // 宠物物品：写入名称、等级、亲密度、饱食度等额外属性
         if (isPet) {
             Pet pet = item.getPet();
             p.writeFixedString(StringUtil.getRightPaddedStr(pet.getName(), '\0', 13));
@@ -422,16 +546,17 @@ public class PacketCreator {
             p.writeShort(pet.getTameness());
             p.writeByte(pet.getFullness());
             addExpirationTime(p, item.getExpiration());
-            p.writeShort(pet.getPetAttribute()); // PetAttribute noticed by lrenex & Spoon
-            p.writeShort(0); // PetSkill
-            p.writeInt(18000); // RemainLife
-            p.writeShort(0); // attribute
+            p.writeShort(pet.getPetAttribute());
+            p.writeShort(0);
+            p.writeInt(18000);
+            p.writeShort(0);
             return;
         }
+        // 非装备物品：写入数量、所有者、标签，可充能物品额外写入充能信息
         if (equip == null) {
             p.writeShort(item.getQuantity());
             p.writeString(item.getOwner());
-            p.writeShort(item.getFlag()); // flag
+            p.writeShort(item.getFlag());
 
             if (ItemConstants.isRechargeable(item.getItemId())) {
                 p.writeInt(2);
@@ -439,26 +564,28 @@ public class PacketCreator {
             }
             return;
         }
-        p.writeByte(equip.getUpgradeSlots()); // upgrade slots
-        p.writeByte(equip.getLevel()); // level
-        p.writeShort(equip.getStr()); // str
-        p.writeShort(equip.getDex()); // dex
-        p.writeShort(equip.getInt()); // int
-        p.writeShort(equip.getLuk()); // luk
-        p.writeShort(equip.getHp()); // hp
-        p.writeShort(equip.getMp()); // mp
-        p.writeShort(equip.getWatk()); // watk
-        p.writeShort(equip.getMatk()); // matk
-        p.writeShort(equip.getWdef()); // wdef
-        p.writeShort(equip.getMdef()); // mdef
-        p.writeShort(equip.getAcc()); // accuracy
-        p.writeShort(equip.getAvoid()); // avoid
-        p.writeShort(equip.getHands()); // hands
-        p.writeShort(equip.getSpeed()); // speed
-        p.writeShort(equip.getJump()); // jump
-        p.writeString(equip.getOwner()); // owner name
-        p.writeShort(equip.getFlag()); //Item Flags
+        // 装备物品：写入升级次数、等级、四维属性、攻击力、防御力等
+        p.writeByte(equip.getUpgradeSlots());
+        p.writeByte(equip.getLevel());
+        p.writeShort(equip.getStr());
+        p.writeShort(equip.getDex());
+        p.writeShort(equip.getInt());
+        p.writeShort(equip.getLuk());
+        p.writeShort(equip.getHp());
+        p.writeShort(equip.getMp());
+        p.writeShort(equip.getWatk());
+        p.writeShort(equip.getMatk());
+        p.writeShort(equip.getWdef());
+        p.writeShort(equip.getMdef());
+        p.writeShort(equip.getAcc());
+        p.writeShort(equip.getAvoid());
+        p.writeShort(equip.getHands());
+        p.writeShort(equip.getSpeed());
+        p.writeShort(equip.getJump());
+        p.writeString(equip.getOwner());
+        p.writeShort(equip.getFlag());
 
+        // 现金装备：写入 10 个 0x40 填充；普通装备：写入道具等级、经验、凶恶值
         if (isCash) {
             for (int i = 0; i < 10; i++) {
                 p.writeByte(0x40);
@@ -470,9 +597,9 @@ public class PacketCreator {
             expNibble /= ExpTable.getEquipExpNeededForLevel(itemLevel);
 
             p.writeByte(0);
-            p.writeByte(itemLevel); //Item Level
+            p.writeByte(itemLevel);
             p.writeInt((int) expNibble);
-            p.writeInt(equip.getVicious()); //WTF NEXON ARE YOU SERIOUS?
+            p.writeInt(equip.getVicious());
             p.writeLong(0);
         }
         p.writeLong(getTime(-2));
@@ -480,6 +607,9 @@ public class PacketCreator {
 
     }
 
+    /**
+     * 写入背包信息（各类型背包容量 + 装备 + 消耗 + 设置 + 其他 + 现金物品）
+     */
     private static void addInventoryInfo(OutPacket p, Character chr) {
         for (byte i = 1; i <= 5; i++) {
             p.writeByte(chr.getInventory(InventoryType.getByType(i)).getSlotLimit());
@@ -525,6 +655,10 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入技能信息（技能列表 + 冷却时间）
+     * 注意：隐藏技能不计入技能列表大小
+     */
     private static void addSkillInfo(OutPacket p, Character chr) {
         p.writeByte(0); // start of skills
         Map<Skill, SkillEntry> skills = chr.getSkills();
@@ -555,6 +689,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入怪物图鉴信息（封面 + 已收集卡片）
+     */
     private static void addMonsterBookInfo(OutPacket p, Character chr) {
         p.writeInt(chr.getMonsterBookCover()); // cover
         p.writeByte(0);
@@ -566,6 +703,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 发送访客登录（TOS协议）封包
+     */
     public static Packet sendGuestTOS() {
         final OutPacket p = OutPacket.create(SendOpcode.GUEST_ID_LOGIN);
         p.writeShort(0x100);
@@ -659,18 +799,31 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送虚假 GM 通知封包（反外挂检测）
+     */
     public static Packet sendPolice() {
         final OutPacket p = OutPacket.create(SendOpcode.FAKE_GM_NOTICE);
         p.writeByte(0);//doesn't even matter what value
         return p;
     }
 
+    /**
+     * 发送 CRC 校验失败封包，断开客户端连接
+     *
+     * @param text 显示文本
+     */
     public static Packet sendPolice(String text) {
         final OutPacket p = OutPacket.create(SendOpcode.DATA_CRC_CHECK_FAILED);
         p.writeString(text);
         return p;
     }
 
+    /**
+     * 发送永久封禁封包
+     *
+     * @param reason 封禁原因码
+     */
     public static Packet getPermBan(byte reason) {
         final OutPacket p = OutPacket.create(SendOpcode.LOGIN_STATUS);
         p.writeByte(2); // Account is banned
@@ -681,6 +834,12 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送临时封禁封包
+     *
+     * @param timestampTill 封禁截止时间
+     * @param reason        封禁原因码
+     */
     public static Packet getTempBan(long timestampTill, byte reason) {
         OutPacket p = OutPacket.create(SendOpcode.LOGIN_STATUS);
         p.writeByte(2);
@@ -743,28 +902,46 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * PIN 注册成功封包
+     */
     public static Packet pinRegistered() {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_PINCODE);
         p.writeByte(0);
         return p;
     }
 
+    /**
+     * 请求用户输入 PIN
+     */
     public static Packet requestPin() {
         return pinOperation((byte) 4);
     }
 
+    /**
+     * PIN 验证失败，请求重新输入
+     */
     public static Packet requestPinAfterFailure() {
         return pinOperation((byte) 2);
     }
 
+    /**
+     * 请求注册新 PIN
+     */
     public static Packet registerPin() {
         return pinOperation((byte) 1);
     }
 
+    /**
+     * PIN 验证通过
+     */
     public static Packet pinAccepted() {
         return pinOperation((byte) 0);
     }
 
+    /**
+     * PIC 错误封包
+     */
     public static Packet wrongPic() {
         OutPacket p = OutPacket.create(SendOpcode.CHECK_SPW_RESULT);
         p.writeByte(0);
@@ -904,6 +1081,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 启用 MapleTV 功能的封包
+     */
     public static Packet enableTV() {
         OutPacket p = OutPacket.create(SendOpcode.ENABLE_TV);
         p.writeInt(0);
@@ -1059,6 +1239,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 带精确坐标的地图切换封包
+     *
+     * @param spawnPosition 自定义出生坐标，用于事件地图等特殊场景
+     */
     public static Packet getWarpToMap(MapleMap to, int spawnPoint, Point spawnPosition, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
@@ -1165,6 +1350,16 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 生成风筝（Kite）地图物品
+     *
+     * @param objId   物体唯一 ID
+     * @param itemId  风筝道具 ID
+     * @param name    玩家名
+     * @param msg     消息内容
+     * @param pos     生成坐标
+     * @param ft      站立平台
+     */
     public static Packet spawnKite(int objId, int itemId, String name, String msg, Point pos, int ft) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_KITE);
         p.writeInt(objId);
@@ -1176,6 +1371,12 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 移除风筝地图物品
+     *
+     * @param objId         物体 ID
+     * @param animationType 动画类型（0=完整动画, 1=立即消失）
+     */
     public static Packet removeKite(int objId, int animationType) {    // thanks to Arnah (Vertisy)
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_KITE);
         p.writeByte(animationType); // 0 is 10/10, 1 just vanishes
@@ -1183,6 +1384,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 无法生成风筝（到达上限）的封包
+     */
     public static Packet sendCannotSpawnKite() {
         return OutPacket.create(SendOpcode.CANNOT_SPAWN_KITE);
     }
@@ -1238,10 +1442,22 @@ public class PacketCreator {
         return serverMessage(type, 0, message, false, false, npc);
     }
 
+    /**
+     * 指定频道的服务器通知封包
+     *
+     * @param type    通知类型
+     * @param channel 频道
+     * @param message 消息内容
+     */
     public static Packet serverNotice(int type, int channel, String message) {
         return serverMessage(type, channel, message, false, false, 0);
     }
 
+    /**
+     * 指定频道 + 扩音器接收标志的服务器通知封包
+     *
+     * @param smegaEar true=普通扩音器也可接收此超级扩音器消息
+     */
     public static Packet serverNotice(int type, int channel, String message, boolean smegaEar) {
         return serverMessage(type, channel, message, false, smegaEar, 0);
     }
@@ -1301,9 +1517,8 @@ public class PacketCreator {
         return p;
     }
 
-    /*
-     * Sends a packet to remove the tiger megaphone
-     * @return
+    /**
+     * 发送清理超级扩音器（Avatar Mega）封包
      */
     public static Packet byeAvatarMega() {
         final OutPacket p = OutPacket.create(SendOpcode.CLEAR_AVATAR_MEGAPHONE);
@@ -1329,6 +1544,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 在地图上生成 NPC（其他玩家视角）
+     *
+     * @param life NPC 对象
+     */
     public static Packet spawnNPC(NPC life) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC);
         p.writeInt(life.getObjectId());
@@ -1343,6 +1563,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 在地图上生成 NPC 并请求控制权（当前玩家视角）
+     *
+     * @param miniMap true=在小地图上显示该 NPC
+     */
     public static Packet spawnNPCRequestController(NPC life, boolean miniMap) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC_REQUEST_CONTROLLER);
         p.writeByte(1);
@@ -1416,6 +1641,12 @@ public class PacketCreator {
         return spawnMonsterInternal(life, true, false, false, 0, true);
     }
 
+    /**
+     * 编码怪物非父对象生成特效
+     *
+     * @param newSpawn 是否为新生成的怪物
+     * @param effect   特效类型（0=无视, 15=特殊动画）
+     */
     private static void encodeParentlessMobSpawnEffect(OutPacket p, boolean newSpawn, int effect) {
         if (effect > 0) {
             p.writeByte(effect);
@@ -1428,6 +1659,9 @@ public class PacketCreator {
         p.writeByte(newSpawn ? -2 : -1);
     }
 
+    /**
+     * 编码怪物临时状态效果（Buff/Debuff），包括武器/魔法反射计数
+     */
     private static void encodeTemporary(OutPacket p, Map<MonsterStatus, MonsterStatusEffect> stati) {
         int pCounter = -1;
         int mCounter = -1;
@@ -1765,6 +1999,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 杀死怪物封包（动画控制）
+     *
+     * @param animation true=渐隐消失, false=直接消失
+     */
     public static Packet killMonster(int objId, boolean animation) {
         return killMonster(objId, animation ? 1 : 0);
     }
@@ -1784,6 +2023,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新地图上已存在的掉落物信息（所有权变更等）
+     *
+     * @param giveOwnership true=赋予当前玩家拾取权
+     */
     public static Packet updateMapItemObject(MapItem drop, boolean giveOwnership) {
         OutPacket p = OutPacket.create(SendOpcode.DROP_ITEM_FROM_MAPOBJECT);
         p.writeByte(2);
@@ -1802,6 +2046,15 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 从地图物体掉落物品/金币
+     *
+     * @param player   掉落物所属玩家
+     * @param drop     掉落物对象
+     * @param dropfrom 掉落起始位置
+     * @param dropto   掉落目标位置
+     * @param mod      模式（0=新掉落, 1=已有掉落, 2=无掉落动画）
+     */
     public static Packet dropItemFromMapObject(Character player, MapItem drop, Point dropfrom, Point dropto, byte mod) {
         int dropType = drop.getDropType();
         if (drop.hasClientsideOwnership(player) && dropType < 3) {
@@ -1829,6 +2082,9 @@ public class PacketCreator {
         return p;
     }
 
+/**
+     * 写入外部视角角色的 Buff 信息（只写入需要客户端显示的外部特效 Buff）
+     */
     private static void writeForeignBuffs(OutPacket p, Character chr) {
         p.writeInt(0);
         p.writeShort(0); //v83
@@ -1927,8 +2183,9 @@ public class PacketCreator {
     public static Packet spawnPlayerMapObject(Client target, Character chr, boolean enteringField) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PLAYER);
         p.writeInt(chr.getId());
-        p.writeByte(chr.getLevel()); //v83
+        p.writeByte(chr.getLevel());
         p.writeString(chr.getName());
+        // 编码公会信息：若有公会则写入名称和徽标数据，否则写入空
         if (chr.getGuildId() < 1) {
             p.writeString("");
             p.writeBytes(new byte[6]);
@@ -1950,18 +2207,12 @@ public class PacketCreator {
 
         p.writeShort(chr.getJob().getId());
 
-                /* replace "p.writeShort(chr.getJob().getId())" with this snippet for 3rd person FJ animation on all classes
-                if (chr.getJob().isA(Job.HERMIT) || chr.getJob().isA(Job.DAWNWARRIOR2) || chr.getJob().isA(Job.NIGHTWALKER2)) {
-			p.writeShort(chr.getJob().getId());
-                } else {
-			p.writeShort(412);
-                }*/
-
         addCharLook(p, chr, false);
         p.writeInt(chr.getInventory(InventoryType.CASH).countById(ItemId.HEART_SHAPED_CHOCOLATE));
         p.writeInt(chr.getItemEffect());
         p.writeInt(ItemConstants.getInventoryType(chr.getChair()) == InventoryType.SETUP ? chr.getChair() : 0);
 
+        // 刚进入地图时显示"从天而降"效果；已在场景中则使用当前姿态
         if (enteringField) {
             Point spawnPos = new Point(chr.getPosition());
             spawnPos.y -= 42;
@@ -1972,24 +2223,27 @@ public class PacketCreator {
             p.writeByte(chr.getStance());
         }
 
-        p.writeShort(0);//chr.getFh()
+        p.writeShort(0);
         p.writeByte(0);
+        // 依次编码 3 个宠物，以 0 结尾
         Pet[] pet = chr.getPets();
         for (int i = 0; i < 3; i++) {
             if (pet[i] != null) {
                 addPetInfo(p, pet[i], false);
             }
         }
-        p.writeByte(0); //end of pets
+        p.writeByte(0);
+        // 骑宠信息：无骑宠时写入默认值 (level=1, exp=0, tired=0)
         if (chr.getMapleMount() == null) {
-            p.writeInt(1); // mob level
-            p.writeLong(0); // mob exp + tiredness
+            p.writeInt(1);
+            p.writeLong(0);
         } else {
             p.writeInt(chr.getMapleMount().getLevel());
             p.writeInt(chr.getMapleMount().getExp());
             p.writeInt(chr.getMapleMount().getTiredness());
         }
 
+        // 编码交互标识：优先个人商店，其次小游戏，最后无标识
         PlayerShop mps = chr.getPlayerShop();
         if (mps != null && mps.isOwner(chr)) {
             if (mps.hasFreeSlot()) {
@@ -2010,22 +2264,27 @@ public class PacketCreator {
             }
         }
 
+        // 小黑板/留言板内容
         if (chr.getChalkboard() != null) {
             p.writeByte(1);
             p.writeString(chr.getChalkboard());
         } else {
             p.writeByte(0);
         }
-        addRingLook(p, chr, true);  // crush
-        addRingLook(p, chr, false); // friendship
+        // 戒指外观：Cursh Ring → Friendship Ring → Marriage Ring
+        addRingLook(p, chr, true);
+        addRingLook(p, chr, false);
         addMarriageRingLook(target, p, chr);
-        encodeNewYearCardInfo(p, chr);  // new year seems to crash sometimes...
+        encodeNewYearCardInfo(p, chr);
         p.writeByte(0);
         p.writeByte(0);
-        p.writeByte(chr.getTeam());//only needed in specific fields
+        p.writeByte(chr.getTeam());
         return p;
     }
 
+    /**
+     * 编码角色收到的贺卡信息
+     */
     private static void encodeNewYearCardInfo(OutPacket p, Character chr) {
         Set<NewYearCardRecord> newyears = chr.getReceivedNewYearRecords();
         if (!newyears.isEmpty()) {
@@ -2040,11 +2299,21 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 发送新年贺卡操作结果（发/收/删）
+     *
+     * @param cardId 贺卡 ID
+     * @param mode   操作模式（4=发送成功, 6=接收成功, 8=删除成功）
+     * @param msg    额外消息
+     */
     public static Packet onNewYearCardRes(Character user, int cardId, int mode, int msg) {
         NewYearCardRecord newyear = user.getNewYearRecord(cardId);
         return onNewYearCardRes(user, newyear, mode, msg);
     }
 
+    /**
+     * 发送新年贺卡操作结果
+     */
     public static Packet onNewYearCardRes(Character user, NewYearCardRecord newyear, int mode, int msg) {
         OutPacket p = OutPacket.create(SendOpcode.NEW_YEAR_CARD_RES);
         p.writeByte(mode);
@@ -2102,6 +2371,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 编码单张新年贺卡数据
+     */
     private static void encodeNewYearCard(NewYearCardRecord newyear, OutPacket p) {
         p.writeInt(newyear.getId());
         p.writeInt(newyear.getSenderId());
@@ -2116,6 +2388,11 @@ public class PacketCreator {
         p.writeString(newyear.getMessage());
     }
 
+    /**
+     * 写入交友/恋人戒指外观
+     *
+     * @param crush true=恋人戒指, false=好友戒指
+     */
     private static void addRingLook(final OutPacket p, Character chr, boolean crush) {
         List<Ring> rings;
         if (crush) {
@@ -2142,6 +2419,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 写入结婚戒指外观（根据目标玩家决定是否显示自己的 ID）
+     */
     private static void addMarriageRingLook(Client target, final OutPacket p, Character chr) {
         Ring ring = chr.getMarriageRing();
 
@@ -2181,6 +2461,12 @@ public class PacketCreator {
         p.writeByte(0);
     }
 
+    /**
+     * 添加小游戏公告盒子信息
+     *
+     * @param ammount   当前人数
+     * @param joinable  是否可加入（0=可加入, 1=对战进行中不可加入）
+     */
     private static void addAnnounceBox(final OutPacket p, MiniGame game, int ammount, int joinable) {
         p.writeByte(game.getGameType().getValue());
         p.writeInt(game.getObjectId()); // gameid/shopid
@@ -2192,6 +2478,9 @@ public class PacketCreator {
         p.writeByte(joinable);
     }
 
+    /**
+     * 编码雇佣商人的店铺房间信息
+     */
     private static void updateHiredMerchantBoxInfo(OutPacket p, HiredMerchant hm) {
         byte[] roomInfo = hm.getShopRoomInfo();
 
@@ -2202,6 +2491,9 @@ public class PacketCreator {
         p.writeBytes(roomInfo);    // visitor capacity here, thanks GabrielSin
     }
 
+    /**
+     * 更新雇佣商人店铺封包
+     */
     public static Packet updateHiredMerchantBox(HiredMerchant hm) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_HIRED_MERCHANT);
         p.writeInt(hm.getOwnerId());
@@ -2209,6 +2501,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 编码个人商店的房间信息
+     */
     private static void updatePlayerShopBoxInfo(OutPacket p, PlayerShop shop) {
         byte[] roomInfo = shop.getShopRoomInfo();
 
@@ -2222,6 +2517,9 @@ public class PacketCreator {
         p.writeByte(0);
     }
 
+    /**
+     * 更新个人商店信息封包（店主和其他玩家均需接收）
+     */
     public static Packet updatePlayerShopBox(PlayerShop shop) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(shop.getOwner().getId());
@@ -2229,6 +2527,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 移除个人商店封包
+     */
     public static Packet removePlayerShopBox(PlayerShop shop) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(shop.getOwner().getId());
@@ -2236,6 +2537,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送表情动作封包
+     *
+     * @param expression 表情 ID
+     */
     public static Packet facialExpression(Character from, int expression) {
         OutPacket p = OutPacket.create(SendOpcode.FACIAL_EXPRESSION);
         p.writeInt(from.getId());
@@ -2243,6 +2549,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 转发客户端移动数据（不解码，直接复制字节流）
+     */
     private static void rebroadcastMovementList(OutPacket op, InPacket ip, long movementDataLength) {
         //movement command length is sent by client, probably not a big issue? (could be calculated on server)
         //if multiple write/reads are slow, could use (and cache?) a byte[] buffer
@@ -2251,6 +2560,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 序列化移动片段列表
+     */
     private static void serializeMovementList(OutPacket p, List<LifeMovementFragment> moves) {
         p.writeByte(moves.size());
         for (LifeMovementFragment move : moves) {
@@ -2258,6 +2570,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 广播角色移动封包
+     */
     public static Packet movePlayer(int chrId, InPacket movementPacket, long movementDataLength) {
         OutPacket p = OutPacket.create(SendOpcode.MOVE_PLAYER);
         p.writeInt(chrId);
@@ -2266,6 +2581,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 广播召唤兽移动封包
+     *
+     * @param startPos 召唤兽起始位置
+     */
     public static Packet moveSummon(int cid, int oid, Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_SUMMON);
         p.writeInt(cid);
@@ -2275,6 +2595,13 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 广播怪物移动封包
+     *
+     * @param skillPossible 怪物是否能使用技能
+     * @param skill         技能编号
+     * @param startPos      怪物起始位置
+     */
     public static Packet moveMonster(int oid, boolean skillPossible, int skill, int skillId, int skillLevel, int pOption,
                                      Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_MONSTER);
@@ -2290,6 +2617,12 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送召唤兽攻击封包
+     *
+     * @param direction  攻击方向
+     * @param allDamage  攻击命中列表
+     */
     public static Packet summonAttack(int cid, int summonOid, byte direction, List<SummonAttackEntry> allDamage) {
         OutPacket p = OutPacket.create(SendOpcode.SUMMON_ATTACK);
         //b2 00 29 f7 00 00 9a a3 04 00 c8 04 01 94 a3 04 00 06 ff 2b 00
@@ -2326,12 +2659,30 @@ public class PacketCreator {
         }
         */
 
+    /**
+     * 近战攻击封包（近程技能攻击）
+     *
+     * @param chr                攻击角色
+     * @param skill              技能 ID
+     * @param skilllevel         技能等级
+     * @param stance             角色姿态
+     * @param numAttackedAndDamage 被攻击数量
+     * @param damage             伤害列表 (目标 OID → 多次伤害值列表)
+     * @param speed              攻击速度
+     * @param direction          攻击方向
+     * @param display            显示模式
+     */
     public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.CLOSE_RANGE_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         return p;
     }
 
+    /**
+     * 远程攻击封包（远程物理攻击）
+     *
+     * @param projectile 飞弹/子弹 ID
+     */
     public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.RANGED_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction, display);
@@ -2339,6 +2690,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 魔法攻击封包
+     *
+     * @param charge 蓄力值（-1=无蓄力）
+     */
     public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.MAGIC_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
@@ -2348,10 +2704,15 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入攻击封包公共主体（所有攻击类型共享结构）
+     *
+     * @param projectile 投射物 ID，非远程攻击则为 0
+     */
     private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
         p.writeInt(chr.getId());
         p.writeByte(numAttackedAndDamage);
-        p.writeByte(0x5B);//?
+        p.writeByte(0x5B);
         p.writeByte(skilllevel);
         if (skilllevel > 0) {
             p.writeInt(skill);
@@ -2362,6 +2723,7 @@ public class PacketCreator {
         p.writeByte(speed);
         p.writeByte(0x0A);
         p.writeInt(projectile);
+        // 遍历每个受击目标，写入目标 OID 和伤害值列表；Meso Explosion（技能 4211006）需要额外写入命中次数
         for (Integer oned : damage.keySet()) {
             List<Integer> onedList = damage.get(oned);
             if (onedList != null) {
@@ -2377,7 +2739,12 @@ public class PacketCreator {
         }
     }
 
-    public static Packet throwGrenade(int cid, Point pos, int keyDown, int skillId, int skillLevel) { // packets found thanks to GabrielSin
+    /**
+     * 投掷手雷封包（火枪/投掷技能）
+     *
+     * @param keyDown 按键持续时间（蓄力相关）
+     */
+    public static Packet throwGrenade(int cid, Point pos, int keyDown, int skillId, int skillLevel) {
         OutPacket p = OutPacket.create(SendOpcode.THROW_GRENADE);
         p.writeInt(cid);
         p.writeInt(pos.x);
@@ -2388,24 +2755,37 @@ public class PacketCreator {
         return p;
     }
 
-    // someone thought it was a good idea to handle floating point representation through packets ROFL
+    /**
+     * 将双精度浮点数的高位截断为 short 类型
+     * 用于封包中浮点数价格的最低精度传输
+     *
+     * @param d 双精度浮点数
+     * @return 高 16 位截断值
+     */
     private static int doubleToShortBits(double d) {
         return (int) (Double.doubleToLongBits(d) >> 48);
     }
 
+    /**
+     * 打开 NPC 商店封包
+     *
+     * @param items 商店物品列表
+     * @return 商店封包
+     */
     public static Packet getNPCShop(Client c, int sid, List<ShopItem> items) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         final OutPacket p = OutPacket.create(SendOpcode.OPEN_NPC_SHOP);
         p.writeInt(sid);
-        p.writeShort(items.size()); // item count
+        p.writeShort(items.size());
         for (ShopItem item : items) {
             p.writeInt(item.getItemId());
             p.writeInt(item.getPrice());
-            p.writeInt(item.getPrice() == 0 ? item.getPitch() : 0); //Perfect Pitch
-            p.writeInt(0); //Can be used x minutes after purchase
-            p.writeInt(0); //Hmm
+            p.writeInt(item.getPrice() == 0 ? item.getPitch() : 0);
+            p.writeInt(0);
+            p.writeInt(0);
+            // 可充能物品使用 double 高位压缩价格；普通物品写入堆叠数量
             if (!ItemConstants.isRechargeable(item.getItemId())) {
-                p.writeShort(1); // stacksize o.o
+                p.writeShort(1);
                 p.writeShort(item.getBuyable());
             } else {
                 p.writeShort(0);
@@ -2428,12 +2808,22 @@ public class PacketCreator {
      * 0D = You need more items
      * 0E = CRASH; LENGTH NEEDS TO BE LONGER :O
      */
+    /**
+     * 商店交易结果码封包
+     * <p>00=成功, 01=库存不足, 02=金币不足, 03=背包已满, 0D=需要更多物品</p>
+     */
     public static Packet shopTransaction(byte code) {
         OutPacket p = OutPacket.create(SendOpcode.CONFIRM_SHOP_TRANSACTION);
         p.writeByte(code);
         return p;
     }
 
+    /**
+     * 背包格子扩容封包
+     *
+     * @param type     背包类型
+     * @param newLimit 新的格子上限
+     */
     public static Packet updateInventorySlotLimit(int type, int newLimit) {
         final OutPacket p = OutPacket.create(SendOpcode.INVENTORY_GROW);
         p.writeByte(type);
@@ -2441,33 +2831,42 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 背包操作封包（增/删/改/移物品）
+     *
+     * @param updateTick true=更新客户端 tick，用于防作弊检测
+     * @param mods       待处理的背包修改列表
+     */
     public static Packet modifyInventory(boolean updateTick, final List<ModifyInventory> mods) {
         OutPacket p = OutPacket.create(SendOpcode.INVENTORY_OPERATION);
         p.writeBool(updateTick);
         p.writeByte(mods.size());
-        //p.writeByte(0); v104 :)
         int addMovement = -1;
         for (ModifyInventory mod : mods) {
             p.writeByte(mod.getMode());
             p.writeByte(mod.getInventoryType());
             p.writeShort(mod.getMode() == 2 ? mod.getOldPosition() : mod.getPosition());
             switch (mod.getMode()) {
-                case 0: {//add item
+                case 0: {
+                    // 模式 0：添加物品，写入完整物品信息
                     addItemInfo(p, mod.getItem(), true);
                     break;
                 }
-                case 1: {//update quantity
+                case 1: {
+                    // 模式 1：更新物品数量
                     p.writeShort(mod.getQuantity());
                     break;
                 }
-                case 2: {//move
+                case 2: {
+                    // 模式 2：移动物品，记录跨背包移动方向
                     p.writeShort(mod.getPosition());
                     if (mod.getPosition() < 0 || mod.getOldPosition() < 0) {
                         addMovement = mod.getOldPosition() < 0 ? 1 : 2;
                     }
                     break;
                 }
-                case 3: {//remove
+                case 3: {
+                    // 模式 3：删除物品
                     if (mod.getPosition() < 0) {
                         addMovement = 2;
                     }
@@ -2476,12 +2875,19 @@ public class PacketCreator {
             }
             mod.clear();
         }
+        // 跨背包操作时写入移动方向：1=从仓库取出, 2=存入仓库
         if (addMovement > -1) {
             p.writeByte(addMovement);
         }
         return p;
     }
 
+    /**
+     * 卷轴鉴定效果封包
+     *
+     * @param legendarySpirit true=使用祝福卷轴
+     * @param whiteScroll     true=使用白卷保护
+     */
     public static Packet getScrollEffect(int chr, ScrollResult scrollSuccess, boolean legendarySpirit, boolean whiteScroll) {   // thanks to Rien dev team
         OutPacket p = OutPacket.create(SendOpcode.SHOW_SCROLL_EFFECT);
         p.writeInt(chr);
@@ -2492,12 +2898,20 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 从地图中移除角色
+     */
     public static Packet removePlayerFromMap(int chrId) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_PLAYER_FROM_MAP);
         p.writeInt(chrId);
         return p;
     }
 
+    /**
+     * 捕获怪物失败消息封包
+     *
+     * @param message 1=怪物太强, 2=需要属性石
+     */
     public static Packet catchMessage(int message) { // not done, I guess
         final OutPacket p = OutPacket.create(SendOpcode.BRIDLE_MOB_CATCH_FAIL);
         p.writeByte(message); // 1 = too strong, 2 = Elemental Rock
@@ -2506,6 +2920,12 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 查看全部服务器角色封包
+     *
+     * @param totalWorlds 服务器总数
+     * @param totalChrs   角色总数
+     */
     public static Packet showAllCharacter(int totalWorlds, int totalChrs) {
         OutPacket p = OutPacket.create(SendOpcode.VIEW_ALL_CHAR);
         p.writeByte(totalChrs > 0 ? 1 : 5); // 2: already connected to server, 3 : unk error (view-all-characters), 5 : cannot find any
@@ -2514,16 +2934,25 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示阿里安竞技场得分板
+     */
     public static Packet showAriantScoreBoard() {   // thanks lrenex for pointing match's end scoreboard packet
         return OutPacket.create(SendOpcode.ARIANT_ARENA_SHOW_RESULT);
     }
 
+    /**
+     * 刷新阿里安竞技场排名（单角色）
+     */
     public static Packet updateAriantPQRanking(final Character chr, final int score) {
         return updateAriantPQRanking(new LinkedHashMap<Character, Integer>() {{
             put(chr, score);
         }});
     }
 
+    /**
+     * 刷新阿里安竞技场排名（批量角色的分数）
+     */
     public static Packet updateAriantPQRanking(Map<Character, Integer> playerScore) {
         OutPacket p = OutPacket.create(SendOpcode.ARIANT_ARENA_USER_SCORE);
         p.writeByte(playerScore.size());
@@ -2534,12 +2963,18 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新魔女塔得分
+     */
     public static Packet updateWitchTowerScore(int score) {
         OutPacket p = OutPacket.create(SendOpcode.WITCH_TOWER_SCORE_UPDATE);
         p.writeByte(score);
         return p;
     }
 
+    /**
+     * 静默移除地上物品（无拾取动画）
+     */
     public static Packet silentRemoveItemFromMap(int objId) {
         return removeItemFromMap(objId, 1, 0);
     }
@@ -2582,6 +3017,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新角色外观（装备/戒指变更）
+     */
     public static Packet updateCharLook(Client target, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_LOOK);
         p.writeInt(chr.getId());
@@ -2594,6 +3032,15 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 角色受到伤害封包
+     *
+     * @param skill       技能类型（-3=陷阱, -4=毒伤害）
+     * @param monsteridfrom 攻击来源怪物 ID
+     * @param fake        假伤害值（用于显示 Miss）
+     * @param pgmr        受 PowerGuard / MagicGuard 保护
+     * @param is_pg       100% 魔法/物理伤害减免
+     */
     public static Packet damagePlayer(int skill, int monsteridfrom, int cid, int damage, int fake, int direction, boolean pgmr, int pgmr_1, boolean is_pg, int oid, int pos_x, int pos_y) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_PLAYER);
         p.writeInt(cid);
@@ -2627,12 +3074,18 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送 MapleLife 角色信息
+     */
     public static Packet sendMapleLifeCharacterInfo() {
         final OutPacket p = OutPacket.create(SendOpcode.MAPLELIFE_RESULT);
         p.writeInt(0);
         return p;
     }
 
+    /**
+     * 发送 MapleLife 名称已占用错误
+     */
     public static Packet sendMapleLifeNameError() {
         OutPacket p = OutPacket.create(SendOpcode.MAPLELIFE_RESULT);
         p.writeInt(2);
@@ -2641,6 +3094,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送 MapleLife 通用错误码
+     */
     public static Packet sendMapleLifeError(int code) {
         OutPacket p = OutPacket.create(SendOpcode.MAPLELIFE_ERROR);
         p.writeByte(0);
@@ -2648,6 +3104,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 角色名验证结果封包
+     *
+     * @param nameUsed true=名称已占用
+     */
     public static Packet charNameResponse(String charname, boolean nameUsed) {
         final OutPacket p = OutPacket.create(SendOpcode.CHAR_NAME_RESPONSE);
         p.writeString(charname);
@@ -2655,6 +3116,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 新增角色条目的响应封包（创角成功）
+     */
     public static Packet addNewCharEntry(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.ADD_NEW_CHAR_ENTRY);
         p.writeByte(0);
@@ -2686,12 +3150,20 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 选择服务器世界封包
+     *
+     * @param world 世界 ID
+     */
     public static Packet selectWorld(int world) {
         final OutPacket p = OutPacket.create(SendOpcode.LAST_CONNECTED_WORLD);
         p.writeInt(world);//According to GMS, it should be the world that contains the most characters (most active)
         return p;
     }
 
+    /**
+     * 发送推荐服务器列表
+     */
     public static Packet sendRecommended(List<Pair<Integer, String>> worlds) {
         final OutPacket p = OutPacket.create(SendOpcode.RECOMMENDED_WORLD_MESSAGE);
         p.writeByte(worlds.size());//size
@@ -2703,6 +3175,8 @@ public class PacketCreator {
     }
 
     /**
+     * 角色详细信息查询（宠物/坐骑/勋章/收藏册）
+     *
      * @param chr
      * @return
      */
@@ -2891,12 +3365,21 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 场景HP自动减少通知
+     *
+     * @param change HP变化量
+     * @return 封包
+     */
     public static Packet onNotifyHPDecByField(int change) {
         final OutPacket p = OutPacket.create(SendOpcode.ON_NOTIFY_HP_DEC_BY_FIELD);
         p.writeInt(change);
         return p;
     }
 
+    /**
+     * 添加任务时间限制
+     */
     public static Packet addQuestTimeLimit(final short quest, final int time) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_QUEST_INFO);
         p.writeByte(6);
@@ -2906,6 +3389,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 移除任务时间限制
+     */
     public static Packet removeQuestTimeLimit(final short quest) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_QUEST_INFO);
         p.writeByte(7);
@@ -2914,6 +3400,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新任务进度封包
+     *
+     * @param infoUpdate true=更新任务信息, false=更新任务状态
+     */
     public static Packet updateQuest(Character chr, QuestStatus qs, boolean infoUpdate) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(1);
@@ -2931,6 +3422,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入疾病（Debuff）的 128 位掩码
+     */
     private static void writeLongMaskD(final OutPacket p, List<Pair<Disease, Integer>> statups) {
         long firstmask = 0;
         long secondmask = 0;
@@ -2945,6 +3439,11 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
+    /**
+     * 给自己上疾病（Debuff）封包
+     *
+     * @param skill 怪物技能（用于显示技能 ID 和持续时间）
+     */
     public static Packet giveDebuff(List<Pair<Disease, Integer>> statups, MobSkill skill) {
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         writeLongMaskD(p, statups);
@@ -2959,6 +3458,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 给其他角色上疾病（Debuff）封包
+     */
     public static Packet giveForeignDebuff(int chrId, List<Pair<Disease, Integer>> statups, MobSkill skill) {
         // Poison damage visibility and missing diseases status visibility, extended through map transitions thanks to Ronan
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
@@ -2975,6 +3477,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 取消外部角色的首个疾病集（first mask）
+     */
     public static Packet cancelForeignFirstDebuff(int cid, long mask) {
         final OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(cid);
@@ -2983,6 +3488,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 取消外部角色的第二疾病集（second mask）
+     */
     public static Packet cancelForeignDebuff(int cid, long mask) {
         final OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(cid);
@@ -2991,6 +3499,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 给其他角色上 Buff 封包
+     */
     public static Packet giveForeignBuff(int chrId, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
@@ -3003,6 +3514,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 取消外部角色 Buff 封包
+     */
     public static Packet cancelForeignBuff(int chrId, List<BuffStat> statups) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(chrId);
@@ -3010,6 +3524,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 取消自身 Buff 封包
+     */
     public static Packet cancelBuff(List<BuffStat> statups) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_BUFF);
         writeLongMaskFromList(p, statups);
@@ -3017,6 +3534,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入 Buff 的 128 位掩码
+     */
     private static void writeLongMask(final OutPacket p, List<Pair<BuffStat, Integer>> statups) {
         long firstmask = 0;
         long secondmask = 0;
@@ -3031,6 +3551,9 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
+    /**
+     * 按列表写入 Buff 掩码
+     */
     private static void writeLongMaskFromList(OutPacket p, List<BuffStat> statups) {
         long firstmask = 0;
         long secondmask = 0;
@@ -3045,6 +3568,9 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
+    /**
+     * 写入怪物状态的 4-int 掩码
+     */
     private static void writeLongEncodeTemporaryMask(final OutPacket p, Collection<MonsterStatus> stati) {
         int[] masks = new int[4];
 
@@ -3060,6 +3586,9 @@ public class PacketCreator {
         }
     }
 
+    /**
+     * 取消疾病封包
+     */
     public static Packet cancelDebuff(long mask) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_BUFF);
         p.writeLong(0);
@@ -3068,12 +3597,18 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入减速异常的掩码
+     */
     private static void writeLongMaskSlowD(final OutPacket p) {
         p.writeInt(0);
         p.writeInt(2048);
         p.writeLong(0);
     }
 
+    /**
+     * 给其他角色上减速异常封包
+     */
     public static Packet giveForeignSlowDebuff(int chrId, List<Pair<Disease, Integer>> statups, MobSkill skill) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
@@ -3089,6 +3624,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 取消外部角色的减速异常
+     */
     public static Packet cancelForeignSlowDebuff(int chrId) {
         final OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(chrId);
@@ -3096,12 +3634,18 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 椅子技能效果的 Buff 掩码
+     */
     private static void writeLongMaskChair(OutPacket p) {
         p.writeInt(0);
         p.writeInt(262144);
         p.writeLong(0);
     }
 
+    /**
+     * 给其他角色显示椅子坐骑技能效果
+     */
     public static Packet giveForeignChairSkillEffect(int cid) {
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
@@ -3120,7 +3664,9 @@ public class PacketCreator {
         return p;
     }
 
-    // packet found thanks to Ronan
+    /**
+     * 给其他角色显示 White Knight 充能手技能效果
+     */
     public static Packet giveForeignWKChargeEffect(int cid, int buffid, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
@@ -3132,6 +3678,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 取消其他角色的椅子技能效果
+     */
     public static Packet cancelForeignChairSkillEffect(int chrId) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(chrId);
@@ -3139,6 +3688,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 玩家商店/交易室聊天消息
+     */
     public static Packet getPlayerShopChat(Character chr, String chat, boolean owner) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.CHAT.getCode());
@@ -3148,6 +3700,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 玩家商店新访客加入
+     */
     public static Packet getPlayerShopNewVisitor(Character chr, int slot) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
@@ -3157,6 +3712,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 玩家商店访客离开
+     */
     public static Packet getPlayerShopRemoveVisitor(int slot) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.EXIT.getCode());
@@ -3166,6 +3724,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 交易对方加入
+     */
     public static Packet getTradePartnerAdd(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
@@ -3175,6 +3736,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 向对方发起交易邀请
+     */
     public static Packet tradeInvite(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.INVITE.getCode());
@@ -3184,6 +3748,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 在交易窗口中设置金币
+     */
     public static Packet getTradeMesoSet(byte number, int meso) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SET_MESO.getCode());
@@ -3192,6 +3759,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 在交易窗口中添加物品
+     */
     public static Packet getTradeItemAdd(byte number, Item item) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SET_ITEMS.getCode());
@@ -3201,6 +3771,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新玩家商店商品列表
+     */
     public static Packet getPlayerShopItemUpdate(PlayerShop shop) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
@@ -3214,6 +3787,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新玩家商店已售商品记录
+     */
     public static Packet getPlayerShopOwnerUpdate(PlayerShop.SoldItem item, int position) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_PLAYERSHOP.getCode());
@@ -3225,9 +3801,9 @@ public class PacketCreator {
     }
 
     /**
-     * @param shop
-     * @param owner
-     * @return
+     * 打开玩家商店/交易界面
+     *
+     * @param owner true=店主界面（含已售记录）, false=访客界面
      */
     public static Packet getPlayerShop(PlayerShop shop, boolean owner) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
@@ -3275,6 +3851,11 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 开始交易（打开交易窗口）
+     *
+     * @param number 交易方编号（0=发起方, 1=接收方）
+     */
     public static Packet getTradeStart(Client c, Trade trade, byte number) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
@@ -3293,6 +3874,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 交易双方确认操作
+     */
     public static Packet getTradeConfirmation() {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.CONFIRM.getCode());
@@ -3304,10 +3888,6 @@ public class PacketCreator {
      * other character<br> 7: Trade successful<br> 8: Trade unsuccessful<br>
      * 9: Cannot carry more one-of-a-kind items<br> 12: Cannot trade on different maps<br>
      * 13: Cannot trade, game files damaged<br>
-     *
-     * @param number
-     * @param operation
-     * @return
      */
     public static Packet getTradeResult(byte number, byte operation) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
@@ -3318,16 +3898,9 @@ public class PacketCreator {
     }
 
     /**
-     * Possible values for <code>speaker</code>:<br> 0: Npc talking (left)<br>
-     * 1: Npc talking (right)<br> 2: Player talking (left)<br> 3: Player talking
-     * (left)<br>
+     * NPC 对话封包
      *
-     * @param npc      Npcid
-     * @param msgType
-     * @param talk
-     * @param endBytes
-     * @param speaker
-     * @return
+     * @param speaker 0=左侧NPC, 1=右侧NPC, 2=左侧玩家, 3=右侧玩家
      */
     public static Packet getNPCTalk(int npc, byte msgType, String talk, String endBytes, byte speaker) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
@@ -3340,6 +3913,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 次元之境 NPC 对话
+     */
     public static Packet getDimensionalMirror(String talk) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
@@ -3351,6 +3927,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * NPC 发型/整形选择界面（展示样式列表）
+     */
     public static Packet getNPCTalkStyle(int npc, String talk, int[] styles) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
@@ -3365,6 +3944,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * NPC 数字输入对话
+     */
     public static Packet getNPCTalkNum(int npc, String talk, int def, int min, int max) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
@@ -3379,6 +3961,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * NPC 文字输入对话
+     */
     public static Packet getNPCTalkText(int npc, String talk, String def) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // Doesn't matter
@@ -3390,6 +3975,10 @@ public class PacketCreator {
         p.writeInt(0);
         return p;
     }
+
+    /**
+     * NPC 数字输入对话（指定说话者）
+     */
     public static Packet getNPCTalkNum(int npc, String talk, int def, int min, int max,byte speaker) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
@@ -3404,6 +3993,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * NPC 文字输入对话（指定说话者）
+     */
     public static Packet getNPCTalkText(int npc, String talk, String def,byte speaker) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // Doesn't matter
@@ -3415,7 +4007,10 @@ public class PacketCreator {
         p.writeInt(0);
         return p;
     }
-    // NPC Quiz packets thanks to Eric
+
+    /**
+     * NPC 问答界面（Quiz）
+     */
     public static Packet OnAskQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, String sTitle, String sProblemText, String sHintText, int nMinInput, int nMaxInput, int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
@@ -3434,6 +4029,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * NPC 快速问答界面（限时答题）
+     */
     public static Packet OnAskSpeedQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, int nType, int dwAnswer, int nCorrect, int nRemain, int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
@@ -3451,10 +4049,16 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示 Buff 特效（默认方向）
+     */
     public static Packet showBuffEffect(int chrId, int skillId, int effectId) {
         return showBuffEffect(chrId, skillId, effectId, (byte) 3);
     }
 
+    /**
+     * 显示 Buff 特效（指定方向）
+     */
     public static Packet showBuffEffect(int chrId, int skillId, int effectId, byte direction) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chrId);
@@ -3466,6 +4070,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示 Buff 特效（完整版含技能等级）
+     */
     public static Packet showBuffEffect(int chrId, int skillId, int skillLv, int effectId, byte direction) {   // updated packet structure found thanks to Rien dev team
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chrId);
@@ -3477,6 +4084,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示自身 Buff 特效
+     */
     public static Packet showOwnBuffEffect(int skillId, int effectId) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
         p.writeByte(effectId);
@@ -3486,6 +4096,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示自身狂暴（Berserk）状态
+     */
     public static Packet showOwnBerserk(int skilllevel, boolean Berserk) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_ITEM_GAIN_INCHAT);
         p.writeByte(1);
@@ -3496,6 +4109,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示其他角色狂暴（Berserk）状态
+     */
     public static Packet showBerserk(int chrId, int skillLv, boolean berserk) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chrId);
@@ -3507,6 +4123,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 更新技能等级和熟练度
+     */
     public static Packet updateSkill(int skillId, int level, int masterlevel, long expiration) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_SKILLS);
         p.writeByte(1);
@@ -3519,12 +4138,18 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 任务完成通知
+     */
     public static Packet getShowQuestCompletion(int id) {
         final OutPacket p = OutPacket.create(SendOpcode.QUEST_CLEAR);
         p.writeShort(id);
         return p;
     }
 
+    /**
+     * 快捷键映射同步
+     */
     public static Packet getKeymap(Map<Integer, KeyBinding> keybindings) {
         final OutPacket p = OutPacket.create(SendOpcode.KEYMAP);
         p.writeByte(0);
@@ -3541,24 +4166,41 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 快捷栏初始化
+     */
     public static Packet QuickslotMappedInit(QuickslotBinding pQuickslot) {
         OutPacket p = OutPacket.create(SendOpcode.QUICKSLOT_INIT);
         pQuickslot.encode(p);
         return p;
     }
 
+    /**
+     * 背包已满通知（空 inventory 变更）
+     */
     public static Packet getInventoryFull() {
         return modifyInventory(true, Collections.emptyList());
     }
 
+    /**
+     * 背包已满提示
+     */
     public static Packet getShowInventoryFull() {
         return getShowInventoryStatus(0xff);
     }
 
+    /**
+     * 物品不可用提示
+     */
     public static Packet showItemUnavailable() {
         return getShowInventoryStatus(0xfe);
     }
 
+    /**
+     * 背包状态提示
+     *
+     * @param mode 0xff=背包已满, 0xfe=物品不可用
+     */
     public static Packet getShowInventoryStatus(int mode) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(0);
@@ -3568,6 +4210,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 打开仓库界面
+     */
     public static Packet getStorage(int npcId, byte slots, Collection<Item> items, int meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x16);
@@ -3598,6 +4243,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 仓库金币变更
+     */
     public static Packet mesoStorage(byte slots, int meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x13);
@@ -3609,6 +4257,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 物品存入仓库
+     */
     public static Packet storeStorage(byte slots, InventoryType type, Collection<Item> items) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0xD);
@@ -3623,6 +4274,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 从仓库取出物品
+     */
     public static Packet takeOutStorage(byte slots, InventoryType type, Collection<Item> items) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x9);
@@ -3637,6 +4291,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 整理仓库物品
+     */
     public static Packet arrangeStorage(byte slots, Collection<Item> items) {
         OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0xF);
@@ -3652,9 +4309,7 @@ public class PacketCreator {
     }
 
     /**
-     * @param oid
-     * @param remhppercentage
-     * @return
+     * 显示怪物血量百分比
      */
     public static Packet showMonsterHP(int oid, int remhppercentage) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_MONSTER_HP);
@@ -3663,6 +4318,9 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 显示 Boss 血条（含颜色和数值）
+     */
     public static Packet showBossHP(int oid, int currHP, int maxHP, byte tagColor, byte tagBgColor) {
         final OutPacket p = OutPacket.create(SendOpcode.FIELD_EFFECT);
         p.writeByte(5);
@@ -3674,6 +4332,14 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 对高HP值进行归一化处理，确保不超过32位整数范围
+     * 当最大HP超出Integer.MAX_VALUE时，按比例缩放当前HP和最大HP
+     *
+     * @param currHP 当前HP
+     * @param maxHP  最大HP
+     * @return 归一化后的 (当前HP, 最大HP) 对
+     */
     private static Pair<Integer, Integer> normalizedCustomMaxHP(long currHP, long maxHP) {
         int sendHP, sendMaxHP;
 
@@ -3690,6 +4356,17 @@ public class PacketCreator {
         return new Pair<>(sendHP, sendMaxHP);
     }
 
+    /**
+     * 显示超大血量Boss血条（支持长整型HP值）
+     *
+     * @param call       操作类型（5=显示, 6=更新1, 7=更新2）
+     * @param oid        怪物对象ID
+     * @param currHP     当前HP（long类型，支持超32位）
+     * @param maxHP      最大HP（long类型，支持超32位）
+     * @param tagColor   标签颜色
+     * @param tagBgColor 标签背景颜色
+     * @return 封包
+     */
     public static Packet customShowBossHP(byte call, int oid, long currHP, long maxHP, byte tagColor, byte tagBgColor) {
         Pair<Integer, Integer> customHP = normalizedCustomMaxHP(currHP, maxHP);
 
@@ -3703,6 +4380,14 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 发送人气（Fame）操作响应
+     *
+     * @param mode      响应模式（0=成功, 1=角色名错误, 2=等级不足, 3=今日已用尽...）
+     * @param charname  目标角色名
+     * @param newfame   更新后的人气值
+     * @return 封包
+     */
     public static Packet giveFameResponse(int mode, String charname, int newfame) {
         final OutPacket p = OutPacket.create(SendOpcode.FAME_RESPONSE);
         p.writeByte(0);
@@ -6728,6 +7413,14 @@ public class PacketCreator {
         return p;
     }
 
+/**
+     * 生成右填充字符串，使用指定字符填充到指定长度
+     *
+     * @param in       原始字符串
+     * @param padchar  填充字符
+     * @param length   目标长度
+     * @return 填充后的字符串
+     */
     private static String getRightPaddedStr(String in, char padchar, int length) {
         StringBuilder builder = new StringBuilder(in);
         for (int x = in.length(); x < length; x++) {
@@ -6754,6 +7447,12 @@ public class PacketCreator {
         return p;
     }
 
+/**
+     * 写入情侣戒指、友情戒指和婚姻戒指信息
+     *
+     * @param p   输出封包
+     * @param chr 角色对象
+     */
     private static void addRingInfo(OutPacket p, Character chr) {
         p.writeShort(chr.getCrushRings().size());
         for (Ring ring : chr.getCrushRings()) {
@@ -6932,10 +7631,25 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入现金物品信息（无礼物消息版本）
+     *
+     * @param p         输出封包
+     * @param item      现金物品
+     * @param accountId 账户ID
+     */
     public static void addCashItemInformation(OutPacket p, Item item, int accountId) {
         addCashItemInformation(p, item, accountId, null);
     }
 
+    /**
+     * 写入现金物品完整信息（支持礼物消息）
+     *
+     * @param p           输出封包
+     * @param item        现金物品
+     * @param accountId   账户ID
+     * @param giftMessage 礼物消息（为null表示非礼物）
+     */
     public static void addCashItemInformation(OutPacket p, Item item, int accountId, String giftMessage) {
         boolean isGift = giftMessage != null;
         boolean isRing = false;
@@ -7215,6 +7929,13 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 写入改造后的现金商品信息
+     * 通过反射读取字段值与CommodityFlag匹配，按位标志序列化
+     *
+     * @param p    输出封包
+     * @param item 现金商品数据对象
+     */
     private static void writeModifiedCashItem(OutPacket p, ModifiedCashItemDO item) {
         List<Pair<CommodityFlag, Number>> writeList = new ArrayList<>();
         for (CommodityFlag commodityFlag : CommodityFlag.getAvailableSortedValues()) {
@@ -7433,8 +8154,14 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 生成屠杀结果封包（Pyramid PQ评分系统）
+     *
+     * @param nRank   评级（0=S, 1=A, 2=B, 3=C, 4=D）
+     * @param nIncExp 获得经验值
+     * @return 封包
+     */
     private static Packet MassacreResult(byte nRank, int nIncExp) {
-        //CField_MassacreResult__OnMassacreResult @ 0x005617C5
         final OutPacket p = OutPacket.create(SendOpcode.PYRAMID_SCORE); //MASSACRERESULT | 0x009E
         p.writeByte(nRank); //(0 - S) (1 - A) (2 - B) (3 - C) (4 - D) ( Else - Crash )
         p.writeInt(nIncExp);
@@ -7442,6 +8169,13 @@ public class PacketCreator {
     }
 
 
+    /**
+     * 生成锦标赛状态封包
+     *
+     * @param nState    主状态
+     * @param nSubState 子状态
+     * @return 封包
+     */
     private static Packet Tournament__Tournament(byte nState, byte nSubState) {
         final OutPacket p = OutPacket.create(SendOpcode.TOURNAMENT);
         p.writeByte(nState);
@@ -7449,11 +8183,27 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 生成锦标赛比赛表封包
+     *
+     * @param nState    主状态
+     * @param nSubState 子状态
+     * @return 封包
+     */
     private static Packet Tournament__MatchTable(byte nState, byte nSubState) {
         final OutPacket p = OutPacket.create(SendOpcode.TOURNAMENT_MATCH_TABLE); //Prompts CMatchTableDlg Modal
         return p;
     }
 
+/**
+     * 生成锦标赛设置奖品封包
+     *
+     * @param bSetPrize  设置结果（0=设置失败，1=设置成功）
+     * @param bHasPrize  是否有奖品
+     * @param nItemID1   第一个奖品物品ID
+     * @param nItemID2   第二个奖品物品ID
+     * @return 封包
+     */
     private static Packet Tournament__SetPrize(byte bSetPrize, byte bHasPrize, int nItemID1, int nItemID2) {
         final OutPacket p = OutPacket.create(SendOpcode.TOURNAMENT_SET_PRIZE);
 
@@ -7471,6 +8221,12 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 生成锦标赛UEW状态封包（自动晋级提示）
+     *
+     * @param nState 位标志状态（2=决赛, 4=半决赛, 8/16=N轮）
+     * @return 封包
+     */
     private static Packet Tournament__UEW(byte nState) {
         final OutPacket p = OutPacket.create(SendOpcode.TOURNAMENT_UEW);
 

@@ -30,9 +30,13 @@ import org.gms.server.quest.QuestActionType;
 import org.gms.util.NumberTool;
 
 /**
+ * 金币奖励动作
+ * 给玩家增加金币奖励，支持金币倍率设置
+ *
  * @author Tyler (Twdtwd)
  */
 public class MesoAction extends AbstractQuestAction {
+    /** 奖励金币数量 */
     int mesos;
 
     public MesoAction(Quest quest, Data data) {
@@ -63,4 +67,4 @@ public class MesoAction extends AbstractQuestAction {
             }
         }
     }
-} 
+}

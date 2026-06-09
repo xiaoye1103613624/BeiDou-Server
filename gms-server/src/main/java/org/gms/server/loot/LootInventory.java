@@ -28,11 +28,20 @@ import java.util.Map;
 
 
 /**
+ * 掉落库存
+ * 快照玩家背包中的物品数量，用于掉落分配时判断是否需要某物品
+ *
  * @author Ronan
  */
 public class LootInventory {
+    /** 物品ID -> 数量映射 */
     Map<Integer, Integer> items = new HashMap<>(50);
 
+    /**
+     * 从玩家背包构造快照
+     *
+     * @param from 玩家
+     */
     public LootInventory(Character from) {
         for (InventoryType values : InventoryType.values()) {
 
@@ -48,6 +57,13 @@ public class LootInventory {
         }
     }
 
+    /**
+     * 检查是否拥有物品
+     *
+     * @param itemid   物品ID
+     * @param quantity 需求量
+     * @return 0不拥有，1拥有但不足，2满足需求
+     */
     public int hasItem(int itemid, int quantity) {
         Integer itemQty = items.get(itemid);
         return itemQty == null ? 0 : itemQty >= quantity ? 2 : itemQty > 0 ? 1 : 0;

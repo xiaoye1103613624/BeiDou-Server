@@ -35,9 +35,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 物品需求
+ * 检查玩家背包中是否持有指定数量的物品（装备、消耗品等）
+ *
  * @author Tyler (Twdtwd)
  */
 public class ItemRequirement extends AbstractQuestRequirement {
+    /** 物品ID到所需数量的映射 */
     Map<Integer, Integer> items = new HashMap<>();
 
 

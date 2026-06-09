@@ -28,6 +28,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
+ * 左侧击退处理器
+ * 处理玩家被击退到左侧的操作
+ *
  * @author kevintjuh93
  */
 public class LeftKnockbackHandler extends AbstractPacketHandler {

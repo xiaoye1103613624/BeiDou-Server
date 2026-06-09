@@ -29,29 +29,50 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Ronan
+ * 邀请协调器
+ * 管理组队和公会邀请的协调，防止重复邀请请求
  */
 public class InviteCoordinator {
 
+    /**
+     * 邀请结果类型枚举
+     */
     public enum InviteResultType {
+        /** 接受邀请 */
         ACCEPTED,
+        /** 拒绝邀请 */
         DENIED,
+        /** 未找到邀请 */
         NOT_FOUND
     }
 
+    /**
+     * 邀请类型枚举
+     * 每种邀请类型维护独立的邀请表
+     */
     public enum InviteType {
-        //BUDDY, (not needed)
+        /** 家族邀请 */
         FAMILY,
+        /** 家族召唤邀请 */
         FAMILY_SUMMON,
+        /**  messenger聊天邀请 */
         MESSENGER,
+        /** 交易邀请 */
         TRADE,
+        /** 组队邀请 */
         PARTY,
+        /** 公会邀请 */
         GUILD,
+        /** 联盟邀请 */
         ALLIANCE;
 
+        /** 邀请表，key为被邀请人角色ID，value为引用对象 */
         final ConcurrentHashMap<Integer, Object> invites;
+        /** 邀请人映射，key为被邀请人角色ID，value为邀请人 */
         final ConcurrentHashMap<Integer, Character> inviteFrom;
+        /** 超时计数器，key为被邀请人角色ID，value为超时计数 */
         final ConcurrentHashMap<Integer, Integer> inviteTimeouts;
+        /** 邀请参数，key为被邀请人角色ID，value为参数数组 */
         final ConcurrentHashMap<Integer, Object[]> inviteParams;
 
         InviteType() {

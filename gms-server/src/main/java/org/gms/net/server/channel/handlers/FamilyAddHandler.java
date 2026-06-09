@@ -31,6 +31,9 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.util.PacketCreator;
 
 /**
+ * 家族添加成员处理器
+ * 处理玩家向其他玩家发送家族加入邀请的逻辑，包含等级差、代际上限等校验
+ *
  * @author Jay Estrella
  * @author Ubaware
  */

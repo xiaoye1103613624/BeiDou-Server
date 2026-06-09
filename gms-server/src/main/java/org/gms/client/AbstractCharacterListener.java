@@ -20,6 +20,9 @@
 package org.gms.client;
 
 /**
+ * 角色属性监听器接口
+ * 定义角色属性变化的回调：HP变化、HP/MP池更新、属性更新和属性池广播
+ *
  * @author Ronan
  */
 public interface AbstractCharacterListener {

@@ -45,27 +45,40 @@ import java.util.concurrent.ScheduledFuture;
 import static java.util.concurrent.TimeUnit.HOURS;
 
 /**
+ * 新年贺卡记录
+ * 管理新年贺卡的发送、接收、丢弃和定时任务处理
+ * 贺卡在用户下线时自动丢弃，超过24小时自动过期
+ *
  * @author Ronan - credits to Eric for showing the New Year opcodes and handler layout
  */
 @Slf4j
 @Data
 public class NewYearCardRecord {
+    /** 贺卡ID */
     private int id;
-
+    /** 发送者ID */
     private int senderId;
+    /** 发送者名称 */
     private String senderName;
+    /** 发送者是否丢弃 */
     private boolean senderDiscardCard;
-
+    /** 接收者ID */
     private int receiverId;
+    /** 接收者名称 */
     private String receiverName;
+    /** 接收者是否丢弃 */
     private boolean receiverDiscardCard;
+    /** 接收者是否已接收 */
     private boolean receiverReceivedCard;
-
+    /** 贺卡消息内容 */
     private String message;
+    /** 发送时间 */
     private long dateSent;
+    /** 接收时间 */
     private long dateReceived;
-
+    /** 发送定时任务 */
     private ScheduledFuture<?> sendTask;
+    /** 新年贺卡服务 */
     private static final NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
 
     public NewYearCardRecord(int senderId, String senderName, int receiverId, String receiverName, String message) {

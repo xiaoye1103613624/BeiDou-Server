@@ -36,10 +36,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 技能奖励动作
+ * 给玩家学习指定技能，支持按职业编码限制
+ *
  * @author Tyler (Twdtwd)
  */
 public class SkillAction extends AbstractQuestAction {
+    /** 道具效果ID */
     int itemEffect;
+    /** 技能ID到技能数据的映射 */
     Map<Integer, SkillData> skillData = new HashMap<>();
 
     public SkillAction(Quest quest, Data data) {
@@ -48,6 +53,11 @@ public class SkillAction extends AbstractQuestAction {
     }
 
 
+    /**
+     * 从WZ数据中解析技能奖励配置，包括技能ID、等级、精通等级和适用职业
+     *
+     * @param data WZ数据
+     */
     @Override
     public void processData(Data data) {
         for (Data sEntry : data) {
@@ -71,6 +81,12 @@ public class SkillAction extends AbstractQuestAction {
         }
     }
 
+    /**
+     * 执行技能奖励：根据职业匹配给玩家学习或升级技能
+     *
+     * @param chr          玩家
+     * @param extSelection 扩展选择参数
+     */
     @Override
     public void run(Character chr, Integer extSelection) {
         for (SkillData skill : skillData.values()) {
@@ -91,7 +107,13 @@ public class SkillAction extends AbstractQuestAction {
     }
 
     private class SkillData {
-        protected int id, level, masterLevel;
+        /** 技能ID */
+        protected int id;
+        /** 技能等级 */
+        protected int level;
+        /** 技能精通等级 */
+        protected int masterLevel;
+        /** 适用的职业列表 */
         List<Integer> jobs = new ArrayList<>();
 
         public SkillData(int id, int level, int masterLevel, List<Integer> jobs) {
@@ -119,4 +141,4 @@ public class SkillAction extends AbstractQuestAction {
 
 
     }
-} 
+}

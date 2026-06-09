@@ -23,6 +23,10 @@ import org.gms.client.inventory.Item;
 import org.gms.constants.inventory.ItemConstants;
 
 /**
+ * 业力（绑定）操作工具类
+ * 处理物品的绑定/解绑标记，防止物品在非绑定状态下交易
+ * 支持装备和消耗品的业力标记设置
+ *
  * @author RonanLana
  */
 public class KarmaManipulator {

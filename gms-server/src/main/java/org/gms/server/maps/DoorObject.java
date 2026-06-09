@@ -31,20 +31,42 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 门对象
+ * 表示神秘之门（Mystic Door）的地图对象，为一对门（城镇门和野外门），
+ * 支持玩家和同队成员在地图间传送，使用读写锁保证线程安全
+ *
  * @author Ronan
  */
 public class DoorObject extends AbstractMapObject {
+    /** 门的所有者ID */
     private final int ownerId;
+    /** 配对门的对象ID */
     private int pairOid;
 
+    /** 门所在的地图（来源） */
     private final MapleMap from;
+    /** 门指向的地图（目标） */
     private final MapleMap to;
+    /** 关联传送门ID */
     private int linkedPortalId;
+    /** 关联传送门位置 */
     private Point linkedPos;
 
+    /** 读锁，保证线程安全读取 */
     private final Lock rlock;
+    /** 写锁，保证线程安全写入 */
     private final Lock wlock;
 
+    /**
+     * 构造方法，创建门对象并初始化读写锁
+     *
+     * @param owner          门的所有者ID
+     * @param destination    目标地图
+     * @param origin         来源地图
+     * @param townPortalId   城镇传送门ID
+     * @param targetPosition 目标位置
+     * @param toPosition     到达位置
+     */
     public DoorObject(int owner, MapleMap destination, MapleMap origin, int townPortalId, Point targetPosition, Point toPosition) {
         super();
         setPosition(targetPosition);
@@ -60,6 +82,9 @@ public class DoorObject extends AbstractMapObject {
         this.wlock = lock.writeLock();
     }
 
+    /**
+     * 更新门的传送门关联信息（写锁保护）
+     */
     public void update(int townPortalId, Point toPosition) {
         wlock.lock();
         try {
@@ -70,6 +95,9 @@ public class DoorObject extends AbstractMapObject {
         }
     }
 
+    /**
+     * 获取关联传送门ID（读锁保护）
+     */
     private int getLinkedPortalId() {
         rlock.lock();
         try {
@@ -79,6 +107,9 @@ public class DoorObject extends AbstractMapObject {
         }
     }
 
+    /**
+     * 获取关联传送门位置（读锁保护）
+     */
     private Point getLinkedPortalPosition() {
         rlock.lock();
         try {
@@ -88,6 +119,10 @@ public class DoorObject extends AbstractMapObject {
         }
     }
 
+    /**
+     * 传送玩家到门的另一侧
+     * 只有门的所有者或同队成员可以使用
+     */
     public void warp(final Character chr) {
         Party party = chr.getParty();
         if (chr.getId() == ownerId || (party != null && party.getMemberById(ownerId) != null)) {
@@ -109,6 +144,12 @@ public class DoorObject extends AbstractMapObject {
         sendSpawnData(client, true);
     }
 
+    /**
+     * 发送门生成数据到客户端
+     *
+     * @param client   客户端
+     * @param launched 是否已启动
+     */
     public void sendSpawnData(Client client, boolean launched) {
         Character chr = client.getPlayer();
         if (this.getFrom().getId() == chr.getMapId()) {
@@ -135,6 +176,9 @@ public class DoorObject extends AbstractMapObject {
         }
     }
 
+    /**
+     * 发送门销毁数据到客户端，并更新队伍传送门状态
+     */
     public void sendDestroyData(Client client, boolean partyUpdate) {
         if (client != null && from.getId() == client.getPlayer().getMapId()) {
             client.sendPacket(PacketCreator.partyPortal(MapId.NONE, MapId.NONE, new Point(-1, -1)));
@@ -142,42 +186,72 @@ public class DoorObject extends AbstractMapObject {
         }
     }
 
+    /**
+     * 获取门的所有者ID
+     */
     public int getOwnerId() {
         return ownerId;
     }
 
+    /**
+     * 设置配对门的对象ID
+     */
     public void setPairOid(int oid) {
         this.pairOid = oid;
     }
 
+    /**
+     * 获取配对门的对象ID
+     */
     public int getPairOid() {
         return pairOid;
     }
 
+    /**
+     * 判断门是否在城镇中（linkedPortalId为-1表示城镇）
+     */
     public boolean inTown() {
         return getLinkedPortalId() == -1;
     }
 
+    /**
+     * 获取门所在的地图（来源）
+     */
     public MapleMap getFrom() {
         return from;
     }
 
+    /**
+     * 获取门指向的地图（目标）
+     */
     public MapleMap getTo() {
         return to;
     }
 
+    /**
+     * 获取城镇侧的地图
+     */
     public MapleMap getTown() {
         return inTown() ? from : to;
     }
 
+    /**
+     * 获取野外侧的地图
+     */
     public MapleMap getArea() {
         return !inTown() ? from : to;
     }
 
+    /**
+     * 获取野外侧的位置
+     */
     public Point getAreaPosition() {
         return !inTown() ? getPosition() : getLinkedPortalPosition();
     }
 
+    /**
+     * 获取目标位置
+     */
     public Point toPosition() {
         return getLinkedPortalPosition();
     }

@@ -28,9 +28,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 进入区域需求
+ * 检查玩家当前所在的地图是否为任务要求的地图
+ *
  * @author Tyler (Twdtwd)
  */
 public class FieldEnterRequirement extends AbstractQuestRequirement {
+    /** 需求的地图ID，-1表示未设置 */
     private int mapId = -1;
 
 

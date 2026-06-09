@@ -14,11 +14,16 @@ import java.util.concurrent.locks.ReentrantLock;
  * Manages session initialization using remote host (ip address).
  */
 public class SessionInitialization {
+    /** 日志记录器 */
     private final static Logger log = LoggerFactory.getLogger(SessionInitialization.class);
+    /** 最大初始化尝试次数 */
     private static final int MAX_INIT_TRIES = 2;
+    /** 重试等待间隔（毫秒） */
     private static final long RETRY_DELAY_MILLIS = 1777;
 
+    /** 处于初始化状态的远程主机集合 */
     private final Set<String> remoteHostsInInitState = new HashSet<>();
+    /** 锁池，用于分段加锁 */
     private final List<Lock> locks = new ArrayList<>(100);
 
     SessionInitialization() {
@@ -27,6 +32,12 @@ public class SessionInitialization {
         }
     }
 
+    /**
+     * 根据远程主机哈希值获取对应的锁
+     *
+     * @param remoteHost 远程主机地址
+     * @return 对应的分段锁
+     */
     private Lock getLock(String remoteHost) {
         return locks.get(Math.abs(remoteHost.hashCode()) % 100);
     }
@@ -73,7 +84,10 @@ public class SessionInitialization {
     }
 
     /**
-     * Finalize an initialization. Should be called <em>after</em> any session initialization procedure.
+     * 完成初始化
+     * 在会话初始化过程<em>之后</em>调用，释放该远程主机的初始化状态
+     *
+     * @param remoteHost 远程主机地址
      */
     public void finalize(String remoteHost) {
         final Lock lock = getLock(remoteHost);

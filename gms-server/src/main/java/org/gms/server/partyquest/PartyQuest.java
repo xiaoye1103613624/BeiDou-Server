@@ -33,15 +33,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 组队任务抽象基类
+ * 定义组队任务的基本框架，管理队伍成员、频道和世界信息
+ * 子类需实现具体任务逻辑
+ *
  * @author kevintjuh93
  */
 public class PartyQuest {
     private static final Logger log = LoggerFactory.getLogger(PartyQuest.class);
 
-    int channel, world;
+    /** 频道 */
+    int channel;
+    /** 世界 */
+    int world;
+    /** 队伍 */
     Party party;
+    /** 参与者列表 */
     List<Character> participants = new ArrayList<>();
 
+    /**
+     * 构造组队任务
+     * 自动筛选同频道同地图的队伍成员
+     *
+     * @param party 队伍
+     */
     public PartyQuest(Party party) {
         this.party = party;
         PartyCharacter leader = party.getLeader();
@@ -58,22 +73,44 @@ public class PartyQuest {
         }
     }
 
+    /**
+     * 获取组队
+     *
+     * @return 队伍对象
+     */
     public Party getParty() {
         return party;
     }
 
+    /**
+     * 获取参与者列表
+     *
+     * @return 参与者列表
+     */
     public List<Character> getParticipants() {
         return participants;
     }
 
+    /**
+     * 移除参与者
+     *
+     * @param chr 要移除的参与者
+     * @throws Throwable 可能抛出异常
+     */
     public void removeParticipant(Character chr) throws Throwable {
         synchronized (participants) {
             participants.remove(chr);
             chr.setPartyQuest(null);
-            //System.gc();
         }
     }
 
+    /**
+     * 根据组队任务名称和玩家等级计算经验奖励
+     *
+     * @param PQ    组队任务名称
+     * @param level 玩家等级
+     * @return 经验值
+     */
     public static int getExp(String PQ, int level) {
         switch (PQ) {
         case "HenesysPQ":

@@ -23,12 +23,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.server.events;
 
 /**
+ * 游戏事件抽象基类
+ * 定义游戏事件的基本接口，子类需实现getInfo()返回事件信息
+ *
  * @author kevintjuh93
  */
 public abstract class Events {
+    /**
+     * 构造游戏事件
+     */
     public Events() {
 
     }
 
+    /**
+     * 获取事件信息
+     *
+     * @return 事件信息值
+     */
     public abstract int getInfo();
 }

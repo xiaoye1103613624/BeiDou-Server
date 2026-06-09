@@ -21,6 +21,10 @@
 */
 package org.gms.scripting.portal;
 
+/**
+ * 传送门脚本接口
+ * 定义传送门脚本的执行入口，通过玩家交互对象触发传送逻辑
+ */
 public interface PortalScript {
     boolean enter(PortalPlayerInteraction ppi);
 }

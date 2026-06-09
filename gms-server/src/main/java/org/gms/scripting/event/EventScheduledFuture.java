@@ -22,18 +22,34 @@ package org.gms.scripting.event;
 import org.gms.scripting.event.scheduler.EventScriptScheduler;
 
 /**
- * @author Ronan
+ * 事件调度Future
+ * 封装事件脚本调度器中已调度任务的取消能力
  */
 public class EventScheduledFuture {
+    /** 关联的执行任务 */
     Runnable r;
+    /** 事件脚本调度器引用 */
     EventScriptScheduler ess;
 
+    /**
+     * 构造函数
+     *
+     * @param r   执行任务
+     * @param ess 事件脚本调度器
+     */
     public EventScheduledFuture(Runnable r, EventScriptScheduler ess) {
         this.r = r;
         this.ess = ess;
     }
 
-    public void cancel(boolean dummy) {   // will always implement "non-interrupt if running" regardless of boolean value
+    /**
+     * 取消已调度的任务
+     * 无论传入的boolean值如何，始终实现"运行中不中断"的行为
+     *
+     * @param dummy 无实际作用（保留接口兼容性）
+     */
+    public void cancel(boolean dummy) {
+        // 无论传入的boolean值如何，始终实现"运行中不中断"的行为
         ess.cancelEntry(r);
     }
 }

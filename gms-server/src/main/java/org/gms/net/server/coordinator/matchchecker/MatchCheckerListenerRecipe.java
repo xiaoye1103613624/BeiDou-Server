@@ -20,6 +20,9 @@
 package org.gms.net.server.coordinator.matchchecker;
 
 /**
+ * 匹配检查器监听器配方接口
+ * 定义获取匹配检查器监听器的工厂方法
+ *
  * @author Ronan
  */
 public interface MatchCheckerListenerRecipe {

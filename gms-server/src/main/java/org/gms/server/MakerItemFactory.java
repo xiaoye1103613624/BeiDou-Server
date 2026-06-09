@@ -31,11 +31,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
+ * 制作物品工厂
+ * 处理装备制作系统的费用计算，包括催化剂和试剂费用
+ * 根据制作物品ID和催化剂类型计算制作成本
+ *
  * @author Jay Estrella, Ronan
  */
 public class MakerItemFactory {
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
+    /**
+     * 获取制作物品条目（含费用计算）
+     *
+     * @param toCreate    要制作的物品ID
+     * @param stimulantid 催化剂ID（-1表示无催化剂）
+     * @param reagentids  试剂ID到数量的映射
+     * @return 制作物品条目
+     */
     public static MakerItemCreateEntry getItemCreateEntry(int toCreate, int stimulantid, Map<Integer, Short> reagentids) {
         MakerItemCreateEntry makerEntry = ii.getMakerItemEntry(toCreate);
         if (makerEntry.isInvalid()) {
@@ -57,6 +69,13 @@ public class MakerItemFactory {
         return makerEntry;
     }
 
+    /**
+     * 生成剩余晶体制作条目
+     *
+     * @param fromLeftoverid 剩余物品ID
+     * @param crystalId      晶体物品ID
+     * @return 制作条目
+     */
     public static MakerItemCreateEntry generateLeftoverCrystalEntry(int fromLeftoverid, int crystalId) {
         MakerItemCreateEntry ret = new MakerItemCreateEntry(0, 0, 1);
         ret.addReqItem(fromLeftoverid, 100);
@@ -64,7 +83,16 @@ public class MakerItemFactory {
         return ret;
     }
 
-    public static MakerItemCreateEntry generateDisassemblyCrystalEntry(int fromEquipid, int cost, List<Pair<Integer, Integer>> gains) {     // equipment at specific position already taken
+    /**
+     * 生成分解晶体制作条目
+     * equipment at specific position already taken
+     *
+     * @param fromEquipid 装备ID
+     * @param cost        费用
+     * @param gains       获得的物品列表（物品ID -> 数量）
+     * @return 制作条目
+     */
+    public static MakerItemCreateEntry generateDisassemblyCrystalEntry(int fromEquipid, int cost, List<Pair<Integer, Integer>> gains) {
         MakerItemCreateEntry ret = new MakerItemCreateEntry(cost, 0, 1);
         ret.addReqItem(fromEquipid, 1);
         for (Pair<Integer, Integer> p : gains) {
@@ -73,6 +101,12 @@ public class MakerItemFactory {
         return ret;
     }
 
+    /**
+     * 计算制作催化剂费用
+     *
+     * @param itemid 物品ID
+     * @return 催化剂费用
+     */
     private static double getMakerStimulantFee(int itemid) {
         if (GameConfig.getServerBoolean("use_maker_fee_heuristics")) {
             EquipType et = EquipType.getEquipTypeById(itemid);
@@ -143,20 +177,42 @@ public class MakerItemFactory {
         }
     }
 
+    /**
+     * 制作物品创建条目
+     * 包含制作配方信息：所需物品、产出物品、费用、等级要求等
+     */
     public static class MakerItemCreateEntry {
+        /** 需求等级 */
         private final int reqLevel;
+        /** 需求制作技能等级 */
         private final int reqMakerLevel;
+        /** 费用（内部计算用，浮点数） */
         private double cost;
+        /** 最终费用（截断到1000的倍数） */
         private int reqCost;
-        private final List<Pair<Integer, Integer>> reqItems = new ArrayList<>(); // itemId / amount
-        private final List<Pair<Integer, Integer>> gainItems = new ArrayList<>(); // itemId / amount
+        /** 所需物品列表（物品ID / 数量） */
+        private final List<Pair<Integer, Integer>> reqItems = new ArrayList<>();
+        /** 产出物品列表（物品ID / 数量） */
+        private final List<Pair<Integer, Integer>> gainItems = new ArrayList<>();
 
+        /**
+         * 构造函数
+         *
+         * @param cost         费用
+         * @param reqLevel     需求等级
+         * @param reqMakerLevel 需求制作技能等级
+         */
         public MakerItemCreateEntry(int cost, int reqLevel, int reqMakerLevel) {
             this.cost = cost;
             this.reqLevel = reqLevel;
             this.reqMakerLevel = reqMakerLevel;
         }
 
+        /**
+         * 拷贝构造函数
+         *
+         * @param mi 源条目
+         */
         public MakerItemCreateEntry(MakerItemCreateEntry mi) {
             this.cost = mi.cost;
             this.reqLevel = mi.reqLevel;
@@ -167,10 +223,20 @@ public class MakerItemFactory {
             gainItems.addAll(mi.gainItems);
         }
 
+        /**
+         * 获取所需物品列表
+         *
+         * @return 物品列表
+         */
         public List<Pair<Integer, Integer>> getReqItems() {
             return reqItems;
         }
 
+        /**
+         * 获取产出物品列表
+         *
+         * @return 物品列表
+         */
         public List<Pair<Integer, Integer>> getGainItems() {
             return gainItems;
         }
@@ -187,6 +253,11 @@ public class MakerItemFactory {
             return reqCost;
         }
 
+        /**
+         * 增加费用（内部计算用）
+         *
+         * @param amount 增加额
+         */
         public void addCost(double amount) {
             cost += amount;
         }
@@ -199,12 +270,21 @@ public class MakerItemFactory {
             gainItems.add(new Pair<>(itemId, amount));
         }
 
+        /**
+         * 将费用截断为1000的倍数（最终费用）
+         */
         public void trimCost() {
             reqCost = (int) (cost / 1000);
             reqCost *= 1000;
         }
 
-        public boolean isInvalid() {    // thanks Rohenn, Wh1SK3Y for noticing some items not getting checked properly
+        /**
+         * 检查条目是否无效
+         * thanks Rohenn, Wh1SK3Y for noticing some items not getting checked properly
+         *
+         * @return 无效返回true
+         */
+        public boolean isInvalid() {
             return reqLevel < 0;
         }
     }

@@ -31,7 +31,10 @@ import org.gms.util.PacketCreator;
 
 import java.awt.*;
 
-/*
+/**
+ * 手榴弹效果处理器
+ * 处理玩家使用手榴弹技能的效果
+ *
  * @author GabrielSin
  */
 public class GrenadeEffectHandler extends AbstractPacketHandler {

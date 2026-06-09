@@ -32,8 +32,17 @@ import java.util.List;
 @AllArgsConstructor
 public class EquipAdvanceService {
 
+    /**
+     * 装备进阶路线数据访问对象
+     */
     private final EquipAdvanceRouteMapper routeMapper;
+    /**
+     * 装备进阶阶段数据访问对象
+     */
     private final EquipAdvanceStageMapper stageMapper;
+    /**
+     * 装备进阶消耗材料数据访问对象
+     */
     private final EquipAdvanceCostMapper costMapper;
 
     /**
@@ -46,7 +55,12 @@ public class EquipAdvanceService {
         log.info("装备进阶配置加载完成");
     }
 
-    /** 获取所有装备进阶路线列表 */
+    /**
+     * 获取所有装备进阶路线列表
+     * 加载全部路线、阶段和消耗材料数据，组装为DTO列表
+     *
+     * @return 装备进阶路线DTO列表
+     */
     public List<EquipAdvanceSaveDTO> getRouteList() {
         List<EquipAdvanceRouteDO> routes = routeMapper.selectAll();
         List<EquipAdvanceStageDO> allStages = stageMapper.selectAll();
@@ -59,14 +73,25 @@ public class EquipAdvanceService {
         return result;
     }
 
-    /** 根据ID获取装备进阶路线 */
+    /**
+     * 根据ID获取装备进阶路线
+     *
+     * @param id 路线ID
+     * @return 装备进阶路线DTO，不存在返回null
+     */
     public EquipAdvanceSaveDTO getRouteById(Long id) {
         EquipAdvanceRouteDO route = routeMapper.selectOneById(id);
         if (route == null) return null;
         return toDTO(route, stageMapper.selectAll(), costMapper.selectAll());
     }
 
-    /** 保存装备进阶路线（新增或更新） */
+    /**
+     * 保存装备进阶路线（新增或更新）
+     * 存在ID时更新并删除旧阶段重新创建，不存在ID时插入新路线
+     *
+     * @param dto 装备进阶保存DTO
+     * @return 保存后的装备进阶路线DTO
+     */
     @Transactional
     public EquipAdvanceSaveDTO saveRoute(EquipAdvanceSaveDTO dto) {
         EquipAdvanceRouteDO route = EquipAdvanceRouteDO.builder()
@@ -76,9 +101,11 @@ public class EquipAdvanceService {
                 .enabled(dto.getEnabled() != null ? dto.getEnabled() : 1)
                 .build();
         if (route.getId() != null) {
+            // 更新路线并清除旧阶段数据
             routeMapper.update(route);
             deleteStagesByRouteId(route.getId());
         } else {
+            // 新增路线
             routeMapper.insert(route);
         }
 
@@ -126,7 +153,11 @@ public class EquipAdvanceService {
         return getRouteById(route.getId());
     }
 
-    /** 删除装备进阶路线（级联删除阶段和消耗材料） */
+    /**
+     * 删除装备进阶路线（级联删除阶段和消耗材料）
+     *
+     * @param id 路线ID
+     */
     @Transactional
     public void deleteRoute(Long id) {
         deleteStagesByRouteId(id);
@@ -134,7 +165,12 @@ public class EquipAdvanceService {
         refreshCache();
     }
 
-    /** 根据路线ID删除所有关联的阶段和消耗材料 */
+    /**
+     * 根据路线ID删除所有关联的阶段和消耗材料
+     * 先删除每个阶段的消耗材料，再删除阶段记录
+     *
+     * @param routeId 路线ID
+     */
     private void deleteStagesByRouteId(Long routeId) {
         List<EquipAdvanceStageDO> existingStages = stageMapper.selectListByQuery(
                 QueryWrapper.create().where("route_id = ?", routeId));
@@ -145,12 +181,23 @@ public class EquipAdvanceService {
         stageMapper.deleteByQuery(QueryWrapper.create().where("route_id = ?", routeId));
     }
 
-    /** 刷新缓存 */
+    /**
+     * 刷新内存缓存
+     * 从数据库重新加载所有配置到 EquipAdvanceManager
+     */
     private void refreshCache() {
         EquipAdvanceManager.load(routeMapper.selectAll(), stageMapper.selectAll(), costMapper.selectAll());
     }
 
-    /** DO转DTO */
+    /**
+     * DO转DTO
+     * 将数据库实体转换为前端使用的DTO对象
+     *
+     * @param route     路线实体
+     * @param allStages 所有阶段列表
+     * @param allCosts  所有消耗材料列表
+     * @return 装备进阶路线DTO
+     */
     private EquipAdvanceSaveDTO toDTO(EquipAdvanceRouteDO route,
                                       List<EquipAdvanceStageDO> allStages,
                                       List<EquipAdvanceCostDO> allCosts) {
@@ -175,6 +222,7 @@ public class EquipAdvanceService {
                     .speedAdd(st.getSpeedAdd()).jumpAdd(st.getJumpAdd())
                     .costs(costDTOs).build());
         }
+        // 按阶段顺序排序
         stageDTOs.sort(java.util.Comparator.comparingInt(StageDTO::getStageOrder));
         return EquipAdvanceSaveDTO.builder()
                 .id(route.getId()).jobGroup(route.getJobGroup()).routeName(route.getRouteName())

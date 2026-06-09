@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+/**
+ * 账号控制器
+ * 处理账号的注册、查询、修改、封禁/解封等请求
+ */
 @RestController
 @RequestMapping("/account")
 public class AccountController {

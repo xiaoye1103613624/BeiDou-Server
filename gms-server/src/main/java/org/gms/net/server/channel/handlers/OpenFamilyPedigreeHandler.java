@@ -27,9 +27,19 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
+ * 家族谱系打开处理器
+ * 处理玩家查看指定角色家族谱系的操作
+ *
  * @author Ubaware
  */
 public final class OpenFamilyPedigreeHandler extends AbstractPacketHandler {
+
+    /**
+     * 处理打开家族谱系包，根据目标角色名称获取其家族谱系信息并发送给客户端
+     *
+     * @param p 输入数据包，包含目标角色名称
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         if (!GameConfig.getServerBoolean("use_family_system")) {

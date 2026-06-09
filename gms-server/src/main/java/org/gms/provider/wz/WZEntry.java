@@ -24,6 +24,10 @@ package org.gms.provider.wz;
 import org.gms.provider.DataEntity;
 import org.gms.provider.DataEntry;
 
+/**
+ * WZ条目基类
+ * 封装WZ文件中条目的基本属性：名称、大小、校验和、偏移量和父节点
+ */
 public class WZEntry implements DataEntry {
     private final String name;
     private final int size;

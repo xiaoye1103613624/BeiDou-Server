@@ -26,11 +26,16 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 信息数字需求
+ * 存储任务相关的数值信息，用于脚本判断
+ * check()始终返回true，实际判断由脚本完成
+ *
  * @author Ronan
  */
 public class InfoNumberRequirement extends AbstractQuestRequirement {
-
+    /** 信息数值 */
     private short infoNumber;
+    /** 关联的任务ID */
     private final int questID;
 
     public InfoNumberRequirement(Quest quest, Data data) {

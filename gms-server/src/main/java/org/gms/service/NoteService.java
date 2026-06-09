@@ -15,14 +15,25 @@ import java.util.Optional;
 
 import static org.gms.dao.entity.table.NotesDOTableDef.NOTES_D_O;
 
+/**
+ * 便签服务类，提供便签的发送、查看和删除功能。
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class NoteService {
+
+    /**
+     * 便签数据访问对象
+     */
     private final NotesMapper notesMapper;
 
     /**
-     * Send normal note from one character to another
+     * 发送普通便签（从一个角色发送给另一个角色）。
+     *
+     * @param message      便签内容
+     * @param senderName   发送者名称
+     * @param receiverName 接收者名称
      */
     public void sendNormal(String message, String senderName, String receiverName) {
         notesMapper.insertSelective(NotesDO.builder()
@@ -34,7 +45,11 @@ public class NoteService {
     }
 
     /**
-     * Send note which will increase the receiver's fame by one.
+     * 发送带声望的便签（接收者声望+1）。
+     *
+     * @param message      便签内容
+     * @param senderName   发送者名称
+     * @param receiverName 接收者名称
      */
     public void sendWithFame(String message, String senderName, String receiverName) {
         notesMapper.insertSelective(NotesDO.builder()
@@ -47,9 +62,10 @@ public class NoteService {
     }
 
     /**
-     * Show unread notes
+     * 向角色展示未读便签。
      *
-     * @param chr Note recipient
+     * @param chr 便签接收者角色
+     * @throws IllegalArgumentException 如果角色为null
      */
     public void show(Character chr) {
         if (chr == null) {
@@ -66,10 +82,10 @@ public class NoteService {
     }
 
     /**
-     * Delete a read note
+     * 删除已读便签。
      *
-     * @param noteId Id of note to discard
-     * @return Discarded note. Empty optional if failed to discard.
+     * @param noteId 要删除的便签ID
+     * @return 被删除的便签对象，如果删除失败则返回空的Optional
      */
     public Optional<NotesDO> delete(int noteId) {
         try {

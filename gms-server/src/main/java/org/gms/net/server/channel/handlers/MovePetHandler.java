@@ -30,7 +30,18 @@ import org.gms.exception.EmptyMovementException;
 
 import java.util.List;
 
+/**
+ * 宠物移动处理器
+ * 处理玩家宠物在地图上的移动操作
+ */
 public final class MovePetHandler extends AbstractMovementPacketHandler {
+
+    /**
+     * 处理宠物移动包，解析宠物的移动路径并广播给地图中的其他玩家
+     *
+     * @param p 输入数据包，包含宠物的移动数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int petId = p.readInt();

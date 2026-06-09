@@ -12,7 +12,8 @@ import org.gms.util.RequireUtil;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 后面如有商城相关，叫cashShop
+ * 商店控制器
+ * 处理NPC商店和商店物品的查询、修改和删除请求
  */
 @RestController
 @AllArgsConstructor

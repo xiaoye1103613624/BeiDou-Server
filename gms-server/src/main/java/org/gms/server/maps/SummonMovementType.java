@@ -21,14 +21,30 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 召唤兽移动类型枚举
+ * 定义召唤兽跟随玩家的移动方式
+ */
 public enum SummonMovementType {
-    STATIONARY(0), FOLLOW(1), CIRCLE_FOLLOW(3);
+    /** 静止不动 */
+    STATIONARY(0),
+    /** 跟随玩家 */
+    FOLLOW(1),
+    /** 环绕玩家 */
+    CIRCLE_FOLLOW(3);
+
+    /** 移动类型编号 */
     private final int val;
 
     SummonMovementType(int val) {
         this.val = val;
     }
 
+    /**
+     * 获取移动类型编号
+     *
+     * @return 编号
+     */
     public int getValue() {
         return val;
     }

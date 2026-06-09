@@ -23,6 +23,9 @@ import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
 
 /**
+ * 地图所有权检查定时任务
+ * 定期检查各频道的地图所有权状态，确保地图占领逻辑正确
+ *
  * @author Ronan
  */
 public class MapOwnershipTask extends BaseTask implements Runnable {
@@ -34,6 +37,11 @@ public class MapOwnershipTask extends BaseTask implements Runnable {
         }
     }
 
+    /**
+     * 构造地图所有权检查定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public MapOwnershipTask(World world) {
         super(world);
     }

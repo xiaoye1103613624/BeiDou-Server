@@ -20,12 +20,21 @@
 package org.gms.net.server.services;
 
 /**
+ * 服务管理器
+ * 管理一组游戏服务，统一初始化和销毁
+ *
  * @author Ronan
  */
 public class ServicesManager {
 
+    /** 服务数组 */
     private Service[] services;
 
+    /**
+     * 构造方法，根据服务类型枚举初始化所有服务
+     *
+     * @param serviceBundle 服务类型包
+     */
     public ServicesManager(ServiceType serviceBundle) {
         Enum[] serviceTypes = serviceBundle.enumValues();
 
@@ -35,10 +44,19 @@ public class ServicesManager {
         }
     }
 
+    /**
+     * 获取指定类型的服务
+     *
+     * @param s 服务类型
+     * @return 服务实例
+     */
     public Service getAccess(ServiceType s) {
         return services[s.ordinal()];
     }
 
+    /**
+     * 关闭所有服务，释放资源
+     */
     public void shutdown() {
         for (Service service : services) {
             service.dispose();

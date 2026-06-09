@@ -32,6 +32,10 @@ import org.gms.util.PacketCreator;
 /**
  * @author Matze
  */
+/**
+ * 传送门处理器
+ * 处理玩家的传送门（Mystic Door）相关操作
+ */
 public final class DoorHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

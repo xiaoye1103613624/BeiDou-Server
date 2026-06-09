@@ -22,12 +22,26 @@ package org.gms.net.server;
 
 import org.gms.client.Disease;
 
-public class PlayerDiseaseValueHolder {//Thanks Celino
+/**
+ * 玩家异常状态值持有者
+ * 记录异常状态的类型、开始时间和持续时长
+ */
+public class PlayerDiseaseValueHolder {
 
+    /** 异常状态开始时间 */
     public long startTime;
+    /** 异常状态持续时长 */
     public long length;
+    /** 异常状态类型 */
     public Disease disease;
 
+    /**
+     * 构造异常状态值持有者
+     *
+     * @param disease   异常状态类型
+     * @param startTime 异常状态开始时间
+     * @param length    异常状态持续时长
+     */
     public PlayerDiseaseValueHolder(final Disease disease, final long startTime, final long length) {
         this.disease = disease;
         this.startTime = startTime;

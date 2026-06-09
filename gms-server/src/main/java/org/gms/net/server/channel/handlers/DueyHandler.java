@@ -28,6 +28,10 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 快递系统处理器
+ * 处理Duey快递系统的发送、领取、删除包裹等操作
+ */
 public final class DueyHandler extends AbstractPacketHandler {
 
     @Override

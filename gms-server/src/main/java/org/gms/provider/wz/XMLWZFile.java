@@ -34,6 +34,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * XML格式WZ文件数据提供者
+ * 将XML格式的WZ数据目录映射为DataProvider，支持递归遍历和路径访问
+ */
 public class XMLWZFile implements DataProvider {
 	private static final Logger log = LoggerFactory.getLogger(DataProvider.class);
 	private final Path root;

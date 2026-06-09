@@ -24,12 +24,16 @@ import org.gms.client.Character;
 import java.lang.ref.WeakReference;
 
 /**
- * @author Ronan
+ * 队伍搜索角色
+ * 封装参与队伍搜索的玩家角色信息
  */
 public class PartySearchCharacter {
 
+    /** 弱引用持有的玩家角色，避免阻止GC回收 */
     private final WeakReference<Character> player;
+    /** 玩家等级 */
     private final int level;
+    /** 是否仍在排队中 */
     private boolean queued;
 
     public PartySearchCharacter(Character chr) {
@@ -38,12 +42,25 @@ public class PartySearchCharacter {
         queued = true;
     }
 
+    /**
+     * 构造字符串描述
+     *
+     * @return 角色描述字符串
+     */
     @Override
     public String toString() {
         Character chr = player.get();
         return chr == null ? "[empty]" : chr.toString();
     }
 
+    /**
+     * 尝试呼叫此玩家
+     * 检查玩家是否在线、是否在地图附近、未被屏蔽且未加入队伍
+     *
+     * @param leaderid    领袖角色ID
+     * @param callerMapid 呼叫的地图ID
+     * @return 可用的角色，否则返回null
+     */
     public Character callPlayer(int leaderid, int callerMapid) {
         Character chr = player.get();
         if (chr == null || !PartySearchCoordinator.isInVicinity(callerMapid, chr.getMapId())) {

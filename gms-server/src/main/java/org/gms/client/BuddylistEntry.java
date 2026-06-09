@@ -21,11 +21,20 @@
 */
 package org.gms.client;
 
+/**
+ * 好友条目
+ * 记录单个好友的基本信息：名称、分组、角色ID、所在频道和可见性
+ */
 public class BuddylistEntry {
+    /** 好友名称 */
     private final String name;
+    /** 好友分组 */
     private String group;
+    /** 好友角色ID */
     private final int cid;
+    /** 所在频道 */
     private int channel;
+    /** 是否可见 */
     private boolean visible;
 
     /**

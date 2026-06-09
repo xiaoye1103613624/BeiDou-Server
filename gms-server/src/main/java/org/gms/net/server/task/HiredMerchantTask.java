@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 雇佣商人定时任务
+ * 定期检查雇佣商人的到期和维护状态
+ *
  * @author Ronan
  */
 public class HiredMerchantTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class HiredMerchantTask extends BaseTask implements Runnable {
         wserv.runHiredMerchantSchedule();
     }
 
+    /**
+     * 构造雇佣商人定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public HiredMerchantTask(World world) {
         super(world);
     }

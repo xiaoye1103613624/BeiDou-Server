@@ -6,6 +6,10 @@ import org.gms.property.ServiceProperty;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * WZ文件枚举
+ * 定义游戏客户端使用的WZ数据文件名称和路径
+ */
 public enum WZFiles {
     QUEST("Quest"),
     ETC("Etc"),

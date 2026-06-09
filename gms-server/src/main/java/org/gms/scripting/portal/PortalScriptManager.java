@@ -34,16 +34,29 @@ import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 传送门脚本管理器（单例）
+ * 管理传送门脚本的加载、缓存和执行
+ */
 public class PortalScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(PortalScriptManager.class);
     private static final PortalScriptManager instance = new PortalScriptManager();
 
+    /** 脚本路径到PortalScript实例的缓存映射 */
     private final Map<String, PortalScript> scripts = new HashMap<>();
 
     public static PortalScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     * 加载并获取传送门脚本实例（带缓存）
+     * 通过JS引擎加载脚本文件，获取PortalScript接口实现，并缓存结果
+     *
+     * @param scriptName 脚本名称（不含路径和扩展名）
+     * @return 传送门脚本实例
+     * @throws ScriptException 脚本未实现PortalScript接口时抛出
+     */
     private PortalScript getPortalScript(String scriptName) throws ScriptException {
         String scriptPath = "portal/" + scriptName + ".js";
         PortalScript script = scripts.get(scriptPath);
@@ -65,6 +78,13 @@ public class PortalScriptManager extends AbstractScriptManager {
         return script;
     }
 
+    /**
+     * 执行传送门入口脚本
+     *
+     * @param portal 传送门
+     * @param c      客户端
+     * @return 脚本是否成功执行，成功后玩家才能进入目标地图
+     */
     public boolean executePortalScript(Portal portal, Client c) {
         try {
             String strPortalName = portal.getScriptName();
@@ -83,6 +103,9 @@ public class PortalScriptManager extends AbstractScriptManager {
         return false;
     }
 
+    /**
+     * 清除所有已缓存的传送门脚本，触发重新加载
+     */
     public void reloadPortalScripts() {
         scripts.clear();
     }

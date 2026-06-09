@@ -8,6 +8,9 @@ import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
 /**
+ * 管理员聊天处理器
+ * 处理管理员（GM）聊天消息的发送和广播
+ *
  * @author kevintjuh93
  */
 public class AdminChatHandler extends AbstractPacketHandler {

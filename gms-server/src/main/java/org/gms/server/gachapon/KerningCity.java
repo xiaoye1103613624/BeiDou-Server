@@ -1,14 +1,21 @@
 package org.gms.server.gachapon;
 
 /**
+ * 废弃都市扭蛋机奖品
+ * 包含该城镇专属的扭蛋奖池物品，分为普通、稀有、罕见三个等级
+ *
  * @author Alan (SharpAceX) - gachapon source classes stub & pirate equipment
  * @author Ronan - parsed MapleSEA loots
  * <p>
  * MapleSEA-like loots thanks to AyumiLove - src: https://ayumilovemaple.wordpress.com/maplestory-gachapon-guide/
  */
-
 public class KerningCity extends GachaponItems {
 
+    /**
+     * 获取普通品质物品
+     *
+     * @return 物品ID数组
+     */
     @Override
     public int[] getCommonItems() {
         return new int[]{
@@ -45,11 +52,21 @@ public class KerningCity extends GachaponItems {
         };
     }
 
+    /**
+     * 获取稀有品质物品
+     *
+     * @return 物品ID数组
+     */
     @Override
     public int[] getUncommonItems() {
         return new int[]{2040805, 1082149, 1102041};
     }
 
+    /**
+     * 获取罕见品质物品
+     *
+     * @return 物品ID数组
+     */
     @Override
     public int[] getRareItems() {
         return new int[]{};

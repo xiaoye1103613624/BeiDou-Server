@@ -56,11 +56,16 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 远征队
+ * 管理Boss远征队的组队、报名、人数限制和Boss挑战流程
+ * 使用并发集合保证多线程安全，支持踢人、超时自动开始
+ *
  * @author Alan (SharpAceX)
  */
 public class Expedition {
     private static final Logger log = LoggerFactory.getLogger(Expedition.class);
 
+    /** 支持远征挑战的Boss怪物ID数组 */
     private static final int[] EXPEDITION_BOSSES = {
             MobId.ZAKUM_1,
             MobId.ZAKUM_2,
@@ -93,21 +98,44 @@ public class Expedition {
             MobId.FURIOUS_TARGA,
     };
 
+    /** 队长 */
     private final Character leader;
+    /** 远征类型 */
     private final ExpeditionType type;
+    /** 是否正在报名 */
     private boolean registering;
+    /** 开始地图 */
     private final MapleMap startMap;
+    /** Boss日志 */
     private final List<String> bossLogs;
+    /** 报名定时器 */
     private ScheduledFuture<?> schedule;
+    /** 队员列表（角色ID -> 角色名） */
     private final Map<Integer, String> members = new ConcurrentHashMap<>();
+    /** 被禁入队员ID列表 */
     private final List<Integer> banned = new CopyOnWriteArrayList<>();
+    /** 开始时间戳 */
     private long startTime;
+    /** 属性配置 */
     private final Properties props = new Properties();
+    /** 是否静默模式 */
     private final boolean silent;
+    /** 最小人数 */
     private final int minSize;
+    /** 最大人数 */
     private final int maxSize;
+    /** 玩家列表操作锁 */
     private final Lock pL = new ReentrantLock(true);
 
+    /**
+     * 构造远征队
+     *
+     * @param player      创建远征队的玩家（队长）
+     * @param met         远征类型
+     * @param sil         是否静默模式
+     * @param minPlayers  最小人数，0使用类型默认值
+     * @param maxPlayers  最大人数，0使用类型默认值
+     */
     public Expedition(Character player, ExpeditionType met, boolean sil, int minPlayers, int maxPlayers) {
         leader = player;
         members.put(player.getId(), player.getName());
@@ -183,6 +211,12 @@ public class Expedition {
         Expedition.log.info(log);
     }
 
+    /**
+     * 获取格式化时间字符串
+     *
+     * @param then 起始时间戳
+     * @return 格式化的时间差字符串
+     */
     private static String getTimeString(long then) {
         long duration = System.currentTimeMillis() - then;
         int seconds = (int) (duration / SECONDS.toMillis(1)) % 60;
@@ -194,6 +228,10 @@ public class Expedition {
         registering = false;
     }
 
+    /**
+     * 开始远征挑战
+     * 结束报名，记录开始时间，向GM广播开始消息
+     */
     public void start() {
         finishRegistration();
         registerExpeditionAttempt();
@@ -212,12 +250,14 @@ public class Expedition {
         if (banned.contains(player.getId())) {
             return I18nUtil.getMessage("Expedition.addMember.message2", leader.getName());
         }
-        if (members.size() >= this.getMaxSize()) { //Would be a miracle if anybody ever saw this
+        if (members.size() >= this.getMaxSize()) {
+            // Would be a miracle if anybody ever saw this
             return I18nUtil.getMessage("Expedition.addMember.message3");
         }
 
         int channel = this.getRecruitingMap().getChannelServer().getId();
-        if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {    // thanks Conrad, Cato for noticing some expeditions have entry limit
+        if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {
+            // thanks Conrad, Cato for noticing some expeditions have entry limit
             return I18nUtil.getMessage("Expedition.addMember.message4");
         }
 
@@ -248,6 +288,9 @@ public class Expedition {
         return 0; //"You have registered for the expedition successfully!";
     }
 
+    /**
+     * 注册所有队员的远征尝试记录
+     */
     private void registerExpeditionAttempt() {
         int channel = this.getRecruitingMap().getChannelServer().getId();
 
@@ -256,12 +299,23 @@ public class Expedition {
         }
     }
 
+    /**
+     * 向所有在线队员广播数据包
+     *
+     * @param packet 数据包
+     */
     private void broadcastExped(Packet packet) {
         for (Character chr : getActiveMembers()) {
             chr.sendPacket(packet);
         }
     }
 
+    /**
+     * 移除队员
+     *
+     * @param chr 玩家
+     * @return true移除成功，false玩家不在远征队中
+     */
     public boolean removeMember(Character chr) {
         if (members.remove(chr.getId()) != null) {
             chr.sendPacket(PacketCreator.removeClock());
@@ -317,6 +371,12 @@ public class Expedition {
         }
     }
 
+    /**
+     * 获取属性
+     *
+     * @param key 属性键
+     * @return 属性值
+     */
     public String getProperty(String key) {
         pL.lock();
         try {
@@ -344,6 +404,11 @@ public class Expedition {
         return activeMembers;
     }
 
+    /**
+     * 获取队员映射（副本）
+     *
+     * @return 队员ID->名称映射
+     */
     public Map<Integer, String> getMembers() {
         return new HashMap<>(members);
     }
@@ -367,6 +432,11 @@ public class Expedition {
         return memberList;
     }
 
+    /**
+     * 检查远征队是否在同一地图
+     *
+     * @return true全在同一地图
+     */
     public final boolean isExpeditionTeamTogether() {
         List<Character> chars = getActiveMembers();
         if (chars.size() <= 1) {
@@ -387,6 +457,12 @@ public class Expedition {
         return true;
     }
 
+    /**
+     * 传送远征队在特定地图的成员
+     *
+     * @param warpFrom 源地图ID
+     * @param warpTo   目标地图ID
+     */
     public final void warpExpeditionTeam(int warpFrom, int warpTo) {
         List<Character> players = getActiveMembers();
 
@@ -427,42 +503,95 @@ public class Expedition {
         return ch.addExpedition(this);
     }
 
+    /**
+     * 从频道移除远征队
+     *
+     * @param ch 频道
+     */
     public final void removeChannelExpedition(Channel ch) {
         ch.removeExpedition(this);
     }
 
+    /**
+     * 获取队长
+     *
+     * @return 队长
+     */
     public Character getLeader() {
         return leader;
     }
 
+    /**
+     * 获取招募地图
+     *
+     * @return 招募地图
+     */
     public MapleMap getRecruitingMap() {
         return startMap;
     }
 
+    /**
+     * 判断玩家是否在远征队中
+     *
+     * @param player 玩家
+     * @return true在远征队中
+     */
     public boolean contains(Character player) {
         return members.containsKey(player.getId()) || isLeader(player);
     }
 
+    /**
+     * 判断是否为队长
+     *
+     * @param player 玩家
+     * @return true是队长
+     */
     public boolean isLeader(Character player) {
         return isLeader(player.getId());
     }
 
+    /**
+     * 根据ID判断是否为队长
+     *
+     * @param playerid 玩家ID
+     * @return true是队长
+     */
     public boolean isLeader(int playerid) {
         return leader.getId() == playerid;
     }
 
+    /**
+     * 判断是否在报名中
+     *
+     * @return true正在报名
+     */
     public boolean isRegistering() {
         return registering;
     }
 
+    /**
+     * 判断是否已开始
+     *
+     * @return true已开始
+     */
     public boolean isInProgress() {
         return !registering;
     }
 
+    /**
+     * 获取开始时间
+     *
+     * @return 开始时间戳
+     */
     public long getStartTime() {
         return startTime;
     }
 
+    /**
+     * 获取Boss日志
+     *
+     * @return 日志列表
+     */
     public List<String> getBossLogs() {
         return bossLogs;
     }

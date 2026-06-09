@@ -23,9 +23,36 @@ package org.gms.server.movement;
 
 import java.awt.*;
 
+/**
+ * 生命体移动接口
+ * 扩展LifeMovementFragment，定义完整移动动作的属性：位置、新状态、持续时间和类型
+ */
 public interface LifeMovement extends LifeMovementFragment {
+    /**
+     * 获取移动目标位置
+     *
+     * @return 目标位置
+     */
     Point getPosition();
+
+    /**
+     * 获取移动后的新状态
+     *
+     * @return 新状态值
+     */
     int getNewstate();
+
+    /**
+     * 获取移动持续时间
+     *
+     * @return 持续时间（tick）
+     */
     int getDuration();
+
+    /**
+     * 获取移动类型
+     *
+     * @return 移动类型编码
+     */
     int getType();
 }

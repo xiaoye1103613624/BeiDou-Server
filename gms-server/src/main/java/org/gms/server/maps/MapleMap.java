@@ -104,94 +104,178 @@ import java.util.function.Predicate;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 冒险岛地图
+ * 管理地图上的所有对象（怪物、NPC、玩家、道具、反应器、传送门等），
+ * 提供地图内的网络广播、怪物生成、物品掉落等核心功能
+ *
+ * @author Matze
+ */
 public class MapleMap {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(MapleMap.class);
+    /** 需要按范围刷新的地图对象类型列表 */
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
+    /** 掉落边界缓存 */
     private static final Map<Integer, Pair<Integer, Integer>> dropBoundsCache = new HashMap<>(100);
 
+    /** 地图中所有对象，键为对象ID */
     private final Map<Integer, MapObject> mapobjects = new LinkedHashMap<>();
+    /** 自毁对象集合 */
     private final Set<Integer> selfDestructives = new LinkedHashSet<>();
+    /** 怪物生成点列表 */
     private final Collection<SpawnPoint> monsterSpawn = Collections.synchronizedList(new LinkedList<>());
+    /** 所有怪物生成点列表（含BOSS等不重复生成的） */
     private final Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<>());
+    /** 已生成怪物计数 */
     private final AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
+    /** 已掉落物品计数 */
     private final AtomicInteger droppedItemCount = new AtomicInteger(0);
+    /** 地图中的角色集合 */
     private final Collection<Character> characters = new LinkedHashSet<>();
+    /** 地图中按队伍分组的角色 */
     private final Map<Integer, Set<Integer>> mapParty = new LinkedHashMap<>();
+    /** 传送门映射，键为传送门ID */
     private final Map<Integer, Portal> portals = new HashMap<>();
+    /** 背景类型映射 */
     private final Map<Integer, Integer> backgroundTypes = new HashMap<>();
+    /** 环境变量映射 */
     private final Map<String, Integer> environment = new LinkedHashMap<>();
+    /** 掉落的道具映射 */
     private final Map<MapItem, Long> droppedItems = new LinkedHashMap<>();
+    /** 已注册的掉落弱引用列表 */
     private final LinkedList<WeakReference<MapObject>> registeredDrops = new LinkedList<>();
+    /** 怪物掉落条目缓存 */
     private final Map<MobLootEntry, Long> mobLootEntries = new HashMap(20);
+    /** 状态更新任务列表 */
     private final List<Runnable> statUpdateRunnables = new ArrayList(50);
+    /** 地图区域列表 */
     private final List<Rectangle> areas = new ArrayList<>();
+    /** 站脚点树 */
     private FootholdTree footholds = null;
-    private Pair<Integer, Integer> xLimits;  // caches the min and max x's with available footholds
+    /** X轴可用站脚点范围缓存 */
+    private Pair<Integer, Integer> xLimits;
+    // caches the min and max x's with available footholds
+    /** 地图区域矩形 */
     private final Rectangle mapArea = new Rectangle();
+    /** 地图ID */
     private final int mapid;
+    /** 自增对象ID计数器 */
     private final AtomicInteger runningOid = new AtomicInteger(1000000001);
+    /** 返回地图ID */
     private final int returnMapId;
+    /** 频道号 */
     private final int channel;
+    /** 世界号 */
     private final int world;
+    /** 座位数 */
     private int seats;
+    /** 怪物倍率 */
     private byte monsterRate;
+    /** 是否有时钟 */
     private boolean clock;
+    /** 是否有船 */
     private boolean boat;
+    /** 是否已停靠 */
     private boolean docked = false;
+    /** 事件实例管理器 */
     private EventInstanceManager event = null;
+    /** 地图名称 */
     private String mapName;
+    /** 街道名称 */
     private String streetName;
+    /** 地图特效 */
     private MapEffect mapEffect = null;
+    /** 是否永久存在 */
     private boolean everlast = false;
+    /** 强制返回地图ID */
     private int forcedReturnMap = MapId.NONE;
+    /** 时间限制 */
     private int timeLimit;
+    /** 地图计时器 */
     private long mapTimer;
+    /** 每秒HP减少量 */
     private int decHP = 0;
+    /** HP恢复倍率 */
     private float recovery = 1.0f;
+    /** 保护道具ID */
     private int protectItem = 0;
+    /** 是否为城镇 */
     private boolean town;
+    /** OX问答活动 */
     private OxQuiz ox;
+    /** 是否为OX问答地图 */
     private boolean isOxQuiz = false;
+    /** 是否允许掉落 */
     private boolean dropsOn = true;
+    /** 首个用户进入时的脚本 */
     private String onFirstUserEnter;
+    /** 用户进入时的脚本 */
     private String onUserEnter;
+    /** 地图字段类型 */
     private int fieldType;
+    /** 地图字段限制 */
     private int fieldLimit = 0;
+    /** 怪物容量 */
     private int mobCapacity = -1;
-    private MonsterAggroCoordinator aggroMonitor = null;   // aggroMonitor activity in sync with itemMonitor
+    /** 怪物仇恨协调器 */
+    private MonsterAggroCoordinator aggroMonitor = null;
+    // aggroMonitor activity in sync with itemMonitor
+    /** 物品监视器任务 */
     private ScheduledFuture<?> itemMonitor = null;
+    /** 道具过期任务 */
     private ScheduledFuture<?> expireItemsTask = null;
+    /** 怪物掉落刷新任务 */
     private ScheduledFuture<?> mobSpawnLootTask = null;
+    /** 角色状态更新任务 */
     private ScheduledFuture<?> characterStatUpdateTask = null;
+    /** 物品监视器超时(秒) */
     private short itemMonitorTimeout;
+    /** 时间怪物 */
     private Pair<Integer, String> timeMob = null;
+    /** 怪物刷新间隔 */
     private short mobInterval = 5000;
-    private boolean allowSummons = true; // All maps should have this true at the beginning
+    /** 是否允许召唤 */
+    private boolean allowSummons = true;
+    // All maps should have this true at the beginning
+    /** 地图拥有者 */
     private Character mapOwner = null;
+    /** 地图拥有者最后活动时间 */
     private long mapOwnerLastActivityTime = Long.MAX_VALUE;
 
-    // events
-    private boolean eventstarted = false, isMuted = false;
+    /** 事件是否已开始 */
+    private boolean eventstarted = false;
+    /** 是否已静音 */
+    private boolean isMuted = false;
     private Snowball snowball0 = null;
     private Snowball snowball1 = null;
     private Coconut coconut;
 
-    //CPQ
+    /** CPQ最大怪物数 */
     private int maxMobs;
+    /** CPQ最大反应器数 */
     private int maxReactors;
+    /** CPQ死亡CP */
     private int deathCP;
+    /** 默认时间 */
     private int timeDefault;
+    /** 扩展时间 */
     private int timeExpand;
 
-    //locks
+    /** 角色读锁 */
     private final Lock chrRLock;
+    /** 角色写锁 */
     private final Lock chrWLock;
+    /** 对象读锁 */
     private final Lock objectRLock;
+    /** 对象写锁 */
     private final Lock objectWLock;
 
+    /** 战利品锁 */
     private final Lock lootLock = new ReentrantLock(true);
 
     // due to the nature of loadMapFromWz (synchronized), sole function that calls 'generateMapDropRangeCache', this lock remains optional.
+    /** 边界锁 */
     private static final Lock bndLock = new ReentrantLock(true);
 
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {
@@ -530,8 +614,10 @@ public class MapleMap {
                 Point rp = new Point(mapArea.x + mapArea.width, mapArea.y);
                 Point fallback = new Point(mapArea.x + (mapArea.width / 2), mapArea.y);
 
-                lp = bsearchDropPos(lp, fallback);  // approximated leftmost fh node position
-                rp = bsearchDropPos(rp, fallback);  // approximated rightmost fh node position
+                // approximated leftmost fh node position
+                lp = bsearchDropPos(lp, fallback);
+                // approximated rightmost fh node position
+                rp = bsearchDropPos(rp, fallback);
 
                 xLimits = new Pair<>(lp.x + 14, rp.x - 14);
                 dropBoundsCache.put(mapid, xLimits);
@@ -572,7 +658,8 @@ public class MapleMap {
             initial.x = xLimits.right;
         }
 
-        Point ret = calcPointBelow(new Point(initial.x, initial.y - 85));   // actual drop ranges: default - 120, explosive - 360
+        // actual drop ranges: default - 120, explosive - 360
+        Point ret = calcPointBelow(new Point(initial.x, initial.y - 85));
         if (ret == null) {
             ret = bsearchDropPos(initial, fallback);
         }
@@ -763,9 +850,11 @@ public class MapleMap {
         final List<MonsterDropEntry> otherQuestEntry = new ArrayList<>();
 
         List<MonsterDropEntry> lootEntry = GameConfig.getServerBoolean("use_spawn_relevant_loot") ? mob.retrieveRelevantDrops() : mi.retrieveEffectiveDrop(mob.getId());
-        sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, chr);     // thanks Articuno, Limit, Rohenn for noticing quest loots not showing up in only-quest item drops scenario
+        sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, chr);
+        // thanks Articuno, Limit, Rohenn for noticing quest loots not showing up in only-quest item drops scenario
 
-        if (lootEntry.isEmpty()) {   // thanks resinate
+        if (lootEntry.isEmpty()) {
+            // thanks resinate
             return;
         }
 
@@ -779,7 +868,8 @@ public class MapleMap {
 
         final byte droptype = (byte) (chr.getParty() != null ? 1 : 0);
         final int mobpos = mob.getPosition().x;
-        int chRate = 1000000;   // guaranteed item drop
+        int chRate = 1000000;
+        // guaranteed item drop
         byte d = 1;
         Point pos = new Point(0, mob.getPosition().y);
 
@@ -1423,12 +1513,12 @@ public class MapleMap {
                         AutobanFactory.GENERAL.alert(chr, "因击杀超过自身30级的怪物[" + monster.getName() + "]被系统警告");
                     }
 
-                    /*if (chr.getQuest(Quest.getInstance(29400)).getStatus().equals(QuestStatus.Status.STARTED)) {
-                     if (chr.getLevel() >= 120 && monster.getStats().getLevel() >= 120) {
-                     //FIX MEDAL SHET
-                     } else if (monster.getStats().getLevel() >= chr.getLevel()) {
-                     }
-                     }*/
+                    // if (chr.getQuest(Quest.getInstance(29400)).getStatus().equals(QuestStatus.Status.STARTED)) {
+                    //     if (chr.getLevel() >= 120 && monster.getStats().getLevel() >= 120) {
+                    //         //FIX MEDAL SHET
+                    //     } else if (monster.getStats().getLevel() >= chr.getLevel()) {
+                    //     }
+                    // }
 
                     if (monster.getCP() > 0 && chr.getMap().isCPQMap()) {
                         chr.gainCP(monster.getCP());
@@ -1492,8 +1582,9 @@ public class MapleMap {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                } finally {     // thanks resinate for pointing out a memory leak possibly from an exception thrown
-                    monster.dispatchMonsterKilled(true);
+                } finally {
+                // thanks resinate for pointing out a memory leak possibly from an exception thrown
+                monster.dispatchMonsterKilled(true);
                     broadcastMessage(PacketCreator.killMonster(monster.getObjectId(), animation), monster.getPosition());
                 }
             }
@@ -1884,9 +1975,11 @@ public class MapleMap {
     }
 
     public Point getGroundBelow(Point pos) {
-        Point spos = new Point(pos.x, pos.y - 14); // Using -14 fixes spawning pets causing a lot of issues.
+        // Using -14 fixes spawning pets causing a lot of issues.
+        Point spos = new Point(pos.x, pos.y - 14);
         spos = calcPointBelow(spos);
-        spos.y--;//shouldn't be null!
+        // shouldn't be null!
+        spos.y--;
         return spos;
     }
 
@@ -1977,7 +2070,8 @@ public class MapleMap {
 
     public void spawnMonster(final Monster monster, int difficulty, boolean isPq) {
         if (mobCapacity != -1 && mobCapacity == spawnedMonstersOnMap.get()) {
-            return;//PyPQ
+            // PyPQ
+            return;
         }
 
         monster.changeDifficulty(difficulty, isPq);
@@ -2024,7 +2118,8 @@ public class MapleMap {
 
         spawnedMonstersOnMap.incrementAndGet();
         addSelfDestructive(monster);
-        applyRemoveAfter(monster);  // thanks LightRyuzaki for pointing issues with spawned CWKPQ mobs not applying this
+        // thanks LightRyuzaki for pointing issues with spawned CWKPQ mobs not applying this
+        applyRemoveAfter(monster);
     }
 
     public void spawnDojoMonster(final Monster monster) {
@@ -2502,7 +2597,8 @@ public class MapleMap {
                 break;
             }
         }
-        chr.commitExcludedItems();  // thanks OishiiKawaiiDesu for noticing pet item ignore registry erasing upon changing maps
+        chr.commitExcludedItems();
+        // thanks OishiiKawaiiDesu for noticing pet item ignore registry erasing upon changing maps
 
         if (chr.getMonsterCarnival() != null) {
             chr.sendPacket(PacketCreator.getClock(chr.getMonsterCarnival().getTimeLeftSeconds()));
@@ -2525,7 +2621,8 @@ public class MapleMap {
 
         if (chr.getChalkboard() != null) {
             if (!GameConstants.isFreeMarketRoom(mapid)) {
-                chr.sendPacket(PacketCreator.useChalkboard(chr, false)); // update player's chalkboard when changing maps found thanks to Vcoc
+                // update player's chalkboard when changing maps found thanks to Vcoc
+                chr.sendPacket(PacketCreator.useChalkboard(chr, false));
             } else {
                 chr.setChalkboard(null);
             }
@@ -2684,11 +2781,9 @@ public class MapleMap {
         return null;
     }
 
-    /*
-    public Collection<Portal> getPortals() {
-        return Collections.unmodifiableCollection(portals.values());
-    }
-    */
+    //     public Collection<Portal> getPortals() {
+//         return Collections.unmodifiableCollection(portals.values());
+//     }
 
     public void addPlayerPuppet(Character player) {
         for (Monster mm : this.getAllMonsters()) {
@@ -3465,7 +3560,8 @@ public class MapleMap {
         if (mapobj instanceof MapItem) {
             return makeDisappearItemFromMap((MapItem) mapobj);
         } else {
-            return mapobj == null;  // no drop to make disappear...
+            // no drop to make disappear...
+            return mapobj == null;
         }
     }
 
@@ -3602,7 +3698,8 @@ public class MapleMap {
             return;
         }
 
-        final int numShouldSpawn = (short) ((monsterSpawn.size() - spawnedMonstersOnMap.get()));//Fking lol'd
+        // Fking lol'd
+        final int numShouldSpawn = (short) ((monsterSpawn.size() - spawnedMonstersOnMap.get()));
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = getMonsterSpawn();
             Collections.shuffle(randomSpawn);
@@ -3624,7 +3721,8 @@ public class MapleMap {
             return;
         }
 
-        final int numShouldSpawn = (short) ((monsterSpawn.size() - spawnedMonstersOnMap.get()));//Fking lol'd
+        // Fking lol'd
+        final int numShouldSpawn = (short) ((monsterSpawn.size() - spawnedMonstersOnMap.get()));
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = getMonsterSpawn();
             Collections.shuffle(randomSpawn);
@@ -3687,14 +3785,12 @@ public class MapleMap {
     }
 
     private int getNumShouldSpawn(int numPlayers) {
-        /*
-        System.out.println("----------------------------------");
-        for (SpawnPoint spawnPoint : getMonsterSpawn()) {
-            System.out.println("sp " + spawnPoint.getPosition().getX() + ", " + spawnPoint.getPosition().getY() + ": " + spawnPoint.getDenySpawn());
-        }
-        System.out.println("try " + monsterSpawn.size() + " - " + spawnedMonstersOnMap.get());
-        System.out.println("----------------------------------");
-        */
+        // System.out.println("----------------------------------");
+        // for (SpawnPoint spawnPoint : getMonsterSpawn()) {
+        //     System.out.println("sp " + spawnPoint.getPosition().getX() + ", " + spawnPoint.getPosition().getY() + ": " + spawnPoint.getDenySpawn());
+        // }
+        // System.out.println("try " + monsterSpawn.size() + " - " + spawnedMonstersOnMap.get());
+        // System.out.println("----------------------------------");
 
         if (GameConfig.getServerBoolean("use_enable_full_respawn")) {
             return (monsterSpawn.size() - spawnedMonstersOnMap.get());
@@ -4171,9 +4267,11 @@ public class MapleMap {
         return true;
     }
 
-    public void spawnHorntailOnGroundBelow(final Point targetPoint) {   // ayy lmao
+    public void spawnHorntailOnGroundBelow(final Point targetPoint) {
+        // ayy lmao
         Monster htIntro = LifeFactory.getMonster(MobId.SUMMON_HORNTAIL);
-        spawnMonsterOnGroundBelow(htIntro, targetPoint);    // htintro spawn animation converting into horntail detected thanks to Arnah
+        // htintro spawn animation converting into horntail detected thanks to Arnah
+        spawnMonsterOnGroundBelow(htIntro, targetPoint);
 
         final Monster ht = LifeFactory.getMonster(MobId.HORNTAIL);
         ht.setParentMobOid(htIntro.getObjectId());
@@ -4436,7 +4534,8 @@ public class MapleMap {
             Reactor reactor = new Reactor(ReactorFactory.getReactorS(reactorID), reactorID);
             pt.setTaken(true);
             reactor.setPosition(pt.getPosition());
-            reactor.setName(team + "" + num); //lol
+            // lol
+            reactor.setName(team + "" + num);
             reactor.resetReactorActions(0);
             this.spawnReactor(reactor);
             reactor.setGuardian(pt);

@@ -23,10 +23,14 @@ import org.gms.net.server.coordinator.matchchecker.listener.MatchCheckerCPQChall
 import org.gms.net.server.coordinator.matchchecker.listener.MatchCheckerGuildCreation;
 
 /**
- * @author Ronan
+ * 匹配检查器监听器工厂
+ * 根据匹配检查类型创建对应的监听器实例
  */
 public class MatchCheckerListenerFactory {
 
+    /**
+     * 匹配检查类型枚举
+     */
     public enum MatchCheckerType {
 
         GUILD_CREATION(MatchCheckerGuildCreation.loadListener()),

@@ -21,6 +21,10 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 动画地图对象接口
+ * 扩展MapObject，支持姿态和朝向的动画属性
+ */
 public interface AnimatedMapObject extends MapObject {
     int getStance();
     void setStance(int stance);

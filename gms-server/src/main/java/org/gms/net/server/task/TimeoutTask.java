@@ -9,9 +9,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 
 /**
+ * 超时断开定时任务
+ * 检查玩家最后发包时间，超过配置的超时阈值则自动断开连接
+ *
  * @author Shavit
  */
 public class TimeoutTask extends BaseTask implements Runnable {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(TimeoutTask.class);
 
     @Override
@@ -27,6 +31,11 @@ public class TimeoutTask extends BaseTask implements Runnable {
         }
     }
 
+    /**
+     * 构造超时断开定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public TimeoutTask(World world) {
         super(world);
     }

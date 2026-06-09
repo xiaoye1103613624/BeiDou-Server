@@ -51,7 +51,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 市场交易系统处理器
+ * 处理MTS（Maple Trading System）的所有操作，包括上架、搜索、购买、购物车、转让、取消订单等
+ */
 public final class MTSHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(MTSHandler.class);
 
     @Override

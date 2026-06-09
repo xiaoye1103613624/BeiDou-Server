@@ -31,7 +31,18 @@ import org.gms.exception.EmptyMovementException;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * 召唤兽移动处理器
+ * 处理玩家召唤兽在地图上的移动操作
+ */
 public final class MoveSummonHandler extends AbstractMovementPacketHandler {
+
+    /**
+     * 处理召唤兽移动包，根据对象ID查找对应的召唤兽，更新其移动路径并广播给地图中的其他玩家
+     *
+     * @param p 输入数据包，包含召唤兽的移动数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();

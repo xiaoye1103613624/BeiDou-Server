@@ -41,18 +41,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Lerk
+ * 反应堆脚本管理器（单例）
+ * 管理反应堆（Reactor）脚本的加载、执行和掉落配置
  */
 public class ReactorScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(ReactorScriptManager.class);
     private static final ReactorScriptManager instance = new ReactorScriptManager();
 
+    /** 反应堆ID到掉落条目列表的映射缓存 */
     private final Map<Integer, List<ReactorDropEntry>> drops = new HashMap<>();
 
     public static ReactorScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     * 触发反应堆击打脚本hit函数
+     *
+     * @param c       客户端
+     * @param reactor 反应堆
+     */
     public void onHit(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
@@ -68,6 +76,12 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 触发反应堆动作脚本act函数
+     *
+     * @param c       客户端
+     * @param reactor 反应堆
+     */
     public void act(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
@@ -81,6 +95,13 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 获取反应堆掉落配置列表（带缓存）
+     * 首次查询时从数据库加载，后续命中缓存
+     *
+     * @param reactorId 反应堆ID
+     * @return 掉落条目列表
+     */
     public List<ReactorDropEntry> getDrops(int reactorId) {
         List<ReactorDropEntry> ret = drops.get(reactorId);
         if (ret == null) {
@@ -102,18 +123,40 @@ public class ReactorScriptManager extends AbstractScriptManager {
         return ret;
     }
 
+    /**
+     * 清除掉落配置缓存
+     */
     public void clearDrops() {
         drops.clear();
     }
 
+    /**
+     * 触发反应堆触碰脚本touch函数
+     *
+     * @param c       客户端
+     * @param reactor 反应堆
+     */
     public void touch(Client c, Reactor reactor) {
         touching(c, reactor, true);
     }
 
+    /**
+     * 触发反应堆离开脚本untouch函数
+     *
+     * @param c       客户端
+     * @param reactor 反应堆
+     */
     public void untouch(Client c, Reactor reactor) {
         touching(c, reactor, false);
     }
 
+    /**
+     * 执行触碰/离开脚本
+     *
+     * @param c        客户端
+     * @param reactor  反应堆
+     * @param touching true=触碰, false=离开
+     */
     private void touching(Client c, Reactor reactor, boolean touching) {
         final String functionName = touching ? "touch" : "untouch";
         try {
@@ -128,6 +171,14 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 初始化脚本可调用对象
+     * 加载反应堆JS脚本，创建ReactantActionManager并注入到JS引擎上下文
+     *
+     * @param c       客户端
+     * @param reactor 反应堆
+     * @return 可调用对象，脚本不存在则返回null
+     */
     private Invocable initializeInvocable(Client c, Reactor reactor) {
         ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
         if (engine == null) {

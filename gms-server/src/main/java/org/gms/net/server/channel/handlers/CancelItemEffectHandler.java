@@ -26,6 +26,10 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
 
+/**
+ * 取消道具效果处理器
+ * 处理玩家手动取消道具效果的操作
+ */
 public final class CancelItemEffectHandler extends AbstractPacketHandler {
 
     @Override

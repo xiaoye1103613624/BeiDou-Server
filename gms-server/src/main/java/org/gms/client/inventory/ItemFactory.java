@@ -34,6 +34,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 物品工厂枚举
+ * 两种数据源：玩家背包物品和账号仓库物品，提供数据库加载和保存功能
+ * 使用ReentrantLock保护并发写操作，保证数据库操作线程安全
+ *
  * @author Flav
  */
 public enum ItemFactory {

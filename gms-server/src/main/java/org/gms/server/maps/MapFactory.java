@@ -46,10 +46,24 @@ import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 地图工厂
+ * 负责从WZ文件和数据库加载地图数据，包括生命体（怪物/NPC）、传送门、站脚点等
+ * 支持从WZ文件和数据库双源加载，数据库中的数据优先于WZ文件
+ */
 public class MapFactory {
+    /** 地图名称数据（来自String.wz） */
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+    /** 地图数据源（来自Map.wz） */
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
+    /**
+     * 从WZ文件加载地图生命体（怪物和NPC）
+     * 解析life节点中的每个生命体配置，包括位置、朝向、隐藏状态等
+     *
+     * @param map     目标地图
+     * @param mapData WZ地图数据
+     */
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
         for (Data life : mapData.getChildByPath("life")) {
             life.getName();
@@ -78,6 +92,12 @@ public class MapFactory {
         }
     }
 
+    /**
+     * 从数据库加载地图生命体（玩家自定义放置的怪物/NPC）
+     * 数据库中的数据优先于WZ文件数据
+     *
+     * @param map 目标地图
+     */
     private static void loadLifeFromDb(MapleMap map) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM plife WHERE map = ? and world = ?")) {
@@ -112,8 +132,10 @@ public class MapFactory {
         if (myLife instanceof Monster monster) {
             int mobRespawnRate = GameConfig.getServerInt("mob_respawn_rate");
             float mobTimeRate = GameConfig.getServerFloat("boss_respawn_mob_time_rate");
-            mobTimeRate = (mobTimeRate <= 0 || mobTimeRate > 1) ? 1 : mobTimeRate;  //将值限定在0~1之间的范围
-            if (mobRespawnRate < 1) {   //如果读入的值小于1，或者怪物为boss，则设定生怪倍率为1
+            // 将值限定在0~1之间的范围
+            mobTimeRate = (mobTimeRate <= 0 || mobTimeRate > 1) ? 1 : mobTimeRate;
+            // 如果读入的值小于1，或者怪物为boss，则设定生怪倍率为1
+            if (mobRespawnRate < 1) {
                 mobRespawnRate = 1;
             }
             if (monster.isBoss()) {
@@ -126,7 +148,8 @@ public class MapFactory {
             }
 
             for (int i = 0; i < mobRespawnRate; i++) {
-                if (mobTime == -1) { //does not respawn, force spawn once
+                // does not respawn, force spawn once
+                if (mobTime == -1) {
                     map.spawnMonster(monster);
                 } else {
                     map.addMonsterSpawn(monster, mobTime, team);
@@ -140,11 +163,22 @@ public class MapFactory {
         }
     }
 
+    /**
+     * 从WZ文件加载完整地图
+     * 加载地图元数据、生命体、传送门、站脚点、反应器等所有信息
+     *
+     * @param mapid   地图ID
+     * @param world   世界ID
+     * @param channel 频道
+     * @param event   事件实例管理器（可为null）
+     * @return 加载的地图对象
+     */
     public static MapleMap loadMapFromWz(int mapid, int world, int channel, EventInstanceManager event) {
         MapleMap map;
 
         String mapName = getMapName(mapid);
-        Data mapData = mapSource.getData(mapName);    // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
+        // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
+        Data mapData = mapSource.getData(mapName);
         Data infoData = mapData.getChildByPath("info");
 
         String link = DataTool.getString(infoData.getChildByPath("link"), "");
@@ -259,7 +293,8 @@ public class MapFactory {
             Data mcData = mapData.getChildByPath("monsterCarnival");
             if (mcData != null) {
                 map.setDeathCP(DataTool.getIntConvert("deathCP", mcData, 0));
-                map.setMaxMobs(DataTool.getIntConvert("mobGenMax", mcData, 20));    // thanks Atoot for noticing CPQ1 bf. 3 and 4 not accepting spawns due to undefined limits, Lame for noticing a need to cap mob spawns even on such undefined limits
+                map.setMaxMobs(DataTool.getIntConvert("mobGenMax", mcData, 20));
+                // thanks Atoot for noticing CPQ1 bf. 3 and 4 not accepting spawns due to undefined limits, Lame for noticing a need to cap mob spawns even on such undefined limits
                 map.setTimeDefault(DataTool.getIntConvert("timeDefault", mcData, 0));
                 map.setTimeExpand(DataTool.getIntConvert("timeExpand", mcData, 0));
                 map.setMaxReactors(DataTool.getIntConvert("guardianGenMax", mcData, 16));
@@ -299,7 +334,8 @@ public class MapFactory {
         map.setStreetName(loadStreetName(mapid));
 
         map.setClock(mapData.getChildByPath("clock") != null);
-        map.setEverlast(DataTool.getIntConvert("everlast", infoData, 0) != 0); // thanks davidlafriniere for noticing value 0 accounting as true
+        // thanks davidlafriniere for noticing value 0 accounting as true
+        map.setEverlast(DataTool.getIntConvert("everlast", infoData, 0) != 0);
         map.setTown(DataTool.getIntConvert("town", infoData, 0) != 0);
         map.setHPDec(DataTool.getIntConvert("decHP", infoData, 0));
         map.setHPDecProtect(DataTool.getIntConvert("protectItem", infoData, 0));
@@ -307,8 +343,8 @@ public class MapFactory {
         map.setBoat(mapData.getChildByPath("shipObj") != null);
         map.setTimeLimit(DataTool.getIntConvert("timeLimit", infoData, -1));
         map.setFieldType(DataTool.getIntConvert("fieldType", infoData, 0));
-        map.setMobCapacity(DataTool.getIntConvert("fixedMobCapacity", infoData, 500));//Is there a map that contains more than 500 mobs?
-
+        map.setMobCapacity(DataTool.getIntConvert("fixedMobCapacity", infoData, 500));
+        // Is there a map that contains more than 500 mobs?
         Data recData = infoData.getChildByPath("recovery");
         if (recData != null) {
             map.setRecovery(DataTool.getFloat(recData));

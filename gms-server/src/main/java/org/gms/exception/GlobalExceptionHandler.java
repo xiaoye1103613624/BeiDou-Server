@@ -15,6 +15,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * 全局异常处理器
+ * 统一处理业务异常、数据库冲突、运行时异常和Servlet异常，返回标准化的ResultBody
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);

@@ -22,6 +22,9 @@ package org.gms.net.server.services;
 import java.util.List;
 
 /**
+ * 调度器监听器接口
+ * 定义调度任务移除时的回调，用于处理被移除的调度条目
+ *
  * @author Ronan
  */
 public interface SchedulerListener {

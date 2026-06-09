@@ -36,19 +36,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author RMZero213
+ * 任务脚本管理器
+ * 管理任务JavaScript脚本的加载和执行，处理任务开始、进行中和完成动作
  */
 public class QuestScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(QuestScriptManager.class);
     private static final QuestScriptManager instance = new QuestScriptManager();
 
+    /** 客户端到任务动作管理器的映射 */
     private final Map<Client, QuestActionManager> qms = new HashMap<>();
+    /** 客户端到JS脚本可调用对象的映射 */
     private final Map<Client, Invocable> scripts = new HashMap<>();
 
     public static QuestScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     * 根据任务ID加载对应的JS脚本引擎
+     * 如果是勋章任务，回退到通用勋章脚本
+     *
+     * @param c       客户端
+     * @param questid 任务ID
+     * @return 脚本引擎，无对应脚本则返回null
+     */
     private ScriptEngine getQuestScriptEngine(Client c, short questid) {
         ScriptEngine engine = getInvocableScriptEngine("quest/" + questid + ".js", c);
         if (engine == null && GameConstants.isMedalQuest(questid)) {
@@ -58,6 +69,13 @@ public class QuestScriptManager extends AbstractScriptManager {
         return engine;
     }
 
+    /**
+     * 启动任务开始脚本
+     *
+     * @param c       客户端
+     * @param questid 任务ID
+     * @param npc     NPC ID
+     */
     public void start(Client c, short questid, int npc) {
         Quest quest = Quest.getInstance(questid);
         try {
@@ -93,6 +111,14 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 启动任务进行中脚本（处理玩家选择后续步骤）
+     *
+     * @param c         客户端
+     * @param mode      模式
+     * @param type      类型
+     * @param selection 选项
+     */
     public void start(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
@@ -106,6 +132,14 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 启动任务结束脚本
+     * 校验任务状态必须是已开始，且NPC必须在地图中或任务支持自动完成
+     *
+     * @param c       客户端
+     * @param questid 任务ID
+     * @param npc     NPC ID
+     */
     public void end(Client c, short questid, int npc) {
         Quest quest = Quest.getInstance(questid);
         if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED) || (!c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
@@ -145,6 +179,14 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 处理任务结束时的玩家后续选择
+     *
+     * @param c         客户端
+     * @param mode      模式
+     * @param type      类型
+     * @param selection 选项
+     */
     public void end(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
@@ -158,6 +200,13 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 唤起任务打开事件，触发raiseOpen脚本函数
+     *
+     * @param c       客户端
+     * @param questid 任务ID
+     * @param npc     NPC ID
+     */
     public void raiseOpen(Client c, short questid, int npc) {
         try {
             QuestActionManager qm = new QuestActionManager(c, questid, npc, true);
@@ -187,6 +236,13 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 清理任务脚本会话
+     * 移除客户端关联的QM和脚本，重置NPC冷却时间并清理脚本上下文
+     *
+     * @param qm 任务动作管理器
+     * @param c  客户端
+     */
     public void dispose(QuestActionManager qm, Client c) {
         qms.remove(c);
         scripts.remove(c);
@@ -195,6 +251,11 @@ public class QuestScriptManager extends AbstractScriptManager {
         c.getPlayer().flushDelayedUpdateQuests();
     }
 
+    /**
+     * 通过客户端清理任务脚本会话
+     *
+     * @param c 客户端
+     */
     public void dispose(Client c) {
         QuestActionManager qm = qms.get(c);
         if (qm != null) {
@@ -202,15 +263,33 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 获取客户端对应的任务动作管理器
+     *
+     * @param c 客户端
+     * @return 任务动作管理器
+     */
     public QuestActionManager getQM(Client c) {
         return qms.get(c);
     }
 
+    /**
+     * 重新加载所有任务脚本，清除缓存
+     */
     public void reloadQuestScripts() {
         scripts.clear();
         qms.clear();
     }
 
+    /**
+     * 检查指定任务脚本是否包含某函数
+     *
+     * @param c            客户端
+     * @param questid      任务ID
+     * @param npc          NPC ID
+     * @param functionName 函数名
+     * @return 是否存在
+     */
     public boolean checkFunctionExists(Client c, short questid, int npc, String functionName) {
         ScriptEngine engine = getQuestScriptEngine(c, questid);
         if (engine == null) {

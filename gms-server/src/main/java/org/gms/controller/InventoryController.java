@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 背包控制器
+ * 处理背包物品查询、修改和删除等请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/inventory")

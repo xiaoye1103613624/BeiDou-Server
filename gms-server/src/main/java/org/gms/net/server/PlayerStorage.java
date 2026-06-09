@@ -33,18 +33,34 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 玩家存储
+ * 线程安全的玩家容器，支持按ID或名称查找、遍历在线玩家
+ */
 public class PlayerStorage {
+    /** 角色ID映射存储 */
     private final Map<Integer, Character> storage = new LinkedHashMap<>();
+    /** 角色名称映射存储 */
     private final Map<String, Character> nameStorage = new LinkedHashMap<>();
+    /** 读锁 */
     private final Lock rlock;
+    /** 写锁 */
     private final Lock wlock;
 
+    /**
+     * 构造玩家存储
+     */
     public PlayerStorage() {
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
         this.rlock = readWriteLock.readLock();
         this.wlock = readWriteLock.writeLock();
     }
 
+    /**
+     * 添加玩家
+     *
+     * @param chr 玩家角色对象
+     */
     public void addPlayer(Character chr) {
         wlock.lock();
         try {
@@ -55,6 +71,12 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 移除玩家
+     *
+     * @param chr 角色ID
+     * @return 被移除的角色对象，若不存在则返回null
+     */
     public Character removePlayer(int chr) {
         wlock.lock();
         try {
@@ -69,6 +91,12 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 根据名称查找玩家
+     *
+     * @param name 角色名称
+     * @return 角色对象，若不存在则返回null
+     */
     public Character getCharacterByName(String name) {
         rlock.lock();
         try {
@@ -78,6 +106,12 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 根据ID查找玩家
+     *
+     * @param id 角色ID
+     * @return 角色对象，若不存在则返回null
+     */
     public Character getCharacterById(int id) {
         rlock.lock();
         try {
@@ -87,6 +121,11 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 获取所有在线玩家
+     *
+     * @return 所有角色对象的集合
+     */
     public Collection<Character> getAllCharacters() {
         rlock.lock();
         try {
@@ -96,6 +135,9 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 断开所有玩家的连接
+     */
     public final void disconnectAll() {
         List<Character> chrList;
         rlock.lock();
@@ -120,6 +162,11 @@ public class PlayerStorage {
         }
     }
 
+    /**
+     * 获取在线玩家数量
+     *
+     * @return 玩家数量
+     */
     public int getSize() {
         rlock.lock();
         try {

@@ -19,10 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * 动态配置控制器
+ * 提供游戏动态参数的增删改查、导入导出功能
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/config")
 public class ConfigController {
+    /** 配置服务 */
     private final ConfigService configService;
 
     @Tag(name = "/config/" + ApiConstant.LATEST)

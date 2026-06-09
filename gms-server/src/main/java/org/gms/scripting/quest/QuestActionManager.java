@@ -29,10 +29,13 @@ import org.gms.server.quest.actions.ExpAction;
 import org.gms.server.quest.actions.MesoAction;
 
 /**
- * @author RMZero213
+ * 任务动作管理器
+ * 处理任务脚本中的玩家动作，继承NPCConversationManager以支持对话和物品操作
  */
 public class QuestActionManager extends NPCConversationManager {
-    private final boolean start; // this is if the script in question is start or end
+    /** 标记此脚本是任务开始(true)还是结束(false) */
+    private final boolean start;
+    /** 任务ID */
     private final int quest;
 
     public QuestActionManager(Client c, int quest, int npc, boolean start) {
@@ -41,10 +44,20 @@ public class QuestActionManager extends NPCConversationManager {
         this.start = start;
     }
 
+    /**
+     * 获取当前任务ID
+     *
+     * @return 任务ID
+     */
     public int getQuest() {
         return quest;
     }
 
+    /**
+     * 判断是否为任务开始节点
+     *
+     * @return true表示任务开始，false表示任务完成
+     */
     public boolean isStart() {
         return start;
     }
@@ -54,10 +67,20 @@ public class QuestActionManager extends NPCConversationManager {
         QuestScriptManager.getInstance().dispose(this, getClient());
     }
 
+    /**
+     * 强制开始当前任务
+     *
+     * @return 是否成功
+     */
     public boolean forceStartQuest() {
         return forceStartQuest(quest);
     }
 
+    /**
+     * 强制完成当前任务
+     *
+     * @return 是否成功
+     */
     public boolean forceCompleteQuest() {
         return forceCompleteQuest(quest);
     }
@@ -82,7 +105,12 @@ public class QuestActionManager extends NPCConversationManager {
         MesoAction.runAction(getPlayer(), gain);
     }
 
-    public String getMedalName() {  // usable only for medal quests (id 299XX)
+    /**
+     * 获取勋章名称，仅用于勋章任务（ID 299XX）
+     *
+     * @return 勋章名称
+     */
+    public String getMedalName() {
         Quest q = Quest.getInstance(quest);
         return ItemInformationProvider.getInstance().getName(q.getMedalRequirement());
     }

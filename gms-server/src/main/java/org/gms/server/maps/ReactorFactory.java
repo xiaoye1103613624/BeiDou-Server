@@ -35,10 +35,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 反应器工厂
+ * 从WZ数据中加载并缓存反应器模板，支持按ID获取反应器统计信息
+ * 支持link继承其他反应器属性，缓存结果避免重复解析
+ *
+ * @author Lerk
+ */
 public class ReactorFactory {
+    /** 反应器数据源（来自Reactor.wz） */
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
+    /** 反应器属性缓存（反应器ID -> 属性） */
     private static final Map<Integer, ReactorStats> reactorStats = new HashMap<>();
 
+    /**
+     * 根据反应器ID获取反应器属性（带缓存）
+     * 缓存未命中则从WZ文件解析，支持link继承
+     *
+     * @param rid 反应器ID
+     * @return 反应器属性
+     */
     public static final ReactorStats getReactorS(int rid) {
         ReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
@@ -68,9 +84,11 @@ public class ReactorFactory {
                         Data reactorInfoData = reactorInfoData_.getChildByPath("0");
                         Pair<Integer, Integer> reactItem = null;
                         int type = DataTool.getIntConvert("type", reactorInfoData);
-                        if (type == 100) { //reactor waits for item
+                        // reactor waits for item
+                    if (type == 100) {
                             reactItem = new Pair<>(DataTool.getIntConvert("0", reactorInfoData), DataTool.getIntConvert("1", reactorInfoData, 1));
-                            if (!areaSet) { //only set area of effect for item-triggered reactors once
+                            // only set area of effect for item-triggered reactors once
+                            if (!areaSet) {
                                 stats.setTL(DataTool.getPoint("lt", reactorInfoData));
                                 stats.setBR(DataTool.getPoint("rb", reactorInfoData));
                                 areaSet = true;
@@ -86,7 +104,8 @@ public class ReactorFactory {
                 if (rid != infoId) {
                     reactorStats.put(rid, stats);
                 }
-            } else { // stats exist at infoId but not rid; add to map
+            } else {
+                // stats exist at infoId but not rid; add to map
                 reactorStats.put(rid, stats);
             }
         }
@@ -127,9 +146,11 @@ public class ReactorFactory {
                                 } else {
                                     Pair<Integer, Integer> reactItem = null;
                                     int type = DataTool.getIntConvert("type", fknexon);
-                                    if (type == 100) { //reactor waits for item
+                                    // reactor waits for item
+                                    if (type == 100) {
                                         reactItem = new Pair<>(DataTool.getIntConvert("0", fknexon), DataTool.getIntConvert("1", fknexon));
-                                        if (!areaSet || loadArea) { //only set area of effect for item-triggered reactors once
+                                        // only set area of effect for item-triggered reactors once
+                                        if (!areaSet || loadArea) {
                                             stats.setTL(DataTool.getPoint("lt", fknexon));
                                             stats.setBR(DataTool.getPoint("rb", fknexon));
                                             areaSet = true;
@@ -153,17 +174,17 @@ public class ReactorFactory {
                         reactorInfoData = reactorData.getChildByPath(Byte.toString(i));
                         statedatas = new ArrayList<>();
                     }
-                } else //sit there and look pretty; likely a reactor such as Zakum/Papulatus doors that shows if player can enter
-                {
-                    statedatas.add(new StateData(999, null, null, (byte) 0));
+                } else {
+                // sit there and look pretty; likely a reactor such as Zakum/Papulatus doors that shows if player can enter
+                statedatas.add(new StateData(999, null, null, (byte) 0));
                     stats.addState((byte) 0, statedatas, -1);
                 }
                 reactorStats.put(infoId, stats);
                 if (rid != infoId) {
                     reactorStats.put(rid, stats);
                 }
-            } else // stats exist at infoId but not rid; add to map
-            {
+            } else {
+                // stats exist at infoId but not rid; add to map
                 reactorStats.put(rid, stats);
             }
         }

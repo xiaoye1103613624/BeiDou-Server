@@ -39,17 +39,30 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 
 /**
+ * 迷雾/毒雾
+ * 表示地图上的持续效果区域，如毒雾、火焰、烟雾等，对范围内怪物造成持续伤害
+ * 支持怪物技能释放和玩家技能释放两种来源，支持伤害和恢复两种类型
+ *
  * @author LaiLaiNoob
  */
 public class Mist extends AbstractMapObject {
+    /** 迷雾区域矩形边界 */
     private final Rectangle mistPosition;
+    /** 迷雾来源玩家（玩家技能） */
     private Character owner = null;
+    /** 迷雾来源怪物（怪物技能） */
     private Monster mob = null;
+    /** 技能效果（玩家技能） */
     private StatEffect source;
+    /** 怪物技能（怪物技能） */
     private MobSkill skill;
+    /** 是否怪物技能产生的迷雾 */
     private final boolean isMobMist;
+    /** 是否毒雾（造成伤害） */
     private boolean isPoisonMist;
+    /** 是否恢复迷雾（恢复HP） */
     private boolean isRecoveryMist;
+    /** 伤害延迟（单位：tick） */
     private final int skillDelay;
 
     public Mist(Rectangle mistPosition, Monster mob, MobSkill skill) {
@@ -62,6 +75,14 @@ public class Mist extends AbstractMapObject {
         skillDelay = 0;
     }
 
+    /**
+     * 构造玩家技能释放的迷雾
+     * 根据技能ID自动判断类型（毒雾/恢复/烟雾）
+     *
+     * @param mistPosition 迷雾区域
+     * @param owner        释放技能的玩家
+     * @param source       技能效果
+     */
     public Mist(Rectangle mistPosition, Character owner, StatEffect source) {
         this.mistPosition = mistPosition;
         this.owner = owner;

@@ -18,22 +18,44 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 怪物嘉年华组队任务
+ * 两支队伍在竞技场中召唤怪物互相攻击，通过CP点数决定胜负
+ * 支持D、C、B、A四个难度等级
+ *
  * @author Drago (Dragohe4rt)
  */
 public class MonsterCarnival {
 
+    /** 难度等级：D */
     public static int D = 3;
+    /** 难度等级：C */
     public static int C = 2;
+    /** 难度等级：B */
     public static int B = 1;
+    /** 难度等级：A */
     public static int A = 0;
 
+    /** 红队和蓝队 */
     private Party p1, p2;
+    /** 竞技场地图 */
     private MapleMap map;
+    /** 定时器、特效定时器、怪物刷新任务 */
     private ScheduledFuture<?> timer, effectTimer, respawnTask;
+    /** 开始时间戳 */
     private long startTime = 0;
-    private int summonsR = 0, summonsB = 0, room = 0;
+    /** 红队和蓝队召唤次数 */
+    private int summonsR = 0, summonsB = 0;
+    /** 房间号 */
+    private int room = 0;
+    /** 红队队长和蓝队队长 */
     private Character leader1, leader2, team1, team2;
-    private int redCP, blueCP, redTotalCP, blueTotalCP, redTimeupCP, blueTimeupCP;
+    /** 红队和蓝队CP值 */
+    private int redCP, blueCP;
+    /** 红队和蓝队总CP值 */
+    private int redTotalCP, blueTotalCP;
+    /** 红队和蓝队时间结束时的CP值 */
+    private int redTimeupCP, blueTimeupCP;
+    /** 是否为CPQ1模式 */
     private boolean cpq1;
 
     public MonsterCarnival(Party p1, Party p2, int mapid, boolean cpq1, int room) {
@@ -109,10 +131,18 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 刷新竞技场怪物
+     */
     private void respawn() {
         map.respawn();
     }
 
+    /**
+     * 处理玩家断线，找到其所属队伍并通知所有玩家
+     *
+     * @param charid 断线玩家ID
+     */
     public void playerDisconnected(int charid) {
         int team = -1;
         for (PartyCharacter mpc : leader1.getParty().getMembers()) {
@@ -143,34 +173,66 @@ public class MonsterCarnival {
         earlyFinish();
     }
 
+    /**
+     * 提前结束嘉年华
+     */
     private void earlyFinish() {
         dispose(true);
     }
 
+    /**
+     * 处理玩家离开队伍
+     *
+     * @param charid 离开玩家ID
+     */
     public void leftParty(int charid) {
         playerDisconnected(charid);
     }
 
+    /**
+     * 清理资源，不传送玩家
+     */
     protected void dispose() {
         dispose(false);
     }
 
+    /**
+     * 判断红队是否可以召唤怪物
+     *
+     * @return true表示可以召唤
+     */
     public boolean canSummonR() {
         return summonsR < map.getMaxMobs();
     }
 
+    /**
+     * 红队召唤怪物计数加1
+     */
     public void summonR() {
         summonsR++;
     }
 
+    /**
+     * 判断蓝队是否可以召唤怪物
+     *
+     * @return true表示可以召唤
+     */
     public boolean canSummonB() {
         return summonsB < map.getMaxMobs();
     }
 
+    /**
+     * 蓝队召唤怪物计数加1
+     */
     public void summonB() {
         summonsB++;
     }
 
+    /**
+     * 判断红队是否可以放置守护者
+     *
+     * @return true表示可以放置
+     */
     public boolean canGuardianR() {
         int teamReactors = 0;
         for (Reactor react : map.getAllReactors()) {
@@ -182,6 +244,11 @@ public class MonsterCarnival {
         return teamReactors < map.getMaxReactors();
     }
 
+    /**
+     * 判断蓝队是否可以放置守护者
+     *
+     * @return true表示可以放置
+     */
     public boolean canGuardianB() {
         int teamReactors = 0;
         for (Reactor react : map.getAllReactors()) {
@@ -193,6 +260,11 @@ public class MonsterCarnival {
         return teamReactors < map.getMaxReactors();
     }
 
+    /**
+     * 清理嘉年华资源，可选传送玩家回城
+     *
+     * @param warpout 是否传送玩家出去
+     */
     protected void dispose(boolean warpout) {
         Channel cs = map.getChannelServer();
         MapleMap out;
@@ -245,14 +317,27 @@ public class MonsterCarnival {
         cs.finishMonsterCarnival(cpq1, room);
     }
 
+    /**
+     * 退出嘉年华
+     */
     public void exit() {
         dispose();
     }
 
+    /**
+     * 获取定时器
+     *
+     * @return 定时任务
+     */
     public ScheduledFuture<?> getTimer() {
         return this.timer;
     }
 
+    /**
+     * 结束嘉年华，根据胜负传送玩家到对应地图并发放节日积分
+     *
+     * @param winningTeam 获胜队伍编号（0=红队赢，1=蓝队赢）
+     */
     private void finish(int winningTeam) {
         try {
             Channel cs = map.getChannelServer();
@@ -321,6 +406,9 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 时间到，判断CP较高的一方获胜，平局则延长比赛时间
+     */
     private void timeUp() {
         int cp1 = this.redTimeupCP;
         int cp2 = this.blueTimeupCP;
@@ -335,14 +423,27 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 获取剩余时间（毫秒）
+     *
+     * @return 剩余时间
+     */
     public long getTimeLeft() {
         return (startTime - System.currentTimeMillis());
     }
 
+    /**
+     * 获取剩余时间（秒）
+     *
+     * @return 剩余秒数
+     */
     public int getTimeLeftSeconds() {
         return (int) (getTimeLeft() / 1000);
     }
 
+    /**
+     * 延长比赛时间3分钟
+     */
     private void extendTime() {
         for (Character chrMap : map.getAllPlayers()) {
             chrMap.dropMessage(5, LanguageConstants.getMessage(chrMap, LanguageConstants.CPQExtendTime));
@@ -352,9 +453,13 @@ public class MonsterCarnival {
         map.broadcastMessage(PacketCreator.getClock((int) MINUTES.toSeconds(3)));
 
         timer = TimerManager.getInstance().schedule(() -> timeUp(), SECONDS.toMillis(map.getTimeExpand()));
-        effectTimer = TimerManager.getInstance().schedule(() -> complete(), SECONDS.toMillis(map.getTimeExpand() - 10)); // thanks Vcoc for noticing a time set issue here
+        // thanks Vcoc for noticing a time set issue here
+        effectTimer = TimerManager.getInstance().schedule(() -> complete(), SECONDS.toMillis(map.getTimeExpand() - 10));
     }
 
+    /**
+     * 比赛完成时记录双方当前CP值，清除怪物并向玩家发送胜负特效
+     */
     public void complete() {
         int cp1 = this.redTotalCP;
         int cp2 = this.blueTotalCP;
@@ -435,6 +540,12 @@ public class MonsterCarnival {
         this.leader2 = leader2;
     }
 
+    /**
+     * 获取敌方队伍的队长
+     *
+     * @param team 本方队伍编号（0=红队，返回蓝队队长；1=蓝队，返回红队队长）
+     * @return 敌方队长
+     */
     public Character getEnemyLeader(int team) {
         switch (team) {
             case 0:
@@ -477,6 +588,12 @@ public class MonsterCarnival {
         this.redTotalCP = redTotalCP;
     }
 
+    /**
+     * 获取指定队伍的总CP值
+     *
+     * @param team 队伍编号（0=红队，1=蓝队）
+     * @return 总CP值
+     */
     public int getTotalCP(int team) {
         if (team == 0) {
             return redTotalCP;
@@ -487,6 +604,12 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 设置指定队伍的总CP值
+     *
+     * @param totalCP 总CP值
+     * @param team    队伍编号（0=红队，1=蓝队）
+     */
     public void setTotalCP(int totalCP, int team) {
         if (team == 0) {
             this.redTotalCP = totalCP;
@@ -495,6 +618,12 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 获取指定队伍的当前CP值
+     *
+     * @param team 队伍编号（0=红队，1=蓝队）
+     * @return 当前CP值
+     */
     public int getCP(int team) {
         if (team == 0) {
             return redCP;
@@ -505,6 +634,12 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 设置指定队伍的当前CP值
+     *
+     * @param CP   当前CP值
+     * @param team 队伍编号（0=红队，1=蓝队）
+     */
     public void setCP(int CP, int team) {
         if (team == 0) {
             this.redCP = CP;
@@ -513,10 +648,20 @@ public class MonsterCarnival {
         }
     }
 
+    /**
+     * 获取房间号
+     *
+     * @return 房间号
+     */
     public int getRoom() {
         return this.room;
     }
 
+    /**
+     * 获取竞技场地图
+     *
+     * @return 竞技场地图
+     */
     public MapleMap getEventMap() {
         return this.map;
     }

@@ -32,9 +32,11 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
 /**
+ * 怪物攻击友方怪物处理器
+ * 处理怪物攻击友方怪物（如任务保护NPC怪物）的伤害计算和死亡处理
+ *
  * @author Xotic (XoticStory) & BubblesDev
  */
-
 public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
 
 /**
+ * 登录协调器定时任务
+ * 定期清理过期的硬件ID（HWID）历史记录
+ *
  * @author Ronan
  */
 public class LoginCoordinatorTask implements Runnable {

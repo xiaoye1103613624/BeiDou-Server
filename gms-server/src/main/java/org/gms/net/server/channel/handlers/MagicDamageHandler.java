@@ -39,6 +39,10 @@ import org.gms.util.PacketCreator;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 魔法伤害处理器
+ * 处理玩家的魔法攻击（如法师技能），解析攻击包并广播魔法伤害
+ */
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

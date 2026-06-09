@@ -45,16 +45,26 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 商店
+ * 管理NPC商店的加载、物品出售和玩家购买逻辑
+ * 支持星石/金币兑换、充值物品、宠物、技能重置等特殊物品
+ *
  * @author Matze
  */
 public class Shop {
     private static final Logger log = LoggerFactory.getLogger(Shop.class);
+    /** 可充值物品集合 */
     private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
 
+    /** 商店ID */
     private final int id;
+    /** NPC ID */
     private final int npcId;
+    /** 出售物品列表 */
     private final List<ShopItem> items;
+    /** 代币价值（1金币 = ?代币） */
     private final int tokenvalue = 1000000000;
+    /** 代币物品ID（黄金枫叶） */
     private final int token = ItemId.GOLDEN_MAPLE_LEAF;
 
     static {
@@ -64,27 +74,52 @@ public class Shop {
         rechargeableItems.add(ItemId.BLAZE_CAPSULE);
         rechargeableItems.add(ItemId.GLAZE_CAPSULE);
         rechargeableItems.add(ItemId.BALANCED_FURY);
-        rechargeableItems.remove(ItemId.DEVIL_RAIN_THROWING_STAR); // doesn't exist
+        // doesn't exist
+        rechargeableItems.remove(ItemId.DEVIL_RAIN_THROWING_STAR);
         for (int bulletId : ItemId.allBulletIds()) {
             rechargeableItems.add(bulletId);
         }
     }
 
+    /**
+     * 私有构造函数，通过createFromDB创建
+     *
+     * @param id    商店ID
+     * @param npcId NPC ID
+     */
     private Shop(int id, int npcId) {
         this.id = id;
         this.npcId = npcId;
         items = new ArrayList<>();
     }
 
+    /**
+     * 添加物品到商店
+     *
+     * @param item 商店物品
+     */
     private void addItem(ShopItem item) {
         items.add(item);
     }
 
+    /**
+     * 发送商店数据包给客户端
+     *
+     * @param c 客户端
+     */
     public void sendShop(Client c) {
         c.getPlayer().setShop(this);
         c.sendPacket(PacketCreator.getNPCShop(c, getNpcId(), items));
     }
 
+    /**
+     * 玩家购买物品
+     *
+     * @param c        客户端
+     * @param slot     购买项在列表中的索引
+     * @param itemId   物品ID
+     * @param quantity 购买数量
+     */
     public void buy(Client c, short slot, int itemId, short quantity) {
         ShopItem item = findBySlot(slot);
         if (item != null) {
@@ -105,7 +140,8 @@ public class Shop {
                 int amount = (int) Math.min((float) item.getPrice() * quantity, Integer.MAX_VALUE);
                 if (c.getPlayer().getMeso() >= amount) {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                        if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
+                        // Pets can't be bought from shops
+                        if (!ItemConstants.isRechargeable(itemId)) {
                             InventoryManipulator.addById(c, itemId, quantity, "", -1);
                             c.getPlayer().gainMeso(-amount, false);
                         } else {
@@ -171,8 +207,16 @@ public class Shop {
 
     }
 
+    /**
+     * 检查物品是否可出售
+     *
+     * @param item     物品
+     * @param quantity 数量
+     * @return 可出售返回true
+     */
     private static boolean canSell(Item item, short quantity) {
-        if (item == null) { //Basic check
+        // Basic check
+        if (item == null) {
             return false;
         }
 
@@ -190,6 +234,13 @@ public class Shop {
         return true;
     }
 
+    /**
+     * 获取实际出售数量（充值物品按当前充能数出售）
+     *
+     * @param item     物品
+     * @param quantity 请求数量
+     * @return 实际出售数量
+     */
     private static short getSellingQuantity(Item item, short quantity) {
         if (ItemConstants.isRechargeable(item.getItemId())) {
             quantity = item.getQuantity();
@@ -201,6 +252,14 @@ public class Shop {
         return quantity;
     }
 
+    /**
+     * 玩家出售物品给商店
+     *
+     * @param c        客户端
+     * @param type     物品栏类型
+     * @param slot     物品栏位置
+     * @param quantity 出售数量
+     */
     public void sell(Client c, InventoryType type, short slot, short quantity) {
         if (quantity == 0xFFFF || quantity == 0) {
             quantity = 1;
@@ -230,6 +289,12 @@ public class Shop {
         }
     }
 
+    /**
+     * 充能物品（镖/子弹等）
+     *
+     * @param c    客户端
+     * @param slot 物品栏位置
+     */
     public void recharge(Client c, short slot) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Inventory inventory = c.getPlayer().getInventory(InventoryType.USE);
@@ -260,10 +325,23 @@ public class Shop {
 
     }
 
+    /**
+     * 按位置索引查找物品
+     *
+     * @param slot 位置索引
+     * @return 商店物品
+     */
     private ShopItem findBySlot(short slot) {
         return items.get(slot);
     }
 
+    /**
+     * 从数据库创建商店实例
+     *
+     * @param id       商店ID或NPC ID
+     * @param isShopId true=按商店ID查找, false=按NPC ID查找
+     * @return 商店实例，未找到返回null
+     */
     public static Shop createFromDB(int id, boolean isShopId) {
         Shop ret = null;
         int shopId;
@@ -315,10 +393,20 @@ public class Shop {
         return ret;
     }
 
+    /**
+     * 获取NPC ID
+     *
+     * @return NPC ID
+     */
     public int getNpcId() {
         return npcId;
     }
 
+    /**
+     * 获取商店ID
+     *
+     * @return 商店ID
+     */
     public int getId() {
         return id;
     }

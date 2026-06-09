@@ -22,6 +22,10 @@ package org.gms.client.inventory;
 import org.gms.client.Character;
 
 /**
+ * 背包验证
+ * 继承{@link Inventory}，用于物品移动前的安全验证
+ * 在物品移除前创建物品快照，防止物品被误删或丢失
+ *
  * @author Ronan
  */
 public class InventoryProof extends Inventory {

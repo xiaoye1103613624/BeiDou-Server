@@ -24,10 +24,14 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 事件调度服务
+ * 管理频道的游戏事件延迟任务调度，通过分片避免锁竞争
+ *
  * @author Ronan
  */
 public class EventService extends BaseService {
 
+    /** 事件调度器数组，按频道分片 */
     private final EventScheduler[] eventSchedulers = new EventScheduler[GameConfig.getServerInt("channel_locks")];
 
     public EventService() {
@@ -46,12 +50,29 @@ public class EventService extends BaseService {
         }
     }
 
+    /**
+     * 注册事件延迟操作
+     *
+     * @param mapid     地图ID
+     * @param runAction 执行逻辑
+     * @param delay     延迟时间
+     */
     public void registerEventAction(int mapid, Runnable runAction, long delay) {
         eventSchedulers[getChannelSchedulerIndex(mapid)].registerDelayedAction(runAction, delay);
     }
 
+    /**
+     * 事件调度器
+     * 负责事件延迟任务的注册
+     */
     private class EventScheduler extends BaseScheduler {
 
+        /**
+         * 注册延迟操作
+         *
+         * @param runAction 执行逻辑
+         * @param delay     延迟时间
+         */
         public void registerDelayedAction(Runnable runAction, long delay) {
             registerEntry(runAction, runAction, delay);
         }

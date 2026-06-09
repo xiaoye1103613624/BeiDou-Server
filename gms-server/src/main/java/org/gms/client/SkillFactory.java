@@ -85,6 +85,11 @@ import org.gms.server.life.Element;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 技能工厂（单例）
+ * 从WZ文件加载所有技能数据并缓存，按技能ID提供技能对象
+ * 同时管理技能的延迟加载和全局冷却时间
+ */
 public class SkillFactory {
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
     private static final DataProvider datasource = DataProviderFactory.getDataProvider(WZFiles.SKILL);

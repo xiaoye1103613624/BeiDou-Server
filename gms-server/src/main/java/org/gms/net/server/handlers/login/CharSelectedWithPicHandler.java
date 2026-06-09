@@ -15,9 +15,20 @@ import org.gms.util.PacketCreator;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 角色选择处理器（带PIC验证）
+ * 处理客户端在选择角色后输入PIC验证码，验证通过后进入游戏世界
+ */
 public class CharSelectedWithPicHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(CharSelectedWithPicHandler.class);
 
+    /**
+     * 将防多客户端检测结果映射为客户端错误码
+     *
+     * @param res 防多客户端检测结果
+     * @return 客户端错误码
+     */
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {
         return switch (res) {
             case REMOTE_PROCESSING -> 10;
@@ -28,6 +39,13 @@ public class CharSelectedWithPicHandler extends AbstractPacketHandler {
         };
     }
 
+    /**
+     * 处理带PIC的角色选择请求
+     * 先验证PIC码，通过后再进行硬件ID验证和世界重定向
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         String pic = p.readString();

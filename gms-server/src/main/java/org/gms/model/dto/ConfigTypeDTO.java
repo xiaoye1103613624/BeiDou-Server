@@ -7,11 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 配置类型DTO
+ * 返回所有可用的配置类型和子类型列表
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ConfigTypeDTO {
+    /** 配置类型列表 */
     private List<String> types;
+    /** 配置子类型列表 */
     private List<String> subTypes;
 }

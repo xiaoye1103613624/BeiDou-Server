@@ -27,9 +27,19 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
+ * 家族信息打开处理器
+ * 处理玩家打开家族信息面板的操作
+ *
  * @author Ubaware
  */
 public final class OpenFamilyHandler extends AbstractPacketHandler {
+
+    /**
+     * 处理打开家族信息包，检查家族系统是否启用后发送家族信息给客户端
+     *
+     * @param p 输入数据包
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         if (!GameConfig.getServerBoolean("use_family_system")) {

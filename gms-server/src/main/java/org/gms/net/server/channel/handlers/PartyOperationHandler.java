@@ -38,8 +38,18 @@ import org.gms.util.PacketCreator;
 
 import java.util.List;
 
+/**
+ * 队伍操作处理器
+ * 处理队伍相关的所有操作，包括创建、离开、加入、邀请、踢出和转移队长
+ */
 public final class PartyOperationHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理队伍操作包，根据操作类型（创建/离开/加入/邀请/踢出/转移队长）执行对应的队伍逻辑
+     *
+     * @param p 输入数据包，包含操作类型和相关参数
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int operation = p.readByte();

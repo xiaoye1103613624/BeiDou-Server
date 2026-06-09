@@ -99,61 +99,114 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 客户端会话类
+ * 继承Netty的{@link ChannelInboundHandlerAdapter}，管理客户端与服务器之间的网络连接
+ * 处理登录/频道切换、封包收发、多客户端检测、会话超时等
+ * 同时作为玩家的脚本引擎容器，支持NPC对话、任务脚本等交互
+ */
 public class Client extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(Client.class);
 
+    /** 未登录状态 */
     public static final int LOGIN_NOTLOGGEDIN = 0;
+    /** 服务器切换中 */
     public static final int LOGIN_SERVER_TRANSITION = 1;
+    /** 已登录 */
     public static final int LOGIN_LOGGEDIN = 2;
 
+    /** 客户端类型（登录/频道） */
     private final Type type;
+    /** 会话ID */
     private final long sessionId;
+    /** 封包处理器 */
     private final PacketProcessor packetProcessor;
 
+    /** 硬件ID */
     private Hwid hwid;
+    /** 远程地址 */
     private String remoteAddress;
+    /** 是否正在切换服务器 */
     private volatile boolean inTransition;
 
+    /** Netty通道 */
     private io.netty.channel.Channel ioChannel;
+    /** 关联的玩家角色 */
     private Character player;
+    /** 频道号 */
     private int channel = 1;
+    /** 账号ID */
     private int accId = -4;
+    /** 是否已登录 */
     private boolean loggedIn = false;
+    /** 是否正在切换服务器 */
     private boolean serverTransition = false;
+    /** 生日 */
     private Calendar birthday = null;
+    /** 账号名 */
     private String accountName = null;
+    /** 所在世界 */
     private int world;
+    /** 最后心跳时间 */
     private volatile long lastPong;
+    /** GM等级 */
     private int gmlevel;
+    /** MAC地址集合 */
     private Set<String> macs = new HashSet<>();
+    /** 脚本引擎映射 */
     private Map<String, ScriptEngine> engines = new HashMap<>();
+    /** 角色槽位数量 */
     private byte characterSlots = 3;
+    /** 登录尝试次数 */
     private byte loginattempt = 0;
+    /** PIN码 */
     private String pin = "";
+    /** PIN码尝试次数 */
     private int pinattempt = 0;
+    /** PIC码 */
     private String pic = "";
+    /** PIC码尝试次数 */
     private int picattempt = 0;
+    /** 商城切换尝试次数 */
     private byte csattempt = 0;
+    /** 性别 */
     private byte gender = -1;
+    /** 是否正在断开连接 */
     private boolean disconnecting = false;
+    /** 信号量控制并发操作数（最多7个） */
     private final Semaphore actionsSemaphore = new Semaphore(7);
+    /** 通用锁 */
     private final Lock lock = new ReentrantLock(true);
+    /** 编码器锁 */
     private final Lock encoderLock = new ReentrantLock(true);
+    /** 广播锁 */
     private final Lock announcerLock = new ReentrantLock(true);
     // thanks Masterrulax & try2hack for pointing out a bottleneck issue with shared locks, shavit for noticing an opportunity for improvement
+    /** 临时封禁日历 */
     private Calendar tempBanCalendar;
+    /** 投票点数 */
     private int votePoints;
+    /** 投票时间 */
     private int voteTime = -1;
+    /** 可见世界 */
     private int visibleWorlds;
+    /** 上次NPC点击时间 */
     private long lastNpcClick;
+    /** 上次封包时间 */
     private long lastPacket = System.currentTimeMillis();
+    /** 语言 */
     private int lang = 0;
-    // 提供公共方法来获取 sysRescue
+    /** 系统救援（静态实例） */
     @Getter
     private static SystemRescue sysRescue;
 
+    /**
+     * 客户端类型枚举
+     */
     public enum Type {
+        /** 登录服务器 */
         LOGIN,
+        /** 频道服务器 */
         CHANNEL
     }
 

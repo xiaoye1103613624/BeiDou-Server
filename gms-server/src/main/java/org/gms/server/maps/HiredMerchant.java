@@ -56,30 +56,54 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 雇佣商人
+ * 管理玩家雇佣的商人NPC，提供离线商品销售功能，支持24小时运营
+ * 线程安全，使用AtomicBoolean和ReentrantLock管理并发访问
+ *
  * @author XoticStory
  * @author Ronan - concurrency protection
  */
 public class HiredMerchant extends AbstractMapObject {
+    /** 访问者历史记录上限 */
     private static final int VISITOR_HISTORY_LIMIT = 10;
+    /** 黑名单上限 */
     private static final int BLACKLIST_LIMIT = 20;
 
+    /** 所有者ID */
     private final int ownerId;
+    /** 外观物品ID */
     private final int itemId;
+    /** 金币（始终为0） */
     private final int mesos = 0;
+    /** 频道 */
     private final int channel;
+    /** 世界 */
     private final int world;
+    /** 开始时间 */
     private final long start;
+    /** 所有者名称 */
     private String ownerName = "";
+    /** 商店描述 */
     private String description = "";
+    /** 上架物品列表 */
     private final List<PlayerShopItem> items = new LinkedList<>();
+    /** 消息列表 */
     private final List<Pair<String, Byte>> messages = new LinkedList<>();
+    /** 已售物品列表 */
     private final List<SoldItem> sold = new LinkedList<>();
+    /** 商店是否开放 */
     private final AtomicBoolean open = new AtomicBoolean();
+    /** 是否已发布 */
     private boolean published = false;
+    /** 所属地图 */
     private MapleMap map;
+    /** 访问者数组（最多3人） */
     private final Visitor[] visitors = new Visitor[3];
+    /** 访问者历史记录 */
     private final LinkedList<PastVisitor> visitorHistory = new LinkedList<>();
-    private final LinkedHashSet<String> blacklist = new LinkedHashSet<>(); // case-sensitive character names
+    /** 黑名单（区分大小写） */
+    private final LinkedHashSet<String> blacklist = new LinkedHashSet<>();
+    /** 访问者锁，保证多线程安全 */
     private final Lock visitorLock = new ReentrantLock(true);
 
     private record Visitor(Character chr, Instant enteredAt) {}
@@ -196,7 +220,8 @@ public class HiredMerchant extends AbstractMapObject {
                 return i;
             }
         }
-        return -1; //Actually 0 because of the +1's.
+        // Actually 0 because of the +1's.
+        return -1;
     }
 
     private void removeAllVisitors() {
@@ -302,7 +327,8 @@ public class HiredMerchant extends AbstractMapObject {
             if (c.getPlayer().getMeso() >= price) {
                 if (canBuy(c, newItem)) {
                     c.getPlayer().gainMeso(-price, false);
-                    price -= Trade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
+                    // thanks BHB for pointing out trade fees not applying here
+                    price -= Trade.getFee(price);
 
                     synchronized (sold) {
                         sold.add(new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), newItem.getQuantity(), price));
@@ -313,7 +339,8 @@ public class HiredMerchant extends AbstractMapObject {
                         pItem.setDoesExist(false);
                     }
 
-                    if (GameConfig.getServerBoolean("use_announce_shop_item_sold")) {   // idea thanks to Vcoc
+                    if (GameConfig.getServerBoolean("use_announce_shop_item_sold")) {
+                        // idea thanks to Vcoc
                         announceItemSold(newItem, price, getQuantityLeft(pItem.getItem().getItemId()));
                     }
 
@@ -702,7 +729,8 @@ public class HiredMerchant extends AbstractMapObject {
 
     public int getTimeOpen() {
         double openTime = (System.currentTimeMillis() - start) / 60000;
-        openTime /= 1440;   // heuristics since engineered method to count time here is unknown
+        // heuristics since engineered method to count time here is unknown
+        openTime /= 1440;
         openTime *= 1318;
 
         return (int) Math.ceil(openTime);

@@ -30,6 +30,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.npc.NPCScriptManager;
 
 /**
+ * 点击向导处理器
+ * 处理玩家点击向导的操作
+ *
  * @author kevintjuh93
  */
 public class ClickGuideHandler extends AbstractPacketHandler {

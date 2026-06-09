@@ -20,6 +20,10 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * 服务器通道初始化器
+ * 配置Netty通道流水线（pipeline），包括空闲检测、加密编解码、包日志和业务处理器
+ */
 public abstract class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private static final Logger log = LoggerFactory.getLogger(ServerChannelInitializer.class);
     private static final int IDLE_TIME_SECONDS = 30;

@@ -24,15 +24,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ * 现金商城服务类
+ * 管理商城商品的上架、分类查询以及购买记录，支持WZ数据与数据库数据合并
+ */
 @Service
 @AllArgsConstructor
 public class CashShopService {
+    /** 自定义商城商品数据访问对象 */
     private final ModifiedCashItemMapper modifiedCashItemMapper;
 
+    /**
+     * 加载所有自定义商城商品数据
+     *
+     * @return 自定义商城商品列表
+     */
     public List<ModifiedCashItemDO> loadAllModifiedCashItems() {
         return modifiedCashItemMapper.selectAll();
     }
 
+    /**
+     * 获取所有商城分类列表
+     * 从WZ的Category.img中读取分类数据
+     *
+     * @return 商城分类列表
+     */
     public List<CashCategory> getAllCategoryList() {
         DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
         List<CashCategory> cashCategoryList = new ArrayList<>();
@@ -46,6 +62,13 @@ public class CashShopService {
         return cashCategoryList;
     }
 
+    /**
+     * 按分类查询商城商品
+     * 合并WZ数据与数据库数据，以数据库为准覆盖可更新字段
+     *
+     * @param data 分类查询条件，包含分类ID、子分类ID、上架状态、物品ID、物品名称等筛选条件
+     * @return 分页的商城商品列表
+     */
     public Page<CashShopSearchRtnDTO> getCommodityByCategory(CashCategory data) {
         RequireUtil.requireNotNull(data.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
         RequireUtil.requireNotNull(data.getSubId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "subId"));
@@ -93,6 +116,13 @@ public class CashShopService {
                 .page();
     }
 
+    /**
+     * 根据序列号查询单个商城商品
+     * 合并WZ商品数据与数据库中的修改数据
+     *
+     * @param sn 商品序列号
+     * @return 商城商品详细信息
+     */
     public CashShopSearchRtnDTO getCommodityBySn(Integer sn) {
         RequireUtil.requireNotNull(sn, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
         String snStr = String.valueOf(sn);
@@ -109,6 +139,12 @@ public class CashShopService {
         return rtnDTO;
     }
 
+    /**
+     * 修改商品上架状态
+     * 如果上架：只记录与WZ默认值不同的字段到数据库；如果下架：仅记录onSale=0
+     *
+     * @param data 商城商品数据，包含序列号和需要修改的字段值
+     */
     @Transactional(rollbackFor = Exception.class)
     public void changeOnSale(ModifiedCashItemDO data) {
         RequireUtil.requireNotNull(data.getSn(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
@@ -145,6 +181,14 @@ public class CashShopService {
         CashShop.CashItemFactory.loadAllModifiedCashItems();
     }
 
+    /**
+     * 从缓存中查找分类
+     *
+     * @param id    分类ID
+     * @param subId 子分类ID
+     * @return 匹配的商城分类
+     * @throws BizException 未找到分类时抛出
+     */
     private CashCategory getCategory(Integer id, Integer subId) {
         return CashShop.CashItemFactory.getCashCategories().stream()
                 .filter(cc -> Objects.equals(cc.getId(), id) && Objects.equals(cc.getSubId(), subId))
@@ -152,6 +196,13 @@ public class CashShopService {
                 .orElseThrow(() -> new BizException(I18nUtil.getExceptionMessage("CashShopService.getByCategory.exception1")));
     }
 
+    /**
+     * 将WZ商品实体转换为DTO并附加分类信息
+     *
+     * @param cashCategory 商城分类
+     * @param cashItem     WZ商品实体
+     * @return 商城商品DTO，包含分类信息和默认值
+     */
     private CashShopSearchRtnDTO fromCashItem(CashCategory cashCategory, ModifiedCashItemDO cashItem) {
         return CashShopSearchRtnDTO.builder()
                 .categoryId(cashCategory.getId())
@@ -195,6 +246,13 @@ public class CashShopService {
                 .build();
     }
 
+    /**
+     * 用数据库中的商品数据覆盖DTO中的对应字段
+     * 如果数据库字段为null，则保留DTO原值（WZ默认值）
+     *
+     * @param rtnDTO     WZ商品DTO，字段值会被数据库值覆盖
+     * @param dbCashItem 数据库中的商品修改记录
+     */
     private void setDbItemValue(CashShopSearchRtnDTO rtnDTO, ModifiedCashItemDO dbCashItem) {
         rtnDTO.setItemId(Optional.ofNullable(dbCashItem.getItemId()).orElse(rtnDTO.getItemId()));
         rtnDTO.setPrice(Optional.ofNullable(dbCashItem.getPrice()).orElse(rtnDTO.getPrice()));
@@ -215,6 +273,12 @@ public class CashShopService {
         rtnDTO.setPackageSn(Optional.ofNullable(dbCashItem.getPackageSn()).orElse(rtnDTO.getPackageSn()));
     }
 
+    /**
+     * 批量修改商品上架属性
+     * 遍历提交数据，根据操作类型（价格/数量/有效期）设置对应字段后逐一上架
+     *
+     * @param submit 批量上架请求DTO，包含商品列表、操作类型和修改值
+     */
     @Transactional
     public void batchChangeOnSale(CashShopBatchOnSaleReqDTO submit) {
         for (ModifiedCashItemDO data : submit.getData()) {

@@ -66,23 +66,44 @@ public class HexTool {
         return HexFormat.of().parseHex(removeAllSpaces(hexString));
     }
 
+    /**
+     * 移除字符串中的所有空白字符（空格、制表符、换行等）
+     *
+     * @param input 原始字符串
+     * @return 移除空白后的字符串
+     */
     private static String removeAllSpaces(String input) {
         return input.replaceAll("\\s", "");
     }
 
+    /**
+     * 从字节数组中提取可打印字符，特殊字符替换为'.'
+     *
+     * @param bytes 字节数组
+     * @return 可打印字符串
+     */
     public static String toStringFromCharset(final byte[] bytes) {
         byte[] filteredBytes = new byte[bytes.length];
         for (int i = 0; i < bytes.length; i++) {
             if (isSpecialCharacter(bytes[i])) {
+                // 控制字符替换为'.'
                 filteredBytes[i] = '.';
             } else {
+                // 保留原字节低8位
                 filteredBytes[i] = (byte) (bytes[i] & 0xFF);
             }
         }
 
+        // 使用客户端语言对应的字符集构建字符串
         return new String(filteredBytes, CharsetConstants.getCharset(ThreadLocalUtil.getClientLang()));
     }
 
+    /**
+     * 判断字节是否为特殊字符（ASCII控制字符 0~31）
+     *
+     * @param asciiCode 待判断的ASCII码
+     * @return true表示是控制字符
+     */
     private static boolean isSpecialCharacter(byte asciiCode) {
         return asciiCode >= 0 && asciiCode <= 31;
     }

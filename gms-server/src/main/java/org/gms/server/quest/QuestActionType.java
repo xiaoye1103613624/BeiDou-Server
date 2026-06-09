@@ -22,27 +22,50 @@
 package org.gms.server.quest;
 
 /**
+ * 任务动作类型枚举
+ * 定义任务完成后的奖励类型，如经验、物品、金币、技能、声望等
+ * 支持从WZ名称直接映射
+ *
  * @author Matze
  */
 public enum QuestActionType {
+    /** 未定义 */
     UNDEFINED(-1),
+    /** 经验奖励 */
     EXP(0),
+    /** 物品奖励 */
     ITEM(1),
+    /** 下一个任务 */
     NEXTQUEST(2),
+    /** 金币奖励 */
     MESO(3),
+    /** 任务奖励 */
     QUEST(4),
+    /** 技能奖励 */
     SKILL(5),
+    /** 声望奖励 */
     FAME(6),
+    /** Buff奖励 */
     BUFF(7),
+    /** 宠物技能奖励 */
     PETSKILL(8),
+    /** 是 */
     YES(9),
+    /** 否 */
     NO(10),
+    /** NPC */
     NPC(11),
+    /** 最低等级 */
     MIN_LEVEL(12),
+    /** 普通自动启动 */
     NORMAL_AUTO_START(13),
+    /** 宠物亲密度 */
     PETTAMENESS(14),
+    /** 宠物速度 */
     PETSPEED(15),
+    /** 信息 */
     INFO(16),
+    /** 零 */
     ZERO(16);
 
     final byte type;

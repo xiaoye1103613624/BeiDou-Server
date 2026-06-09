@@ -28,6 +28,10 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
 
+/**
+ * 自动仇恨处理器
+ * 处理客户端上报的怪物自动仇恨（Auto Aggro）事件
+ */
 public final class AutoAggroHandler extends AbstractPacketHandler {
 
     @Override

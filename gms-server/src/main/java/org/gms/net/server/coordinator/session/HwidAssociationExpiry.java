@@ -7,6 +7,10 @@ import java.time.Instant;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 
+/**
+ * 硬件ID关联过期计算器
+ * 根据账号关联度计算硬件ID绑定过期时间
+ */
 public class HwidAssociationExpiry {
     public static Instant getHwidAccountExpiry(int relevance) {
         return Instant.ofEpochMilli(Server.getInstance().getCurrentTime()).plusMillis(hwidExpirationUpdate(relevance));

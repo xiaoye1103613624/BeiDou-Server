@@ -26,11 +26,15 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
 
 /**
+ * 信息动作
+ * 设置任务进度信息字符串，用于脚本读取和判断
+ *
  * @author Ronan
  */
 public class InfoAction extends AbstractQuestAction {
-
+    /** 信息字符串 */
     private String info;
+    /** 关联的任务ID */
     private final int questID;
 
     public InfoAction(Quest quest, Data data) {

@@ -25,9 +25,15 @@ import org.gms.client.Client;
 import org.gms.scripting.AbstractPlayerInteraction;
 
 /**
- * @author kevintjuh93
+ * 物品脚本方法
+ * 为物品脚本提供可调用的玩家操作方法，继承自AbstractPlayerInteraction
  */
 public class ItemScriptMethods extends AbstractPlayerInteraction {
+    /**
+     * 构造函数
+     *
+     * @param c 客户端
+     */
     public ItemScriptMethods(Client c) {
         super(c);
     }

@@ -29,6 +29,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 /**
+ * 扭蛋经验券使用处理器
+ * 处理玩家使用扭蛋经验券的操作
+ *
  * @author kevintjuh93
  * <p>
  * Modified by -- Ronan - concurrency protection

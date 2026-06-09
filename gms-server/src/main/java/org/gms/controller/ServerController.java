@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 服务器控制器
+ * 处理服务器启动、停止、世界列表和频道列表等查询请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/server")

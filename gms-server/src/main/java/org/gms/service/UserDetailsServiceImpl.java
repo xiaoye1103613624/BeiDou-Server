@@ -15,15 +15,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * 用户详情服务实现类
+ * 从数据库加载用户信息并验证是否为Web管理员
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    /** 账号数据访问对象 */
     private final AccountsMapper userDao;
 
+    /**
+     * 构造函数，注入账号数据访问对象
+     *
+     * @param userRepository 账号数据访问对象
+     */
     @Autowired
     public UserDetailsServiceImpl(AccountsMapper userRepository) {
         this.userDao = userRepository;
     }
 
+    /**
+     * 根据用户名加载用户详情
+     * 仅允许webadmin=1的用户登录后台管理系统
+     *
+     * @param username 用户名
+     * @return 用户详情，非管理员返回null
+     * @throws UsernameNotFoundException 用户不存在时抛出
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

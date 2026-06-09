@@ -21,6 +21,10 @@
 */
 package org.gms.provider.wz;
 
+/**
+ * WZ数据类型枚举
+ * 定义WZ文件中支持的数据类型，包括无类型、字符串、双精度、浮点数、整数、短整数、向量和位图等
+ */
 public enum DataType {
     NONE,
     IMG_0x00,

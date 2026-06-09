@@ -41,6 +41,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * XML DOM数据节点实现
+ * 基于DOM解析XML格式的WZ数据，提供子节点遍历和属性访问功能
+ */
 public class XMLDomMapleData implements Data {
     private final Node node;
     private Path imageDataDir;

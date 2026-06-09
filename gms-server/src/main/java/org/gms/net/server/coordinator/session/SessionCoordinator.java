@@ -44,31 +44,57 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
+ * 会话协调器
+ * 管理登录会话、防止多客户端登录、维护在线客户端列表
+ *
  * @author Ronan
  */
 public class SessionCoordinator {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(SessionCoordinator.class);
+    /** 单例实例 */
     private static final SessionCoordinator instance = new SessionCoordinator();
 
+    /**
+     * 获取单例实例
+     *
+     * @return 会话协调器实例
+     */
     public static SessionCoordinator getInstance() {
         return instance;
     }
 
+    /**
+     * 防多客户端结果枚举
+     */
     public enum AntiMulticlientResult {
+        /** 成功登录 */
         SUCCESS,
+        /** 远程账号已登录 */
         REMOTE_LOGGEDIN,
+        /** 远程达到账号限制 */
         REMOTE_REACHED_LIMIT,
+        /** 远程正在处理中 */
         REMOTE_PROCESSING,
+        /** 远程无匹配 */
         REMOTE_NO_MATCH,
+        /** 太多登录尝试 */
         MANY_ACCOUNT_ATTEMPTS,
+        /** 协调器错误 */
         COORDINATOR_ERROR
     }
 
+    /** 登录会话初始化器 */
     private final SessionInitialization sessionInit = new SessionInitialization();
+    /** 登录存储 */
     private final LoginStorage loginStorage = new LoginStorage();
-    private final Map<Integer, Client> onlineClients = new HashMap<>(); // Key: account id
-    private final Set<Hwid> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
-    private final Map<String, Client> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
+    /** 在线客户端映射，key为账号ID */
+    private final Map<Integer, Client> onlineClients = new HashMap<>();
+    /** 在线远程硬件ID集合 */
+    private final Set<Hwid> onlineRemoteHwids = new HashSet<>();
+    /** 登录中的远程主机映射，key为IP+硬件ID，value为客户端 */
+    private final Map<String, Client> loginRemoteHosts = new ConcurrentHashMap<>();
+    /** 主机硬件ID缓存 */
     private final HostHwidCache hostHwidCache = new HostHwidCache();
 
     private SessionCoordinator() {
@@ -99,6 +125,13 @@ public class SessionCoordinator {
         return false;
     }
 
+    /**
+     * 获取客户端会话的远程主机标识
+     * 结合IP地址和硬件ID生成唯一标识
+     *
+     * @param client 客户端
+     * @return 远程主机标识字符串
+     */
     public static String getSessionRemoteHost(Client client) {
         Hwid hwid = client.getHwid();
 
@@ -127,6 +160,13 @@ public class SessionCoordinator {
         }
     }
 
+    /**
+     * 检查是否可以启动登录会话
+     * 进行防多客户端检测和远程主机冲突检查
+     *
+     * @param client 客户端
+     * @return 是否允许启动登录会话
+     */
     public boolean canStartLoginSession(Client client) {
         if (!GameConfig.getServerBoolean("deterred_multi_client")) {
             return true;
@@ -183,6 +223,16 @@ public class SessionCoordinator {
         loginRemoteHosts.remove(remoteHost);
     }
 
+    /**
+     * 尝试完成登录会话验证
+     * 验证账号、硬件ID和在线状态
+     *
+     * @param client      客户端
+     * @param hwid        硬件ID
+     * @param accountId   账号ID
+     * @param routineCheck 是否为例行检查
+     * @return 防多客户端检测结果
+     */
     public AntiMulticlientResult attemptLoginSession(Client client, Hwid hwid, int accountId, boolean routineCheck) {
         if (!GameConfig.getServerBoolean("deterred_multi_client")) {
             client.setHwid(hwid);
@@ -215,6 +265,15 @@ public class SessionCoordinator {
         }
     }
 
+    /**
+     * 尝试完成游戏会话验证
+     * 验证从登录阶段到游戏阶段的硬件ID一致性
+     *
+     * @param client    客户端
+     * @param accountId 账号ID
+     * @param hwid      硬件ID
+     * @return 防多客户端检测结果
+     */
     public AntiMulticlientResult attemptGameSession(Client client, int accountId, Hwid hwid) {
         final String remoteHost = getSessionRemoteHost(client);
         if (!GameConfig.getServerBoolean("deterred_multi_client")) {
@@ -294,6 +353,12 @@ public class SessionCoordinator {
         return fakeClient;
     }
 
+    /**
+     * 关闭会话，清理在线状态和硬件ID记录
+     *
+     * @param client      客户端
+     * @param immediately 是否立即关闭连接
+     */
     public void closeSession(Client client, Boolean immediately) {
         if (client == null) {
             client = fetchInTransitionSessionClient(client);
@@ -322,25 +387,46 @@ public class SessionCoordinator {
         }
     }
 
+    /**
+     * 获取登录会话硬件ID
+     *
+     * @param client 客户端
+     * @return 硬件ID，未找到则返回null
+     */
     public Hwid pickLoginSessionHwid(Client client) {
         String remoteHost = client.getRemoteAddress();
         // thanks BHB, resinate for noticing players from same network not being able to login
         return hostHwidCache.removeEntryAndGetItsHwid(remoteHost);
     }
 
+    /**
+     * 获取游戏会话硬件ID
+     *
+     * @param client 客户端
+     * @return 硬件ID，未找到则返回null
+     */
     public Hwid getGameSessionHwid(Client client) {
         String remoteHost = getSessionRemoteHost(client);
         return hostHwidCache.getEntryHwid(remoteHost);
     }
 
+    /**
+     * 清除过期的硬件ID缓存记录
+     */
     public void clearExpiredHwidHistory() {
         hostHwidCache.clearExpired();
     }
 
+    /**
+     * 更新登录历史，清除过期记录
+     */
     public void runUpdateLoginHistory() {
         loginStorage.clearExpiredAttempts();
     }
 
+    /**
+     * 打印会话跟踪信息到日志
+     */
     public void printSessionTrace() {
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, Client>> elist = new ArrayList<>(onlineClients.entrySet());

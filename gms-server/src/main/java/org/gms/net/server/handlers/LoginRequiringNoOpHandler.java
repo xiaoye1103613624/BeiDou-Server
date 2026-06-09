@@ -25,16 +25,38 @@ import org.gms.client.Client;
 import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 需要登录的空操作处理器
+ * 对已登录客户端的数据包不做任何处理（占位处理器），单例模式
+ */
 public final class LoginRequiringNoOpHandler implements PacketHandler {
+    /** 单例实例 */
     private static final LoginRequiringNoOpHandler instance = new LoginRequiringNoOpHandler();
 
+    /**
+     * 获取单例实例
+     *
+     * @return 单例
+     */
     public static LoginRequiringNoOpHandler getInstance() {
         return instance;
     }
 
+    /**
+     * 空操作处理
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     public void handlePacket(InPacket p, Client c) {
     }
 
+    /**
+     * 验证客户端状态
+     *
+     * @param c 客户端会话
+     * @return 仅已登录状态返回true
+     */
     public boolean validateState(Client c) {
         return c.isLoggedIn();
     }

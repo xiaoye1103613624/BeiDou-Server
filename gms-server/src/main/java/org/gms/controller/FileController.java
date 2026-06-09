@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+/**
+ * 文件控制器
+ * 处理脚本文件的目录浏览、读写和删除请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/file")

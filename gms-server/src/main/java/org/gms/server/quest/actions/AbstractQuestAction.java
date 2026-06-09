@@ -27,12 +27,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 抽象任务动作基类
+ * 定义任务完成后执行动作的基本框架，所有具体奖励动作继承此类
+ * 子类需实现run()执行动作和processData()解析配置
+ *
  * @author Tyler (Twdtwd)
  */
 public abstract class AbstractQuestAction {
+    /** 动作类型 */
     private final QuestActionType type;
+    /** 关联的任务ID */
     protected int questID;
 
+    /**
+     * 构造任务动作
+     *
+     * @param action 动作类型
+     * @param quest  关联任务
+     */
     public AbstractQuestAction(QuestActionType action, Quest quest) {
         this.type = action;
         this.questID = quest.getId();

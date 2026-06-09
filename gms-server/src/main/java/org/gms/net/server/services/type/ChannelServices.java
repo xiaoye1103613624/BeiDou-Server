@@ -30,28 +30,53 @@ import org.gms.net.server.services.task.channel.MobStatusService;
 import org.gms.net.server.services.task.channel.OverallService;
 
 /**
+ * 频道服务枚举
+ * 定义频道级别的服务类型及其对应的服务实现类
+ *
  * @author Ronan
  */
 public enum ChannelServices implements ServiceType {
 
+    /** 怪物状态服务 */
     MOB_STATUS(MobStatusService.class),
+    /** 怪物动画服务 */
     MOB_ANIMATION(MobAnimationService.class),
+    /** 怪物清技能服务 */
     MOB_CLEAR_SKILL(MobClearSkillService.class),
+    /** 怪物迷雾服务 */
     MOB_MIST(MobMistService.class),
+    /** 事件服务 */
     EVENT(EventService.class),
+    /** 综合服务 */
     OVERALL(OverallService.class);
 
+    /** 服务实现类 */
     private final Class<? extends BaseService> s;
 
+    /**
+     * 构造方法
+     *
+     * @param service 服务实现类
+     */
     ChannelServices(Class<? extends BaseService> service) {
         s = service;
     }
 
+    /**
+     * 创建服务实例
+     *
+     * @return 服务包装实例
+     */
     @Override
     public Service createService() {
         return new Service(s);
     }
 
+    /**
+     * 获取所有枚举值
+     *
+     * @return 枚举值数组
+     */
     @Override
     public ChannelServices[] enumValues() {
         return ChannelServices.values();

@@ -37,9 +37,20 @@ import org.gms.server.life.PlayerNPC;
 import org.gms.server.maps.MapObject;
 import org.gms.util.PacketCreator;
 
+/**
+ * NPC对话处理器
+ * 处理玩家与NPC的对话交互，包括普通NPC对话、抽奖机、Maple TV、转生NPC等特殊NPC的脚本路由
+ */
 public final class NPCTalkHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(NPCTalkHandler.class);
 
+    /**
+     * 处理NPC对话包，根据NPC类型路由到对应的脚本，包括普通NPC、玩家NPC、抽奖机等
+     *
+     * @param p 输入数据包，包含NPC的对象ID
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         if (c.getPlayer().getMapId() == MapId.JAIL) {   //监狱地图不可使用脚本

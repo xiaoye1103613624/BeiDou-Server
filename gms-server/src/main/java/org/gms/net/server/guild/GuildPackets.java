@@ -15,16 +15,30 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 公会数据包工厂类
+ * 生成公会和联盟相关的网络数据包，包括信息展示、成员变更、排名等
+ */
 public class GuildPackets {
+
+    /**
+     * 生成显示公会信息的数据包
+     *
+     * @param chr 角色对象，若为null则显示空公会
+     * @return 公会信息数据包
+     */
     public static Packet showGuildInfo(Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
-        p.writeByte(0x1A); //signature for showing guild info
-        if (chr == null) { //show empty guild (used for leaving, expelled)
+        // signature for showing guild info
+        p.writeByte(0x1A);
+        // show empty guild (used for leaving, expelled)
+        if (chr == null) {
             p.writeByte(0);
             return p;
         }
         Guild g = chr.getClient().getWorldServer().getGuild(chr.getMGC());
-        if (g == null) { //failed to read from DB - don't show a guild
+        // failed to read from DB - don't show a guild
+        if (g == null) {
             p.writeByte(0);
             return p;
         }
@@ -32,15 +46,18 @@ public class GuildPackets {
             p.writeByte(0);
             return p;
         }
-        p.writeByte(1); //bInGuild
+        // bInGuild
+        p.writeByte(1);
         p.writeInt(g.getId());
         p.writeString(g.getName());
         for (int i = 1; i <= 5; i++) {
             p.writeString(g.getRankTitle(i));
         }
         Collection<GuildCharacter> members = g.getMembers();
-        p.writeByte(members.size()); //then it is the size of all the members
-        for (GuildCharacter mgc : members) {//and each of their character ids o_O
+        // then it is the size of all the members
+        p.writeByte(members.size());
+        // and each of their character ids o_O
+        for (GuildCharacter mgc : members) {
             p.writeInt(mgc.getId());
         }
         for (GuildCharacter mgc : members) {
@@ -63,6 +80,14 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会成员在线状态变更数据包
+     *
+     * @param guildId 公会ID
+     * @param chrId   角色ID
+     * @param bOnline 是否在线
+     * @return 在线状态数据包
+     */
     public static Packet guildMemberOnline(int guildId, int chrId, boolean bOnline) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x3d);
@@ -72,6 +97,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会邀请数据包
+     *
+     * @param guildId  公会ID
+     * @param charName 被邀请角色名称
+     * @return 邀请数据包
+     */
     public static Packet guildInvite(int guildId, String charName) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x05);
@@ -80,6 +112,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会创建消息数据包
+     *
+     * @param masterName 会长名称
+     * @param guildName  公会名称
+     * @return 创建消息数据包
+     */
     public static Packet createGuildMessage(String masterName, String guildName) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x3);
@@ -90,7 +129,7 @@ public class GuildPackets {
     }
 
     /**
-     * Gets a Heracle/guild message packet.
+     * 获取通用公会消息数据包
      * <p>
      * Possible values for <code>code</code>:<br> 28: guild name already in use<br>
      * 31: problem in locating players during agreement<br> 33/40: already joined a guild<br>
@@ -99,8 +138,8 @@ public class GuildPackets {
      * 45/48: character not in guild<br> 52: problem in disbanding guild<br> 56: admin cannot make guild<br>
      * 57: problem in increasing guild size<br>
      *
-     * @param code The response code.
-     * @return The guild message packet.
+     * @param code 响应码
+     * @return 公会消息数据包
      */
     public static Packet genericGuildMessage(byte code) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
@@ -109,14 +148,14 @@ public class GuildPackets {
     }
 
     /**
-     * Gets a guild message packet appended with target name.
+     * 获取带目标名称的公会消息数据包
      * <p>
      * 53: player not accepting guild invites<br>
      * 54: player already managing an invite<br> 55: player denied an invite<br>
      *
-     * @param code       The response code.
-     * @param targetName The initial player target of the invitation.
-     * @return The guild message packet.
+     * @param code       响应码
+     * @param targetName 目标角色名称
+     * @return 公会消息数据包
      */
     public static Packet responseGuildMessage(byte code, String targetName) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
@@ -125,6 +164,12 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成新成员加入公会数据包
+     *
+     * @param mgc 公会角色
+     * @return 新成员数据包
+     */
     public static Packet newGuildMember(GuildCharacter mgc) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x27);
@@ -133,14 +178,24 @@ public class GuildPackets {
         p.writeFixedString(StringUtil.getRightPaddedStr(mgc.getName(), '\0', 13));
         p.writeInt(mgc.getJobId());
         p.writeInt(mgc.getLevel());
-        p.writeInt(mgc.getGuildRank()); //should be always 5 but whatevs
-        p.writeInt(mgc.isOnline() ? 1 : 0); //should always be 1 too
-        p.writeInt(1); //? could be guild signature, but doesn't seem to matter
+        // should be always 5 but whatevs
+        p.writeInt(mgc.getGuildRank());
+        // should always be 1 too
+        p.writeInt(mgc.isOnline() ? 1 : 0);
+        // ? could be guild signature, but doesn't seem to matter
+        p.writeInt(1);
         p.writeInt(3);
         return p;
     }
 
-    //someone leaving, mode == 0x2c for leaving, 0x2f for expelled
+    /**
+     * 生成成员离开/被踢出公会数据包
+     * mode == 0x2c for leaving, 0x2f for expelled
+     *
+     * @param mgc       公会角色
+     * @param bExpelled 是否被踢出
+     * @return 成员离开数据包
+     */
     public static Packet memberLeft(GuildCharacter mgc, boolean bExpelled) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(bExpelled ? 0x2f : 0x2c);
@@ -150,7 +205,12 @@ public class GuildPackets {
         return p;
     }
 
-    //rank change
+    /**
+     * 生成公会等级变更数据包
+     *
+     * @param mgc 公会角色
+     * @return 等级变更数据包
+     */
     public static Packet changeRank(GuildCharacter mgc) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x40);
@@ -160,6 +220,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会公告数据包
+     *
+     * @param guildId 公会ID
+     * @param notice  公告内容
+     * @return 公告数据包
+     */
     public static Packet guildNotice(int guildId, String notice) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x44);
@@ -168,6 +235,12 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会成员等级/职业更新数据包
+     *
+     * @param mgc 公会角色
+     * @return 更新数据包
+     */
     public static Packet guildMemberLevelJobUpdate(GuildCharacter mgc) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x3C);
@@ -178,6 +251,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会等级头衔变更数据包
+     *
+     * @param guildId 公会ID
+     * @param ranks   等级头衔数组
+     * @return 头衔变更数据包
+     */
     public static Packet rankTitleChange(int guildId, String[] ranks) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x3E);
@@ -188,6 +268,12 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会解散数据包
+     *
+     * @param guildId 公会ID
+     * @return 解散数据包
+     */
     public static Packet guildDisband(int guildId) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x32);
@@ -196,6 +282,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会任务等待通知数据包
+     *
+     * @param channel    频道号
+     * @param waitingPos 等待位置
+     * @return 等待通知数据包
+     */
     public static Packet guildQuestWaitingNotice(byte channel, int waitingPos) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x4C);
@@ -204,6 +297,16 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会徽章变更数据包
+     *
+     * @param guildId  公会ID
+     * @param bg       徽标背景
+     * @param bgcolor  徽标背景颜色
+     * @param logo     徽标
+     * @param logoColor 徽标颜色
+     * @return 徽章变更数据包
+     */
     public static Packet guildEmblemChange(int guildId, short bg, byte bgcolor, short logo, byte logoColor) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x42);
@@ -215,6 +318,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会容量变更数据包
+     *
+     * @param guildId  公会ID
+     * @param capacity 新容量
+     * @return 容量变更数据包
+     */
     public static Packet guildCapacityChange(int guildId, int capacity) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x3A);
@@ -223,6 +333,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 添加公告板帖子信息到数据包
+     *
+     * @param p  数据包
+     * @param rs 结果集
+     * @throws SQLException 数据库异常
+     */
     public static void addThread(final OutPacket p, ResultSet rs) throws SQLException {
         p.writeInt(rs.getInt("localthreadid"));
         p.writeInt(rs.getInt("postercid"));
@@ -232,6 +349,14 @@ public class GuildPackets {
         p.writeInt(rs.getInt("replycount"));
     }
 
+    /**
+     * 生成公告板帖子列表数据包
+     *
+     * @param rs    结果集
+     * @param start 起始位置
+     * @return 帖子列表数据包
+     * @throws SQLException 数据库异常
+     */
     public static Packet BBSThreadList(ResultSet rs, int start) throws SQLException {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_BBS_PACKET);
         p.writeByte(0x06);
@@ -242,15 +367,19 @@ public class GuildPackets {
             return p;
         }
         int threadCount = rs.getRow();
-        if (rs.getInt("localthreadid") == 0) { //has a notice
+        // has a notice
+        if (rs.getInt("localthreadid") == 0) {
             p.writeByte(1);
             addThread(p, rs);
-            threadCount--; //one thread didn't count (because it's a notice)
+            // one thread didn't count (because it's a notice)
+            threadCount--;
         } else {
             p.writeByte(0);
         }
-        if (!rs.absolute(start + 1)) { //seek to the thread before where we start
-            rs.first(); //uh, we're trying to start at a place past possible
+        // seek to the thread before where we start
+        if (!rs.absolute(start + 1)) {
+            // uh, we're trying to start at a place past possible
+            rs.first();
             start = 0;
         }
         p.writeInt(threadCount);
@@ -262,6 +391,16 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成显示单个帖子的数据包
+     *
+     * @param localthreadid 本地帖子ID
+     * @param threadRS      帖子结果集
+     * @param repliesRS     回复结果集
+     * @return 帖子详情数据包
+     * @throws SQLException 数据库异常
+     * @throws RuntimeException 回复数量不匹配
+     */
     public static Packet showThread(int localthreadid, ResultSet threadRS, ResultSet repliesRS) throws SQLException, RuntimeException {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_BBS_PACKET);
         p.writeByte(0x07);
@@ -290,15 +429,25 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会排行榜数据包
+     *
+     * @param npcid NPC ID
+     * @param rs    结果集
+     * @return 排行榜数据包
+     * @throws SQLException 数据库异常
+     */
     public static Packet showGuildRanks(int npcid, ResultSet rs) throws SQLException {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x49);
         p.writeInt(npcid);
-        if (!rs.last()) { //no guilds o.o
+        // no guilds o.o
+        if (!rs.last()) {
             p.writeInt(0);
             return p;
         }
-        p.writeInt(rs.getRow()); //number of entries
+        // number of entries
+        p.writeInt(rs.getRow());
         rs.beforeFirst();
         while (rs.next()) {
             p.writeString(rs.getString("name"));
@@ -311,6 +460,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成玩家排行榜数据包
+     *
+     * @param npcid        NPC ID
+     * @param worldRanking 世界排名列表
+     * @return 排行榜数据包
+     */
     public static Packet showPlayerRanks(int npcid, List<Pair<String, Integer>> worldRanking) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x49);
@@ -331,6 +487,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成更新公会GP数据包
+     *
+     * @param guildId 公会ID
+     * @param GP      公会GP值
+     * @return GP更新数据包
+     */
     public static Packet updateGP(int guildId, int GP) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x48);
@@ -339,6 +502,12 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 将公会信息写入数据包
+     *
+     * @param p     数据包
+     * @param guild 公会对象
+     */
     public static void getGuildInfo(OutPacket p, Guild guild) {
         p.writeInt(guild.getId());
         p.writeString(guild.getName());
@@ -369,6 +538,12 @@ public class GuildPackets {
         p.writeInt(guild.getAllianceId());
     }
 
+    /**
+     * 生成联盟信息数据包
+     *
+     * @param alliance 联盟对象
+     * @return 联盟信息数据包
+     */
     public static Packet getAllianceInfo(Alliance alliance) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0C);
@@ -379,7 +554,8 @@ public class GuildPackets {
             p.writeString(alliance.getRankTitle(i));
         }
         p.writeByte(alliance.getGuilds().size());
-        p.writeInt(alliance.getCapacity()); // probably capacity
+        // probably capacity
+        p.writeInt(alliance.getCapacity());
         for (Integer guild : alliance.getGuilds()) {
             p.writeInt(guild);
         }
@@ -387,6 +563,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成更新联盟信息数据包
+     *
+     * @param alliance 联盟对象
+     * @param world    世界ID
+     * @return 更新联盟信息数据包
+     */
     public static Packet updateAllianceInfo(Alliance alliance, int world) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0F);
@@ -399,7 +582,8 @@ public class GuildPackets {
         for (Integer guild : alliance.getGuilds()) {
             p.writeInt(guild);
         }
-        p.writeInt(alliance.getCapacity()); // probably capacity
+        // probably capacity
+        p.writeInt(alliance.getCapacity());
         p.writeShort(0);
         for (Integer guildid : alliance.getGuilds()) {
             getGuildInfo(p, Server.getInstance().getGuild(guildid, world));
@@ -407,6 +591,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成联盟公会列表数据包
+     *
+     * @param alliance 联盟对象
+     * @param worldId  世界ID
+     * @return 联盟公会列表数据包
+     */
     public static Packet getGuildAlliances(Alliance alliance, int worldId) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0D);
@@ -417,6 +608,14 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成添加公会到联盟的数据包
+     *
+     * @param alliance 联盟对象
+     * @param newGuild 新公会ID
+     * @param c        客户端
+     * @return 添加公会数据包
+     */
     public static Packet addGuildToAlliance(Alliance alliance, int newGuild, Client c) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x12);
@@ -436,6 +635,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成联盟成员在线状态数据包
+     *
+     * @param mc     角色对象
+     * @param online 是否在线
+     * @return 在线状态数据包
+     */
     public static Packet allianceMemberOnline(Character mc, boolean online) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0E);
@@ -446,6 +652,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成联盟公告数据包
+     *
+     * @param id     联盟ID
+     * @param notice 公告内容
+     * @return 联盟公告数据包
+     */
     public static Packet allianceNotice(int id, String notice) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x1C);
@@ -454,6 +667,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成变更联盟等级头衔数据包
+     *
+     * @param alliance 联盟ID
+     * @param ranks    头衔数组
+     * @return 头衔变更数据包
+     */
     public static Packet changeAllianceRankTitle(int alliance, String[] ranks) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x1A);
@@ -464,6 +684,12 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成更新联盟成员职业/等级数据包
+     *
+     * @param mc 角色对象
+     * @return 更新数据包
+     */
     public static Packet updateAllianceJobLevel(Character mc) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x18);
@@ -475,6 +701,14 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成从联盟中移除公会数据包
+     *
+     * @param alliance      联盟对象
+     * @param expelledGuild 被移除的公会ID
+     * @param worldId       世界ID
+     * @return 移除公会数据包
+     */
     public static Packet removeGuildFromAlliance(Alliance alliance, int expelledGuild, int worldId) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x10);
@@ -495,6 +729,12 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成解散联盟数据包
+     *
+     * @param alliance 联盟ID
+     * @return 解散联盟数据包
+     */
     public static Packet disbandAlliance(int alliance) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x1D);
@@ -502,6 +742,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成联盟邀请数据包
+     *
+     * @param allianceid 联盟ID
+     * @param chr        被邀请角色
+     * @return 联盟邀请数据包
+     */
     public static Packet allianceInvite(int allianceid, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x03);
@@ -511,12 +758,25 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会Boss治疗者移动数据包
+     *
+     * @param nY 新Y位置
+     * @return 移动数据包
+     */
     public static Packet GuildBoss_HealerMove(short nY) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_BOSS_HEALER_MOVE);
-        p.writeShort(nY); //New Y Position
+        // New Y Position
+        p.writeShort(nY);
         return p;
     }
 
+    /**
+     * 生成公会Boss滑轮状态变更数据包
+     *
+     * @param nState 滑轮状态
+     * @return 状态变更数据包
+     */
     public static Packet GuildBoss_PulleyStateChange(byte nState) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_BOSS_PULLEY_STATE_CHANGE);
         p.writeByte(nState);
@@ -524,9 +784,12 @@ public class GuildPackets {
     }
 
     /**
-     * Guild Name & Mark update packet, thanks to Arnah (Vertisy)
+     * 生成公会名称变更数据包
+     * thanks to Arnah (Vertisy)
      *
-     * @param guildName The Guild name, blank for nothing.
+     * @param chrid     角色ID
+     * @param guildName 公会名称，空字符串表示无
+     * @return 名称变更数据包
      */
     public static Packet guildNameChanged(int chrid, String guildName) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_NAME_CHANGED);
@@ -535,6 +798,13 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成公会徽标变更数据包
+     *
+     * @param chrId 角色ID
+     * @param guild 公会对象
+     * @return 徽标变更数据包
+     */
     public static Packet guildMarkChanged(int chrId, Guild guild) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_MARK_CHANGED);
         p.writeInt(chrId);
@@ -545,7 +815,13 @@ public class GuildPackets {
         return p;
     }
 
-
+    /**
+     * 生成显示联盟信息数据包
+     *
+     * @param allianceid 联盟ID
+     * @param playerid   玩家ID
+     * @return 显示信息数据包
+     */
     public static Packet sendShowInfo(int allianceid, int playerid) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x02);
@@ -554,6 +830,14 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成发送联盟邀请数据包
+     *
+     * @param allianceid 联盟ID
+     * @param playerid   玩家ID
+     * @param guildname  公会名称
+     * @return 邀请数据包
+     */
     public static Packet sendInvitation(int allianceid, int playerid, final String guildname) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x05);
@@ -563,6 +847,15 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成变更公会联盟数据包
+     *
+     * @param allianceid 联盟ID
+     * @param playerid   玩家ID
+     * @param guildid    公会ID
+     * @param option     选项
+     * @return 变更数据包
+     */
     public static Packet sendChangeGuild(int allianceid, int playerid, int guildid, int option) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x07);
@@ -573,6 +866,14 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成变更联盟盟主数据包
+     *
+     * @param allianceid 联盟ID
+     * @param playerid   玩家ID
+     * @param victim     新任盟主ID
+     * @return 变更盟主数据包
+     */
     public static Packet sendChangeLeader(int allianceid, int playerid, int victim) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x08);
@@ -582,6 +883,15 @@ public class GuildPackets {
         return p;
     }
 
+    /**
+     * 生成变更联盟等级数据包
+     *
+     * @param allianceid 联盟ID
+     * @param playerid   玩家ID
+     * @param int1       参数1
+     * @param byte1      参数2
+     * @return 变更等级数据包
+     */
     public static Packet sendChangeRank(int allianceid, int playerid, int int1, byte byte1) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x09);

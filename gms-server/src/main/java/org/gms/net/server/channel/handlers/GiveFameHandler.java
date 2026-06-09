@@ -31,7 +31,12 @@ import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 人气赠送处理器
+ * 处理玩家赠送/降低他人人气值的操作，包含每日限制和同月限制检测
+ */
 public final class GiveFameHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(GiveFameHandler.class);
 
     @Override

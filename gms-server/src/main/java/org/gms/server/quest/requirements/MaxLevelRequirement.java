@@ -28,10 +28,14 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 最高等级需求
+ * 检查玩家等级是否不超过任务要求的最高等级
+ *
  * @author Tyler (Twdtwd)
  */
 public class MaxLevelRequirement extends AbstractQuestRequirement {
-    private int maxLevel;
+    /** 最高等级 */
+    private int maxLevel = 0;
 
 
     public MaxLevelRequirement(Quest quest, Data data) {
@@ -40,7 +44,9 @@ public class MaxLevelRequirement extends AbstractQuestRequirement {
     }
 
     /**
-     * @param data
+     * 从WZ数据中解析最高等级限制
+     *
+     * @param data WZ数据
      */
     @Override
     public void processData(Data data) {

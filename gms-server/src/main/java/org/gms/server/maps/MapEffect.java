@@ -25,24 +25,52 @@ import org.gms.client.Client;
 import org.gms.net.packet.Packet;
 import org.gms.util.PacketCreator;
 
+/**
+ * 地图特效
+ * 管理地图上的视觉特效，包括消息文字和物品特效，支持开始和销毁
+ */
 public class MapEffect {
+    /** 特效消息文字 */
     private final String msg;
+    /** 特效物品ID */
     private final int itemId;
+    /** 是否激活，默认true */
     private final boolean active = true;
 
+    /**
+     * 构造方法
+     *
+     * @param msg    特效消息文字
+     * @param itemId 特效物品ID
+     */
     public MapEffect(String msg, int itemId) {
         this.msg = msg;
         this.itemId = itemId;
     }
 
+    /**
+     * 生成销毁特效的数据包
+     *
+     * @return 销毁特效的网络包
+     */
     public final Packet makeDestroyData() {
         return PacketCreator.removeMapEffect();
     }
 
+    /**
+     * 生成开始特效的数据包
+     *
+     * @return 开始特效的网络包
+     */
     public final Packet makeStartData() {
         return PacketCreator.startMapEffect(msg, itemId, active);
     }
 
+    /**
+     * 向客户端发送开始特效
+     *
+     * @param client 客户端
+     */
     public void sendStartData(Client client) {
         client.sendPacket(makeStartData());
     }

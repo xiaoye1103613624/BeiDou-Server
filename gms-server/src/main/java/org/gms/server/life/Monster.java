@@ -83,60 +83,122 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 怪物
+ * 继承AbstractLoadedLife，代表游戏地图中的怪物实体，包含完整的战斗、生命值、经验分配、状态效果等逻辑
+ * 使用多重锁保证线程安全：外部锁、怪物属性锁、状态锁、动画锁、仇恨更新锁
+ *
+ * @author OdinMS Team
+ */
 public class Monster extends AbstractLoadedLife {
     private static final Logger log = LoggerFactory.getLogger(Monster.class);
 
-    private ChangeableStats ostats = null;  //unused, v83 WZs offers no support for changeable stats.
+    /** 可变属性覆盖（未使用，v83 WZ不支持可变属性） */
+    private ChangeableStats ostats = null;
+    /** 怪物属性 */
     private MonsterStats stats;
+    /** 当前生命值 */
     private final AtomicInteger hp = new AtomicInteger(1);
+    /** 累计最大生命值加治愈量，用于经验分配计算 */
     private final AtomicLong maxHpPlusHeal = new AtomicLong(1);
+    /** 当前魔法值 */
     private int mp;
+    /** 仇恨控制器玩家（弱引用） */
     private WeakReference<Character> controller = new WeakReference<>(null);
+    /** 控制器是否有仇恨 */
     private boolean controllerHasAggro, controllerKnowsAboutAggro, controllerHasPuppet;
+    /** 怪物事件监听器列表 */
     private final Collection<MonsterListener> listeners = new LinkedList<>();
+    /** 当前状态效果映射 */
     private final EnumMap<MonsterStatus, MonsterStatusEffect> stati = new EnumMap<>(MonsterStatus.class);
+    /** 已施加的buff状态列表 */
     private final ArrayList<MonsterStatus> alreadyBuffed = new ArrayList<>();
+    /** 当前所在地图 */
     private MapleMap map;
+    /** 毒液乘数（中毒层数） */
     private int VenomMultiplier = 0;
+    /** 是否为假怪物 */
     private boolean fake = false;
+    /** 是否禁用掉落 */
     private boolean dropsDisabled = false;
+    /** 已使用技能集合（冷却中） */
     private final Set<MobSkillId> usedSkills = new HashSet<>();
+    /** 已使用攻击位置集合（冷却中） */
     private final Set<Integer> usedAttacks = new HashSet<>();
+    /** 已召唤怪物对象ID集合 */
     private Set<Integer> calledMobOids = null;
+    /** 召唤者怪物（弱引用） */
     private WeakReference<Monster> callerMob = new WeakReference<>(null);
+    /** 被偷窃的物品列表 */
     private final List<Integer> stolenItems = new ArrayList<>(5);
+    /** 队伍ID */
     private int team;
+    /** 父怪物对象ID */
     private int parentMobOid = 0;
+    /** 生成特效ID */
     private int spawnEffect = 0;
+    /** 每个玩家造成的伤害记录（玩家ID -> 累计伤害） */
     private final HashMap<Integer, AtomicLong> takenDamage = new HashMap<>();
+    /** 友好怪物掉落定时任务 */
     private ScheduledFuture<?> monsterItemDrop = null;
+    /** 移除后执行的动作 */
     private Runnable removeAfterAction = null;
+    /** 是否可用傀儡更新 */
     private boolean availablePuppetUpdate = true;
 
+    /** 外部操作锁，保护怪物操作并发 */
     private final Lock externalLock = new ReentrantLock();
+    /** 怪物属性锁，保护属性修改并发 */
     private final Lock monsterLock = new ReentrantLock(true);
+    /** 状态锁，保护状态效果并发 */
     private final Lock statiLock = new ReentrantLock();
+    /** 动画锁，保护动画执行并发 */
     private final Lock animationLock = new ReentrantLock();
+    /** 仇恨更新锁，保护仇恨更新并发 */
     private final Lock aggroUpdateLock = new ReentrantLock();
 
+    /**
+     * 构造怪物对象
+     *
+     * @param id 怪物ID
+     * @param stats 怪物属性
+     */
     public Monster(int id, MonsterStats stats) {
         super(id);
         initWithStats(stats);
     }
 
+    /**
+     * 复制构造怪物对象
+     *
+     * @param monster 源怪物
+     */
     public Monster(Monster monster) {
         super(monster);
         initWithStats(monster.stats);
     }
 
+    /**
+     * 获取怪物外部锁（阻塞获取）
+     * 用于保护怪物操作的并发访问
+     */
     public void lockMonster() {
         externalLock.lock();
     }
 
+    /**
+     * 释放怪物外部锁
+     */
     public void unlockMonster() {
         externalLock.unlock();
     }
 
+    /**
+     * 使用怪物属性初始化怪物
+     * 设置初始姿态、复制属性、初始化生命值
+     *
+     * @param baseStats 怪物基础属性
+     */
     private void initWithStats(MonsterStats baseStats) {
         setStance(5);
         this.stats = baseStats.copy();
@@ -414,28 +476,27 @@ public class Monster extends AbstractLoadedLife {
                 return false;
             }
 
-            /* pyramid not implemented
-            Pair<Integer, Integer> cool = this.getStats().getCool();
-            if (cool != null) {
-                Pyramid pq = (Pyramid) chr.getPartyQuest();
-                if (pq != null) {
-                    if (damage > 0) {
-                        if (damage >= cool.getLeft()) {
-                            if ((Math.random() * 100) < cool.getRight()) {
-                                pq.cool();
-                            } else {
-                                pq.kill();
-                            }
-                        } else {
-                            pq.kill();
-                        }
-                    } else {
-                        pq.miss();
-                    }
-                    killed = true;
-                }
-            }
-            */
+            // pyramid not implemented
+            // Pair<Integer, Integer> cool = this.getStats().getCool();
+            // if (cool != null) {
+            //     Pyramid pq = (Pyramid) chr.getPartyQuest();
+            //     if (pq != null) {
+            //         if (damage > 0) {
+            //             if (damage >= cool.getLeft()) {
+            //                 if ((Math.random() * 100) < cool.getRight()) {
+            //                     pq.cool();
+            //                 } else {
+            //                     pq.kill();
+            //                 }
+            //             } else {
+            //                 pq.kill();
+            //             }
+            //         } else {
+            //             pq.miss();
+            //         }
+            //         killed = true;
+            //     }
+            // }
 
             if (damage > 0) {
                 this.applyDamage(attacker, damage, stayAlive, false);
@@ -1268,15 +1329,13 @@ public class Monster extends AbstractLoadedLife {
             } else {
                 return false;
             }
-            /*
-        } else if (status.getSkill().getId() == Hermit.SHADOW_WEB || status.getSkill().getId() == NightWalker.SHADOW_WEB) { //Shadow Web
-            int webDamage = (int) (getMaxHp() / 50.0 + 0.999);
-            status.setValue(MonsterStatus.SHADOW_WEB, Integer.valueOf(webDamage));
-            animationTime = broadcastStatusEffect(status);
-            
-            overtimeAction = new DamageTask(webDamage, from, status, 1);
-            overtimeDelay = 3500;
-            */
+            // } else if (status.getSkill().getId() == Hermit.SHADOW_WEB || status.getSkill().getId() == NightWalker.SHADOW_WEB) { //Shadow Web
+            //     int webDamage = (int) (getMaxHp() / 50.0 + 0.999);
+            //     status.setValue(MonsterStatus.SHADOW_WEB, Integer.valueOf(webDamage));
+            //     animationTime = broadcastStatusEffect(status);
+            //
+            //     overtimeAction = new DamageTask(webDamage, from, status, 1);
+            //     overtimeDelay = 3500;
         } else if (status.getSkill().getId() == 4121004 || status.getSkill().getId() == 4221004) { // Ninja Ambush
             final Skill skill = SkillFactory.getSkill(status.getSkill().getId());
             final byte level = from.getSkillLevel(skill);
@@ -1486,11 +1545,9 @@ public class Monster extends AbstractLoadedLife {
                 return false;
             }
             
-            /*
-            if (!this.applyAnimationIfRoaming(-1, toUse)) {
-                return false;
-            }
-            */
+            // if (!this.applyAnimationIfRoaming(-1, toUse)) {
+            //     return false;
+            // }
 
             if (apply) {
                 this.usedSkill(toUse);
@@ -1540,11 +1597,9 @@ public class Monster extends AbstractLoadedLife {
     public int canUseAttack(int attackPos, boolean isSkill) {
         monsterLock.lock();
         try {
-            /*
-            if (usedAttacks.contains(attackPos)) {
-                return -1;
-            }
-            */
+            // if (usedAttacks.contains(attackPos)) {
+            //     return -1;
+            // }
 
             Pair<Integer, Integer> attackInfo = MonsterInformationProvider.getInstance().getMobAttackInfo(this.getId(), attackPos);
             if (attackInfo == null) {
@@ -1556,11 +1611,9 @@ public class Monster extends AbstractLoadedLife {
                 return -1;
             }
             
-            /*
-            if (!this.applyAnimationIfRoaming(attackPos, null)) {
-                return -1;
-            }
-            */
+            // if (!this.applyAnimationIfRoaming(attackPos, null)) {
+            //     return -1;
+            // }
 
             usedAttack(attackPos, mpCon, attackInfo.getRight());
             return 1;
@@ -1619,14 +1672,32 @@ public class Monster extends AbstractLoadedLife {
         return this.stats.getBuffToGive();
     }
 
+    /**
+     * 持续伤害任务（内部类）
+     * 处理毒素、毒液、忍者伏击等持续伤害效果的周期性执行
+     * 每次执行时对怪物造成固定伤害，当怪物HP降到1时自动中断
+     */
     private final class DamageTask implements Runnable {
 
+        /** 每次造成的伤害值 */
         private final int dealDamage;
+        /** 施加伤害的玩家 */
         private final Character chr;
+        /** 状态效果 */
         private final MonsterStatusEffect status;
+        /** 伤害类型：0=中毒, 1=Shadow Web, 2=忍者伏击 */
         private final int type;
+        /** 所在地图 */
         private final MapleMap map;
 
+        /**
+         * 构造持续伤害任务
+         *
+         * @param dealDamage 每次造成的伤害值
+         * @param chr 施加伤害的玩家
+         * @param status 状态效果
+         * @param type 伤害类型
+         */
         private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type) {
             this.dealDamage = dealDamage;
             this.chr = chr;
@@ -1635,6 +1706,10 @@ public class Monster extends AbstractLoadedLife {
             this.map = chr.getMap();
         }
 
+        /**
+         * 执行一次持续伤害
+         * 当怪物HP降到1时自动中断状态效果
+         */
         @Override
         public void run() {
             int curHp = hp.get();
@@ -2095,15 +2170,13 @@ public class Monster extends AbstractLoadedLife {
                 this.aggroUpdatePuppetVisibility();
             }
             
-            /*
-            For some reason, some mobs loses aggro on controllers if other players also attacks them.
-            Maybe Nexon intended to interchange controllers at every attack...
-            
-            else if (chrController != null) {
-                chrController.sendPacket(PacketCreator.stopControllingMonster(this.getObjectId()));
-                aggroMonsterControl(chrController.getClient(), this, true);
-            }
-            */
+            //             For some reason, some mobs loses aggro on controllers if other players also attacks them.
+            //             Maybe Nexon intended to interchange controllers at every attack...
+            //
+            //             else if (chrController != null) {
+            //                 chrController.sendPacket(PacketCreator.stopControllingMonster(this.getObjectId()));
+            //                 aggroMonsterControl(chrController.getClient(), this, true);
+            //             }
         } else {
             this.setControllerHasAggro(true);
             this.aggroUpdatePuppetVisibility();

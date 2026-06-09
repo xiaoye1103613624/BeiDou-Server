@@ -15,11 +15,14 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * 北斗动态参数计划，结构
- * {"world":{"0":{"server_message":{"clazz":"java.lang.String","value":"Welcome to Scania!"},"exp_rate":{"clazz":"java.lang.Float","value":"1.0"}}},"server":{"global":{"WORLDS":{"clazz":"java.lang.Integer","value":"1"}},"npc":{"NPCS_SCRIPTABLE":{"clazz":"java.util.Map","value":"{9001105:\"Rescue Gaga!\"}"}}}}
+ * 游戏动态配置管理器
+ * 提供游戏运行时动态配置，从数据库加载配置参数，支持层级存储和类型转换
+ * 结构示例: {"world":{"0":{"server_message":{"clazz":"java.lang.String","value":"Welcome to Scania!"},"exp_rate":{"clazz":"java.lang.Float","value":"1.0"}}},"server":{"global":{"WORLDS":{"clazz":"java.lang.Integer","value":"1"}}}}
  */
 public class GameConfig {
+    /** 单例实例 */
     private static final GameConfig config = new GameConfig();
+    /** 配置属性存储，三级结构: 类型 -> 子类型 -> 配置码 */
     private final JSONObject properties = new JSONObject();
 
     private GameConfig() {
@@ -28,10 +31,21 @@ public class GameConfig {
         gameConfigDOS.forEach(gameConfigDO -> add(this, gameConfigDO));
     }
 
+    /**
+     * 添加游戏配置到全局单例
+     *
+     * @param gameConfigDO 配置数据对象
+     */
     public static void add(GameConfigDO gameConfigDO) {
         add(config, gameConfigDO);
     }
 
+    /**
+     * 添加游戏配置到指定配置对象
+     *
+     * @param config       配置对象
+     * @param gameConfigDO 配置数据对象
+     */
     private static void add(GameConfig config, GameConfigDO gameConfigDO) {
         JSONObject typeProp = config.properties.getJSONObject(gameConfigDO.getConfigType());
         if (typeProp == null) {
@@ -52,6 +66,11 @@ public class GameConfig {
         valueProp.put("clazz", gameConfigDO.getConfigClazz());
     }
 
+    /**
+     * 删除指定游戏配置
+     *
+     * @param gameConfigDO 配置数据对象
+     */
     public static void remove(GameConfigDO gameConfigDO) {
         JSONObject typeProp = config.properties.getJSONObject(gameConfigDO.getConfigType());
         if (typeProp == null) {
@@ -70,6 +89,12 @@ public class GameConfig {
         }
     }
 
+    /**
+     * 更新游戏配置
+     * 更新配置值，同时触发相关游戏世界参数的实时重载
+     *
+     * @param gameConfigDO 配置数据对象
+     */
     public static void update(GameConfigDO gameConfigDO) {
         JSONObject valueProp = getValueProp(gameConfigDO.getConfigType(), gameConfigDO.getConfigSubType(), gameConfigDO.getConfigCode());
         if (valueProp == null) {
@@ -126,10 +151,23 @@ public class GameConfig {
         }
     }
 
+    /**
+     * 根据key获取配置对象
+     *
+     * @param key 配置键，格式为"类型.子类型.配置码"
+     * @return 配置对象
+     */
     public static Object getObject(String key) {
         return get(key, null);
     }
 
+    /**
+     * 根据key获取配置值，返回泛型类型
+     *
+     * @param key 配置键
+     * @param <T> 返回值类型
+     * @return 配置值
+     */
     public static <T> T get(String key) {
         return get(key, null);
     }
@@ -303,10 +341,25 @@ public class GameConfig {
     }
 
     /* -------------------- 以下根据参数大类获取，可以避免同一个参数，不同大区的场景获取错误 -------------------- */
+    /**
+     * 获取指定世界的配置值
+     *
+     * @param worldId 世界ID
+     * @param key     配置键
+     * @param <T>     返回值类型
+     * @return 配置值
+     */
     public static <T> T getWorld(int worldId, String key) {
         return get("world", String.valueOf(worldId), key);
     }
 
+    /**
+     * 获取服务器级别的配置值
+     *
+     * @param key 配置键
+     * @param <T> 返回值类型
+     * @return 配置值
+     */
     public static <T> T getServer(String key) {
         return get("server", key);
     }
@@ -327,6 +380,13 @@ public class GameConfig {
         return valueProp.getIntValue("value");
     }
 
+    /**
+     * 获取指定世界的字节配置
+     *
+     * @param worldId 世界ID
+     * @param key     配置键
+     * @return 字节配置值
+     */
     public static byte getWorldByte(int worldId, String key) {
         JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
         if (valueProp == null) {

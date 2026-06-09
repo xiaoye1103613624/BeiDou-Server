@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.Server;
 
 /**
+ * 排名命令刷新任务
+ * 定期重新加载所有世界的玩家排名数据
+ *
  * @author Ronan
  */
 public class RankingCommandTask implements Runnable {

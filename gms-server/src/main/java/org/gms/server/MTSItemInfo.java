@@ -28,15 +28,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 /**
+ * 交易市场物品信息
+ * 表示MTS交易市场中上架的物品，包含价格、卖家、上架时间等信息
+ *
  * @author Traitor
  */
 public class MTSItemInfo {
+    /** 价格 */
     private final int price;
+    /** 物品 */
     private final Item item;
+    /** 卖家名称 */
     private final String seller;
+    /** 物品ID */
     private final int id;
+    /** 下架年份 */
     private final int year;
+    /** 下架月份 */
     private final int month;
+    /** 下架日 */
     private int day = 1;
 
     public MTSItemInfo(Item item, int price, int id, int cid, String seller, String date) {
@@ -52,6 +62,11 @@ public class MTSItemInfo {
         this.day = sellEnd.getDayOfMonth();
     }
 
+    /**
+     * 获取物品
+     *
+     * @return 物品
+     */
     public Item getItem() {
         return item;
     }
@@ -64,6 +79,11 @@ public class MTSItemInfo {
         return 100 + price / 10;
     }
 
+    /**
+     * 获取交易ID
+     *
+     * @return 交易ID
+     */
     public int getID() {
         return id;
     }
@@ -74,6 +94,11 @@ public class MTSItemInfo {
         return now.getTimeInMillis();
     }
 
+    /**
+     * 获取卖家名称
+     *
+     * @return 卖家名称
+     */
     public String getSeller() {
         return seller;
     }

@@ -28,16 +28,24 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Ronan
+ * 事件召回协调器
+ * 管理事件参与者的召回和重连，确保玩家在事件进行中不掉队
  */
 public class EventRecallCoordinator {
 
+    /** 单例实例 */
     private final static EventRecallCoordinator instance = new EventRecallCoordinator();
 
+    /**
+     * 获取单例实例
+     *
+     * @return 事件召回协调器实例
+     */
     public static EventRecallCoordinator getInstance() {
         return instance;
     }
 
+    /** 事件实例历史表，key为角色ID，value为事件实例管理器 */
     private final ConcurrentHashMap<Integer, EventInstanceManager> eventHistory = new ConcurrentHashMap<>();
 
     private static boolean isRecallableEvent(EventInstanceManager eim) {

@@ -31,21 +31,41 @@ import java.awt.*;
 import java.util.Collection;
 
 /**
+ * 神秘之门
+ * 管理神秘之门（Mystic Door）的创建、更新和销毁，由一对DoorObject组成（城镇门和野外门），
+ * 支持玩家和同队成员在地图间传送
+ *
  * @author Matze
  * @author Ronan
  */
 public class Door {
+    /** 门的所有者ID */
     private int ownerId;
+    /** 城镇侧地图 */
     private MapleMap town;
+    /** 城镇侧传送门 */
     private Portal townPortal;
+    /** 野外侧地图 */
     private final MapleMap target;
+    /** 门的位置状态（用于位置校验） */
     private Pair<String, Integer> posStatus = null;
+    /** 门的部署时间 */
     private long deployTime;
+    /** 门是否激活 */
     private boolean active;
 
+    /** 城镇侧门对象 */
     private DoorObject townDoor;
+    /** 野外侧门对象 */
     private DoorObject areaDoor;
 
+    /**
+     * 构造方法，创建神秘之门
+     * 检查目标位置是否可部署，分配城镇传送门，创建一对DoorObject
+     *
+     * @param owner          门的所有者
+     * @param targetPosition 目标位置
+     */
     public Door(Character owner, Point targetPosition) {
         this.ownerId = owner.getId();
         this.target = owner.getMap();
@@ -78,6 +98,9 @@ public class Door {
         }
     }
 
+    /**
+     * 更新门的传送门（当玩家切换门槽位时）
+     */
     public void updateDoorPortal(Character owner) {
         int slot = owner.fetchDoorSlot();
 
@@ -88,6 +111,9 @@ public class Door {
         }
     }
 
+    /**
+     * 广播移除门，从两个地图上移除门对象并通知所有玩家
+     */
     private void broadcastRemoveDoor(Character owner) {
         DoorObject areaDoor = this.getAreaDoor();
         DoorObject townDoor = this.getTownDoor();
@@ -113,6 +139,7 @@ public class Door {
 
         owner.removePartyDoor(false);
 
+        // 如果当前传送门是共享传送门，需要重新显示其他玩家的门
         if (this.getTownPortal().getId() == 0x80) {
             for (Character chr : townChars) {
                 Door door = chr.getMainTownDoor();
@@ -124,16 +151,21 @@ public class Door {
         }
     }
 
+    /**
+     * 尝试移除门，考虑门部署效果动画的持续时间
+     */
     public static void attemptRemoveDoor(final Character owner) {
         final Door destroyDoor = owner.getPlayerDoor();
         if (destroyDoor != null && destroyDoor.dispose()) {
-            long effectTimeLeft = 3000 - destroyDoor.getElapsedDeployTime();   // portal deployment effect duration
+            // portal deployment effect duration
+            long effectTimeLeft = 3000 - destroyDoor.getElapsedDeployTime();
             if (effectTimeLeft > 0) {
                 MapleMap town = destroyDoor.getTown();
 
                 OverallService service = (OverallService) town.getChannelServer().getServiceAccess(ChannelServices.OVERALL);
                 service.registerOverallAction(town.getId(), () -> {
-                    destroyDoor.broadcastRemoveDoor(owner);   // thanks BHB88 for noticing doors crashing players when instantly cancelling buff
+                    // thanks BHB88 for noticing doors crashing players when instantly cancelling buff
+                    destroyDoor.broadcastRemoveDoor(owner);
                 }, effectTimeLeft);
             } else {
                 destroyDoor.broadcastRemoveDoor(owner);
@@ -141,6 +173,9 @@ public class Door {
         }
     }
 
+    /**
+     * 获取城镇门传送门
+     */
     private Portal getTownDoorPortal(int doorid) {
         return town.getDoorPortal(doorid);
     }
@@ -173,10 +208,16 @@ public class Door {
         return posStatus;
     }
 
+    /**
+     * 获取门已部署的时长（毫秒）
+     */
     public long getElapsedDeployTime() {
         return System.currentTimeMillis() - deployTime;
     }
 
+    /**
+     * 销毁门，标记为不活跃，返回是否成功销毁
+     */
     private boolean dispose() {
         if (active) {
             active = false;

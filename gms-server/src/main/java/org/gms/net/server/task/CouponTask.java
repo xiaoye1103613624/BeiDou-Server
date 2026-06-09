@@ -24,10 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 优惠券效果定时任务
+ * 负责维护优惠券的经验和掉落加成效果，定期更新并提交状态
+ *
  * @author Ronan
- * @info Thread responsible for maintaining coupons EXP & DROP effects active
  */
 public class CouponTask implements Runnable {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(CouponTask.class);
 
     @Override

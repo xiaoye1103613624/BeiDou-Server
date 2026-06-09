@@ -1,4 +1,4 @@
-/*
+package org.gms.server.movement;/*
 	This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
 		       Matthias Butz <matze@odinms.de>
@@ -19,42 +19,86 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package org.gms.server.movement;
 
 import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 跳下移动
+ * 从高处跳下落到下方站脚点，包含下落速度和目标站脚点
+ */
 public class JumpDownMovement extends AbstractLifeMovement {
+    /** 每秒像素速度 */
     private Point pixelsPerSecond;
+    /** 目标站脚点ID */
     private int fh;
+    /** 原始站脚点ID */
     private int originFh;
 
+    /**
+     * 构造跳下移动
+     *
+     * @param type     移动类型
+     * @param position 起跳位置
+     * @param duration 下落持续时间
+     * @param newstate 落地后状态
+     */
     public JumpDownMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);
     }
 
+    /**
+     * 获取每秒像素下落速度
+     *
+     * @return 每秒像素速度
+     */
     public Point getPixelsPerSecond() {
         return pixelsPerSecond;
     }
 
+    /**
+     * 设置每秒像素下落速度
+     *
+     * @param wobble 每秒像素速度
+     */
     public void setPixelsPerSecond(Point wobble) {
         this.pixelsPerSecond = wobble;
     }
 
+    /**
+     * 获取目标站脚点ID
+     *
+     * @return 站脚点ID
+     */
     public int getFh() {
         return fh;
     }
 
+    /**
+     * 设置目标站脚点ID
+     *
+     * @param fh 站脚点ID
+     */
     public void setFh(int fh) {
         this.fh = fh;
     }
 
+    /**
+     * 获取起跳原始站脚点ID
+     *
+     * @return 原始站脚点ID
+     */
     public int getOriginFh() {
         return originFh;
     }
 
-    public void setOriginFh(int fh) {    // fh actually originFh, thanks Spoon for pointing this out
+    /**
+     * 设置起跳原始站脚点ID
+     *
+     * @param fh 原始站脚点ID
+     */
+    public void setOriginFh(int fh) {
         this.originFh = fh;
     }
 

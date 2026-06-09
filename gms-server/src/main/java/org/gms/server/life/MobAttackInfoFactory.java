@@ -32,12 +32,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 怪物攻击信息工厂
+ * 从WZ文件中加载怪物攻击配置信息，包括致命攻击、MP燃烧、异常状态等
+ * 使用双重检查锁定模式保证线程安全
+ *
  * @author Danny (Leifde)
  */
 public class MobAttackInfoFactory {
+    /** 怪物攻击信息缓存 */
     private static final Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
+    /** WZ数据源 */
     private static final DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.MOB);
 
+    /**
+     * 获取指定怪物的攻击信息
+     * 先从缓存获取，缓存未命中则从WZ文件加载
+     * 使用synchronized双重检查锁定保证线程安全
+     *
+     * @param mob 怪物对象
+     * @param attack 攻击序号
+     * @return 怪物攻击信息，不存在则返回null
+     */
     public static MobAttackInfo getMobAttackInfo(Monster mob, int attack) {
         MobAttackInfo ret = mobAttacks.get(mob.getId() + "" + attack);
         if (ret != null) {
@@ -48,7 +63,6 @@ public class MobAttackInfoFactory {
             if (ret == null) {
                 Data mobData = dataSource.getData(StringUtil.getLeftPaddedStr(mob.getId() + ".img", '0', 11));
                 if (mobData != null) {
-//					MapleData infoData = mobData.getChildByPath("info");
                     String linkedmob = DataTool.getString("link", mobData, "");
                     if (!linkedmob.equals("")) {
                         mobData = dataSource.getData(StringUtil.getLeftPaddedStr(linkedmob + ".img", '0', 11));

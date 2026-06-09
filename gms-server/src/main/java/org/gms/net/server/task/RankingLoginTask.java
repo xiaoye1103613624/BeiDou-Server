@@ -29,13 +29,23 @@ import org.gms.util.DatabaseConnection;
 import java.sql.*;
 
 /**
+ * 排行榜排名更新任务
+ * 定期更新所有世界的玩家排名，包括综合排名和各职业排名
+ * 兼容历史账号和未登录的自动注册账号
+ *
  * @author Matze
  * @author Quit
  * @author Ronan
  */
 public class RankingLoginTask implements Runnable {
+    /** 上次更新时间戳，用于判断玩家近期是否活跃 */
     private long lastUpdate = System.currentTimeMillis();
 
+    /**
+     * 重置排名变化标记，避免重复计算历史排名变化
+     *
+     * @param job true表示职业排名，false表示综合排名
+     */
     private void resetMoveRank(boolean job) throws SQLException {
         String query = "UPDATE characters SET " + (job ? "jobRankMove = 0" : "rankMove = 0");
         try (Connection con = DatabaseConnection.getConnection()) {
@@ -44,6 +54,13 @@ public class RankingLoginTask implements Runnable {
         }
     }
 
+    /**
+     * 更新排名数据
+     * 按等级、经验、最后获取经验时间、人气和金币排序，更新玩家综合排名或职业排名
+     *
+     * @param job   职业分类，-1表示综合排名
+     * @param world 世界ID
+     */
     private void updateRanking(int job, int world) throws SQLException {
         String sqlCharSelect = "SELECT c.id, " + (job != -1 ? "c.jobRank, c.jobRankMove" : "c.`rank`, c.rankMove") + ", a.lastlogin AS lastlogin, a.loggedin FROM characters AS c LEFT JOIN accounts AS a ON c.accountid = a.id WHERE c.gm < 2 AND c.world = ? ";
         if (job != -1) {

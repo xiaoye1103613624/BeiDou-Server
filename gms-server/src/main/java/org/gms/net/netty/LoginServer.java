@@ -6,6 +6,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+/**
+ * 登录服务器
+ * 基于Netty实现，监听登录端口，处理客户端登录连接
+ */
 public class LoginServer extends AbstractServer {
     public static final int WORLD_ID = -1;
     public static final int CHANNEL_ID = -1;

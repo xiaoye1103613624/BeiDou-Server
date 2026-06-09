@@ -22,6 +22,9 @@
 package org.gms.provider;
 
 /**
+ * 数据文件条目接口
+ * WZ文件中的文件条目，可设置偏移量
+ *
  * @author Matze
  */
 public interface DataFileEntry extends DataEntry {

@@ -40,21 +40,19 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * 宠物
+ * 继承{@link Item}，管理宠物状态：名称、驯服度、等级、饱食度、属性
+ * 支持宠物移动、拾取物品、宠物属性加成和数据库持久化
+ *
  * @author Matze
  */
 public class Pet extends Item {
-    private String name;
-    private int uniqueid;
-    private int tameness = 0;
-    private byte level = 1;
-    private int fullness = 100;
-    private int Fh;
-    private Point pos;
-    private int stance;
-    private boolean summoned;
-    private int petAttribute = 0;
 
+    /**
+     * 宠物属性枚举
+     */
     public enum PetAttribute {
+        /** 主人速度加成 */
         OWNER_SPEED(0x01);
 
         private final int i;
@@ -67,6 +65,27 @@ public class Pet extends Item {
             return i;
         }
     }
+
+    /** 宠物名称 */
+    private String name;
+    /** 宠物唯一ID */
+    private int uniqueid;
+    /** 宠物驯服度（亲密度） */
+    private int tameness = 0;
+    /** 宠物等级 */
+    private byte level = 1;
+    /** 宠物饱食度 */
+    private int fullness = 100;
+    /** 脚梯ID */
+    private int Fh;
+    /** 宠物位置坐标 */
+    private Point pos;
+    /** 宠物动作姿态 */
+    private int stance;
+    /** 是否已召唤 */
+    private boolean summoned;
+    /** 宠物属性掩码 */
+    private int petAttribute = 0;
 
     private Pet(int id, short position, int uniqueid) {
         super(id, position, (short) 1);

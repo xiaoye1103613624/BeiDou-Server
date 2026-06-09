@@ -10,6 +10,10 @@ import org.gms.util.RateLimitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 频道服务器通道初始化器
+ * 初始化游戏频道连接，绑定世界和频道信息，进行会话协调和限流检查
+ */
 public class ChannelServerInitializer extends ServerChannelInitializer {
     private static final Logger log = LoggerFactory.getLogger(ChannelServerInitializer.class);
 

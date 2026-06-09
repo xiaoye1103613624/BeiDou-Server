@@ -27,13 +27,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 指令服务类
+ * 管理游戏GM指令的注册、更新、权限控制和热加载
+ */
 @Slf4j
 @Service
 @AllArgsConstructor
 public class CommandService {
 
+    /**
+     * 指令信息数据访问对象
+     */
     private final CommandInfoMapper commandInfoMapper;
 
+    /**
+     * 加载所有指令到内存
+     * 从数据库读取指令配置，按等级分组注册到指令执行器
+     *
+     * @param registeredCommands 已注册指令映射（指令语法 -> 指令实例）
+     * @param commandsNameDesc   指令名称描述列表，按GM等级分组
+     */
     public void loadCommands(final HashMap<String, Command> registeredCommands,
                              final List<Pair<List<String>, List<String>>> commandsNameDesc) {
         registeredCommands.clear();
@@ -44,7 +58,7 @@ public class CommandService {
             log.warn(I18nUtil.getLogMessage("CommandService.loadCommands.warn1"));
             return;
         }
-        // 根据level对指令分组
+        // 根据 GM 等级对指令分组
         Map<Integer, List<CommandInfoDO>> levelMap = commandInfoList.stream()
                 .collect(Collectors.groupingBy(CommandInfoDO::getLevel));
         for (int i = 0; i <= 6; i++) {
@@ -53,53 +67,61 @@ public class CommandService {
         log.info(I18nUtil.getLogMessage("CommandService.loadCommands.info1"), registeredCommands.size());
     }
 
-
+    /**
+     * 更新已注册指令
+     * 根据数据库配置变化，更新内存中的指令注册状态
+     *
+     * @param commandInfoDO 指令信息实体
+     */
     private void updateRegisteredCommands(CommandInfoDO commandInfoDO) {
         CommandsExecutor commandsExecutor = CommandsExecutor.getInstance();
         HashMap<String, Command> registeredCommands = commandsExecutor.getRegisteredCommands();
         List<Pair<List<String>, List<String>>> commandsNameDesc = commandsExecutor.getCommandsNameDesc();
         String syntax = commandInfoDO.getSyntax().toLowerCase();
         Command command = registeredCommands.get(syntax);
-        // 如果原先未注册
+        // 新指令注册：未注册 + 状态开启 → 实例化并添加到对应等级分组末尾
         if (command == null) {
-            // 如果更新的状态是开启，则添加注册。如果新状态是关闭，则不必理会，更新db即可
             if (commandInfoDO.isEnabled()) {
                 command = getCommandInstance(commandInfoDO);
                 RequireUtil.requireNotNull(command, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "clazz", commandInfoDO.getClazz()));
                 registeredCommands.put(syntax, command);
-                // 按照新等级获取实例
+                // 按新等级获取 nameDesc 分组节点，追加到末尾
                 Pair<List<String>, List<String>> nameDescPair = commandsNameDesc.get(commandInfoDO.getLevel());
-                // 添加到最后
                 nameDescPair.getLeft().add(syntax);
                 nameDescPair.getRight().add(command.getDescription());
             }
             return;
         }
-        // 原先已注册，这里拿的是老的rank去获取老的nameDesc
+        // 已注册指令更新：先按旧等级找到并移除 nameDesc 条目，再按新等级重新注册
         Pair<List<String>, List<String>> oldPair = commandsNameDesc.get(command.getRank());
         int index = oldPair.getLeft().indexOf(syntax);
-        // 获取index，移除name和desc
         if (index > -1) {
             oldPair.getLeft().remove(index);
             oldPair.getRight().remove(index);
         }
 
-        // 如果新状态是开启，那么有可能是更新了等级。如果新状态是关闭，则移除之前的注册
         if (commandInfoDO.isEnabled()) {
-            // 老的nameDesc已经移除，这里直接把新的等级加进nameDesc
+            // 启用状态：新等级加入 nameDesc + 更新 Rank
             Pair<List<String>, List<String>> newPair = commandsNameDesc.get(commandInfoDO.getLevel());
             newPair.getLeft().add(syntax);
             newPair.getRight().add(command.getDescription());
 
-            // 更新reg的Rank
             command.setRank(commandInfoDO.getLevel());
         } else {
-            // 老的nameDesc已经移除，这里直接移除reg
+            // 禁用状态：从注册表中移除
             registeredCommands.remove(syntax);
         }
-
     }
 
+    /**
+     * 注册指令到内存
+     * 将指定等级的指令批量注册到指令执行器
+     *
+     * @param registeredCommands 已注册指令映射
+     * @param commandsNameDesc   指令名称描述列表
+     * @param level              GM等级
+     * @param commandInfoList    指令信息列表
+     */
     private void registerCommands(final HashMap<String, Command> registeredCommands,
                                   final List<Pair<List<String>, List<String>>> commandsNameDesc,
                                   int level,
@@ -111,7 +133,7 @@ public class CommandService {
 
         Pair<List<String>, List<String>> levelCommandsCursor = new Pair<>(new ArrayList<>(), new ArrayList<>());
         for (CommandInfoDO item : commandInfoList) {
-            // 未开启的不能加载
+            // 已禁用的指令不注册
             if (!item.isEnabled()) {
                 continue;
             }
@@ -139,6 +161,13 @@ public class CommandService {
         commandsNameDesc.add(levelCommandsCursor);
     }
 
+    /**
+     * 通过反射创建指令实例
+     * 根据类路径反射实例化指令对象
+     *
+     * @param commandInfoDO 指令信息实体
+     * @return 指令实例，反射失败返回null
+     */
     private Command getCommandInstance(CommandInfoDO commandInfoDO) {
         try {
             Class<?> aClass = Class.forName("org.gms.client.command.commands.gm" + commandInfoDO.getDefaultLevel()
@@ -151,6 +180,13 @@ public class CommandService {
         }
     }
 
+    /**
+     * 分页查询指令列表
+     * 支持按等级、默认等级、语法和启用状态筛选
+     *
+     * @param request 查询请求参数
+     * @return 分页的指令列表
+     */
     public Page<CommandReqDTO> getCommandListFromDB(CommandReqDTO request) {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (request.getLevel() != null) queryWrapper.in("level", request.getLevelList());
@@ -162,7 +198,6 @@ public class CommandService {
         return new Page<>(
                 commandInfoDOPage.getRecords().stream()
                         .map(record -> {
-                            // 显式声明返回值类型
                             CommandReqDTO build = CommandReqDTO.builder()
                                     .id(record.getId())
                                     .level(record.getLevel())
@@ -183,6 +218,13 @@ public class CommandService {
         );
     }
 
+    /**
+     * 根据指令信息获取指令描述
+     * 反射实例化指令对象后获取其描述信息
+     *
+     * @param CommandDO 指令信息实体
+     * @return 指令描述文本
+     */
     public String getDescriptionByCommandInfoDO(CommandInfoDO CommandDO) {
         Command command = getCommandInstance(CommandDO);
         if (command == null) {
@@ -191,18 +233,23 @@ public class CommandService {
         return command.getDescription();
     }
 
+    /**
+     * 更新指令配置
+     * 只允许修改开关和等级，语法和类名不允许修改以避免与描述文本冲突
+     *
+     * @param request 指令更新请求参数
+     * @return 更新后的指令信息
+     */
     @Transactional
     public CommandInfoDO updateCommand(CommandReqDTO request) {
 
         RequireUtil.requireNotNull(request.getEnabled(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "enabled"));
         RequireUtil.requireNotNull(request.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
 
-        /*
-         * 只能改开关和等级，其他的不能改
-         * Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
-         * 因为level已经被改成其他的了
-         * DefaultLevel和Clazz也不能改
-         */
+        // 只能改开关和等级，其他的不能改
+        // Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
+        // 因为level已经被改成其他的了
+        // DefaultLevel和Clazz也不能改
         commandInfoMapper.update(CommandInfoDO.builder()
                 .id(request.getId())
                 .level(request.getLevel())
@@ -214,8 +261,12 @@ public class CommandService {
     }
 
 
+    /**
+     * 热加载事件脚本
+     * 遍历所有频道的EventScriptManager重新加载事件脚本
+     */
     public void reloadEventsByGMCommand() {
-        //执行ReloadEventsCommand中的execute方法
+        // 遍历所有频道执行 ReloadEventsCommand 中的 execute 逻辑
         for (Channel ch : Server.getInstance().getAllChannels()) {
             ch.reloadEventScriptManager();
         }
@@ -223,12 +274,20 @@ public class CommandService {
 
     }
 
+    /**
+     * 热加载传送脚本
+     * 重建PortalScriptManager实例重新加载所有传送脚本
+     */
     public void reloadPortalsByGMCommand() {
         PortalScriptManager.getInstance().reloadPortalScripts();
         log.info(I18nUtil.getMessage("ReloadPortalsCommand.message2"));
     }
 
 
+    /**
+     * 热加载地图
+     * 遍历所有世界的所有频道，重置每张地图并重新传送所有玩家
+     */
     public void reloadMapsByGMCommand() {
         Server.getInstance().getWorlds().forEach(world -> {
             world.getChannels().forEach(channel -> {
@@ -252,5 +311,3 @@ public class CommandService {
         }
 
     }
-
-

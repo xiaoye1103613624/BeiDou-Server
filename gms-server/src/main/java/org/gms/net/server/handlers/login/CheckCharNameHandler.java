@@ -27,8 +27,18 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 角色名检查处理器
+ * 处理客户端在创建角色时检查角色名是否可用
+ */
 public final class CheckCharNameHandler extends AbstractPacketHandler {
 
+    /**
+     * 检查角色名是否可用
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         String name = p.readString();

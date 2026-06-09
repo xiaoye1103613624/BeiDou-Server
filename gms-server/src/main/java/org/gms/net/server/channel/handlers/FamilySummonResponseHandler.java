@@ -14,6 +14,10 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 
+/**
+ * 家族召唤响应处理器
+ * 处理玩家对家族召唤邀请的接受或拒绝响应
+ */
 public class FamilySummonResponseHandler extends AbstractPacketHandler {
 
     @Override

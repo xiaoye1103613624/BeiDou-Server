@@ -26,9 +26,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 脚本需求
+ * 通过JavaScript脚本检测玩家是否满足任务条件，提供最大的灵活性
+ *
  * @author Ronan
  */
 public class ScriptRequirement extends AbstractQuestRequirement {
+    /** 是否需要脚本检测 */
     private boolean reqScript;
 
     public ScriptRequirement(Quest quest, Data data) {
@@ -36,16 +40,33 @@ public class ScriptRequirement extends AbstractQuestRequirement {
         processData(data);
     }
 
+    /**
+     * 从WZ数据中解析脚本需求字符串，非空表示需要脚本检测
+     *
+     * @param data WZ数据
+     */
     @Override
     public void processData(Data data) {
         reqScript = !DataTool.getString(data, "").isEmpty();
     }
 
+    /**
+     * 检查当前是否满足脚本检测条件（始终返回true，实际检查由脚本完成）
+     *
+     * @param chr   玩家
+     * @param npcid NPC ID
+     * @return 始终返回true
+     */
     @Override
     public boolean check(Character chr, Integer npcid) {
         return true;
     }
 
+    /**
+     * 获取是否需要脚本检测
+     *
+     * @return true表示需要脚本检测
+     */
     public boolean get() {
         return reqScript;
     }

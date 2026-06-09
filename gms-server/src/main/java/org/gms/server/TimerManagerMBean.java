@@ -21,6 +21,10 @@
 */
 package org.gms.server;
 
+/**
+ * 定时器管理器MBean接口
+ * 提供定时任务管理器的JMX监控指标：任务状态、完成数、活跃数和队列长度
+ */
 public interface TimerManagerMBean {
     boolean isTerminated();
     boolean isShutdown();

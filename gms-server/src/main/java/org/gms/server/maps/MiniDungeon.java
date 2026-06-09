@@ -32,6 +32,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
+ * 迷你副本
+ * 管理玩家专属副本实例的创建、进入和退出
+ *
  * @author Ronan
  */
 public class MiniDungeon {
@@ -39,9 +42,17 @@ public class MiniDungeon {
     ScheduledFuture<?> timeoutTask = null;
     private final Lock lock = new ReentrantLock(true);
 
+    /** 副本入口地图ID */
     int baseMap;
+    /** 副本过期时间（毫秒） */
     long expireTime;
 
+    /**
+     * 构造迷你副本，设置超时自动关闭
+     *
+     * @param base      入口地图ID
+     * @param timeLimit 时间限制（秒）
+     */
     public MiniDungeon(int base, long timeLimit) {
         baseMap = base;
         expireTime = SECONDS.toMillis(timeLimit);
@@ -51,6 +62,12 @@ public class MiniDungeon {
         expireTime += System.currentTimeMillis();
     }
 
+    /**
+     * 注册玩家进入副本，显示剩余时间倒计时
+     *
+     * @param chr 玩家
+     * @return true表示注册成功
+     */
     public boolean registerPlayer(Character chr) {
         int time = (int) ((expireTime - System.currentTimeMillis()) / 1000);
         if (time > 0) {
@@ -71,6 +88,12 @@ public class MiniDungeon {
         return true;
     }
 
+    /**
+     * 注销玩家，若副本无玩家则销毁，若注销的是队长则关闭副本
+     *
+     * @param chr 玩家
+     * @return true表示注销成功
+     */
     public boolean unregisterPlayer(Character chr) {
         chr.sendPacket(PacketCreator.removeClock());
 
@@ -86,13 +109,16 @@ public class MiniDungeon {
             lock.unlock();
         }
 
-        if (chr.isPartyLeader()) {  // thanks Conrad for noticing party is not sent out of the MD as soon as leader leaves it
+        if (chr.isPartyLeader()) {
             close();
         }
 
         return true;
     }
 
+    /**
+     * 关闭副本，将所有玩家传送回入口地图
+     */
     public void close() {
         lock.lock();
         try {
@@ -109,6 +135,9 @@ public class MiniDungeon {
         }
     }
 
+    /**
+     * 销毁副本，清除玩家列表并取消超时任务
+     */
     public void dispose() {
         lock.lock();
         try {

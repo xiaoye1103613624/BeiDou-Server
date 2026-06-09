@@ -30,9 +30,16 @@ import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.PacketCreator;
 
 /**
+ * 进入商城处理器
+ * 处理玩家进入现金商城（Cash Shop）的操作
+ *
  * @author Flav
  */
-public class EnterCashShopHandler extends AbstractPacketHandler {
+/**
+ * 进入商城处理器
+ * 处理玩家进入现金商城的操作
+ */
+public final class EnterCashShopHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         try {

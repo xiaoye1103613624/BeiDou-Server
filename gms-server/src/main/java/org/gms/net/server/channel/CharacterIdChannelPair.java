@@ -22,24 +22,48 @@
 package org.gms.net.server.channel;
 
 /**
+ * 角色ID与频道对应关系
+ * 记录角色所在频道，用于频道间消息路由
+ *
  * @author Frz
  */
 public class CharacterIdChannelPair {
+    /** 角色ID */
     private int charid;
+    /** 频道号 */
     private int channel;
 
+    /**
+     * 无参构造
+     */
     public CharacterIdChannelPair() {
     }
 
+    /**
+     * 构造角色ID与频道对应关系
+     *
+     * @param charid  角色ID
+     * @param channel 频道号
+     */
     public CharacterIdChannelPair(int charid, int channel) {
         this.charid = charid;
         this.channel = channel;
     }
 
+    /**
+     * 获取角色ID
+     *
+     * @return 角色ID
+     */
     public int getCharacterId() {
         return charid;
     }
 
+    /**
+     * 获取频道号
+     *
+     * @return 频道号
+     */
     public int getChannel() {
         return channel;
     }

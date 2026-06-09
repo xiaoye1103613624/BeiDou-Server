@@ -35,9 +35,21 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * 查看所有角色处理器
+ * 处理客户端查看所有世界角色总览的请求，展示所有角色并按世界分组
+ */
 public final class ViewAllCharHandler extends AbstractPacketHandler {
+    /** 角色上限值，超过会导致客户端崩溃 */
     private static final int CHARACTER_LIMIT = 60; // Client will crash if sending 61 or more characters
 
+    /**
+     * 处理查看所有角色请求
+     * 加载所有世界角色列表，限制总量后按世界分组发送给客户端
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         try {
@@ -101,12 +113,10 @@ public final class ViewAllCharHandler extends AbstractPacketHandler {
     }
 
     /**
-     * If there are more characters than fits the screen (9), and you start scrolling down,
-     * the characters on the last row will not appear unless the row is completely filled.
-     * Meaning, if there are 1 or 2 characters remaining on the last row, they will not appear.
+     * 填充最后一行角色以确保渲染完整
+     * 当角色数超过9且最后一行未填满时，复制最后一个角色填充空位
      *
-     * @param totalChrs total amount of characters to display on 'View all characters' screen
-     * @return if we need to pad the last row to include the characters that would otherwise not appear
+     * @param worldChrs 按世界分组的角色映射
      */
     private static void padChrsIfNeeded(SortedMap<Integer, List<Character>> worldChrs) {
         while (shouldPadLastRow(countTotalChrs(worldChrs))) {

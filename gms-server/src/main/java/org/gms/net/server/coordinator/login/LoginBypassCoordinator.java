@@ -37,17 +37,33 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
- * @author Ronan
+ * 登录绕过协调器
+ * 管理角色的登录绕过请求，用于离线迁移和重新登录场景
  */
 public class LoginBypassCoordinator {
+    /** 单例实例 */
     private final static LoginBypassCoordinator instance = new LoginBypassCoordinator();
 
+    /**
+     * 获取单例实例
+     *
+     * @return 登录绕过协调器实例
+     */
     public static LoginBypassCoordinator getInstance() {
         return instance;
     }
 
-    private final ConcurrentHashMap<Pair<Hwid, Integer>, Pair<Boolean, Long>> loginBypass = new ConcurrentHashMap<>();   // optimized PIN & PIC check
+    /** 登录绕过缓存表，key为(Hwid,账号ID)对，value为(是否PIC绕过,过期时间戳)对 */
+    private final ConcurrentHashMap<Pair<Hwid, Integer>, Pair<Boolean, Long>> loginBypass = new ConcurrentHashMap<>();
 
+    /**
+     * 判断是否可以绕过登录验证
+     *
+     * @param hwid  硬件ID
+     * @param accId 账号ID
+     * @param pic   是否PIC验证
+     * @return true表示可以绕过，false表示需要验证
+     */
     public boolean canLoginBypass(Hwid hwid, int accId, boolean pic) {
         try {
             Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);

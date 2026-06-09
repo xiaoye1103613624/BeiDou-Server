@@ -32,11 +32,20 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
+ * 宠物排除物品处理器
+ * 处理宠物拾取物品的排除列表设置，允许玩家指定哪些物品不被宠物自动拾取
+ *
  * @author BubblesDev
  * @author Ronan
  */
 public final class PetExcludeItemsHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理宠物排除物品包，客户端提交完整过滤列表，先加载旧配置，再按差异增量更新数据库和内存
+     *
+     * @param p 输入数据包，包含宠物ID和要排除的物品ID列表
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         final int petId = p.readInt();

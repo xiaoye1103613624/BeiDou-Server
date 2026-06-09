@@ -21,13 +21,26 @@ import static org.gms.dao.entity.table.MedalmapsDOTableDef.MEDALMAPS_D_O;
 import static org.gms.dao.entity.table.QuestprogressDOTableDef.QUESTPROGRESS_D_O;
 import static org.gms.dao.entity.table.QueststatusDOTableDef.QUESTSTATUS_D_O;
 
+/**
+ * 任务服务类
+ * 提供任务的查询、进度管理和删除功能
+ */
 @Service
 @AllArgsConstructor
 public class QuestService {
+    /** 勋章数据访问对象 */
     private final MedalmapsMapper medalmapsMapper;
+    /** 任务进度数据访问对象 */
     private final QuestprogressMapper questprogressMapper;
+    /** 任务状态数据访问对象 */
     private final QueststatusMapper queststatusMapper;
 
+    /**
+     * 删除角色的所有任务相关数据
+     * 包括勋章、任务进度和任务状态
+     *
+     * @param cid 角色ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteQuestProgressByCharacter(int cid) {
         medalmapsMapper.deleteByQuery(QueryWrapper.create().where(MEDALMAPS_D_O.CHARACTERID.eq(cid)));
@@ -35,6 +48,13 @@ public class QuestService {
         queststatusMapper.deleteByQuery(QueryWrapper.create().where(QUESTSTATUS_D_O.CHARACTERID.eq(cid)));
     }
 
+    /**
+     * 获取角色的任务状态列表
+     * 组装任务状态、进度和勋章信息
+     *
+     * @param cid 角色ID
+     * @return 任务状态列表
+     */
     public List<QuestStatus> getQuestStatusByCharacter(int cid) {
         List<QueststatusDO> queststatusDOList = queststatusMapper.selectListByQuery(QueryWrapper.create().where(QUESTSTATUS_D_O.CHARACTERID.eq(cid)));
         List<QuestprogressDO> questprogressDOList = questprogressMapper.selectListByQuery(QueryWrapper.create().where(QUESTPROGRESS_D_O.CHARACTERID.eq(cid)));

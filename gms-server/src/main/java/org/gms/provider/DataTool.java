@@ -25,11 +25,28 @@ import org.gms.provider.wz.DataType;
 
 import java.awt.*;
 
+/**
+ * 数据工具类
+ * 提供从WZ数据节点中安全读取各种类型数据（String、Double、Int、Point等）的工具方法
+ */
 public class DataTool {
+    /**
+     * 从Data节点获取字符串
+     *
+     * @param data 数据节点
+     * @return 字符串值
+     */
     public static String getString(Data data) {
         return ((String) data.getData());
     }
 
+    /**
+     * 从Data节点获取字符串，带默认值
+     *
+     * @param data 数据节点
+     * @param def  默认值
+     * @return 字符串值或默认值
+     */
     public static String getString(Data data, String def) {
         if (data == null || data.getData() == null) {
             return def;
@@ -38,18 +55,45 @@ public class DataTool {
         }
     }
 
+    /**
+     * 通过路径从Data节点获取字符串
+     *
+     * @param path 子节点路径
+     * @param data 数据节点
+     * @return 字符串值
+     */
     public static String getString(String path, Data data) {
         return getString(data.getChildByPath(path));
     }
 
+    /**
+     * 通过路径从Data节点获取字符串，带默认值
+     *
+     * @param path 子节点路径
+     * @param data 数据节点
+     * @param def  默认值
+     * @return 字符串值或默认值
+     */
     public static String getString(String path, Data data, String def) {
         return getString(data.getChildByPath(path), def);
     }
 
+    /**
+     * 从Data节点获取Double值
+     *
+     * @param data 数据节点
+     * @return Double值
+     */
     public static double getDouble(Data data) {
         return (Double) data.getData();
     }
 
+    /**
+     * 从Data节点获取Float值
+     *
+     * @param data 数据节点
+     * @return Float值
+     */
     public static float getFloat(Data data) {
         return (Float) data.getData();
     }
@@ -65,6 +109,12 @@ public class DataTool {
         return getInt(data.getChildByPath(path));
     }
 
+    /**
+     * 从Data节点获取Int值，支持类型转换
+     *
+     * @param data 数据节点
+     * @return Int值
+     */
     public static int getIntConvert(Data data) {
         if (data.getType() == DataType.STRING) {
             return Integer.parseInt(getString(data));
@@ -116,10 +166,26 @@ public class DataTool {
         }
     }
 
+    /**
+     * 通过路径从Data节点获取Int值，带默认值
+     *
+     * @param path 子节点路径
+     * @param data 数据节点
+     * @param def  默认值
+     * @return Int值或默认值
+     */
     public static int getInt(String path, Data data, int def) {
         return getInt(data.getChildByPath(path), def);
     }
 
+    /**
+     * 通过路径从Data节点获取Int值，带默认值，支持类型转换
+     *
+     * @param path 子节点路径
+     * @param data 数据节点
+     * @param def  默认值
+     * @return Int值或默认值
+     */
     public static int getIntConvert(String path, Data data, int def) {
         Data d = data.getChildByPath(path);
         if (d == null) {
@@ -188,14 +254,35 @@ public class DataTool {
         return val == null ? def : val;
     }
 
+    /**
+     * 从Data节点获取Point坐标
+     *
+     * @param data 数据节点
+     * @return Point对象
+     */
     public static Point getPoint(Data data) {
         return ((Point) data.getData());
     }
 
+    /**
+     * 通过路径从Data节点获取Point坐标
+     *
+     * @param path 子节点路径
+     * @param data 数据节点
+     * @return Point对象
+     */
     public static Point getPoint(String path, Data data) {
         return getPoint(data.getChildByPath(path));
     }
 
+    /**
+     * 通过路径从Data节点获取Point坐标，带默认值
+     *
+     * @param path 子节点路径
+     * @param data 数据节点
+     * @param def  默认值
+     * @return Point对象或默认值
+     */
     public static Point getPoint(String path, Data data, Point def) {
         final Data pointData = data.getChildByPath(path);
         if (pointData == null) {

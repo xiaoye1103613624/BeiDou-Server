@@ -31,21 +31,40 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 百宝箱服务类
+ * 提供百宝箱奖池的管理和抽奖功能
+ * 支持奖池配置、奖励管理、概率计算和抽奖执行
+ */
 @Slf4j
 @Service
 public class GachaponService {
+    /** 奖池数据访问对象 */
     @Autowired
     private GachaponRewardPoolMapper gachaponRewardPoolMapper;
+
+    /** 奖励数据访问对象 */
     @Autowired
     private GachaponRewardMapper gachaponRewardMapper;
 
-
+    /** 奖池奖励缓存，key为奖池ID，value为奖励列表 */
     private static final HashMap<Integer, List<GachaponRewardDO>> poolRewardsCache = new HashMap<>();
+
+    /** 读写锁，用于保证缓存的线程安全 */
     private static final ReadWriteLock lock = new ReentrantReadWriteLock(true);
+
+    /** 读锁 */
     private static final Lock rLock = lock.readLock();
+
+    /** 写锁 */
     private static final Lock wLock = lock.writeLock();
 
-
+    /**
+     * 更新奖池配置（新增或更新）
+     * 根据奖池类型设置不同的必填参数校验
+     *
+     * @param submit 奖池配置数据
+     */
     public void updatePool(GachaponRewardPoolDO submit) {
         wLock.lock();
         try {
@@ -59,14 +78,20 @@ public class GachaponService {
                 RequireUtil.requireNotNull(submit.getGachaponId(), "百宝箱ID不能为空");
                 RequireUtil.requireNotNull(submit.getWeight(), "奖池权重不能为空");
             }
-            // 校验城镇概率和是否大于100%
+            // 校验公共奖池概率总和不超过 100%
             gachaponRewardPoolMapper.insertOrUpdate(submit);
+            // 清除缓存，下次查询时重新加载
             poolRewardsCache.remove(submit.getId());
         } finally {
             wLock.unlock();
         }
     }
 
+    /**
+     * 删除奖池（级联删除奖励）
+     *
+     * @param id 奖池ID
+     */
     @Transactional
     public void deletePool(Integer id) {
         wLock.lock();
@@ -79,6 +104,13 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 获取奖池列表
+     * 支持按百宝箱ID筛选，并计算真实概率
+     *
+     * @param condition 查询条件
+     * @return 分页的奖池列表
+     */
     public Page<GachaponPoolSearchRtnDTO> getPools(GachaponPoolSearchReqDTO condition) {
         rLock.lock();
         try {
@@ -111,7 +143,7 @@ public class GachaponService {
                 records.add(data);
             }
 
-            // 设置真实概率
+            // 计算真实概率并设置
             if (condition.getGachaponId() != null && condition.getGachaponId() != -1) {
                 setRealProb(records);
             }
@@ -127,6 +159,12 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 获取奖池的奖励列表
+     *
+     * @param poolId 奖池ID
+     * @return 奖励列表
+     */
     public List<GachaponRewardDO> getRewards(Integer poolId) {
         rLock.lock();
         try {
@@ -143,6 +181,11 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 更新奖励（新增或更新）
+     *
+     * @param reward 奖励数据
+     */
     public void updateReward(GachaponRewardDO reward) {
         wLock.lock();
         try {
@@ -153,6 +196,11 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 删除奖励
+     *
+     * @param id 奖励ID
+     */
     public void deleteReward(Integer id) {
         wLock.lock();
         try {
@@ -166,12 +214,19 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 计算奖池的真实概率
+     * 公共奖池使用固定概率，非公共奖池根据权重计算
+     *
+     * @param pools 奖池列表
+     */
     private void setRealProb(List<GachaponPoolSearchRtnDTO> pools) {
         int probTotal = pools.stream().mapToInt(GachaponPoolSearchRtnDTO::getProb).sum();
         int probPoint = 100 * probTotal;
         int weightPoint = 1000000 - probPoint;
 
-        int totalWeight = pools.stream().mapToInt(GachaponPoolSearchRtnDTO::getWeight).sum(); // 总权重
+        // 公共奖池 = 固定概率 × 100，非公共奖池 = (剩余权重分 × 自身权重 / 总权重)
+        int totalWeight = pools.stream().mapToInt(GachaponPoolSearchRtnDTO::getWeight).sum();
         for (GachaponPoolSearchRtnDTO pool : pools) {
             if (pool.getIsPublic()) {
                 pool.setRealProb(pool.getProb() * 100);
@@ -181,10 +236,17 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 获取当前有效的奖池列表
+     * 根据有效期筛选，包含公共奖池和指定百宝箱的专属奖池
+     *
+     * @param gachaponId 百宝箱ID
+     * @return 有效奖池列表
+     */
     private List<GachaponRewardPoolDO> getActivePools(Integer gachaponId) {
         rLock.lock();
         try {
-            // pools 存在有效期，不能缓存
+            // 奖池存在有效期，不能缓存
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
             return gachaponRewardPoolMapper.selectListByQuery(QueryWrapper.create()
@@ -198,28 +260,37 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 执行百宝箱抽奖
+     * 根据概率和权重选择奖池，然后随机抽取奖励
+     *
+     * @param player     玩家角色
+     * @param gachaponId 百宝箱ID
+     */
     public void doGachapon(Character player, int gachaponId) {
         rLock.lock();
         try {
-            List<GachaponRewardPoolDO> pools = getActivePools(gachaponId); // 已按ID排序
+            List<GachaponRewardPoolDO> pools = getActivePools(gachaponId);
             if (pools.isEmpty()) {
                 player.message("百宝箱为空，请联系管理员，百宝箱id: " + gachaponId);
                 log.error("百宝箱奖池为空，百宝箱id:{} 抽奖人:[{}] {}", gachaponId, player.getId(), player.getName());
                 return;
             }
 
-            int point; // 积分
-            int pointTotal = 0; // 累计积分
+            int point;
+            int pointTotal = 0;
 
             int probTotal = pools.stream().mapToInt(GachaponRewardPoolDO::getProb).sum();
-            int probPoint = 100 * probTotal; // 公共奖池积分总额
-            int weightPoint = 1000000 - probPoint; // 非公共奖池积分总额
+            // 公共奖池按比例分配积分为 probPoint，非公共奖池按权重分配 weightPoint
+            // 总随机空间 = 1000000（百万分比精度）
+            int probPoint = 100 * probTotal;
+            int weightPoint = 1000000 - probPoint;
 
-            int totalWeight = pools.stream().mapToInt(GachaponRewardPoolDO::getWeight).sum(); // 总权重
-            int random = Randomizer.nextInt(1000000); // 随机数
+            int totalWeight = pools.stream().mapToInt(GachaponRewardPoolDO::getWeight).sum();
+            int random = Randomizer.nextInt(1000000);
             GachaponRewardPoolDO target = null;
             for (GachaponRewardPoolDO pool : pools) {
-                // 按权重分配积分
+                // 按权重分配积分：公共 → 固定分，非公共 → 按权重占比分配
                 if (pool.getIsPublic()) {
                     point = pool.getProb() * 100;
                 } else {
@@ -235,7 +306,7 @@ public class GachaponService {
             }
 
             if (target == null) {
-                // 如果三个奖池的权重分别是 8 8 2 / 3 3 3或其他类似的组合，那么有近乎于0（但不等于0）的概率出现null的情况
+                // 极端情况：所有权重组合导致累计积分为 0 或浮点截断，兜底取第一个奖池
                 target = pools.getFirst();
             }
             doReward(player, target);
@@ -244,11 +315,24 @@ public class GachaponService {
         }
     }
 
+    /**
+     * 根据NPC ID获取所有有效奖励
+     *
+     * @param npcId NPC ID
+     * @return 奖励列表
+     */
     public List<GachaponRewardDO> getRewardsByNpcId(Integer npcId) {
         List<GachaponRewardPoolDO> activePools = getActivePools(npcId);
         return activePools.stream().flatMap(pool -> getRewards(pool.getId()).stream()).toList();
     }
 
+    /**
+     * 发放奖励给玩家
+     * 从奖池中随机选择一个奖励并发放
+     *
+     * @param player 玩家角色
+     * @param pool   奖池
+     */
     private void doReward(Character player, GachaponRewardPoolDO pool) {
         List<GachaponRewardDO> poolRewards = getPoolRewards(pool.getId());
         if (poolRewards.isEmpty()) {
@@ -260,7 +344,7 @@ public class GachaponService {
         int random = Randomizer.nextInt(poolRewards.size());
         GachaponRewardDO reward = poolRewards.get(random);
         Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
-        // 修复背包满导致的空指针
+        // 防止背包满导致空指针
         if (itemGained == null) {
             return;
         }
@@ -268,11 +352,18 @@ public class GachaponService {
         player.dropMessage(gachaponMessage);
         Gachapon.log(player, reward.getItemId(), player.getMap().getMapName());
 
+        // 如果需要全服广播通知
         if (pool.getNotification()) {
             Server.getInstance().broadcastMessage(player.getWorld(), PacketCreator.gachaponMessage(itemGained, player.getMap().getMapName(), player));
         }
     }
 
+    /**
+     * 获取奖池的奖励列表（带缓存）
+     *
+     * @param poolId 奖池ID
+     * @return 奖励列表
+     */
     private List<GachaponRewardDO> getPoolRewards(Integer poolId) {
         if (poolRewardsCache.containsKey(poolId)) {
             return poolRewardsCache.get(poolId);

@@ -30,9 +30,15 @@ import org.gms.server.quest.QuestRequirementType;
 import java.util.Calendar;
 
 /**
+ * 结束日期需求
+ * 检查当前时间是否在任务的有效截止日期之前
+ *
  * @author Tyler (Twdtwd)
  */
 public class EndDateRequirement extends AbstractQuestRequirement {
+    /** 截止日期 */
+    private Calendar endDate;
+    /** 时间字符串 */
     private String timeStr;
 
 
@@ -42,7 +48,9 @@ public class EndDateRequirement extends AbstractQuestRequirement {
     }
 
     /**
-     * @param data
+     * 从WZ数据中解析时间字符串
+     *
+     * @param data WZ数据
      */
     @Override
     public void processData(Data data) {

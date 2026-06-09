@@ -24,12 +24,28 @@ package org.gms.net;
 import org.gms.client.Client;
 import org.gms.net.server.Server;
 
+/**
+ * 抽象数据包处理器
+ * 提供数据包处理的默认实现，验证客户端登录状态和获取当前服务器时间
+ */
 public abstract class AbstractPacketHandler implements PacketHandler {
+    /**
+     * 验证客户端状态
+     * 默认验证客户端是否已登录
+     *
+     * @param c 客户端对象
+     * @return true表示状态有效
+     */
     @Override
     public boolean validateState(Client c) {
         return c.isLoggedIn();
     }
 
+    /**
+     * 获取当前服务器时间
+     *
+     * @return 服务器当前时间戳
+     */
     protected static long currentServerTime() {
         return Server.getInstance().getCurrentTime();
     }

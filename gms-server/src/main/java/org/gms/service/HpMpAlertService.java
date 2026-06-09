@@ -10,24 +10,44 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * HP/MP警报服务类
+ * 管理角色的HP/MP警报阈值设置，使用内存缓存提升查询性能
+ */
 @Slf4j
 @Service
 public class HpMpAlertService {
     /**
-     * 客户端上报 0-19 共 20 个挡位；服务端按“挡位/20”换算比例（最大 95%）。
+     * 客户端上报 0-19 共 20 个挡位；服务端按"挡位/20"换算比例（最大 95%）。
      */
     private static final int MAX_ALERT_STEP = 19;
     private static final int ALERT_STEP_DIVISOR = 20;
 
+    /** HP/MP警报数据访问对象 */
     @Autowired
     private HpMpAlertMapper hpMpAlertMapper;
+    /** 警报缓存，key为角色ID */
     public static final Map<Integer, HpMpAlertDO> cacheMap = new ConcurrentHashMap<>();
 
+    /**
+     * 标准化警报挡位
+     * 将输入挡位限制在 0~MAX_ALERT_STEP 范围内
+     *
+     * @param step 原始挡位
+     * @return 标准化后的挡位
+     */
     private static byte normalizeAlertStep(byte step) {
         int normalized = Math.min(MAX_ALERT_STEP, Math.max(0, Byte.toUnsignedInt(step)));
         return (byte) normalized;
     }
 
+    /**
+     * 获取角色的HP警报挡位
+     * 优先从缓存读取，缓存未命中则查询数据库
+     *
+     * @param characterId 角色ID
+     * @return HP警报挡位（0~19）
+     */
     public byte getHpAlert(int characterId) {
         HpMpAlertDO cached = cacheMap.get(characterId);
         if (cached != null) {
@@ -51,6 +71,13 @@ public class HpMpAlertService {
         return 0;
     }
 
+    /**
+     * 设置角色的HP警报挡位
+     * 先更新缓存，未命中缓存时查询数据库并更新/新建
+     *
+     * @param characterId 角色ID
+     * @param alert       HP警报挡位
+     */
     public void setHpAlert(int characterId, byte alert) {
         byte normalizedAlert = normalizeAlertStep(alert);
         HpMpAlertDO cached = cacheMap.get(characterId);
@@ -68,10 +95,23 @@ public class HpMpAlertService {
         cacheMap.put(characterId, hpMpAlert);
     }
 
+    /**
+     * 获取角色的HP警报比例
+     *
+     * @param characterId 角色ID
+     * @return HP警报比例（0.0 ~ 0.95）
+     */
     public float getHpAlertPer(int characterId) {
         return (float) Byte.toUnsignedInt(getHpAlert(characterId)) / ALERT_STEP_DIVISOR;
     }
 
+    /**
+     * 获取角色的MP警报挡位
+     * 优先从缓存读取，缓存未命中则查询数据库
+     *
+     * @param characterId 角色ID
+     * @return MP警报挡位（0~19）
+     */
     public byte getMpAlert(int characterId) {
         HpMpAlertDO cached = cacheMap.get(characterId);
         if (cached != null) {
@@ -95,6 +135,13 @@ public class HpMpAlertService {
         return 0;
     }
 
+    /**
+     * 设置角色的MP警报挡位
+     * 先更新缓存，未命中缓存时查询数据库并更新/新建
+     *
+     * @param characterId 角色ID
+     * @param alert       MP警报挡位
+     */
     public void setMpAlert(int characterId, byte alert) {
         byte normalizedAlert = normalizeAlertStep(alert);
         HpMpAlertDO cached = cacheMap.get(characterId);
@@ -112,6 +159,12 @@ public class HpMpAlertService {
         cacheMap.put(characterId, hpMpAlert);
     }
 
+    /**
+     * 获取角色的MP警报比例
+     *
+     * @param characterId 角色ID
+     * @return MP警报比例（0.0 ~ 0.95）
+     */
     public float getMpAlertPer(int characterId) {
         return (float) Byte.toUnsignedInt(getMpAlert(characterId)) / ALERT_STEP_DIVISOR;
     }

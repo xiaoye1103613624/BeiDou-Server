@@ -41,16 +41,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 生命体工厂
+ * 负责从WZ文件中加载怪物和NPC的数据，创建对应的{@link Monster}和{@link NPC}对象
+ * 包含怪物属性解析、碰撞框计算、攻击信息提取、技能解析、可视化数据解析等完整逻辑
+ * 使用缓存机制避免重复加载，支持link怪物属性继承
+ *
+ * @author OdinMS Team
+ */
 public class LifeFactory {
     private static final Logger log = LoggerFactory.getLogger(LifeFactory.class);
+    /** 怪物数据提供者（Mob.wz） */
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
+    /** 字符串数据提供者（String.wz） */
     private final static DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
+    /** 怪物名称数据节点 */
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
+    /** NPC名称数据节点 */
     private static final Data npcStringData = stringDataWZ.getData("Npc.img");
+    /** 怪物属性缓存 */
     private static final Map<Integer, MonsterStats> monsterStats = new HashMap<>();
+    /** 血条BOSS集合（从UI.wz中加载） */
     private static final Set<Integer> hpbarBosses = getHpBarBosses();
+    /** NPC名称缓存 */
     private static final Map<Integer, String> npcNames = new HashMap<>();
 
+    /**
+     * 从UI.wz中加载血条BOSS列表
+     * 这些BOSS在客户端显示血条
+     *
+     * @return BOSS的怪物ID集合
+     */
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
 
@@ -62,6 +83,14 @@ public class LifeFactory {
         return ret;
     }
 
+    /**
+     * 根据类型获取生命体对象
+     * n=NPC, m=怪物
+     *
+     * @param id 生命体ID
+     * @param type 类型（n或m）
+     * @return AbstractLoadedLife对象，未知类型返回null
+     */
     public static AbstractLoadedLife getLife(int id, String type) {
         if (type.equalsIgnoreCase("n")) {
             return getNPC(id);
@@ -73,10 +102,18 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 怪物攻击信息持有者（内部类）
+     * 存储怪物攻击动作的参数：攻击序号、MP消耗、冷却时间、动画时间
+     */
     private static class MobAttackInfoHolder {
+        /** 攻击序号 */
         protected int attackPos;
+        /** MP消耗 */
         protected int mpCon;
+        /** 冷却时间 */
         protected int coolTime;
+        /** 动画时间 */
         protected int animationTime;
 
         protected MobAttackInfoHolder(int attackPos, int mpCon, int coolTime, int animationTime) {
@@ -87,6 +124,10 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 包围盒（内部类）
+     * 用于计算怪物多个动作帧的最大碰撞框范围
+     */
     private static final class BoundingBox {
         private int minX = Integer.MAX_VALUE;
         private int minY = Integer.MAX_VALUE;
@@ -351,6 +392,12 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 设置怪物攻击信息到MonsterInformationProvider
+     *
+     * @param mid 怪物ID
+     * @param attackInfos 攻击信息列表
+     */
     private static void setMonsterAttackInfo(int mid, List<MobAttackInfoHolder> attackInfos) {
         if (!attackInfos.isEmpty()) {
             MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
@@ -514,41 +561,47 @@ public class LifeFactory {
         }
         // 统一从最终视觉来源回填尺寸与碰撞框，避免 link 怪重复走本地旧逻辑。
         applyMonsterVisualStats(mid, stats, visualMonsterData);
-        /* 已废弃：以下旧的本地 visual 解析路径仅作留档，当前统一走上面的 link 可视数据解析。
-        Data fly = monsterData.getChildByPath("fly/0");
-        if (fly != null) {
-            stats.setMovetype(1);   //设定怪物类型为：fly
-            fly = fly.getType() == DataType.UOL ? fly.getChildByPath((String) fly.getData()) : fly;  //呼叫转移...
-            if (fly != null) {
-                stats.setImgwidth(DataTool.getAttributeValueInt(fly,"width",-1));
-                stats.setImgheight(DataTool.getAttributeValueInt(fly,"height",-1));
-            }
-        } else if (stand != null) {
-            stats.setMovetype(0);   //设定怪物类型为：stand
-            stand = stand.getType() == DataType.UOL ? stand.getChildByPath((String) stand.getData()) : stand;  //呼叫转移...
-            if (stand != null) {
-                stats.setImgwidth(DataTool.getAttributeValueInt(stand,"width",-1));
-                stats.setImgheight(DataTool.getAttributeValueInt(stand,"height",-1));
-            }
-
-        }
-        // 计算怪物碰撞框（多动作帧合并），用于后续距离判定和大体型识别
-        BoundingBox bbox = buildMonsterBoundingBox(mid, stats.getName(), monsterData);
-        if (bbox.isValid()) {
-            stats.setBbox(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
-        } else {
-            Point origin = DataTool.getPoint("stand/0/origin", monsterData, null);
-            if (origin == null) {
-                origin = DataTool.getPoint("fly/0/origin", monsterData, null);
-            }
-            if (origin != null && stats.getImgwidth() > 0 && stats.getImgheight() > 0) {
-                stats.setBbox(-origin.x, -origin.y, stats.getImgwidth() - origin.x, stats.getImgheight() - origin.y);
-            }
-        }
-        */
+        // 已废弃：以下旧的本地 visual 解析路径仅作留档，当前统一走上面的 link 可视数据解析。
+        // Data fly = monsterData.getChildByPath("fly/0");
+        // if (fly != null) {
+        //     stats.setMovetype(1);   //设定怪物类型为：fly
+        //     fly = fly.getType() == DataType.UOL ? fly.getChildByPath((String) fly.getData()) : fly;  //呼叫转移...
+        //     if (fly != null) {
+        //         stats.setImgwidth(DataTool.getAttributeValueInt(fly,"width",-1));
+        //         stats.setImgheight(DataTool.getAttributeValueInt(fly,"height",-1));
+        //     }
+        // } else if (stand != null) {
+        //     stats.setMovetype(0);   //设定怪物类型为：stand
+        //     stand = stand.getType() == DataType.UOL ? stand.getChildByPath((String) stand.getData()) : stand;  //呼叫转移...
+        //     if (stand != null) {
+        //         stats.setImgwidth(DataTool.getAttributeValueInt(stand,"width",-1));
+        //         stats.setImgheight(DataTool.getAttributeValueInt(stand,"height",-1));
+        //     }
+        //
+        // }
+        // // 计算怪物碰撞框（多动作帧合并），用于后续距离判定和大体型识别
+        // BoundingBox bbox = buildMonsterBoundingBox(mid, stats.getName(), monsterData);
+        // if (bbox.isValid()) {
+        //     stats.setBbox(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
+        // } else {
+        //     Point origin = DataTool.getPoint("stand/0/origin", monsterData, null);
+        //     if (origin == null) {
+        //         origin = DataTool.getPoint("fly/0/origin", monsterData, null);
+        //     }
+        //     if (origin != null && stats.getImgwidth() > 0 && stats.getImgheight() > 0) {
+        //         stats.setBbox(-origin.x, -origin.y, stats.getImgwidth() - origin.x, stats.getImgheight() - origin.y);
+        //     }
+        // }
         return new Pair<>(stats, attackInfos);
     }
 
+    /**
+     * 获取怪物对象（带缓存）
+     * 先从缓存获取属性，缓存未命中则从WZ加载并缓存
+     *
+     * @param mid 怪物ID
+     * @return 怪物对象，加载失败返回null
+     */
     public static Monster getMonster(int mid) {
         try {
             MonsterStats stats = monsterStats.get(mid);
@@ -566,6 +619,13 @@ public class LifeFactory {
         }
     }
 
+    /**
+     * 获取怪物等级
+     * 先从缓存获取，缓存未命中则直接从WZ文件读取
+     *
+     * @param mid 怪物ID
+     * @return 怪物等级，加载失败返回-1
+     */
     public static int getMonsterLevel(int mid) {
         try {
             MonsterStats stats = monsterStats.get(mid);
@@ -586,12 +646,27 @@ public class LifeFactory {
         return -1;
     }
 
+    /**
+     * 解析元素抗性字符串
+     * 格式：每两个字符一组，第一个字符是元素字母，第二个字符是抗性等级
+     * 例如："F2I3"表示火属性强抵抗、冰属性弱抵抗
+     *
+     * @param stats 怪物属性（输出参数）
+     * @param elemAttr 元素抗性字符串
+     */
     private static void decodeElementalString(MonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
             stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.parseInt(String.valueOf(elemAttr.charAt(i + 1)))));
         }
     }
 
+    /**
+     * 获取NPC对象（带缓存）
+     * 缓存NPC名称避免重复从WZ加载
+     *
+     * @param nid NPC ID
+     * @return NPC对象
+     */
     public static NPC getNPC(int nid) {
         String name = npcNames.get(nid);
         if (RequireUtil.isEmpty(name)) {
@@ -601,18 +676,37 @@ public class LifeFactory {
         return new NPC(nid, new NPCStats(name));
     }
 
+    /**
+     * 获取NPC名称
+     *
+     * @param nid NPC ID
+     * @return NPC名称
+     */
     public static String getNPCName(int nid) {
         return getNPC(nid).getName();
     }
 
+    /**
+     * 获取NPC默认对话文本
+     *
+     * @param nid NPC ID
+     * @return 默认对话文本
+     */
     public static String getNPCDefaultTalk(int nid) {
         return DataTool.getString(nid + "/d0", npcStringData, "(...)");
     }
 
+    /**
+     * 放逐信息（内部类）
+     * 怪物技能放逐玩家时使用的目标地图和传送门信息
+     */
     public static class BanishInfo {
 
+        /** 目标地图ID */
         private final int map;
+        /** 目标传送门 */
         private final String portal;
+        /** 放逐消息 */
         private final String msg;
 
         public BanishInfo(String msg, int map, String portal) {
@@ -621,23 +715,45 @@ public class LifeFactory {
             this.portal = portal;
         }
 
+        /**
+         * 获取目标地图ID
+         *
+         * @return 地图ID
+         */
         public int getMap() {
             return map;
         }
 
+        /**
+         * 获取目标传送门
+         *
+         * @return 传送门名称
+         */
         public String getPortal() {
             return portal;
         }
 
+        /**
+         * 获取放逐消息
+         *
+         * @return 放逐消息文本
+         */
         public String getMsg() {
             return msg;
         }
     }
 
+    /**
+     * 丢失物品信息（内部类）
+     * 怪物被攻击后可能丢失的物品配置
+     */
     public static class loseItem {
 
+        /** 物品ID */
         private final int id;
+        /** 掉落概率 */
         private final byte chance;
+        /** X坐标偏移 */
         private final byte x;
 
         public loseItem(int id, byte chance, byte x) {
@@ -646,23 +762,45 @@ public class LifeFactory {
             this.x = x;
         }
 
+        /**
+         * 获取物品ID
+         *
+         * @return 物品ID
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * 获取掉落概率
+         *
+         * @return 概率值
+         */
         public byte getChance() {
             return chance;
         }
 
+        /**
+         * 获取X坐标偏移
+         *
+         * @return X偏移
+         */
         public byte getX() {
             return x;
         }
     }
 
+    /**
+     * 自毁信息（内部类）
+     * 怪物自毁技能配置：动作、移除时间、触发HP
+     */
     public static class selfDestruction {
 
+        /** 自毁动作序号 */
         private final byte action;
+        /** 自毁后移除时间 */
         private final int removeAfter;
+        /** 触发自毁的HP阈值 */
         private final int hp;
 
         public selfDestruction(byte action, int removeAfter, int hp) {
@@ -671,14 +809,29 @@ public class LifeFactory {
             this.hp = hp;
         }
 
+        /**
+         * 获取触发自毁的HP阈值
+         *
+         * @return HP阈值
+         */
         public int getHp() {
             return hp;
         }
 
+        /**
+         * 获取自毁动作序号
+         *
+         * @return 动作序号
+         */
         public byte getAction() {
             return action;
         }
 
+        /**
+         * 获取自毁后移除时间
+         *
+         * @return 移除时间（毫秒）
+         */
         public int removeAfter() {
             return removeAfter;
         }

@@ -21,14 +21,26 @@
 */
 package org.gms.client;
 
+/**
+ * 皮肤颜色枚举
+ * 定义角色的8种肤色选项，使用整数ID标识
+ */
 public enum SkinColor {
+    /** 普通 */
     NORMAL(0),
+    /** 暗色 */
     DARK(1),
+    /** 黑色 */
     BLACK(2),
+    /** 苍白 */
     PALE(3),
+    /** 蓝色 */
     BLUE(4),
+    /** 绿色 */
     GREEN(5),
+    /** 白色 */
     WHITE(9),
+    /** 粉色 */
     PINK(10);
 
     final int id;

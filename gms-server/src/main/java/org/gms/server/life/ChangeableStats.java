@@ -19,10 +19,30 @@ package org.gms.server.life;
 
 import org.gms.constants.game.GameConstants;
 
+/**
+ * 可变怪物属性
+ * 继承OverrideMonsterStats，支持根据等级或属性倍率动态计算怪物的攻击力、防御力、等级等属性
+ * 常用于组队任务（PQ）和等级调整场景
+ */
 public class ChangeableStats extends OverrideMonsterStats {
 
-    public int watk, matk, wdef, mdef, level;
+    /** 物理攻击力 */
+    public int watk;
+    /** 魔法攻击力 */
+    public int matk;
+    /** 物理防御力 */
+    public int wdef;
+    /** 魔法防御力 */
+    public int mdef;
+    /** 等级 */
+    public int level;
 
+    /**
+     * 基于已有属性和覆盖属性构造
+     *
+     * @param stats 怪物基础属性
+     * @param ostats 覆盖属性
+     */
     public ChangeableStats(MonsterStats stats, OverrideMonsterStats ostats) {
         hp = ostats.getHp();
         exp = ostats.getExp();
@@ -34,11 +54,21 @@ public class ChangeableStats extends OverrideMonsterStats {
         level = stats.getLevel();
     }
 
-    public ChangeableStats(MonsterStats stats, int newLevel, boolean pqMob) { // here we go i think
+    /**
+     * 基于新等级动态计算属性
+     * 根据等级比例调整HP、MP、攻击力、防御力等属性
+     * BOSS怪物使用原始HP按比例缩放，普通怪物使用标准等级HP公式
+     * 防御力上限：BOSS为30，普通怪物为20
+     *
+     * @param stats 怪物基础属性
+     * @param newLevel 新等级
+     * @param pqMob 是否为组队任务怪物（PQ怪物属性乘以1.5倍）
+     */
+    public ChangeableStats(MonsterStats stats, int newLevel, boolean pqMob) {
         final double mod = (double) newLevel / (double) stats.getLevel();
         final double hpRatio = (double) stats.getHp() / (double) stats.getExp();
-        final double pqMod = (pqMob ? 1.5 : 1.0); // god damn
-        hp = Math.min((int) Math.round((!stats.isBoss() ? GameConstants.getMonsterHP(newLevel) : (stats.getHp() * mod)) * pqMod), Integer.MAX_VALUE); // right here lol
+        final double pqMod = (pqMob ? 1.5 : 1.0);
+        hp = Math.min((int) Math.round((!stats.isBoss() ? GameConstants.getMonsterHP(newLevel) : (stats.getHp() * mod)) * pqMod), Integer.MAX_VALUE);
         exp = Math.min((int) Math.round((!stats.isBoss() ? (GameConstants.getMonsterHP(newLevel) / hpRatio) : (stats.getExp())) * pqMod), Integer.MAX_VALUE);
         mp = Math.min((int) Math.round(stats.getMp() * mod * pqMod), Integer.MAX_VALUE);
         watk = Math.min((int) Math.round(stats.getPADamage() * mod), Integer.MAX_VALUE);
@@ -48,6 +78,13 @@ public class ChangeableStats extends OverrideMonsterStats {
         level = newLevel;
     }
 
+    /**
+     * 基于属性倍率计算属性（通过倍率推算新等级）
+     *
+     * @param stats 怪物基础属性
+     * @param statModifier 属性倍率
+     * @param pqMob 是否为组队任务怪物
+     */
     public ChangeableStats(MonsterStats stats, float statModifier, boolean pqMob) {
         this(stats, (int) (statModifier * stats.getLevel()), pqMob);
     }

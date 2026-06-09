@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 角色属性监听器
+ * 实现{@link AbstractCharacterListener}接口，监听并处理角色属性变化
+ * 当HP变化时触发hpChangeAction，HP/MP池更新时重新计算本地属性
+ *
+ * @author Ronan
+ */
 public class CharacterListener implements AbstractCharacterListener {
+    /** 关联的角色 */
     private final Character character;
     public CharacterListener(Character character) {
         this.character = character;

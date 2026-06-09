@@ -37,11 +37,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 玩家NPC位置管理器
+ * 负责在普通地图上为玩家NPC自动分配位置，避免重叠
+ * 使用网格扫描算法，逐步缩小间距以容纳更多NPC
+ *
  * @author RonanLana
  */
 public class PlayerNPCPositioner {
     private static final Logger log = LoggerFactory.getLogger(PlayerNPCPositioner.class);
 
+    /**
+     * 判断指定位置是否与已有NPC位置重叠
+     *
+     * @param otherPos 已有NPC位置列表
+     * @param searchPos 待检查位置
+     * @param xLimit X轴限制距离
+     * @param yLimit Y轴限制距离
+     * @return true表示位置冲突
+     */
     private static boolean isPlayerNpcNearby(List<Point> otherPos, Point searchPos, int xLimit, int yLimit) {
         int xLimit2 = xLimit / 2, yLimit2 = yLimit / 2;
 
@@ -57,14 +70,35 @@ public class PlayerNPCPositioner {
         return false;
     }
 
+    /**
+     * 计算当前步数下的X轴间隔
+     *
+     * @param newStep 当前步数
+     * @return X轴间隔
+     */
     private static int calcDx(int newStep) {
         return GameConfig.getServerInt("playernpc_area_x") / (newStep + 1);
     }
 
+    /**
+     * 计算当前步数下的Y轴间隔
+     *
+     * @param newStep 当前步数
+     * @return Y轴间隔
+     */
     private static int calcDy(int newStep) {
         return (GameConfig.getServerInt("playernpc_area_y") / 2) + (GameConfig.getServerInt("playernpc_area_y") / (1 << (newStep + 1)));
     }
 
+    /**
+     * 重新排列玩家NPC位置
+     * 扫描地图区域，找到所有可用位置
+     *
+     * @param map 地图
+     * @param newStep 当前步数
+     * @param pnpcsSize 需要位置的NPC数量
+     * @return 可用位置列表
+     */
     private static List<Point> rearrangePlayerNpcPositions(MapleMap map, int newStep, int pnpcsSize) {
         Rectangle mapArea = map.getMapArea();
 
@@ -97,6 +131,15 @@ public class PlayerNPCPositioner {
         return null;
     }
 
+    /**
+     * 重新排列已有NPC位置并返回新NPC的可用位置
+     * 按脚本ID排序后重新分配位置，广播更新到所有频道
+     *
+     * @param map 地图
+     * @param newStep 当前步数
+     * @param pnpcs 已有NPC列表
+     * @return 新NPC的可用位置
+     */
     private static Point rearrangePlayerNpcs(MapleMap map, int newStep, List<PlayerNPC> pnpcs) {
         Rectangle mapArea = map.getMapArea();
 
@@ -135,6 +178,15 @@ public class PlayerNPCPositioner {
         return null;    // this area should not be reached under any scenario
     }
 
+    /**
+     * 重新组织地图上的所有玩家NPC
+     * 按脚本ID排序后重新布局，同步更新所有频道
+     *
+     * @param map 地图
+     * @param newStep 当前步数
+     * @param mmoList 地图对象列表
+     * @return 新NPC的可用位置
+     */
     private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
             if (GameConfig.getServerBoolean("use_debug")) {
@@ -178,7 +230,16 @@ public class PlayerNPCPositioner {
         return null;
     }
 
-    private static Point getNextPlayerNpcPosition(MapleMap map, int initStep) {   // automated playernpc position thanks to Ronan
+    /**
+     * 获取下一个玩家NPC的可用位置
+     * 使用网格扫描算法，从初始步数开始逐步缩小间距搜索可用位置
+     * 当所有初始步数位置都满时，增加步数缩小间距以容纳更多NPC
+     *
+     * @param map 地图
+     * @param initStep 初始步数
+     * @return 可用位置，无可用位置返回null
+     */
+    private static Point getNextPlayerNpcPosition(MapleMap map, int initStep) {
         List<MapObject> mmoList = map.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC));
         List<Point> otherPlayerNpcs = new LinkedList<>();
         for (MapObject mmo : mmoList) {
@@ -235,6 +296,12 @@ public class PlayerNPCPositioner {
         return null;
     }
 
+    /**
+     * 获取下一个玩家NPC的可用位置（公开接口）
+     *
+     * @param map 地图
+     * @return 可用位置，无可用位置返回null
+     */
     public static Point getNextPlayerNpcPosition(MapleMap map) {
         return getNextPlayerNpcPosition(map, map.getWorldServer().getPlayerNpcMapStep(map.getId()));
     }

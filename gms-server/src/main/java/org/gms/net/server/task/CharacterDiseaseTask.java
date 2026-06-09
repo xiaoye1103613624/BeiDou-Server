@@ -22,8 +22,10 @@ package org.gms.net.server.task;
 import org.gms.net.server.Server;
 
 /**
+ * 角色异常状态广播定时任务
+ * 定期广播地图内玩家的异常状态（如中毒、虚弱等），确保新进入地图的玩家能看到其他玩家的状态效果
+ *
  * @author Ronan
- * @info Thread responsible for announcing other players diseases when one enters into a map
  */
 public class CharacterDiseaseTask implements Runnable {
     @Override

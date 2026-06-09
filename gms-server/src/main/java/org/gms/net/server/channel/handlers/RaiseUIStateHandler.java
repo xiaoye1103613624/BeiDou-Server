@@ -10,6 +10,9 @@ import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.server.quest.Quest;
 
 /**
+ * UI状态提升处理器
+ * 处理玩家UI状态变化的操作
+ *
  * @author Xari
  */
 public class RaiseUIStateHandler extends AbstractPacketHandler {

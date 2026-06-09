@@ -29,9 +29,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 前置任务需求
+ * 检查玩家是否已完成指定任务，任务状态必须匹配要求的完成状态
+ *
  * @author Tyler (Twdtwd)
  */
 public class QuestRequirement extends AbstractQuestRequirement {
+    /** 任务ID -> 完成状态映射 */
     Map<Integer, Integer> quests = new HashMap<>();
 
     public QuestRequirement(Quest quest, Data data) {
@@ -40,7 +44,9 @@ public class QuestRequirement extends AbstractQuestRequirement {
     }
 
     /**
-     * @param data
+     * 从WZ数据中解析前置任务ID和要求的完成状态
+     *
+     * @param data WZ数据
      */
     @Override
     public void processData(Data data) {

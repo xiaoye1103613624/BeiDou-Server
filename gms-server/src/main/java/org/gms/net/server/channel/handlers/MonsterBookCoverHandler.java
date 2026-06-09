@@ -26,6 +26,10 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 怪物图鉴封面处理器
+ * 处理玩家更换怪物图鉴封面的操作
+ */
 public final class MonsterBookCoverHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         int id = p.readInt();

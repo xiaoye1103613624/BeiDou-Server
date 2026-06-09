@@ -5,12 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 商店搜索结果返回参数
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ShopSearchRtnDTO {
+    /** 商店ID */
     private Long shopId;
+    /** NPC ID */
     private Integer npcId;
+    /** NPC名称 */
     private String npcName;
 }

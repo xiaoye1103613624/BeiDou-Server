@@ -33,10 +33,20 @@ import org.gms.util.PacketCreator;
 import java.util.Set;
 
 /**
+ * 宠物拾取处理器
+ * 处理宠物拾取地图上掉落物品和金币的操作
+ *
  * @author TheRamon
  * @author Ronan
  */
 public final class PetLootHandler extends AbstractPacketHandler {
+
+    /**
+     * 处理宠物拾取包，根据掉落物类型（金币/物品）检查对应的宠物装备（吸金磁铁/物品袋），验证排除列表后执行拾取
+     *
+     * @param p 输入数据包，包含宠物ID和掉落物对象ID
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();

@@ -24,10 +24,14 @@ import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
 /**
+ * 综合调度服务
+ * 管理频道的通用延迟任务调度，通过分片避免锁竞争
+ *
  * @author Ronan
  */
-public class OverallService extends BaseService {   // thanks Alex for suggesting a refactor over the several channel schedulers unnecessarily populating the Channel class
+public class OverallService extends BaseService {
 
+    /** 频道调度器数组，按频道分片 */
     private final OverallScheduler[] channelSchedulers = new OverallScheduler[GameConfig.getServerInt("channel_locks")];
 
     public OverallService() {
@@ -46,21 +50,49 @@ public class OverallService extends BaseService {   // thanks Alex for suggestin
         }
     }
 
+    /**
+     * 注册综合延迟操作
+     *
+     * @param mapid     地图ID
+     * @param runAction 执行逻辑
+     * @param delay     延迟时间
+     */
     public void registerOverallAction(int mapid, Runnable runAction, long delay) {
         channelSchedulers[getChannelSchedulerIndex(mapid)].registerDelayedAction(runAction, delay);
     }
 
+    /**
+     * 强制立即执行综合操作
+     *
+     * @param mapid     地图ID
+     * @param runAction 执行逻辑
+     */
     public void forceRunOverallAction(int mapid, Runnable runAction) {
         channelSchedulers[getChannelSchedulerIndex(mapid)].forceRunDelayedAction(runAction);
     }
 
 
+    /**
+     * 综合调度器
+     * 负责延迟任务的注册和强制执行
+     */
     public class OverallScheduler extends BaseScheduler {
 
+        /**
+         * 注册延迟操作
+         *
+         * @param runAction 执行逻辑
+         * @param delay     延迟时间
+         */
         public void registerDelayedAction(Runnable runAction, long delay) {
             registerEntry(runAction, runAction, delay);
         }
 
+        /**
+         * 强制立即执行操作
+         *
+         * @param runAction 执行逻辑
+         */
         public void forceRunDelayedAction(Runnable runAction) {
             interruptEntry(runAction);
         }

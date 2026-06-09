@@ -48,6 +48,10 @@ import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 近战伤害处理器
+ * 处理玩家的近战（物理）攻击，解析攻击包并广播伤害
+ */
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
 
     @Override

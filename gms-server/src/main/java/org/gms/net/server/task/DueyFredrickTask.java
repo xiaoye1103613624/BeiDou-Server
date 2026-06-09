@@ -23,11 +23,20 @@ import org.gms.client.processor.npc.DueyProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 
 /**
+ * 快递与弗雷德里克定时任务
+ * 定期检查弗雷德里克（Fredrick）和快递（Duey）的到期包裹，执行过期清理
+ *
  * @author Ronan
  */
 public class DueyFredrickTask implements Runnable {
+    /** 弗雷德里克处理器 */
     private final FredrickProcessor fredrickProcessor;
 
+    /**
+     * 构造快递与弗雷德里克定时任务
+     *
+     * @param fredrickProcessor 弗雷德里克处理器
+     */
     public DueyFredrickTask(FredrickProcessor fredrickProcessor) {
         this.fredrickProcessor = fredrickProcessor;
     }

@@ -21,6 +21,10 @@
 */
 package org.gms.util;
 
+/**
+ * 字符串工具类
+ * 提供字符串左填充、连接、计数、截断等常用操作
+ */
 public class StringUtil {
     /**
      * Gets a string padded from the left to <code>length</code> by

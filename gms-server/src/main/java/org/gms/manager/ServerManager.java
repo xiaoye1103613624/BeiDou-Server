@@ -21,9 +21,14 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.net.InetAddress;
 
+/**
+ * 服务管理器
+ * 负责应用启动时初始化游戏服务器、启动完成后展示API文档地址、应用关闭时优雅停止服务
+ */
 @Component
 @Slf4j
 public class ServerManager implements ApplicationContextAware, ApplicationRunner, DisposableBean {
+    /** Spring应用上下文 */
     @Getter
     private static ApplicationContext applicationContext;
 

@@ -26,10 +26,17 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
- * 脚本、GM指令传送玩家到指定地图触发
+ * 组队搜索更新处理器
+ * 脚本、GM指令传送玩家到指定地图触发，用于注销玩家的组队搜索登记
  */
 public final class PartySearchUpdateHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理组队搜索更新包，将当前玩家从组队搜索协调器中注销
+     *
+     * @param p 输入数据包
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         c.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(c.getPlayer());

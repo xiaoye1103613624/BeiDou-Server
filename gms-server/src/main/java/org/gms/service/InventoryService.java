@@ -32,16 +32,35 @@ import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQU
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
 import static org.gms.dao.entity.table.PetignoresDOTableDef.PETIGNORES_D_O;
 
+/**
+ * 背包服务类
+ * 提供角色背包的查询、修改、删除等管理功能
+ * 支持在线玩家和离线玩家的背包操作
+ */
 @Transactional
 @Service
 @AllArgsConstructor
 public class InventoryService {
+    /** 物品库存数据访问对象 */
     private final InventoryitemsMapper inventoryitemsMapper;
+
+    /** 装备库存数据访问对象 */
     private final InventoryequipmentMapper inventoryequipmentMapper;
+
+    /** 戒指数据访问对象 */
     private final RingsMapper ringsMapper;
+
+    /** 宠物数据访问对象 */
     private final PetsMapper petsMapper;
+
+    /** 宠物忽略物品数据访问对象 */
     private final PetignoresMapper petignoresMapper;
 
+    /**
+     * 获取所有背包类型列表
+     *
+     * @return 背包类型列表
+     */
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
         for (InventoryType value : InventoryType.values()) {
@@ -50,6 +69,13 @@ public class InventoryService {
         return list;
     }
 
+    /**
+     * 获取角色列表（带背包数据）
+     * 支持按角色ID和角色名进行筛选
+     *
+     * @param data 查询条件，包含角色ID、角色名、分页信息
+     * @return 角色列表，包含在线状态
+     */
     public Page<InventorySearchReqDTO> getCharacterList(InventorySearchReqDTO data) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(distinct(CHARACTERS_D_O.ID, CHARACTERS_D_O.NAME, CHARACTERS_D_O.ACCOUNTID))
@@ -79,6 +105,13 @@ public class InventoryService {
         );
     }
 
+    /**
+     * 获取角色背包列表
+     * 根据角色ID和背包类型查询背包物品，支持在线和离线玩家
+     *
+     * @param data 查询条件，包含角色ID、背包类型
+     * @return 背包物品列表
+     */
     public List<InventorySearchRtnDTO> getInventoryList(InventorySearchReqDTO data) {
         RequireUtil.requireNotNull(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
         RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
@@ -112,6 +145,12 @@ public class InventoryService {
         return rtnDTOList;
     }
 
+    /**
+     * 根据角色ID删除所有背包数据
+     * 级联删除相关的宠物、戒指等数据，并释放对应的CashId
+     *
+     * @param cid 角色ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteInventoryByCharacterId(int cid) {
         QueryWrapper itemQueryWrapper = QueryWrapper.create().where(INVENTORYITEMS_D_O.CHARACTERID.eq(cid));
@@ -120,6 +159,7 @@ public class InventoryService {
         if (inventoryItemIds.isEmpty()) {
             return;
         }
+        // 收集宠物ID并级联删除
         List<Integer> petIds = inventoryItemsDOS.stream()
                 .map(InventoryitemsDO::getPetid)
                 .filter(Objects::nonNull)
@@ -127,9 +167,11 @@ public class InventoryService {
                 .toList();
         if (!petIds.isEmpty()) {
             petsMapper.deleteBatchByIds(petIds);
+            // 释放宠物占用的CashId
             petIds.forEach(CashIdGenerator::freeCashId);
         }
 
+        // 收集戒指ID并级联删除
         QueryWrapper equipmentQueryWrapper = QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.in(inventoryItemIds));
         List<InventoryequipmentDO> inventoryEquipmentDOS = inventoryequipmentMapper.selectListByQuery(equipmentQueryWrapper);
         List<Integer> ringIds = inventoryEquipmentDOS.stream()
@@ -139,12 +181,20 @@ public class InventoryService {
                 .toList();
         if (!ringIds.isEmpty()) {
             ringsMapper.deleteBatchByIds(ringIds);
+            // 释放戒指占用的CashId
             ringIds.forEach(CashIdGenerator::freeCashId);
         }
         inventoryequipmentMapper.deleteByQuery(equipmentQueryWrapper);
         inventoryitemsMapper.deleteByQuery(itemQueryWrapper);
     }
 
+    /**
+     * 根据角色ID获取在线角色对象
+     * 遍历所有世界查找在线角色
+     *
+     * @param characterId 角色ID
+     * @return 在线角色对象，如果角色离线则返回null
+     */
     private Character getCharacterById(int characterId) {
         for (World world : Server.getInstance().getWorlds()) {
             Optional<Character> characterOptional = world.getPlayerStorage().getAllCharacters().stream()
@@ -157,6 +207,12 @@ public class InventoryService {
         return null;
     }
 
+    /**
+     * 从数据库记录构建背包物品DTO
+     *
+     * @param obj 数据库查询结果行
+     * @return 背包物品DTO
+     */
     private InventorySearchRtnDTO buildByDb(Row obj) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
@@ -209,6 +265,13 @@ public class InventoryService {
         return rtnDTO;
     }
 
+    /**
+     * 从在线角色构建背包物品DTO列表
+     *
+     * @param character 在线角色对象
+     * @param type      背包类型
+     * @return 背包物品DTO列表
+     */
     private List<InventorySearchRtnDTO> buildByOnline(Character character, InventoryType type) {
         Inventory inventory = character.getInventory(type);
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -264,6 +327,12 @@ public class InventoryService {
         }).toList();
     }
 
+    /**
+     * 更新背包物品
+     * 根据玩家在线状态选择不同的更新方式：在线时更新内存数据，离线时更新数据库
+     *
+     * @param data 背包物品数据
+     */
     @Transactional(rollbackFor = Exception.class)
     public void updateInventory(InventorySearchRtnDTO data) {
         modifyInventoryCheck(data);
@@ -281,6 +350,13 @@ public class InventoryService {
         }
     }
 
+    /**
+     * 更新在线玩家的背包物品
+     * 直接修改内存中的物品数据并发送更新包给客户端
+     *
+     * @param data      背包物品数据
+     * @param character 在线角色对象
+     */
     private void updateOnline(InventorySearchRtnDTO data, Character character) {
         InventoryType type = InventoryType.getByType(data.getInventoryType());
         Inventory inventory = character.getInventory(type);
@@ -312,15 +388,22 @@ public class InventoryService {
             if (equipment.getVicious() != null) equip.setVicious(equipment.getVicious());
             if (equipment.getEnhanceLevel() != null) equip.setEnhanceLevel(equipment.getEnhanceLevel());
         }
+        // 发送背包更新包通知客户端
         character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
     }
 
+    /**
+     * 更新离线玩家的背包物品
+     * 修改数据库中的物品数据
+     *
+     * @param data 背包物品数据
+     */
     private void updateDb(InventorySearchRtnDTO data) {
         InventoryitemsDO inventoryitemsDO = getModifyItemOffline(data);
         // 仅以下值可修改
         InventoryType type = InventoryType.getByType(data.getInventoryType());
         if (type.isEquip()) {
-            // 修正数量
+            // 修正数量，装备数量固定为1
             if (data.getQuantity() != null && data.getQuantity() != 1) {
                 data.setQuantity((short) 1);
             }
@@ -354,6 +437,12 @@ public class InventoryService {
                 .build());
     }
 
+    /**
+     * 删除背包物品
+     * 根据玩家在线状态选择不同的删除方式：在线时从内存删除，离线时从数据库删除
+     *
+     * @param data 背包物品数据
+     */
     @Transactional(rollbackFor = Exception.class)
     public void deleteInventory(InventorySearchRtnDTO data) {
         modifyInventoryCheck(data);
@@ -369,7 +458,7 @@ public class InventoryService {
             Inventory inventory = character.getInventory(type);
             Item item = getModifyItemOnline(data, inventory);
 
-            //删除相对应的物品
+            // 删除相对应的物品
             inventory.removeSlot(item.getPosition());
             character.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(3, item))));
         } else {
@@ -379,6 +468,12 @@ public class InventoryService {
         }
     }
 
+    /**
+     * 获取宠物的忽略物品列表
+     *
+     * @param petId 宠物ID
+     * @return 宠物忽略物品列表
+     */
     public List<PetignoresDO> getPetIgnoreByPetId(Integer petId) {
         return petignoresMapper.selectListByQuery(QueryWrapper.create().where(PETIGNORES_D_O.PETID.eq(petId)));
     }
@@ -431,6 +526,11 @@ public class InventoryService {
         }
 
 
+    /**
+     * 验证修改背包物品的参数
+     *
+     * @param data 背包物品数据
+     */
     private void modifyInventoryCheck(InventorySearchRtnDTO data) {
         RequireUtil.requireNotNull(data.getItemId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "itemId"));
         RequireUtil.requireNotNull(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
@@ -440,6 +540,13 @@ public class InventoryService {
         RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "inventoryType", data.getInventoryType()));
     }
 
+    /**
+     * 获取在线玩家要修改的物品
+     *
+     * @param data      背包物品数据
+     * @param inventory 背包对象
+     * @return 要修改的物品
+     */
     private Item getModifyItemOnline(InventorySearchRtnDTO data, Inventory inventory) {
         Item item = inventory.getItem(data.getPosition());
         RequireUtil.requireNotNull(item, I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
@@ -449,6 +556,12 @@ public class InventoryService {
         return item;
     }
 
+    /**
+     * 获取离线玩家要修改的物品
+     *
+     * @param data 背包物品数据
+     * @return 要修改的物品实体
+     */
     private InventoryitemsDO getModifyItemOffline(InventorySearchRtnDTO data) {
         QueryWrapper itemQueryWrapper = QueryWrapper.create()
                 .where(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterId()))
@@ -463,4 +576,3 @@ public class InventoryService {
         return inventoryItemsDO;
     }
 }
-

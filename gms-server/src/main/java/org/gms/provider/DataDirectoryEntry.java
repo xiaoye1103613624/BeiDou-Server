@@ -24,6 +24,9 @@ package org.gms.provider;
 import java.util.List;
 
 /**
+ * 数据目录条目接口
+ * WZ文件中的目录条目，包含子目录和文件列表
+ *
  * @author Matze
  */
 public interface DataDirectoryEntry extends DataEntry {

@@ -28,9 +28,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
 
 /**
+ * 宠物亲密度奖励动作
+ * 增加宠物亲密度值
+ *
  * @author Ronan
  */
 public class PetTamenessAction extends AbstractQuestAction {
+    /** 亲密度增加量 */
     int tameness;
 
     public PetTamenessAction(Quest quest, Data data) {
@@ -61,4 +65,4 @@ public class PetTamenessAction extends AbstractQuestAction {
             c.unlockClient();
         }
     }
-} 
+}

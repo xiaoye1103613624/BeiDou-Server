@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 角色生命值减少定时任务
+ * 定期执行在线玩家的HP自然减少逻辑
+ *
  * @author Ronan
  */
 public class CharacterHpDecreaseTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class CharacterHpDecreaseTask extends BaseTask implements Runnable {
         wserv.runPlayerHpDecreaseSchedule();
     }
     
+    /**
+     * 构造角色生命值减少定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public CharacterHpDecreaseTask(World world) {
         super(world);
     }

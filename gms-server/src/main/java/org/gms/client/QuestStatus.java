@@ -31,13 +31,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 任务状态
+ * 管理单个任务的进度信息：状态、完成进度、完成时间
+ * 支持未开始/已开始/已完成四种状态，记录任务信息键值对
+ *
  * @author Matze
  */
 public class QuestStatus {
+    /**
+     * 任务完成状态枚举
+     */
     public enum Status {
+        /** 未定义 */
         UNDEFINED(-1),
+        /** 未开始 */
         NOT_STARTED(0),
+        /** 已开始（进行中） */
         STARTED(1),
+        /** 已完成 */
         COMPLETED(2);
         final int status;
 
@@ -59,13 +70,20 @@ public class QuestStatus {
         }
     }
 
+    /** 任务ID */
     private final short questID;
+    /** 任务完成状态 */
     private Status status;
-    //private boolean updated;   //maybe this can be of use for someone?
+    /** 任务进度键值对（信息编号 -> 信息值） */
     private final Map<Integer, String> progress = new LinkedHashMap<>();
+    /** 勋章进度列表 */
     private final List<Integer> medalProgress = new LinkedList<>();
+    /** 关联NPC ID */
     private int npc;
-    private long completionTime, expirationTime;
+    /** 完成时间 */
+    private long completionTime;
+    /** 过期时间 */
+    private long expirationTime;
     private int forfeited = 0, completed = 0;
     private String customData;
 

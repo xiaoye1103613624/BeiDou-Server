@@ -28,10 +28,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 掉落管理器
+ * 管理怪物掉落物品的分配逻辑，根据任务需求、物品需求等因素智能分配掉落
+ * 确保每个玩家都能获得所需的掉落物品
+ *
  * @author Ronan
  */
 public class LootManager {
 
+    /**
+     * 判断掉落物是否与玩家相关（任务物品或普通需求）
+     *
+     * @param dropEntry  掉落条目
+     * @param players    玩家列表
+     * @param playersInv  玩家库存列表
+     * @return true表示相关
+     */
     private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<LootInventory> playersInv) {
         if (dropEntry.questid <= 0) {
             return true;
@@ -44,7 +56,7 @@ public class LootManager {
             qCompleteAmount = quest.getCompleteItemAmountNeeded(dropEntry.itemId);
         }
 
-        //boolean restricted = ItemInformationProvider.getInstance().isPickupRestricted(dropEntry.itemId);
+        // boolean restricted = ItemInformationProvider.getInstance().isPickupRestricted(dropEntry.itemId);
         for (int i = 0; i < players.size(); i++) {
             LootInventory chrInv = playersInv.get(i);
 
@@ -63,12 +75,14 @@ public class LootManager {
                 int qItemStatus = chrInv.hasItem(dropEntry.itemId, qItemAmount);
                 if (qItemStatus == 2) {
                     continue;
-                } /*else if (restricted && qItemStatus == 1) {  // one-of-a-kind loots should be available everytime, thanks onechord for noticing
-                    continue;
-                }*/
-            } /*else if (restricted && chrInv.hasItem(dropEntry.itemId, 1) > 0) {   // thanks Conrad, Legalize for noticing eligible loots not being available to drop for non-killer parties
-                continue;
-            }*/
+                }
+                // else if (restricted && qItemStatus == 1) {  // one-of-a-kind loots should be available everytime, thanks onechord for noticing
+                //     continue;
+                // }
+            }
+            // else if (restricted && chrInv.hasItem(dropEntry.itemId, 1) > 0) {   // thanks Conrad, Legalize for noticing eligible loots not being available to drop for non-killer parties
+            //     continue;
+            // }
 
             return true;
         }
@@ -76,6 +90,14 @@ public class LootManager {
         return false;
     }
 
+    /**
+     * 获取与玩家相关的有效掉落
+     * 过滤掉无人需要的任务物品，只保留有玩家需求的掉落
+     *
+     * @param monsterId 怪物ID
+     * @param players   玩家列表
+     * @return 有效掉落条目列表
+     */
     public static List<MonsterDropEntry> retrieveRelevantDrops(int monsterId, List<Character> players) {
         List<MonsterDropEntry> loots = MonsterInformationProvider.getInstance().retrieveEffectiveDrop(monsterId);
         if (loots.isEmpty()) {

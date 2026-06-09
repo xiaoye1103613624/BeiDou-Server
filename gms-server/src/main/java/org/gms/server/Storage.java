@@ -48,27 +48,55 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 仓库
+ * 管理玩家仓库存储，支持物品存取、金币存取、槽位扩容等功能
+ * 使用ReentrantLock保证多线程安全，缓存仓库容量信息
+ *
  * @author Matze
  */
 public class Storage {
     private static final Logger log = LoggerFactory.getLogger(Storage.class);
+    /** 仓库取出费用缓存（NPC ID -> 费用） */
     private static final Map<Integer, Integer> trunkGetCache = new HashMap<>();
+    /** 仓库存入费用缓存（NPC ID -> 费用） */
     private static final Map<Integer, Integer> trunkPutCache = new HashMap<>();
 
+    /** 仓库ID（账户ID） */
     private final int id;
+    /** 当前NPC ID */
     private int currentNpcid;
+    /** 仓库金币 */
     private int meso;
+    /** 仓库槽位数 */
     private byte slots;
+    /** 仓库物品（按类型分组） */
     private final Map<InventoryType, List<Item>> typeItems = new HashMap<>();
+    /** 仓库物品列表 */
     private List<Item> items = new LinkedList<>();
+    /** 仓库锁，保证多线程安全 */
     private final Lock lock = new ReentrantLock(true);
 
+    /**
+     * 构造函数
+     *
+     * @param id    仓库ID
+     * @param slots 槽位数
+     * @param meso  金币数
+     */
     private Storage(int id, byte slots, int meso) {
         this.id = id;
         this.slots = slots;
         this.meso = meso;
     }
 
+    /**
+     * 为新账户创建仓库记录
+     *
+     * @param id    账户ID
+     * @param world 世界ID
+     * @return 新仓库实例
+     * @throws SQLException 数据库异常
+     */
     private static Storage create(int id, int world) throws SQLException {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO storages (accountid, world, slots, meso) VALUES (?, ?, 4, 0)")) {
@@ -80,6 +108,13 @@ public class Storage {
         return loadOrCreateFromDB(id, world);
     }
 
+    /**
+     * 从数据库加载或创建仓库实例
+     *
+     * @param id    账户ID
+     * @param world 世界ID
+     * @return 仓库实例
+     */
     public static Storage loadOrCreateFromDB(int id, int world) {
         Storage ret;
         try (Connection con = DatabaseConnection.getConnection();
@@ -105,15 +140,32 @@ public class Storage {
         }
     }
 
+    /**
+     * 获取仓库槽位数
+     *
+     * @return 槽位数
+     */
     public byte getSlots() {
         return slots;
     }
 
+    /**
+     * 检查是否可以增加槽位
+     *
+     * @param slots 增加的槽位数
+     * @return 可以增加返回true
+     */
     public boolean canGainSlots(int slots) {
         slots += this.slots;
         return slots <= 48;
     }
 
+    /**
+     * 增加仓库槽位
+     *
+     * @param slots 增加的槽位数
+     * @return 增加成功返回true
+     */
     public boolean gainSlots(int slots) {
         lock.lock();
         try {
@@ -129,6 +181,11 @@ public class Storage {
         }
     }
 
+    /**
+     * 保存仓库数据到数据库
+     *
+     * @param con 数据库连接
+     */
     public void saveToDB(Connection con) {
         try {
             try (PreparedStatement ps = con.prepareStatement("UPDATE storages SET slots = ?, meso = ? WHERE storageid = ?")) {
@@ -150,6 +207,12 @@ public class Storage {
         }
     }
 
+    /**
+     * 获取指定槽位的物品
+     *
+     * @param slot 槽位索引
+     * @return 物品
+     */
     public Item getItem(byte slot) {
         lock.lock();
         try {
@@ -159,6 +222,12 @@ public class Storage {
         }
     }
 
+    /**
+     * 从仓库取出物品
+     *
+     * @param item 要取出的物品
+     * @return 取出成功返回true
+     */
     public boolean takeOut(Item item) {
         lock.lock();
         try {
@@ -173,10 +242,17 @@ public class Storage {
         }
     }
 
+    /**
+     * 存入物品到仓库
+     *
+     * @param item 要存入的物品
+     * @return 存入成功返回true，仓库已满返回false
+     */
     public boolean store(Item item) {
         lock.lock();
         try {
-            if (isFull()) { // thanks Optimist for noticing unrestricted amount of insertions here
+            // thanks Optimist for noticing unrestricted amount of insertions here
+            if (isFull()) {
                 return false;
             }
 
@@ -191,6 +267,11 @@ public class Storage {
         }
     }
 
+    /**
+     * 获取仓库物品列表（不可修改）
+     *
+     * @return 物品列表
+     */
     public List<Item> getItems() {
         lock.lock();
         try {
@@ -200,6 +281,12 @@ public class Storage {
         }
     }
 
+    /**
+     * 按物品栏类型过滤物品
+     *
+     * @param type 物品栏类型
+     * @return 匹配的物品列表
+     */
     private List<Item> filterItems(InventoryType type) {
         List<Item> storageItems = getItems();
         List<Item> ret = new LinkedList<>();
@@ -212,6 +299,13 @@ public class Storage {
         return ret;
     }
 
+    /**
+     * 获取物品在指定类型分组中的全局槽位
+     *
+     * @param type 物品栏类型
+     * @param slot 类型内槽位索引
+     * @return 全局槽位索引，未找到返回-1
+     */
     public byte getSlot(InventoryType type, byte slot) {
         lock.lock();
         try {
@@ -229,6 +323,12 @@ public class Storage {
         }
     }
 
+    /**
+     * 发送仓库界面给客户端
+     *
+     * @param c     客户端
+     * @param npcId NPC ID
+     */
     public void sendStorage(Client c, int npcId) {
         if (c.getPlayer().getLevel() < 15) {
             c.getPlayer().dropMessage(1, "15级以后才可以使用仓库服务");
@@ -259,6 +359,12 @@ public class Storage {
         }
     }
 
+    /**
+     * 发送存入物品数据包
+     *
+     * @param c    客户端
+     * @param type 物品栏类型
+     */
     public void sendStored(Client c, InventoryType type) {
         lock.lock();
         try {
@@ -268,6 +374,12 @@ public class Storage {
         }
     }
 
+    /**
+     * 发送取出物品数据包
+     *
+     * @param c    客户端
+     * @param type 物品栏类型
+     */
     public void sendTakenOut(Client c, InventoryType type) {
         lock.lock();
         try {
@@ -277,6 +389,11 @@ public class Storage {
         }
     }
 
+    /**
+     * 整理仓库物品（合并+排序）
+     *
+     * @param c 客户端
+     */
     public void arrangeItems(Client c) {
         lock.lock();
         try {
@@ -294,10 +411,20 @@ public class Storage {
         }
     }
 
+    /**
+     * 获取仓库金币
+     *
+     * @return 金币数
+     */
     public int getMeso() {
         return meso;
     }
 
+    /**
+     * 设置仓库金币（不能为负数）
+     *
+     * @param meso 金币数
+     */
     public void setMeso(int meso) {
         if (meso < 0) {
             throw new RuntimeException();
@@ -305,11 +432,22 @@ public class Storage {
         this.meso = meso;
     }
 
+    /**
+     * 发送金币数据包
+     *
+     * @param c 客户端
+     */
     public void sendMeso(Client c) {
         c.sendPacket(PacketCreator.mesoStorage(slots, meso));
     }
 
-    public int getStoreFee() {  // thanks to GabrielSin
+    /**
+     * 获取存入费用
+     * thanks to GabrielSin
+     *
+     * @return 存入费用
+     */
+    public int getStoreFee() {
         int npcId = currentNpcid;
         Integer fee = trunkPutCache.get(npcId);
         if (fee == null) {
@@ -327,6 +465,11 @@ public class Storage {
         return fee;
     }
 
+    /**
+     * 获取取出费用
+     *
+     * @return 取出费用
+     */
     public int getTakeOutFee() {
         int npcId = currentNpcid;
         Integer fee = trunkGetCache.get(npcId);
@@ -345,6 +488,11 @@ public class Storage {
         return fee;
     }
 
+    /**
+     * 检查仓库是否已满
+     *
+     * @return 已满返回true
+     */
     public boolean isFull() {
         lock.lock();
         try {
@@ -354,6 +502,9 @@ public class Storage {
         }
     }
 
+    /**
+     * 关闭仓库，清理类型分组缓存
+     */
     public void close() {
         lock.lock();
         try {

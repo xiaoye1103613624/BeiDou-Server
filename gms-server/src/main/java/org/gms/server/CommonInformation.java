@@ -15,8 +15,14 @@ import org.gms.util.RequireUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 通用信息查询
+ * 从WZ String数据中查询物品、装备、怪物、NPC、地图等通用信息，支持模糊/精确匹配
+ * 使用单例模式
+ */
 public class CommonInformation {
     private static CommonInformation instance;
+    /** String.wz数据源 */
     private final DataProvider stringData;
 
     private CommonInformation() {
@@ -114,6 +120,16 @@ public class CommonInformation {
         }
     }
 
+    /**
+     * 将匹配的地图子项添加到结果列表（地图使用mapName/streetName而非name/desc）
+     *
+     * @param results   结果列表
+     * @param infType   信息类型
+     * @param data      数据节点
+     * @param filter    过滤关键字
+     * @param filterType 过滤类型
+     * @param fullMatch 是否完全匹配
+     */
     private void addMapResult(List<InformationResult> results, InformationType infType, Data data, String filter, int filterType, boolean fullMatch) {
         RequireUtil.requireNotNull(data, I18nUtil.getExceptionMessage("MISSING_RESOURCE", infType.getType()));
         for (Data child : data.getChildren()) {
@@ -131,6 +147,16 @@ public class CommonInformation {
         }
     }
 
+    /**
+     * 判断id或name是否匹配过滤条件
+     *
+     * @param id         物品ID字符串
+     * @param name       物品名称
+     * @param filter     过滤关键字
+     * @param filterType 过滤类型
+     * @param fullMatch  是否完全匹配
+     * @return 匹配返回true
+     */
     private boolean isMatch(String id, String name, String filter, int filterType, boolean fullMatch) {
         boolean match = false;
         if (filterType == 0 || filterType == 1) {

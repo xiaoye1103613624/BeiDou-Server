@@ -20,14 +20,33 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 反应器掉落条目
+ * 记录反应器被破坏时的掉落物品、概率和任务需求
+ */
 public class ReactorDropEntry {
 
+    /** 掉落物品ID */
+    public int itemId;
+    /** 掉落概率 */
+    public int chance;
+    /** 关联任务ID */
+    public int questid;
+    /** 分配的掉落范围起始值 */
+    public int assignedRangeStart;
+    /** 分配的掉落范围长度 */
+    public int assignedRangeLength;
+
+    /**
+     * 构造反应器掉落条目
+     *
+     * @param itemId  物品ID
+     * @param chance  掉落概率
+     * @param questId 关联任务ID（0表示无任务需求）
+     */
     public ReactorDropEntry(int itemId, int chance, int questId) {
         this.itemId = itemId;
         this.chance = chance;
         this.questid = questId;
     }
-
-    public int itemId, chance, questid;
-    public int assignedRangeStart, assignedRangeLength;
 }

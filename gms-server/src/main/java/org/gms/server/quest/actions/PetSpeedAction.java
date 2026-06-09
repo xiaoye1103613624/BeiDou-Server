@@ -27,6 +27,9 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
 
 /**
+ * 宠物速度奖励动作
+ * 提高宠物移动速度
+ *
  * @author Ronan
  */
 public class PetSpeedAction extends AbstractQuestAction {
@@ -57,4 +60,4 @@ public class PetSpeedAction extends AbstractQuestAction {
         }
 
     }
-} 
+}

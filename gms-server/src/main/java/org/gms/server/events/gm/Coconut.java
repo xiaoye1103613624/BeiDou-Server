@@ -33,18 +33,33 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 打椰子GM活动
+ * 两支队伍在限时内击打椰子获取分数，分数高的队伍获胜
+ * 支持炸弹击打和掉落机制，由GM发起活动
+ *
  * @author kevintjuh93
  */
-//Make them better :)
 public class Coconut extends Event {
+    /** 活动地图 */
     private MapleMap map = null;
+    /** 枫叶队分数 */
     private int MapleScore = 0;
+    /** 冒险岛队分数 */
     private int StoryScore = 0;
+    /** 炸弹击打计数 */
     private int countBombing = 80;
+    /** 掉落椰子计数 */
     private int countFalling = 401;
+    /** 停止掉落计数 */
     private int countStopped = 20;
+    /** 椰子列表 */
     private final List<Coconuts> coconuts = new LinkedList<>();
 
+    /**
+     * 构造打椰子活动
+     *
+     * @param map 活动地图
+     */
     public Coconut(MapleMap map) {
         super(1, 50);
         this.map = map;
@@ -126,6 +141,10 @@ public class Coconut extends Event {
 
     }
 
+    /**
+     * 传出玩家
+     * 根据胜负将不同队伍的玩家传送到对应地图（获胜区或出口）
+     */
     public void warpOut() {
         setCoconutsHittable(false);
         TimerManager.getInstance().schedule(() -> {
@@ -142,57 +161,113 @@ public class Coconut extends Event {
         }, 12000);
     }
 
+    /**
+     * 获取枫叶队分数
+     *
+     * @return 枫叶队分数
+     */
     public int getMapleScore() {
         return MapleScore;
     }
 
+    /**
+     * 获取冒险岛队分数
+     *
+     * @return 冒险岛队分数
+     */
     public int getStoryScore() {
         return StoryScore;
     }
 
+    /**
+     * 枫叶队加1分
+     */
     public void addMapleScore() {
         this.MapleScore += 1;
     }
 
+    /**
+     * 冒险岛队加1分
+     */
     public void addStoryScore() {
         this.StoryScore += 1;
     }
 
+    /**
+     * 获取炸弹击打次数
+     *
+     * @return 炸弹击打计数
+     */
     public int getBombings() {
         return countBombing;
     }
 
+    /**
+     * 减少炸弹击打计数
+     */
     public void bombCoconut() {
         countBombing--;
     }
 
+    /**
+     * 获取掉落计数
+     *
+     * @return 掉落椰子计数
+     */
     public int getFalling() {
         return countFalling;
     }
 
+    /**
+     * 减少掉落计数
+     */
     public void fallCoconut() {
         countFalling--;
     }
 
+    /**
+     * 获取停止掉落计数
+     *
+     * @return 停止掉落计数
+     */
     public int getStopped() {
         return countStopped;
     }
 
+    /**
+     * 减少停止掉落计数
+     */
     public void stopCoconut() {
         countStopped--;
     }
 
+    /**
+     * 根据ID获取椰子
+     *
+     * @param id 椰子ID
+     * @return 椰子对象
+     */
     public Coconuts getCoconut(int id) {
         return coconuts.get(id);
     }
 
+    /**
+     * 获取所有椰子列表
+     *
+     * @return 椰子列表
+     */
     public List<Coconuts> getAllCoconuts() {
         return coconuts;
     }
 
+    /**
+     * 设置所有椰子是否可被命中
+     *
+     * @param hittable true可命中，false不可命中
+     */
     public void setCoconutsHittable(boolean hittable) {
         for (Coconuts nut : coconuts) {
             nut.setHittable(hittable);
         }
     }
-}  
+}

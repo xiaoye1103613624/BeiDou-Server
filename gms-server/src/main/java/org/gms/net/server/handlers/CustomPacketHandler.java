@@ -26,7 +26,18 @@ import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 自定义数据包处理器
+ * 允许GM级别4以上的管理员发送自定义数据包到客户端
+ */
 public class CustomPacketHandler implements PacketHandler {
+    /**
+     * 处理自定义数据包
+     * 仅当有数据和GM等级>=4时生效
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         if (p.available() > 0 && c.getGMLevel() >= 4) {//w/e
@@ -34,6 +45,12 @@ public class CustomPacketHandler implements PacketHandler {
         }
     }
 
+    /**
+     * 验证客户端状态
+     *
+     * @param c 客户端会话
+     * @return 始终返回true，允许任何状态
+     */
     @Override
     public boolean validateState(Client c) {
         return true;

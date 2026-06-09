@@ -27,28 +27,50 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 站脚点四叉树
+ * 使用四叉树（Quadtree）结构管理地图上的站脚点，支持快速查找玩家下方的站脚点和墙壁碰撞检测
+ * 最大深度为8层，递归分割地图空间
+ *
  * @author Matze
  */
 public class FootholdTree {
+    /** 西北子节点 */
     private FootholdTree nw = null;
+    /** 东北子节点 */
     private FootholdTree ne = null;
+    /** 西南子节点 */
     private FootholdTree sw = null;
+    /** 东南子节点 */
     private FootholdTree se = null;
+    /** 当前节点内的站脚点列表 */
     private final List<Foothold> footholds = new LinkedList<>();
+    /** 区域左上角 */
     private final Point p1;
+    /** 区域右下角 */
     private final Point p2;
+    /** 区域中心点 */
     private final Point center;
+    /** 当前深度 */
     private int depth = 0;
+    /** 最大深度 */
     private static final int maxDepth = 8;
+    /** 最大掉落X坐标 */
     private int maxDropX;
+    /** 最小掉落X坐标 */
     private int minDropX;
 
+    /**
+     * 构造方法（根节点）
+     */
     public FootholdTree(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
+    /**
+     * 构造方法（子节点，指定深度）
+     */
     public FootholdTree(Point p1, Point p2, int depth) {
         this.p1 = p1;
         this.p2 = p2;
@@ -56,6 +78,10 @@ public class FootholdTree {
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
+    /**
+     * 插入站脚点到四叉树
+     * 若站脚点完全在当前区域内或达到最大深度则直接存储，否则递归插入子节点
+     */
     public void insert(Foothold f) {
         if (depth == 0) {
             if (f.getX1() > maxDropX) {
@@ -94,10 +120,16 @@ public class FootholdTree {
         }
     }
 
+    /**
+     * 获取指定点相关的所有站脚点
+     */
     private List<Foothold> getRelevants(Point p) {
         return getRelevants(p, new LinkedList<>());
     }
 
+    /**
+     * 递归获取指定点相关的所有站脚点
+     */
     private List<Foothold> getRelevants(Point p, List<Foothold> list) {
         list.addAll(footholds);
         if (nw != null) {
@@ -114,6 +146,9 @@ public class FootholdTree {
         return list;
     }
 
+    /**
+     * 递归查找墙壁站脚点
+     */
     private Foothold findWallR(Point p1, Point p2) {
         Foothold ret;
         for (Foothold f : footholds) {
@@ -149,6 +184,11 @@ public class FootholdTree {
         return null;
     }
 
+    /**
+     * 查找墙壁站脚点
+     *
+     * @throws IllegalArgumentException 如果p1和p2的Y坐标不同
+     */
     public Foothold findWall(Point p1, Point p2) {
         if (p1.y != p2.y) {
             throw new IllegalArgumentException();
@@ -156,6 +196,10 @@ public class FootholdTree {
         return findWallR(p1, p2);
     }
 
+    /**
+     * 查找指定点正下方的站脚点
+     * 使用三角函数精确计算坡度上的Y坐标
+     */
     public Foothold findBelow(Point p) {
         List<Foothold> relevants = getRelevants(p);
         List<Foothold> xMatches = new LinkedList<>();
@@ -193,26 +237,44 @@ public class FootholdTree {
         return null;
     }
 
+    /**
+     * 获取区域左上角X坐标
+     */
     public int getX1() {
         return p1.x;
     }
 
+    /**
+     * 获取区域右下角X坐标
+     */
     public int getX2() {
         return p2.x;
     }
 
+    /**
+     * 获取区域左上角Y坐标
+     */
     public int getY1() {
         return p1.y;
     }
 
+    /**
+     * 获取区域右下角Y坐标
+     */
     public int getY2() {
         return p2.y;
     }
 
+    /**
+     * 获取最大掉落X坐标
+     */
     public int getMaxDropX() {
         return maxDropX;
     }
 
+    /**
+     * 获取最小掉落X坐标
+     */
     public int getMinDropX() {
         return minDropX;
     }

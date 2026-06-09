@@ -26,7 +26,18 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 import org.gms.exception.EmptyMovementException;
 
+/**
+ * 玩家移动处理器
+ * 处理玩家角色的移动操作
+ */
 public final class MovePlayerHandler extends AbstractMovementPacketHandler {
+
+    /**
+     * 处理玩家移动包，解析玩家的移动路径，更新位置并广播给地图中的其他玩家
+     *
+     * @param p 输入数据包，包含玩家的移动数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.skip(9);

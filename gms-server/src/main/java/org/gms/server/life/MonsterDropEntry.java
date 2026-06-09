@@ -21,10 +21,21 @@
 package org.gms.server.life;
 
 /**
+ * 怪物掉落条目
+ * 存储单个物品的掉落配置信息，包括物品ID、掉落概率、数量和任务关联
+ *
  * @author LightPepsi
  */
-
 public class MonsterDropEntry {
+    /**
+     * 构造掉落条目
+     *
+     * @param itemId 物品ID
+     * @param chance 掉落概率
+     * @param Minimum 最小掉落数量
+     * @param Maximum 最大掉落数量
+     * @param questid 关联任务ID（0表示无关联）
+     */
     public MonsterDropEntry(int itemId, int chance, int Minimum, int Maximum, short questid) {
         this.itemId = itemId;
         this.chance = chance;
@@ -33,6 +44,14 @@ public class MonsterDropEntry {
         this.Maximum = Maximum;
     }
 
+    /** 关联任务ID */
     public short questid;
-    public int itemId, chance, Minimum, Maximum;
+    /** 物品ID */
+    public int itemId;
+    /** 掉落概率 */
+    public int chance;
+    /** 最小掉落数量 */
+    public int Minimum;
+    /** 最大掉落数量 */
+    public int Maximum;
 }

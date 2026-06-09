@@ -74,6 +74,14 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * NPC对话路由方法，根据是否有下一级上下文选择执行action或nextLevel
+     *
+     * @param c        客户端连接
+     * @param action   操作类型
+     * @param lastMsg  上一条消息类型
+     * @param selection 玩家选择的选项索引
+     */
     private void cmRouting(Client c, byte action, byte lastMsg, int selection) {
         if (c.getCM().getNextLevelContext().getLevelType() == null) {
             NPCScriptManager.getInstance().action(c, action, lastMsg, selection);

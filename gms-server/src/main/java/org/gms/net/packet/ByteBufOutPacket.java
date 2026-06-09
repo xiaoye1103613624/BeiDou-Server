@@ -14,6 +14,11 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * ByteBuf出站数据包实现
+ * 基于Netty ByteBuf的OutPacket实现，负责向客户端发送数据的序列化
+ * 非线程安全，需要在同一线程中写入和发送
+ */
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;

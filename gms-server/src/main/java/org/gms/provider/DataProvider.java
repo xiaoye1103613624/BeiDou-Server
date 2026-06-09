@@ -21,6 +21,10 @@
 */
 package org.gms.provider;
 
+/**
+ * 数据提供者接口
+ * 提供对WZ文件数据的访问入口，通过路径获取数据节点
+ */
 public interface DataProvider {
     Data getData(String path);
     DataDirectoryEntry getRoot();

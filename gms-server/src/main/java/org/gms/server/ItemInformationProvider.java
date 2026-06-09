@@ -70,27 +70,44 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
+ * 物品信息提供者
+ * 从WZ文件和数据库中加载并缓存所有物品信息，包括装备属性、价格、最大堆叠数、需求等
+ * 使用单例模式，提供物品ID查询、是否可交换、最大堆叠、潜力属性等查询接口
+ *
  * @author Matze
  */
 public class ItemInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(ItemInformationProvider.class);
+    /** 单例实例 */
     private final static ItemInformationProvider instance = new ItemInformationProvider();
 
     public static ItemInformationProvider getInstance() {
         return instance;
     }
 
+    /** 物品数据提供者 */
     protected DataProvider itemData;
+    /** 装备数据提供者 */
     protected DataProvider equipData;
+    /** 字符串数据提供者 */
     protected DataProvider stringData;
+    /** 其他数据提供者 */
     protected DataProvider etcData;
+    /** 现金物品字符串数据 */
     protected Data cashStringData;
+    /** 消耗品字符串数据 */
     protected Data consumeStringData;
+    /** 装备字符串数据 */
     protected Data eqpStringData;
+    /** 其他物品字符串数据 */
     protected Data etcStringData;
+    /** 可安装物品字符串数据 */
     protected Data insStringData;
+    /** 宠物字符串数据 */
     protected Data petStringData;
+    /** 最大堆叠缓存（物品ID -> 最大堆叠） */
     protected Map<Integer, Short> slotMaxCache = new HashMap<>();
+    /** 物品效果缓存 */
     protected Map<Integer, StatEffect> itemEffects = new HashMap<>();
     protected Map<Integer, Map<String, Integer>> equipStatsCache = new HashMap<>();
     protected Map<Integer, Equip> equipCache = new HashMap<>();
@@ -1094,7 +1111,8 @@ public class ItemInformationProvider {
 
                 // 判断是否成功应用卷轴效果（根据成功率和GM状态）
                 if (assertGM || rollSuccessChance(prop)) {
-                    short flag = nEquip.getFlag(); // 获取装备的标志位
+                    // 获取装备的标志位
+                    short flag = nEquip.getFlag();
 
                     // 根据卷轴ID应用不同的效果
                     switch (scrollId) {
@@ -1103,7 +1121,8 @@ public class ItemInformationProvider {
                             nEquip.setFlag((byte) flag);
                             break;
                         case ItemId.COLD_PROTECTION_SCROLl:
-                            flag |= ItemConstants.COLD; // 设置寒冷保护标志位
+                            // 设置寒冷保护标志位
+                            flag |= ItemConstants.COLD;
                             nEquip.setFlag((byte) flag);
                             break;
                         case ItemId.CLEAN_SLATE_1:
@@ -1117,18 +1136,21 @@ public class ItemInformationProvider {
                         case ItemId.CHAOS_SCROll_60:
                         case ItemId.LIAR_TREE_SAP:
                         case ItemId.MAPLE_SYRUP:
-                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range")); // 使用混沌卷轴增加随机属性
+                            // 使用混沌卷轴增加随机属性
+                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range"));
                             break;
 
                         default:
-                            improveEquipStats(nEquip, stats); // 默认情况下提高装备属性
+                            // 默认情况下提高装备属性
+                            improveEquipStats(nEquip, stats);
                             break;
                     }
 
                     // 如果不是清洁卷轴，则处理升级插槽和等级
                     if (!ItemConstants.isCleanSlate(scrollId)) {
                         if (!assertGM && !ItemConstants.isModifierScroll(scrollId)) {   // 处理修饰卷轴不消耗插槽的问题
-                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1)); // 减少一个升级插槽
+                            // 减少一个升级插槽
+                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
                         }
                         nEquip.setLevel((byte) (nEquip.getLevel() + 1)); // 提升装备等级
                     }
@@ -1143,7 +1165,8 @@ public class ItemInformationProvider {
                 }
             }
         }
-        return equip; // 返回处理后的装备
+        // 返回处理后的装备
+        return equip;
     }
 
     public static void improveEquipStats(Equip nEquip, Map<String, Integer> stats) {
@@ -1779,18 +1802,18 @@ public class ItemInformationProvider {
             return itemz;
         }
         boolean highfivestamp = false;
-        /* Removed because players shouldn't even get this, and gm's should just be gm job.
-         try {
-         for (Pair<Item, InventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
-         if (ii.getRight() == InventoryType.CASH) {
-         if (ii.getLeft().getItemId() == 5590000) {
-         highfivestamp = true;
-         }
-         }
-         }
-         } catch (SQLException ex) {
-            ex.printStackTrace();
-         }*/
+        // Removed because players shouldn't even get this, and gm's should just be gm job.
+        //  try {
+        //  for (Pair<Item, InventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
+        //  if (ii.getRight() == InventoryType.CASH) {
+        //  if (ii.getLeft().getItemId() == 5590000) {
+        //  highfivestamp = true;
+        //  }
+        //  }
+        //  }
+        //  } catch (SQLException ex) {
+        //     ex.printStackTrace();
+        //  }
         int tdex = chr.getDex(), tstr = chr.getStr(), tint = chr.getInt(), tluk = chr.getLuk(), fame = chr.getFame();
         if (chr.getJob() != Job.SUPERGM || chr.getJob() != Job.GM) {
             for (Item item : inv.list()) {
@@ -1865,24 +1888,25 @@ public class ItemInformationProvider {
 
 
         boolean highfivestamp = false;
-        /* Removed check above for message ><
-         try {
-         for (Pair<Item, InventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
-         if (ii.getRight() == InventoryType.CASH) {
-         if (ii.getLeft().getItemId() == 5590000) {
-         highfivestamp = true;
-         }
-         }
-         }
-         } catch (SQLException ex) {
-            ex.printStackTrace();
-         }*/
+        // Removed check above for message ><
+        //  try {
+        //  for (Pair<Item, InventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
+        //  if (ii.getRight() == InventoryType.CASH) {
+        //  if (ii.getLeft().getItemId() == 5590000) {
+        //  highfivestamp = true;
+        //  }
+        //  }
+        //  }
+        //  } catch (SQLException ex) {
+        //     ex.printStackTrace();
+        //  }
 
         int reqLevel = getEquipLevelReq(equip.getItemId());
         if (highfivestamp) {
             reqLevel -= 5;
         }
-        int i = 0; //lol xD
+        // lol xD
+        int i = 0;
         //Removed job check. Shouldn't really be needed.
         if (reqLevel > chr.getLevel()) {
             i++;

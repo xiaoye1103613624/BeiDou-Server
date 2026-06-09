@@ -34,11 +34,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 怪物击杀需求
+ * 检查玩家是否已击杀指定数量的怪物，通过任务进度记录判断
+ *
  * @author Tyler (Twdtwd)
  */
 public class MobRequirement extends AbstractQuestRequirement {
     private static final Logger log = LoggerFactory.getLogger(MobRequirement.class);
+    /** 怪物ID到击杀数量的映射 */
     Map<Integer, Integer> mobs = new HashMap<>();
+    /** 关联的任务ID */
     private final int questID;
 
     public MobRequirement(Quest quest, Data data) {
@@ -48,7 +53,9 @@ public class MobRequirement extends AbstractQuestRequirement {
     }
 
     /**
-     * @param data
+     * 从WZ数据中解析怪物ID和击杀数量要求
+     *
+     * @param data WZ数据
      */
     @Override
     public void processData(Data data) {
@@ -81,6 +88,12 @@ public class MobRequirement extends AbstractQuestRequirement {
         return true;
     }
 
+    /**
+     * 获取指定怪物的击杀数量要求
+     *
+     * @param mobid 怪物ID
+     * @return 击杀数量，未设置则返回0
+     */
     public int getRequiredMobCount(int mobid) {
         if (mobs.containsKey(mobid)) {
             return mobs.get(mobid);

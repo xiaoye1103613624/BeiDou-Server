@@ -28,9 +28,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * NPC需求
+ * 检查当前交互的NPC是否为任务指定的NPC
+ *
  * @author Tyler (Twdtwd)
  */
 public class NpcRequirement extends AbstractQuestRequirement {
+    /** 需求的NPC ID */
     private int reqNPC;
 
     public NpcRequirement(Quest quest, Data data) {

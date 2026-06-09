@@ -11,6 +11,10 @@ import org.gms.model.dto.*;
 import org.gms.service.CommandService;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 命令控制器
+ * 处理游戏命令的查询、更新和启用/禁用请求
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/command")

@@ -32,9 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 宠物需求
+ * 检查玩家是否拥有指定类型的宠物
+ *
  * @author Tyler (Twdtwd)
  */
 public class PetRequirement extends AbstractQuestRequirement {
+    /** 需求的宠物ID列表 */
     List<Integer> petIDs = new ArrayList<>();
 
 

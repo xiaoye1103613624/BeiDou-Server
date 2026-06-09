@@ -33,9 +33,20 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
+/**
+ * 多人聊天处理器
+ * 处理好友聊天、队伍聊天、公会聊天、联盟聊天等多种频道消息
+ */
 public final class MultiChatHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(MultiChatHandler.class);
 
+    /**
+     * 处理多人聊天包，根据类型（好友/队伍/公会/联盟）将消息分发到对应的聊天频道
+     *
+     * @param p 输入数据包，包含聊天类型、接收者列表和聊天内容
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character player = c.getPlayer();

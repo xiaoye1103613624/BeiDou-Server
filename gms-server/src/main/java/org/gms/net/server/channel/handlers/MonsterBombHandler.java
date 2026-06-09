@@ -28,6 +28,10 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.life.Monster;
 import org.gms.util.PacketCreator;
 
+/**
+ * 怪物炸弹处理器
+ * 处理暗黑星（DarkStar）怪物的自爆机制
+ */
 public final class MonsterBombHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

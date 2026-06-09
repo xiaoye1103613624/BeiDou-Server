@@ -37,16 +37,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * @author Matze
+ * 抽象脚本管理器
+ * 所有脚本管理器的基类，提供GraalJS脚本引擎的创建、脚本文件加载和执行能力
  */
 public abstract class AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(AbstractScriptManager.class);
+    /** GraalJS脚本引擎工厂 */
     private final ScriptEngineFactory sef;
 
+    /**
+     * 构造函数
+     * 初始化GraalJS脚本引擎工厂
+     */
     protected AbstractScriptManager() {
         sef = new ScriptEngineManager().getEngineByName("graal.js").getFactory();
     }
 
+    /**
+     * 获取可调用的脚本引擎（加载指定路径的JS脚本）
+     * 优先加载语言文件夹下的脚本，不存在则回退到默认scripts目录
+     *
+     * @param path 脚本文件相对路径
+     * @return 脚本引擎实例，脚本不存在则返回null
+     */
     protected ScriptEngine getInvocableScriptEngine(String path) {
         // 优先取语言文件夹，没有则取scripts
         String scriptName = "scripts";
@@ -82,6 +95,14 @@ public abstract class AbstractScriptManager {
         return graalScriptEngine;
     }
 
+    /**
+     * 获取可调用的脚本引擎（带客户端缓存）
+     * 先从客户端缓存获取，缓存未命中则加载并存入缓存
+     *
+     * @param path 脚本文件相对路径
+     * @param c    客户端
+     * @return 脚本引擎实例，脚本不存在则返回null
+     */
     protected ScriptEngine getInvocableScriptEngine(String path, Client c) {
         ScriptEngine engine = c.getScriptEngine("scripts/" + path);
         if (engine == null) {
@@ -101,6 +122,13 @@ public abstract class AbstractScriptManager {
         bindings.put("polyglot.js.allowHostClassLookup", true);
     }
 
+    /**
+     * 重置脚本上下文
+     * 从客户端缓存中移除指定脚本引擎，以便下次重新加载
+     *
+     * @param path 脚本文件相对路径
+     * @param c    客户端
+     */
     protected void resetContext(String path, Client c) {
         c.removeScriptEngine("scripts/" + path);
     }

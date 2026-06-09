@@ -47,11 +47,15 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * 物品奖励动作
+ * 给玩家发放物品奖励，支持随机概率、限时道具、性别过滤等机制
+ *
  * @author Tyler (Twdtwd)
  * @author Ronan
  */
 public class ItemAction extends AbstractQuestAction {
     private static final Logger log = LoggerFactory.getLogger(ItemAction.class);
+    /** 奖励物品列表 */
     List<ItemData> items = new ArrayList<>();
 
     public ItemAction(Quest quest, Data data) {
@@ -252,6 +256,12 @@ public class ItemAction extends AbstractQuestAction {
         return true;
     }
 
+    /**
+     * 向玩家发送背包已满或物品受限的提示消息
+     *
+     * @param itemids 物品ID列表
+     * @param chr     玩家
+     */
     private void announceInventoryLimit(List<Integer> itemids, Character chr) {
         for (Integer id : itemids) {
             if (ItemInformationProvider.getInstance().isPickupRestricted(id) && chr.haveItemWithId(id, true)) {
@@ -263,6 +273,13 @@ public class ItemAction extends AbstractQuestAction {
         chr.dropMessage(1, I18nUtil.getMessage("ItemAction.Message1"));
     }
 
+    /**
+     * 检查玩家背包在移除指定物品后是否能容纳所有新物品
+     *
+     * @param chr      玩家
+     * @param gainList 待添加的物品列表
+     * @return true表示可以容纳
+     */
     private boolean canHold(Character chr, List<Pair<Item, InventoryType>> gainList) {
         List<Integer> toAddItemids = new LinkedList<>();
         List<Integer> toAddQuantity = new LinkedList<>();
@@ -285,6 +302,13 @@ public class ItemAction extends AbstractQuestAction {
         return chr.getAbstractPlayerInteraction().canHoldAllAfterRemoving(toAddItemids, toAddQuantity, toRemoveItemids, toRemoveQuantity);
     }
 
+    /**
+     * 检查玩家是否符合物品的性别和职业限制
+     *
+     * @param item 物品数据
+     * @param chr  玩家
+     * @return true表示可以获取该物品
+     */
     private boolean canGetItem(ItemData item, Character chr) {
         if (item.getGender() != 2 && item.getGender() != chr.getGender()) {
             return false;
@@ -305,6 +329,13 @@ public class ItemAction extends AbstractQuestAction {
         return true;
     }
 
+    /**
+     * 恢复丢失的任务物品，仅恢复已领过且数量不足的任务道具
+     *
+     * @param chr    玩家
+     * @param itemid 物品ID
+     * @return true表示成功恢复或无需恢复
+     */
     public boolean restoreLostItem(Character chr, int itemid) {
         if (!ItemInformationProvider.getInstance().isQuestItem(itemid)) {
             return false;
@@ -331,7 +362,19 @@ public class ItemAction extends AbstractQuestAction {
     }
 
     private class ItemData {
-        private final int map, id, count, job, gender, period;
+        /** 数据序号 */
+        private final int map;
+        /** 物品ID */
+        private final int id;
+        /** 物品数量 */
+        private final int count;
+        /** 适用职业编码 */
+        private final int job;
+        /** 性别限制（2=不限） */
+        private final int gender;
+        /** 有效期（分钟） */
+        private final int period;
+        /** 获取概率，null表示必得 */
         private final Integer prop;
 
         public ItemData(int map, int id, int count, Integer prop, int job, int gender, int period) {
@@ -368,4 +411,4 @@ public class ItemAction extends AbstractQuestAction {
             return period;
         }
     }
-} 
+}

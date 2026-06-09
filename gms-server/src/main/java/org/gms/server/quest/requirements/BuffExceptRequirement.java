@@ -26,9 +26,14 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 排除Buff需求（Buff取反）
+ * 检查玩家是否没有指定来源的Buff效果
+ * 与BuffRequirement相反，不满足条件（有该Buff）则无法接取或完成任务
+ *
  * @author Ronan
  */
 public class BuffExceptRequirement extends AbstractQuestRequirement {
+    /** Buff ID，道具Buff为负数 */
     private int buffId = -1;
 
     public BuffExceptRequirement(Quest quest, Data data) {

@@ -1,4 +1,4 @@
-/*
+package org.gms.server.movement;/*
 	This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
 		       Matthias Butz <matze@odinms.de>
@@ -19,32 +19,67 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package org.gms.server.movement;
 
 import org.gms.net.packet.OutPacket;
+import org.gms.server.movement.AbstractLifeMovement;
 
 import java.awt.*;
 
+/**
+ * 绝对位置移动
+ * 移动到地图绝对坐标，用于怪物AI路径点移动
+ * 包含每秒像素速度和站脚点ID
+ */
 public class AbsoluteLifeMovement extends AbstractLifeMovement {
+    /** 每秒像素速度 */
     private Point pixelsPerSecond;
+    /** 目标站脚点ID */
     private int fh;
 
+    /**
+     * 构造绝对位置移动对象
+     *
+     * @param type     移动类型
+     * @param position 目标绝对坐标
+     * @param duration 移动持续时间
+     * @param newstate 移动后的新状态
+     */
     public AbsoluteLifeMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);
     }
 
+    /**
+     * 获取每秒像素移动速度
+     *
+     * @return 每秒像素速度
+     */
     public Point getPixelsPerSecond() {
         return pixelsPerSecond;
     }
 
+    /**
+     * 设置每秒像素移动速度
+     *
+     * @param wobble 每秒像素速度
+     */
     public void setPixelsPerSecond(Point wobble) {
         this.pixelsPerSecond = wobble;
     }
 
-    public int getFh() {    // unk -> fh, thanks Spoon for pointing this out
+    /**
+     * 获取目标站脚点ID（fh 为 foothold 缩写）
+     *
+     * @return 站脚点ID
+     */
+    public int getFh() {
         return fh;
     }
 
+    /**
+     * 设置目标站脚点ID
+     *
+     * @param fh 站脚点ID
+     */
     public void setFh(int fh) {
         this.fh = fh;
     }

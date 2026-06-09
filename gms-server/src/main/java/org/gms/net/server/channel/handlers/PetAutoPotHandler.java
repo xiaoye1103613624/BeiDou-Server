@@ -29,8 +29,18 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.StatEffect;
 
+/**
+ * 宠物自动喝药处理器
+ * 处理宠物自动使用药水的操作
+ */
 public final class PetAutoPotHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理宠物自动喝药包，解析药水槽位和物品ID，执行自动喝药逻辑
+     *
+     * @param p 输入数据包，包含宠物和药水相关信息
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();

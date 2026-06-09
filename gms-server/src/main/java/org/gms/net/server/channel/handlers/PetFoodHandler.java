@@ -34,8 +34,18 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.util.PacketCreator;
 
+/**
+ * 宠物喂食处理器
+ * 处理玩家给宠物喂食的操作
+ */
 public final class PetFoodHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理宠物喂食包，自动选择饱食度最低的宠物，验证物品合法性后消耗食物并增加宠物的饱食度和亲密度
+     *
+     * @param p 输入数据包，包含物品槽位和物品ID
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();

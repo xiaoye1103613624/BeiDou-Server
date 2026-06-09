@@ -30,6 +30,10 @@ import org.gms.server.maps.MapObject;
 import org.gms.server.maps.Summon;
 import org.gms.util.PacketCreator;
 
+/**
+ * 召唤兽受伤处理器
+ * 处理召唤兽（Summon/Puppet）受到怪物伤害的客户端上报
+ */
 public final class DamageSummonHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {

@@ -46,20 +46,33 @@ import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * 交易系统
+ * 管理两个玩家之间的物品和金币交易，使用AtomicBoolean保证锁状态线程安全
+ * 支持交易确认、取消、完成等完整流程，含金币交易税率计算
+ *
  * @author Matze
  * @author Ronan - concurrency safety + check available slots + trade results
-                    并发安全+检查可用插槽+交易结果
  */
 public class Trade {
     private static final Logger log = LoggerFactory.getLogger(Trade.class);
 
+    /**
+     * 交易结果枚举
+     */
     public enum TradeResult {
+        /** 无响应 */
         NO_RESPONSE(1),
+        /** 对方取消 */
         PARTNER_CANCEL(2),
+        /** 交易成功 */
         SUCCESSFUL(7),
+        /** 交易失败 */
         UNSUCCESSFUL(8),
+        /** 失败：唯一物品数量限制 */
         UNSUCCESSFUL_UNIQUE_ITEM_LIMIT(9),
+        /** 失败：在不同地图 */
         UNSUCCESSFUL_ANOTHER_MAP(12),
+        /** 失败：文件损坏 */
         UNSUCCESSFUL_DAMAGED_FILES(13);
 
         private final int res;
@@ -73,16 +86,31 @@ public class Trade {
         }
     }
 
+    /** 交易伙伴 */
     private Trade partner = null;
+    /** 已放入交易的物品列表 */
     private final List<Item> items = new ArrayList<>();
+    /** 对方物品列表 */
     private List<Item> exchangeItems;
+    /** 已放入金币 */
     private int meso = 0;
+    /** 对方金币 */
     private int exchangeMeso;
+    /** 锁定状态（原子布尔保证线程安全） */
     private final AtomicBoolean locked = new AtomicBoolean(false);
+    /** 交易发起者 */
     private final Character chr;
+    /** 交易编号 */
     private final byte number;
+    /** 是否满交易（物品栏已满） */
     private boolean fullTrade = false;
 
+    /**
+     * 构造交易
+     *
+     * @param number 交易编号
+     * @param chr    交易发起者
+     */
     public Trade(byte number, Character chr) {
         this.chr = chr;
         this.number = number;

@@ -25,6 +25,10 @@ import org.gms.client.Client;
 
 import java.awt.*;
 
+/**
+ * 地图对象接口
+ * 定义地图上所有可交互对象的基本行为：生成、销毁和位置管理
+ */
 public interface MapObject {
     int getObjectId();
     void setObjectId(int id);

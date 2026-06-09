@@ -21,19 +21,37 @@
 */
 package org.gms.server.maps;
 
+/**
+ * 保存位置
+ * 记录玩家在特定地图类型中的存档位置，用于快速返回
+ */
 public class SavedLocation {
+    /** 地图ID */
     private final int mapId;
+    /** 传送门ID */
     private final int portal;
 
+    /**
+     * 构造保存位置
+     *
+     * @param mapId  地图ID
+     * @param portal 传送门ID
+     */
     public SavedLocation(int mapId, int portal) {
         this.mapId = mapId;
         this.portal = portal;
     }
 
+    /**
+     * 获取地图ID
+     */
     public int getMapId() {
         return mapId;
     }
 
+    /**
+     * 获取传送门ID
+     */
     public int getPortal() {
         return portal;
     }

@@ -27,6 +27,10 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 家族分离处理器
+ * 处理玩家从家族中分离（脱离）的操作，计算声望和金币消耗
+ */
 public class FamilySeparateHandler extends AbstractPacketHandler {
 
     @Override

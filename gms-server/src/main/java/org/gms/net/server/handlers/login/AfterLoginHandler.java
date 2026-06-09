@@ -27,8 +27,19 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.util.PacketCreator;
 
+/**
+ * 登录后处理器
+ * 处理登录成功后的PIN码验证流程，包括PIN注册、验证和跳过
+ */
 public final class AfterLoginHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理登录后的PIN码操作
+     * 根据客户端发来的不同类型码，执行PIN注册、PIN验证或跳过PIN流程
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte c2 = p.readByte();

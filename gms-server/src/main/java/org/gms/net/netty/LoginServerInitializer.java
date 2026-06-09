@@ -9,6 +9,10 @@ import org.gms.util.RateLimitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 登录服务器通道初始化器
+ * 初始化客户端登录连接，进行限流检查、会话协调和客户端创建
+ */
 public class LoginServerInitializer extends ServerChannelInitializer {
     private static final Logger log = LoggerFactory.getLogger(LoginServerInitializer.class);
 

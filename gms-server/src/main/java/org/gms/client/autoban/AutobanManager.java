@@ -15,19 +15,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 自动封禁管理器
+ * 为每个玩家维护违规积分记录，支持多种违规检测类型
+ * 当积分达到阈值时自动封禁玩家，使用防刷机制防止误封
+ *
  * @author kevintjuh93
  */
 public class AutobanManager {
     private static final Logger log = LoggerFactory.getLogger(AutobanManager.class);
 
+    /** 关联的玩家 */
     private final Character chr;
+    /** 违规类型 -> 积分 */
     private final Map<AutobanFactory, Integer> points = new HashMap<>();
+    /** 违规类型 -> 上次检测时间 */
     private final Map<AutobanFactory, Long> lastTime = new HashMap<>();
+    /** 攻击未命中次数 */
     private int misses = 0;
+    /** 上次记录的未命中数 */
     private int lastmisses = 0;
+    /** 相同未命中连续次数 */
     private int samemisscount = 0;
+    /** 防刷时间戳数组 */
     private final long[] spam = new long[20];
+    /** 时间戳数组 */
     private final int[] timestamp = new int[20];
+    /** 时间戳计数器 */
     private final byte[] timestampcounter = new byte[20];
 
 

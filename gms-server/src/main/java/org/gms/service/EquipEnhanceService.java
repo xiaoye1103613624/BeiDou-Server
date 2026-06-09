@@ -32,8 +32,17 @@ import java.util.List;
 @AllArgsConstructor
 public class EquipEnhanceService {
 
+    /**
+     * 装备强化配置数据访问对象
+     */
     private final EquipEnhanceConfigMapper configMapper;
+    /**
+     * 装备强化等级数据访问对象
+     */
     private final EquipEnhanceLevelMapper levelMapper;
+    /**
+     * 装备强化消耗物品数据访问对象
+     */
     private final EquipEnhanceCostMapper costMapper;
 
     /**
@@ -46,7 +55,12 @@ public class EquipEnhanceService {
         log.info("装备强化配置加载完成");
     }
 
-    /** 获取所有装备强化配置列表 */
+    /**
+     * 获取所有装备强化配置列表
+     * 加载全部配置、等级和消耗物品数据，组装为DTO列表
+     *
+     * @return 装备强化配置DTO列表
+     */
     public List<EquipEnhanceSaveDTO> getConfigList() {
         List<EquipEnhanceConfigDO> configs = configMapper.selectAll();
         List<EquipEnhanceLevelDO> allLevels = levelMapper.selectAll();
@@ -59,7 +73,12 @@ public class EquipEnhanceService {
         return result;
     }
 
-    /** 根据ID获取装备强化配置 */
+    /**
+     * 根据ID获取装备强化配置
+     *
+     * @param id 配置ID
+     * @return 装备强化配置DTO，不存在返回null
+     */
     public EquipEnhanceSaveDTO getConfigById(Long id) {
         EquipEnhanceConfigDO config = configMapper.selectOneById(id);
         if (config == null) return null;
@@ -68,7 +87,11 @@ public class EquipEnhanceService {
 
     /**
      * 保存装备强化配置（新增或更新）。
+     * 存在ID时更新并删除旧等级重新创建，不存在ID时插入新配置。
      * 所有字段支持空值默认值处理。
+     *
+     * @param dto 装备强化保存DTO
+     * @return 保存后的装备强化配置DTO
      */
     @Transactional
     public EquipEnhanceSaveDTO saveConfig(EquipEnhanceSaveDTO dto) {
@@ -81,9 +104,11 @@ public class EquipEnhanceService {
                 .enabled(dto.getEnabled() != null ? dto.getEnabled() : 1)
                 .build();
         if (config.getId() != null) {
+            // 更新配置并清除旧等级数据
             configMapper.update(config);
             deleteLevelsByConfigId(config.getId());
         } else {
+            // 新增配置
             configMapper.insert(config);
         }
 
@@ -129,7 +154,13 @@ public class EquipEnhanceService {
         return getConfigById(config.getId());
     }
 
-    /** 切换装备强化配置的启用/禁用状态，仅更新 enabled 字段并刷新缓存 */
+    /**
+     * 切换装备强化配置的启用/禁用状态
+     * 仅更新 enabled 字段并刷新缓存
+     *
+     * @param id      配置ID
+     * @param enabled 启用状态（1启用，0禁用）
+     */
     @Transactional
     public void toggleEnabled(Long id, Integer enabled) {
         EquipEnhanceConfigDO config = EquipEnhanceConfigDO.builder()
@@ -140,7 +171,11 @@ public class EquipEnhanceService {
         refreshCache();
     }
 
-    /** 删除装备强化配置（级联删除等级和消耗物品） */
+    /**
+     * 删除装备强化配置（级联删除等级和消耗物品）
+     *
+     * @param id 配置ID
+     */
     @Transactional
     public void deleteConfig(Long id) {
         deleteLevelsByConfigId(id);
@@ -148,7 +183,12 @@ public class EquipEnhanceService {
         refreshCache();
     }
 
-    /** 根据配置ID删除所有关联的等级和消耗物品 */
+    /**
+     * 根据配置ID删除所有关联的等级和消耗物品
+     * 先删除每个等级的消耗物品，再删除等级记录
+     *
+     * @param configId 配置ID
+     */
     private void deleteLevelsByConfigId(Long configId) {
         List<EquipEnhanceLevelDO> existingLevels = levelMapper.selectListByQuery(
                 QueryWrapper.create().where("config_id = ?", configId));
@@ -159,12 +199,23 @@ public class EquipEnhanceService {
         levelMapper.deleteByQuery(QueryWrapper.create().where("config_id = ?", configId));
     }
 
-    /** 刷新缓存 */
+    /**
+     * 刷新内存缓存
+     * 从数据库重新加载所有配置到 EquipEnhanceManager
+     */
     private void refreshCache() {
         EquipEnhanceManager.load(configMapper.selectAll(), levelMapper.selectAll(), costMapper.selectAll());
     }
 
-    /** DO转DTO */
+    /**
+     * DO转DTO
+     * 将数据库实体转换为前端使用的DTO对象
+     *
+     * @param config    配置实体
+     * @param allLevels 所有等级列表
+     * @param allCosts  所有消耗物品列表
+     * @return 装备强化配置DTO
+     */
     private EquipEnhanceSaveDTO toDTO(EquipEnhanceConfigDO config,
                                       List<EquipEnhanceLevelDO> allLevels,
                                       List<EquipEnhanceCostDO> allCosts) {
@@ -189,6 +240,7 @@ public class EquipEnhanceService {
                     .speedAdd(lv.getSpeedAdd()).jumpAdd(lv.getJumpAdd())
                     .costs(costDTOs).build());
         }
+        // 按强化等级排序
         levelDTOs.sort(java.util.Comparator.comparingInt(LevelDTO::getEnhanceLevel));
         return EquipEnhanceSaveDTO.builder()
                 .id(config.getId()).itemId(config.getItemId()).itemName(config.getItemName())

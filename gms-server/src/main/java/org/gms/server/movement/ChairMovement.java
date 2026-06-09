@@ -25,17 +25,40 @@ import org.gms.net.packet.OutPacket;
 
 import java.awt.*;
 
+/**
+ * 椅子移动
+ * 玩家坐到椅子上的移动动作，指定椅子站脚点
+ */
 public class ChairMovement extends AbstractLifeMovement {
+    /** 椅子站脚点ID */
     private int fh;
 
+    /**
+     * 构造椅子移动
+     *
+     * @param type     移动类型
+     * @param position 椅子位置
+     * @param duration 持续时间
+     * @param newstate 坐下后状态
+     */
     public ChairMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);
     }
 
+    /**
+     * 获取椅子站脚点ID
+     *
+     * @return 站脚点ID
+     */
     public int getFh() {
         return fh;
     }
 
+    /**
+     * 设置椅子站脚点ID
+     *
+     * @param fh 站脚点ID
+     */
     public void setFh(int fh) {
         this.fh = fh;
     }
@@ -49,4 +72,3 @@ public class ChairMovement extends AbstractLifeMovement {
         p.writeShort(getDuration());
     }
 }
-

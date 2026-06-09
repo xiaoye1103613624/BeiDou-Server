@@ -26,17 +26,33 @@ import org.gms.server.life.MobSkillType;
 
 import java.util.Arrays;
 
+/**
+ * 异常状态枚举
+ * 定义角色可受的异常状态（如减速、眩晕、中毒等），使用位掩码表示
+ * 每种异常状态关联对应的怪物技能类型，用于怪物施加异常状态时的映射
+ */
 public enum Disease {
+    /** 无异常 */
     NULL(0x0),
+    /** 减速 */
     SLOW(0x1, MobSkillType.SLOW),
+    /** 魅惑 */
     SEDUCE(0x80, MobSkillType.SEDUCE),
+    /** 可钓鱼状态 */
     FISHABLE(0x100),
+    /** 僵尸化 */
     ZOMBIFY(0x4000),
+    /** 混乱（反向输入） */
     CONFUSE(0x80000, MobSkillType.REVERSE_INPUT),
+    /** 眩晕 */
     STUN(0x2000000000000L, MobSkillType.STUN),
+    /** 中毒 */
     POISON(0x4000000000000L, MobSkillType.POISON),
+    /** 封印 */
     SEAL(0x8000000000000L, MobSkillType.SEAL),
+    /** 致盲 */
     DARKNESS(0x10000000000000L, MobSkillType.DARKNESS),
+    /** 虚弱 */
     WEAKEN(0x4000000000000000L, MobSkillType.WEAKNESS),
     CURSE(0x8000000000000000L, MobSkillType.CURSE);
 

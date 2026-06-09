@@ -31,11 +31,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * @author Ronan
+ * 登录存储
+ * 管理登录客户端的存储，维护在线客户端列表和登录时间戳
  */
 public class LoginStorage {
-    private final ConcurrentHashMap<Integer, List<Instant>> loginHistory = new ConcurrentHashMap<>(); // Key: accountId
+    /** 登录历史记录，key为账号ID，value为登录尝试时间戳列表 */
+    private final ConcurrentHashMap<Integer, List<Instant>> loginHistory = new ConcurrentHashMap<>();
 
+    /**
+     * 注册登录尝试
+     * 检查登录尝试次数是否超过限制，超过则拒绝
+     *
+     * @param accountId 账号ID
+     * @return 是否允许登录
+     */
     public boolean registerLogin(int accountId) {
         List<Instant> attempts = loginHistory.computeIfAbsent(accountId, k -> new ArrayList<>());
 
@@ -52,6 +61,10 @@ public class LoginStorage {
         }
     }
 
+    /**
+     * 清除过期的登录尝试记录
+     * 遍历所有账号的登录记录，移除已过期的条目
+     */
     public void clearExpiredAttempts() {
         final Instant now = Instant.ofEpochMilli(Server.getInstance().getCurrentTime());
         List<Integer> accountIdsToClear = new ArrayList<>();

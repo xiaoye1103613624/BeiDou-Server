@@ -40,19 +40,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Matze
+ * NPC脚本管理器（单例）
+ * 管理NPC对话脚本的加载、执行和会话生命周期
  */
 public class NPCScriptManager extends AbstractScriptManager {
+    /** SLF4J日志实例 */
     private static final Logger log = LoggerFactory.getLogger(NPCScriptManager.class);
+    /** 单例实例 */
     private static final NPCScriptManager instance = new NPCScriptManager();
 
+    /** 客户端到NPC对话管理器的映射 */
     private final Map<Client, NPCConversationManager> cms = new HashMap<>();
+    /** 客户端到JS脚本调用接口的映射 */
     private final Map<Client, Invocable> scripts = new HashMap<>();
 
+    /**
+     * 获取单例实例
+     *
+     * @return NPCScriptManager单例
+     */
     public static NPCScriptManager getInstance() {
         return instance;
     }
 
+    /**
+     * 检查指定NPC脚本文件是否存在
+     *
+     * @param c        客户端
+     * @param fileName 脚本文件名（不含路径和扩展名）
+     * @return true表示脚本可用
+     */
     public boolean isNpcScriptAvailable(Client c, String fileName) {
         ScriptEngine engine = null;
         if (fileName != null) {
@@ -62,26 +79,78 @@ public class NPCScriptManager extends AbstractScriptManager {
         return engine != null;
     }
 
+    /**
+     * 启动NPC脚本（使用默认对象ID）
+     *
+     * @param c   客户端
+     * @param npc NPC ID
+     * @param chr 角色
+     * @return 是否成功启动
+     */
     public boolean start(Client c, int npc, Character chr) {
         return start(c, npc, -1, chr);
     }
 
+    /**
+     * 启动NPC脚本（指定对象ID）
+     *
+     * @param c   客户端
+     * @param npc NPC ID
+     * @param oid NPC对象ID
+     * @param chr 角色
+     * @return 是否成功启动
+     */
     public boolean start(Client c, int npc, int oid, Character chr) {
         return start(c, npc, oid, null, chr);
     }
 
+    /**
+     * 启动NPC脚本（通过脚本文件名）
+     *
+     * @param c        客户端
+     * @param npc      NPC ID
+     * @param fileName 脚本文件名
+     * @param chr      角色
+     * @return 是否成功启动
+     */
     public boolean start(Client c, int npc, String fileName, Character chr) {
         return start(c, npc, -1, fileName, chr);
     }
 
+    /**
+     * 启动NPC脚本（完整参数）
+     *
+     * @param c        客户端
+     * @param npc      NPC ID
+     * @param oid      NPC对象ID
+     * @param fileName 脚本文件名
+     * @param chr      角色
+     * @return 是否成功启动
+     */
     public boolean start(Client c, int npc, int oid, String fileName, Character chr) {
         return start(c, npc, oid, fileName, chr, false, "cm");
     }
 
+    /**
+     * 启动物品脚本
+     *
+     * @param c          客户端
+     * @param scriptItem 脚本物品对象
+     * @param chr        角色
+     * @return 是否成功启动
+     */
     public boolean start(Client c, ScriptedItem scriptItem, Character chr) {
         return start(c, scriptItem.getNpc(), -1, scriptItem.getScript(), chr, true, "im");
     }
 
+    /**
+     * 启动NPC脚本（带队伍成员列表）
+     *
+     * @param filename 脚本文件名
+     * @param c        客户端
+     * @param npc      NPC ID
+     * @param chrs     队伍成员列表
+     */
     public void start(String filename, Client c, int npc, List<PartyCharacter> chrs) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, chrs, true);
@@ -113,6 +182,18 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 私有核心启动方法
+     *
+     * @param c          客户端
+     * @param npc        NPC ID
+     * @param oid        NPC对象ID
+     * @param fileName   脚本文件名
+     * @param chr        角色
+     * @param itemScript 是否物品脚本
+     * @param engineName 引擎变量名（在脚本上下文的名称）
+     * @return 是否成功启动
+     */
     private boolean start(Client c, int npc, int oid, String fileName, Character chr, boolean itemScript, String engineName) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, oid, fileName, itemScript);
@@ -169,6 +250,14 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 处理玩家NPC对话动作（普通模式）
+     *
+     * @param c         客户端
+     * @param mode      动作模式（yes/no/select）
+     * @param type      动作类型
+     * @param selection 选择项索引
+     */
     public void action(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
@@ -187,6 +276,15 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 处理玩家NPC对话动作（多层级Level模式）
+     * 根据nextLevelContext中记录的类型，路由到对应的方法
+     *
+     * @param c         客户端
+     * @param mode      动作模式
+     * @param type      动作类型
+     * @param selection 选择项索引
+     */
     public void nextLevel(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
@@ -244,6 +342,12 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 释放指定对话管理器的会话
+     * 清除客户端状态、移除缓存、重置脚本上下文
+     *
+     * @param cm NPC对话管理器
+     */
     public void dispose(NPCConversationManager cm) {
         Client c = cm.getClient();
         c.getPlayer().setCS(false);
@@ -261,10 +365,21 @@ public class NPCScriptManager extends AbstractScriptManager {
         c.getPlayer().flushDelayedUpdateQuests();
     }
 
+    /**
+     * 释放客户端的NPC对话会话
+     *
+     * @param c 客户端
+     */
     public void dispose(Client c) {
         dispose(c, false);
     }
 
+    /**
+     * 释放客户端的NPC对话会话
+     *
+     * @param c      客户端
+     * @param action 是否重新启用玩家操作（发送enableActions包）
+     */
     public void dispose(Client c, boolean action) {
         NPCConversationManager cm = cms.get(c);
         if (cm != null) {
@@ -275,6 +390,12 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
+    /**
+     * 获取客户端的NPC对话管理器
+     *
+     * @param c 客户端
+     * @return NPC对话管理器，不存在返回null
+     */
     public NPCConversationManager getCM(Client c) {
         return cms.get(c);
     }

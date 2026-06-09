@@ -40,18 +40,33 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 联盟
+ * 管理多个公会的联盟系统，包括创建、解散、成员管理和消息广播
+ *
  * @author XoticStory
  * @author Ronan
  */
 public class Alliance {
+    /** 联盟中的公会ID列表 */
     final private List<Integer> guilds = new LinkedList<>();
 
+    /** 联盟ID */
     private int allianceId = -1;
+    /** 联盟容量 */
     private int capacity;
+    /** 联盟名称 */
     private String name;
+    /** 联盟公告 */
     private String notice = "";
+    /** 联盟等级头衔 */
     private String[] rankTitles = new String[5];
 
+    /**
+     * 构造联盟
+     *
+     * @param name 联盟名称
+     * @param id   联盟ID
+     */
     public Alliance(String name, int id) {
         this.name = name;
         allianceId = id;
@@ -61,6 +76,12 @@ public class Alliance {
         }
     }
 
+    /**
+     * 检查联盟名称是否可用
+     *
+     * @param name 联盟名称
+     * @return 是否可用
+     */
     public static boolean canBeUsedAllianceName(String name) {
         if (name.contains(" ") || name.length() > 12) {
             return false;
@@ -83,6 +104,12 @@ public class Alliance {
         }
     }
 
+    /**
+     * 获取队伍中的公会会长列表
+     *
+     * @param party 队伍
+     * @return 会长列表
+     */
     private static List<Character> getPartyGuildMasters(Party party) {
         List<Character> mcl = new LinkedList<>();
 
@@ -109,6 +136,13 @@ public class Alliance {
         return mcl;
     }
 
+    /**
+     * 创建联盟
+     *
+     * @param party 发起队伍
+     * @param name  联盟名称
+     * @return 创建的联盟对象，失败返回null
+     */
     public static Alliance createAlliance(Party party, String name) {
         List<Character> guildMasters = getPartyGuildMasters(party);
         if (guildMasters.size() != 2) {
@@ -142,7 +176,8 @@ public class Alliance {
 
                 int worldid = guildMasters.get(0).getWorld();
                 Server.getInstance().allianceMessage(id, GuildPackets.updateAllianceInfo(alliance, worldid), -1, -1);
-                Server.getInstance().allianceMessage(id, GuildPackets.getGuildAlliances(alliance, worldid), -1, -1);  // thanks Vcoc for noticing guilds from other alliances being visually stacked here due to this not being updated
+                // thanks Vcoc for noticing guilds from other alliances being visually stacked here due to this not being updated
+                Server.getInstance().allianceMessage(id, GuildPackets.getGuildAlliances(alliance, worldid), -1, -1);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -152,9 +187,15 @@ public class Alliance {
         return alliance;
     }
 
+    /**
+     * 在数据库中创建联盟
+     * will create an alliance, where the first guild listed is the leader and the alliance name MUST BE already checked for unicity.
+     *
+     * @param guilds 公会ID列表
+     * @param name   联盟名称
+     * @return 创建的联盟对象
+     */
     public static Alliance createAllianceOnDb(List<Integer> guilds, String name) {
-        // will create an alliance, where the first guild listed is the leader and the alliance name MUST BE already checked for unicity.
-
         int id = -1;
         try (Connection con = DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO `alliance` (`name`) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -181,6 +222,12 @@ public class Alliance {
         return new Alliance(name, id);
     }
 
+    /**
+     * 从数据库加载联盟
+     *
+     * @param id 联盟ID
+     * @return 联盟对象，不存在返回null
+     */
     public static Alliance loadAlliance(int id) {
         if (id <= 0) {
             return null;
@@ -226,6 +273,9 @@ public class Alliance {
         return alliance;
     }
 
+    /**
+     * 保存联盟数据到数据库
+     */
     public void saveToDB() {
         try (Connection con = DatabaseConnection.getConnection()) {
 
@@ -260,6 +310,11 @@ public class Alliance {
         }
     }
 
+    /**
+     * 解散联盟
+     *
+     * @param allianceId 联盟ID
+     */
     public static void disbandAlliance(int allianceId) {
         try (Connection con = DatabaseConnection.getConnection()) {
 
@@ -280,6 +335,11 @@ public class Alliance {
         }
     }
 
+    /**
+     * 从数据库中移除公会与联盟的关联
+     *
+     * @param guildId 公会ID
+     */
     private static void removeGuildFromAllianceOnDb(int guildId) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM `allianceguilds` WHERE guildid = ?")) {
@@ -290,6 +350,14 @@ public class Alliance {
         }
     }
 
+    /**
+     * 从联盟中移除公会
+     *
+     * @param allianceId 联盟ID
+     * @param guildId    公会ID
+     * @param worldId    世界ID
+     * @return 是否成功移除
+     */
     public static boolean removeGuildFromAlliance(int allianceId, int guildId, int worldId) {
         Server srv = Server.getInstance();
         Alliance alliance = srv.getAlliance(allianceId);
@@ -310,6 +378,11 @@ public class Alliance {
         return true;
     }
 
+    /**
+     * 更新联盟数据包
+     *
+     * @param chr 角色对象
+     */
     public void updateAlliancePackets(Character chr) {
         if (allianceId > 0) {
             this.broadcastMessage(GuildPackets.updateAllianceInfo(this, chr.getWorld()));
@@ -317,6 +390,12 @@ public class Alliance {
         }
     }
 
+    /**
+     * 从联盟中移除公会
+     *
+     * @param gid 公会ID
+     * @return 是否成功移除
+     */
     public boolean removeGuild(int gid) {
         synchronized (guilds) {
             int index = getGuildIndex(gid);
@@ -329,6 +408,12 @@ public class Alliance {
         }
     }
 
+    /**
+     * 向联盟中添加公会
+     *
+     * @param gid 公会ID
+     * @return 是否成功添加
+     */
     public boolean addGuild(int gid) {
         synchronized (guilds) {
             if (guilds.size() == capacity || getGuildIndex(gid) > -1) {
@@ -340,6 +425,12 @@ public class Alliance {
         }
     }
 
+    /**
+     * 获取公会在联盟中的索引
+     *
+     * @param gid 公会ID
+     * @return 索引位置，-1表示未找到
+     */
     private int getGuildIndex(int gid) {
         synchronized (guilds) {
             for (int i = 0; i < guilds.size(); i++) {
@@ -351,14 +442,30 @@ public class Alliance {
         }
     }
 
+    /**
+     * 设置联盟等级头衔
+     *
+     * @param ranks 头衔数组
+     */
     public void setRankTitle(String[] ranks) {
         rankTitles = ranks;
     }
 
+    /**
+     * 获取指定等级的联盟头衔
+     *
+     * @param rank 等级（1-5）
+     * @return 头衔名称
+     */
     public String getRankTitle(int rank) {
         return rankTitles[rank - 1];
     }
 
+    /**
+     * 获取联盟中的公会ID列表
+     *
+     * @return 公会ID列表
+     */
     public List<Integer> getGuilds() {
         synchronized (guilds) {
             List<Integer> guilds_ = new LinkedList<>();
@@ -371,38 +478,83 @@ public class Alliance {
         }
     }
 
+    /**
+     * 获取联盟公告
+     *
+     * @return 公告内容
+     */
     public String getAllianceNotice() {
         return notice;
     }
 
+    /**
+     * 获取联盟公告
+     *
+     * @return 公告内容
+     */
     public String getNotice() {
         return notice;
     }
 
+    /**
+     * 设置联盟公告
+     *
+     * @param notice 公告内容
+     */
     public void setNotice(String notice) {
         this.notice = notice;
     }
 
+    /**
+     * 增加联盟容量
+     *
+     * @param inc 增加的容量
+     */
     public void increaseCapacity(int inc) {
         this.capacity += inc;
     }
 
+    /**
+     * 设置联盟容量
+     *
+     * @param newCapacity 新容量
+     */
     public void setCapacity(int newCapacity) {
         this.capacity = newCapacity;
     }
 
+    /**
+     * 获取联盟容量
+     *
+     * @return 容量值
+     */
     public int getCapacity() {
         return this.capacity;
     }
 
+    /**
+     * 获取联盟ID
+     *
+     * @return 联盟ID
+     */
     public int getId() {
         return allianceId;
     }
 
+    /**
+     * 获取联盟名称
+     *
+     * @return 联盟名称
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 获取联盟盟主
+     *
+     * @return 盟主公会角色
+     */
     public GuildCharacter getLeader() {
         synchronized (guilds) {
             for (Integer gId : guilds) {
@@ -418,10 +570,21 @@ public class Alliance {
         }
     }
 
+    /**
+     * 向联盟中所有公会发送消息
+     *
+     * @param message 消息内容
+     */
     public void dropMessage(String message) {
         dropMessage(5, message);
     }
 
+    /**
+     * 向联盟中所有公会发送指定类型的消息
+     *
+     * @param type    消息类型
+     * @param message 消息内容
+     */
     public void dropMessage(int type, String message) {
         synchronized (guilds) {
             for (Integer gId : guilds) {
@@ -431,10 +594,22 @@ public class Alliance {
         }
     }
 
+    /**
+     * 广播数据包到联盟中的所有公会
+     *
+     * @param packet 数据包
+     */
     public void broadcastMessage(Packet packet) {
         Server.getInstance().allianceMessage(allianceId, packet, -1, -1);
     }
 
+    /**
+     * 发送联盟邀请
+     *
+     * @param c              发起邀请的客户端
+     * @param targetGuildName 目标公会名称
+     * @param allianceId     联盟ID
+     */
     public static void sendInvitation(Client c, String targetGuildName, int allianceId) {
         Guild mg = Server.getInstance().getGuildByName(targetGuildName);
         if (mg == null) {
@@ -457,6 +632,15 @@ public class Alliance {
         }
     }
 
+    /**
+     * 答复联盟邀请
+     *
+     * @param targetId       目标玩家ID
+     * @param targetGuildName 目标公会名称
+     * @param allianceId     联盟ID
+     * @param answer         是否接受
+     * @return 是否接受邀请
+     */
     public static boolean answerInvitation(int targetId, String targetGuildName, int allianceId, boolean answer) {
         InviteResult res = InviteCoordinator.answerInvite(InviteType.ALLIANCE, targetId, allianceId, answer);
 

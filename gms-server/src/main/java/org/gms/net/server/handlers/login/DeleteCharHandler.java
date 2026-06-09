@@ -36,9 +36,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 删除角色处理器
+ * 处理客户端删除角色的请求，检查公会、家族和世界转移等限制条件
+ */
 public final class DeleteCharHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(DeleteCharHandler.class);
 
+    /**
+     * 处理删除角色请求
+     * 验证PIC码后检查角色是否满足删除条件（非公会领袖、非家族成员、无进行中的世界转移），通过后删除角色
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         String pic = p.readString();

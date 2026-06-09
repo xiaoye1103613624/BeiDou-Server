@@ -6,6 +6,10 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 家族宣言处理器
+ * 处理族长修改家族宣言（家训）的操作
+ */
 public class FamilyPreceptsHandler extends AbstractPacketHandler {
 
     @Override

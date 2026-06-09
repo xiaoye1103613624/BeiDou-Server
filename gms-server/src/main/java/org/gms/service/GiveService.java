@@ -26,12 +26,32 @@ import org.springframework.stereotype.Service;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 
+/**
+ * 发放资源服务类
+ * 提供向玩家发放各种资源的功能，包括：
+ * - 点券（nxCredit、nxPrepaid、maplePoint）
+ * - 金币（mesos）
+ * - 经验值（exp）
+ * - 物品（item）
+ * - 装备（equip）
+ * - 倍率（expRate、mesoRate、dropRate）
+ * - GM权限
+ * - 声望
+ * - 传送
+ */
 @Service
 @Slf4j
 public class GiveService {
+    /** 角色服务，用于更新角色倍率 */
     @Autowired
     CharacterService characterService;
 
+    /**
+     * 发放资源入口方法
+     * 根据玩家ID判断是发放给单个玩家还是所有在线玩家
+     *
+     * @param submitData 发放请求数据
+     */
     public void give(GiveResourceReqDTO submitData) {
         if (submitData.getPlayerId() == 0) {
             giveAllOnlineChr(submitData);
@@ -40,11 +60,18 @@ public class GiveService {
         }
     }
 
+    /**
+     * 向所有在线玩家发放资源
+     * 根据资源类型分发到对应的发放方法
+     *
+     * @param submitData 发放请求数据
+     */
     private void giveAllOnlineChr(GiveResourceReqDTO submitData) {
+        // 根据类型分发：0/1/2→点券，3→金币，4→经验，5→物品，6→装备
         switch (submitData.getType()) {
-            case 0: // nxCredit 点券
-            case 1: // nxPrepaid 信用点
-            case 2: // maplePoint 抵用券
+            case 0:
+            case 1:
+            case 2:
                 int cashType = switch (submitData.getType()) {
                     case 1 -> CashShop.NX_PREPAID;
                     case 2 -> CashShop.MAPLE_POINT;
@@ -52,35 +79,27 @@ public class GiveService {
                 };
                 giveNxAllOnlineChr(submitData.getQuantity(), cashType);
                 break;
-            case 3: // mesos
+            case 3:
                 giveMesosAllOnlineChr(submitData.getQuantity());
                 break;
-            case 4: // exp
+            case 4:
                 giveExpAllOnlineChr(submitData.getQuantity());
                 break;
-            case 5: // item
+            case 5:
                 giveItemAllOnlineChr(submitData.getId(), Short.parseShort(submitData.getQuantity().toString()));
                 break;
-            case 6: // equip
+            case 6:
                 giveEquipAllOnlineChr(submitData);
                 break;
-            // 全服没有设置倍率的操作
-            // case 7: // expRate
-            // case 8: // mesosRate
-            // case 9: // dropRate
-            // case 10: // bossRate
-            //     String rateType = switch (submitData.getType()) {
-            //         case 7 -> "Exp";
-            //         case 8 -> "Mesos";
-            //         case 9 -> "Drop";
-            //         case 10 -> "Boss";
-            //         default -> "None";
-            //     };
-            //     giveRateAllOnlineChr(rateType, submitData.getRate());
-            //     break;
         }
     }
 
+    /**
+     * 向单个玩家发放资源
+     * 先校验世界ID和角色ID，再根据资源类型分发
+     *
+     * @param submitData 发放请求数据
+     */
     private void giveChr(GiveResourceReqDTO submitData) {
         Integer wId = submitData.getWorldId();
         Integer cId = submitData.getPlayerId();
@@ -92,10 +111,11 @@ public class GiveService {
                 .getPlayerStorage().getCharacterById(cId);
         if (chr == null) throw new BizException(I18nUtil.getExceptionMessage("CHR_OFFLINE"));
 
+        // 根据类型分发：0/1/2→点券，3→金币，4→经验，5→物品，6→装备，7-10→倍率，11→GM，12→声望，13→传送
         switch (submitData.getType()) {
-            case 0: // nxCredit 点券
-            case 1: // nxPrepaid 信用点
-            case 2: // maplePoint 抵用券
+            case 0:
+            case 1:
+            case 2:
                 int cashType = switch (submitData.getType()) {
                     case 1 -> CashShop.NX_PREPAID;
                     case 2 -> CashShop.MAPLE_POINT;
@@ -103,22 +123,22 @@ public class GiveService {
                 };
                 giveNxChr(chr, submitData.getQuantity(), cashType);
                 break;
-            case 3: // mesos
+            case 3:
                 giveMesosChr(chr, submitData.getQuantity());
                 break;
-            case 4: // exp
+            case 4:
                 giveExpChr(chr, submitData.getQuantity());
                 break;
-            case 5: // item
+            case 5:
                 giveItemChr(chr, submitData.getId(), Short.parseShort(submitData.getQuantity().toString()));
                 break;
-            case 6: // equip
+            case 6:
                 giveEquipChr(chr, submitData);
                 break;
-            case 7: // expRate
-            case 8: // mesosRate
-            case 9: // dropRate
-            case 10: // bossRate
+            case 7:
+            case 8:
+            case 9:
+            case 10:
                 String rateType = switch (submitData.getType()) {
                     case 7 -> "expRate";
                     case 8 -> "mesoRate";
@@ -139,6 +159,12 @@ public class GiveService {
         }
     }
 
+    /**
+     * 向所有在线玩家发放点券
+     *
+     * @param quantity 点券数量
+     * @param type     点券类型（NX_CREDIT / NX_PREPAID / MAPLE_POINT）
+     */
     private void giveNxAllOnlineChr(int quantity, int type) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             doGainCash(chr, type, quantity);
@@ -147,12 +173,25 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Nx.All.info1", quantity, getCashTypeName(type)));
     }
 
+    /**
+     * 向单个玩家发放点券
+     *
+     * @param chr      目标角色
+     * @param quantity 点券数量
+     * @param type     点券类型
+     */
     private void giveNxChr(Character chr, int quantity, int type) {
         doGainCash(chr, type, quantity);
         chr.message(I18nUtil.getMessage("Give.Nx.Chr", quantity, getCashTypeName(type)));
         log.info(I18nUtil.getLogMessage("Give.Nx.Chr.info1", chr.getId(), chr.getName(), quantity, getCashTypeName(type)));
     }
 
+    /**
+     * 获取点券类型的国际化名称
+     *
+     * @param type 点券类型
+     * @return 点券类型名称
+     */
     private String getCashTypeName(int type) {
         return switch (type) {
             case 1 -> I18nUtil.getMessage("Give.Nx.Type.1");
@@ -161,6 +200,11 @@ public class GiveService {
         };
     }
 
+    /**
+     * 向所有在线玩家发放金币
+     *
+     * @param quantity 金币数量
+     */
     private void giveMesosAllOnlineChr(int quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             doGainMeso(chr, quantity);
@@ -169,12 +213,23 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Mesos.All.info1", quantity));
     }
 
+    /**
+     * 向单个玩家发放金币
+     *
+     * @param chr      目标角色
+     * @param quantity 金币数量
+     */
     private void giveMesosChr(Character chr, int quantity) {
         doGainMeso(chr, quantity);
         chr.message(I18nUtil.getMessage("Give.Mesos.Chr", quantity));
         log.info(I18nUtil.getLogMessage("Give.Mesos.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
 
+    /**
+     * 向所有在线玩家发放经验值
+     *
+     * @param quantity 经验值数量
+     */
     private void giveExpAllOnlineChr(int quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             doGainExp(chr, quantity);
@@ -183,12 +238,25 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Exp.All.info1", quantity));
     }
 
+    /**
+     * 向单个玩家发放经验值
+     *
+     * @param chr      目标角色
+     * @param quantity 经验值数量
+     */
     private void giveExpChr(Character chr, int quantity) {
         doGainExp(chr, quantity);
         chr.message(I18nUtil.getMessage("Give.Exp.Chr", quantity));
         log.info(I18nUtil.getLogMessage("Give.Exp.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
 
+    /**
+     * 向所有在线玩家发放道具
+     * 支持普通道具和宠物道具，宠物道具按天数计算有效期
+     *
+     * @param itemId   物品ID
+     * @param quantity 发放数量
+     */
     private void giveItemAllOnlineChr(int itemId, short quantity) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
@@ -231,6 +299,14 @@ public class GiveService {
 
     }
 
+    /**
+     * 向单个玩家发放道具
+     * 支持普通道具和宠物道具，宠物道具按天数计算有效期
+     *
+     * @param chr      目标角色
+     * @param itemId   物品ID
+     * @param quantity 发放数量
+     */
     private void giveItemChr(Character chr, int itemId, short quantity) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
@@ -267,6 +343,11 @@ public class GiveService {
         }
     }
 
+    /**
+     * 向所有在线玩家发放装备
+     *
+     * @param submitData 发放请求数据，包含装备ID及各项属性值
+     */
     private void giveEquipAllOnlineChr(GiveResourceReqDTO submitData) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
@@ -323,6 +404,12 @@ public class GiveService {
         ));
     }
 
+    /**
+     * 向单个玩家发放装备
+     *
+     * @param chr        目标角色
+     * @param submitData 发放请求数据，包含装备ID及各项属性值
+     */
     private void giveEquipChr(Character chr, GiveResourceReqDTO submitData) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
@@ -380,6 +467,14 @@ public class GiveService {
         ));
     }
 
+    /**
+     * 向单个玩家设置倍率
+     * 倍率必须大于0，保存到扩展值表
+     *
+     * @param chr  目标角色
+     * @param type 倍率类型（expRate / mesoRate / dropRate）
+     * @param rate 倍率值
+     */
     private void giveRateChr(Character chr, String type, float rate) {
         if (rate <= 0) {
             throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_ZERO", "rate"));
@@ -396,11 +491,19 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Rate.Chr.info1", chr.getId(), chr.getName(), type, rate));
     }
 
+    /**
+     * 设置角色的GM等级
+     * GM等级低于3先取消隐藏再设置权限；等级>=3先设置权限再隐藏，否则无权限执行hide
+     *
+     * @param chr   目标角色
+     * @param level GM等级（0-127）
+     */
     private void giveGMChr(Character chr, Integer level) {
         if (level < 0  || level > 127) {
             throw new BizException(I18nUtil.getExceptionMessage("ILLEGAL_PARAMETERS",level));
         }
-        // 按照以下顺序hide，否则因为没有GM权限而无法hide或unhide
+        // 按以下顺序 hide，否则因无 GM 权限无法执行 hide/unhide
+        // GM 等级 < 3 先解除隐藏再设置；>= 3 先设置权限再隐藏
         if (level < 3) {
             chr.hide(false);
             chr.setGMLevel(level);
@@ -412,6 +515,12 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.GM.Chr.info1", chr.getId(), chr.getName(), level));
     }
 
+    /**
+     * 设置角色的声望值
+     *
+     * @param chr  目标角色
+     * @param fame 声望值
+     */
     private void giveFameChr(Character chr, Integer fame) {
         chr.setFame(fame);
         chr.updateSingleStat(Stat.FAME, fame);
@@ -419,6 +528,13 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Fame.Chr.info1", chr.getId(), chr.getName(), fame));
     }
 
+    /**
+     * 传送角色到指定地图
+     * 自由市场（910000000）需要保存位置再传送
+     *
+     * @param chr   目标角色
+     * @param mapId 目标地图ID
+     */
     private void changeMap(Character chr, Integer mapId) {
         if (910000000 == mapId) {
             chr.saveLocation("FREE_MARKET");
@@ -430,24 +546,38 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Map.Chr.info1", chr.getId(), chr.getName(), mapId));
     }
 
+    /**
+     * 增加点券（带边界保护）
+     * 不允许小于0，不允许超过Integer.MAX_VALUE
+     *
+     * @param chr      目标角色
+     * @param type     点券类型
+     * @param quantity 点券数量
+     */
     private void doGainCash(Character chr, int type, int quantity) {
         int cash = chr.getCashShop().getCash(type);
         long sum = (long) cash + (long) quantity;
-        // 禁止点券小于0导致商城错误
+        // 点券边界保护：不允许小于 0（否则商城会出错），不允许超过 Integer.MAX_VALUE
         if (sum < 0) {
             quantity = -cash;
         }
-        // 禁止点券大于最大值
         if (sum > Integer.MAX_VALUE) {
             quantity = Integer.MAX_VALUE - cash;
         }
         chr.getCashShop().gainCash(type, quantity);
     }
 
+    /**
+     * 增加经验值（带边界保护）
+     * 最低只能将经验清零，不允许溢出
+     *
+     * @param chr      目标角色
+     * @param quantity 经验值数量
+     */
     private void doGainExp(Character chr, int quantity) {
         int exp = chr.getExp();
         long sum = (long) exp + (long) quantity;
-        // 最低只能把经验清0
+        // 经验边界保护：最低只能将经验清零，不允许溢出
         if (sum < 0) {
             sum = -exp;
         } else {
@@ -456,9 +586,17 @@ public class GiveService {
         chr.gainExp((int) sum);
     }
 
+    /**
+     * 增加金币（带边界保护）
+     * 不允许小于0，不允许超过Integer.MAX_VALUE
+     *
+     * @param chr      目标角色
+     * @param quantity 金币数量
+     */
     private void doGainMeso(Character chr, int quantity) {
         int meso = chr.getMeso();
         long sum = (long) meso + (long) quantity;
+        // 金币边界保护：不允许小于 0，不允许超过 Integer.MAX_VALUE
         if (sum < 0) {
             quantity = -meso;
         }

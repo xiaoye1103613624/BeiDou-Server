@@ -22,7 +22,8 @@ package org.gms.net.server.services;
 import org.gms.config.GameConfig;
 
 /**
- * @author Ronan
+ * 基础服务抽象类
+ * 所有游戏服务的基类，提供地图分段索引计算工具方法
  */
 public abstract class BaseService {
 

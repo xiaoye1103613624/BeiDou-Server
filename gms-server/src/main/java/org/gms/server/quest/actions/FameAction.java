@@ -28,9 +28,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
 
 /**
+ * 声望奖励动作
+ * 给玩家增加或减少声望值
+ *
  * @author Tyler (Twdtwd)
  */
 public class FameAction extends AbstractQuestAction {
+    /** 声望变化量 */
     int fame;
 
     public FameAction(Quest quest, Data data) {
@@ -49,4 +53,4 @@ public class FameAction extends AbstractQuestAction {
     public void run(Character chr, Integer extSelection) {
         chr.gainFame(fame);
     }
-} 
+}

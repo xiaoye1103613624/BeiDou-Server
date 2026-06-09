@@ -26,12 +26,28 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
+/**
+ * 重连请求处理器
+ * 处理客户端请求重新登录的响应，返回重连成功包
+ */
 public final class RelogRequestHandler extends AbstractPacketHandler {
+    /**
+     * 验证客户端状态，确保未登录
+     *
+     * @param c 客户端会话
+     * @return 未登录返回true
+     */
     @Override
     public boolean validateState(Client c) {
         return !c.isLoggedIn();
     }
 
+    /**
+     * 处理重连请求
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         c.sendPacket(PacketCreator.getRelogResponse());

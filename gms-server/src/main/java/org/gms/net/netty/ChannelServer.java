@@ -6,6 +6,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+/**
+ * 频道服务器
+ * 基于Netty实现，监听频道端口，处理游戏频道连接及数据包
+ */
 public class ChannelServer extends AbstractServer {
     private final int world;
     private final int channel;

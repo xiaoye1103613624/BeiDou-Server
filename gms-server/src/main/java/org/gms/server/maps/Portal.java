@@ -25,6 +25,10 @@ import org.gms.client.Client;
 
 import java.awt.*;
 
+/**
+ * 传送门接口
+ * 定义地图传送门的基本属性和行为，包括传送逻辑和状态管理
+ */
 public interface Portal {
     int TELEPORT_PORTAL = 1;
     int MAP_PORTAL = 2;

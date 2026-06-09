@@ -68,59 +68,79 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  */
 public class EventInstanceManager {
     private static final Logger log = LoggerFactory.getLogger(EventInstanceManager.class);
-    private final Map<Integer, Character> chars = new HashMap<>();// 存储参与事件的玩家，key为玩家ID
-    private int leaderId = -1; // 事件队伍领袖ID
-    private final List<Monster> mobs = new LinkedList<>();// 事件中生成的怪物列表
-    private final Map<Character, Integer> killCount = new HashMap<>();// 玩家击杀计数
-    private EventManager em; // 所属事件管理器
-    private EventScriptScheduler ess; // 事件脚本调度器
-    private MapManager mapManager; // 地图管理器
-    private String name; // 事件实例名称
 
-    // 事件属性存储
+    /** 存储参与事件的玩家，key为玩家ID */
+    private final Map<Integer, Character> chars = new HashMap<>();
+    /** 事件队伍领袖ID，-1表示未设置 */
+    private int leaderId = -1;
+    /** 事件中生成的怪物列表 */
+    private final List<Monster> mobs = new LinkedList<>();
+    /** 玩家击杀计数，key为玩家对象 */
+    private final Map<Character, Integer> killCount = new HashMap<>();
+    /** 所属事件管理器 */
+    private EventManager em;
+    /** 事件脚本调度器，管理延时任务 */
+    private EventScriptScheduler ess;
+    /** 地图管理器，负责事件专属地图实例的创建与管理 */
+    private MapManager mapManager;
+    /** 事件实例名称 */
+    private String name;
+
+    /** 事件属性存储（字符串键值对） */
     private final Properties props = new Properties();
+    /** 事件对象属性存储，支持任意类型值 */
     private final Map<String, Object> objectProps = new HashMap<>();
 
-    // 事件计时相关
-    private long timeStarted = 0; // 事件开始时间
-    private long eventTime = 0; // 事件总时长
+    /** 事件开始时间戳 */
+    private long timeStarted = 0;
+    /** 事件总时长（毫秒） */
+    private long eventTime = 0;
 
-    // 远征队相关
+    /** 事件关联的远征队 */
     private Expedition expedition = null;
 
-    // 事件使用的地图ID列表
+    /** 事件使用的地图ID列表 */
     private final List<Integer> mapIds = new LinkedList<>();
 
-    // 读写锁控制
+    /** 读写锁的读锁，用于遍历玩家列表等读操作 */
     private final Lock readLock;
+    /** 读写锁的写锁，用于注册/注销玩家等写操作 */
     private final Lock writeLock;
 
-    private final Lock propertyLock = new ReentrantLock(true);// 属性操作锁
-    private final Lock scriptLock = new ReentrantLock(true);// 脚本操作锁
+    /** 属性操作锁，保证props和objectProps的线程安全 */
+    private final Lock propertyLock = new ReentrantLock(true);
+    /** 脚本操作锁，保证脚本调用与事件状态变更的互斥 */
+    private final Lock scriptLock = new ReentrantLock(true);
 
-    private ScheduledFuture<?> event_schedule = null;// 事件调度任务
+    /** 事件调度任务句柄，用于取消定时任务 */
+    private ScheduledFuture<?> event_schedule = null;
 
-    // 状态标志
-    private boolean disposed = false; // 是否已销毁
-    private boolean eventCleared = false; // 事件是否完成
-    private boolean eventStarted = false; // 事件是否开始
+    /** 是否已销毁 */
+    private boolean disposed = false;
+    /** 事件是否已完成通关 */
+    private boolean eventCleared = false;
+    /** 事件是否已开始 */
+    private boolean eventStarted = false;
 
-    // 奖励相关配置
+    /** 事件奖励物品集合，key为事件等级 */
     private final Map<Integer, List<Integer>> collectionSet = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
+    /** 事件奖励物品数量，key为事件等级 */
     private final Map<Integer, List<Integer>> collectionQty = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
+    /** 事件奖励经验值，key为事件等级 */
     private final Map<Integer, Integer> collectionExp = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
 
-    // 清理阶段奖励
+    /** 清理阶段奖励经验值列表 */
     private final List<Integer> onMapClearExp = new ArrayList<>();
+    /** 清理阶段奖励金币列表 */
     private final List<Integer> onMapClearMeso = new ArrayList<>();
 
-    // 玩家状态网格
+    /** 玩家状态网格，key为玩家ID，value为状态值 */
     private final Map<Integer, Integer> playerGrid = new HashMap<>();
 
-    // 已开启的门记录
+    /** 已开启的门记录，key为地图ID，value为(门对象名, 新状态) */
     private final Map<Integer, Pair<String, Integer>> openedGates = new HashMap<>();
 
-    // 事件专属物品
+    /** 事件专属物品ID集合，用于玩家退出时自动回收 */
     private final Set<Integer> exclusiveItems = new HashSet<>();
 
     /**
@@ -131,10 +151,12 @@ public class EventInstanceManager {
     public EventInstanceManager(EventManager em, String name) {
         this.em = em;
         this.name = name;
+        // 创建事件脚本调度器，管理延时任务
         this.ess = new EventScriptScheduler();
+        // 创建事件专属地图管理器，管理本事件的所有地图实例
         this.mapManager = new MapManager(this, em.getWorldServer().getId(), em.getChannelServer().getId());
 
-        // 初始化读写锁
+        // 初始化公平读写锁，保证事件状态操作的线程安全
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
         this.readLock = readWriteLock.readLock();
         this.writeLock = readWriteLock.writeLock();
@@ -154,10 +176,9 @@ public class EventInstanceManager {
     }
 
     public int getEventPlayersJobs() {
-        //Bits -> 0: BEGINNER 1: WARRIOR 2: MAGICIAN
-        //        3: BOWMAN 4: THIEF 5: PIRATE
-
+        /* Bits -> 0:BEGINNER 1:WARRIOR 2:MAGICIAN 3:BOWMAN 4:THIEF 5:PIRATE */
         int mask = 0;
+        /* 遍历所有参与玩家，按职业类型设置对应的bit位 */
         for (Character chr : getPlayers()) {
             mask |= (1 << chr.getJob().getJobNiche());
         }
@@ -265,21 +286,23 @@ public class EventInstanceManager {
             return;
         }
 
-        writeLock.lock(); // 获取写锁
+        writeLock.lock();
         try {
             if (chars.containsKey(chr.getId())) {
-                return; // 已注册则返回
+                return;
             }
 
-            chars.put(chr.getId(), chr); // 添加玩家到集合
-            chr.setEventInstance(this); // 设置玩家事件实例
+            /* 将玩家加入事件玩家集合，并绑定事件实例到玩家 */
+            chars.put(chr.getId(), chr);
+            chr.setEventInstance(this);
         } finally {
-            writeLock.unlock(); // 释放写锁
+            writeLock.unlock();
         }
 
+        /* 执行入口脚本——通知脚本层有新玩家加入 */
         if (runEntryScript) {
             try {
-                invokeScriptFunction("playerEntry", EventInstanceManager.this, chr);// 调用玩家进入脚本函数
+                invokeScriptFunction("playerEntry", EventInstanceManager.this, chr);
             } catch (ScriptException | NoSuchMethodException ex) {
                 ex.printStackTrace();
             }
@@ -315,10 +338,12 @@ public class EventInstanceManager {
         timeStarted = System.currentTimeMillis();
         eventTime = time;
 
+        /* 向所有参与玩家发送倒计时时钟包 */
         for (Character chr : getPlayers()) {
             chr.sendPacket(PacketCreator.getClock((int) (time / 1000)));
         }
 
+        /* 定时到期后调用脚本层scheduledTimeout函数 */
         event_schedule = TimerManager.getInstance().schedule(() -> {
             dismissEventTimer();
 
@@ -332,6 +357,7 @@ public class EventInstanceManager {
 
     public void addEventTimer(long time) {
         if (event_schedule != null) {
+            // 已有定时器运行中，取消后追加时间再重新调度
             if (event_schedule.cancel(false)) {
                 long nextTime = getTimeLeft() + time;
                 eventTime += time;
@@ -347,15 +373,18 @@ public class EventInstanceManager {
                 }, nextTime);
             }
         } else {
+            // 无定时器运行，直接启动
             startEventTimer(time);
         }
     }
 
     private void dismissEventTimer() {
+        /* 移除所有玩家的倒计时UI时钟 */
         for (Character chr : getPlayers()) {
             chr.sendPacket(PacketCreator.removeClock());
         }
 
+        /* 重置定时相关状态 */
         event_schedule = null;
         eventTime = 0;
         timeStarted = 0;
@@ -386,7 +415,8 @@ public class EventInstanceManager {
 
     public void registerParty(Party party, MapleMap map) {
         for (PartyCharacter mpc : party.getEligibleMembers()) {
-            if (mpc.isOnline()) {   // thanks resinate
+            /* 只注册在线的且在同一地图的队员 */
+            if (mpc.isOnline()) {
                 Character chr = map.getCharacterById(mpc.getId());
                 if (chr != null) {
                     registerPlayer(chr);
@@ -403,6 +433,7 @@ public class EventInstanceManager {
     private void registerExpeditionTeam(Expedition exped, int recruitMap) {
         expedition = exped;
 
+        /* 只注册在招募地图中的远征队活跃成员 */
         for (Character chr : exped.getActiveMembers()) {
             if (chr.getMapId() == recruitMap) {
                 registerPlayer(chr);
@@ -411,12 +442,14 @@ public class EventInstanceManager {
     }
 
     public void unregisterPlayer(final Character chr) {
+        // 先通知脚本层玩家即将注销
         try {
             invokeScriptFunction("playerUnregistered", EventInstanceManager.this, chr);
         } catch (ScriptException | NoSuchMethodException ex) {
             log.error("事件脚本 {} 没有封装playerUnregistered函数", em.getName(), ex);
         }
 
+        // 从事件中移除玩家，清除双向引用
         writeLock.lock();
         try {
             chars.remove(chr.getId());
@@ -425,6 +458,7 @@ public class EventInstanceManager {
             writeLock.unlock();
         }
 
+        // 清除玩家事件状态和专属物品
         gridRemove(chr);
         dropExclusiveItems(chr);
     }
@@ -466,7 +500,8 @@ public class EventInstanceManager {
     }
 
     public void registerMonster(Monster mob) {
-        if (!mob.getStats().isFriendly()) { //We cannot register moon bunny
+        /* 不注册友善怪物（如月兔），它们不属于事件击杀统计范围 */
+        if (!mob.getStats().isFriendly()) {
             mobs.add(mob);
         }
     }
@@ -511,8 +546,10 @@ public class EventInstanceManager {
             mobs.remove(mob);
 
             if (eventStarted) {
+                /* scriptResult=1: 触发monsterKilled脚本 */
                 scriptResult = 1;
 
+                /* scriptResult=2: 怪物全部清空，额外触发allMonstersDead脚本 */
                 if (mobs.isEmpty()) {
                     scriptResult = 2;
                 }
@@ -521,6 +558,7 @@ public class EventInstanceManager {
             scriptLock.unlock();
         }
 
+        /* 在锁外调用脚本，避免死锁 */
         if (scriptResult > 0) {
             try {
                 invokeScriptFunction("monsterKilled", mob, EventInstanceManager.this, hasKiller);
@@ -528,6 +566,7 @@ public class EventInstanceManager {
                 ex.printStackTrace();
             }
 
+            /* 所有怪物死亡后触发通关检查 */
             if (scriptResult > 1) {
                 try {
                     invokeScriptFunction("allMonstersDead", EventInstanceManager.this, hasKiller);
@@ -599,16 +638,19 @@ public class EventInstanceManager {
 
     public void monsterKilled(Character chr, final Monster mob) {
         try {
+            /* 脚本层提供该怪物对击杀计数的贡献值 */
             final int inc = (int) invokeScriptFunction("monsterValue", EventInstanceManager.this, mob.getId());
 
             if (inc != 0) {
                 Integer kc = killCount.get(chr);
+                /* 更新玩家击杀计数 */
                 if (kc == null) {
                     kc = inc;
                 } else {
                     kc += inc;
                 }
                 killCount.put(chr, kc);
+                /* 远征队模式下同步更新远征队击杀计数 */
                 if (expedition != null) {
                     expedition.monsterKilled(chr, mob);
                 }
@@ -624,6 +666,7 @@ public class EventInstanceManager {
     }
 
     public void dispose() {
+        /* 先断开所有玩家的引用关系 */
         readLock.lock();
         try {
             for (Character chr : chars.values()) {
@@ -636,11 +679,12 @@ public class EventInstanceManager {
         dispose(false);
     }
 
-    public synchronized void dispose(boolean shutdown) {    // should not trigger any event script method after disposed
+    public synchronized void dispose(boolean shutdown) {
         if (disposed) {
             return;
         }
 
+        // 调用脚本层dispose函数进行自定义清理
         try {
             invokeScriptFunction("dispose", EventInstanceManager.this);
         } catch (ScriptException | NoSuchMethodException ex) {
@@ -648,8 +692,10 @@ public class EventInstanceManager {
         }
         disposed = true;
 
+        // 停止脚本调度器，清除所有延时任务
         ess.dispose();
 
+        // 清除所有玩家和怪物引用
         writeLock.lock();
         try {
             for (Character chr : chars.values()) {
@@ -662,11 +708,13 @@ public class EventInstanceManager {
             writeLock.unlock();
         }
 
+        // 取消事件定时器
         if (event_schedule != null) {
             event_schedule.cancel(false);
             event_schedule = null;
         }
 
+        // 清理所有数据集合
         killCount.clear();
         mapIds.clear();
         props.clear();
@@ -674,6 +722,7 @@ public class EventInstanceManager {
 
         disposeExpedition();
 
+        // 未通关的事件实例从事件管理器注销
         scriptLock.lock();
         try {
             if (!eventCleared) {
@@ -683,8 +732,9 @@ public class EventInstanceManager {
             scriptLock.unlock();
         }
 
+        // 延迟1分钟销毁地图管理器，避免对象被立即回收导致引用错误
         TimerManager.getInstance().schedule(() -> {
-            mapManager.dispose();   // issues from instantly disposing some event objects found thanks to MedicOP
+            mapManager.dispose();
             writeLock.lock();
             try {
                 mapManager = null;
@@ -866,6 +916,7 @@ public class EventInstanceManager {
 
         try {
             if (players.size() < size) {
+                /* 人数不足，将剩余玩家传送到指定地图后销毁事件 */
                 for (Character chr : players) {
                     if (chr == null) {
                         continue;
@@ -939,14 +990,16 @@ public class EventInstanceManager {
         onMapClearMeso.addAll(convertToIntegerList(gain));
     }
 
-    public Integer getClearStageExp(int stage) {    //stage counts from ONE.
+    /* 阶段计数从1开始（stage counts from ONE） */
+    public Integer getClearStageExp(int stage) {
         if (stage > onMapClearExp.size()) {
             return 0;
         }
         return onMapClearExp.get(stage - 1);
     }
 
-    public Integer getClearStageMeso(int stage) {   //stage counts from ONE.
+    /* 阶段计数从1开始（stage counts from ONE） */
+    public Integer getClearStageMeso(int stage) {
         if (stage > onMapClearMeso.size()) {
             return 0;
         }
@@ -996,18 +1049,18 @@ public class EventInstanceManager {
         setEventRewards(eventLevel, rwds, qtys, 0);
     }
 
+    // 固定经验值将在随机物品发放时一起给予
     public final void setEventRewards(int eventLevel, List<Object> rwds, List<Object> qtys, int expGiven) {
-        // fixed EXP will be rewarded at the same time the random item is given
 
         if (eventLevel <= 0 || eventLevel > GameConfig.getServerInt("max_event_levels")) {
             return;
         }
-        eventLevel--;    //event level starts from 1
+        /* 事件等级从1开始，内部索引从0开始 */
+        eventLevel--;
 
         List<Integer> rewardIds = convertToIntegerList(rwds);
         List<Integer> rewardQtys = convertToIntegerList(qtys);
 
-        //rewardsSet and rewardsQty hold temporary values
         writeLock.lock();
         try {
             collectionSet.put(eventLevel, rewardIds);
@@ -1018,6 +1071,10 @@ public class EventInstanceManager {
         }
     }
 
+    /**
+     * 获取指定等级奖励所需的背包空间类型位掩码
+     * 用于检查玩家背包是否有足够空间领取奖励
+     */
     private byte getRewardListRequirements(int level) {
         if (level >= collectionSet.size()) {
             return 0;
@@ -1026,6 +1083,7 @@ public class EventInstanceManager {
         byte rewardTypes = 0;
         List<Integer> list = collectionSet.get(level);
 
+        // 遍历所有奖励物品，按物品所属背包类型设置bit位
         for (Integer itemId : list) {
             rewardTypes |= (1 << ItemConstants.getInventoryType(itemId).getType());
         }
@@ -1033,10 +1091,14 @@ public class EventInstanceManager {
         return rewardTypes;
     }
 
+    /**
+     * 检查玩家是否有足够背包空间领取事件奖励
+     * 遍历装备/消耗/装饰/特殊/现金五种背包类型
+     */
     private boolean hasRewardSlot(Character player, int eventLevel) {
-        byte listReq = getRewardListRequirements(eventLevel);   //gets all types of items present in the event reward list
+        byte listReq = getRewardListRequirements(eventLevel);
 
-        //iterating over all valid inventory types
+        /* 遍历装备、消耗、装饰、特殊、现金五种背包类型 */
         for (byte type = 1; type <= 5; type++) {
             if ((listReq >> type) % 2 == 1 && !player.hasEmptySlot(type)) {
                 return false;
@@ -1050,14 +1112,15 @@ public class EventInstanceManager {
         return giveEventReward(player, 1);
     }
 
-    //gives out EXP & a random item in a similar fashion of when clearing KPQ, LPQ, etc.
+    /* 以类似KPQ/LPQ通关的方式发放经验值和一个随机物品 */
     public final boolean giveEventReward(Character player, int eventLevel) {
         List<Integer> rewardsSet, rewardsQty;
         Integer rewardExp;
 
         readLock.lock();
         try {
-            eventLevel--;       //event level starts counting from 1
+            /* 事件等级从1开始，内部索引从0开始 */
+            eventLevel--;
             if (eventLevel >= collectionSet.size()) {
                 return true;
             }
@@ -1074,6 +1137,7 @@ public class EventInstanceManager {
             rewardExp = 0;
         }
 
+        /* 无奖励物品但有经验时，只发放经验 */
         if (rewardsSet == null || rewardsSet.isEmpty()) {
             if (rewardExp > 0) {
                 player.gainExp(rewardExp);
@@ -1081,11 +1145,13 @@ public class EventInstanceManager {
             return true;
         }
 
+        // 检查背包空间，空间不足则返回false由调用方处理
         if (!hasRewardSlot(player, eventLevel)) {
             return false;
         }
 
         AbstractPlayerInteraction api = player.getAbstractPlayerInteraction();
+        /* 随机选择奖励物品中的一项 */
         int rnd = (int) Math.floor(Math.random() * rewardsSet.size());
 
         api.gainItem(rewardsSet.get(rnd), rewardsQty.get(rnd).shortValue());
@@ -1097,8 +1163,10 @@ public class EventInstanceManager {
 
     private void disposeExpedition() {
         if (expedition != null) {
+            /* 通知远征队事件结束（eventCleared标识是否通关） */
             expedition.dispose(eventCleared);
 
+            /* 从频道服务器移除远征队注册 */
             scriptLock.lock();
             try {
                 expedition.removeChannelExpedition(em.getChannelServer());
@@ -1113,6 +1181,7 @@ public class EventInstanceManager {
     public final synchronized void startEvent() {
         eventStarted = true;
 
+        /* 事件启动后调用脚本层afterSetup，脚本可在此阶段生成怪物、设置奖励等 */
         try {
             invokeScriptFunction("afterSetup", EventInstanceManager.this);
         } catch (ScriptException | NoSuchMethodException ex) {
@@ -1123,10 +1192,12 @@ public class EventInstanceManager {
     public final void setEventCleared() {
         eventCleared = true;
 
+        /* 给所有参与玩家发放活动积分 */
         for (Character chr : getPlayers()) {
             chr.awardQuestPoint(GameConfig.getServerInt("quest_point_per_event_clear"));
         }
 
+        /* 从事件管理器注销实例 */
         scriptLock.lock();
         try {
             em.disposeInstance(name);
@@ -1134,6 +1205,7 @@ public class EventInstanceManager {
             scriptLock.unlock();
         }
 
+        /* 清理远征队 */
         disposeExpedition();
     }
 
@@ -1156,32 +1228,39 @@ public class EventInstanceManager {
     }
 
     public final boolean checkEventTeamLacking(boolean leavingEventMap, int minPlayers) {
+        /* 已通关且人数多于1人，不算缺人 */
         if (eventCleared && getPlayerCount() > 1) {
             return false;
         }
 
+        /* 未通关、正在离开事件地图、且队长不在线 */
         if (!eventCleared && leavingEventMap && !isEventTeamLeaderOn()) {
             return true;
         }
+        /* 人数低于最低要求 */
         return getPlayerCount() < minPlayers;
     }
 
     public final boolean isExpeditionTeamLackingNow(boolean leavingEventMap, int minPlayers, Character quitter) {
         if (eventCleared) {
+            /* 已通关时，仅当离开事件地图且只剩1人时判为缺人 */
             return leavingEventMap && getPlayerCount() <= 1;
         } else {
-            // thanks Conrad for noticing expeditions don't need to have neither the leader nor meet the minimum requirement inside the event
+            /* 远征队模式下不要求队长在场，仅检查人数是否低于等于1 */
             return getPlayerCount() <= 1;
         }
     }
 
     public final boolean isEventTeamLackingNow(boolean leavingEventMap, int minPlayers, Character quitter) {
         if (eventCleared) {
+            /* 已通关时，仅当离开事件地图且只剩1人时判为缺人 */
             return leavingEventMap && getPlayerCount() <= 1;
         } else {
+            /* 队长离开事件地图则队伍解散 */
             if (leavingEventMap && getLeaderId() == quitter.getId()) {
                 return true;
             }
+            /* 人数低于最低要求 */
             return getPlayerCount() <= minPlayers;
         }
     }
@@ -1193,6 +1272,7 @@ public class EventInstanceManager {
                 return true;
             }
 
+            /* 检查所有队员是否在同一地图 */
             Iterator<Character> iterator = chars.values().iterator();
             Character mc = iterator.next();
             int mapId = mc.getMapId();
@@ -1279,6 +1359,7 @@ public class EventInstanceManager {
 
     public final void showWrongEffect(int mapId) {
         MapleMap map = getMapInstance(mapId);
+        /* 发送错误特效（红色叉号）和失败音效 */
         map.broadcastMessage(PacketCreator.showEffect("quest/party/wrong_kor"));
         map.broadcastMessage(PacketCreator.playSound("Party1/Failed"));
     }
@@ -1308,9 +1389,11 @@ public class EventInstanceManager {
 
     public final void showClearEffect(boolean hasGate, int mapId, String mapObj, int newState) {
         MapleMap map = getMapInstance(mapId);
+        /* 发送通关特效和成功音效 */
         map.broadcastMessage(PacketCreator.showEffect("quest/party/clear"));
         map.broadcastMessage(PacketCreator.playSound("Party1/Clear"));
         if (hasGate) {
+            /* 显示过关门特效（如KPQ中的门）并记录状态 */
             map.broadcastMessage(PacketCreator.environmentChange(mapObj, newState));
             writeLock.lock();
             try {
@@ -1339,15 +1422,19 @@ public class EventInstanceManager {
     }
 
     public final void giveEventPlayersStageReward(int thisStage) {
-        List<Integer> list = getClearStageBonus(thisStage);     // will give bonus exp & mesos to everyone in the event
+        /* 向事件中所有玩家发放该阶段的奖励经验和金币 */
+        List<Integer> list = getClearStageBonus(thisStage);
         giveEventPlayersExp(list.get(0));
         giveEventPlayersMeso(list.get(1));
     }
 
     public final void linkToNextStage(int thisStage, String eventFamily, int thisMapId) {
+        /* 先发放当前阶段奖励 */
         giveEventPlayersStageReward(thisStage);
-        thisStage--;    //stages counts from ONE, scripts from ZERO
+        /* 阶段从1开始计数，脚本索引从0开始 */
+        thisStage--;
 
+        /* 将下一阶段的传送门脚本绑定到事件家族名+阶段索引 */
         MapleMap nextStage = getMapInstance(thisMapId);
         Portal portal = nextStage.getPortal("next00");
         if (portal != null) {
@@ -1356,8 +1443,10 @@ public class EventInstanceManager {
     }
 
     public final void linkPortalToScript(int thisStage, String portalName, String scriptName, int thisMapId) {
+        /* 先发放当前阶段奖励 */
         giveEventPlayersStageReward(thisStage);
-        thisStage--;    //stages counts from ONE, scripts from ZERO
+        /* 阶段从1开始计数，脚本索引从0开始 */
+        thisStage--;
 
         MapleMap nextStage = getMapInstance(thisMapId);
         Portal portal = nextStage.getPortal(portalName);
@@ -1366,7 +1455,9 @@ public class EventInstanceManager {
         }
     }
 
-    // registers a player status in an event
+    /**
+     * 在事件中注册玩家状态
+     */
     public final void gridInsert(Character chr, int newStatus) {
         writeLock.lock();
         try {
@@ -1376,7 +1467,9 @@ public class EventInstanceManager {
         }
     }
 
-    // unregisters a player status in an event
+    /**
+     * 注销事件中玩家的状态
+     */
     public final void gridRemove(Character chr) {
         writeLock.lock();
         try {
@@ -1386,7 +1479,10 @@ public class EventInstanceManager {
         }
     }
 
-    // checks a player status
+    /**
+     * 检查事件中玩家的状态
+     * @return 玩家状态值，未注册返回-1
+     */
     public final int gridCheck(Character chr) {
         readLock.lock();
         try {

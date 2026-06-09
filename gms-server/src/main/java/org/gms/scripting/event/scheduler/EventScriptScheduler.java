@@ -34,17 +34,28 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Ronan
+ * 事件脚本调度器
+ * 管理事件脚本的定时任务调度，支持任务的注册、延迟执行和取消
  */
 public class EventScriptScheduler {
 
+    /** 调度器是否已释放 */
     private boolean disposed = false;
+    /** 空闲计数器，达到阈值后取消调度任务 */
     private int idleProcs = 0;
+    /** 注册的延时任务映射（任务 -> 延迟毫秒数） */
     private final Map<Runnable, Long> registeredEntries = new HashMap<>();
 
+    /** 底层定时任务句柄 */
     private ScheduledFuture<?> schedulerTask = null;
+    /** 调度器锁，保证线程安全 */
     private final Lock schedulerLock = new ReentrantLock(true);
 
+    /**
+     * 基础调度循环
+     * 遍历已注册的延时任务，到期后执行并从注册表中移除
+     * 空闲计数达到阈值时自动取消调度任务以节省资源
+     */
     private void runBaseSchedule() {
         List<Runnable> toRemove;
         Map<Runnable, Long> registeredEntriesCopy;
@@ -76,7 +87,8 @@ public class EventScriptScheduler {
             if (rmd.getValue() < timeNow) {
                 Runnable r = rmd.getKey();
 
-                r.run();  // runs the scheduled action
+                // runs the scheduled action
+                r.run();
                 toRemove.add(r);
             }
         }
@@ -93,6 +105,12 @@ public class EventScriptScheduler {
         }
     }
 
+    /**
+     * 注册延时任务
+     *
+     * @param scheduledAction 延时执行的任务
+     * @param duration        延迟时间（毫秒）
+     */
     public void registerEntry(final Runnable scheduledAction, final long duration) {
 
         ThreadManager.getInstance().newTask(() -> {
@@ -114,6 +132,11 @@ public class EventScriptScheduler {
         });
     }
 
+    /**
+     * 取消已注册的延时任务
+     *
+     * @param scheduledAction 要取消的任务
+     */
     public void cancelEntry(final Runnable scheduledAction) {
 
         ThreadManager.getInstance().newTask(() -> {
@@ -126,6 +149,10 @@ public class EventScriptScheduler {
         });
     }
 
+    /**
+     * 释放调度器
+     * 取消所有调度任务，清空注册表，标记为已释放
+     */
     public void dispose() {
 
         ThreadManager.getInstance().newTask(() -> {

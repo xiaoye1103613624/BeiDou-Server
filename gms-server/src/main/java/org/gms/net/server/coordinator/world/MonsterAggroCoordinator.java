@@ -40,29 +40,48 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Ronan
+ * 怪物仇恨协调器
+ * 管理怪物仇恨列表，控制怪物对玩家的目标切换频率和优先级
  */
 public class MonsterAggroCoordinator {
+    /** 可重入锁 */
     private final Lock lock = new ReentrantLock();
+    /** 空闲状态锁，公平锁 */
     private final Lock idleLock = new ReentrantLock(true);
+    /** 上次停止时间 */
     private long lastStopTime = Server.getInstance().getCurrentTime();
 
+    /** 仇恨监控定时器 */
     private ScheduledFuture<?> aggroMonitor = null;
 
+    /** 怪物仇恨条目表，key为怪物，value为玩家ID到仇恨条目的映射 */
     private final Map<Monster, Map<Integer, PlayerAggroEntry>> mobAggroEntries = new HashMap<>();
+    /** 怪物排序仇恨表，key为怪物，value为排序后的仇恨条目列表 */
     private final Map<Monster, List<PlayerAggroEntry>> mobSortedAggros = new HashMap<>();
 
+    /** 傀儡地图条目集合 */
     private final Set<Integer> mapPuppetEntries = new HashSet<>();
 
+    /**
+     * 玩家仇恨条目
+     */
     private class PlayerAggroEntry {
+        /** 角色ID */
         protected int cid;
+        /** 平均伤害 */
         protected int averageDamage = 0;
+        /** 当前伤害实例数 */
         protected int currentDamageInstances = 0;
+        /** 累计伤害 */
         protected long accumulatedDamage = 0;
 
+        /** 过期计数 */
         protected int expireStreak = 0;
+        /** 更新计数 */
         protected int updateStreak = 0;
+        /** 到达下次更新的计数 */
         protected int toNextUpdate = 0;
+        /** 排名 */
         protected int entryRank = -1;
 
         protected PlayerAggroEntry(int cid) {
@@ -147,6 +166,14 @@ public class MonsterAggroCoordinator {
         }
     }
 
+    /**
+     * 在指定时间内累计怪物伤害
+     * 自动创建新的仇恨条目或激活已有条目
+     *
+     * @param mob    怪物
+     * @param cid    角色ID
+     * @param damage 本次造成的伤害
+     */
     public void addAggroDamage(Monster mob, int cid, int damage) { // assumption: should not trigger after dispose()
         if (!mob.isAlive()) {
             return;
@@ -198,6 +225,12 @@ public class MonsterAggroCoordinator {
         insertEntryDamage(aggroEntry, damage);
     }
 
+    /**
+     * 执行一次仇恨更新
+     * 更新所有怪物仇恨条目的过期状态
+     *
+     * @param deltaTime 时间增量
+     */
     private void runAggroUpdate(int deltaTime) {
         List<Pair<Monster, Map<Integer, PlayerAggroEntry>>> aggroMobs = new LinkedList<>();
         lock.lock();
@@ -268,6 +301,12 @@ public class MonsterAggroCoordinator {
         }
     }
 
+    /**
+     * 使用插入排序按累计伤害对仇恨列表排序
+     * 排序后为降序，伤害最高的在前面
+     *
+     * @param paeList 仇恨条目列表
+     */
     private static void insertionSortAggroList(List<PlayerAggroEntry> paeList) {
         for (int i = 1; i < paeList.size(); i++) {
             PlayerAggroEntry pae = paeList.get(i);
@@ -292,6 +331,14 @@ public class MonsterAggroCoordinator {
         }
     }
 
+    /**
+     * 判断玩家是否是怪物的当前仇恨目标
+     * 基于准排序的agro列表检查玩家是否可以被选为下一个仇恨领袖
+     *
+     * @param mob    怪物
+     * @param player 玩家
+     * @return 是否为首要仇恨目标
+     */
     public boolean isLeadingCharacterAggro(Monster mob, Character player) {
         if (mob.isLeadingPuppetInVicinity()) {
             return false;
@@ -324,6 +371,9 @@ public class MonsterAggroCoordinator {
         return false;
     }
 
+    /**
+     * 对所有怪物的仇恨列表执行排序
+     */
     public void runSortLeadingCharactersAggro() {
         List<List<PlayerAggroEntry>> aggroList;
         lock.lock();
@@ -340,6 +390,11 @@ public class MonsterAggroCoordinator {
         }
     }
 
+    /**
+     * 移除怪物的所有仇恨记录
+     *
+     * @param mob 已死亡的怪物
+     */
     public void removeAggroEntries(Monster mob) {
         lock.lock();
         try {
@@ -350,24 +405,42 @@ public class MonsterAggroCoordinator {
         }
     }
 
+    /**
+     * 添加傀儡仇恨记录
+     *
+     * @param player 召唤傀儡的玩家
+     */
     public void addPuppetAggro(Character player) {
         synchronized (mapPuppetEntries) {
             mapPuppetEntries.add(player.getId());
         }
     }
 
+    /**
+     * 移除傀儡仇恨记录
+     *
+     * @param cid 角色ID
+     */
     public void removePuppetAggro(Integer cid) {
         synchronized (mapPuppetEntries) {
             mapPuppetEntries.remove(cid);
         }
     }
 
+    /**
+     * 获取所有傀儡仇恨列表
+     *
+     * @return 傀儡仇恨角色ID列表的副本
+     */
     public List<Integer> getPuppetAggroList() {
         synchronized (mapPuppetEntries) {
             return new ArrayList<>(mapPuppetEntries);
         }
     }
 
+    /**
+     * 销毁仇恨协调器，清理所有资源
+     */
     public void dispose() {
         stopAggroCoordinator();
 

@@ -27,25 +27,41 @@ import java.util.concurrent.Executors;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
+ * 线程管理器
+ * 提供统一的线程池管理，使用单例模式，线程最大空闲时间为60分钟
+ *
  * @author Ronan
  */
 public class ThreadManager {
+    /** 单例实例 */
     @Getter
     private static final ThreadManager instance = new ThreadManager();
 
+    /** 线程池执行器 */
     private ExecutorService executorService;
 
     private ThreadManager() {}
 
+    /**
+     * 提交新任务到线程池
+     *
+     * @param r 任务
+     */
     public void newTask(Runnable r) {
         executorService.execute(r);
     }
 
+    /**
+     * 启动线程池（虚拟线程）
+     */
     public void start() {
         // 注意，虚拟线程不建议池化，所以也不需要拒绝策略
         executorService = Executors.newVirtualThreadPerTaskExecutor();
     }
 
+    /**
+     * 优雅关闭线程池，最多等待5分钟
+     */
     public void stop() {
         executorService.shutdown();
         try {

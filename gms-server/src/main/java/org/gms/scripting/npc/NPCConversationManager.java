@@ -79,20 +79,31 @@ import java.util.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
- * @author Matze
+ * NPC对话管理器
+ * 处理NPC对话流程，包括对话状态管理、选择分支、物品商店和合成等操作
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
+    /** SLF4J日志实例 */
     private static final Logger log = LoggerFactory.getLogger(NPCConversationManager.class);
 
+    /** 当前NPC的ID */
     private final int npc;
+    /** NPC对象ID（用于地图中的唯一标识） */
     private int npcOid;
+    /** 脚本名称 */
     private String scriptName;
+    /** 玩家输入的文本 */
     private String getText;
+    /** 是否由物品触发 */
     private boolean itemScript;
+    /** 其他队伍成员列表 */
     private List<PartyCharacter> otherParty;
+    /** 扭蛋服务Bean */
     private static final GachaponService gachaponService = ServerManager.getApplicationContext().getBean(GachaponService.class);
 
+    /** NPC默认对话文本缓存 */
     private final Map<Integer, String> npcDefaultTalks = new HashMap<>();
+    /** 下一步对话上下文 */
     @Getter
     private final NextLevelContext nextLevelContext = new NextLevelContext();
 
@@ -106,10 +117,25 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return talk;
     }
 
+    /**
+     * 构造函数
+     *
+     * @param c          客户端
+     * @param npc        NPC ID
+     * @param scriptName 脚本名称
+     */
     public NPCConversationManager(Client c, int npc, String scriptName) {
         this(c, npc, -1, scriptName, false);
     }
 
+    /**
+     * 构造函数（带其他队伍成员）
+     *
+     * @param c          客户端
+     * @param npc        NPC ID
+     * @param otherParty 其他队伍成员
+     * @param test       测试标志
+     */
     public NPCConversationManager(Client c, int npc, List<PartyCharacter> otherParty, boolean test) {
         super(c);
         this.c = c;
@@ -117,6 +143,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.otherParty = otherParty;
     }
 
+    /**
+     * 构造函数
+     *
+     * @param c          客户端
+     * @param npc        NPC ID
+     * @param oid        NPC对象ID
+     * @param scriptName 脚本名称
+     * @param itemScript 是否物品脚本
+     */
     public NPCConversationManager(Client c, int npc, int oid, String scriptName, boolean itemScript) {
         super(c);
         this.npc = npc;
@@ -125,106 +160,218 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         this.itemScript = itemScript;
     }
 
+    /**
+     * 获取当前NPC的ID
+     *
+     * @return NPC ID
+     */
     public int getNpc() {
         return npc;
     }
 
+    /**
+     * 获取NPC对象ID
+     *
+     * @return NPC对象ID
+     */
     public int getNpcObjectId() {
         return npcOid;
     }
 
+    /**
+     * 获取脚本名称
+     *
+     * @return 脚本名称
+     */
     public String getScriptName() {
         return scriptName;
     }
 
+    /**
+     * 判断是否为物品脚本
+     *
+     * @return true表示物品脚本
+     */
     public boolean isItemScript() {
         return itemScript;
     }
 
+    /**
+     * 重置物品脚本标志
+     */
     public void resetItemScript() {
         this.itemScript = false;
     }
 
+    /**
+     * 关闭当前NPC对话，释放资源并恢复操作
+     */
     public void dispose() {
         nextLevelContext.clear();
         NPCScriptManager.getInstance().dispose(this);
         getClient().sendPacket(PacketCreator.enableActions());
     }
 
+    /**
+     * 发送仅含"下一步"按钮的对话
+     *
+     * @param text 对话文本
+     */
     public void sendNext(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", (byte) 0));
     }
 
+    /**
+     * 发送仅含"上一步"按钮的对话
+     *
+     * @param text 对话文本
+     */
     public void sendPrev(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", (byte) 0));
     }
 
+    /**
+     * 发送含"上一步"和"下一步"按钮的对话
+     *
+     * @param text 对话文本
+     */
     public void sendNextPrev(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", (byte) 0));
     }
 
+    /**
+     * 发送仅含"确定"按钮的对话
+     *
+     * @param text 对话文本
+     */
     public void sendOk(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", (byte) 0));
     }
 
+    /**
+     * 发送NPC默认对话
+     */
     public void sendDefault() {
         sendOk(getDefaultTalk(npc));
     }
 
+    /**
+     * 发送含"是/否"按钮的对话
+     *
+     * @param text 对话文本
+     */
     public void sendYesNo(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", (byte) 0));
     }
 
+    /**
+     * 发送含"接受/拒绝"按钮的对话
+     *
+     * @param text 对话文本
+     */
     public void sendAcceptDecline(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", (byte) 0));
     }
 
+    /**
+     * 发送含选择列表的对话
+     *
+     * @param text 对话文本
+     */
     public void sendSimple(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", (byte) 0));
     }
 
+    /**
+     * 发送仅含"下一步"按钮的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendNext(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", speaker));
     }
 
+    /**
+     * 发送仅含"上一步"按钮的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendPrev(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", speaker));
     }
 
+    /**
+     * 发送含"上一步"和"下一步"按钮的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendNextPrev(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", speaker));
     }
 
+    /**
+     * 发送仅含"确定"按钮的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendOk(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", speaker));
     }
 
+    /**
+     * 发送含"是/否"按钮的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendYesNo(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", speaker));
     }
 
+    /**
+     * 发送含"接受/拒绝"按钮的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendAcceptDecline(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", speaker));
     }
 
+    /**
+     * 发送含选择列表的对话（指定说话者）
+     *
+     * @param text    对话文本
+     * @param speaker 说话者类型
+     */
     public void sendSimple(String text, byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", speaker));
     }
 
+    /**
+     * 发送造型选择对话（头发/脸型等）
+     *
+     * @param text   对话文本
+     * @param styles 造型ID数组
+     */
     public void sendStyle(String text, int[] styles) {
         if (styles.length > 0) {
             nextLevelContext.clear();
@@ -235,42 +382,86 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 发送数字输入对话框
+     *
+     * @param text 提示文本
+     * @param def  默认值
+     * @param min  最小值
+     * @param max  最大值
+     */
     public void sendGetNumber(String text, int def, int min, int max) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max));
     }
 
+    /**
+     * 发送文本输入对话框
+     *
+     * @param text 提示文本
+     */
     public void sendGetText(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, ""));
     }
+
+    /**
+     * 发送数字输入对话框（指定说话者）
+     *
+     * @param text    提示文本
+     * @param def     默认值
+     * @param min     最小值
+     * @param max     最大值
+     * @param speaker 说话者类型
+     */
     public void sendGetNumber(String text, int def, int min, int max,byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max,speaker));
     }
 
+    /**
+     * 发送文本输入对话框（指定说话者）
+     *
+     * @param text    提示文本
+     * @param speaker 说话者类型
+     */
     public void sendGetText(String text,byte speaker) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "",speaker));
     }
-    /*
-     * 0 = ariant colliseum
-     * 1 = Dojo
-     * 2 = Carnival 1
-     * 3 = Carnival 2
-     * 4 = Ghost Ship PQ?
-     * 5 = Pyramid PQ
-     * 6 = Kerning Subway
+
+    // 0 = ariant colliseum
+    // 1 = Dojo
+    // 2 = Carnival 1
+    // 3 = Carnival 2
+    // 4 = Ghost Ship PQ?
+    // 5 = Pyramid PQ
+    // 6 = Kerning Subway
+
+    /**
+     * 发送次元镜选择对话框
+     *
+     * @param text 对话框文本
      */
     public void sendDimensionalMirror(String text) {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getDimensionalMirror(text));
     }
 
+    /**
+     * 设置玩家输入的文本
+     *
+     * @param text 输入文本
+     */
     public void setGetText(String text) {
         this.getText = text;
     }
 
+    /**
+     * 获取玩家输入的文本
+     *
+     * @return 输入文本
+     */
     public String getText() {
         return this.getText;
     }
@@ -305,18 +496,38 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return completeQuest(id, npc);
     }
 
+    /**
+     * 获取玩家金币
+     *
+     * @return 金币数
+     */
     public int getMeso() {
         return getPlayer().getMeso();
     }
 
+    /**
+     * 增加/减少玩家金币
+     *
+     * @param gain 金币变化量
+     */
     public void gainMeso(int gain) {
         getPlayer().gainMeso(gain);
     }
 
+    /**
+     * 增加/减少玩家金币
+     *
+     * @param gain 金币变化量
+     */
     public void gainMeso(Double gain) {
         getPlayer().gainMeso(gain.intValue());
     }
 
+    /**
+     * 增加玩家经验值
+     *
+     * @param gain 经验值
+     */
     public void gainExp(int gain) {
         getPlayer().gainExp(gain, true, true);
     }
@@ -326,37 +537,73 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getPlayer().getMap().broadcastMessage(PacketCreator.environmentChange(effect, 3));
     }
 
+    /**
+     * 设置玩家发型
+     *
+     * @param hair 发型ID
+     */
     public void setHair(int hair) {
         getPlayer().setHair(hair);
         getPlayer().updateSingleStat(Stat.HAIR, hair);
         getPlayer().equipChanged();
     }
 
+    /**
+     * 设置玩家脸型
+     *
+     * @param face 脸型ID
+     */
     public void setFace(int face) {
         getPlayer().setFace(face);
         getPlayer().updateSingleStat(Stat.FACE, face);
         getPlayer().equipChanged();
     }
 
+    /**
+     * 设置玩家肤色
+     *
+     * @param color 肤色ID
+     */
     public void setSkin(int color) {
         getPlayer().setSkinColor(SkinColor.getById(color));
         getPlayer().updateSingleStat(Stat.SKIN, color);
         getPlayer().equipChanged();
     }
 
+    /**
+     * 获取玩家背包中的物品数量
+     *
+     * @param itemid 物品ID
+     * @return 物品数量
+     */
     public int itemQuantity(int itemid) {
         return getPlayer().getInventory(ItemConstants.getInventoryType(itemid)).countById(itemid);
     }
 
+    /**
+     * 显示公会排行榜
+     */
     public void displayGuildRanks() {
         Guild.displayGuildRanks(getClient(), npc);
     }
 
+    /**
+     * 检查是否可以在此地图生成玩家NPC
+     *
+     * @param mapid 地图ID
+     * @return 是否可以生成
+     */
     public boolean canSpawnPlayerNpc(int mapid) {
         Character chr = getPlayer();
         return !GameConfig.getServerBoolean("playernpc_auto_deploy") && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
     }
 
+    /**
+     * 通过脚本ID获取当前地图中的玩家NPC
+     *
+     * @param scriptId 脚本ID
+     * @return 玩家NPC对象
+     */
     public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
         for (MapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC))) {
             PlayerNPC pn = (PlayerNPC) pnpcObj;
@@ -379,6 +626,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getClient().getChannelServer().getMapFactory().getMap(mapid).resetReactors();
     }
 
+    /**
+     * 增加宠物亲密度
+     *
+     * @param tameness 亲密度增量
+     */
     public void gainTameness(int tameness) {
         for (Pet pet : getPlayer().getPets()) {
             if (pet != null) {
@@ -387,45 +639,89 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 获取玩家名称
+     *
+     * @return 玩家名称
+     */
     public String getName() {
         return getPlayer().getName();
     }
 
+    /**
+     * 获取玩家性别
+     *
+     * @return 性别（0=男，1=女）
+     */
     public int getGender() {
         return getPlayer().getGender();
     }
 
+    /**
+     * 通过ID更改职业
+     *
+     * @param a 职业ID
+     */
     public void changeJobById(int a) {
         getPlayer().changeJob(Job.getById(a));
     }
 
+    /**
+     * 更改职业
+     *
+     * @param job 职业枚举
+     */
     public void changeJob(Job job) {
         getPlayer().changeJob(job);
     }
 
+    /**
+     * 获取职业名称
+     *
+     * @param id 职业ID
+     * @return 职业名称
+     */
     public String getJobName(int id) {
         return GameConstants.getJobName(id);
     }
 
+    /**
+     * 获取物品效果
+     *
+     * @param itemId 物品ID
+     * @return 物品效果
+     */
     public StatEffect getItemEffect(int itemId) {
         return ItemInformationProvider.getInstance().getItemEffect(itemId);
     }
 
+    /**
+     * 重置玩家属性点
+     */
     public void resetStats() {
         getPlayer().resetStats();
     }
 
+    /**
+     * 打开NPC商店
+     *
+     * @param id 商店ID
+     */
     public void openShopNPC(int id) {
         Shop shop = ShopFactory.getInstance().getShop(id);
 
         if (shop != null) {
             shop.sendShop(c);
-        } else {    // check for missing shopids thanks to resinate
+        } else {
+            // check for missing shopids thanks to resinate
             log.warn("Shop ID: {} is missing from database.", id);
             ShopFactory.getInstance().getShop(11000).sendShop(c);
         }
     }
 
+    /**
+     * 将所有技能升至最高等级
+     */
     public void maxMastery() {
         for (Data skill_ : DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {
@@ -441,6 +737,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 执行扭蛋抽奖
+     */
     public void doGachapon() {
         gachaponService.doGachapon(getPlayer(), npc);
     }
@@ -464,6 +763,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     //     }
     // }
 
+    /**
+     * 升级公会联盟容量
+     */
     public void upgradeAlliance() {
         Alliance alliance = Server.getInstance().getAlliance(c.getPlayer().getGuild().getAllianceId());
         alliance.increaseCapacity(1);
@@ -471,9 +773,16 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, c.getWorld()), -1, -1);
         Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.allianceNotice(alliance.getId(), alliance.getNotice()), -1, -1);
 
-        c.sendPacket(GuildPackets.updateAllianceInfo(alliance, c.getWorld()));  // thanks Vcoc for finding an alliance update to leader issue
+        // thanks Vcoc for finding an alliance update to leader issue
+        c.sendPacket(GuildPackets.updateAllianceInfo(alliance, c.getWorld()));
     }
 
+    /**
+     * 解散公会联盟
+     *
+     * @param c          客户端
+     * @param allianceId 联盟ID
+     */
     public void disbandAlliance(Client c, int allianceId) {
         Alliance.disbandAlliance(allianceId);
     }

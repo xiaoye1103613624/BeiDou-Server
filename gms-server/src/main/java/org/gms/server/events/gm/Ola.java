@@ -29,14 +29,27 @@ import org.gms.util.PacketCreator;
 import java.util.concurrent.ScheduledFuture;
 
 /**
+ * 奥拉活动（Ola Ola）
+ * 玩家限时通过迷宫关卡，超时自动传出地图
+ * 打开起点传送门后玩家开始计时挑战
+ *
  * @author kevintjuh93
  */
 public class Ola {
+    /** 参与玩家 */
     private final Character chr;
+    /** 剩余时间 */
     private long time = 0;
+    /** 开始时间戳 */
     private long timeStarted = 0;
+    /** 结束定时器 */
     private ScheduledFuture<?> schedule = null;
 
+    /**
+     * 构造奥拉活动
+     *
+     * @param chr 参与玩家
+     */
     public Ola(final Character chr) {
         this.chr = chr;
         this.schedule = TimerManager.getInstance().schedule(() -> {
@@ -57,20 +70,39 @@ public class Ola {
         chr.sendPacket(PacketCreator.serverNotice(0, "The portal has now opened. Press the up arrow key at the portal to enter."));
     }
 
+    /**
+     * 判断计时是否已开始
+     *
+     * @return true已开始，false未开始
+     */
     public boolean isTimerStarted() {
         return time > 0 && timeStarted > 0;
     }
 
+    /**
+     * 获取总时间
+     *
+     * @return 总时间毫秒数
+     */
     public long getTime() {
         return time;
     }
 
+    /**
+     * 重置计时器
+     * 将时间和开始时间置零，取消定时任务
+     */
     public void resetTimes() {
         this.time = 0;
         this.timeStarted = 0;
         schedule.cancel(false);
     }
 
+    /**
+     * 获取剩余时间
+     *
+     * @return 剩余毫秒数
+     */
     public long getTimeLeft() {
         return time - (System.currentTimeMillis() - timeStarted);
     }

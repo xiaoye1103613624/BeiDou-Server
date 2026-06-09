@@ -61,30 +61,58 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/*
+/**
+ * 现金商城
+ * 管理玩家现金商城，处理NX点券购买、库存管理、礼物赠送、愿望清单等功能
+ * 支持NX Credit、Maple Point、NX Prepaid三种货币
+ *
  * @author Flav
  * @author Ponk
  */
 public class CashShop {
+    /** NX信用点数 */
     public static final int NX_CREDIT = 1;
+    /** 枫叶点数 */
     public static final int MAPLE_POINT = 2;
+    /** NX预付点数 */
     public static final int NX_PREPAID = 4;
+    /** 现金库存最大安全数量 */
     public static final int MAX_CASH_INVENTORY_SAFE = 1000;
 
+    /** 账户ID */
     private final int accountId;
+    /** 角色ID */
     private final int characterId;
+    /** NX信用点数余额 */
     private int nxCredit;
+    /** 枫叶点数余额 */
     private int maplePoint;
+    /** NX预付点数余额 */
     private int nxPrepaid;
+    /** 是否已打开 */
     private boolean opened;
+    /** 物品工厂 */
     private ItemFactory factory;
+    /** 现金物品库存 */
     private final List<Item> inventory = new ArrayList<>();
+    /** 愿望清单 */
     private final List<Integer> wishList = new ArrayList<>();
+    /** 未读便签数 */
     private int notes = 0;
+    /** 锁，保证多线程安全 */
     private final Lock lock = new ReentrantLock();
+    /** 账户服务 */
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    /** 角色服务 */
     private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
 
+    /**
+     * 初始化现金商城
+     *
+     * @param accountId   账户ID
+     * @param characterId 角色ID
+     * @param jobType     职业类型（0=冒险家, 1=骑士团, 2=战神）
+     */
     public CashShop(int accountId, int characterId, int jobType) {
         this.accountId = accountId;
         this.characterId = characterId;
@@ -123,15 +151,26 @@ public class CashShop {
         wishlistsDOList.forEach(wishlistsDO -> wishList.add(wishlistsDO.getSn()));
     }
 
+    /**
+     * 现金物品工厂
+     * 加载和管理所有现金物品数据，支持包（Package）检索和随机物品获取
+     */
     public static class CashItemFactory {
+        /** 现金物品映射（SN -> 物品） */
         @Getter
         private static volatile Map<Integer, ModifiedCashItemDO> items = new HashMap<>();
+        /** 现金物品包映射（包ID -> SN列表） */
         private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
+        /** 现金分类列表 */
         @Getter
         private static final List<CashCategory> cashCategories = new ArrayList<>();
+        /** 已修改的现金物品映射（SN -> 物品） */
         @Getter
         private static final Map<Integer, ModifiedCashItemDO> modifiedCashItems = new HashMap<>();
 
+        /**
+         * 从WZ文件加载所有现金物品数据
+         */
         public static void loadAllCashItems() {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
@@ -202,6 +241,9 @@ public class CashShop {
             cashShopService.loadAllModifiedCashItems().forEach(modifiedCashItemDO -> modifiedCashItems.put(modifiedCashItemDO.getSn(), modifiedCashItemDO));
         }
 
+        /**
+         * 加载现金物品分类
+         */
         private static void loadCashCategories() {
             modifiedCashItems.clear();
             CashShopService cashShopService = ServerManager.getApplicationContext().getBean(CashShopService.class);
@@ -267,15 +309,33 @@ public class CashShop {
             return cashPackage;
         }
 
+        /**
+         * 判断指定物品ID是否为现金物品包
+         *
+         * @param itemId 物品ID
+         * @return 是包则返回true
+         */
         public static boolean isPackage(int itemId) {
             return packages.containsKey(itemId);
         }
 
     }
 
+    /**
+     * 现金商城惊喜结果
+     *
+     * @param usedCashShopSurprise 使用的惊喜物品
+     * @param reward               获得的奖励物品
+     */
     public record CashShopSurpriseResult(Item usedCashShopSurprise, Item reward) {
     }
 
+    /**
+     * 获取指定类型的点数余额
+     *
+     * @param type 点数类型（NX_CREDIT=1, MAPLE_POINT=2, NX_PREPAID=4）
+     * @return 点数余额
+     */
     public int getCash(int type) {
         return switch (type) {
             case NX_CREDIT -> nxCredit;
@@ -286,6 +346,12 @@ public class CashShop {
 
     }
 
+    /**
+     * 增加指定类型的点数
+     *
+     * @param type 点数类型
+     * @param cash 增加量
+     */
     public void gainCash(int type, int cash) {
         switch (type) {
             case NX_CREDIT -> nxCredit += cash;
@@ -294,6 +360,13 @@ public class CashShop {
         }
     }
 
+    /**
+     * 购买商品后扣减点数并记录
+     *
+     * @param type     点数类型
+     * @param buyItem  购买的商品
+     * @param world    世界ID
+     */
     public void gainCash(int type, ModifiedCashItemDO buyItem, int world) {
         gainCash(type, -buyItem.getPrice());
         if (!GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
@@ -301,14 +374,29 @@ public class CashShop {
         }
     }
 
+    /**
+     * 商城是否已打开
+     *
+     * @return 已打开返回true
+     */
     public boolean isOpened() {
         return opened;
     }
 
+    /**
+     * 设置商城开关状态
+     *
+     * @param b 是否打开
+     */
     public void open(boolean b) {
         opened = b;
     }
 
+    /**
+     * 获取现金库存（不可修改）
+     *
+     * @return 库存列表
+     */
     public List<Item> getInventory() {
         lock.lock();
         try {
@@ -318,6 +406,12 @@ public class CashShop {
         }
     }
 
+    /**
+     * 根据现金物品ID查找物品
+     *
+     * @param cashId 现金物品ID（petId 或 ringId 或 cashId）
+     * @return 找到的物品，未找到返回null
+     */
     public Item findByCashId(int cashId) {
         boolean isRing;
         Equip equip = null;
@@ -359,10 +453,20 @@ public class CashShop {
         }
     }
 
+    /**
+     * 获取现金库存上限
+     *
+     * @return 库存上限
+     */
     public int getInventoryLimit() {
         return MAX_CASH_INVENTORY_SAFE;
     }
 
+    /**
+     * 获取当前库存物品数量
+     *
+     * @return 物品数量
+     */
     public int getInventorySize() {
         lock.lock();
         try {
@@ -381,6 +485,11 @@ public class CashShop {
         }
     }
 
+    /**
+     * 获取愿望清单
+     *
+     * @return 愿望清单SN列表
+     */
     public List<Integer> getWishList() {
         return wishList;
     }
@@ -389,14 +498,36 @@ public class CashShop {
         wishList.clear();
     }
 
+    /**
+     * 添加物品到愿望清单
+     *
+     * @param sn 物品序列号
+     */
     public void addToWishList(int sn) {
         wishList.add(sn);
     }
 
+    /**
+     * 赠送礼物
+     *
+     * @param recipient 接收者角色ID
+     * @param from      发送者名称
+     * @param message   留言
+     * @param sn        物品序列号
+     */
     public void gift(int recipient, String from, String message, int sn) {
         gift(recipient, from, message, sn, -1);
     }
 
+    /**
+     * 赠送礼物（含戒指ID）
+     *
+     * @param recipient 接收者角色ID
+     * @param from      发送者名称
+     * @param message   留言
+     * @param sn        物品序列号
+     * @param ringid    戒指ID（-1表示非戒指）
+     */
     public void gift(int recipient, String from, String message, int sn, int ringid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)")) {
@@ -411,6 +542,11 @@ public class CashShop {
         }
     }
 
+    /**
+     * 加载所有礼物并从数据库中删除
+     *
+     * @return 礼物列表（物品 + 留言）
+     */
     public List<Pair<Item, String>> loadGifts() {
         List<Pair<Item, String>> gifts = new ArrayList<>();
 
@@ -468,6 +604,9 @@ public class CashShop {
         return notes;
     }
 
+    /**
+     * 减少未读便签计数
+     */
     public void decreaseNotes() {
         notes--;
     }
@@ -506,6 +645,12 @@ public class CashShop {
         }
     }
 
+    /**
+     * 打开现金商城惊喜（抽奖）
+     *
+     * @param cashId 惊喜物品的cashId
+     * @return 抽奖结果，无法抽奖时返回空
+     */
     public Optional<CashShopSurpriseResult> openCashShopSurprise(long cashId) {
         lock.lock();
         try {
@@ -551,6 +696,11 @@ public class CashShop {
                 .findAny();
     }
 
+    /**
+     * 获取当前库存物品数量（锁内）
+     *
+     * @return 物品数量
+     */
     public int getItemsSize() {
         lock.lock();
         try {
@@ -572,6 +722,13 @@ public class CashShop {
         }
     }
 
+    /**
+     * 生成优惠券物品
+     *
+     * @param itemId   物品ID
+     * @param quantity 数量
+     * @return 生成的优惠券物品
+     */
     public static Item generateCouponItem(int itemId, short quantity) {
         return ModifiedCashItemDO.builder()
                 .sn(77777777)

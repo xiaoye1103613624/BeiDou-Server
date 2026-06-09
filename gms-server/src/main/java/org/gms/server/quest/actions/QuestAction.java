@@ -32,10 +32,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 任务奖励动作
+ * 给玩家接取新任务或设置任务状态，支持批量操作
+ *
  * @author Tyler (Twdtwd)
  */
 public class QuestAction extends AbstractQuestAction {
+    /** 额外金币奖励 */
     int mesos;
+    /** 任务ID -> 目标状态映射 */
     Map<Integer, Integer> quests = new HashMap<>();
 
     public QuestAction(Quest quest, Data data) {
@@ -61,4 +66,4 @@ public class QuestAction extends AbstractQuestAction {
             chr.updateQuestStatus(new QuestStatus(Quest.getInstance(questID), QuestStatus.Status.getById(stat)));
         }
     }
-} 
+}

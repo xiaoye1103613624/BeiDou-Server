@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 转蛋控制器
+ * 处理转蛋池配置和物品管理的请求
+ */
 @RestController
 @RequestMapping("/gachapon")
 public class GachaponController {

@@ -35,7 +35,8 @@ import org.gms.net.server.world.Party;
 import java.util.Set;
 
 /**
- * @author Ronan
+ * 公会创建匹配检查监听器
+ * 处理公会创建时的双人确认匹配逻辑
  */
 public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
 

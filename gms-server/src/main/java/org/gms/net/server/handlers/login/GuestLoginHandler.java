@@ -26,11 +26,21 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
-/*
+/**
+ * 游客登录处理器
+ * 处理客户端以游客身份登录的请求，发送服务条款后复用密码登录流程
+ *
  * @author David
  */
 public final class GuestLoginHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理游客登录
+     * 先发送游客服务条款，然后委托给LoginPasswordHandler完成登录
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         c.sendPacket(PacketCreator.sendGuestTOS());

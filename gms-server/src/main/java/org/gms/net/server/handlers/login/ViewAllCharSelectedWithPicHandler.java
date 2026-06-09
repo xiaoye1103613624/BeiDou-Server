@@ -29,6 +29,13 @@ public class ViewAllCharSelectedWithPicHandler extends AbstractPacketHandler {
         };
     }
 
+    /**
+     * 处理带PIC的跨世界角色选择请求
+     * 先验证PIC码，通过后随机分配频道并重定向到游戏世界服务器
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
 

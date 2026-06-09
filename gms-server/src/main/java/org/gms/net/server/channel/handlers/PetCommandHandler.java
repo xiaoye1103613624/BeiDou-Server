@@ -31,8 +31,18 @@ import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
+/**
+ * 宠物指令处理器
+ * 处理玩家对宠物下达指令的操作，根据指令概率决定是否增加亲密度和饱食度
+ */
 public final class PetCommandHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理宠物指令包，根据宠物指令的概率判定是否成功，并更新宠物的亲密度和饱食度
+     *
+     * @param p 输入数据包，包含宠物ID和指令类型
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();

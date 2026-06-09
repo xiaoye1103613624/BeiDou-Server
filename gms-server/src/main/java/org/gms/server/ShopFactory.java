@@ -25,6 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 商店工厂
+ * 管理商店的加载和缓存，支持按商店ID和NPC ID查找
+ * 使用单例模式，缓存商店数据避免重复加载
+ *
  * @author Matze
  */
 public class ShopFactory {
@@ -35,8 +39,16 @@ public class ShopFactory {
     }
 
     private final Map<Integer, Shop> shops = new HashMap<>();
+    /** NPC ID -> 商店映射 */
     private final Map<Integer, Shop> npcShops = new HashMap<>();
 
+    /**
+     * 按ID加载商店并缓存
+     *
+     * @param id       商店ID或NPC ID
+     * @param isShopId true=按商店ID查找, false=按NPC ID查找
+     * @return 商店实例
+     */
     private Shop loadShop(int id, boolean isShopId) {
         Shop ret = Shop.createFromDB(id, isShopId);
         if (ret != null) {
@@ -57,6 +69,12 @@ public class ShopFactory {
         return loadShop(shopId, true);
     }
 
+    /**
+     * 按NPC ID获取商店
+     *
+     * @param npcId NPC ID
+     * @return 商店实例
+     */
     public Shop getShopForNPC(int npcId) {
         if (npcShops.containsKey(npcId)) {
             return npcShops.get(npcId);

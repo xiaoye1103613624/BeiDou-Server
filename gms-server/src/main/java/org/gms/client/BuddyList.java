@@ -37,6 +37,11 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * 好友列表
+ * 管理角色的好友关系，支持增删好友、容量限制、在线状态同步
+ * 使用LinkedHashMap保持插入顺序，最多支持50个好友
+ */
 public class BuddyList {
     public enum BuddyOperation {
         ADDED, DELETED

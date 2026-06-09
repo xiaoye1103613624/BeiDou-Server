@@ -12,6 +12,11 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 @Configuration
 public class I18nConfig {
 
+    /**
+     * 创建通用消息资源Bean
+     *
+     * @return 消息资源
+     */
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -20,6 +25,11 @@ public class I18nConfig {
         return messageSource;
     }
 
+    /**
+     * 创建日志消息资源Bean
+     *
+     * @return 日志消息资源
+     */
     @Bean
     public MessageSource logSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -28,6 +38,11 @@ public class I18nConfig {
         return messageSource;
     }
 
+    /**
+     * 创建异常消息资源Bean
+     *
+     * @return 异常消息资源
+     */
     @Bean
     public MessageSource exceptionSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

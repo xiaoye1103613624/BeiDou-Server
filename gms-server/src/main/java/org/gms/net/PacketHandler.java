@@ -24,6 +24,10 @@ package org.gms.net;
 import org.gms.client.Client;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 数据包处理器接口
+ * 定义处理客户端数据包的标准流程：验证状态和实际处理
+ */
 public interface PacketHandler {
     void handlePacket(InPacket p, Client c);
     boolean validateState(Client c);

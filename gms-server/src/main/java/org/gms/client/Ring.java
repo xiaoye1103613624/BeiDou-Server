@@ -31,14 +31,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 戒指
+ * 管理玩家之间的特殊关系戒指（如结婚戒指、友谊戒指），支持数据库持久化
+ *
  * @author Danny
  */
 public class Ring implements Comparable<Ring> {
+    /** 戒指ID */
     private final int ringId;
+    /** 配对戒指ID */
     private final int ringId2;
+    /** 伴侣角色ID */
     private final int partnerId;
+    /** 戒指道具ID */
     private final int itemId;
+    /** 伴侣名称 */
     private final String partnerName;
+    /** 是否已装备 */
     private boolean equipped = false;
 
     public Ring(int id, int id2, int partnerId, int itemid, String partnername) {

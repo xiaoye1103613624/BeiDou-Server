@@ -37,6 +37,9 @@ import org.gms.util.PacketCreator;
 import java.util.Objects;
 
 /**
+ * 家族功能使用处理器
+ * 处理家族成员使用家族特权（传送、召唤、家族团聚、经验/Drop增益等）的操作
+ *
  * @author Moogra
  * @author Ubaware
  */

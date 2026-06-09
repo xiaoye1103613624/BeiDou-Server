@@ -22,33 +22,61 @@
 package org.gms.server.quest;
 
 /**
+ * 任务需求类型枚举
+ * 定义任务的各种前置条件类型，如等级、职业、物品、怪物、Buff等
+ *
  * @author Matze
  */
 public enum QuestRequirementType {
+    /** 未定义 */
     UNDEFINED(-1),
+    /** 职业要求 */
     JOB(0),
+    /** 物品要求 */
     ITEM(1),
+    /** 前置任务要求 */
     QUEST(2),
+    /** 最低等级要求 */
     MIN_LEVEL(3),
+    /** 最高等级要求 */
     MAX_LEVEL(4),
+    /** 结束日期要求 */
     END_DATE(5),
+    /** 击杀怪物要求 */
     MOB(6),
+    /** NPC要求 */
     NPC(7),
+    /** 进入区域要求 */
     FIELD_ENTER(8),
+    /** 间隔时间要求 */
     INTERVAL(9),
+    /** 脚本要求 */
     SCRIPT(10),
+    /** 宠物要求 */
     PET(11),
+    /** 最低宠物亲密度要求 */
     MIN_PET_TAMENESS(12),
+    /** 怪物手册要求 */
     MONSTER_BOOK(13),
+    /** 普通自动启动 */
     NORMAL_AUTO_START(14),
+    /** 信息数字要求 */
     INFO_NUMBER(15),
+    /** 信息扩展要求 */
     INFO_EX(16),
+    /** 已完成任务要求 */
     COMPLETED_QUEST(17),
+    /** 开始 */
     START(18),
+    /** 结束 */
     END(19),
+    /** 每日 */
     DAY_BY_DAY(20),
+    /** 金币要求 */
     MESO(21),
+    /** Buff要求 */
     BUFF(22),
+    /** 排除Buff要求 */
     EXCEPT_BUFF(23);
 
     final byte type;
@@ -103,8 +131,8 @@ public enum QuestRequirementType {
             return COMPLETED_QUEST;
         case "start":
             return START;
-	/* case "end":already coded
-            return END;*/
+        // case "end": already coded
+        //     return END;
         case "daybyday":
             return DAY_BY_DAY;
         case "money":

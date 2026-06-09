@@ -17,10 +17,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 
+/**
+ * 服务器启动类
+ * Spring Boot应用入口，负责自动创建数据库并启动服务
+ */
 @SpringBootApplication
 @MapperScan("org.gms.dao.mapper")
 @Slf4j
 public class ServerApplication {
+    /**
+     * Spring Boot 应用主入口
+     * 先自动创建数据库，再启动服务
+     *
+     * @param args 命令行参数
+     */
     public static void main(String[] args) {
         try {
             initDb(args);
@@ -35,6 +45,9 @@ public class ServerApplication {
      * 修复PreDataSourceConfig优先级不够，导致在创建数据库之前获取连接，进而无法正常启动
      * 以下组件FlywayAutoConfiguration、HibernateJpaAutoConfiguration在启动的时候会获取数据库连接，因为库名不存在，进而一直报错
      * 无法解决在获取MybatisFlexProperties之后，在以上自动配置之前执行，进而手动解析yml来自动创建库
+     *
+     * @param args 命令行参数
+     * @throws Exception 数据库连接或创建失败时抛出
      */
     private static void initDb(String[] args) throws Exception {
         InputStream resource = null;
@@ -81,11 +94,28 @@ public class ServerApplication {
         }
     }
 
+    /**
+     * 获取数据库连接
+     *
+     * @param driver   驱动类名
+     * @param url      数据库连接URL
+     * @param username 用户名
+     * @param password 密码
+     * @return 数据库连接
+     * @throws Exception 驱动找不到或连接失败时抛出
+     */
     private static Connection getConnection(String driver, String url, String username, String password) throws Exception {
         Class.forName(driver);
         return DriverManager.getConnection(url, username, password);
     }
 
+    /**
+     * 获取启动参数值（按优先级：JVM参数 → Spring Boot参数 → 环境变量）
+     *
+     * @param args      命令行参数
+     * @param paramName 参数名
+     * @return 参数值，未找到返回 null
+     */
     private static String getStartParam(String[] args, String paramName) {
         // 第一优先级 jvm参数
         String property = System.getProperty(paramName);

@@ -45,7 +45,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * 公会操作处理器
+ * 处理公会的创建、加入、退出、踢人、职位变更、徽章设置、公告设置等操作
+ */
 public final class GuildOperationHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(GuildOperationHandler.class);
 
     private boolean isGuildNameAcceptable(String name) {

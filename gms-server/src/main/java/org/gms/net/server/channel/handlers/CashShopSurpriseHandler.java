@@ -29,6 +29,9 @@ import org.gms.util.PacketCreator;
 import java.util.Optional;
 
 /**
+ * 商城惊喜处理器
+ * 处理商城惊喜道具相关操作
+ *
  * @author RonanLana
  * @author Ponk
  */

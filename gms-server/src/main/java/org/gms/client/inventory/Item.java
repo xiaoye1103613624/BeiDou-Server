@@ -30,21 +30,39 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 物品
+ * 物品基类，封装物品ID、序列号、数量、位置、过期时间等基本信息
+ * 支持物品比较（按类型和位置排序）、克隆和宠物关联
+ */
 public class Item implements Comparable<Item> {
 
-    private static final AtomicInteger runningCashId = new AtomicInteger(777000000);  // pets & rings shares cashid values
+    /** 现金物品ID自增计数器 */
+    private static final AtomicInteger runningCashId = new AtomicInteger(777000000);
 
+    /** 物品ID */
     private final int id;
+    /** 现金物品ID */
     private int cashId;
+    /** 序列号（数据库唯一标识） */
     private int sn;
+    /** 物品在背包中的槽位 */
     private short position;
+    /** 物品数量 */
     private short quantity;
+    /** 关联宠物ID */
     private int petid = -1;
+    /** 关联宠物对象 */
     private Pet pet = null;
+    /** 物品所有者 */
     private String owner = "";
+    /** 物品日志列表 */
     protected List<String> itemLog;
+    /** 物品标记（封印、礼物等） */
     private short flag;
+    /** 过期时间戳 */
     private long expiration = -1;
+    /** 赠送者名称 */
     private String giftFrom = "";
 
     public Item(int id, short position, short quantity) {

@@ -108,95 +108,135 @@ import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
 
+/**
+ * 角色核心类
+ * 表示游戏中的玩家角色，管理角色的所有属性、技能、背包、任务、关系等
+ * 继承{@link AbstractCharacterObject}，支持地图定位、动画和各类监听器
+ * 使用读写锁保证地图切换时的线程安全，定时任务处理自动回复和Buff过期
+ */
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
+    /** 所在世界 */
     @Getter
     @Setter
     private int world;
+    /** 角色ID */
     @Getter
     @Setter
     private int id;
+    /** 账号ID */
     @Getter
     @Setter
     private int accountId;
+    /** 等级 */
     @Getter
     @Setter
     private int level;
+    /** 排名 */
     @Getter
     @Setter
     private int rank;
+    /** 排名变化 */
     @Getter
     @Setter
     private int rankMove;
+    /** 职业排名 */
     @Getter
     @Setter
     private int jobRank;
+    /** 职业排名变化 */
     @Getter
     @Setter
     private int jobRankMove;
+    /** 性别 */
     @Setter
     @Getter
     private int gender;
+    /** 发型 */
     @Setter
     @Getter
     private int hair;
+    /** 脸型 */
     @Setter
     @Getter
     private int face;
-    @Setter
+    /** 人气 */
     @Getter
+    @Setter
     private int fame;
+    /** 任务人气 */
     @Getter
     @Setter
     private int questFame;
+    /** 初始出生点 */
     @Getter
     @Setter
     private int initialSpawnPoint;
+    /** 当前地图ID */
     @Setter
     private int mapId;
+    /** 当前页 */
     @Getter
     private int currentPage;
+    /** 当前类型 */
     @Getter
     private int currentType = 0;
+    /** 当前Tab */
     @Getter
     private int currentTab = 1;
+    /** 物品特效 */
     @Setter
     @Getter
     private int itemEffect;
+    /** 公会ID */
     @Setter
     @Getter
     private int guildId;
+    /** 公会等级 */
     @Setter
     @Getter
     private int guildRank;
+    /** 联盟等级 */
     @Setter
     @Getter
     private int allianceRank;
+    /** 信使位置 */
     @Setter
     @Getter
     private int messengerPosition = 4;
+    /** 背包槽位 */
     private int slots = 0;
+    /** 能量条 */
     @Getter
     @Setter
     private int energyBar;
+    /** GM等级 */
     private int gmLevel;
+    /** 对话索引 */
     @Getter
     private int ci = 0;
+    /** 家族条目 */
     @Getter
     private FamilyEntry familyEntry;
+    /** 家族ID */
     @Setter
     @Getter
     private int familyId;
+    /** 怪物图鉴封面 */
     @Setter
     private int bookCover;
+    /** 战舰HP */
     @Setter
     @Getter
     private int battleshipHp = 0;
+    /** 交易金币数 */
     @Getter
     private int mesosTraded = 0;
+    /** 剩余举报次数 */
     @Getter
     private int possibleReports = 10;
+    /** 阿里安特积分 */
     @Getter
     @Setter
     private int ariantPoints;

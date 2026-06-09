@@ -35,9 +35,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 家族条目
+ * 记录单个家族成员的基本信息：名称、角色ID、等级、职业、声望等
+ * 由{@link Family}管理，用于家族消息广播和成员列表显示
+ *
  * @author Ubaware
  */
-
 public class FamilyEntry {
     private static final Logger log = LoggerFactory.getLogger(FamilyEntry.class);
 

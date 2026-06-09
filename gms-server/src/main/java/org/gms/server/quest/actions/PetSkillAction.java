@@ -30,9 +30,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
 
 /**
+ * 宠物技能奖励动作
+ * 给宠物学习指定技能
+ *
  * @author Tyler (Twdtwd)
  */
 public class PetSkillAction extends AbstractQuestAction {
+    /** 宠物技能标识 */
     int flag;
 
     public PetSkillAction(Quest quest, Data data) {
@@ -61,4 +65,4 @@ public class PetSkillAction extends AbstractQuestAction {
     public void run(Character chr, Integer extSelection) {
         chr.getPet(0).setFlag((byte) ItemConstants.getFlagByInt(flag));
     }
-} 
+}

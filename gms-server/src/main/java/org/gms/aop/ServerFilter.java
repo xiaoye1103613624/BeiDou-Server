@@ -16,14 +16,24 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 
 /**
- * 处理业务类的过滤器，到了这里的请求已经经过security的过滤
+ * 业务过滤器
+ * 处理IP封禁检查、限流控制，并提供请求体缓存功能
+ * 此过滤器在Security过滤器之后执行
  */
 @Slf4j
 @Component
 @AllArgsConstructor
 public class ServerFilter extends HttpFilter {
+    /** 账号服务，用于IP封禁检查 */
     private final AccountService accountService;
 
+    /**
+     * 判断是否跳过过滤
+     * 静态资源、Swagger文档和根路径直接放行
+     *
+     * @param request HTTP请求
+     * @return 是否跳过过滤
+     */
     protected boolean shouldNotFilter(final HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         // web resource
@@ -37,6 +47,16 @@ public class ServerFilter extends HttpFilter {
         return "/".equals(requestURI);
     }
 
+    /**
+     * 执行过滤逻辑
+     * 检查IP封禁状态和限流，非multipart请求替换为可重复读取的请求包装器
+     *
+     * @param request  HTTP请求
+     * @param response HTTP响应
+     * @param chain    过滤器链
+     * @throws IOException      IO异常
+     * @throws ServletException Servlet异常
+     */
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {

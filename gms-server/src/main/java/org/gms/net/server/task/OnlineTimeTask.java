@@ -9,8 +9,14 @@ import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * 在线时长统计定时任务
+ * 每5分钟更新所有在线玩家的在线时长，跨天自动重置
+ */
 public class OnlineTimeTask implements Runnable {
+    /** 上次更新日期 */
     private final AtomicReference<LocalDate> lastUpdated = new AtomicReference<>(LocalDate.now());
+    /** 是否正在运行，防止重复执行 */
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     @Override
@@ -48,6 +54,13 @@ public class OnlineTimeTask implements Runnable {
         lastUpdated.set(now);
     }
 
+    /**
+     * 获取玩家初始在线时长
+     * 从账户扩展值中读取历史在线时长，用于服务器重启后恢复
+     *
+     * @param chr 角色
+     * @return 初始在线时长（秒）
+     */
     private int getInitialOnlineTime(Character chr) {
         try {
             String timeStr = chr.getAbstractPlayerInteraction().getAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), true);

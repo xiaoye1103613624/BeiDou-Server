@@ -26,6 +26,10 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.life.LifeFactory.BanishInfo;
 import org.gms.server.life.Monster;
 
+/**
+ * 怪物驱逐玩家处理器
+ * 处理怪物将玩家驱逐出地图的操作
+ */
 public final class MobBanishPlayerHandler extends AbstractPacketHandler {
 
     @Override

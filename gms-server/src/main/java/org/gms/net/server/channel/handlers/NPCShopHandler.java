@@ -30,11 +30,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * NPC商店处理器
+ * 处理NPC商店的购买、出售、充值和离开操作
+ *
  * @author Matze
  */
 public final class NPCShopHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(NPCShopHandler.class);
 
+    /**
+     * 处理NPC商店包，根据操作模式（购买/出售/充值/离开）执行对应的商店交互逻辑
+     *
+     * @param p 输入数据包，包含商店操作模式和交易数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         byte bmode = p.readByte();

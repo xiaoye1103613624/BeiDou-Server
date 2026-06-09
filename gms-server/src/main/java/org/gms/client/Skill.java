@@ -27,12 +27,23 @@ import org.gms.server.life.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 技能
+ * 封装单个技能的基本信息：ID、等级效果、职业、元素属性等
+ * 关联{@link StatEffect}提供技能效果数据
+ */
 public class Skill {
+    /** 技能ID */
     private final int id;
+    /** 技能效果列表（按等级索引） */
     private final List<StatEffect> effects = new ArrayList<>();
+    /** 元素属性 */
     private Element element;
+    /** 技能动画时间 */
     private int animationTime;
+    /** 技能所属职业 */
     private final int job;
+    /** 是否通过技能动作触发 */
     private boolean action;
 
     public Skill(int id) {

@@ -28,6 +28,10 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.maps.MapObject;
 import org.gms.util.PacketCreator;
 
+/**
+ * 角色信息请求处理器
+ * 处理客户端请求查看其他角色详细信息的操作
+ */
 public final class CharInfoRequestHandler extends AbstractPacketHandler {
 
     @Override

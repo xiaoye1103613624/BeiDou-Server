@@ -31,10 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 扩展信息需求
+ * 存储任务相关的字符串信息列表，用于脚本判断
+ * check()始终返回true，实际判断由脚本完成
+ *
  * @author Tyler (Twdtwd)
  */
 public class InfoExRequirement extends AbstractQuestRequirement {
+    /** 期望的信息字符串列表 */
     private final List<String> infoExpected = new ArrayList<>();
+    /** 关联的任务ID */
     private final int questID;
 
 

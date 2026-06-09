@@ -86,14 +86,25 @@ import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
 
+/**
+ * 游戏服务器核心类（单例）
+ * 管理登录服务器、频道服务器、在线玩家、活动状态等全局状态
+ * 提供世界列表、频道列表、玩家查找等核心功能
+ */
 public class Server {
     static {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
     }
 
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(Server.class);
+    /** 服务器单例实例 */
     private static Server instance = null;
 
+    /**
+     * 获取服务器单例实例
+     * @return 服务器单例
+     */
     public static Server getInstance() {
         if (instance == null) {
             instance = new Server();
@@ -101,65 +112,114 @@ public class Server {
         return instance;
     }
 
+    /** 可飞行账号ID集合 */
     private static final Set<Integer> activeFly = new HashSet<>();
+    /** 优惠券倍率映射，key为优惠券ID，value为倍率值 */
     private static final Map<Integer, Integer> couponRates = new HashMap<>(30);
+    /** 当前激活的优惠券ID列表 */
     private static final List<Integer> activeCoupons = new LinkedList<>();
+    /** 频道依赖服务 */
     private ChannelDependencies channelDependencies;
 
+    /** 登录服务器实例 */
     private LoginServer loginServer;
+    /** 各世界的频道IP信息，外层索引为世界ID，内层Map的key为频道ID，value为IP地址 */
     private final List<Map<Integer, String>> channels = new LinkedList<>();
+    /** 世界列表 */
     private final List<World> worlds = new ArrayList<>();
     @Getter
+    /** 子网配置属性 */
     private final Properties subnetInfo = new Properties();
+    /** 账号角色映射，key为账号ID，value为该账号下的角色ID集合 */
     private final Map<Integer, Set<Integer>> accountChars = new HashMap<>();
+    /** 账号角色数量映射，key为账号ID，value为角色总数 */
     private final Map<Integer, Short> accountCharacterCount = new HashMap<>();
+    /** 角色所属世界映射，key为角色ID，value为世界ID */
     private final Map<Integer, Integer> worldChars = new HashMap<>();
+    /** 正在转频道中的角色映射，key为远程IP地址，value为角色ID */
     private final Map<String, Integer> transitioningChars = new HashMap<>();
+    /** 世界推荐列表，每个元素为世界ID和推荐消息的键值对 */
     private final List<Pair<Integer, String>> worldRecommendedList = new LinkedList<>();
+    /** 公会映射，key为公会ID，value为公会对象 */
     private final Map<Integer, Guild> guilds = new HashMap<>(100);
+    /** 登录状态中的客户端映射，key为客户端对象，value为超时时间戳 */
     private final Map<Client, Long> inLoginState = new HashMap<>(100);
 
+    /** 玩家Buff存储 */
     private final PlayerBuffStorage buffStorage = new PlayerBuffStorage();
+    /** 联盟映射，key为联盟ID，value为联盟对象 */
     private final Map<Integer, Alliance> alliances = new HashMap<>(100);
+    /** 新年贺卡记录映射，key为贺卡ID，value为贺卡记录 */
     private final Map<Integer, NewYearCardRecord> newyears = new HashMap<>();
+    /** 待处理疾病通知的玩家客户端列表 */
     private final List<Client> processDiseaseAnnouncePlayers = new LinkedList<>();
+    /** 已注册疾病通知的玩家客户端列表 */
     private final List<Client> registeredDiseaseAnnouncePlayers = new LinkedList<>();
 
+    /** 玩家排行榜，每个世界一个列表，列表中元素为角色名和等级的键值对 */
     private final List<List<Pair<String, Integer>>> playerRanking = new LinkedList<>();
 
+    /** 服务器全局锁 */
     private final Lock srvLock = new ReentrantLock();
+    /** 疾病通知锁 */
     private final Lock disLock = new ReentrantLock();
 
+    /** 世界读锁 */
     private final Lock wldRLock;
+    /** 世界写锁 */
     private final Lock wldWLock;
 
+    /** 登录读锁 */
     private final Lock lgnRLock;
+    /** 登录写锁 */
     private final Lock lgnWLock;
 
+    /** 原子时间计数器，用于跟踪服务器运行时间 */
     private final AtomicLong currentTime = new AtomicLong(0);
+    /** 缓存的服务端当前时间，用于减少系统调用 */
     private long serverCurrentTime = 0;
 
+    /** 开发者房间是否可用 */
     private volatile boolean availableDeveloperRoom = false;
     @Getter
     @Setter
+    /** 服务器是否在线运行 */
     private boolean online = false;
+    /** 服务器启动时间戳 */
     public static long uptime = System.currentTimeMillis();
+    /** 下一次随机事件触发时间戳 */
     private long nextTime;
 
+    /** NPC服务 */
     private static final NpcService npcService = ServerManager.getApplicationContext().getBean(NpcService.class);
+    /** 优惠券服务 */
     private static final NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
+    /** 角色服务 */
     private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+    /** 账号服务 */
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    /** 兑换码服务 */
     private static final NxCodeService nxCodeService = ServerManager.getApplicationContext().getBean(NxCodeService.class);
+    /** 新年贺卡服务 */
     private static final NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
+    /** 改名服务 */
     private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+    /** 转区服务 */
     private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
+    /** 家族服务 */
     private static final FamilyService familyService = ServerManager.getApplicationContext().getBean(FamilyService.class);
+    /** 信件服务 */
     private static final NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
+    /** HP/MP报警服务 */
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    /** 服务配置属性 */
     private static final ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+    /** 自动封禁配置服务 */
     private static final AutobanConfigService autobanConfigService = ServerManager.getApplicationContext().getBean(AutobanConfigService.class);
 
+    /**
+     * 私有构造函数，初始化读写锁
+     */
     private Server() {
         ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
         this.wldRLock = worldLock.readLock();
@@ -170,18 +230,33 @@ public class Server {
         this.lgnWLock = loginLock.writeLock();
     }
 
+    /**
+     * 获取当前时间戳（相对于服务器启动时间的偏移量，秒级）
+     * @return 当前时间戳
+     */
     public int getCurrentTimestamp() {
         return (int) (Server.getInstance().getCurrentTime() - Server.uptime);
     }
 
-    public long getCurrentTime() {  // returns a slightly delayed time value, under frequency of UPDATE_INTERVAL
+    /**
+     * 获取服务器当前时间（微延迟值，在UPDATE_INTERVAL频率以下）
+     * @return 服务器当前时间
+     */
+    public long getCurrentTime() {
         return serverCurrentTime;
     }
 
+    /**
+     * 按配置的时间间隔更新服务器当前时间
+     */
     public void updateCurrentTime() {
         serverCurrentTime = currentTime.addAndGet(GameConfig.getServerLong("update_interval"));
     }
 
+    /**
+     * 强制更新服务器当前时间为系统实际时间
+     * @return 更新后的时间值
+     */
     public long forceUpdateCurrentTime() {
         long timeNow = System.currentTimeMillis();
         serverCurrentTime = timeNow;
@@ -190,30 +265,58 @@ public class Server {
         return timeNow;
     }
 
+    /**
+     * 获取世界推荐列表
+     * @return 世界推荐列表
+     */
     public List<Pair<Integer, String>> worldRecommendedList() {
         return worldRecommendedList;
     }
 
+    /**
+     * 设置新年贺卡记录
+     * @param nyc 新年贺卡记录
+     */
     public void setNewYearCard(NewYearCardRecord nyc) {
         newyears.put(nyc.getId(), nyc);
     }
 
+    /**
+     * 根据贺卡ID获取新年贺卡记录
+     * @param cardid 贺卡ID
+     * @return 新年贺卡记录，不存在则返回null
+     */
     public NewYearCardRecord getNewYearCard(int cardid) {
         return newyears.get(cardid);
     }
 
+    /**
+     * 移除新年贺卡记录
+     * @param cardid 贺卡ID
+     * @return 被移除的贺卡记录，不存在则返回null
+     */
     public NewYearCardRecord removeNewYearCard(int cardid) {
         return newyears.remove(cardid);
     }
 
+    /**
+     * 设置开发者房间为可用状态
+     */
     public void setAvailableDeveloperRoom() {
         availableDeveloperRoom = true;
     }
 
+    /**
+     * 检查是否可以进入开发者房间
+     * @return 是否可以进入
+     */
     public boolean canEnterDeveloperRoom() {
         return availableDeveloperRoom;
     }
 
+    /**
+     * 从数据库加载玩家NPC地图步骤数据
+     */
     private void loadPlayerNpcMapStepFromDb() {
         List<PlayernpcsFieldDO> playernpcsFieldDOList = npcService.getPlayerNpcFields(new PlayernpcsFieldDO());
         playernpcsFieldDOList.forEach(playernpcsFieldDO -> {
@@ -222,6 +325,11 @@ public class Server {
         });
     }
 
+    /**
+     * 根据世界ID获取世界对象
+     * @param id 世界ID
+     * @return 世界对象，不存在则返回null
+     */
     public World getWorld(int id) {
         wldRLock.lock();
         try {
@@ -235,6 +343,10 @@ public class Server {
         }
     }
 
+    /**
+     * 获取所有世界的只读列表
+     * @return 世界列表
+     */
     public List<World> getWorlds() {
         wldRLock.lock();
         try {
@@ -244,6 +356,10 @@ public class Server {
         }
     }
 
+    /**
+     * 获取世界数量
+     * @return 世界数量
+     */
     public int getWorldsSize() {
         wldRLock.lock();
         try {
@@ -253,6 +369,12 @@ public class Server {
         }
     }
 
+    /**
+     * 根据世界ID和频道ID获取频道对象
+     * @param world 世界ID
+     * @param channel 频道ID
+     * @return 频道对象，不存在则返回null
+     */
     public Channel getChannel(int world, int channel) {
         try {
             return this.getWorld(world).getChannel(channel);
@@ -261,6 +383,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取指定世界的所有频道
+     * @param world 世界ID
+     * @return 频道列表
+     */
     public List<Channel> getChannelsFromWorld(int world) {
         try {
             return this.getWorld(world).getChannels();
@@ -269,6 +396,10 @@ public class Server {
         }
     }
 
+    /**
+     * 获取所有世界的全部频道
+     * @return 所有频道列表
+     */
     public List<Channel> getAllChannels() {
         try {
             List<Channel> channelz = new ArrayList<>();
@@ -281,6 +412,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取指定世界已开启的频道ID集合
+     * @param world 世界ID
+     * @return 频道ID集合
+     */
     public Set<Integer> getOpenChannels(int world) {
         wldRLock.lock();
         try {
@@ -290,6 +426,12 @@ public class Server {
         }
     }
 
+    /**
+     * 获取指定世界和频道的IP地址字符串
+     * @param world 世界ID
+     * @param channel 频道ID
+     * @return IP地址字符串（格式：ip:port）
+     */
     private String getIP(int world, int channel) {
         wldRLock.lock();
         try {
@@ -299,6 +441,14 @@ public class Server {
         }
     }
 
+    /**
+     * 根据客户端IP类型获取合适的服务器地址
+     * 本地地址使用localhost，局域网地址使用LAN IP，外网地址使用公网IP
+     * @param client 客户端连接
+     * @param world 世界ID
+     * @param channel 频道ID
+     * @return 包含IP和端口的字符串数组，[0]=IP, [1]=端口
+     */
     public String[] getInetSocket(Client client, int world, int channel) {
         String remoteIp = client.getRemoteAddress();
 
@@ -316,6 +466,11 @@ public class Server {
         }
     }
 
+    /**
+     * 在指定世界添加一个新频道
+     * @param worldid 世界ID
+     * @return 新频道ID，-2表示已达最大频道数，-3表示世界不存在
+     */
     public int addChannel(int worldid) {
         World world;
         Map<Integer, String> channelInfo;
@@ -358,6 +513,10 @@ public class Server {
         return channelid;
     }
 
+    /**
+     * 添加一个新世界
+     * @return 新世界ID，-1表示已达最大世界数
+     */
     public int addWorld() {
         int newWorld = initWorld();
         if (newWorld > -1) {
@@ -379,6 +538,10 @@ public class Server {
         return newWorld;
     }
 
+    /**
+     * 初始化一个世界，从配置读取倍率等参数并创建频道
+     * @return 世界ID，-1表示已达最大世界数，-2表示部署失败
+     */
     private int initWorld() {
         int i;
 
@@ -421,7 +584,8 @@ public class Server {
 
         boolean canDeploy;
 
-        wldWLock.lock();    // thanks Ashen for noticing a deadlock issue when trying to deploy a channel
+        // thanks Ashen for noticing a deadlock issue when trying to deploy a channel
+        wldWLock.lock();
         try {
             canDeploy = world.getId() == worlds.size();
             if (canDeploy) {
@@ -445,7 +609,13 @@ public class Server {
         }
     }
 
-    public boolean removeChannel(int worldid) {   //lol don't!
+    /**
+     * 从指定世界移除一个频道
+     * @param worldid 世界ID
+     * @return 是否成功移除
+     */
+    //lol don't!
+    public boolean removeChannel(int worldid) {
         World world;
 
         wldRLock.lock();
@@ -476,7 +646,12 @@ public class Server {
         return false;
     }
 
-    public boolean removeWorld() {   //lol don't!
+    /**
+     * 移除最后一个世界
+     * @return 是否成功移除
+     */
+    //lol don't!
+    public boolean removeWorld() {
         World w;
         int worldid;
 
@@ -513,7 +688,11 @@ public class Server {
         return true;
     }
 
-    private void resetServerWorlds() {  // thanks maple006 for noticing proprietary lists assigned to null
+    /**
+     * 重置服务器世界数据（清空世界列表、频道列表和推荐列表）
+     */
+    // thanks maple006 for noticing proprietary lists assigned to null
+    private void resetServerWorlds() {
         wldWLock.lock();
         try {
             worlds.clear();
@@ -524,6 +703,10 @@ public class Server {
         }
     }
 
+    /**
+     * 获取距离下一个整点的剩余时间（毫秒）
+     * @return 剩余毫秒数
+     */
     private static long getTimeLeftForNextHour() {
         Calendar nextHour = Calendar.getInstance();
         nextHour.add(Calendar.HOUR, 1);
@@ -533,6 +716,10 @@ public class Server {
         return Math.max(0, nextHour.getTimeInMillis() - System.currentTimeMillis());
     }
 
+    /**
+     * 获取距离下一天的剩余时间（毫秒）
+     * @return 剩余毫秒数
+     */
     public static long getTimeLeftForNextDay() {
         Calendar nextDay = Calendar.getInstance();
         nextDay.add(Calendar.DAY_OF_MONTH, 1);
@@ -543,16 +730,27 @@ public class Server {
         return Math.max(0, nextDay.getTimeInMillis() - System.currentTimeMillis());
     }
 
+    /**
+     * 获取优惠券倍率映射表
+     * @return 优惠券倍率Map
+     */
     public Map<Integer, Integer> getCouponRates() {
         return couponRates;
     }
 
+    /**
+     * 获取当前激活的优惠券ID列表
+     * @return 激活优惠券列表
+     */
     public List<Integer> getActiveCoupons() {
         synchronized (activeCoupons) {
             return activeCoupons;
         }
     }
 
+    /**
+     * 向所有在线玩家提交激活的优惠券倍率更新
+     */
     public void commitActiveCoupons() {
         for (World world : getWorlds()) {
             for (Character chr : world.getPlayerStorage().getAllCharacters()) {
@@ -565,6 +763,10 @@ public class Server {
         }
     }
 
+    /**
+     * 切换优惠券的激活状态
+     * @param couponId 优惠券ID
+     */
     public void toggleCoupon(Integer couponId) {
         if (ItemConstants.isRateCoupon(couponId)) {
             synchronized (activeCoupons) {
@@ -579,6 +781,9 @@ public class Server {
         }
     }
 
+    /**
+     * 从数据库更新当前时间段的激活优惠券列表
+     */
     public void updateActiveCoupons() {
         synchronized (activeCoupons) {
             activeCoupons.clear();
@@ -590,6 +795,10 @@ public class Server {
         }
     }
 
+    /**
+     * 运行玩家疾病通知调度
+     * 先处理待通知列表中的玩家，然后将已注册玩家移至待处理列表
+     */
     public void runAnnouncePlayerDiseasesSchedule() {
         List<Client> processDiseaseAnnounceClients;
         disLock.lock();
@@ -621,6 +830,10 @@ public class Server {
         }
     }
 
+    /**
+     * 注册客户端以接收疾病通知
+     * @param c 客户端
+     */
     public void registerAnnouncePlayerDiseases(Client c) {
         disLock.lock();
         try {
@@ -630,6 +843,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取指定世界的玩家排行榜
+     * @param worldid 世界ID
+     * @return 排行榜列表（角色名和等级的键值对）
+     */
     public List<Pair<String, Integer>> getWorldPlayerRanking(int worldid) {
         wldRLock.lock();
         try {
@@ -639,6 +857,9 @@ public class Server {
         }
     }
 
+    /**
+     * 重新加载所有世界的玩家排行榜
+     */
     public void reloadWorldsPlayerRanking() {
         List<List<CharactersDO>> rankPlayers = characterService.getWorldsRankPlayers(getWorldsSize());
         if (rankPlayers.isEmpty()) {
@@ -653,6 +874,10 @@ public class Server {
         }
     }
 
+    /**
+     * 游戏服务器初始化
+     * 加载技能、现金道具、任务、技能书数据，初始化各个世界并启动登录服务器
+     */
     //游戏启动
     public void init() {
         Instant beforeInit = Instant.now();
@@ -719,7 +944,8 @@ public class Server {
         log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();
-        initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
+        // aggregated method for timely tasks thanks to lxconan
+        initializeTimelyTasks();
 
         try {
             for (int i = 0; i < worldCount; i++) {
@@ -732,7 +958,8 @@ public class Server {
                 familyService.loadAllFamilies();
             }
         } catch (Exception e) {
-            log.error(I18nUtil.getLogMessage("Server.init.error3"), e); //For those who get errors
+            //For those who get errors
+            log.error(I18nUtil.getLogMessage("Server.init.error3"), e);
             System.exit(0);
         }
 
@@ -752,6 +979,10 @@ public class Server {
         log.info(I18nUtil.getLogMessage("Server.init.info9"), initDuration.toMillis() / 1000.0);
     }
 
+    /**
+     * 注册频道依赖服务
+     * 创建信件处理器和频道依赖关系
+     */
     private void registerChannelDependencies() {
         FredrickProcessor fredrickProcessor = new FredrickProcessor(noteService);
         ChannelDependencies channelDependencies = new ChannelDependencies(noteService, fredrickProcessor);
@@ -759,16 +990,26 @@ public class Server {
         this.channelDependencies = channelDependencies;
     }
 
+    /**
+     * 初始化并启动登录服务器
+     * @param port 登录服务器端口
+     * @return 登录服务器实例
+     */
     private LoginServer initLoginServer(int port) {
         LoginServer loginServer = new LoginServer(port);
         loginServer.start();
         return loginServer;
     }
 
+    /**
+     * 初始化定时任务
+     * 注册疾病检测、优惠券更新、排行榜刷新、Boss日志等周期性任务
+     */
     private void initializeTimelyTasks() {
         TimerManager tMan = TimerManager.getInstance();
         tMan.start();
-        tMan.register(tMan.purge(), MINUTES.toMillis(5));//Purging ftw...
+        //Purging ftw...
+        tMan.register(tMan.purge(), MINUTES.toMillis(5));
         disconnectIdlesOnLoginTask();
 
         long timeLeft = getTimeLeftForNextHour();
@@ -790,6 +1031,11 @@ public class Server {
         tMan.register(new ExtendValueTask(), DAYS.toMillis(1), timeLeft);
     }
 
+    /**
+     * 根据ID获取联盟
+     * @param id 联盟ID
+     * @return 联盟对象，不存在则返回null
+     */
     public Alliance getAlliance(int id) {
         synchronized (alliances) {
             if (alliances.containsKey(id)) {
@@ -799,6 +1045,11 @@ public class Server {
         }
     }
 
+    /**
+     * 添加联盟
+     * @param id 联盟ID
+     * @param alliance 联盟对象
+     */
     public void addAlliance(int id, Alliance alliance) {
         synchronized (alliances) {
             if (!alliances.containsKey(id)) {
@@ -807,6 +1058,10 @@ public class Server {
         }
     }
 
+    /**
+     * 解散联盟
+     * @param id 联盟ID
+     */
     public void disbandAlliance(int id) {
         synchronized (alliances) {
             Alliance alliance = alliances.get(id);
@@ -819,6 +1074,13 @@ public class Server {
         }
     }
 
+    /**
+     * 向联盟内所有公会（排除指定公会）发送消息
+     * @param id 联盟ID
+     * @param packet 数据包
+     * @param exception 排除的角色ID
+     * @param guildex 排除的公会ID
+     */
     public void allianceMessage(int id, Packet packet, int exception, int guildex) {
         Alliance alliance = alliances.get(id);
         if (alliance != null) {
@@ -834,6 +1096,12 @@ public class Server {
         }
     }
 
+    /**
+     * 将公会添加到联盟
+     * @param aId 联盟ID
+     * @param guildId 公会ID
+     * @return 是否成功添加
+     */
     public boolean addGuildtoAlliance(int aId, int guildId) {
         Alliance alliance = alliances.get(aId);
         if (alliance != null) {
@@ -844,6 +1112,12 @@ public class Server {
         return false;
     }
 
+    /**
+     * 从联盟中移除公会
+     * @param aId 联盟ID
+     * @param guildId 公会ID
+     * @return 是否成功移除
+     */
     public boolean removeGuildFromAlliance(int aId, int guildId) {
         Alliance alliance = alliances.get(aId);
         if (alliance != null) {
@@ -854,6 +1128,12 @@ public class Server {
         return false;
     }
 
+    /**
+     * 设置联盟职位名称
+     * @param aId 联盟ID
+     * @param ranks 职位名称数组
+     * @return 是否成功设置
+     */
     public boolean setAllianceRanks(int aId, String[] ranks) {
         Alliance alliance = alliances.get(aId);
         if (alliance != null) {
@@ -863,6 +1143,12 @@ public class Server {
         return false;
     }
 
+    /**
+     * 设置联盟公告
+     * @param aId 联盟ID
+     * @param notice 公告内容
+     * @return 是否成功设置
+     */
     public boolean setAllianceNotice(int aId, String notice) {
         Alliance alliance = alliances.get(aId);
         if (alliance != null) {
@@ -872,6 +1158,12 @@ public class Server {
         return false;
     }
 
+    /**
+     * 增加联盟容量
+     * @param aId 联盟ID
+     * @param inc 增加的数量
+     * @return 是否成功增加
+     */
     public boolean increaseAllianceCapacity(int aId, int inc) {
         Alliance alliance = alliances.get(aId);
         if (alliance != null) {
@@ -881,10 +1173,21 @@ public class Server {
         return false;
     }
 
+    /**
+     * 创建公会
+     * @param leaderId 会长角色ID
+     * @param name 公会名称
+     * @return 新公会的ID
+     */
     public int createGuild(int leaderId, String name) {
         return Guild.createGuild(leaderId, name);
     }
 
+    /**
+     * 根据名称查找公会（忽略大小写）
+     * @param name 公会名称
+     * @return 公会对象，不存在则返回null
+     */
     public Guild getGuildByName(String name) {
         synchronized (guilds) {
             for (Guild mg : guilds.values()) {
@@ -897,6 +1200,11 @@ public class Server {
         }
     }
 
+    /**
+     * 根据ID获取公会（仅从内存查找）
+     * @param id 公会ID
+     * @return 公会对象，不存在则返回null
+     */
     public Guild getGuild(int id) {
         synchronized (guilds) {
             if (guilds.get(id) != null) {
@@ -907,10 +1215,23 @@ public class Server {
         }
     }
 
+    /**
+     * 根据ID和世界获取公会
+     * @param id 公会ID
+     * @param world 世界ID
+     * @return 公会对象，不存在则返回null
+     */
     public Guild getGuild(int id, int world) {
         return getGuild(id, world, null);
     }
 
+    /**
+     * 根据ID、世界和角色获取公会（内存不存在则从数据库加载）
+     * @param id 公会ID
+     * @param world 世界ID
+     * @param mc 角色对象
+     * @return 公会对象，不存在则返回null
+     */
     public Guild getGuild(int id, int world, Character mc) {
         synchronized (guilds) {
             Guild g = guilds.get(id);
@@ -944,11 +1265,23 @@ public class Server {
         }
     }
 
+    /**
+     * 设置公会成员的在线状态
+     * @param mc 角色
+     * @param bOnline 是否在线
+     * @param channel 所在频道
+     */
     public void setGuildMemberOnline(Character mc, boolean bOnline, int channel) {
         Guild g = getGuild(mc.getGuildId(), mc.getWorld(), mc);
         g.setOnline(mc.getId(), bOnline, channel);
     }
 
+    /**
+     * 添加公会成员
+     * @param mgc 公会角色信息
+     * @param chr 角色对象
+     * @return 操作结果码
+     */
     public int addGuildMember(GuildCharacter mgc, Character chr) {
         Guild g = guilds.get(mgc.getGuildId());
         if (g != null) {
@@ -957,6 +1290,12 @@ public class Server {
         return 0;
     }
 
+    /**
+     * 设置公会的联盟ID
+     * @param gId 公会ID
+     * @param aId 联盟ID
+     * @return 是否成功设置
+     */
     public boolean setGuildAllianceId(int gId, int aId) {
         Guild guild = guilds.get(gId);
         if (guild != null) {
@@ -966,10 +1305,18 @@ public class Server {
         return false;
     }
 
+    /**
+     * 重置联盟内公会成员的排名
+     * @param gId 公会ID
+     */
     public void resetAllianceGuildPlayersRank(int gId) {
         guilds.get(gId).resetAllianceGuildPlayersRank();
     }
 
+    /**
+     * 退出公会
+     * @param mgc 公会角色信息
+     */
     public void leaveGuild(GuildCharacter mgc) {
         Guild g = guilds.get(mgc.getGuildId());
         if (g != null) {
@@ -977,6 +1324,13 @@ public class Server {
         }
     }
 
+    /**
+     * 公会聊天
+     * @param gid 公会ID
+     * @param name 发言人名称
+     * @param cid 发言人角色ID
+     * @param msg 消息内容
+     */
     public void guildChat(int gid, String name, int cid, String msg) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -984,6 +1338,12 @@ public class Server {
         }
     }
 
+    /**
+     * 修改公会成员职位
+     * @param gid 公会ID
+     * @param cid 角色ID
+     * @param newRank 新职位等级
+     */
     public void changeRank(int gid, int cid, int newRank) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -991,6 +1351,12 @@ public class Server {
         }
     }
 
+    /**
+     * 开除公会成员
+     * @param initiator 发起操作的公会角色
+     * @param name 被开除角色名
+     * @param cid 被开除角色ID
+     */
     public void expelMember(GuildCharacter initiator, String name, int cid) {
         Guild g = guilds.get(initiator.getGuildId());
         if (g != null) {
@@ -998,6 +1364,11 @@ public class Server {
         }
     }
 
+    /**
+     * 设置公会公告
+     * @param gid 公会ID
+     * @param notice 公告内容
+     */
     public void setGuildNotice(int gid, String notice) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -1005,6 +1376,10 @@ public class Server {
         }
     }
 
+    /**
+     * 更新公会成员的等级和职业信息
+     * @param mgc 公会角色信息
+     */
     public void memberLevelJobUpdate(GuildCharacter mgc) {
         Guild g = guilds.get(mgc.getGuildId());
         if (g != null) {
@@ -1012,6 +1387,11 @@ public class Server {
         }
     }
 
+    /**
+     * 修改公会职位名称
+     * @param gid 公会ID
+     * @param ranks 职位名称数组
+     */
     public void changeRankTitle(int gid, String[] ranks) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -1019,6 +1399,14 @@ public class Server {
         }
     }
 
+    /**
+     * 设置公会徽章
+     * @param gid 公会ID
+     * @param bg 背景图案ID
+     * @param bgcolor 背景颜色
+     * @param logo 徽标图案ID
+     * @param logocolor 徽标颜色
+     */
     public void setGuildEmblem(int gid, short bg, byte bgcolor, short logo, byte logocolor) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -1026,6 +1414,10 @@ public class Server {
         }
     }
 
+    /**
+     * 解散公会
+     * @param gid 公会ID
+     */
     public void disbandGuild(int gid) {
         synchronized (guilds) {
             Guild g = guilds.get(gid);
@@ -1034,6 +1426,11 @@ public class Server {
         }
     }
 
+    /**
+     * 增加公会容量
+     * @param gid 公会ID
+     * @return 是否成功增加
+     */
     public boolean increaseGuildCapacity(int gid) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -1042,6 +1439,11 @@ public class Server {
         return false;
     }
 
+    /**
+     * 增加公会GP点数
+     * @param gid 公会ID
+     * @param amount 增加量
+     */
     public void gainGP(int gid, int amount) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -1049,10 +1451,21 @@ public class Server {
         }
     }
 
+    /**
+     * 向公会所有成员广播消息
+     * @param gid 公会ID
+     * @param packet 数据包
+     */
     public void guildMessage(int gid, Packet packet) {
         guildMessage(gid, packet, -1);
     }
 
+    /**
+     * 向公会所有成员广播消息（排除指定角色）
+     * @param gid 公会ID
+     * @param packet 数据包
+     * @param exception 排除的角色ID，-1表示不排除
+     */
     public void guildMessage(int gid, Packet packet, int exception) {
         Guild g = guilds.get(gid);
         if (g != null) {
@@ -1060,10 +1473,19 @@ public class Server {
         }
     }
 
+    /**
+     * 获取玩家Buff存储
+     * @return PlayerBuffStorage实例
+     */
     public PlayerBuffStorage getPlayerBuffStorage() {
         return buffStorage;
     }
 
+    /**
+     * 删除公会角色（根据Character对象）
+     * 普通成员退出公会，会长则解散公会
+     * @param mc 角色对象
+     */
     public void deleteGuildCharacter(Character mc) {
         setGuildMemberOnline(mc, false, (byte) -1);
         if (mc.getMGC().getGuildRank() > 1) {
@@ -1073,6 +1495,11 @@ public class Server {
         }
     }
 
+    /**
+     * 删除公会角色（根据GuildCharacter对象）
+     * 普通成员退出公会，会长则解散公会
+     * @param mgc 公会角色信息
+     */
     public void deleteGuildCharacter(GuildCharacter mgc) {
         if (mgc.getCharacter() != null) {
             setGuildMemberOnline(mgc.getCharacter(), false, (byte) -1);
@@ -1084,6 +1511,10 @@ public class Server {
         }
     }
 
+    /**
+     * 重新加载指定世界中所有在线角色的公会信息
+     * @param world 世界ID
+     */
     public void reloadGuildCharacters(int world) {
         World worlda = getWorld(world);
         for (Character mc : worlda.getPlayerStorage().getAllCharacters()) {
@@ -1095,18 +1526,33 @@ public class Server {
         worlda.reloadGuildSummary();
     }
 
+    /**
+     * 向指定世界的所有频道广播消息
+     * @param world 世界ID
+     * @param packet 数据包
+     */
     public void broadcastMessage(int world, Packet packet) {
         for (Channel ch : getChannelsFromWorld(world)) {
             ch.broadcastPacket(packet);
         }
     }
 
+    /**
+     * 向指定世界的所有频道广播GM消息
+     * @param world 世界ID
+     * @param packet 数据包
+     */
     public void broadcastGMMessage(int world, Packet packet) {
         for (Channel ch : getChannelsFromWorld(world)) {
             ch.broadcastGMPacket(packet);
         }
     }
 
+    /**
+     * 检查指定世界是否有GM在线
+     * @param world 世界ID
+     * @return 是否有GM在线
+     */
     public boolean isGmOnline(int world) {
         for (Channel ch : getChannelsFromWorld(world)) {
             for (Character player : ch.getPlayerStorage().getAllCharacters()) {
@@ -1118,6 +1564,11 @@ public class Server {
         return false;
     }
 
+    /**
+     * 修改账号的飞行权限
+     * @param accountid 账号ID
+     * @param canFly 是否可以飞行
+     */
     public void changeFly(Integer accountid, boolean canFly) {
         if (canFly) {
             activeFly.add(accountid);
@@ -1126,10 +1577,20 @@ public class Server {
         }
     }
 
+    /**
+     * 检查账号是否可以飞行
+     * @param accountid 账号ID
+     * @return 是否可以飞行
+     */
     public boolean canFly(Integer accountid) {
         return activeFly.contains(accountid);
     }
 
+    /**
+     * 获取角色所在的世界ID
+     * @param chrid 角色ID
+     * @return 世界ID，不存在则返回-1
+     */
     public int getCharacterWorld(Integer chrid) {
         lgnRLock.lock();
         try {
@@ -1140,6 +1601,12 @@ public class Server {
         }
     }
 
+    /**
+     * 检查账号下是否包含指定角色
+     * @param accountid 账号ID
+     * @param chrid 角色ID
+     * @return 是否包含
+     */
     public boolean haveCharacterEntry(Integer accountid, Integer chrid) {
         lgnRLock.lock();
         try {
@@ -1150,6 +1617,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取账号的角色总数
+     * @param accountid 账号ID
+     * @return 角色总数
+     */
     public short getAccountCharacterCount(Integer accountid) {
         lgnRLock.lock();
         try {
@@ -1159,6 +1631,12 @@ public class Server {
         }
     }
 
+    /**
+     * 获取账号在指定世界的角色数量
+     * @param accountid 账号ID
+     * @param worldid 世界ID
+     * @return 角色数量
+     */
     public short getAccountWorldCharacterCount(Integer accountid, Integer worldid) {
         lgnRLock.lock();
         try {
@@ -1176,6 +1654,11 @@ public class Server {
         }
     }
 
+    /**
+     * 获取账号下的角色ID集合
+     * @param accountid 账号ID
+     * @return 角色ID集合
+     */
     private Set<Integer> getAccountCharacterEntries(Integer accountid) {
         lgnRLock.lock();
         try {
@@ -1185,6 +1668,10 @@ public class Server {
         }
     }
 
+    /**
+     * 更新角色在角色选择界面的展示信息
+     * @param chr 角色对象
+     */
     public void updateCharacterEntry(Character chr) {
         // 已经不在线，不再更新角色视图
         if (!chr.isLoggedIn() || chr.getAccountId() == 0) {
@@ -1204,6 +1691,10 @@ public class Server {
         }
     }
 
+    /**
+     * 创建角色条目（新角色注册到账号下）
+     * @param chr 角色对象
+     */
     public void createCharacterEntry(Character chr) {
         Integer accountid = chr.getAccountId(), chrid = chr.getId(), world = chr.getWorld();
 
@@ -1227,6 +1718,11 @@ public class Server {
         }
     }
 
+    /**
+     * 删除角色条目
+     * @param accountid 账号ID
+     * @param chrid 角色ID
+     */
     public void deleteCharacterEntry(Integer accountid, Integer chrid) {
         lgnWLock.lock();
         try {
@@ -1247,7 +1743,13 @@ public class Server {
         }
     }
 
-    public void transferWorldCharacterEntry(Character chr, Integer toWorld) { // used before setting the new worldid on the character object
+    /**
+     * 转移角色的世界归属（在设置新世界ID之前调用）
+     * @param chr 角色对象
+     * @param toWorld 目标世界ID
+     */
+    // used before setting the new worldid on the character object
+    public void transferWorldCharacterEntry(Character chr, Integer toWorld) {
         lgnWLock.lock();
         try {
             Integer chrid = chr.getId(), accountid = chr.getAccountId(), world = worldChars.get(chr.getId());
@@ -1270,24 +1772,29 @@ public class Server {
             lgnWLock.unlock();
         }
     }
-    
-    /*
-    public void deleteAccountEntry(Integer accountid) { is this even a thing?
-        lgnWLock.lock();
-        try {
-            accountCharacterCount.remove(accountid);
-            accountChars.remove(accountid);
-        } finally {
-            lgnWLock.unlock();
-        }
-    
-        for (World wserv : this.getWorlds()) {
-            wserv.clearAccountCharacterView(accountid);
-            wserv.unregisterAccountStorage(accountid);
-        }
-    }
-    */
 
+    // is this even a thing?
+    //public void deleteAccountEntry(Integer accountid) {
+    //    lgnWLock.lock();
+    //    try {
+    //        accountCharacterCount.remove(accountid);
+    //        accountChars.remove(accountid);
+    //    } finally {
+    //        lgnWLock.unlock();
+    //    }
+    //
+    //    for (World wserv : this.getWorlds()) {
+    //        wserv.clearAccountCharacterView(accountid);
+    //        wserv.unregisterAccountStorage(accountid);
+    //    }
+    //}
+
+    /**
+     * 加载账号的角色列表（按世界分组）
+     * @param accountId 账号ID
+     * @param visibleWorlds 可见世界数量
+     * @return 按世界ID排序的角色列表映射
+     */
     public SortedMap<Integer, List<Character>> loadAccountCharlist(int accountId, int visibleWorlds) {
         List<World> worlds = this.getWorlds();
         if (worlds.size() > visibleWorlds) {
@@ -1304,9 +1811,12 @@ public class Server {
                 if (chrs == null) {
                     if (!accountChars.containsKey(accountId)) {
                         accountCharacterCount.put(accountId, (short) 0);
-                        accountChars.put(accountId, new HashSet<>());    // not advisable at all to write on the map on a read-protected environment
-                    }                                                           // yet it's known there's no problem since no other point in the source does
-                } else if (!chrs.isEmpty()) {                                  // this action.
+                        // not advisable at all to write on the map on a read-protected environment
+                        accountChars.put(accountId, new HashSet<>());
+                        // yet it's known there's no problem since no other point in the source does
+                        // this action.
+                    }
+                } else if (!chrs.isEmpty()) {
                     worldChrs.put(world.getId(), chrs);
                 }
             }
@@ -1317,6 +1827,12 @@ public class Server {
         return worldChrs;
     }
 
+    /**
+     * 从数据库加载账号的角色视图数据
+     * @param accId 账号ID
+     * @param wlen 世界数量
+     * @return 角色数量和各世界角色列表的键值对
+     */
     private static Pair<Short, List<List<Character>>> loadAccountCharactersViewFromDb(int accId, int wlen) {
         short characterCount = 0;
         List<List<Character>> wchars = new ArrayList<>(wlen);
@@ -1374,6 +1890,9 @@ public class Server {
         return new Pair<>(characterCount, wchars);
     }
 
+    /**
+     * 加载所有账号的角色视图数据
+     */
     public void loadAllAccountsCharactersView() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT id FROM accounts");
@@ -1390,6 +1909,11 @@ public class Server {
         }
     }
 
+    /**
+     * 检查账号是否首次登录（内存中无角色数据）
+     * @param accId 账号ID
+     * @return 是否首次登录
+     */
     private boolean isFirstAccountLogin(Integer accId) {
         lgnRLock.lock();
         try {
@@ -1399,6 +1923,10 @@ public class Server {
         }
     }
 
+    /**
+     * 加载账号的角色信息并设置GM等级
+     * @param c 客户端连接
+     */
     public void loadAccountCharacters(Client c) {
         Integer accId = c.getAccID();
         if (!isFirstAccountLogin(accId)) {
@@ -1434,7 +1962,15 @@ public class Server {
         c.setGMLevel(gmLevel);
     }
 
-    private int loadAccountCharactersView(Integer accId, int gmLevel, int fromWorldid) {    // returns the maximum gmLevel found
+    /**
+     * 从数据库加载账号角色视图，返回最高GM等级
+     * @param accId 账号ID
+     * @param gmLevel 初始GM等级
+     * @param fromWorldid 起始世界ID
+     * @return 账号下角色的最高GM等级
+     */
+    // returns the maximum gmLevel found
+    private int loadAccountCharactersView(Integer accId, int gmLevel, int fromWorldid) {
         List<World> wlist = this.getWorlds();
         Pair<Short, List<List<Character>>> accCharacters = loadAccountCharactersViewFromDb(accId, wlist.size());
 
@@ -1472,6 +2008,10 @@ public class Server {
         return gmLevel;
     }
 
+    /**
+     * 加载账号在各世界的仓库数据
+     * @param c 客户端连接
+     */
     public void loadAccountStorages(Client c) {
         int accountId = c.getAccID();
         Set<Integer> accWorlds = new HashSet<>();
@@ -1498,10 +2038,20 @@ public class Server {
         }
     }
 
+    /**
+     * 获取客户端的远程主机标识
+     * @param client 客户端连接
+     * @return 远程主机标识字符串
+     */
     private static String getRemoteHost(Client client) {
         return SessionCoordinator.getSessionRemoteHost(client);
     }
 
+    /**
+     * 设置正在转频道中的角色ID
+     * @param client 客户端连接
+     * @param charId 角色ID
+     */
     public void setCharacteridInTransition(Client client, int charId) {
         String remoteIp = getRemoteHost(client);
 
@@ -1513,6 +2063,12 @@ public class Server {
         }
     }
 
+    /**
+     * 验证转频道中的角色ID是否匹配
+     * @param client 客户端连接
+     * @param charId 角色ID
+     * @return 是否验证通过
+     */
     public boolean validateCharacteridInTransition(Client client, int charId) {
         if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return true;
@@ -1529,6 +2085,11 @@ public class Server {
         }
     }
 
+    /**
+     * 释放客户端的转频道状态
+     * @param client 客户端连接
+     * @return 被释放的角色ID，不存在则返回null
+     */
     public Integer freeCharacteridInTransition(Client client) {
         if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return null;
@@ -1544,6 +2105,11 @@ public class Server {
         }
     }
 
+    /**
+     * 检查客户端是否存在正在转频道中的角色
+     * @param client 客户端连接
+     * @return 是否存在
+     */
     public boolean hasCharacteridInTransition(Client client) {
         if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return true;
@@ -1559,6 +2125,10 @@ public class Server {
         }
     }
 
+    /**
+     * 注册客户端的登录状态（设置10分钟超时）
+     * @param c 客户端连接
+     */
     public void registerLoginState(Client c) {
         srvLock.lock();
         try {
@@ -1568,6 +2138,10 @@ public class Server {
         }
     }
 
+    /**
+     * 注销客户端的登录状态
+     * @param c 客户端连接
+     */
     public void unregisterLoginState(Client c) {
         srvLock.lock();
         try {
@@ -1577,6 +2151,9 @@ public class Server {
         }
     }
 
+    /**
+     * 断开所有登录超时的空闲客户端
+     */
     private void disconnectIdlesOnLoginState() {
         List<Client> toDisconnect = new LinkedList<>();
 
@@ -1597,7 +2174,8 @@ public class Server {
             srvLock.unlock();
         }
 
-        for (Client c : toDisconnect) {    // thanks Lei for pointing a deadlock issue with srvLock
+        // thanks Lei for pointing a deadlock issue with srvLock
+        for (Client c : toDisconnect) {
             if (c.isLoggedIn()) {
                 c.disconnect(false, false);
             } else {
@@ -1606,19 +2184,34 @@ public class Server {
         }
     }
 
+    /**
+     * 注册登录空闲断开任务（每5分钟执行一次）
+     */
     private void disconnectIdlesOnLoginTask() {
         TimerManager.getInstance().register(this::disconnectIdlesOnLoginState, 300000);
     }
 
-    public final Runnable shutdown(final boolean restart) {//no player should be online when trying to shutdown!
+    /**
+     * 创建关服任务（返回Runnable）
+     * @param restart 是否在关服后重启
+     * @return 关服Runnable任务
+     */
+    //no player should be online when trying to shutdown!
+    public final Runnable shutdown(final boolean restart) {
         return () -> shutdownInternal(restart);
     }
 
+    /**
+     * 执行服务器关闭的内部逻辑
+     * 关闭所有世界、频道，停止定时器，可选重启服务器
+     * @param restart 是否重启
+     */
     public synchronized void shutdownInternal(boolean restart) {
         log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info1"), restart ?
                 I18nUtil.getLogMessage("Server.shutdownInternal.info2") : I18nUtil.getLogMessage("Server.shutdownInternal.info3"));
         if (getWorlds() == null) {
-            return;//already shutdown
+            //already shutdown
+            return;
         }
         for (World w : getWorlds()) {
             w.shutdown();
@@ -1652,6 +2245,11 @@ public class Server {
         }
     }
 
+    /**
+     * 检查是否到达下一次随机事件时间
+     * 首次调用会随机设置1-4天后的时间点，后续到期后重新随机
+     * @return 是否到达时间点
+     */
     public boolean isNextTime() {
         if (nextTime == 0) {
             Random random = new Random();
@@ -1670,6 +2268,11 @@ public class Server {
         return true;
     }
 
+    /**
+     * 带消息提示的关服
+     * 可设置倒计时时间、屏幕中央消息、滚动消息和聊天消息
+     * @param serverShutdownDTO 关服配置DTO
+     */
     public synchronized void shutdownWithMsgAndInternal(ServerShutdownDTO serverShutdownDTO) {
 
         int time = 60000;

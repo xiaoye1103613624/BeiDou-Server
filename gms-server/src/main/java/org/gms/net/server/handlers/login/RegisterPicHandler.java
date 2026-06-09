@@ -15,9 +15,20 @@ import org.gms.util.PacketCreator;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 注册PIC处理器
+ * 处理第一次登录时注册PIC验证码，验证成功后进入游戏世界
+ */
 public final class RegisterPicHandler extends AbstractPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(RegisterPicHandler.class);
 
+    /**
+     * 将防多客户端检测结果映射为客户端错误码
+     *
+     * @param res 防多客户端检测结果
+     * @return 客户端错误码
+     */
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {
         return switch (res) {
             case REMOTE_PROCESSING -> 10;
@@ -28,6 +39,13 @@ public final class RegisterPicHandler extends AbstractPacketHandler {
         };
     }
 
+    /**
+     * 处理注册PIC请求
+     * 验证硬件ID后注册PIC，通过后重定向到游戏世界服务器
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();

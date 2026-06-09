@@ -32,24 +32,41 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Danny//changed to map :3
- * @author Ronan//debuffs to storage as well
+ * 玩家Buff存储
+ * 线程安全地管理玩家身上的Buff和Debuff效果，支持效果和异常状态的叠加处理
  */
 public class PlayerBuffStorage {
+    /** 唯一标识ID */
     private final int id = (int) (Math.random() * 100);
+    /** 线程锁 */
     private final Lock lock = new ReentrantLock(true);
+    /** 角色Buff映射（角色ID -> Buff列表） */
     private final Map<Integer, List<PlayerBuffValueHolder>> buffs = new HashMap<>();
+    /** 角色异常状态映射（角色ID -> 异常状态类型映射） */
     private final Map<Integer, Map<Disease, Pair<Long, MobSkill>>> diseases = new HashMap<>();
 
+    /**
+     * 添加角色的Buff到存储
+     *
+     * @param chrid   角色ID
+     * @param toStore 待存储的Buff列表
+     */
     public void addBuffsToStorage(int chrid, List<PlayerBuffValueHolder> toStore) {
         lock.lock();
         try {
-            buffs.put(chrid, toStore);//Old one will be replaced if it's in here.
+            // Old one will be replaced if it's in here.
+            buffs.put(chrid, toStore);
         } finally {
             lock.unlock();
         }
     }
 
+    /**
+     * 从存储中取出并移除角色的Buff
+     *
+     * @param chrid 角色ID
+     * @return Buff列表，若无则返回null
+     */
     public List<PlayerBuffValueHolder> getBuffsFromStorage(int chrid) {
         lock.lock();
         try {
@@ -59,6 +76,12 @@ public class PlayerBuffStorage {
         }
     }
 
+    /**
+     * 添加角色的异常状态到存储
+     *
+     * @param chrid   角色ID
+     * @param toStore 待存储的异常状态映射
+     */
     public void addDiseasesToStorage(int chrid, Map<Disease, Pair<Long, MobSkill>> toStore) {
         lock.lock();
         try {
@@ -68,6 +91,12 @@ public class PlayerBuffStorage {
         }
     }
 
+    /**
+     * 从存储中取出并移除角色的异常状态
+     *
+     * @param chrid 角色ID
+     * @return 异常状态映射，若无则返回null
+     */
     public Map<Disease, Pair<Long, MobSkill>> getDiseasesFromStorage(int chrid) {
         lock.lock();
         try {

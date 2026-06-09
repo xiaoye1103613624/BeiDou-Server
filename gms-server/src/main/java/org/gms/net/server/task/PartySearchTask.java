@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 组队搜索定时任务
+ * 定期更新组队搜索列表，清理过期队伍信息
+ *
  * @author Ronan
  */
 public class PartySearchTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class PartySearchTask extends BaseTask implements Runnable {
         wserv.runPartySearchUpdateSchedule();
     }
 
+    /**
+     * 构造组队搜索定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public PartySearchTask(World world) {
         super(world);
     }

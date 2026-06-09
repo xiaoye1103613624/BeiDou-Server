@@ -22,6 +22,9 @@ package org.gms.net.server.task;
 import org.gms.net.server.world.World;
 
 /**
+ * 宠物饱食度定时任务
+ * 定期更新所有在线宠物的饱食度，触发饥饿逻辑
+ *
  * @author Ronan
  */
 public class PetFullnessTask extends BaseTask implements Runnable {
@@ -31,6 +34,11 @@ public class PetFullnessTask extends BaseTask implements Runnable {
         wserv.runPetSchedule();
     }
 
+    /**
+     * 构造宠物饱食度定时任务
+     *
+     * @param world 关联的世界实例
+     */
     public PetFullnessTask(World world) {
         super(world);
     }

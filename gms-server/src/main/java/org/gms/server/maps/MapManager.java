@@ -27,14 +27,27 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 地图管理器
+ * 管理频道的所有地图实例，提供地图的加载、缓存和重置功能
+ * 使用读写锁保证多线程安全
+ *
+ * @author Ronan
+ */
 public class MapManager {
+    /** 频道 */
     private final int channel;
+    /** 世界 */
     private final int world;
+    /** 关联的事件实例 */
     private EventInstanceManager event;
 
+    /** 地图缓存（地图ID -> 地图实例） */
     private final Map<Integer, MapleMap> maps = new HashMap<>();
 
+    /** 地图读锁 */
     private final Lock mapsRLock;
+    /** 地图写锁 */
     private final Lock mapsWLock;
 
     public MapManager(EventInstanceManager eim, int world, int channel) {
@@ -58,6 +71,13 @@ public class MapManager {
         return getMap(mapid);
     }
 
+    /**
+     * 从WZ加载地图（带缓存）
+     *
+     * @param mapid 地图ID
+     * @param cache 是否使用缓存
+     * @return 地图实例
+     */
     private synchronized MapleMap loadMapFromWz(int mapid, boolean cache) {
         MapleMap map;
 

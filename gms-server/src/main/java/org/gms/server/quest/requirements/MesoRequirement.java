@@ -26,9 +26,13 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 金币需求
+ * 检查玩家是否持有足够的金币
+ *
  * @author Ronan
  */
 public class MesoRequirement extends AbstractQuestRequirement {
+    /** 需要的金币数量 */
     private int meso = 0;
 
     public MesoRequirement(Quest quest, Data data) {

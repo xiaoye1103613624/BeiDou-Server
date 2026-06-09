@@ -28,6 +28,9 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 /**
+ * 弗雷德里克处理器
+ * 处理玩家与弗雷德里克（Fredrick）NPC交互的操作
+ *
  * @author kevintjuh93
  */
 public class FredrickHandler extends AbstractPacketHandler {

@@ -37,13 +37,30 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Calendar;
 
+/**
+ * 用户名密码登录处理器
+ * 处理客户端使用用户名和密码登录的完整流程，包括自动注册、密码迁移、封禁检测
+ */
 public final class LoginPasswordHandler implements PacketHandler {
 
+    /**
+     * 验证客户端状态，确保未登录
+     *
+     * @param c 客户端会话
+     * @return 未登录返回true
+     */
     @Override
     public boolean validateState(Client c) {
         return !c.isLoggedIn();
     }
 
+    /**
+     * 处理登录请求
+     * 解析用户名、密码和硬件ID，执行登录验证，检查封禁状态，成功后注册登录状态
+     *
+     * @param p 输入数据包
+     * @param c 客户端会话
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
         String remoteHost = c.getRemoteAddress();
@@ -121,6 +138,11 @@ public final class LoginPasswordHandler implements PacketHandler {
         }
     }
 
+    /**
+     * 完成登录，发送认证成功包并注册登录状态
+     *
+     * @param c 客户端会话
+     */
     private static void login(Client c) {
         c.sendPacket(PacketCreator.getAuthSuccess(c));//why the fk did I do c.getAccountName()?
         Server.getInstance().registerLoginState(c);

@@ -46,17 +46,31 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 命令执行器（单例）
+ * 管理所有命令的注册、查找和执行
+ * 支持玩家命令（@开头）和GM命令（!开头），按GM等级分级
+ * 从数据库加载命令配置，支持动态重载
+ *
+ * @Author: Arthur L - Refactored command content into modules
+ */
 public class CommandsExecutor {
     private static final Logger log = LoggerFactory.getLogger(CommandsExecutor.class);
+    /** 单例实例 */
     @Getter
     private static final CommandsExecutor instance = new CommandsExecutor();
+    /** 玩家命令前缀 */
     private static final char USER_HEADING = '@';
+    /** GM命令前缀 */
     private static final char GM_HEADING = '!';
 
+    /** 已注册命令映射（命令名 -> 命令对象） */
     @Getter
     private final HashMap<String, Command> registeredCommands = new HashMap<>();
+    /** 命令名称和描述列表，按等级分组 */
     @Getter
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
+    /** 当前等级命令组游标 */
     private Pair<List<String>, List<String>> levelCommandsCursor;
 
     private static final CommandService commandService = ServerManager.getApplicationContext().getBean(CommandService.class);

@@ -25,6 +25,10 @@ import org.gms.provider.wz.DataType;
 
 import java.util.List;
 
+/**
+ * 数据节点接口
+ * 表示WZ文件中的单个数据节点，支持迭代子节点和属性访问
+ */
 public interface Data extends DataEntity, Iterable<Data> {
     @Override
     String getName();

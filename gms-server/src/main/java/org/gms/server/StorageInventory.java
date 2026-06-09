@@ -28,13 +28,26 @@ import org.gms.constants.inventory.ItemConstants;
 import java.util.*;
 
 /**
+ * 仓库库存
+ * 管理仓库物品的排序、合并和移动逻辑
+ * 按装备/现金和新品/消耗品分类，支持物品堆叠和自动合并
+ *
  * @author RonanLana
  */
 public class StorageInventory {
+    /** 所属客户端 */
     private final Client c;
+    /** 仓库物品（槽位ID -> 物品） */
     private Map<Short, Item> inventory = new LinkedHashMap<>();
+    /** 槽位上限 */
     private final byte slotLimit;
 
+    /**
+     * 构造函数
+     *
+     * @param c      客户端
+     * @param toSort 待排序的物品列表
+     */
     public StorageInventory(Client c, List<Item> toSort) {
         this.inventory = new LinkedHashMap<>();
         this.slotLimit = (byte) toSort.size();
@@ -45,14 +58,30 @@ public class StorageInventory {
         }
     }
 
+    /**
+     * 获取槽位上限
+     *
+     * @return 槽位上限
+     */
     private byte getSlotLimit() {
         return slotLimit;
     }
 
+    /**
+     * 获取物品列表（不可修改）
+     *
+     * @return 物品集合
+     */
     private Collection<Item> list() {
         return Collections.unmodifiableCollection(inventory.values());
     }
 
+    /**
+     * 添加物品到下一个可用槽位
+     *
+     * @param item 物品
+     * @return 槽位ID，失败返回-1
+     */
     private short addItem(Item item) {
         short slotId = getNextFreeSlot();
         if (slotId < 0 || item == null) {
@@ -63,15 +92,35 @@ public class StorageInventory {
         return slotId;
     }
 
+    /**
+     * 判断物品是否为装备或现金物品
+     *
+     * @param item 物品
+     * @return 是装备/现金返回true
+     */
     private static boolean isEquipOrCash(Item item) {
         int type = item.getItemId() / 1000000;
         return type == 1 || type == 5;
     }
 
+    /**
+     * 判断两物品所有权人是否相同
+     *
+     * @param source 源物品
+     * @param target 目标物品
+     * @return 相同返回true
+     */
     private static boolean isSameOwner(Item source, Item target) {
         return source.getOwner().equals(target.getOwner());
     }
 
+    /**
+     * 移动物品：支持交换、堆叠和合并
+     *
+     * @param sSlot   源槽位
+     * @param dSlot   目标槽位
+     * @param slotMax 槽位最大堆叠数
+     */
     private void move(short sSlot, short dSlot, short slotMax) {
         Item source = inventory.get(sSlot);
         Item target = inventory.get(dSlot);
@@ -98,6 +147,12 @@ public class StorageInventory {
         }
     }
 
+    /**
+     * 移动物品到目标槽位
+     *
+     * @param src 源槽位
+     * @param dst 目标槽位
+     */
     private void moveItem(short src, short dst) {
         if (src < 0 || dst < 0) {
             return;
@@ -114,6 +169,12 @@ public class StorageInventory {
         this.move(src, dst, slotMax);
     }
 
+    /**
+     * 交换两个物品的槽位
+     *
+     * @param source 物品A
+     * @param target 物品B
+     */
     private void swap(Item source, Item target) {
         inventory.remove(source.getPosition());
         inventory.remove(target.getPosition());
@@ -124,22 +185,49 @@ public class StorageInventory {
         inventory.put(target.getPosition(), target);
     }
 
+    /**
+     * 获取指定槽位的物品
+     *
+     * @param slot 槽位
+     * @return 物品
+     */
     private Item getItem(short slot) {
         return inventory.get(slot);
     }
 
+    /**
+     * 添加物品到指定槽位
+     *
+     * @param slot 槽位
+     * @param item 物品
+     */
     private void addSlot(short slot, Item item) {
         inventory.put(slot, item);
     }
 
+    /**
+     * 移除指定槽位的物品
+     *
+     * @param slot 槽位
+     */
     private void removeSlot(short slot) {
         inventory.remove(slot);
     }
 
+    /**
+     * 检查仓库是否已满
+     *
+     * @return 已满返回true
+     */
     private boolean isFull() {
         return inventory.size() >= slotLimit;
     }
 
+    /**
+     * 获取下一个可用槽位
+     *
+     * @return 槽位ID，已满返回-1
+     */
     private short getNextFreeSlot() {
         if (isFull()) {
             return -1;
@@ -153,6 +241,9 @@ public class StorageInventory {
         return -1;
     }
 
+    /**
+     * 合并物品（堆叠相同物品）
+     */
     public void mergeItems() {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Item srcItem, dstItem;
@@ -204,6 +295,11 @@ public class StorageInventory {
         }
     }
 
+    /**
+     * 排序物品并返回排序后的列表
+     *
+     * @return 排序后的物品列表
+     */
     public List<Item> sortItems() {
         ArrayList<Item> itemarray = new ArrayList<>();
 
@@ -227,12 +323,24 @@ public class StorageInventory {
     }
 }
 
+/**
+ * 配对快速排序
+ * 支持主排序和次排序两级排序
+ * 排序方式：0=物品ID, 1=数量, 2=名称, 3=等级
+ */
 class PairedQuicksort {
+    /** 左指针 */
     private int i = 0;
+    /** 右指针 */
     private int j = 0;
+    /** 交集索引列表 */
     private final ArrayList<Integer> intersect;
+    /** 物品信息提供者实例 */
     ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
+    /**
+     * 按物品ID分区
+     */
     private void PartitionByItemId(int Esq, int Dir, ArrayList<Item> A) {
         Item x, w;
 
@@ -259,6 +367,9 @@ class PairedQuicksort {
         } while (i <= j);
     }
 
+    /**
+     * 按物品名称分区
+     */
     private void PartitionByName(int Esq, int Dir, ArrayList<Item> A) {
         Item x, w;
 
@@ -285,6 +396,9 @@ class PairedQuicksort {
         } while (i <= j);
     }
 
+    /**
+     * 按物品数量分区
+     */
     private void PartitionByQuantity(int Esq, int Dir, ArrayList<Item> A) {
         Item x, w;
 
@@ -311,6 +425,9 @@ class PairedQuicksort {
         } while (i <= j);
     }
 
+    /**
+     * 按装备等级分区
+     */
     private void PartitionByLevel(int Esq, int Dir, ArrayList<Item> A) {
         Equip x, w, eqpI, eqpJ;
 
@@ -341,6 +458,14 @@ class PairedQuicksort {
         } while (i <= j);
     }
 
+    /**
+     * 快速排序（递归）
+     *
+     * @param Esq  左边界
+     * @param Dir  右边界
+     * @param A    物品数组
+     * @param sort 排序方式
+     */
     void MapleQuicksort(int Esq, int Dir, ArrayList<Item> A, int sort) {
         switch (sort) {
             case 3:
@@ -368,6 +493,13 @@ class PairedQuicksort {
         }
     }
 
+    /**
+     * 构造函数：执行两级快速排序
+     *
+     * @param A             物品数组
+     * @param primarySort   主排序方式
+     * @param secondarySort 次排序方式（在相同ID组内排序）
+     */
     public PairedQuicksort(ArrayList<Item> A, int primarySort, int secondarySort) {
         intersect = new ArrayList<>();
 

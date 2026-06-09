@@ -44,13 +44,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 怪物移动处理器
+ * 处理怪物（Mob/Life）的移动逻辑，包括普通移动、攻击、技能释放等行为
+ *
  * @author Danny (Leifde)
  * @author ExtremeDevilz
  * @author Ronan (HeavenMS)
  */
 public final class MoveLifeHandler extends AbstractMovementPacketHandler {
+    /** 日志记录器 */
     private static final Logger log = LoggerFactory.getLogger(MoveLifeHandler.class);
 
+    /**
+     * 处理怪物移动包，解析怪物的活动类型（移动/攻击/技能），更新位置并广播给地图中的玩家
+     *
+     * @param p 输入数据包，包含怪物的移动和活动数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character player = c.getPlayer();
@@ -178,6 +188,14 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         }
     }
 
+    /**
+     * 判断值是否在指定范围内（包含边界）
+     *
+     * @param pVal 待判断的值
+     * @param pMin 范围最小值
+     * @param pMax 范围最大值
+     * @return 如果值在范围内返回true，否则返回false
+     */
     private static boolean inRangeInclusive(Byte pVal, Integer pMin, Integer pMax) {
         return !(pVal < pMin) || (pVal > pMax);
     }

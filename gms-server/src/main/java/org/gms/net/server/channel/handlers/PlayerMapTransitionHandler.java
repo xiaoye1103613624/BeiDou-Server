@@ -34,11 +34,19 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 玩家地图切换完成处理器
+ * 玩家完成切换地图时触发，处理怪物的控制权重新分配和重生逻辑
+ *
  * @author Ronan
- * 玩家完成切换地图触发
  */
 public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
 
+    /**
+     * 处理地图切换完成包，标记玩家地图切换完成，取消导向信标Buff，重新分配地图上怪物的控制权
+     *
+     * @param p 输入数据包
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public final void handlePacket(InPacket p, Client c) {
 

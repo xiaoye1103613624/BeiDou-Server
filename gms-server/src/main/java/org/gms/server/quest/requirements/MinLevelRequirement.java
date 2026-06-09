@@ -28,10 +28,14 @@ import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
 /**
+ * 最低等级需求
+ * 检查玩家等级是否达到任务要求的最低等级
+ *
  * @author Tyler (Twdtwd)
  */
 public class MinLevelRequirement extends AbstractQuestRequirement {
-    private int minLevel;
+    /** 最低等级 */
+    private int minLevel = 0;
 
 
     public MinLevelRequirement(Quest quest, Data data) {

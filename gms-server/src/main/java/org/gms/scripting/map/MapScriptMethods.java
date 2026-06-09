@@ -23,20 +23,33 @@ package org.gms.scripting.map;
 
 import org.gms.client.Client;
 import org.gms.client.QuestStatus;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.id.MapId;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.quest.Quest;
 import org.gms.util.PacketCreator;
 
+/**
+ * 地图脚本方法
+ * 为地图脚本提供可调用的玩家操作方法，继承自AbstractPlayerInteraction
+ */
 public class MapScriptMethods extends AbstractPlayerInteraction {
-
+    /** 勋章挑战完成提示文本 */
     private final String rewardstring = " 勋章挑战已完成！请找勋章老人领取你的勋章。";
 
+    /**
+     * 构造函数
+     *
+     * @param c 客户端
+     */
     public MapScriptMethods(Client c) {
         super(c);
     }
 
+    /**
+     * 显示皇家骑士团（Cygnus）开场介绍动画
+     */
     public void displayCygnusIntro() {
         switch (c.getPlayer().getMapId()) {
             case MapId.CYGNUS_INTRO_LEAD -> {
@@ -71,6 +84,34 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 获取角色认证类型
+     *
+     * @return 认证类型（0=初心者, 1=转职后）
+     */
+    public int getAuthType() {
+        if (!GameConfig.getServerBoolean("enforce_player_auth_checks")) {
+            return 1;
+        }
+        return (this.c.getPlayer().getJob().getId() == 0) ? 0 : 1;
+    }
+
+    /**
+     * 获取角色认证类型（可指定是否执行检查）
+     *
+     * @param enforceChecks 是否强制执行检查
+     * @return 认证类型
+     */
+    public int getAuthType(boolean enforceChecks) {
+        if (!enforceChecks) {
+            return 1;
+        }
+        return (this.c.getPlayer().getJob().getId() == 0) ? 0 : 1;
+    }
+
+    /**
+     * 启动冒险家新手体验
+     */
     public void startExplorerExperience() {
         switch (c.getPlayer().getMapId()) {
         case 1020100: //Swordman
@@ -91,16 +132,29 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 显示"出发冒险"动画
+     */
     public void goAdventure() {
         lockUI();
         c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/goAdventure/Scene" + c.getPlayer().getGender()));
     }
 
+    /**
+     * 显示"前往魔法密林"动画
+     */
     public void goLith() {
         lockUI();
         c.sendPacket(PacketCreator.showIntro("Effect/Direction3.img/goLith/Scene" + c.getPlayer().getGender()));
     }
 
+    /**
+     * 执行探索任务（勋章挑战）
+     * 记录玩家探索的地图进度，完成时发放勋章
+     *
+     * @param questid   任务ID
+     * @param questName 任务/勋章名称
+     */
     public void explorerQuest(short questid, String questName) {
         Quest quest = Quest.getInstance(questid);
         if (isQuestCompleted(questid)) {
@@ -138,6 +192,10 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         showInfoText(smp.toString());
     }
 
+    /**
+     * 执行"站在巅峰的人"勋章挑战
+     * 记录玩家探索的地图进度（任务29004）
+     */
     public void touchTheSky() { //29004
         Quest quest = Quest.getInstance(29004);
         if (!isQuestStarted(29004)) {

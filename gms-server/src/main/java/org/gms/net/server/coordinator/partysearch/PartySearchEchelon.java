@@ -31,12 +31,16 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * @author Ronan
+ * 队伍搜索梯队
+ * 按等级区间划分的队伍搜索分组，管理该梯队内的搜索角色
  */
 public class PartySearchEchelon {
+    /** 读锁 */
     private final Lock psRLock;
+    /** 写锁 */
     private final Lock psWLock;
 
+    /** 梯队中的玩家，key为角色ID，使用弱引用避免阻止GC */
     private final Map<Integer, WeakReference<Character>> echelon = new HashMap<>(20);
 
     public PartySearchEchelon() {
@@ -45,6 +49,12 @@ public class PartySearchEchelon {
         this.psWLock = partySearchLock.writeLock();
     }
 
+    /**
+     * 导出梯队中所有在线玩家并清空梯队
+     * 使用写锁（reverse locking策略）以允许精度换性能的折中
+     *
+     * @return 在线玩家列表
+     */
     public List<Character> exportEchelon() {
         psWLock.lock();     // reversing read/write actually could provide a lax yet sure performance/precision trade-off here
         try {
@@ -64,6 +74,11 @@ public class PartySearchEchelon {
         }
     }
 
+    /**
+     * 将玩家添加到梯队中
+     *
+     * @param chr 玩家角色
+     */
     public void attachPlayer(Character chr) {
         psRLock.lock();
         try {
@@ -73,6 +88,12 @@ public class PartySearchEchelon {
         }
     }
 
+    /**
+     * 从梯队中移除玩家
+     *
+     * @param chr 玩家角色
+     * @return 是否成功移除
+     */
     public boolean detachPlayer(Character chr) {
         psRLock.lock();
         try {

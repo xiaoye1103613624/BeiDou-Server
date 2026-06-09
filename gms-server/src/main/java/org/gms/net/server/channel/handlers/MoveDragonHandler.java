@@ -31,7 +31,18 @@ import org.gms.exception.EmptyMovementException;
 import java.awt.*;
 
 
+/**
+ * 龙移动处理器
+ * 处理玩家控制龙移动的操作
+ */
 public class MoveDragonHandler extends AbstractMovementPacketHandler {
+
+    /**
+     * 处理龙移动包，解析龙的起始位置，更新龙的移动路径并广播给地图中的其他玩家
+     *
+     * @param p 输入数据包，包含龙的移动数据
+     * @param c 客户端连接，包含当前玩家信息
+     */
     @Override
     public void handlePacket(InPacket p, Client c) {
         final Character chr = c.getPlayer();
