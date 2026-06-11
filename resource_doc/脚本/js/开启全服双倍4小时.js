@@ -1,0 +1,106 @@
+/*
+	灰灰自制脚本，自助开双
+	QQ422505158
+**/
+var 心2 = "#fUI/GuildMark.img/Mark/Etc/00009001/15#";
+var 奖励 = "#fUI/UIWindow.img/Quest/reward#";
+var 人气王 = "#fUI/UIWindow.img/QuestIcon/6/0#";
+var 五角星 = "#fUI/UIWindow.img/UserList/Expedition/icon14#";
+var 红色箭头 = "#fEffect/CharacterEff/1112908/0/1#";  //彩光3
+var status = 0;
+
+
+
+function start() {
+     status = -1;
+    action(1, 0, 0);
+}
+
+function action(mode, type, selection) {
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0) {
+            cm.dispose();
+            return;
+        }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+	if (status == 0) {
+		var txt = "";
+		txt += "   \t\t  " + 心2 + "   " + 心2 + "  #d#e < 自助双倍 > #k#n  " + 心2 + "   " + 心2 + "\r\n\r\n";
+		txt += "\tHi~#b#h ##k，这里是#b自助双倍经验系统#k，如果你有足够的点券或抵用券的话，可以给全服开启双倍经验哦！另外，给全服开双的大佬将获得以下福利：\r\n"
+		//txt += ""+奖励+"\r\n"
+		//txt += "\t"+人气王+" 20点\t\t全属性5#v1122017##z1122017##r                                              （12小时权,戴上就增加30%额外经验值）\r\n\r\n";
+		txt += "#L1#给全服开双 4 小时\r\n\r\n";
+		//txt += "#L2#给全服开双 4 小时 （需要10000抵用券）";
+		cm.sendOk(txt);
+	} 
+	if (status == 1) {
+		if (selection == 1) {
+			if (cm.getPlayer().getClient().getChannel() != 1) {
+				cm.sendOk("只能在1线开启系统双倍经验。");
+				cm.dispose();
+				return
+			}
+			if (cm.getPlayer().getCSPoints(1) > 1){
+			var em = cm.getEventManager("Autodbexp1");
+			if (em == null) {
+				cm.sendOk("发生未知错误,请稍后再试....");
+			} else {
+				var prop = em.getProperty("state");
+				if (prop.equals("0") || prop == null) {
+					em.startInstance();
+					cm.gainNX(-1);
+					//cm.给属性装备(1122017,0,0,5,5,5,5,100,100,5,5,5,5,5,5,5,5,12);
+					//var 人气 = cm.getPlayer().getFame();
+					//cm.getPlayer().setFame(人气+20);
+					cm.worldMessage(5,"["+cm.getName()+"]双倍活动：已为全服开启双倍经验活动，持续4小时，要升级的赶紧了!");
+					//cm.worldMessage(3, "【双倍活动】\r\n" + cm.getChar().getName() + "已为全服开启双倍经验活动，持续4小时，要升级的赶紧了！");
+					cm.dispose();
+					return;
+				} else {
+					cm.sendOk("目前正在系统双倍时间中...");
+				}
+			}
+			} else {
+				cm.sendOk("你的点券不足.");
+				cm.dispose();
+			}
+			
+		} else if (selection == 2) {
+			if (cm.getPlayer().getClient().getChannel() != 1) {
+				cm.sendOk("只能在1线开启系统双倍经验。");
+				cm.dispose();
+				return;
+			}
+			if (cm.getPlayer().getCSPoints(2) > 1){
+			var em = cm.getEventManager("Autodbexp1");
+			if (em == null) {
+				cm.sendOk("发生未知错误,请稍后再试....");
+			} else {
+				var prop = em.getProperty("state");
+				if (prop.equals("0") || prop == null) {
+					em.startInstance();
+					cm.给抵用券(-1);
+					//cm.给属性装备(1122017,0,0,5,5,5,5,100,100,5,5,5,5,5,5,5,5,12);
+					//var 人气 = cm.getPlayer().getFame();
+					//cm.getPlayer().setFame(人气+20);
+					cm.worldMessage(1, "【双倍活动】\r\n" + cm.getChar().getName() + "已为全服开启双倍经验活动，持续1小时，要升级的赶紧了！");
+					cm.dispose();
+					return;
+				} else {
+					cm.sendOk("目前正在系统双倍时间中...");
+				}
+			}
+		} else {
+			cm.sendOk("你的抵用券不足.");
+			cm.dispose();
+		}
+	}
+	}
+}
+}
