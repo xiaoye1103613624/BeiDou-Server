@@ -30,11 +30,23 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 技能Buff命令（GM等级2）
+ * 为自身施加指定技能的满级效果（直接获取技能最高等级的Buff）
+ *
+ * @author Arthur L
+ */
 public class BuffCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("BuffCommand.message1"));
     }
 
+    /**
+     * 施加技能Buff：查询技能并应用其满级效果
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（技能ID）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -44,6 +56,7 @@ public class BuffCommand extends Command {
         }
         int skillid = Integer.parseInt(params[0]);
 
+        // 查找技能并应用满级效果
         Skill skill = SkillFactory.getSkill(skillid);
         if (skill != null) {
             skill.getEffect(skill.getMaxLevel()).applyTo(player);

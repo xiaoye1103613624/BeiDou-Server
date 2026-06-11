@@ -29,11 +29,24 @@ import org.gms.client.command.Command;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.util.I18nUtil;
 
+/**
+ * 重载掉落表命令（GM等级3）
+ * 清空服务器内存中的怪物掉落缓存，强制下次查询时从XML重新加载
+ * 用于修改掉落配置后无需重启服务器
+ *
+ * @author Arthur L
+ */
 public class ReloadDropsCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ReloadDropsCommand.message1"));
     }
 
+    /**
+     * 重载掉落数据：清除内存缓存→后续查询自动重新加载XML
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();

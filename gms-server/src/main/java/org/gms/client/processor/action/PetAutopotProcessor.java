@@ -37,6 +37,9 @@ import org.gms.util.PacketCreator;
 import java.util.List;
 
 /**
+ * 宠物自动吃药系统处理器
+ * 管理宠物自动使用HP/MP药水逻辑，支持连续消耗直到血蓝满或药水耗尽
+ *
  * @author Ronan - multi-pot consumption feature
  */
 public class PetAutopotProcessor {
@@ -208,6 +211,9 @@ public class PetAutopotProcessor {
         }
     }
 
+    /**
+     * 执行自动吃药操作，创建 AutopotAction 实例并运行
+     */
     public static void runAutopotAction(Client c, short slot, int itemid) {
         AutopotAction action = new AutopotAction(c, slot, itemid);
         action.run();

@@ -29,15 +29,29 @@ import org.gms.client.command.Command;
 import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
+/**
+ * 详细倍率展示命令（玩家等级0）
+ * 分项展示服务器全局倍率和玩家个人倍率（基础/个人/优惠券/最终）
+ * 覆盖经验、金币、普通掉落、BOSS掉落的逐层加成明细
+ *
+ * @author Arthur L
+ */
 public class ShowRatesCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ShowRatesCommand.message1"));
     }
 
+    /**
+     * 展示倍率明细：全局→个人→优惠券→最终，分别对经验/金币/掉落/boss掉落
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         String showMsg = "#e" + I18nUtil.getMessage("ShowRatesCommand.message2") + "#n\r\n";
+        // 经验倍率明细
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message3") + "#k" + c.getWorldServer().getExpRate() + "x#k" + "\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message4") + "#k" + player.getRawExpRate() + "x#k" + "\r\n";
         if (player.getCouponExpRate() != 1) {
@@ -45,6 +59,7 @@ public class ShowRatesCommand extends Command {
         }
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? I18nUtil.getMessage("ShowRatesCommand.message7") : "") + "\r\n";
 
+        // 金币倍率明细
         showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message8") + "#n\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message9") + "#k" + c.getWorldServer().getMesoRate() + "x#k" + "\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message10") + "#k" + player.getRawMesoRate() + "x#k" + "\r\n";
@@ -53,6 +68,7 @@ public class ShowRatesCommand extends Command {
         }
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message12") + "#e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
 
+        // 掉落倍率明细
         showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message13") + "#n\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message14") + "#k" + c.getWorldServer().getDropRate() + "x#k" + "\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message15") + "#k" + player.getRawDropRate() + "x#k" + "\r\n";
@@ -61,6 +77,7 @@ public class ShowRatesCommand extends Command {
         }
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message17") + "#e#b" + player.getDropRate() + "x#k#n" + "\r\n";
 
+        // Boss掉落倍率明细
         showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message18") + "#n\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message19") + "#k" + c.getWorldServer().getBossDropRate() + "x#k" + "\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message20") + "#k" + player.getRawDropRate() + "x#k" + "\r\n";
@@ -69,11 +86,13 @@ public class ShowRatesCommand extends Command {
         }
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message22") + "#e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
 
+        // 任务倍率
         if (GameConfig.getServerBoolean("use_quest_rate")) {
             showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message23") + "#n\r\n";
             showMsg += I18nUtil.getMessage("ShowRatesCommand.message24") + "#e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
         }
 
+        // 旅行倍率
         showMsg += "\r\n";
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message25") + "#e#b" + c.getWorldServer().getTravelRate() + "x#k#n" + "\r\n";
 

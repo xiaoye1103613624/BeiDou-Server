@@ -28,20 +28,35 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 离开活动命令（玩家等级0）
+ * 退出当前参与的Ola/Fitness等活动，返回活动前保存的地图位置
+ * 同时重置活动计时器并释放活动参与名额
+ *
+ * @author Arthur L
+ */
 public class LeaveEventCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("LeaveEventCommand.message1"));
     }
 
+    /**
+     * 离开活动：重置活动状态→返回原地图→释放活动名额
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         int returnMap = player.getSavedLocation("EVENT");
         if (returnMap != -1) {
+            // 重置Ola活动状态
             if (player.getOla() != null) {
                 player.getOla().resetTimes();
                 player.setOla(null);
             }
+            // 重置Fitness活动状态
             if (player.getFitness() != null) {
                 player.getFitness().resetTimes();
                 player.setFitness(null);
@@ -49,6 +64,7 @@ public class LeaveEventCommand extends Command {
 
             player.saveLocationOnWarp();
             player.changeMap(returnMap);
+            // 释放活动参与名额
             if (c.getChannelServer().getEvent() != null) {
                 c.getChannelServer().getEvent().addLimit();
             }

@@ -33,21 +33,37 @@ import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
+/**
+ * 全服保存命令（GM等级6）
+ * 保存所有世界中所有在线玩家的角色数据到数据库
+ * 同时保存HP/MP预警数据，防止数据丢失
+ *
+ * @author Arthur L
+ */
 public class SaveAllCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SaveAllCommand.message1"));
     }
 
+    /**
+     * 执行全服保存：遍历所有世界→逐个保存角色→保存预警数据→广播通知
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        // 遍历所有世界保存在线角色数据
         for (World world : Server.getInstance().getWorlds()) {
             for (Character chr : world.getPlayerStorage().getAllCharacters()) {
                 chr.saveCharToDB();
             }
         }
+        // 广播保存通知
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("SaveAllCommand.message2", player.getName())));
         player.message(I18nUtil.getMessage("SaveAllCommand.message3"));
+        // 保存HP/MP预警服务数据
         HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
         hpMpAlertService.saveAll();
     }

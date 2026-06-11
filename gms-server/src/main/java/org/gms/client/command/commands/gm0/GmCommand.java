@@ -33,6 +33,13 @@ import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
+/**
+ * GM公告命令（玩家等级0）
+ * GM使用此命令向全服发送黄字公告提示和系统通知
+ * 附带随机GM小贴士，命令内容长度至少3个字符
+ *
+ * @author Arthur L
+ */
 public class GmCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GmCommand.message1"));
@@ -40,6 +47,12 @@ public class GmCommand extends Command {
 
     private static final Logger log = LoggerFactory.getLogger(GmCommand.class);
 
+    /**
+     * 发送GM公告：广播黄字提示和系统通知，记录日志，附带随机小贴士
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（公告内容）
+     */
     @Override
     public void execute(Client c, String[] params) {
         String[] tips = {
@@ -50,15 +63,18 @@ public class GmCommand extends Command {
                 I18nUtil.getMessage("GmCommand.message6"),
         };
         Character player = c.getPlayer();
-        if (params.length < 1 || params[0].length() < 3) { // #goodbye 'hi'
+        // 内容长度至少3个字符，过滤无效请求
+        if (params.length < 1 || params[0].length() < 3) {
             player.dropMessage(5, I18nUtil.getMessage("GmCommand.message7"));
             return;
         }
         String message = player.getLastCommandMessage();
+        // 广播黄字提示和系统通知
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip(I18nUtil.getMessage("GmCommand.message8") + Character.makeMapleReadable(player.getName()) + ": " + message));
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(1, message));
         log.info("{}: {}", Character.makeMapleReadable(player.getName()), message);
         player.dropMessage(5, I18nUtil.getMessage("GmCommand.message9", message));
+        // 附带随机GM小贴士
         player.dropMessage(5, tips[Randomizer.nextInt(tips.length)]);
     }
 }

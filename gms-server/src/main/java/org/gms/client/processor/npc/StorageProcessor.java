@@ -40,12 +40,18 @@ import org.gms.server.Storage;
 import org.gms.util.PacketCreator;
 
 /**
+ * 仓库处理器
+ * 管理玩家银行仓库操作：存入物品、取出物品、存取金币
+ *
  * @author Matze
  * @author Ronan - inventory concurrency protection on storing items
  */
 public class StorageProcessor {
     private static final Logger log = LoggerFactory.getLogger(StorageProcessor.class);
 
+    /**
+     * 处理仓库操作封包（存入/取出/整理/金币存取/关闭）
+     */
     public static void storageAction(InPacket p, Client c) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Character chr = c.getPlayer();
@@ -244,6 +250,9 @@ public class StorageProcessor {
         }
     }
 
+    /**
+     * 检查GM是否满足使用仓库的等级限制
+     */
     private static boolean hasGMRestrictions(Character character) {
         return character.isGM() && character.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_use_storage");
     }

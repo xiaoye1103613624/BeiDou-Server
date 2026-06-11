@@ -36,11 +36,24 @@ import org.gms.util.I18nUtil;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 全屏秒杀命令（GM等级3）
+ * 杀死当前地图所有非友好怪物，跳过黑龙本体（防止触发阶段切换）
+ * 使用Integer.MAX_VALUE伤害确保一击必杀
+ *
+ * @author Arthur L
+ */
 public class KillAllCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("KillAllCommand.message1"));
     }
 
+    /**
+     * 全图秒杀：遍历地图怪物→跳过友好型和黑龙→使用MAX_VALUE伤害击杀
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -49,6 +62,7 @@ public class KillAllCommand extends Command {
         int count = 0;
         for (MapObject monstermo : monsters) {
             Monster monster = (Monster) monstermo;
+            // 跳过友好怪物和黑龙（防止触发阶段切换导致卡死）
             if (!monster.getStats().isFriendly() && !(monster.getId() >= MobId.DEAD_HORNTAIL_MIN && monster.getId() <= MobId.HORNTAIL)) {
                 map.damageMonster(player, monster, Integer.MAX_VALUE);
                 count++;

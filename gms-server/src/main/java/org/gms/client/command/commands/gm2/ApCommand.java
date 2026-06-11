@@ -29,11 +29,24 @@ import org.gms.client.command.Command;
 import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
+/**
+ * AP修改命令（GM等级2）
+ * 修改自己或指定玩家的剩余AP点数（能力点数）
+ * 可在上下限范围内自由调整
+ *
+ * @author Arthur L
+ */
 public class ApCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ApCommand.message1"));
     }
 
+    /**
+     * 修改AP：单参数改自身，双参数指定目标玩家
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（AP值 [目标玩家名,AP值]）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -43,6 +56,7 @@ public class ApCommand extends Command {
         }
 
         if (params.length < 2) {
+            // 单参数：修改自己的AP
             int newAp = Integer.parseInt(params[0]);
             if (newAp < 0) {
                 newAp = 0;
@@ -52,6 +66,7 @@ public class ApCommand extends Command {
 
             player.changeRemainingAp(newAp, false);
         } else {
+            // 双参数：修改指定玩家的AP
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim != null) {
                 int newAp = Integer.parseInt(params[1]);

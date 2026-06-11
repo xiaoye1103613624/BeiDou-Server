@@ -22,9 +22,9 @@ package org.gms.client.inventory;
 import org.gms.client.Character;
 
 /**
- * 背包验证
- * 继承{@link Inventory}，用于物品移动前的安全验证
- * 在物品移除前创建物品快照，防止物品被误删或丢失
+ * 物品移动验证容器
+ * 继承{@link Inventory}，类型为CANHOLD，用于物品移动前的安全验证
+ * 在物品被移出原背包前创建物品快照，验证目标背包是否有足够空间
  *
  * @author Ronan
  */
@@ -34,6 +34,12 @@ public class InventoryProof extends Inventory {
         super(mc, InventoryType.CANHOLD, (byte) 0);
     }
 
+    /**
+     * 克隆目标背包的完整内容快照
+     * 同时获取双方锁保证原子性
+     *
+     * @param inv 需要克隆的源背包
+     */
     public void cloneContents(Inventory inv) {
         inv.lockInventory();
         lock.lock();
@@ -51,6 +57,9 @@ public class InventoryProof extends Inventory {
         }
     }
 
+    /**
+     * 清空验证容器的内容
+     */
     public void flushContents() {
         lock.lock();
         try {

@@ -593,14 +593,31 @@ public class Character extends AbstractCharacterObject {
         setPosition(new Point(0, 0));
     }
 
+    /**
+     * 根据选项获取角色职业风格
+     *
+     * @param opt 选项字节，0x80 表示力量为主，0x40 表示敏捷为主
+     * @return 对应职业风格
+     */
     public Job getJobStyle(byte opt) {
         return Job.getJobStyleInternal(this.getJob().getId(), opt);
     }
 
+    /**
+     * 根据角色当前力量和敏捷比例自动选择职业风格
+     *
+     * @return 自动选择后的职业风格
+     */
     public Job getJobStyle() {
         return getJobStyle((byte) ((this.getStr() > this.getDex()) ? 0x80 : 0x40));
     }
 
+    /**
+     * 创建默认角色对象，用于新角色初始化
+     *
+     * @param c 客户端对象
+     * @return 默认配置的角色实例
+     */
     public static Character getDefault(Client c) {
         Character ret = new Character();
         ret.client = c;
@@ -645,14 +662,27 @@ public class Character extends AbstractCharacterObject {
         return ret;
     }
 
+    /**
+     * 判断角色是否真正在线且在世界地图中（非商城/MTS）
+     *
+     * @return true 表示在世界地图中正常在线
+     */
     public boolean isLoggedInWorld() {
         return this.isLoggedIn() && !this.isAwayFromWorld();
     }
 
+    /**
+     * 判断角色是否离开世界（进入商城/MTS）
+     *
+     * @return true 表示角色已离开世界
+     */
     public boolean isAwayFromWorld() {
         return awayFromWorld.get();
     }
 
+    /**
+     * 标记角色已进入频道世界，从离线状态切换到在线状态
+     */
     public void setEnteredChannelWorld() {
         awayFromWorld.set(false);
         client.getChannelServer().removePlayerAway(id);
@@ -662,14 +692,25 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 标记角色已离开频道世界（进入商城/MTS），不标记为断开连接
+     */
     public void setAwayFromChannelWorld() {
         setAwayFromChannelWorld(false);
     }
 
+    /**
+     * 标记角色已断开与频道世界的连接
+     */
     public void setDisconnectedFromChannelWorld() {
         setAwayFromChannelWorld(true);
     }
 
+    /**
+     * 设置角色是否离开频道世界的内部方法
+     *
+     * @param disconnect 是否为断开连接（而非进入商城）
+     */
     private void setAwayFromChannelWorld(boolean disconnect) {
         awayFromWorld.set(true);
 
@@ -680,6 +721,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 更新角色队伍搜索可用性状态
+     *
+     * @param pSearchAvailable 是否允许被搜索
+     */
     public void updatePartySearchAvailability(boolean pSearchAvailable) {
         if (pSearchAvailable) {
             if (canRecvPartySearchInvite && getParty() == null) {
@@ -692,6 +738,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 切换是否接收队伍搜索邀请
+     *
+     * @return 切换后的状态
+     */
     public boolean toggleRecvPartySearchInvite() {
         canRecvPartySearchInvite = !canRecvPartySearchInvite;
 
@@ -704,26 +755,54 @@ public class Character extends AbstractCharacterObject {
         return canRecvPartySearchInvite;
     }
 
+    /**
+     * 查询是否已启用接收队伍搜索邀请
+     *
+     * @return true 表示已启用
+     */
     public boolean isRecvPartySearchInviteEnabled() {
         return canRecvPartySearchInvite;
     }
 
+    /**
+     * 设置会话过渡状态，确保频道切换时客户端正确识别角色
+     */
     public void setSessionTransitionState() {
         client.setCharacterOnSessionTransitionState(this.getId());
     }
 
+    /**
+     * 设置是否使用混沌卷轴（装备制作时使用）
+     */
     public void setCS(boolean cs) {
         useCS = cs;
     }
 
+    /**
+     * 获取NPC交互冷却时间
+     *
+     * @return 冷却时间戳
+     */
     public long getNpcCooldown() {
         return npcCd;
     }
 
+    /**
+     * 设置NPC交互冷却时间
+     *
+     * @param d 冷却时间戳
+     */
     public void setNpcCooldown(long d) {
         npcCd = d;
     }
 
+    /**
+     * 添加技能冷却记录
+     *
+     * @param skillId   技能ID
+     * @param startTime 冷却开始时间
+     * @param length    冷却时长（毫秒）
+     */
     public void addCooldown(int skillId, long startTime, long length) {
         effLock.lock();
         chrLock.lock();
@@ -735,6 +814,9 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 根据ID查找戒指，依次在 crush 戒指、友情戒指、结婚戒指中搜索
+     */
     public Ring getRingById(int id) {
         Optional<Ring> ringOptional = getCrushRings().stream().filter(ring -> ring.getRingId() == id).findFirst();
         if (ringOptional.isPresent()) {
@@ -750,10 +832,16 @@ public class Character extends AbstractCharacterObject {
         return null;
     }
 
+    /**
+     * 获取角色间的关系ID
+     */
     public int getRelationshipId() {
         return getWorldServer().getRelationshipId(id);
     }
 
+    /**
+     * 判断角色是否已婚
+     */
     public boolean isMarried() {
         return marriageRing != null && partnerId > 0;
     }

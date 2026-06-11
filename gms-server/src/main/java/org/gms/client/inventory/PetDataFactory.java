@@ -45,6 +45,14 @@ public class PetDataFactory {
     /** 宠物饥饿度缓存（宠物ID -> 饥饿度） */
     private static final Map<Integer, Integer> petHunger = new HashMap<>();
 
+    /**
+     * 获取宠物命令技能（双重检查锁DCL）
+     * 从WZ文件Pet/{id}.img/interact/{skillId}节点读取触发概率(prob)和亲密度增量(inc)
+     *
+     * @param petId   宠物ID
+     * @param skillId 技能ID
+     * @return 宠物命令对象
+     */
     public static PetCommand getPetCommand(int petId, int skillId) {
         PetCommand ret = petCommands.get(petId + "" + skillId);
         if (ret != null) {
@@ -67,6 +75,13 @@ public class PetDataFactory {
         }
     }
 
+    /**
+     * 获取宠物饥饿度（双重检查锁DCL）
+     * 从WZ文件Pet/{id}.img/info/hungry节点读取
+     *
+     * @param petId 宠物ID
+     * @return 饥饿度数值
+     */
     public static int getHunger(int petId) {
         Integer ret = petHunger.get(petId);
         if (ret != null) {

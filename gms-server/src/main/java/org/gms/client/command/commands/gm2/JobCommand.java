@@ -30,16 +30,30 @@ import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
+/**
+ * 转职命令（GM等级2）
+ * 修改自己或指定玩家的职业（Job），自动更新装备适配
+ * 支持按玩家名或ID查找目标
+ *
+ * @author Arthur L
+ */
 public class JobCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("JobCommand.message1"));
     }
 
+    /**
+     * 修改职业：单参数改自身，双参数指定目标
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（职业ID [目标玩家,职业ID]）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length == 1) {
             int jobid = Integer.parseInt(params[0]);
+            // 职业ID范围校验（0~2199）
             if (jobid < 0 || jobid >= 2200) {
                 player.message(I18nUtil.getMessage("JobCommand.message2", jobid));
                 return;
@@ -48,6 +62,7 @@ public class JobCommand extends Command {
             player.changeJob(Job.getById(jobid));
             player.equipChanged();
         } else if (params.length == 2) {
+            // 先按名称查找，再按ID查找
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim == null && StringUtil.isNumeric(params[0])) {
                 victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));

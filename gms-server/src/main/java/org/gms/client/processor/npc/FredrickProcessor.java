@@ -52,6 +52,9 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
+ * 弗雷德里克（Fredrick）商店回收系统处理器
+ * 管理雇佣商人的物品/金币回收：从商店取回未售出物品、领取销售收入、每日提醒通知
+ *
  * @author RonanLana - synchronization of Fredrick modules and operation results
  */
 public class FredrickProcessor {
@@ -64,6 +67,9 @@ public class FredrickProcessor {
         this.noteService = noteService;
     }
 
+    /**
+     * 检查从弗雷德里克取回物品的前置条件（背包空间、金币容量）
+     */
     private static byte canRetrieveFromFredrick(Character chr, List<Pair<Item, InventoryType>> items) {
         if (!Inventory.checkSpotsAndOwnership(chr, items)) {
             List<Integer> itemids = new LinkedList<>();
@@ -92,6 +98,9 @@ public class FredrickProcessor {
         return 0x0;
     }
 
+    /**
+     * 计算两个时间戳之间的天数差
+     */
     public static int timestampElapsedDays(Timestamp then, long timeNow) {
         return (int) ((timeNow - then.getTime()) / DAYS.toMillis(1));
     }
@@ -108,6 +117,9 @@ public class FredrickProcessor {
         return msg;
     }
 
+    /**
+     * 删除指定角色的弗雷德里克存储记录
+     */
     public static void removeFredrickLog(int cid) {
         try (Connection con = DatabaseConnection.getConnection()) {
             removeFredrickLog(con, cid);
@@ -123,6 +135,9 @@ public class FredrickProcessor {
         }
     }
 
+    /**
+     * 为关闭商店的角色插入弗雷德里克存储记录
+     */
     public static void insertFredrickLog(int cid) {
         try (Connection con = DatabaseConnection.getConnection()) {
 
@@ -159,6 +174,10 @@ public class FredrickProcessor {
         }
     }
 
+    /**
+     * 弗雷德里克定时调度任务
+     * 处理过期物品清理（超100天）和每日递增提醒通知
+     */
     public void runFredrickSchedule() {
         try (Connection con = DatabaseConnection.getConnection()) {
             List<Pair<Integer, Integer>> expiredCids = new LinkedList<>();
@@ -258,6 +277,9 @@ public class FredrickProcessor {
         }
     }
 
+    /**
+     * 删除指定角色存储在弗雷德里克的物品
+     */
     private static boolean deleteFredrickItems(int cid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM `inventoryitems` WHERE `type` = ? AND `characterid` = ?")) {
@@ -272,6 +294,10 @@ public class FredrickProcessor {
         }
     }
 
+    /**
+     * 从弗雷德里克取回物品和金币
+     * 加载商店物品并奖励玩家，清理数据库记录
+     */
     public void fredrickRetrieveItems(Client c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
         if (c.tryacquireClient()) {
             try {

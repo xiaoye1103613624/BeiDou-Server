@@ -28,11 +28,23 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.util.I18nUtil;
 
+/**
+ * 开发团队名单命令（玩家等级0）
+ * 打开赫拉克勒斯NPC的致谢界面，展示服务器开发团队信息
+ *
+ * @author Arthur L
+ */
 public class StaffCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("StaffCommand.message1"));
     }
 
+    /**
+     * 显示开发团队：打开赫拉克勒斯NPC的致谢界面
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         c.getAbstractPlayerInteraction().openNpc(NpcId.HERACLE, "credits");

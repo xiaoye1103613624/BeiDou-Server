@@ -39,7 +39,7 @@ public enum InventoryType {
     EQUIP(1, I18nUtil.getMessage("InventoryType.EQUIP")),
     /** 消耗品 */
     USE(2, I18nUtil.getMessage("InventoryType.USE")),
-    /** 装饰品 */
+    /** 设置物品 */
     SETUP(3, I18nUtil.getMessage("InventoryType.SETUP")),
     /** 其他 */
     ETC(4, I18nUtil.getMessage("InventoryType.ETC")),

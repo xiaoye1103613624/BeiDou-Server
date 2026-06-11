@@ -39,11 +39,11 @@ public enum WeaponType {
     GENERAL2H_STAB(3.4),
     /** 弓 */
     BOW(3.4),
-    /** 飞镖（拳套） */
+    /** 拳套 */
     CLAW(3.6),
     /** 弩 */
     CROSSBOW(3.6),
-    /** 短刀（飞侠） */
+    /** 短刀（飞侠职业） */
     DAGGER_THIEVES(3.6),
     /** 短刀（其他职业） */
     DAGGER_OTHER(4),
@@ -59,9 +59,13 @@ public enum WeaponType {
     SPEAR_STAB(5.0),
     /** 枪-挥舞 */
     SPEAR_SWING(3.0),
+    /** 短杖 */
     STAFF(3.6),
+    /** 单手剑 */
     SWORD1H(4.0),
+    /** 双手剑 */
     SWORD2H(4.6),
+    /** 长杖 */
     WAND(3.6);
 
     private final double damageMultiplier;

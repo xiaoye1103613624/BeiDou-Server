@@ -54,10 +54,16 @@ public class Mount {
         active = true;
     }
 
+    /**
+     * 获取道具ID
+     */
     public int getItemId() {
         return itemid;
     }
 
+    /**
+     * 获取坐骑技能ID
+     */
     public int getSkillId() {
         return skillid;
     }
@@ -84,18 +90,32 @@ public class Mount {
         return 5;
     }
 
+    /**
+     * 获取当前疲劳度
+     */
     public int getTiredness() {
         return tiredness;
     }
 
+    /**
+     * 获取当前经验值
+     */
     public int getExp() {
         return exp;
     }
 
+    /**
+     * 获取当前等级
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * 设置疲劳度，不允许负数
+     *
+     * @param newtiredness 新疲劳度
+     */
     public void setTiredness(int newtiredness) {
         this.tiredness = newtiredness;
         if (tiredness < 0) {
@@ -103,35 +123,73 @@ public class Mount {
         }
     }
 
+    /**
+     * 疲劳度自增1并返回
+     *
+     * @return 自增后的疲劳度
+     */
     public int incrementAndGetTiredness() {
         this.tiredness++;
         return this.tiredness;
     }
 
+    /**
+     * 设置经验值
+     *
+     * @param newexp 新经验值
+     */
     public void setExp(int newexp) {
         this.exp = newexp;
     }
 
+    /**
+     * 设置等级
+     *
+     * @param newlevel 新等级
+     */
     public void setLevel(int newlevel) {
         this.level = newlevel;
     }
 
+    /**
+     * 设置道具ID
+     *
+     * @param newitemid 新道具ID
+     */
     public void setItemId(int newitemid) {
         this.itemid = newitemid;
     }
 
+    /**
+     * 设置技能ID
+     *
+     * @param newskillid 新技能ID
+     */
     public void setSkillId(int newskillid) {
         this.skillid = newskillid;
     }
 
+    /**
+     * 设置是否激活坐骑
+     *
+     * @param set true表示激活，false表示未激活
+     */
     public void setActive(boolean set) {
         this.active = set;
     }
 
+    /**
+     * 判断坐骑是否激活
+     *
+     * @return true表示激活，false表示未激活
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * 清空坐骑信息，取消饥饿度定时器注册
+     */
     public void empty() {
         if (owner != null) {
             owner.getClient().getWorldServer().unregisterMountHunger(owner);

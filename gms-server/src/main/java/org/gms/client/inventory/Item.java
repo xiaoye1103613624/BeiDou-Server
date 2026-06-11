@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 物品
- * 物品基类，封装物品ID、序列号、数量、位置、过期时间等基本信息
- * 支持物品比较（按类型和位置排序）、克隆和宠物关联
+ * 物品基类
+ * 封装物品ID、序列号、数量、槽位、过期时间等基本信息
+ * 支持物品比较（按ID排序）、克隆、宠物关联及不可交易判断
+ *
+ * @author Matze
  */
 public class Item implements Comparable<Item> {
 
@@ -44,23 +46,23 @@ public class Item implements Comparable<Item> {
     private final int id;
     /** 现金物品ID */
     private int cashId;
-    /** 序列号（数据库唯一标识） */
+    /** 数据库序列号 */
     private int sn;
     /** 物品在背包中的槽位 */
     private short position;
     /** 物品数量 */
     private short quantity;
-    /** 关联宠物ID */
+    /** 关联宠物ID，-1表示无关联 */
     private int petid = -1;
     /** 关联宠物对象 */
     private Pet pet = null;
-    /** 物品所有者 */
+    /** 物品归属者名称 */
     private String owner = "";
     /** 物品日志列表 */
     protected List<String> itemLog;
-    /** 物品标记（封印、礼物等） */
+    /** 物品标记（封印/不可交易等） */
     private short flag;
-    /** 过期时间戳 */
+    /** 过期时间戳，-1表示永不过期 */
     private long expiration = -1;
     /** 赠送者名称 */
     private String giftFrom = "";
@@ -77,7 +79,8 @@ public class Item implements Comparable<Item> {
         this.id = id;
         this.position = position;
         this.quantity = quantity;
-        if (petid > -1) {   // issue with null "pet" having petid > -1 found thanks to MedicOP
+        // petid>-1时加载宠物数据，加载失败则重置为-1
+        if (petid > -1) {
             this.pet = Pet.loadFromDb(id, position, petid);
             if (this.pet == null) {
                 petid = -1;
@@ -88,6 +91,9 @@ public class Item implements Comparable<Item> {
         this.itemLog = new LinkedList<>();
     }
 
+    /**
+     * 深拷贝物品（不含宠物关联）
+     */
     public Item copy() {
         Item ret = new Item(id, position, quantity, petid);
         ret.flag = flag;
@@ -112,6 +118,9 @@ public class Item implements Comparable<Item> {
         return id;
     }
 
+    /**
+     * 获取现金物品唯一ID（懒加载，首次调用时分配）
+     */
     public int getCashId() {
         if (cashId == 0) {
             cashId = runningCashId.getAndIncrement();
@@ -127,11 +136,17 @@ public class Item implements Comparable<Item> {
         return quantity;
     }
 
+    /**
+     * 根据物品ID推断其所属背包类型
+     */
     public InventoryType getInventoryType() {
         return ItemConstants.getInventoryType(id);
     }
 
-    public byte getItemType() { // 1: equip, 3: pet, 2: other
+    /**
+     * 物品类型：1=装备，3=宠物，2=其他
+     */
+    public byte getItemType() {
         if (getPetId() > -1) {
             return 3;
         }
@@ -165,6 +180,9 @@ public class Item implements Comparable<Item> {
         return "Item: " + id + " quantity: " + quantity;
     }
 
+    /**
+     * 获取物品日志（只读）
+     */
     public List<String> getItemLog() {
         return Collections.unmodifiableList(itemLog);
     }
@@ -173,10 +191,14 @@ public class Item implements Comparable<Item> {
         return flag;
     }
 
+    /**
+     * 设置物品标记，自动追加账号绑定标志
+     */
     public void setFlag(short b) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         if (ii.isAccountRestricted(id)) {
-            b |= ItemConstants.ACCOUNT_SHARING; // thanks Shinigami15 for noticing ACCOUNT_SHARING flag not being applied properly to items server-side
+            // 账号限制物品自动附加账号绑定标记
+            b |= ItemConstants.ACCOUNT_SHARING;
         }
 
         this.flag = b;
@@ -186,6 +208,9 @@ public class Item implements Comparable<Item> {
         return expiration;
     }
 
+    /**
+     * 设置过期时间：永久物品设为-1，宠物设为Long.MAX_VALUE
+     */
     public void setExpiration(long expire) {
         this.expiration = !ItemConstants.isPermanentItem(id) ? expire : ItemConstants.isPet(id) ? Long.MAX_VALUE : -1;
     }
@@ -210,6 +235,9 @@ public class Item implements Comparable<Item> {
         return pet;
     }
 
+    /**
+     * 判断物品是否不可交易（标记位或掉落限制且无业报标记）
+     */
     public boolean isUntradeable() {
         return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (ItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !KarmaManipulator.hasKarmaFlag(this));
     }

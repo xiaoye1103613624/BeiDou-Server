@@ -31,14 +31,28 @@ import org.gms.server.events.gm.Event;
 import org.gms.server.maps.FieldLimit;
 import org.gms.util.I18nUtil;
 
+/**
+ * 参加活动命令（玩家等级0）
+ * 传送到当前频道正在进行的GM活动地图
+ * 检查地图限制和活动名额，保存原位置以备返回
+ *
+ * @author Arthur L
+ */
 public class JoinEventCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("JoinEventCommand.message1"));
     }
 
+    /**
+     * 参与活动：检查限制→保存位置→分配队伍（椰子/雪球活动）→传送
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        // 检查地图是否允许传送
         if (!FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
             Event event = c.getChannelServer().getEvent();
             if (event != null) {
@@ -46,6 +60,7 @@ public class JoinEventCommand extends Command {
                     if (event.getLimit() > 0) {
                         player.saveLocation("EVENT");
 
+                        // 椰子收获/雪球入口活动需要分配队伍
                         if (event.getMapId() == MapId.EVENT_COCONUT_HARVEST || event.getMapId() == MapId.EVENT_SNOWBALL_ENTRANCE) {
                             player.setTeam(event.getLimit() % 2);
                         }

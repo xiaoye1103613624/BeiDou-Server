@@ -33,14 +33,27 @@ import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 服务器运行时间查询命令（玩家等级0）
+ * 显示服务器自启动以来的运行时长，精确到秒
+ *
+ * @author Arthur L
+ */
 public class UptimeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("UptimeCommand.message1"));
     }
 
+    /**
+     * 计算服务器运行时间并以天/时/分/秒格式显示
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         long milliseconds = System.currentTimeMillis() - Server.uptime;
+        // 分别计算秒、分、时、天（取余后得到当前单位的值）
         int seconds = (int) (milliseconds / SECONDS.toMillis(1)) % 60;
         int minutes = (int) ((milliseconds / MINUTES.toMillis(1)) % 60);
         int hours = (int) ((milliseconds / HOURS.toMillis(1)) % 24);

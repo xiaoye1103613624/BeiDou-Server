@@ -93,10 +93,19 @@ public class Pet extends Item {
         this.pos = new Point(0, 0);
     }
 
+    /**
+     * 从数据库加载宠物数据
+     * 读取 pets 表的 name/level/closeness/fullness/summoned/flag 字段
+     *
+     * @param itemid   物品ID
+     * @param position 背包槽位
+     * @param petid    宠物唯一ID
+     * @return 宠物对象，加载失败返回null
+     */
     public static Pet loadFromDb(int itemid, short position, int petid) {
         Pet ret = new Pet(itemid, position, petid);
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT name, level, closeness, fullness, summoned, flag FROM pets WHERE petid = ?")) { // Get the pet details...
+             PreparedStatement ps = con.prepareStatement("SELECT name, level, closeness, fullness, summoned, flag FROM pets WHERE petid = ?")) {
             ps.setInt(1, petid);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -115,9 +124,15 @@ public class Pet extends Item {
         }
     }
 
+    /**
+     * 从数据库删除宠物（含内存缓存清理和现金ID回收）
+     *
+     * @param owner 宠物主人
+     * @param petid 宠物唯一ID
+     */
     public static void deleteFromDb(Character owner, int petid) {
         try {
-            // 宠物基础数据删除后，petignores 会通过外键级联清理，这里同步移除角色内存中的缓存。
+            // 先清理角色内存中的宠物忽略列表缓存（petignores表通过外键级联清理）
             owner.deletePetExcludedData(petid);
             CashIdGenerator.freeCashId(petid);
         } catch (Exception ex) {
@@ -125,6 +140,9 @@ public class Pet extends Item {
         }
     }
 
+    /**
+     * 将宠物当前状态持久化到数据库
+     */
     public void saveToDb() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, summoned = ?, flag = ? WHERE petid = ?")) {
@@ -141,6 +159,12 @@ public class Pet extends Item {
         }
     }
 
+    /**
+     * 创建新宠物（默认等级1、亲密度0、饱食度100）
+     *
+     * @param itemid 宠物物品ID
+     * @return 宠物唯一ID，失败返回-1
+     */
     public static int createPet(int itemid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, 1, 0, 100, 0, 0)")) {
@@ -155,6 +179,15 @@ public class Pet extends Item {
         }
     }
 
+    /**
+     * 创建新宠物（可指定等级/亲密度/饱食度）
+     *
+     * @param itemid   宠物物品ID
+     * @param level    初始等级
+     * @param tameness 初始亲密度
+     * @param fullness 初始饱食度
+     * @return 宠物唯一ID，失败返回-1
+     */
     public static int createPet(int itemid, byte level, int tameness, int fullness) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, ?, ?, ?, 0, 0)")) {
@@ -200,17 +233,35 @@ public class Pet extends Item {
         return level;
     }
 
+    /**
+     * 增加宠物亲密度和饱食度（不强制享受）
+     * 喂食成功时提升亲密度，饱食度满时下降亲密度
+     *
+     * @param owner       主人角色
+     * @param incTameness 亲密度增量
+     * @param incFullness 饱食度增量
+     * @param type        食物类型
+     */
     public void gainTamenessFullness(Character owner, int incTameness, int incFullness, int type) {
         gainTamenessFullness(owner, incTameness, incFullness, type, false);
     }
 
+    /**
+     * 增加宠物亲密度和饱食度（可强制享受）
+     * 食物消耗逻辑：饱食度<100时正常增加，饱食度满时下降1点亲密度
+     *
+     * @param owner       主人角色
+     * @param incTameness 亲密度增量
+     * @param incFullness 饱食度增量
+     * @param type        食物类型
+     * @param forceEnjoy  是否强制享受（现金商城物品为true）
+     */
     public void gainTamenessFullness(Character owner, int incTameness, int incFullness, int type, boolean forceEnjoy) {
         byte slot = owner.getPetIndex(this);
         boolean enjoyed;
 
-        //will NOT increase pet's tameness if tried to feed pet with 100% fullness
-        // unless forceEnjoy == true (cash shop)
-        if (fullness < 100 || incFullness == 0 || forceEnjoy) {   //incFullness == 0: command given
+        // 饱食度未满、饱食增量为0（命令触发）或强制享受时，正常增加
+        if (fullness < 100 || incFullness == 0 || forceEnjoy) {
             int newFullness = fullness + incFullness;
             if (newFullness > 100) {
                 newFullness = 100;
@@ -224,6 +275,7 @@ public class Pet extends Item {
                 }
 
                 tameness = newTameness;
+                // 亲密度达到升级阈值时提升等级
                 while (newTameness >= ExpTable.getTamenessNeededForLevel(level)) {
                     level += 1;
                     owner.sendPacket(PacketCreator.showOwnPetLevelUp(slot));
@@ -233,6 +285,7 @@ public class Pet extends Item {
 
             enjoyed = true;
         } else {
+            // 饱食度已满时强行喂养 → 亲密度-1，高等级可能降级
             int newTameness = tameness - 1;
             if (newTameness < 0) {
                 newTameness = 0;
@@ -307,6 +360,12 @@ public class Pet extends Item {
         this.petAttribute = flag;
     }
 
+    /**
+     * 为宠物添加属性标记（位运算OR）
+     *
+     * @param owner 主人角色
+     * @param flag  属性枚举
+     */
     public void addPetAttribute(Character owner, PetAttribute flag) {
         this.petAttribute |= flag.getValue();
         saveToDb();
@@ -317,6 +376,12 @@ public class Pet extends Item {
         }
     }
 
+    /**
+     * 移除宠物属性标记（位运算AND NOT）
+     *
+     * @param owner 主人角色
+     * @param flag  属性枚举
+     */
     public void removePetAttribute(Character owner, PetAttribute flag) {
         this.petAttribute &= 0xFFFFFFFF ^ flag.getValue();
         saveToDb();
@@ -327,10 +392,21 @@ public class Pet extends Item {
         }
     }
 
+    /**
+     * 查询宠物能否消费指定物品（如宠物食品）
+     *
+     * @param itemId 物品ID
+     * @return Pair<概率, 是否可消费>
+     */
     public Pair<Integer, Boolean> canConsume(int itemId) {
         return ItemInformationProvider.getInstance().canPetConsume(this.getItemId(), itemId);
     }
 
+    /**
+     * 根据移动包更新宠物位置和姿态
+     *
+     * @param movement 移动片段列表
+     */
     public void updatePosition(List<LifeMovementFragment> movement) {
         for (LifeMovementFragment move : movement) {
             if (move instanceof LifeMovement) {

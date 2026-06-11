@@ -36,11 +36,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * 封号命令（GM等级3）
+ * 永久封禁指定玩家：IP封禁、MAC封禁、踢下线、
+ * 数据库中标记封禁状态，5秒后断开连接
+ *
+ * @author Arthur L
+ */
 public class BanCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("BanCommand.message1"));
     }
 
+    /**
+     * 执行封禁：提取IP→写入ipbans表→封MAC→执行角色封禁→延迟踢下线
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（玩家名 封禁原因）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -54,7 +67,7 @@ public class BanCommand extends Command {
         if (target != null) {
             String readableTargetName = Character.makeMapleReadable(target.getName());
             String ip = target.getClient().getRemoteAddress();
-            //Ban ip
+            // IP封禁：写入数据库ipbans表
             try (Connection con = DatabaseConnection.getConnection()) {
                 if (ip.matches("[0-9]{1,3}\\..*")) {
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?, ?)")) {
@@ -76,7 +89,8 @@ public class BanCommand extends Command {
             target.yellowMessage(I18nUtil.getMessage("BanCommand.message7", reason));
             c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
             final Character rip = target;
-            TimerManager.getInstance().schedule(() -> rip.getClient().disconnect(false, false), 5000); //5 Seconds
+            // 5秒后强制断开连接
+            TimerManager.getInstance().schedule(() -> rip.getClient().disconnect(false, false), 5000);
             Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, I18nUtil.getMessage("BanCommand.message8", ign)));
         } else if (Character.ban(ign, reason, false)) {
             c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));

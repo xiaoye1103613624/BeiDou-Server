@@ -21,8 +21,8 @@
  */
 package org.gms.scripting;
 
-import org.gms.client.Character;
 import org.gms.client.*;
+import org.gms.client.Character;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
@@ -59,8 +59,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
@@ -358,7 +358,7 @@ public class AbstractPlayerInteraction {
     /**
      * 获取指定类型的背包
      *
-     * @param type 背包类型（0=装备,1=消耗,2=设置,3=其它,4=现金）
+     * @param type 背包类型（参考InventoryType枚举：-1=已装备 0=未定义 1=装备 2=消耗 3=装饰 4=其他 5=现金 6=容器）
      * @return 背包对象
      */
     public Inventory getInventory(int type) {
@@ -1627,6 +1627,17 @@ public class AbstractPlayerInteraction {
      */
     public void cancelItem(final int id) {
         getPlayer().cancelEffect(ItemInformationProvider.getInstance().getItemEffect(id), false, -1);
+    }
+
+    /**
+     * 教授技能 永久
+     *
+     * @param skillid     技能ID
+     * @param level       技能等级
+     * @param masterLevel 掌握等级
+     */
+    public void teachSkill(int skillid, byte level, byte masterLevel) {
+        teachSkill(skillid, level, masterLevel, -1, false);
     }
 
     /**

@@ -29,11 +29,24 @@ import org.gms.client.command.Command;
 import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
+/**
+ * 加力量命令（玩家等级0）
+ * 消耗未分配的AP点数加到力量属性上
+ * 可指定数值或自动加到上限
+ *
+ * @author Arthur L
+ */
 public class StatStrCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("StatStrCommand.message1"));
     }
 
+    /**
+     * 增加力量属性
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（要加的数值，可选）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -47,6 +60,7 @@ public class StatStrCommand extends Command {
                 return;
             }
         } else {
+            // 不指定数值时，自动分配到上限
             amount = Math.min(remainingAp, GameConfig.getServerInt("max_ap") - player.getStr());
         }
 

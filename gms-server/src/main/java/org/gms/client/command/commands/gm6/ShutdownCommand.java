@@ -36,11 +36,24 @@ import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * 服务器关服命令（GM等级6）
+ * 定时关服，可指定分钟数或"now"立即关服
+ * 关服前广播倒计时通知并保存所有在线玩家数据
+ *
+ * @author Arthur L
+ */
 public class ShutdownCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ShutdownCommand.message1"));
     }
 
+    /**
+     * 执行关服：计算倒计时→广播通知→定时保存并关服
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（分钟数 或 "now"立即关服）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -51,11 +64,14 @@ public class ShutdownCommand extends Command {
 
         int time = 60000;
         if (params[0].equalsIgnoreCase("now")) {
+            // 立即关服（1ms延迟）
             time = 1;
         } else {
+            // 分钟转毫秒
             time *= Integer.parseInt(params[0]);
         }
 
+        // 非立即关服时广播倒计时
         if (time > 1) {
             int seconds = (time / (int) SECONDS.toMillis(1)) % 60;
             int minutes = (time / (int) MINUTES.toMillis(1)) % 60;
@@ -72,6 +88,7 @@ public class ShutdownCommand extends Command {
             strTime += I18nUtil.getMessage("ShutdownCommand.message5", minutes);
             strTime += I18nUtil.getMessage("ShutdownCommand.message6", seconds);
 
+            // 广播倒计时到所有世界
             for (World w : Server.getInstance().getWorlds()) {
                 for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                     chr.dropMessage(I18nUtil.getMessage("ShutdownCommand.message7", strTime));

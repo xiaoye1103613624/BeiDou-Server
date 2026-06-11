@@ -182,7 +182,7 @@ public enum Job {
     @Getter
     private final String name;
 
-    final static int maxId = 22;    // maxId = (EVAN / 100);
+    final static int maxId = 22;
 
     Job(int id, String name) {
         this.id = id;

@@ -1093,7 +1093,7 @@ public class EventInstanceManager {
 
     /**
      * 检查玩家是否有足够背包空间领取事件奖励
-     * 遍历装备/消耗/装饰/特殊/现金五种背包类型
+     * 遍历装备/消耗/装饰/其他/现金五种背包类型
      */
     private boolean hasRewardSlot(Character player, int eventLevel) {
         byte listReq = getRewardListRequirements(eventLevel);

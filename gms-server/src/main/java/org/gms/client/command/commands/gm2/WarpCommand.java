@@ -32,11 +32,24 @@ import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.I18nUtil;
 import org.gms.server.maps.Portal;
 
+/**
+ * 传送命令（GM等级2）
+ * 传送到指定地图ID，自动保存当前位置以便返回
+ * 普通玩家受地图限制和副本限制，GM不受限
+ *
+ * @author Arthur L
+ */
 public class WarpCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("WarpCommand.message1"));
     }
 
+    /**
+     * 传送到目标地图：保存原位置→查找传送门→执行地图切换
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（地图ID [传送门名]）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -57,6 +70,7 @@ public class WarpCommand extends Command {
                 return;
             }
 
+            // 非GM玩家检查地图限制和副本限制
             if (!player.isGM()) {
                 if (player.getEventInstance() != null || MiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
                     player.dropMessage(1, I18nUtil.getMessage("WarpCommand.message5"));
@@ -64,17 +78,19 @@ public class WarpCommand extends Command {
                 }
             }
 
-            // expedition issue with this command detected thanks to Masterrulax
             player.saveLocationOnWarp();
             Portal portal = null;
             if (params.length >= 2) {
-                portal = target.getPortal(params[1]);   // 首先尝试使用String作为参数获取Portal
-                if (portal == null && params[1].matches("\\d+")) {// 检查params[1]是否全由数字组成，如果是，则尝试使用int方式获取Portal
+                // 按名称查找传送门
+                portal = target.getPortal(params[1]);
+                if (portal == null && params[1].matches("\\d+")) {
+                    // 名称不存在时尝试按ID查找
                     portal = target.getPortal(Integer.parseInt(params[1]));
                 }
             }
             if (portal == null) {
-                portal = target.getRandomPlayerSpawnpoint(); // 随机落脚点
+                // 兜底：随机出生点
+                portal = target.getRandomPlayerSpawnpoint();
             }
             player.changeMap(target, portal);
         } catch (Exception ex) {

@@ -35,6 +35,9 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 
 /**
+ * 宠物召唤处理器
+ * 处理宠物孵化（龙蛋/机器人蛋）、召唤/收回宠物、宠物位置计算与状态同步
+ *
  * @author RonanLana - just added locking on OdinMS' SpawnPetHandler method body
  */
 public class SpawnPetProcessor {

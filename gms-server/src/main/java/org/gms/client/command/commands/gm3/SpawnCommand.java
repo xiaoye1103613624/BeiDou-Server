@@ -30,11 +30,24 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 
+/**
+ * 召唤怪物命令（GM等级3）
+ * 在当前位置召唤指定ID的怪物，支持指定数量批量召唤
+ * 怪物出生点为玩家脚下的地面位置
+ *
+ * @author Arthur L
+ */
 public class SpawnCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("SpawnCommand.message1"));
     }
 
+    /**
+     * 召唤怪物：单参数召1只，双参数指定数量批量召唤
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（怪物ID [数量]）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -48,6 +61,7 @@ public class SpawnCommand extends Command {
             player.dropMessage(6,"怪物ID：[" + params[0] + "] 不存在，无法召唤。");
             return;
         }
+        // 指定数量时创建多个独立怪物实例
         if (params.length == 2) {
             for (int i = 0; i < Integer.parseInt(params[1]); i++) {
                 player.getMap().spawnMonsterOnGroundBelow(new Monster(monster.getId(), monster.getStats()), player.getPosition());

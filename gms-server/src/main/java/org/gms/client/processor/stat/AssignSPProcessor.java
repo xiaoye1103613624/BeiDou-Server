@@ -35,11 +35,17 @@ import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 
 /**
+ * 技能点（SP）分配处理器
+ * 负责验证技能合法性（职业树匹配、特殊技能限制）并执行技能点分配
+ *
  * @author RonanLana - synchronization of SP transaction modules
  */
 public class AssignSPProcessor {
     private static final Logger log = LoggerFactory.getLogger(AssignSPProcessor.class);
 
+    /**
+     * 验证技能点可否分配给指定技能（职业树匹配、特殊技能限制检查）
+     */
     public static boolean canSPAssign(Client c, int skillid) {
         if (skillid == Aran.HIDDEN_FULL_DOUBLE || skillid == Aran.HIDDEN_FULL_TRIPLE || skillid == Aran.HIDDEN_OVER_DOUBLE || skillid == Aran.HIDDEN_OVER_TRIPLE) {
             c.sendPacket(PacketCreator.enableActions());
@@ -58,6 +64,10 @@ public class AssignSPProcessor {
         return true;
     }
 
+    /**
+     * 执行技能点分配操作
+     * 消耗剩余SP并提升技能等级，处理特殊职业（如Aran）隐藏技能同步
+     */
     public static void SPAssignAction(Client c, int skillid) {
         c.lockClient();
         try {

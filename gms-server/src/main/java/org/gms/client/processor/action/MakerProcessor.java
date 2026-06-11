@@ -50,6 +50,10 @@ public class MakerProcessor {
     private static final Logger log = LoggerFactory.getLogger(MakerProcessor.class);
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
+    /**
+     * 处理制造技能（Maker）封包
+     * 支持4种操作类型：3=合成怪物水晶、4=分解装备、其他=制造物品
+     */
     public static void makerAction(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
@@ -242,6 +246,9 @@ public class MakerProcessor {
     }
 
     // checks and prevents hackers from PE'ing Maker operations with invalid operations
+    /**
+     * 校验试剂合法性，移除同类重复试剂（每种属性只取最强），非武器禁用攻击类试剂
+     */
     private static boolean removeOddMakerReagents(int toCreate, Map<Integer, Short> reagentids) {
         Map<Integer, Integer> reagentType = new LinkedHashMap<>();
         List<Integer> toRemove = new LinkedList<>();
@@ -283,6 +290,9 @@ public class MakerProcessor {
         return true;
     }
 
+    /**
+     * 计算制造物品可用的试剂槽位数量（1/2/3 取决于装备等级）
+     */
     private static int getMakerReagentSlots(int itemId) {
         try {
             int eqpLevel = ii.getEquipLevelReq(itemId);
@@ -299,6 +309,9 @@ public class MakerProcessor {
         }
     }
 
+    /**
+     * 根据装备ID生成分解信息（分解费用和获得的物品列表）
+     */
     private static Pair<Integer, List<Pair<Integer, Integer>>> generateDisassemblyInfo(int itemId) {
         int recvFee = ii.getMakerDisassembledFee(itemId);
         if (recvFee > -1) {
@@ -311,10 +324,16 @@ public class MakerProcessor {
         return null;
     }
 
+    /**
+     * 获取角色的制造技能等级
+     */
     public static int getMakerSkillLevel(Character chr) {
         return chr.getSkillLevel((chr.getJob().getId() / 1000) * 10000000 + 1007);
     }
 
+    /**
+     * 检查制造前置条件（物品、金币、等级、技能等级、背包空间）
+     */
     private static short getCreateStatus(Client c, MakerItemCreateEntry recipe) {
         if (recipe.isInvalid()) {
             return -1;
@@ -358,6 +377,9 @@ public class MakerProcessor {
         return 0;
     }
 
+    /**
+     * 检查玩家背包中是否有制造所需的全部材料
+     */
     private static boolean hasItems(Client c, MakerItemCreateEntry recipe) {
         for (Pair<Integer, Integer> p : recipe.getReqItems()) {
             int itemId = p.getLeft();
@@ -368,6 +390,10 @@ public class MakerProcessor {
         return true;
     }
 
+    /**
+     * 为制造出的装备附加强化效果
+     * 含刺激剂概率判定、混沌卷轴随机化、试剂属性加成
+     */
     private static boolean addBoostedMakerItem(Client c, int itemid, int stimulantid, Map<Integer, Short> reagentids) {
         if (stimulantid != -1 && !ItemInformationProvider.rollSuccessChance(90.0)) {
             return false;

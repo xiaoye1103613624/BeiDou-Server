@@ -28,11 +28,23 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.util.I18nUtil;
 
+/**
+ * 帮助命令（玩家等级0）
+ * 打开管家NPC的指令列表界面，供玩家查看所有可用命令
+ *
+ * @author Arthur L
+ */
 public class HelpCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("HelpCommand.message1"));
     }
 
+    /**
+     * 执行帮助指令：打开管家NPC的命令列表界面
+     *
+     * @param client 客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client client, String[] params) {
         client.getAbstractPlayerInteraction().openNpc(NpcId.STEWARD, "commands");

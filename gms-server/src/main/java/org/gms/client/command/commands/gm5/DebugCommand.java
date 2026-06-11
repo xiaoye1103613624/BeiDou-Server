@@ -43,6 +43,13 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 调试命令（GM等级5）
+ * 多功能调试工具，支持怪物信息、封包、传送门、出生点、地图状态、
+ * Buff、事件区域、Reactor、优惠券、定时器等调试子命令
+ *
+ * @author Arthur L
+ */
 public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
     private final static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -51,6 +58,12 @@ public class DebugCommand extends Command {
         setDescription(I18nUtil.getMessage("DebugCommand.message1"));
     }
 
+    /**
+     * 根据debug类型执行不同的调试查询
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（debug类型）
+     */
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
@@ -72,6 +85,7 @@ public class DebugCommand extends Command {
                 break;
 
             case "monster":
+                // 列出地图上所有怪物的ID、名称、控制者信息
                 List<MapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.MONSTER));
                 for (MapObject monstermo : monsters) {
                     Monster monster = (Monster) monstermo;

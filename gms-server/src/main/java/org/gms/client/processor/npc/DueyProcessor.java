@@ -54,11 +54,17 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
+ * 快递系统（Duey）处理器
+ * 管理玩家间的物品/金币快递收发，包括创建包裹、领取包裹、过期清理和快递通知
+ *
  * @author RonanLana - synchronization of Duey modules
  */
 public class DueyProcessor {
     private static final Logger log = LoggerFactory.getLogger(DueyProcessor.class);
 
+    /**
+     * 快递操作码枚举
+     */
     public enum Actions {
         TOSERVER_RECV_ITEM(0x00),
         TOSERVER_SEND_ITEM(0x02),
@@ -93,6 +99,9 @@ public class DueyProcessor {
         }
     }
 
+    /**
+     * 根据角色名称查询账号ID和角色ID
+     */
     private static Pair<Integer, Integer> getAccountCharacterIdFromCNAME(String name) {
         Pair<Integer, Integer> ids = new Pair<>(-1, -1);
         try (Connection con = DatabaseConnection.getConnection();
@@ -112,6 +121,9 @@ public class DueyProcessor {
         return ids;
     }
 
+    /**
+     * 向收件人发送快递已送达通知
+     */
     private static void showDueyNotification(Client c, Character player) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT SenderName, Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
@@ -136,6 +148,9 @@ public class DueyProcessor {
         ItemFactory.DUEY.saveItems(new LinkedList<>(), packageId, con);
     }
 
+    /**
+     * 从数据库删除快递包裹及关联物品
+     */
     private static void removePackageFromDB(int packageId) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM dueypackages WHERE PackageId = ?")) {
@@ -174,6 +189,9 @@ public class DueyProcessor {
         }
     }
 
+    /**
+     * 从数据库加载指定角色的所有快递包裹
+     */
     private static List<DueyPackage> loadPackages(Character chr) {
         List<DueyPackage> packages = new LinkedList<>();
         try (Connection con = DatabaseConnection.getConnection();

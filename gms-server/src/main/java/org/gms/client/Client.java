@@ -1446,7 +1446,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean canGainCharacterSlot() {
-        return characterSlots < 15;
+        return characterSlots < 30;
     }
 
     public synchronized boolean gainCharacterSlot() {

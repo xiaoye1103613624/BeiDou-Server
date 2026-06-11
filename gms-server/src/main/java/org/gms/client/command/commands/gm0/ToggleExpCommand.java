@@ -27,16 +27,29 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
 
+/**
+ * 经验开关命令（玩家等级0）
+ * 切换角色是否获取经验值，用于卡级或保留低等级状态
+ *
+ * @author Ronan
+ */
 public class ToggleExpCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("ToggleExpCommand.message1"));
     }
 
+    /**
+     * 切换经验获取状态：获取客户端锁后翻转经验开关
+     *
+     * @param c      客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client c, String[] params) {
         if (c.tryacquireClient()) {
             try {
-                c.getPlayer().toggleExpGain();  // Vcoc's idea
+                // 翻转经验获取开关
+                c.getPlayer().toggleExpGain();
             } finally {
                 c.releaseClient();
             }

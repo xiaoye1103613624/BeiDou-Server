@@ -32,11 +32,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * 时间查询命令（玩家等级0）
+ * 显示当前服务器所在时区的系统时间（HH:mm:ss格式）
+ *
+ * @author Arthur L
+ */
 public class TimeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("TimeCommand.message1"));
     }
 
+    /**
+     * 获取并显示系统当前时间
+     *
+     * @param client 客户端会话
+     * @param params 命令参数（无）
+     */
     @Override
     public void execute(Client client, String[] params) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
