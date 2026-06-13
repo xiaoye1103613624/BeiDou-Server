@@ -47,4 +47,11 @@ public class CommonController {
     public ResultBody<List<InformationResult>> informationSearch(@RequestBody SubmitBody<InformationSearch> submitBody) {
         return ResultBody.success(commonService.getInformation(submitBody.getData()));
     }
+
+    @Tag(name = "/common/" + ApiConstant.LATEST)
+    @Operation(summary = "查询物品详细信息，包含属性、价格、穿戴要求等")
+    @PostMapping("/" + ApiConstant.LATEST + "/getItemDetail")
+    public ResultBody<ItemDetailRtnDTO> getItemDetail(@RequestBody SubmitBody<ItemDetailReqDTO> submitBody) {
+        return ResultBody.success(commonService.getItemDetail(submitBody.getData()));
+    }
 }

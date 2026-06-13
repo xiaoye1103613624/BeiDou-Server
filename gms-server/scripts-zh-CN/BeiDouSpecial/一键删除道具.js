@@ -22,7 +22,7 @@ function levelStart() {
 function levelChooseInventory(choose) {
     sel = choose;
     // 选择全部清除，还是删除指定
-    cm.sendSelectLevel("ChooseType", "#L1#清除所有道具#l\r\n#L2#删除指定道具#l\r\n");
+    cm.sendSelectLevel("ChooseType", "#L1##r清除所有道具#k#l\r\n#L2#删除指定道具#l\r\n");
 }
 
 // 选择了删除方式1

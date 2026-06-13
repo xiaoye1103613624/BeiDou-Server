@@ -227,6 +227,14 @@
     <build>
         <finalName>BeiDou</finalName>
         <plugins>
+            <!-- 保留方法参数名，使Spring MVC能通过反射获取参数名（@RequestParam等无需显式指定name） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

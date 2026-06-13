@@ -2238,6 +2238,12 @@ public class Character extends AbstractCharacterObject {
                             showHint(I18nUtil.getMessage("Character.pickupItem.message1", nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)), 300);
                             //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
+                    } else if (mItem.getItemId() / 10000 == 238 && GameConfig.getServerBoolean("monster_card_to_inventory")) {
+                        // 怪物卡片存入背包模式：跳过自动使用，放入消耗栏由玩家手动双击使用
+                        if (!InventoryManipulator.addFromDrop(client, mItem, true)) {
+                            enableActions();
+                            return;
+                        }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {//此段判断为处理捡取治疗道具和怪物卡加入图鉴
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
                         if (mItem.getItemId() == ItemId.ARPQ_SPIRIT_JEWEL) {

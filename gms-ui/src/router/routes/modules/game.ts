@@ -152,6 +152,136 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'toyCollection',
+      name: 'ToyCollection',
+      component: () => import('@/views/game/toyCollection/index.vue'),
+      meta: {
+        locale: 'menu.game.toyCollection',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'dailyDungeon',
+      name: 'DailyDungeon',
+      component: () => import('@/views/game/dailyDungeon/index.vue'),
+      meta: {
+        locale: 'menu.game.dailyDungeon',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'dailyBoss',
+      name: 'DailyBoss',
+      component: () => import('@/views/game/dailyBoss/index.vue'),
+      meta: {
+        locale: 'menu.game.dailyBoss',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'guild',
+      name: 'Guild',
+      component: () => import('@/views/game/guild/index.vue'),
+      meta: {
+        locale: 'menu.game.guild',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'alliance',
+      name: 'Alliance',
+      component: () => import('@/views/game/alliance/index.vue'),
+      meta: {
+        locale: 'menu.game.alliance',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'warehouse',
+      name: 'Warehouse',
+      component: () => import('@/views/game/warehouse/index.vue'),
+      meta: {
+        locale: 'menu.game.warehouse',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'scrollDecompose',
+      name: 'ScrollDecompose',
+      component: () => import('@/views/game/scrollDecompose/index.vue'),
+      meta: {
+        locale: 'menu.game.scrollDecompose',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'paohuan',
+      name: 'Paohuan',
+      component: () => import('@/views/game/paohuan/index.vue'),
+      meta: {
+        locale: 'menu.game.paohuan',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'dailyExplore',
+      name: 'DailyExplore',
+      component: () => import('@/views/game/dailyExplore/index.vue'),
+      meta: {
+        locale: 'menu.game.dailyExplore',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'cdk',
+      name: 'CdkConfig',
+      component: () => import('@/views/game/cdk/index.vue'),
+      meta: {
+        locale: 'menu.game.cdk',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'cdk/logs',
+      name: 'CdkLogs',
+      component: () => import('@/views/game/cdk/logView.vue'),
+      meta: {
+        locale: 'menu.game.cdk.logs',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'sponsor',
+      name: 'SponsorConfig',
+      component: () => import('@/views/game/sponsor/index.vue'),
+      meta: {
+        locale: 'menu.game.sponsor',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'sponsor/logs',
+      name: 'SponsorLogs',
+      component: () => import('@/views/game/sponsor/log.vue'),
+      meta: {
+        locale: 'menu.game.sponsor.logs',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

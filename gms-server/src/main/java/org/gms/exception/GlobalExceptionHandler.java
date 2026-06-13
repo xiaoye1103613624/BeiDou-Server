@@ -57,7 +57,12 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResultBody<Object> exceptionHandler(HttpServletRequest req, RuntimeException e) {
         logger.error("发生运行时异常！原因是:", e);
-        return ResultBody.error(req, BizExceptionEnum.BODY_NOT_MATCH);
+        // 透传异常消息，避免用户看到无关的通用错误提示
+        String msg = e.getMessage();
+        if (msg == null || msg.isEmpty()) {
+            return ResultBody.error(req, BizExceptionEnum.BODY_NOT_MATCH);
+        }
+        return ResultBody.error(req, BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
     }
 
     /**

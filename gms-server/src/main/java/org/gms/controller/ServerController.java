@@ -96,7 +96,7 @@ public class ServerController {
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "频道列表")
     @GetMapping("/" + ApiConstant.LATEST + "/channel/list")
-    public ResultBody<List<ChannelListRtnDTO>> channelList(@RequestParam int worldId) {
+    public ResultBody<List<ChannelListRtnDTO>> channelList(@RequestParam(name = "worldId") int worldId) {
         return ResultBody.success(serverService.channelList(worldId));
     }
 

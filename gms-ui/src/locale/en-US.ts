@@ -14,6 +14,16 @@ import equipEnhance from '@/views/game/equipEnhance/locale/en-US';
 import equipAdvance from '@/views/game/equipAdvance/locale/en-US';
 import levelReward from '@/views/game/levelReward/locale/en-US';
 import newbieGift from '@/views/game/newbieGift/locale/en-US';
+import dailyDungeon from '@/views/game/dailyDungeon/locale/en-US';
+import dailyBoss from '@/views/game/dailyBoss/locale/en-US';
+import guild from '@/views/game/guild/locale/en-US';
+import alliance from '@/views/game/alliance/locale/en-US';
+import toyCollection from '@/views/game/toyCollection/locale/en-US';
+import cdk from '@/views/game/cdk/locale/en-US';
+import warehouse from '@/views/game/warehouse/locale/en-US';
+import scrollDecompose from '@/views/game/scrollDecompose/locale/en-US';
+import paohuan from '@/views/game/paohuan/locale/en-US';
+import dailyExplore from '@/views/game/dailyExplore/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -35,10 +45,25 @@ export default {
   'menu.game.equipAdvance': 'Equip Advance',
   'menu.game.levelReward': 'Level Reward',
   'menu.game.newbieGift': 'Newbie Gift',
+  'menu.game.dailyDungeon': 'Daily Dungeon',
+  'menu.game.dailyBoss': 'Daily Boss',
+  'menu.game.guild': 'Guild',
+  'menu.game.alliance': 'Alliance',
+  'menu.game.toyCollection': 'Toy Collection',
+  'menu.game.warehouse': 'Warehouse',
+  'menu.game.scrollDecompose': 'Scroll Decompose',
+  'menu.game.paohuan': 'Daily Loop',
+  'menu.game.dailyExplore': 'Daily Explore',
+  'menu.game.cdk': 'CDK',
+  'menu.game.cdk.logs': 'Redeem Logs',
+  'menu.customGameplay': 'Custom Gameplay',
+  'menu.customGameplay.overview': 'Overview',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
   'menu.arco': 'UI Doc',
+  // Custom Gameplay
+  'customGameplay.placeholder': 'Custom gameplay features coming soon...',
   'menu.beiDou': 'About BeiDou',
   'message.success': 'Success',
   'message.switch.success': 'Switch to English',
@@ -70,4 +95,14 @@ export default {
   ...equipAdvance,
   ...levelReward,
   ...newbieGift,
+  ...dailyDungeon,
+  ...dailyBoss,
+  ...guild,
+  ...alliance,
+  ...toyCollection,
+  ...cdk,
+  ...warehouse,
+  ...scrollDecompose,
+  ...paohuan,
+  ...dailyExplore,
 };

@@ -10,6 +10,7 @@ import org.gms.model.pojo.InformationSearch;
 import org.gms.model.pojo.InformationResult;
 import org.gms.net.server.Server;
 import org.gms.server.CommonInformation;
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -109,6 +111,90 @@ public class CommonService {
             condition.setTypes(Stream.of(InformationType.values()).map(InformationType::getType).collect(Collectors.toList()));
         }
         return CommonInformation.getInstance().getStringInformation(condition);
+    }
+
+    /**
+     * 获取物品详细信息
+     * 从ItemInformationProvider中查询物品的完整信息，包括基础属性、价格、装备加成、穿戴要求等
+     *
+     * @param submitData 物品详情请求，包含物品ID
+     * @return 物品详情返回对象
+     */
+    public ItemDetailRtnDTO getItemDetail(ItemDetailReqDTO submitData) {
+        Integer itemId = submitData.getItemId();
+        if (itemId == null) {
+            throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL"));
+        }
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        String name = ii.getName(itemId);
+        if (name == null) {
+            throw new BizException(I18nUtil.getExceptionMessage("EQUIP_NOT_FOUND"));
+        }
+
+        ItemDetailRtnDTO rtn = ItemDetailRtnDTO.builder()
+                .itemId(itemId)
+                .name(name)
+                .type(submitData.getType())
+                .build();
+
+        // 获取通用属性
+        rtn.setUnitPrice(ii.getUnitPrice(itemId));
+        rtn.setWholePrice(ii.getWholePrice(itemId));
+        rtn.setSlotMax((int) ii.getSlotMax(itemId));
+        rtn.setCashItem(ii.isCash(itemId));
+
+        // 获取限制标记
+        rtn.setQuestItem(ii.isQuestItem(itemId));
+        rtn.setUntradeable(ii.isUntradeableRestricted(itemId));
+        rtn.setAccountRestricted(ii.isAccountRestricted(itemId));
+        rtn.setDropRestricted(ii.isDropRestricted(itemId));
+
+        // 获取装备属性（仅装备类型才有意义的值）
+        Map<String, Integer> equipStats = ii.getEquipStats(itemId);
+        if (equipStats != null) {
+            // 装备加成属性（inc开头的键）
+            rtn.setStr(getShortFromStats(equipStats, "STR"));
+            rtn.setDex(getShortFromStats(equipStats, "DEX"));
+            rtn.setIntVal(getShortFromStats(equipStats, "INT"));
+            rtn.setLuk(getShortFromStats(equipStats, "LUK"));
+            rtn.setHp(getShortFromStats(equipStats, "MHP"));
+            rtn.setMp(getShortFromStats(equipStats, "MMP"));
+            rtn.setPAtk(getShortFromStats(equipStats, "PAD"));
+            rtn.setMAtk(getShortFromStats(equipStats, "MAD"));
+            rtn.setPDef(getShortFromStats(equipStats, "PDD"));
+            rtn.setMDef(getShortFromStats(equipStats, "MDD"));
+            rtn.setAcc(getShortFromStats(equipStats, "ACC"));
+            rtn.setAvoid(getShortFromStats(equipStats, "EVA"));
+            rtn.setSpeed(getShortFromStats(equipStats, "Speed"));
+            rtn.setJump(getShortFromStats(equipStats, "Jump"));
+            // 升级次数
+            rtn.setUpgradeSlots(equipStats.get("tuc"));
+            // 穿戴要求
+            rtn.setReqLevel(equipStats.get("reqLevel"));
+            rtn.setReqStr(equipStats.get("reqSTR"));
+            rtn.setReqDex(equipStats.get("reqDEX"));
+            rtn.setReqInt(equipStats.get("reqINT"));
+            rtn.setReqLuk(equipStats.get("reqLUK"));
+            rtn.setReqJob(equipStats.get("reqJob"));
+            // 现金装备标记
+            rtn.setEquipCash(equipStats.get("cash") != null && equipStats.get("cash") == 1);
+            // 是否可升级
+            rtn.setUpgradeable(ii.isUpgradeable(itemId));
+        }
+
+        return rtn;
+    }
+
+    /**
+     * 从装备属性Map中安全获取Short值
+     *
+     * @param stats 装备属性Map
+     * @param key   属性键名
+     * @return 属性值（不存在则返回0）
+     */
+    private Short getShortFromStats(Map<String, Integer> stats, String key) {
+        Integer val = stats.get(key);
+        return val != null ? val.shortValue() : 0;
     }
 
 }

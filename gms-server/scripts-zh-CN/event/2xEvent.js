@@ -83,24 +83,47 @@ function cancelSchedule() {
 }
 /**
  * 开始双倍经验活动
+ * 支持属性驱动（从NPC脚本调用时保存原始倍率）和直接调度两种模式
  */
 function start() {
     const Server = Java.type('org.gms.net.server.Server');
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
-    let world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
-    let ExpRate = world.getExpRate();   //获取当前经验倍率
-    world.setExpRate(ExpRate * 2); // 将经验倍率调整为双倍经验
-    world.broadcastPacket(PacketCreator.serverNotice(6, "BOSS扫描器检测到即将到来的复活节兔子袭击！GM团队已激活紧急经验池，在接下来的两小时内获得的经验值将翻倍！"));
+    var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
+    var currentRate = world.getExpRate();   // 获取当前经验倍率
+
+    // 如果NPC脚本已预先保存了原始倍率，则使用保存值；否则自行记录（兼容直接调度模式）
+    var savedRate = em.getProperty("originalExpRate");
+    if (savedRate == null || savedRate.equals("")) {
+        // 直接调度模式：保存当前倍率作为原始倍率（即加倍前的值）
+        em.setProperty("originalExpRate", String(currentRate));
+    }
+
+    world.setExpRate(currentRate * 2); // 将经验倍率调整为双倍
+    world.broadcastPacket(PacketCreator.serverNotice(6, "【双倍活动】BOSS扫描器检测到即将到来的复活节兔子袭击！GM团队已激活紧急经验池，在接下来的两小时内获得的经验值将翻倍！"));
 }
 /**
  * 结束双倍经验活动
+ * 恢复至原始经验倍率并重置活动状态
  */
 function stop() {
     const Server = Java.type('org.gms.net.server.Server');
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
-    world.setExpRate(4); // 将经验值恢复到原来的4倍（正常情况下）
-    world.broadcastPacket(PacketCreator.serverNotice(6, "很遗憾，紧急经验池(EXP)能量已耗尽需要重新充能，经验倍率已恢复正常。"));
+
+    // 恢复原始经验倍率
+    var savedRate = em.getProperty("originalExpRate");
+    if (savedRate != null && !savedRate.equals("")) {
+        world.setExpRate(Number(savedRate)); // 恢复为开启双倍前的原始倍率
+        em.setProperty("originalExpRate", ""); // 清除保存的原始倍率
+    } else {
+        // 兼容模式：没有保存原始倍率时，恢复默认4倍经验
+        world.setExpRate(4);
+    }
+
+    // 重置活动状态，允许再次开启
+    em.setProperty("state", "0");
+
+    world.broadcastPacket(PacketCreator.serverNotice(6, "【双倍活动】很遗憾，紧急经验池(EXP)能量已耗尽需要重新充能，经验倍率已恢复正常。"));
 }
 
 // ---------- 预留函数(空实现) ----------

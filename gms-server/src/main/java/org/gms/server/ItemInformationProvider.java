@@ -402,6 +402,40 @@ public class ItemInformationProvider {
         return (short) (ret + getExtraSlotMaxFromPlayer(c, itemId));
     }
 
+    /**
+     * 获取物品基础最大堆叠数（不包含玩家技能等额外加成）
+     * 适用于无需Client场景（如管理后台查询）
+     *
+     * @param itemId 物品ID
+     * @return 基础最大堆叠数
+     */
+    public short getSlotMax(int itemId) {
+        Short slotMax = slotMaxCache.get(itemId);
+        if (slotMax != null) {
+            return slotMax;
+        }
+        short ret = 0;
+        Data item = getItemData(itemId);
+        if (item != null) {
+            Data smEntry = item.getChildByPath("info/slotMax");
+            short itemSlotMax = GameConfig.getServerShort("item_slot_max");
+            InventoryType inventoryType = ItemConstants.getInventoryType(itemId);
+            if (smEntry == null) {
+                if (inventoryType.getType() == InventoryType.EQUIP.getType()) {
+                    ret = 1;
+                } else if (inventoryType.canChangeSlotMax() && itemSlotMax > 0) {
+                    ret = itemSlotMax;
+                } else {
+                    ret = 100;
+                }
+            } else {
+                ret = inventoryType.canChangeSlotMax() && itemSlotMax > 0 ? itemSlotMax : (short) DataTool.getInt(smEntry);
+            }
+        }
+        slotMaxCache.put(itemId, ret);
+        return ret;
+    }
+
     public int getMeso(int itemId) {
         if (getMesoCache.containsKey(itemId)) {
             return getMesoCache.get(itemId);

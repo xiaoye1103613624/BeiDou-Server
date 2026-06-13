@@ -14,6 +14,17 @@ import equipEnhance from '@/views/game/equipEnhance/locale/zh-CN';
 import equipAdvance from '@/views/game/equipAdvance/locale/zh-CN';
 import levelReward from '@/views/game/levelReward/locale/zh-CN';
 import newbieGift from '@/views/game/newbieGift/locale/zh-CN';
+import dailyDungeon from '@/views/game/dailyDungeon/locale/zh-CN';
+import dailyBoss from '@/views/game/dailyBoss/locale/zh-CN';
+import guild from '@/views/game/guild/locale/zh-CN';
+import alliance from '@/views/game/alliance/locale/zh-CN';
+import toyCollection from '@/views/game/toyCollection/locale/zh-CN';
+import cdk from '@/views/game/cdk/locale/zh-CN';
+import warehouse from '@/views/game/warehouse/locale/zh-CN';
+import scrollDecompose from '@/views/game/scrollDecompose/locale/zh-CN';
+import sponsor from '@/views/game/sponsor/locale/zh-CN';
+import paohuan from '@/views/game/paohuan/locale/zh-CN';
+import dailyExplore from '@/views/game/dailyExplore/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -36,10 +47,27 @@ export default {
   'menu.game.equipAdvance': '装备进阶',
   'menu.game.levelReward': '等级奖励',
   'menu.game.newbieGift': '新手礼包',
+  'menu.game.dailyDungeon': '每日副本',
+  'menu.game.dailyBoss': '每日Boss',
+  'menu.game.guild': '家族管理',
+  'menu.game.alliance': '联盟管理',
+  'menu.game.toyCollection': '玩具收集',
+  'menu.game.warehouse': '仓库管理',
+  'menu.game.scrollDecompose': '卷轴分解',
+  'menu.game.paohuan': '跑环管理',
+  'menu.game.dailyExplore': '每日探索',
+  'menu.game.cdk': 'CDK兑换',
+  'menu.game.cdk.logs': '兑换日志',
+  'menu.game.sponsor': '赞助配置',
+  'menu.game.sponsor.logs': '赞助日志',
+  'menu.customGameplay': '定制玩法',
+  'menu.customGameplay.overview': '玩法概览',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
   'menu.arco': 'UI 开发文档',
+  // 定制玩法
+  'customGameplay.placeholder': '定制玩法功能即将上线，敬请期待...',
   'menu.beiDou': '关于北斗',
   // 提示信息
   'message.success': '操作成功',
@@ -73,4 +101,15 @@ export default {
   ...equipAdvance,
   ...levelReward,
   ...newbieGift,
+  ...dailyDungeon,
+  ...dailyBoss,
+  ...guild,
+  ...alliance,
+  ...toyCollection,
+  ...cdk,
+  ...sponsor,
+  ...warehouse,
+  ...scrollDecompose,
+  ...paohuan,
+  ...dailyExplore,
 };

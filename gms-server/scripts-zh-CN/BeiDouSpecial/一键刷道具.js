@@ -1,6 +1,7 @@
 /**北斗刷道具
  * 支持可配置数量
  * 修复：装备类不可堆叠物品改为逐件发放，防止多数量时只给1件
+ * 修复：校验道具ID是否存在，防止无效ID导致客户端闪退
 
 
 ---By hanmburger*/
@@ -39,6 +40,12 @@ function action(mode, type, selection)
 		{
 			// 执行刷道具
 			var qty = selection;
+			// 先校验道具ID是否存在，防止客户端闪退
+			if (!cm.itemExists(targetItemId)) {
+				cm.sendOk("道具ID #b" + targetItemId + "#k 不存在，请确认后重新输入！");
+				cm.dispose();
+				return;
+			}
 			if (qty > 0)
 			{
 				if (isEquipment(targetItemId)) {
