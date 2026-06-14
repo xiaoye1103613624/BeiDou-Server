@@ -13,7 +13,6 @@ var ToyCollectionConfigManager = Java.type("org.gms.config.ToyCollectionConfigMa
 
 // ==================== 常量 ====================
 var EXTEND_KEY = "玩具收集";          // 持久化Key
-var EQUIP_INV = 1;                   // 装备栏类型
 var SEL_BACK = 0;                    // 返回上一页
 var SEL_SUBMIT_ALL = 998;            // 一键提交本分类
 
@@ -308,39 +307,16 @@ function countInInventory(itemId) {
 }
 
 /**
- * 从背包中扣除指定数量的物品（优先装备栏，再道具栏）
+ * 从背包中扣除指定数量的物品
+ * cm.gainItem(id, -quantity) 内部调用 InventoryManipulator.removeById
+ * 已自动处理所有栏位（装备/消耗/其他/设置/现金）
  * @returns {boolean} 是否全部扣除成功
  */
 function deductFromInventory(itemId, quantity) {
-    var removed = 0;
-    var InventoryType = Java.type("org.gms.client.inventory.InventoryType");
-    var InventoryManipulator = Java.type("org.gms.client.inventory.manipulator.InventoryManipulator");
-
-    // 先从装备栏扣除
-    var equipInv = cm.getInventory(EQUIP_INV);
-    if (equipInv != null) {
-        var arr = equipInv.list().toArray();
-        // 按槽位排序便于逐个删除
-        for (var i = 0; i < arr.length && removed < quantity; i++) {
-            var item = arr[i];
-            if (item != null && item.getItemId() == itemId) {
-                InventoryManipulator.removeFromSlot(cm.getC(), InventoryType.EQUIP, item.getPosition(), 1, false);
-                removed++;
-            }
-        }
-    }
-
-    // 剩余从道具栏扣除
-    var remaining = quantity - removed;
-    if (remaining > 0) {
-        var held = cm.getItemQuantity(itemId);
-        if (held >= remaining) {
-            cm.gainItem(itemId, -remaining);
-            removed += remaining;
-        }
-    }
-
-    return removed >= quantity;
+    var held = cm.getItemQuantity(itemId);
+    if (held < quantity) return false;
+    cm.gainItem(itemId, -quantity);
+    return true;
 }
 
 // ==================== 进度条 ====================

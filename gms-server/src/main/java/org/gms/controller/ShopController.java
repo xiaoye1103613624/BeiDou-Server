@@ -11,6 +11,8 @@ import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 商店控制器
  * 处理NPC商店和商店物品的查询、修改和删除请求
@@ -64,6 +66,14 @@ public class ShopController {
     @DeleteMapping("/" + ApiConstant.LATEST + "/deleteShopItem/{id}")
     public ResultBody<Object> deleteShopItem(@PathVariable("id") Long id) {
         shopService.modifyShopItem(ShopItemSearchRtnDTO.builder().id(id).build(), true);
+        return ResultBody.success(null);
+    }
+
+    @Tag(name = "/shop/" + ApiConstant.LATEST)
+    @Operation(summary = "批量删除商品信息")
+    @PostMapping("/" + ApiConstant.LATEST + "/deleteShopItemBatch")
+    public ResultBody<Object> deleteShopItemBatch(@RequestBody SubmitBody<List<Long>> request) {
+        shopService.deleteShopItemBatch(request.getData());
         return ResultBody.success(null);
     }
 }

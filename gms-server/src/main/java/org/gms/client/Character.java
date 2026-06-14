@@ -29,6 +29,7 @@ import org.gms.client.creator.CharacterFactoryRecipe;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.Equip.StatUpgrade;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.client.inventory.manipulator.KarmaManipulator;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
@@ -2239,7 +2240,8 @@ public class Character extends AbstractCharacterObject {
                             //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
                     } else if (mItem.getItemId() / 10000 == 238 && GameConfig.getServerBoolean("monster_card_to_inventory")) {
-                        // 怪物卡片存入背包模式：跳过自动使用，放入消耗栏由玩家手动双击使用
+                        // 怪物卡片存入背包模式：设置业力标记使其可交易
+                        KarmaManipulator.setKarmaFlag(mItem);
                         if (!InventoryManipulator.addFromDrop(client, mItem, true)) {
                             enableActions();
                             return;

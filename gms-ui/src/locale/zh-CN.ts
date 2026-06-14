@@ -25,6 +25,7 @@ import scrollDecompose from '@/views/game/scrollDecompose/locale/zh-CN';
 import sponsor from '@/views/game/sponsor/locale/zh-CN';
 import paohuan from '@/views/game/paohuan/locale/zh-CN';
 import dailyExplore from '@/views/game/dailyExplore/locale/zh-CN';
+import mentor from '@/views/game/mentor/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -56,6 +57,7 @@ export default {
   'menu.game.scrollDecompose': '卷轴分解',
   'menu.game.paohuan': '跑环管理',
   'menu.game.dailyExplore': '每日探索',
+  'menu.game.mentor': '师徒系统',
   'menu.game.cdk': 'CDK兑换',
   'menu.game.cdk.logs': '兑换日志',
   'menu.game.sponsor': '赞助配置',
@@ -112,4 +114,5 @@ export default {
   ...scrollDecompose,
   ...paohuan,
   ...dailyExplore,
+  ...mentor,
 };

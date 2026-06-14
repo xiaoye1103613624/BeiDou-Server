@@ -5,10 +5,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
-import org.gms.client.inventory.Inventory;
-import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.net.server.world.World;
 import org.gms.config.ToyCollectionConfigManager;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.dao.entity.ToyCollectionCategoryDO;
@@ -21,7 +19,6 @@ import org.gms.model.dto.ToyCollectionDTO;
 import org.gms.model.dto.ToyCollectionDTO.CategoryDTO;
 import org.gms.model.dto.ToyCollectionDTO.ItemDTO;
 import org.gms.model.dto.ToyCollectionDTO.ProgressDTO;
-import org.gms.net.server.world.World;
 import org.gms.server.ItemInformationProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -343,50 +340,18 @@ public class ToyCollectionService {
 
     // ==================== 背包操作 ====================
 
-    /** 计算角色背包中指定物品的总数量 */
+    /** 计算角色背包中指定物品的总数量（getItemQuantity已统计所有栏位） */
     private int countItemInInventory(Character chr, int itemId) {
-        int count = 0;
-        // 装备栏
-        Inventory equipInv = chr.getInventory(InventoryType.EQUIP);
-        if (equipInv != null) {
-            Collection<Item> items = equipInv.list();
-            for (Item item : items) {
-                if (item != null && item.getItemId() == itemId) {
-                    count++;
-                }
-            }
-        }
-        // 消耗/其他/设置/现金栏
-        count += chr.getItemQuantity(itemId, false);
-        return count;
+        return chr.getItemQuantity(itemId, false);
     }
 
-    /** 从角色背包扣除指定数量的物品 */
+    /** 从角色背包扣除指定数量的物品（removeById自动处理所有栏位） */
     private boolean deductFromInventory(Character chr, int itemId, int quantity) {
-        int remaining = quantity;
-        // 先从装备栏扣除
-        Inventory equipInv = chr.getInventory(InventoryType.EQUIP);
-        if (equipInv != null) {
-            List<Item> equipItems = new ArrayList<>(equipInv.list());
-            equipItems.sort(Comparator.comparingInt(Item::getPosition));
-            for (Item item : equipItems) {
-                if (remaining <= 0) break;
-                if (item != null && item.getItemId() == itemId) {
-                    InventoryManipulator.removeFromSlot(chr.getClient(),
-                            InventoryType.EQUIP, item.getPosition(), (short) 1, false);
-                    remaining--;
-                }
-            }
-        }
-        // 再从消耗/其他/设置/现金栏扣除
-        if (remaining > 0) {
-            int held = chr.getItemQuantity(itemId, false);
-            if (held >= remaining) {
-                InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(itemId), itemId, remaining, true, false);
-                remaining = 0;
-            }
-        }
-        return remaining == 0;
+        int held = chr.getItemQuantity(itemId, false);
+        if (held < quantity) return false;
+        InventoryManipulator.removeById(chr.getClient(),
+                ItemConstants.getInventoryType(itemId), itemId, quantity, true, false);
+        return true;
     }
 
     // ==================== 工具方法 ====================

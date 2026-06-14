@@ -82,51 +82,57 @@ function action(mode, type, selection) {
         //text += changeLine;
         // ========================================常用功能============================================1
         // 将字符串复制8次
-        //text += `\t${皇冠.repeat(6)}\t 常用功能 \t${皇冠.repeat(6)}${changeLine}`;
-        text += `${redSelect(3, "传送自由")}\t${generalSelect(71, "专车接送")}\t${generalSelect(69, "快速转职")}${changeLine.repeat(2)}`;
-        text += `${redSelect(0, "新人福利")}\t${generalSelect(113, "新手礼包")}\t${generalSelect(112, "等级奖励")}\t${redSelect(65, "删除物品")}${changeLine.repeat(2)}`;
-        text += `${redSelect(160, "快捷商店")}\t${generalSelect(165, "卷轴中心")}\t${generalSelect(4, "爆率一览")}\t${generalSelect(170, "金币兑换")}${changeLine.repeat(2)}`;
-        text += `${redSelect(166, "仓库管理")}${changeLine.repeat(2)}`;
+        text += `\t${皇冠.repeat(6)}\t 常用功能 \t${皇冠.repeat(6)}${changeLine}`;
+        text += `\t\t\t\t\t\t ${redSelect(3, "[传送自由]")}\t${redSelect(71, "[专车接送]")}\t${changeLine.repeat(2)}`;
+        text += `${generalSelect(0, "新人福利")}\t${generalSelect(113, "新手礼包")}\t${generalSelect(112, "等级奖励")}\t${generalSelect(69, "快速转职")}\t${changeLine.repeat(2)}`;
+        text += `${redSelect(62, "快捷商店")}\t${generalSelect(165, "卷轴中心")}\t${generalSelect(4, "爆率一览")}\t${generalSelect(302, "学习技能")}\t${changeLine.repeat(2)}`;
 
-        //text += changeLine.repeat(2);
+        text += changeLine.repeat(1);
         // =======================================每日牛马============================================2
-        //text += `\t${粉心.repeat(7)}\t 牛马每日 \t${粉心.repeat(7)}${changeLine}`;
+        text += `\t${粉心.repeat(7)}\t 牛马每日 \t${粉心.repeat(7)}${changeLine}`;
         text += `${redSelect(1, "每日签到")}\t${redSelect(2, "在线奖励")}\t${generalSelect(200, "每日探索")}\t${redSelect(201, "每日副本")}${changeLine.repeat(2)}`;
         text += `${redSelect(202, "每日跑环")}\t${generalSelect(203, "跑环仓库")}\t${generalSelect(204, "每日副本")}\t${generalSelect(205, "每日BOSS")}${changeLine.repeat(2)}`;
-        text += `${redSelect(220, "挑战大厅")}${changeLine.repeat(2)}`;
+        //text += `${redSelect(220, "挑战大厅")}${changeLine.repeat(2)}`;
 
-        //text += changeLine.repeat(2);
+       text += changeLine.repeat(1);
         // =======================================收集功能============================================3
-        //text += `\t${皇冠.repeat(6)}\t 收集功能 \t${皇冠.repeat(6)}${changeLine}`;
-        text += `${generalSelect(310, "卡片收集")}\t${generalSelect(301, "玩具收集")}\t${generalSelect(302, "学习技能")}${changeLine.repeat(2)}`;
+        text += `\t${皇冠.repeat(6)}\t 收集功能 \t${皇冠.repeat(6)}${changeLine}`;
+        text += `${generalSelect(310, "卡片收集")}\t${generalSelect(301, "玩具收集")}${changeLine.repeat(2)}`;
         text += `${generalSelect(303, "强化戒指")}\t${generalSelect(304, "钓鱼中心")}\t${generalSelect(305, "小鱼戒指")}${changeLine.repeat(2)}`;
 
-        //text += changeLine.repeat(2);
+        text += changeLine.repeat(1);
+        // =======================================师徒家族============================================5
+        text += `\t${粉心.repeat(7)}\t 师徒家族 \t${粉心.repeat(7)}${changeLine}`;
+        text += `${redSelect(300, "师徒系统")}\t${redSelect(306, "家族系统")}${changeLine.repeat(2)}`;
+
+        text += changeLine.repeat(1);
         // =======================================战力提升============================================4
-        //text += `\t${粉心.repeat(7)}\t 战力提升 \t${粉心.repeat(7)}${changeLine}`;
+        text += `\t${粉心.repeat(7)}\t 战力提升 \t${粉心.repeat(7)}${changeLine}`;
         text += `${redSelect(104, "装备强化")}\t${redSelect(111, "装备进阶")}\t${generalSelect(300, "天赋学习")}\t${generalSelect(72, "转世重生")}${changeLine.repeat(2)}`;
         text += `${redSelect(300, "经验戒指")}\t${redSelect(300, "时装洗练")}\t${generalSelect(4, "翅膀称号")}\t${generalSelect(300, "血衣制作")}${changeLine.repeat(2)}`;
         text += `${redSelect(300, "套装进阶")}${changeLine.repeat(2)}`;
 
-        //text += changeLine.repeat(2);
-        // =======================================师徒家族============================================5
-        //text += `\t${粉心.repeat(7)}\t 师徒家族 \t${粉心.repeat(7)}${changeLine}`;
-        text += `${redSelect(300, "师徒系统")}\t${redSelect(300, "家族系统")}${changeLine.repeat(2)}`;
 
-
-        //text += changeLine.repeat(2);
+        text += changeLine.repeat(1);
         // =======================================会员中心============================================6
-        //text += `\t${粉心.repeat(7)}\t 会员中心 \t${粉心.repeat(7)}${changeLine}`;
+        text += `\t${粉心.repeat(7)}\t 会员中心 \t${粉心.repeat(7)}${changeLine}`;
         text += `${redSelect(600, "会员中心")}\t${redSelect(603, "赞助中心")}\t${generalSelect(604, "全服双倍")}\t${generalSelect(605, "全服双爆")}${changeLine.repeat(2)}`;
-        text += `${redSelect(602, "会员商店")}\t${redSelect(606, "时装洗练")}\t${generalSelect(607, "------")}\t${generalSelect(608, "CDK兑换")}${changeLine.repeat(2)}`;
+        text += `${redSelect(602, "会员商店")}\t${redSelect(606, "时装洗练")}\t${redSelect(65, "删除物品")}\t${generalSelect(608, "CDK兑换")}${changeLine.repeat(2)}`;
+
+        text += changeLine.repeat(1);
+        // =======================================其他============================================6
+        text += `\t${粉心.repeat(7)}\t  其他 \t${粉心.repeat(7)}${changeLine}`;
+        text += `${redSelect(166, "仓库管理")}\t${generalSelect(167, "物品兑换")}\t${generalSelect(168, "金币赌博")}\t${generalSelect(169, "金币抽奖")}${changeLine.repeat(2)}`;
+        text += `${generalSelect(170, "金币兑换")}\t${generalSelect(170, "道具抽奖")}\t${generalSelect(171, "枫叶兑换")}\t${generalSelect(172, "答题")}\t${changeLine.repeat(2)}`;
+
 
 
         // text += "#L999#测试脚本>>>未上线#l\t\r\n";
         if (cm.getPlayer().isGM()) {
-            text += changeLine.repeat(2);
+            text += changeLine.repeat(1);
             // =======================================GM功能============================================9
-            //text += `\t${皇冠.repeat(5)}\t GM功能 \t${皇冠.repeat(5)}${changeLine}`;
-            text += `${generalSelect(62, "超级商店")}\t${generalSelect(66, "一键刷道具")}\t${generalSelect(904, "在线玩家")}${generalSelect(64, "UI查询")}${changeLine}`;
+            text += `\t${皇冠.repeat(5)}\t GM功能 \t${皇冠.repeat(5)}${changeLine}`;
+            text += `${generalSelect(66, "一键刷道具")}\t${generalSelect(904, "在线玩家")}\t${generalSelect(64, "UI查询")}${changeLine}`;
             text += `${generalSelect(900, "发送公告")}\t${generalSelect(901, "巡查面板")}\t${generalSelect(902, "召唤BOSS")}\t${generalSelect(903, "封禁")}${changeLine}`;
             text += `${generalSelect(905, "物品查询")}${changeLine}`;
             text += `${generalSelect(67, "有状态脚本示例")}\t${generalSelect(68, "NextLevel脚本示例")}${changeLine}`;
@@ -240,8 +246,26 @@ function doSelect(selection) {
         case 166:
             openNpc("xy/仓库");
             break;
+        case 167:
+            openNpc("xy/other/物品兑换");
+            break;
+        case 168:
+            openNpc("xy/other/金币赌博");
+            break;
+        case 169:
+            openNpc("xy/other/金币抽奖");
+            break;
         case 170:
-            openNpc("xy/other/金币兑换");
+            openNpc("xy/other/道具抽奖");
+            break;
+        case 171:
+            openNpc("xy/other/枫叶兑换");
+            break;
+        case 172:
+            openNpc("xy/other/答题");
+            break;
+        case 173:
+            openNpc("xy/other/精美时装");
             break;
         case 200:
             openNpc("xy/day/每日探索");
@@ -261,11 +285,14 @@ function doSelect(selection) {
         case 205:
             openNpc("xy/day/每日BOSS");
             break;
+        case 300:
+            openNpc("xy/mentor/师徒系统");
+            break;
         case 310:
-            openNpc("xy/卡片收集");
+            openNpc("xy/collect/卡片收集");
             break;
         case 301:
-            openNpc("xy/玩具收集");
+            openNpc("xy/collect/玩具收集");
             break;
         case 302:
             openNpc("xy/技能学习");
@@ -278,6 +305,9 @@ function doSelect(selection) {
             break;
         case 305:
             openNpc("xy/小鱼戒指");
+            break;
+        case 306:
+            openNpc("xy/家族系统");
             break;
         case 220:
             openNpc("xy/day/挑战大厅");

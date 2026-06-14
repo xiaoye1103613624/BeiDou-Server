@@ -22,6 +22,15 @@ public class DailyExploreSaveDTO {
     /** 目标地图ID */
     private Integer mapId;
 
+    /** 地图名称（服务端自动解析，WZ查询） */
+    private String mapName;
+
+    /** 地图描述（配置者填写，如"射手村"） */
+    private String description;
+
+    /** 地图渲染图片（base64 data URL，供Web端展示，为空时前端实时加载maplestory.io） */
+    private String mapImage;
+
     /** 排序顺序 */
     private Integer sortOrder;
 

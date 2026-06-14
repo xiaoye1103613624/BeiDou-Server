@@ -1441,6 +1441,12 @@ public class ItemInformationProvider {
             return untradeableCache.get(itemId);
         }
 
+        // 怪物卡片(2380000~2389999)强制设为可交易
+        if (ItemId.isMonsterCard(itemId)) {
+            untradeableCache.put(itemId, false);
+            return false;
+        }
+
         boolean bRestricted = false;
         if (itemId != 0) {
             Data data = getItemData(itemId);
@@ -1473,6 +1479,12 @@ public class ItemInformationProvider {
     public boolean isLootRestricted(int itemId) {
         if (dropRestrictionCache.containsKey(itemId)) {
             return dropRestrictionCache.get(itemId);
+        }
+
+        // 怪物卡片(2380000~2389999)强制设为可交易
+        if (ItemId.isMonsterCard(itemId)) {
+            dropRestrictionCache.put(itemId, false);
+            return false;
         }
 
         boolean bRestricted = false;

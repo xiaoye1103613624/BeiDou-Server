@@ -16,9 +16,6 @@ export interface DailyBossForm {
   bossKey?: string;
   bossName?: string;
   bossMobId?: number;
-  sweepItemId?: number;
-  sweepItemCost?: number;
-  maxSweep?: number;
   sortOrder?: number;
   enabled?: number;
   rewards?: DailyBossReward[];

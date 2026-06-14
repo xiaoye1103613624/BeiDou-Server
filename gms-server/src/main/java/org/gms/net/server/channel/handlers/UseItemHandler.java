@@ -105,6 +105,11 @@ public final class UseItemHandler extends AbstractPacketHandler {
                     mse.applyTo(player);
                 }
             }
+
+            // 怪物卡片手动使用时加入图鉴（拾取自动使用模式下由 applyConsumeOnPickup 处理）
+            if (itemId / 10000 == 238) {
+                chr.getMonsterBook().addCard(c, itemId);
+            }
         }
     }
 

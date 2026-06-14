@@ -49,24 +49,6 @@
                 align="center"
               />
               <a-table-column
-                :title="$t('dailyBoss.column.sweepItemId')"
-                data-index="sweepItemId"
-                :width="90"
-                align="center"
-              />
-              <a-table-column
-                :title="$t('dailyBoss.column.sweepItemCost')"
-                data-index="sweepItemCost"
-                :width="80"
-                align="center"
-              />
-              <a-table-column
-                :title="$t('dailyBoss.column.maxSweep')"
-                data-index="maxSweep"
-                :width="80"
-                align="center"
-              />
-              <a-table-column
                 :title="$t('dailyBoss.column.rewards')"
                 align="center"
                 :width="60"
@@ -184,33 +166,6 @@
           </a-col>
         </a-row>
         <a-row :gutter="12">
-          <a-col :span="8">
-            <a-form-item :label="$t('dailyBoss.column.sweepItemId')">
-              <a-input-number
-                v-model="form.sweepItemId"
-                :min="0"
-                style="width: 100%"
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="4">
-            <a-form-item :label="$t('dailyBoss.column.sweepItemCost')">
-              <a-input-number
-                v-model="form.sweepItemCost"
-                :min="1"
-                style="width: 100%"
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="4">
-            <a-form-item :label="$t('dailyBoss.column.maxSweep')">
-              <a-input-number
-                v-model="form.maxSweep"
-                :min="0"
-                style="width: 100%"
-              />
-            </a-form-item>
-          </a-col>
           <a-col :span="4">
             <a-form-item :label="$t('dailyBoss.column.sortOrder')">
               <a-input-number
@@ -366,9 +321,6 @@
     bossKey: '',
     bossName: '',
     bossMobId: undefined,
-    sweepItemId: 0,
-    sweepItemCost: 1,
-    maxSweep: 0,
     sortOrder: 0,
     enabled: 1,
     rewards: [],
@@ -386,9 +338,6 @@
       bossKey: '',
       bossName: '',
       bossMobId: undefined,
-      sweepItemId: 0,
-      sweepItemCost: 1,
-      maxSweep: 0,
       sortOrder: 0,
       enabled: 1,
       rewards: [],
@@ -412,9 +361,6 @@
         bossKey: d.bossKey,
         bossName: d.bossName,
         bossMobId: d.bossMobId,
-        sweepItemId: d.sweepItemId ?? 0,
-        sweepItemCost: d.sweepItemCost ?? 1,
-        maxSweep: d.maxSweep ?? 0,
         sortOrder: d.sortOrder ?? 0,
         enabled: d.enabled ?? 1,
         rewards: d.rewards || [],

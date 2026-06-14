@@ -233,6 +233,16 @@ const GAME: AppRouteRecordRaw = {
       },
     },
     {
+      path: 'mentor',
+      name: 'Mentor',
+      component: () => import('@/views/game/mentor/index.vue'),
+      meta: {
+        locale: 'menu.game.mentor',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
       path: 'dailyExplore',
       name: 'DailyExplore',
       component: () => import('@/views/game/dailyExplore/index.vue'),

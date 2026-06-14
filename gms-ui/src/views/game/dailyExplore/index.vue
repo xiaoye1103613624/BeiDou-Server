@@ -21,6 +21,13 @@
                 <a-button @click="loadMapData">
                   {{ $t('button.search') }}
                 </a-button>
+                <a-button
+                  status="warning"
+                  :loading="fetchAllLoading"
+                  @click="fetchAllImagesClick"
+                >
+                  {{ $t('dailyExplore.map.fetchAllImages') }}
+                </a-button>
               </a-space>
             </a-col>
           </a-row>
@@ -42,11 +49,82 @@
                 align="center"
               />
               <a-table-column
+                :title="$t('dailyExplore.map.thumbnail')"
+                :width="80"
+                align="center"
+              >
+                <template #cell="{ record }">
+                  <a-space v-if="record.mapId" direction="vertical" :size="4">
+                    <a-popover trigger="hover" position="right">
+                      <img
+                        :src="getMapImgSrc(record)"
+                        style="
+                          width: 48px;
+                          height: 48px;
+                          object-fit: cover;
+                          border-radius: 4px;
+                          cursor: pointer;
+                        "
+                        @error="
+                          ($event.target as HTMLImageElement).style.display =
+                            'none'
+                        "
+                      />
+                      <template #content>
+                        <img
+                          :src="getMapImgSrc(record)"
+                          style="
+                            max-width: 350px;
+                            max-height: 260px;
+                            border-radius: 4px;
+                          "
+                          @error="
+                            ($event.target as HTMLImageElement).style.display =
+                              'none'
+                          "
+                        />
+                      </template>
+                    </a-popover>
+                    <a-button
+                      v-if="!record.mapImage"
+                      type="text"
+                      size="mini"
+                      status="warning"
+                      :loading="fetchingIds.has(record.id!)"
+                      @click="fetchSingleImage(record)"
+                    >
+                      {{ $t('dailyExplore.map.fetchImage') }}
+                    </a-button>
+                  </a-space>
+                  <span v-else>-</span>
+                </template>
+              </a-table-column>
+              <a-table-column
                 :title="$t('dailyExplore.map.mapId')"
                 data-index="mapId"
-                :width="120"
+                :width="100"
                 align="center"
               />
+              <a-table-column
+                :title="$t('dailyExplore.map.mapName')"
+                data-index="mapName"
+                :width="140"
+                align="center"
+              >
+                <template #cell="{ record }">
+                  <span>{{ record.mapName || '-' }}</span>
+                </template>
+              </a-table-column>
+              <a-table-column
+                :title="$t('dailyExplore.map.description')"
+                data-index="description"
+                :width="160"
+                align="center"
+              >
+                <template #cell="{ record }">
+                  <span>{{ record.description || '-' }}</span>
+                </template>
+              </a-table-column>
               <a-table-column
                 :title="$t('dailyExplore.map.sortOrder')"
                 data-index="sortOrder"
@@ -73,7 +151,11 @@
               >
                 <template #cell="{ record }">
                   <a-space :size="0">
-                    <a-button type="text" size="mini" @click="editMapClick(record)">
+                    <a-button
+                      type="text"
+                      size="mini"
+                      @click="editMapClick(record)"
+                    >
                       {{ $t('dailyExplore.button.edit') }}
                     </a-button>
                     <a-popconfirm
@@ -97,7 +179,11 @@
           <a-row style="margin-bottom: 16px">
             <a-col>
               <a-space>
-                <a-button type="primary" status="success" @click="addRewardClick">
+                <a-button
+                  type="primary"
+                  status="success"
+                  @click="addRewardClick"
+                >
                   {{ $t('dailyExplore.reward.add') }}
                 </a-button>
               </a-space>
@@ -112,35 +198,99 @@
             :bordered="{ cell: true }"
           >
             <template #columns>
-              <a-table-column :title="$t('dailyExplore.reward.id')" data-index="id" :width="60" align="center" />
-              <a-table-column :title="$t('dailyExplore.reward.itemId')" data-index="itemId" :width="100" align="center" />
-              <a-table-column :title="$t('dailyExplore.reward.itemName')" :width="180" align="center">
+              <a-table-column
+                :title="$t('dailyExplore.reward.id')"
+                data-index="id"
+                :width="60"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.reward.itemId')"
+                data-index="itemId"
+                :width="100"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.reward.itemName')"
+                :width="180"
+                align="center"
+              >
                 <template #cell="{ record }">
-                  <a-button v-if="record.itemId === 0" type="text" size="mini" status="warning">金币</a-button>
+                  <a-button
+                    v-if="record.itemId === 0"
+                    type="text"
+                    size="mini"
+                    status="warning"
+                    >金币</a-button
+                  >
                   <a-popover v-else>
-                    <a-button type="text" size="mini">{{ record.itemName }}</a-button>
+                    <a-button type="text" size="mini">{{
+                      record.itemName
+                    }}</a-button>
                     <template #content>
                       <img :src="getIconUrl('item', record.itemId)" alt="" />
                     </template>
                   </a-popover>
                 </template>
               </a-table-column>
-              <a-table-column :title="$t('dailyExplore.reward.minQty')" data-index="minQuantity" :width="70" align="center" />
-              <a-table-column :title="$t('dailyExplore.reward.maxQty')" data-index="maxQuantity" :width="70" align="center" />
-              <a-table-column :title="$t('dailyExplore.reward.weight')" data-index="weight" :width="70" align="center" />
-              <a-table-column :title="$t('dailyExplore.reward.sortOrder')" data-index="sortOrder" :width="70" align="center" />
-              <a-table-column :title="$t('dailyExplore.reward.enabled')" :width="60" align="center">
+              <a-table-column
+                :title="$t('dailyExplore.reward.minQty')"
+                data-index="minQuantity"
+                :width="70"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.reward.maxQty')"
+                data-index="maxQuantity"
+                :width="70"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.reward.weight')"
+                data-index="weight"
+                :width="70"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.reward.sortOrder')"
+                data-index="sortOrder"
+                :width="70"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.reward.enabled')"
+                :width="60"
+                align="center"
+              >
                 <template #cell="{ record }">
-                  <a-tag v-if="record.enabled === 1" color="green">{{ $t('dailyExplore.yes') }}</a-tag>
+                  <a-tag v-if="record.enabled === 1" color="green">{{
+                    $t('dailyExplore.yes')
+                  }}</a-tag>
                   <a-tag v-else color="gray">{{ $t('dailyExplore.no') }}</a-tag>
                 </template>
               </a-table-column>
-              <a-table-column :title="$t('dailyExplore.map.operation')" :width="140" fixed="right" align="center">
+              <a-table-column
+                :title="$t('dailyExplore.map.operation')"
+                :width="140"
+                fixed="right"
+                align="center"
+              >
                 <template #cell="{ record }">
                   <a-space :size="0">
-                    <a-button type="text" size="mini" @click="editRewardClick(record)">{{ $t('dailyExplore.button.edit') }}</a-button>
-                    <a-popconfirm :content="$t('dailyExplore.reward.delete.confirm')" position="top" @ok="deleteRewardClick(record.id)">
-                      <a-button type="text" size="mini" status="danger">{{ $t('button.delete') }}</a-button>
+                    <a-button
+                      type="text"
+                      size="mini"
+                      @click="editRewardClick(record)"
+                      >{{ $t('dailyExplore.button.edit') }}</a-button
+                    >
+                    <a-popconfirm
+                      :content="$t('dailyExplore.reward.delete.confirm')"
+                      position="top"
+                      @ok="deleteRewardClick(record.id)"
+                    >
+                      <a-button type="text" size="mini" status="danger">{{
+                        $t('button.delete')
+                      }}</a-button>
                     </a-popconfirm>
                   </a-space>
                 </template>
@@ -150,11 +300,18 @@
         </a-tab-pane>
 
         <!-- Tab 3: 完成奖励 -->
-        <a-tab-pane key="finalReward" :title="$t('dailyExplore.tab.finalReward')">
+        <a-tab-pane
+          key="finalReward"
+          :title="$t('dailyExplore.tab.finalReward')"
+        >
           <a-row style="margin-bottom: 16px">
             <a-col>
               <a-space>
-                <a-button type="primary" status="success" @click="addFinalRewardClick">
+                <a-button
+                  type="primary"
+                  status="success"
+                  @click="addFinalRewardClick"
+                >
                   {{ $t('dailyExplore.finalReward.add') }}
                 </a-button>
               </a-space>
@@ -169,29 +326,87 @@
             :bordered="{ cell: true }"
           >
             <template #columns>
-              <a-table-column :title="$t('dailyExplore.finalReward.id')" data-index="id" :width="60" align="center" />
-              <a-table-column :title="$t('dailyExplore.finalReward.exploreCount')" data-index="exploreCount" :width="80" align="center" />
-              <a-table-column :title="$t('dailyExplore.finalReward.desc')" data-index="rewardDesc" :width="150" align="center" />
-              <a-table-column :title="$t('dailyExplore.finalReward.itemId')" data-index="itemId" :width="100" align="center" />
-              <a-table-column :title="$t('dailyExplore.finalReward.itemName')" :width="200" align="center">
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.id')"
+                data-index="id"
+                :width="60"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.exploreCount')"
+                data-index="exploreCount"
+                :width="80"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.desc')"
+                data-index="rewardDesc"
+                :width="150"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.itemId')"
+                data-index="itemId"
+                :width="100"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.itemName')"
+                :width="200"
+                align="center"
+              >
                 <template #cell="{ record }">
-                  <a-button v-if="record.itemId === 0" type="text" size="mini" status="warning">金币</a-button>
+                  <a-button
+                    v-if="record.itemId === 0"
+                    type="text"
+                    size="mini"
+                    status="warning"
+                    >金币</a-button
+                  >
                   <a-popover v-else>
-                    <a-button type="text" size="mini">{{ record.itemName }}</a-button>
+                    <a-button type="text" size="mini">{{
+                      record.itemName
+                    }}</a-button>
                     <template #content>
                       <img :src="getIconUrl('item', record.itemId)" alt="" />
                     </template>
                   </a-popover>
                 </template>
               </a-table-column>
-              <a-table-column :title="$t('dailyExplore.finalReward.quantity')" data-index="quantity" :width="80" align="center" />
-              <a-table-column :title="$t('dailyExplore.finalReward.sortOrder')" data-index="sortOrder" :width="70" align="center" />
-              <a-table-column :title="$t('dailyExplore.map.operation')" :width="140" fixed="right" align="center">
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.quantity')"
+                data-index="quantity"
+                :width="80"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.finalReward.sortOrder')"
+                data-index="sortOrder"
+                :width="70"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('dailyExplore.map.operation')"
+                :width="140"
+                fixed="right"
+                align="center"
+              >
                 <template #cell="{ record }">
                   <a-space :size="0">
-                    <a-button type="text" size="mini" @click="editFinalRewardClick(record)">{{ $t('dailyExplore.button.edit') }}</a-button>
-                    <a-popconfirm :content="$t('dailyExplore.finalReward.delete.confirm')" position="top" @ok="deleteFinalRewardClick(record.id)">
-                      <a-button type="text" size="mini" status="danger">{{ $t('button.delete') }}</a-button>
+                    <a-button
+                      type="text"
+                      size="mini"
+                      @click="editFinalRewardClick(record)"
+                      >{{ $t('dailyExplore.button.edit') }}</a-button
+                    >
+                    <a-popconfirm
+                      :content="$t('dailyExplore.finalReward.delete.confirm')"
+                      position="top"
+                      @ok="deleteFinalRewardClick(record.id)"
+                    >
+                      <a-button type="text" size="mini" status="danger">{{
+                        $t('button.delete')
+                      }}</a-button>
                     </a-popconfirm>
                   </a-space>
                 </template>
@@ -203,13 +418,38 @@
     </a-card>
 
     <!-- 地图编辑弹窗 -->
-    <a-modal v-model:visible="mapModalVisible" :title="mapModalTitle" :width="400" @ok="saveMapClick" @cancel="onMapCancel">
+    <a-modal
+      v-model:visible="mapModalVisible"
+      :title="mapModalTitle"
+      :width="400"
+      @ok="saveMapClick"
+      @cancel="onMapCancel"
+    >
       <a-form :model="mapForm" layout="vertical">
         <a-form-item :label="$t('dailyExplore.map.mapId')">
-          <a-input-number v-model="mapForm.mapId" :min="1" :max="999999999" style="width: 100%" />
+          <a-input-number
+            v-model="mapForm.mapId"
+            :min="1"
+            :max="999999999"
+            style="width: 100%"
+          />
+        </a-form-item>
+        <a-form-item :label="$t('dailyExplore.map.mapName')">
+          <a-input v-model="mapForm.mapName" disabled style="width: 100%" />
+        </a-form-item>
+        <a-form-item :label="$t('dailyExplore.map.description')">
+          <a-input
+            v-model="mapForm.description"
+            :placeholder="$t('dailyExplore.map.description')"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.map.sortOrder')">
-          <a-input-number v-model="mapForm.sortOrder" :min="0" style="width: 100%" />
+          <a-input-number
+            v-model="mapForm.sortOrder"
+            :min="0"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.map.enabled')">
           <a-switch v-model="mapEnabledBool" />
@@ -218,22 +458,52 @@
     </a-modal>
 
     <!-- 每轮奖励编辑弹窗 -->
-    <a-modal v-model:visible="rewardModalVisible" :title="rewardModalTitle" :width="400" @ok="saveRewardClick" @cancel="onRewardCancel">
+    <a-modal
+      v-model:visible="rewardModalVisible"
+      :title="rewardModalTitle"
+      :width="400"
+      @ok="saveRewardClick"
+      @cancel="onRewardCancel"
+    >
       <a-form :model="rewardForm" layout="vertical">
         <a-form-item :label="$t('dailyExplore.reward.itemId')">
-          <a-input-number v-model="rewardForm.itemId" :min="0" :max="5999999" style="width: 100%" />
+          <a-input-number
+            v-model="rewardForm.itemId"
+            :min="0"
+            :max="5999999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.reward.minQty')">
-          <a-input-number v-model="rewardForm.minQuantity" :min="1" :max="99999" style="width: 100%" />
+          <a-input-number
+            v-model="rewardForm.minQuantity"
+            :min="1"
+            :max="99999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.reward.maxQty')">
-          <a-input-number v-model="rewardForm.maxQuantity" :min="1" :max="99999" style="width: 100%" />
+          <a-input-number
+            v-model="rewardForm.maxQuantity"
+            :min="1"
+            :max="99999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.reward.weight')">
-          <a-input-number v-model="rewardForm.weight" :min="0" :max="999" style="width: 100%" />
+          <a-input-number
+            v-model="rewardForm.weight"
+            :min="0"
+            :max="999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.reward.sortOrder')">
-          <a-input-number v-model="rewardForm.sortOrder" :min="0" style="width: 100%" />
+          <a-input-number
+            v-model="rewardForm.sortOrder"
+            :min="0"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.reward.enabled')">
           <a-switch v-model="rewardEnabledBool" />
@@ -242,22 +512,47 @@
     </a-modal>
 
     <!-- 完成奖励编辑弹窗 -->
-    <a-modal v-model:visible="finalRewardModalVisible" :title="finalRewardModalTitle" :width="400" @ok="saveFinalRewardClick" @cancel="onFinalRewardCancel">
+    <a-modal
+      v-model:visible="finalRewardModalVisible"
+      :title="finalRewardModalTitle"
+      :width="400"
+      @ok="saveFinalRewardClick"
+      @cancel="onFinalRewardCancel"
+    >
       <a-form :model="finalRewardForm" layout="vertical">
         <a-form-item :label="$t('dailyExplore.finalReward.exploreCount')">
-          <a-input-number v-model="finalRewardForm.exploreCount" :min="1" :max="999" style="width: 100%" />
+          <a-input-number
+            v-model="finalRewardForm.exploreCount"
+            :min="1"
+            :max="999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.finalReward.desc')">
           <a-input v-model="finalRewardForm.rewardDesc" style="width: 100%" />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.finalReward.itemId')">
-          <a-input-number v-model="finalRewardForm.itemId" :min="0" :max="5999999" style="width: 100%" />
+          <a-input-number
+            v-model="finalRewardForm.itemId"
+            :min="0"
+            :max="5999999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.finalReward.quantity')">
-          <a-input-number v-model="finalRewardForm.quantity" :min="1" :max="99999" style="width: 100%" />
+          <a-input-number
+            v-model="finalRewardForm.quantity"
+            :min="1"
+            :max="99999"
+            style="width: 100%"
+          />
         </a-form-item>
         <a-form-item :label="$t('dailyExplore.finalReward.sortOrder')">
-          <a-input-number v-model="finalRewardForm.sortOrder" :min="0" style="width: 100%" />
+          <a-input-number
+            v-model="finalRewardForm.sortOrder"
+            :min="0"
+            style="width: 100%"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -268,14 +563,28 @@
   import { computed, ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
-  import type { DailyExploreMap, DailyExploreReward, DailyExploreFinalReward } from '@/api/dailyExplore';
+  import type {
+    DailyExploreFinalReward,
+    DailyExploreMap,
+    DailyExploreReward,
+  } from '@/api/dailyExplore';
   import {
-    getMapList, getMap, saveMap, deleteMap, deleteMapBatch,
-    getRewardList, saveReward, deleteReward,
-    getFinalRewardList, saveFinalReward, deleteFinalReward,
+    deleteFinalReward,
+    deleteMap,
+    deleteMapBatch,
+    deleteReward,
+    fetchAllMapImages,
+    fetchMapImage,
+    getFinalRewardList,
+    getMap,
+    getMapList,
+    getRewardList,
+    saveFinalReward,
+    saveMap,
+    saveReward,
   } from '@/api/dailyExplore';
   import { Message } from '@arco-design/web-vue';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, getMapRenderUrl } from '@/utils/mapleStoryAPI';
 
   const { t } = useI18n();
   const activeTab = ref('map');
@@ -295,24 +604,88 @@
     }
   };
 
+  // 地图图片：优先使用缓存base64，否则使用maplestory.io实时渲染
+  const getMapImgSrc = (record: DailyExploreMap) => {
+    if (record.mapImage) return record.mapImage;
+    return getMapRenderUrl(record.mapId!);
+  };
+
+  // 单条爬取
+  const fetchingIds = ref(new Set<number>());
+  const fetchSingleImage = async (record: DailyExploreMap) => {
+    if (!record.id) return;
+    fetchingIds.value.add(record.id);
+    try {
+      const { data } = await fetchMapImage(record.id);
+      const result = data as unknown as DailyExploreMap;
+      if (result?.mapImage) {
+        record.mapImage = result.mapImage;
+        Message.success(t('message.success'));
+      } else {
+        Message.warning('爬取失败，请检查地图ID是否有效');
+      }
+    } finally {
+      fetchingIds.value.delete(record.id);
+    }
+  };
+
+  // 批量爬取
+  const fetchAllLoading = ref(false);
+  const fetchAllImagesClick = async () => {
+    fetchAllLoading.value = true;
+    try {
+      const { data } = await fetchAllMapImages();
+      const result = data as unknown as {
+        success: number;
+        fail: number;
+        skip: number;
+      };
+      Message.success(
+        `爬取完成：成功 ${result.success}，失败 ${result.fail}，跳过 ${result.skip}`
+      );
+      await loadMapData();
+    } finally {
+      fetchAllLoading.value = false;
+    }
+  };
+
   const mapModalVisible = ref(false);
   const editingMapId = ref<number | null>(null);
   const mapModalTitle = computed(() =>
-    editingMapId.value ? t('dailyExplore.button.edit') : t('dailyExplore.map.add')
+    editingMapId.value
+      ? t('dailyExplore.button.edit')
+      : t('dailyExplore.map.add')
   );
 
-  const mapForm = ref<DailyExploreMap>({ mapId: undefined, sortOrder: 0, enabled: 1 });
+  const mapForm = ref<DailyExploreMap>({
+    mapId: undefined,
+    mapName: '',
+    description: '',
+    sortOrder: 0,
+    enabled: 1,
+  });
   const mapEnabledBool = computed({
     get: () => mapForm.value.enabled === 1,
-    set: (v: boolean) => { mapForm.value.enabled = v ? 1 : 0; },
+    set: (v: boolean) => {
+      mapForm.value.enabled = v ? 1 : 0;
+    },
   });
 
   const resetMapForm = () => {
-    mapForm.value = { mapId: undefined, sortOrder: 0, enabled: 1 };
+    mapForm.value = {
+      mapId: undefined,
+      mapName: '',
+      description: '',
+      sortOrder: 0,
+      enabled: 1,
+    };
     editingMapId.value = null;
   };
 
-  const addMapClick = () => { resetMapForm(); mapModalVisible.value = true; };
+  const addMapClick = () => {
+    resetMapForm();
+    mapModalVisible.value = true;
+  };
 
   const editMapClick = async (record: DailyExploreMap) => {
     if (record.id == null) return;
@@ -320,7 +693,14 @@
     try {
       const { data } = await getMap(record.id);
       const d = data as unknown as DailyExploreMap;
-      mapForm.value = { id: d.id, mapId: d.mapId, sortOrder: d.sortOrder, enabled: d.enabled ?? 1 };
+      mapForm.value = {
+        id: d.id,
+        mapId: d.mapId,
+        mapName: d.mapName ?? '',
+        description: d.description ?? '',
+        sortOrder: d.sortOrder,
+        enabled: d.enabled ?? 1,
+      };
       editingMapId.value = d.id ?? null;
       mapModalVisible.value = true;
     } finally {
@@ -329,7 +709,10 @@
   };
 
   const saveMapClick = async () => {
-    if (!mapForm.value.mapId) { Message.warning(t('dailyExplore.validate.mapId')); return; }
+    if (!mapForm.value.mapId) {
+      Message.warning(t('dailyExplore.validate.mapId'));
+      return;
+    }
     setMapLoading(true);
     try {
       await saveMap(mapForm.value);
@@ -354,7 +737,10 @@
   };
 
   const batchDeleteMapClick = () => {
-    if (mapSelectedKeys.value.length === 0) { Message.warning(t('dailyExplore.validate.selectFirst')); return; }
+    if (mapSelectedKeys.value.length === 0) {
+      Message.warning(t('dailyExplore.validate.selectFirst'));
+      return;
+    }
     if (!window.confirm(t('dailyExplore.map.deleteBatch.confirm'))) return;
     setMapLoading(true);
     deleteMapBatch(mapSelectedKeys.value as number[])
@@ -366,10 +752,13 @@
       .finally(() => setMapLoading(false));
   };
 
-  const onMapCancel = () => { mapModalVisible.value = false; };
+  const onMapCancel = () => {
+    mapModalVisible.value = false;
+  };
 
   // ==================== 每轮随机奖励 ====================
-  const { loading: rewardLoading, setLoading: setRewardLoading } = useLoading(false);
+  const { loading: rewardLoading, setLoading: setRewardLoading } =
+    useLoading(false);
   const rewardTableData = ref<DailyExploreReward[]>([]);
 
   const loadRewardData = async () => {
@@ -385,23 +774,42 @@
   const rewardModalVisible = ref(false);
   const editingRewardId = ref<number | null>(null);
   const rewardModalTitle = computed(() =>
-    editingRewardId.value ? t('dailyExplore.button.edit') : t('dailyExplore.reward.add')
+    editingRewardId.value
+      ? t('dailyExplore.button.edit')
+      : t('dailyExplore.reward.add')
   );
 
   const rewardForm = ref<DailyExploreReward>({
-    itemId: 0, minQuantity: 1, maxQuantity: 1, weight: 1, sortOrder: 0, enabled: 1,
+    itemId: 0,
+    minQuantity: 1,
+    maxQuantity: 1,
+    weight: 1,
+    sortOrder: 0,
+    enabled: 1,
   });
   const rewardEnabledBool = computed({
     get: () => rewardForm.value.enabled === 1,
-    set: (v: boolean) => { rewardForm.value.enabled = v ? 1 : 0; },
+    set: (v: boolean) => {
+      rewardForm.value.enabled = v ? 1 : 0;
+    },
   });
 
   const resetRewardForm = () => {
-    rewardForm.value = { itemId: 0, minQuantity: 1, maxQuantity: 1, weight: 1, sortOrder: 0, enabled: 1 };
+    rewardForm.value = {
+      itemId: 0,
+      minQuantity: 1,
+      maxQuantity: 1,
+      weight: 1,
+      sortOrder: 0,
+      enabled: 1,
+    };
     editingRewardId.value = null;
   };
 
-  const addRewardClick = () => { resetRewardForm(); rewardModalVisible.value = true; };
+  const addRewardClick = () => {
+    resetRewardForm();
+    rewardModalVisible.value = true;
+  };
 
   const editRewardClick = (record: DailyExploreReward) => {
     rewardForm.value = { ...record };
@@ -410,7 +818,10 @@
   };
 
   const saveRewardClick = async () => {
-    if (!rewardForm.value.itemId && rewardForm.value.itemId !== 0) { Message.warning(t('dailyExplore.validate.itemId')); return; }
+    if (!rewardForm.value.itemId && rewardForm.value.itemId !== 0) {
+      Message.warning(t('dailyExplore.validate.itemId'));
+      return;
+    }
     setRewardLoading(true);
     try {
       await saveReward(rewardForm.value);
@@ -434,17 +845,21 @@
     }
   };
 
-  const onRewardCancel = () => { rewardModalVisible.value = false; };
+  const onRewardCancel = () => {
+    rewardModalVisible.value = false;
+  };
 
   // ==================== 完成奖励 ====================
-  const { loading: finalRewardLoading, setLoading: setFinalRewardLoading } = useLoading(false);
+  const { loading: finalRewardLoading, setLoading: setFinalRewardLoading } =
+    useLoading(false);
   const finalRewardTableData = ref<DailyExploreFinalReward[]>([]);
 
   const loadFinalRewardData = async () => {
     setFinalRewardLoading(true);
     try {
       const { data } = await getFinalRewardList();
-      finalRewardTableData.value = (data as unknown as DailyExploreFinalReward[]) || [];
+      finalRewardTableData.value =
+        (data as unknown as DailyExploreFinalReward[]) || [];
     } finally {
       setFinalRewardLoading(false);
     }
@@ -453,19 +868,34 @@
   const finalRewardModalVisible = ref(false);
   const editingFinalRewardId = ref<number | null>(null);
   const finalRewardModalTitle = computed(() =>
-    editingFinalRewardId.value ? t('dailyExplore.button.edit') : t('dailyExplore.finalReward.add')
+    editingFinalRewardId.value
+      ? t('dailyExplore.button.edit')
+      : t('dailyExplore.finalReward.add')
   );
 
   const finalRewardForm = ref<DailyExploreFinalReward>({
-    exploreCount: undefined, rewardDesc: '', itemId: 0, quantity: 1, sortOrder: 0,
+    exploreCount: undefined,
+    rewardDesc: '',
+    itemId: 0,
+    quantity: 1,
+    sortOrder: 0,
   });
 
   const resetFinalRewardForm = () => {
-    finalRewardForm.value = { exploreCount: undefined, rewardDesc: '', itemId: 0, quantity: 1, sortOrder: 0 };
+    finalRewardForm.value = {
+      exploreCount: undefined,
+      rewardDesc: '',
+      itemId: 0,
+      quantity: 1,
+      sortOrder: 0,
+    };
     editingFinalRewardId.value = null;
   };
 
-  const addFinalRewardClick = () => { resetFinalRewardForm(); finalRewardModalVisible.value = true; };
+  const addFinalRewardClick = () => {
+    resetFinalRewardForm();
+    finalRewardModalVisible.value = true;
+  };
 
   const editFinalRewardClick = (record: DailyExploreFinalReward) => {
     finalRewardForm.value = { ...record };
@@ -474,7 +904,10 @@
   };
 
   const saveFinalRewardClick = async () => {
-    if (!finalRewardForm.value.exploreCount) { Message.warning(t('dailyExplore.validate.exploreCount')); return; }
+    if (!finalRewardForm.value.exploreCount) {
+      Message.warning(t('dailyExplore.validate.exploreCount'));
+      return;
+    }
     setFinalRewardLoading(true);
     try {
       await saveFinalReward(finalRewardForm.value);
@@ -498,7 +931,9 @@
     }
   };
 
-  const onFinalRewardCancel = () => { finalRewardModalVisible.value = false; };
+  const onFinalRewardCancel = () => {
+    finalRewardModalVisible.value = false;
+  };
 
   loadMapData();
   loadRewardData();

@@ -32,3 +32,7 @@ export function addShopItem(data: NpcShopItemState) {
 export function updateShopItem(data: NpcShopItemState) {
   return axios.post(`/shop/v1/updateShopItem`, data);
 }
+
+export function deleteShopItemBatch(ids: number[]) {
+  return axios.post('/shop/v1/deleteShopItemBatch', ids);
+}

@@ -28,15 +28,6 @@ public class DailyBossSaveDTO {
     /** Boss怪物ID */
     private Integer bossMobId;
 
-    /** 扫荡券道具ID（0=不可扫荡） */
-    private Integer sweepItemId;
-
-    /** 单次扫荡消耗道具数量 */
-    private Integer sweepItemCost;
-
-    /** 每日扫荡上限（0=不可扫荡） */
-    private Integer maxSweep;
-
     /** 排序顺序（升序） */
     private Integer sortOrder;
 

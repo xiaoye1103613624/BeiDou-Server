@@ -4,6 +4,12 @@ import axios from 'axios';
 export interface DailyExploreMap {
   id?: number;
   mapId?: number;
+  /** 地图名称（服务端自动解析） */
+  mapName?: string;
+  /** 地图描述（配置者填写） */
+  description?: string;
+  /** 地图渲染图片（base64 data URL，为空时前端用maplestory.io实时加载） */
+  mapImage?: string;
   sortOrder?: number;
   enabled?: number;
   createTime?: string;
@@ -91,6 +97,18 @@ export function saveFinalReward(data: DailyExploreFinalReward) {
 
 export function deleteFinalReward(id: number) {
   return axios.delete(`/dailyExplore/v1/deleteFinalReward/${id}`);
+}
+
+// ==================== 地图图片爬取 ====================
+
+export function fetchMapImage(id: number) {
+  return axios.post<DailyExploreMap>(`/dailyExplore/v1/fetchMapImage/${id}`);
+}
+
+export function fetchAllMapImages() {
+  return axios.post<{ success: number; fail: number; skip: number }>(
+    '/dailyExplore/v1/fetchAllMapImages'
+  );
 }
 
 // ==================== 游戏参数 ====================

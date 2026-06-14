@@ -31,6 +31,15 @@ public class DailyExploreMapDO implements Serializable {
     /** 目标地图ID */
     private Integer mapId;
 
+    /** 地图名称（服务端自动解析） */
+    private String mapName;
+
+    /** 地图描述（配置者填写） */
+    private String description;
+
+    /** 地图渲染图片（base64 data URL，从maplestory.io爬取缓存） */
+    private String mapImage;
+
     /** 排序顺序（升序） */
     private Integer sortOrder;
 

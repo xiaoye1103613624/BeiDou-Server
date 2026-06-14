@@ -39,6 +39,14 @@
               style="height: 24px"
               direction="vertical"
             />
+            <a-button
+              v-if="shopId > 0 && selectedShopItemKeys.length > 0"
+              type="primary"
+              status="danger"
+              @click="batchDeleteClick"
+            >
+              批量删除 ({{ selectedShopItemKeys.length }})
+            </a-button>
             <a-button v-if="shopId > 0" type="primary" @click="insertItemClick">
               新增
             </a-button>
@@ -105,11 +113,13 @@
       <a-table
         v-if="shopId > 0"
         row-key="id"
+        v-model:selected-keys="selectedShopItemKeys"
         :loading="loading"
         :data="shopItemList"
         column-resizable
         :pagination="false"
         :bordered="{ cell: true }"
+        :row-selection="{ type: 'checkbox', showCheckedAll: true }"
       >
         <template #columns>
           <a-table-column
@@ -235,6 +245,7 @@
   import {
     addShopItem,
     deleteShopItem,
+    deleteShopItemBatch,
     getShopFilter,
     getShopItemList,
     getShopList,
@@ -333,6 +344,7 @@
   };
 
   const editMode = ref<number>(-1);
+  const selectedShopItemKeys = ref<number[]>([]);
 
   const insertItemClick = () => {
     shopItemList.value?.unshift({
@@ -373,6 +385,23 @@
       setLoading(false);
       await loadShopItemList();
     }
+  };
+
+  const batchDeleteClick = () => {
+    if (selectedShopItemKeys.value.length === 0) {
+      Message.warning('请先勾选要删除的商品');
+      return;
+    }
+    const msg = `确定批量删除选中的 ${selectedShopItemKeys.value.length} 个商品吗？此操作不可撤销！`;
+    if (!window.confirm(msg)) return;
+    setLoading(true);
+    deleteShopItemBatch(selectedShopItemKeys.value as number[])
+      .then(() => {
+        Message.success('批量删除成功');
+        selectedShopItemKeys.value = [];
+        return loadShopItemList();
+      })
+      .finally(() => setLoading(false));
   };
 
   const rollbackClick = async (record: NpcShopItemState) => {

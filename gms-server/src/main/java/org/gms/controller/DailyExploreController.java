@@ -115,6 +115,23 @@ public class DailyExploreController {
         return ResultBody.success(null);
     }
 
+    // ==================== 地图图片爬取 ====================
+
+    @Tag(name = "/dailyExplore/" + ApiConstant.LATEST)
+    @Operation(summary = "爬取单条地图的渲染图片")
+    @PostMapping("/" + ApiConstant.LATEST + "/fetchMapImage/{id}")
+    public ResultBody<DailyExploreSaveDTO> fetchMapImage(@PathVariable("id") Long id) {
+        DailyExploreSaveDTO result = dailyExploreService.fetchMapImage(id);
+        return ResultBody.success(result);
+    }
+
+    @Tag(name = "/dailyExplore/" + ApiConstant.LATEST)
+    @Operation(summary = "批量爬取所有地图的渲染图片（仅处理未缓存的地图）")
+    @PostMapping("/" + ApiConstant.LATEST + "/fetchAllMapImages")
+    public ResultBody<java.util.Map<String, Integer>> fetchAllMapImages() {
+        return ResultBody.success(dailyExploreService.fetchAllMapImages());
+    }
+
     // ==================== 游戏参数 ====================
 
     @Tag(name = "/dailyExplore/" + ApiConstant.LATEST)

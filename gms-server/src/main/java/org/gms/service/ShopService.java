@@ -162,6 +162,20 @@ public class ShopService {
     }
 
     /**
+     * 批量删除商店物品
+     * 删除完成后重新加载商店缓存
+     *
+     * @param ids 要删除的商店物品ID列表
+     */
+    public void deleteShopItemBatch(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return;
+        }
+        shopitemsMapper.deleteBatchByIds(ids);
+        ShopFactory.getInstance().reloadShops();
+    }
+
+    /**
      * 将商店物品实体转换为DTO
      *
      * @param shopitemsDO 商店物品实体

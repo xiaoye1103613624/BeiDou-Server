@@ -34,4 +34,7 @@ public class MonstercarddataDO implements Serializable {
 
     private Integer mobid;
 
+    /** 卡片所属地区地图ID（用于按地区分类展示） */
+    private Integer mapid;
+
 }

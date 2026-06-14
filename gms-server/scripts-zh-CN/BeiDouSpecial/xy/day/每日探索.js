@@ -28,6 +28,15 @@ function saveData(data) {
 
 function getDailyLimit() { return DailyExploreConfigManager.getDailyLimit(); }
 
+/** 根据地图ID查找配置（用于显示地图名称和描述） */
+function getMapConfig(mapId) {
+    var maps = DailyExploreConfigManager.queryEnabledMaps();
+    for (var i = 0; i < maps.size(); i++) {
+        if (maps.get(i).getMapId() == mapId) return maps.get(i);
+    }
+    return null;
+}
+
 function start() { levelMain(); }
 
 // ==================== 主菜单 ====================
@@ -48,13 +57,19 @@ function levelMain() {
     }
 
     if (hasActiveTask) {
-        // 有活跃任务 → 显示目标地图信息
+        // 有活跃任务 → 显示目标地图信息（sendSimple中#m可点击打开世界地图）
+        var mapConfig = getMapConfig(data.currentMapId);
         text += "━━━ 当前探索目标 ━━━\r\n";
-        text += "前往：#m" + data.currentMapId + "#（ID:" + data.currentMapId + "）\r\n\r\n";
-        text += "到达该地图后，点击下方按钮提交。\r\n";
+        text += "#fMap/MapHelper/minimap/startnpc# #e目标地图：#n#b#m" + data.currentMapId + "##k（ID:#r" + data.currentMapId + "#k）\r\n";
+        if (mapConfig) {
+            var mn = mapConfig.getMapName();
+            var md = mapConfig.getDescription();
+            if (mn && mn !== "") text += "地图名称：#b" + mn + "#k\r\n";
+            if (md && md !== "") text += "地图描述：#g" + md + "#k\r\n";
+        }
         text += "\r\n";
         text += "#L1##r提交任务（第 " + (data.count + 1) + " 次探索）#k#l\r\n";
-        text += "#L2##b放弃任务（重新随机） #k#l\r\n";
+        text += "#L2##b放弃任务（重新随机，手续费 #r10万金币#k）#k#l\r\n";
     } else {
         // 无活跃任务 → 开始新探索
         text += "━━━ 开始探索 ━━━\r\n";
@@ -95,21 +110,26 @@ function startNewExplore(data) {
     // 从地图池随机选取
     var maps = DailyExploreConfigManager.queryEnabledMaps();
     if (maps.isEmpty()) {
-        cm.sendOkLevel("Main", "探索地图池为空，请联系管理员配置！");
+        cm.sendNextLevel("Main", "探索地图池为空，请联系管理员配置！");
         return;
     }
 
     var idx = Math.floor(Math.random() * maps.size());
     var config = maps.get(idx);
-    data.currentMapId = config.getMapId();
+    // 转为JS数字防止Java Integer序列化问题
+    data.currentMapId = Number(config.getMapId());
     saveData(data);
 
-    var text = "#e探索任务开始！#n\r\n\r\n";
-    text += "第 #r" + (data.count + 1) + "#k 次探索目标：\r\n\r\n";
-    text += "前往：#m" + data.currentMapId + "#（ID:#r" + data.currentMapId + "#k）\r\n\r\n";
-    text += "到达该地图后，回来找NPC提交即可获得奖励！";
-
-    cm.sendOkLevel("Main", text);
+    // 直接回主菜单（sendSimple中#m可点击打开世界地图）
+    var mapName = config.getMapName();
+    var desc = config.getDescription();
+    var msg = "#e探索任务开始！#n\r\n\r\n";
+    msg += "#fUI/UIWindow.img/QuestIcon/7/0# 第 #r" + (data.count + 1) + "#k 次探索目标已分配\r\n\r\n";
+    if (mapName && mapName !== "") {
+        msg += "目标：#b" + mapName + "#k\r\n";
+    }
+    // 返回主菜单查看完整地图信息
+    cm.sendNextLevel("Main", msg);
 }
 
 // ==================== 提交任务 ====================
@@ -122,13 +142,7 @@ function submitExplore(data) {
         text += "当前所在：#m" + currentMapId + "#（ID:" + currentMapId + "）\r\n";
         text += "目标地图：#m" + data.currentMapId + "#（ID:" + data.currentMapId + "）\r\n";
         text += "\r\n请前往目标地图后再提交。";
-        cm.sendOkLevel("Main", text);
-        return;
-    }
-
-    // 检查背包空间
-    if (!cm.canHold(0, 1)) {
-        cm.sendOkLevel("Main", "背包空间不足，请清理后再提交。");
+        cm.sendNextLevel("Main", text);
         return;
     }
 
@@ -224,18 +238,24 @@ function submitExplore(data) {
     if (data.count >= getDailyLimit()) {
         text += "\r\n#r今日探索已全部完成，明天再来吧！#k\r\n";
     } else {
-        text += "\r\n#b点击确定开始下一次探索#k\r\n";
+        text += "\r\n#b点击下一步开始下一次探索#k\r\n";
     }
 
-    cm.sendOkLevel("Main", text);
+    cm.sendNextLevel("Main", text);
 }
 
 // ==================== 放弃任务 ====================
 
 function abandonExplore(data) {
+    // 放弃任务需扣除10万金币手续费
+    if (cm.getMeso() < 100000) {
+        cm.sendNextLevel("Main", "金币不足！放弃任务需要 #r10万金币#k 手续费。\r\n\r\n当前持有：#r" + cm.getMeso().toLocaleString() + "#k 金币");
+        return;
+    }
+    cm.gainMeso(-100000);
     data.currentMapId = 0;
     saveData(data);
-    cm.sendOkLevel("Main", "已放弃当前探索目标，可重新开始。");
+    cm.sendNextLevel("Main", "已放弃当前探索目标（手续费 #r10万金币#k 已扣除），可重新开始。");
 }
 
 // ==================== 奖励规则 ====================
@@ -282,5 +302,5 @@ function showRewardInfo() {
         text += "  暂无配置\r\n";
     }
 
-    cm.sendOkLevel("Main", text);
+    cm.sendNextLevel("Main", text);
 }
