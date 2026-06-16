@@ -32,7 +32,8 @@ var 妖僧 = "#fUI/UIWindow.img/MobGage/Mob/9600025#";
 var 品克宾 = "#fUI/UIWindow.img/MobGage/Mob/8820001#";
 var 黑龙 = "#fUI/UIWindow.img/MobGage/Mob/8810018#";
 var 闹钟 = "#fUI/UIWindow.img/MobGage/Mob/8500001#";
-var 熊狮 = "#fUI/UIWindow.img/MobGage/Mob/9420542#";
+var 心疤狮 = "#fUI/UIWindow.img/MobGage/Mob/9420547#";
+var 暴力熊 = "#fUI/UIWindow.img/MobGage/Mob/9420542#";
 var 扎昆 = "#fUI/UIWindow.img/MobGage/Mob/8800001#";
 
 // Boss数据：[图标, 名称, 怪物ID]
@@ -64,7 +65,8 @@ var bossList = [
     [树精, "[ 树  精 ]", 9420521],
     [妖僧, "[ 妖  僧 ]", 9600025],
     [闹钟, "[ 闹  钟 ]", 8500001],
-    [熊狮, "[ 熊  狮 ]", 9420542],
+    [心疤狮, "[ 心疤狮 ]", 9420547],
+    [暴力熊, "[ 暴力熊 ]", 9420542],
     [扎昆, "[ 扎  昆 ]", 8800001],
     [黑龙, "[ 黑  龙 ]", 8810018],
     [品克宾, "[品 克 宾]", 8820001]

@@ -2,6 +2,7 @@ package org.gms.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.constants.api.ApiConstant;
@@ -9,8 +10,11 @@ import org.gms.model.dto.DailyExploreSaveDTO;
 import org.gms.model.dto.ResultBody;
 import org.gms.model.dto.SubmitBody;
 import org.gms.service.DailyExploreService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +134,47 @@ public class DailyExploreController {
     @PostMapping("/" + ApiConstant.LATEST + "/fetchAllMapImages")
     public ResultBody<java.util.Map<String, Integer>> fetchAllMapImages() {
         return ResultBody.success(dailyExploreService.fetchAllMapImages());
+    }
+
+    // ==================== 地图图片下载 ====================
+
+    @Tag(name = "/dailyExplore/" + ApiConstant.LATEST)
+    @Operation(summary = "下载单张地图图片（PNG格式）")
+    @GetMapping("/" + ApiConstant.LATEST + "/downloadMapImage/{id}")
+    public void downloadMapImage(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+        byte[] imageBytes = dailyExploreService.getMapImageBytes(id);
+        if (imageBytes == null || imageBytes.length == 0) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write("{\"message\":\"该地图无缓存图片\"}");
+            return;
+        }
+        String mapId = dailyExploreService.getMapIdForDownload(id);
+        String fileName = mapId + ".png"; // 如 "100000000.png"，纯ASCII无需URL编码
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + fileName + "\"");
+        response.setContentLength(imageBytes.length);
+        response.getOutputStream().write(imageBytes);
+        response.getOutputStream().flush();
+    }
+
+    @Tag(name = "/dailyExplore/" + ApiConstant.LATEST)
+    @Operation(summary = "批量下载所有已缓存地图图片（ZIP打包，文件名=地图ID.png）")
+    @GetMapping("/" + ApiConstant.LATEST + "/downloadAllMapImages")
+    public void downloadAllMapImages(HttpServletResponse response) throws IOException {
+        byte[] zipBytes = dailyExploreService.exportAllMapImagesToZip();
+        if (zipBytes == null || zipBytes.length == 0) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write("{\"message\":\"没有已缓存的地图图片\"}");
+            return;
+        }
+        String fileName = "dailyExplore_maps.zip";
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + fileName + "\"");
+        response.setContentLength(zipBytes.length);
+        response.getOutputStream().write(zipBytes);
+        response.getOutputStream().flush();
     }
 
     // ==================== 游戏参数 ====================

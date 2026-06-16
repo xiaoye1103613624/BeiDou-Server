@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "wzimg": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "E:/pro/WzImg-MCP-Server/WzImgMCP/WzImgMCP.csproj"
+      ],
+      "env": {
+        "WZIMGMCP_DATA_PATH": "E:/mxd_soft/2.客户端/083/BeiDou-ClientV16.1/BeiDou-Client/Data"
+      }
+    }
+  }
+}

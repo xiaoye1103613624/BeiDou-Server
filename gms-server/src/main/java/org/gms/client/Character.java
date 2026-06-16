@@ -434,6 +434,10 @@ public class Character extends AbstractCharacterObject {
     private ScheduledFuture<?> cpqSchedule = null;
 
     private ScheduledFuture<?> FamilyBuffTimer = null;
+    /** 头顶信息展示定时任务 */
+    private ScheduledFuture<?> overheadInfoTask = null;
+    /** 头顶信息展示开关 */
+    private boolean overheadInfoEnabled = false;
     private final Lock chrLock = new ReentrantLock(true);
     private final Lock evtLock = new ReentrantLock(true);
     private final Lock petLock = new ReentrantLock(true);
@@ -9629,6 +9633,13 @@ public class Character extends AbstractCharacterObject {
 
         clearCpqTimer();
 
+        // 停止头顶信息展示任务
+        if (overheadInfoTask != null) {
+            overheadInfoTask.cancel(true);
+        }
+        overheadInfoTask = null;
+        overheadInfoEnabled = false;
+
         evtLock.lock();
         try {
             if (questExpireTask != null) {
@@ -9691,6 +9702,78 @@ public class Character extends AbstractCharacterObject {
 
     public void toggleWhiteChat() {
         whiteChat = !whiteChat;
+    }
+
+    /**
+     * 是否开启了头顶信息展示
+     */
+    public boolean isOverheadInfoEnabled() {
+        return overheadInfoEnabled;
+    }
+
+    /**
+     * 切换头顶信息展示开关
+     * 开启后每5秒在角色头顶显示经验倍率、掉落倍率、BOSS爆率、金币倍率、网络延迟等信息
+     */
+    public void toggleOverheadInfo() {
+        if (overheadInfoEnabled) {
+            stopOverheadInfo();
+        } else {
+            startOverheadInfo();
+        }
+    }
+
+    /**
+     * 开启头顶信息展示
+     * 向玩家自身发送CHATTEXT封包，显示在角色头顶的气泡中
+     */
+    private void startOverheadInfo() {
+        overheadInfoEnabled = true;
+        overheadInfoTask = TimerManager.getInstance().register(() -> {
+            if (!overheadInfoEnabled || !isLoggedIn() || client == null) {
+                stopOverheadInfo();
+                return;
+            }
+            sendOverheadInfo();
+        }, 5000, 5000); // 每5秒刷新一次，延迟5秒开始
+    }
+
+    /**
+     * 关闭头顶信息展示
+     */
+    public void stopOverheadInfo() {
+        overheadInfoEnabled = false;
+        if (overheadInfoTask != null) {
+            overheadInfoTask.cancel(false);
+            overheadInfoTask = null;
+        }
+    }
+
+    /**
+     * 发送头顶信息气泡到玩家自身
+     * 使用CHATTEXT封包仅发送给自己，不广播到地图
+     */
+    private void sendOverheadInfo() {
+        // 计算网络延迟（自上次PONG响应时间）
+        long latency = client.getLastPong() > 0 ? System.currentTimeMillis() - client.getLastPong() : 0;
+
+        // 获取各项倍率
+        float expBuff = 1;
+        Integer expBuffValue = getBuffedValue(BuffStat.EXP_BUFF);
+        if (expBuffValue != null) {
+            expBuff = 2;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("#e⚡ 角色实时信息#n\r\n");
+        sb.append("经验: #e#b").append(String.format("%.1f", getExpRate() * expBuff * getFamilyExp())).append("x#k#n");
+        sb.append(" | 掉落: #e#b").append(String.format("%.1f", getDropRate() * getFamilyDrop())).append("x#k#n\r\n");
+        sb.append("BOSS爆率: #e#b").append(String.format("%.1f", getBossDropRate())).append("x#k#n");
+        sb.append(" | 金币: #e#b").append(String.format("%.1f", getMesoRate())).append("x#k#n\r\n");
+        sb.append("延迟: #e#b").append(latency).append("ms#k#n");
+
+        // 仅发送给自己，不广播到地图（show=0）
+        client.sendPacket(PacketCreator.getChatText(getId(), sb.toString(), false, 0));
     }
 
     public boolean gotPartyQuestItem(String partyquestchar) {

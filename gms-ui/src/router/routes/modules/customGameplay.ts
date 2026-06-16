@@ -22,6 +22,17 @@ const CUSTOM_GAMEPLAY: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'independentDrop',
+      name: 'IndependentDrop',
+      component: () =>
+        import('@/views/customGameplay/independentDrop/index.vue'),
+      meta: {
+        locale: 'menu.customGameplay.independentDrop',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

@@ -23,8 +23,12 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Base64;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 每日探索服务类，负责地图池、每轮随机奖励、完成奖励的配置管理。
@@ -337,6 +341,106 @@ public class DailyExploreService {
         result.put("fail", fail);
         result.put("skip", skip);
         return result;
+    }
+
+    // ==================== 地图图片下载 ====================
+
+    /**
+     * 获取单条地图的原始 PNG 图片字节
+     *
+     * @param id 地图配置主键ID
+     * @return PNG 图片字节数组，若无缓存图片返回null
+     */
+    public byte[] getMapImageBytes(Long id) {
+        DailyExploreMapDO map = mapMapper.selectOneById(id);
+        if (map == null || map.getMapImage() == null || map.getMapImage().isEmpty()) {
+            return null;
+        }
+        return decodeBase64Image(map.getMapImage());
+    }
+
+    /**
+     * 根据地图配置ID获取地图名称（用于下载文件名）
+     *
+     * @param id 地图配置主键ID
+     * @return 地图ID字符串，如"100000000"，失败返回"unknown"
+     */
+    public String getMapIdForDownload(Long id) {
+        DailyExploreMapDO map = mapMapper.selectOneById(id);
+        if (map == null || map.getMapId() == null) {
+            return "unknown";
+        }
+        return String.valueOf(map.getMapId());
+    }
+
+    /**
+     * 批量导出所有已缓存的地图图片为 ZIP 文件
+     * <p>
+     * 遍历所有已存储 mapImage 的地图记录，将 base64 图片解码后打包为 ZIP，
+     * 每个文件名为"地图ID.png"
+     * </p>
+     *
+     * @return ZIP 文件的字节数组，若无任何已缓存图片返回null
+     */
+    public byte[] exportAllMapImagesToZip() {
+        List<DailyExploreMapDO> allMaps = mapMapper.selectAll();
+        // 收集所有已缓存的图片（mapId → PNG字节），保持插入顺序
+        Map<String, byte[]> imageMap = new LinkedHashMap<>();
+        for (DailyExploreMapDO map : allMaps) {
+            if (map.getMapImage() == null || map.getMapImage().isEmpty()) {
+                continue; // 跳过无缓存图片的地图
+            }
+            if (map.getMapId() == null || map.getMapId() <= 0) {
+                continue; // 跳过无效地图ID
+            }
+            byte[] imageBytes = decodeBase64Image(map.getMapImage());
+            if (imageBytes != null && imageBytes.length > 0) {
+                imageMap.put(map.getMapId() + ".png", imageBytes);
+            }
+        }
+        if (imageMap.isEmpty()) {
+            return null; // 无任何已缓存图片
+        }
+        // 打包为 ZIP
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ZipOutputStream zos = new ZipOutputStream(bos)) {
+            for (Map.Entry<String, byte[]> entry : imageMap.entrySet()) {
+                ZipEntry zipEntry = new ZipEntry(entry.getKey());
+                zos.putNextEntry(zipEntry);
+                zos.write(entry.getValue());
+                zos.closeEntry();
+            }
+            zos.finish();
+            return bos.toByteArray();
+        } catch (Exception e) {
+            log.error("打包地图图片ZIP失败", e);
+            return null;
+        }
+    }
+
+    /**
+     * 从 base64 data URL 解码为原始图片字节
+     *
+     * @param base64DataUrl base64 data URL（如 "data:image/png;base64,..."）
+     * @return 原始图片字节，失败返回null
+     */
+    private byte[] decodeBase64Image(String base64DataUrl) {
+        if (base64DataUrl == null || base64DataUrl.isEmpty()) {
+            return null;
+        }
+        try {
+            // 格式: "data:image/png;base64,xxxx"
+            int commaIdx = base64DataUrl.indexOf(',');
+            if (commaIdx < 0) {
+                // 可能只有纯 base64 字符串（无 data URL 前缀）
+                return Base64.getDecoder().decode(base64DataUrl);
+            }
+            String base64Part = base64DataUrl.substring(commaIdx + 1);
+            return Base64.getDecoder().decode(base64Part);
+        } catch (Exception e) {
+            log.error("解码base64图片失败", e);
+            return null;
+        }
     }
 
     /**

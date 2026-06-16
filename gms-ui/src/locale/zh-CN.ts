@@ -26,6 +26,7 @@ import sponsor from '@/views/game/sponsor/locale/zh-CN';
 import paohuan from '@/views/game/paohuan/locale/zh-CN';
 import dailyExplore from '@/views/game/dailyExplore/locale/zh-CN';
 import mentor from '@/views/game/mentor/locale/zh-CN';
+import independentDrop from '@/views/customGameplay/independentDrop/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -64,6 +65,7 @@ export default {
   'menu.game.sponsor.logs': '赞助日志',
   'menu.customGameplay': '定制玩法',
   'menu.customGameplay.overview': '玩法概览',
+  'menu.customGameplay.independentDrop': '独立掉落',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -115,4 +117,5 @@ export default {
   ...paohuan,
   ...dailyExplore,
   ...mentor,
+  ...independentDrop,
 };

@@ -9,6 +9,8 @@ export default {
   'dailyExplore.map.thumbnail': '地图图片',
   'dailyExplore.map.fetchImage': '爬取图片',
   'dailyExplore.map.fetchAllImages': '批量爬取',
+  'dailyExplore.map.download': '下载',
+  'dailyExplore.map.downloadAll': '批量下载(ZIP)',
   'dailyExplore.map.fetchImageTip': '从maplestory.io下载并缓存地图渲染图',
   'dailyExplore.map.noImage': '暂无',
   'dailyExplore.map.sortOrder': '排序',

@@ -98,8 +98,9 @@ function action(mode, type, selection) {
                 em.schedule("stop", durationMs);
 
                 // 全服公告
+                var BroadcastPrefix = Java.type("org.gms.constants.string.BroadcastPrefix");
                 em.getWorldServer().broadcastPacket(
-                    PacketCreator.serverNotice(5, "【双倍活动】恭喜 [" + cm.getName() + "] 为全服开启了双倍经验活动，持续" + 开双时限小时 + "小时，要升级的赶紧了！")
+                    PacketCreator.serverNotice(BroadcastPrefix.DOUBLE_EVENT.getType(), BroadcastPrefix.DOUBLE_EVENT.getPrefix() + "恭喜 [" + cm.getName() + "] 为全服开启了双倍经验活动，持续" + 开双时限小时 + "小时，要升级的赶紧了！")
                 );
 
                 cm.sendOk("双倍经验活动已开启！全服所有线路生效，持续 #r" + 开双时限小时 + "#k 小时。\r\n\r\n已扣除 #r" + 扣除点券数量 + "#k 点券，剩余： #b" + cm.getPlayer().getCashShop().getCash(1) + "#k 点券");

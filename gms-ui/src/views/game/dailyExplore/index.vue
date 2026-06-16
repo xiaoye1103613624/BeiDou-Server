@@ -28,6 +28,13 @@
                 >
                   {{ $t('dailyExplore.map.fetchAllImages') }}
                 </a-button>
+                <a-button
+                  type="primary"
+                  :loading="downloadAllLoading"
+                  @click="downloadAllImagesClick"
+                >
+                  {{ $t('dailyExplore.map.downloadAll') }}
+                </a-button>
               </a-space>
             </a-col>
           </a-row>
@@ -151,6 +158,14 @@
               >
                 <template #cell="{ record }">
                   <a-space :size="0">
+                    <a-button
+                      v-if="record.mapImage"
+                      type="text"
+                      size="mini"
+                      @click="downloadMapImageClick(record)"
+                    >
+                      {{ $t('dailyExplore.map.download') }}
+                    </a-button>
                     <a-button
                       type="text"
                       size="mini"
@@ -573,6 +588,8 @@
     deleteMap,
     deleteMapBatch,
     deleteReward,
+    downloadAllMapImages,
+    downloadMapImage,
     fetchAllMapImages,
     fetchMapImage,
     getFinalRewardList,
@@ -646,6 +663,32 @@
       await loadMapData();
     } finally {
       fetchAllLoading.value = false;
+    }
+  };
+
+  // 单张下载
+  const downloadMapImageClick = async (record: DailyExploreMap) => {
+    if (!record.id) return;
+    try {
+      await downloadMapImage(record.id);
+      // 下载由拦截器自动触发，无需额外处理
+    } catch {
+      Message.warning('下载失败，请确认该地图已有缓存图片');
+    }
+  };
+
+  // 批量下载
+  const downloadAllLoading = ref(false);
+  const downloadAllImagesClick = async () => {
+    downloadAllLoading.value = true;
+    try {
+      await downloadAllMapImages();
+      // 下载由拦截器自动触发
+      Message.success('下载已开始');
+    } catch {
+      Message.warning('下载失败，请确认已有缓存的地图图片');
+    } finally {
+      downloadAllLoading.value = false;
     }
   };
 

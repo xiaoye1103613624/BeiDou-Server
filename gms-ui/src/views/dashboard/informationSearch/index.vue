@@ -92,7 +92,10 @@
             <template #cell="{ record }">
               <a-popover
                 trigger="hover"
-                :popup-visible="hoveredRecord?.id === record.id && hoveredRecord?.type === record.type"
+                :popup-visible="
+                  hoveredRecord?.id === record.id &&
+                  hoveredRecord?.type === record.type
+                "
                 @popup-visible-change="(visible: boolean) => handlePopoverChange(visible, record)"
               >
                 <a-button type="text" size="mini">
@@ -100,16 +103,16 @@
                 </a-button>
                 <template #content>
                   <!-- 加载中 -->
-                  <div class="item-tooltip-loading" v-if="tooltipLoading">
+                  <div v-if="tooltipLoading" class="item-tooltip-loading">
                     <a-spin dot />
                     加载中...
                   </div>
                   <!-- 加载失败或非物品类型 -->
-                  <div class="item-tooltip-empty" v-else-if="!itemDetail">
+                  <div v-else-if="!itemDetail" class="item-tooltip-empty">
                     暂无可查看的物品详情
                   </div>
                   <!-- 物品详情 -->
-                  <div class="item-tooltip" v-else>
+                  <div v-else class="item-tooltip">
                     <!-- 物品基本信息 -->
                     <div class="item-tooltip-header">
                       <img
@@ -118,130 +121,223 @@
                         class="item-tooltip-icon"
                       />
                       <div class="item-tooltip-title">
-                        <div class="item-name">{{ itemDetail.name || record.name }}</div>
+                        <div class="item-name">
+                          {{ itemDetail.name || record.name }}
+                        </div>
                         <div class="item-id">ID: {{ record.id }}</div>
                         <div class="item-type">
-                          <a-tag :color="getTypeColor(record.type)" size="small">
+                          <a-tag
+                            :color="getTypeColor(record.type)"
+                            size="small"
+                          >
                             {{ getTag(record.type) }}
                           </a-tag>
                         </div>
                       </div>
                     </div>
                     <!-- 物品描述 -->
-                    <div class="item-tooltip-desc" v-if="itemDetail.desc || record.desc">
+                    <div
+                      v-if="itemDetail.desc || record.desc"
+                      class="item-tooltip-desc"
+                    >
                       {{ itemDetail.desc || record.desc }}
                     </div>
                     <!-- 通用属性 -->
-                    <div class="item-tooltip-stats" v-if="hasGeneralInfo">
-                      <div class="stat-row" v-if="itemDetail.wholePrice !== null && itemDetail.wholePrice > 0">
+                    <div v-if="hasGeneralInfo" class="item-tooltip-stats">
+                      <div
+                        v-if="
+                          itemDetail.wholePrice !== null &&
+                          itemDetail.wholePrice > 0
+                        "
+                        class="stat-row"
+                      >
                         <span class="stat-label">售价：</span>
-                        <span class="stat-value">{{ itemDetail.wholePrice.toLocaleString() }} 金币</span>
+                        <span class="stat-value">
+                          {{ itemDetail.wholePrice.toLocaleString() }}
+                          金币
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.slotMax !== null && itemDetail.slotMax > 0 && itemDetail.slotMax < 1000">
+                      <div
+                        v-if="
+                          itemDetail.slotMax !== null &&
+                          itemDetail.slotMax > 0 &&
+                          itemDetail.slotMax < 1000
+                        "
+                        class="stat-row"
+                      >
                         <span class="stat-label">最大堆叠：</span>
                         <span class="stat-value">{{ itemDetail.slotMax }}</span>
                       </div>
                     </div>
                     <!-- 装备属性 -->
-                    <div class="item-tooltip-stats" v-if="hasEquipStats">
+                    <div v-if="hasEquipStats" class="item-tooltip-stats">
                       <div class="stat-section-title">装备属性</div>
-                      <div class="stat-row" v-if="itemDetail.str">
+                      <div v-if="itemDetail.str" class="stat-row">
                         <span class="stat-label">力量：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.str }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.str }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.dex">
+                      <div v-if="itemDetail.dex" class="stat-row">
                         <span class="stat-label">敏捷：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.dex }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.dex }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.int">
+                      <div v-if="itemDetail.int" class="stat-row">
                         <span class="stat-label">智力：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.int }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.int }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.luk">
+                      <div v-if="itemDetail.luk" class="stat-row">
                         <span class="stat-label">运气：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.luk }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.luk }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.hp">
+                      <div v-if="itemDetail.hp" class="stat-row">
                         <span class="stat-label">HP：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.hp }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.hp }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.mp">
+                      <div v-if="itemDetail.mp" class="stat-row">
                         <span class="stat-label">MP：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.mp }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.mp }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.pAtk">
+                      <div v-if="itemDetail.pAtk" class="stat-row">
                         <span class="stat-label">攻击力：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.pAtk }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.pAtk }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.mAtk">
+                      <div v-if="itemDetail.mAtk" class="stat-row">
                         <span class="stat-label">魔力：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.mAtk }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.mAtk }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.pDef">
+                      <div v-if="itemDetail.pDef" class="stat-row">
                         <span class="stat-label">防御力：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.pDef }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.pDef }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.mDef">
+                      <div v-if="itemDetail.mDef" class="stat-row">
                         <span class="stat-label">魔防：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.mDef }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.mDef }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.acc">
+                      <div v-if="itemDetail.acc" class="stat-row">
                         <span class="stat-label">命中：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.acc }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.acc }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.avoid">
+                      <div v-if="itemDetail.avoid" class="stat-row">
                         <span class="stat-label">回避：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.avoid }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.avoid }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.speed">
+                      <div v-if="itemDetail.speed" class="stat-row">
                         <span class="stat-label">移速：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.speed }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.speed }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.jump">
+                      <div v-if="itemDetail.jump" class="stat-row">
                         <span class="stat-label">跳跃：</span>
-                        <span class="stat-value stat-plus">+{{ itemDetail.jump }}</span>
+                        <span class="stat-value stat-plus">
+                          +{{ itemDetail.jump }}
+                        </span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.upgradeSlots !== null && itemDetail.upgradeSlots > 0">
+                      <div
+                        v-if="
+                          itemDetail.upgradeSlots !== null &&
+                          itemDetail.upgradeSlots > 0
+                        "
+                      >
                         <span class="stat-label">升级次数：</span>
-                        <span class="stat-value">{{ itemDetail.upgradeSlots }}</span>
+                        <span class="stat-value">{{
+                          itemDetail.upgradeSlots
+                        }}</span>
                       </div>
                     </div>
                     <!-- 穿戴要求 -->
-                    <div class="item-tooltip-stats" v-if="hasEquipReqs">
+                    <div v-if="hasEquipReqs" class="item-tooltip-stats">
                       <div class="stat-section-title">穿戴要求</div>
-                      <div class="stat-row" v-if="itemDetail.reqLevel">
+                      <div v-if="itemDetail.reqLevel">
                         <span class="stat-label">等级：</span>
-                        <span class="stat-value">{{ itemDetail.reqLevel }}</span>
+                        <span class="stat-value">{{
+                          itemDetail.reqLevel
+                        }}</span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.reqStr">
+                      <div v-if="itemDetail.reqStr">
                         <span class="stat-label">力量：</span>
                         <span class="stat-value">{{ itemDetail.reqStr }}</span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.reqDex">
+                      <div v-if="itemDetail.reqDex">
                         <span class="stat-label">敏捷：</span>
                         <span class="stat-value">{{ itemDetail.reqDex }}</span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.reqInt">
+                      <div v-if="itemDetail.reqInt">
                         <span class="stat-label">智力：</span>
                         <span class="stat-value">{{ itemDetail.reqInt }}</span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.reqLuk">
+                      <div v-if="itemDetail.reqLuk">
                         <span class="stat-label">运气：</span>
                         <span class="stat-value">{{ itemDetail.reqLuk }}</span>
                       </div>
-                      <div class="stat-row" v-if="itemDetail.reqJob">
+                      <div v-if="itemDetail.reqJob">
                         <span class="stat-label">职业要求：</span>
-                        <span class="stat-value">{{ getJobName(itemDetail.reqJob) }}</span>
+                        <span class="stat-value">{{
+                          getJobName(itemDetail.reqJob)
+                        }}</span>
                       </div>
                     </div>
                     <!-- 限制标记 -->
-                    <div class="item-tooltip-flags" v-if="hasFlags">
-                      <a-tag color="red" size="small" v-if="itemDetail.questItem">任务物品</a-tag>
-                      <a-tag color="orange" size="small" v-if="itemDetail.untradeable">不可交易</a-tag>
-                      <a-tag color="orangered" size="small" v-if="itemDetail.accountRestricted">账号绑定</a-tag>
-                      <a-tag color="gray" size="small" v-if="itemDetail.dropRestricted">不可丢弃</a-tag>
-                      <a-tag color="arcoblue" size="small" v-if="itemDetail.cashItem">现金物品</a-tag>
-                      <a-tag color="green" size="small" v-if="itemDetail.upgradeable">可升级</a-tag>
+                    <div v-if="hasFlags" class="item-tooltip-flags">
+                      <a-tag
+                        v-if="itemDetail.questItem"
+                        color="red"
+                        size="small"
+                        >任务物品</a-tag
+                      >
+                      <a-tag
+                        v-if="itemDetail.untradeable"
+                        color="orange"
+                        size="small"
+                        >不可交易</a-tag
+                      >
+                      <a-tag
+                        v-if="itemDetail.accountRestricted"
+                        color="orangered"
+                        size="small"
+                        >账号绑定</a-tag
+                      >
+                      <a-tag
+                        v-if="itemDetail.dropRestricted"
+                        color="gray"
+                        size="small"
+                        >不可丢弃</a-tag
+                      >
+                      <a-tag
+                        v-if="itemDetail.cashItem"
+                        color="arcoblue"
+                        size="small"
+                        >现金物品</a-tag
+                      >
+                      <a-tag
+                        v-if="itemDetail.upgradeable"
+                        color="green"
+                        size="small"
+                        >可升级</a-tag
+                      >
                     </div>
                   </div>
                 </template>
@@ -308,9 +404,21 @@
     if (!itemDetail.value) return false;
     const d = itemDetail.value;
     return (
-      d.str || d.dex || d.int || d.luk || d.hp || d.mp ||
-      d.pAtk || d.mAtk || d.pDef || d.mDef || d.acc || d.avoid ||
-      d.speed || d.jump || (d.upgradeSlots !== null && d.upgradeSlots > 0)
+      d.str ||
+      d.dex ||
+      d.int ||
+      d.luk ||
+      d.hp ||
+      d.mp ||
+      d.pAtk ||
+      d.mAtk ||
+      d.pDef ||
+      d.mDef ||
+      d.acc ||
+      d.avoid ||
+      d.speed ||
+      d.jump ||
+      (d.upgradeSlots !== null && d.upgradeSlots > 0)
     );
   });
 
@@ -345,7 +453,10 @@
   /**
    * 处理气泡弹窗显示/隐藏
    */
-  const handlePopoverChange = async (visible: boolean, record: InformationResult) => {
+  const handlePopoverChange = async (
+    visible: boolean,
+    record: InformationResult
+  ) => {
     if (visible) {
       // 只有物品类型（非map/npc/mob/skill）才获取详情
       if (!ITEM_TYPES.includes(record.type)) {
@@ -356,7 +467,10 @@
       hoveredRecord.value = { id: record.id, type: record.type };
       tooltipLoading.value = true;
       try {
-        const { data } = await getItemDetail({ itemId: record.id, type: record.type });
+        const { data } = await getItemDetail({
+          itemId: record.id,
+          type: record.type,
+        });
         itemDetail.value = data;
       } catch {
         itemDetail.value = null;
@@ -400,6 +514,7 @@
     // 位掩码可能包含多个职业
     const matched: string[] = [];
     Object.entries(jobMap).forEach(([key, name]) => {
+      // eslint-disable-next-line no-bitwise -- 位掩码判断职业匹配
       if (reqJob & parseInt(key, 10)) {
         matched.push(name);
       }

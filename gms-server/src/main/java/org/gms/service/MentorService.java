@@ -6,12 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.config.MentorManager;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.constants.string.BroadcastPrefix;
 import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
 import org.gms.manager.ServerManager;
 import org.gms.model.dto.MentorConfigDTO;
 import org.gms.model.dto.MentorGraduationRewardDTO;
 import org.gms.model.dto.MentorGraduationRewardDTO.ItemDTO;
+import org.gms.net.server.Server;
+import org.gms.util.PacketCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -277,6 +280,8 @@ public class MentorService {
         CharactersDO masterChar = getCharacterById(masterCharId);
         String masterName = masterChar != null ? masterChar.getName() : "未知";
         log.info("{} (ID={}) 拜 {} (ID={}) 为师", discipleName, discipleCharId, masterName, masterCharId);
+        // 全服广播拜师成功通告（粉色文字，type=5）
+        broadcastMentorNotice(discipleChar, discipleName + " 拜 " + masterName + " 为师，师徒一心，共闯冒险岛！");
         return "恭喜！\"" + discipleName + "\" 已成功拜入 " + masterName + " 的门下！";
     }
 
@@ -335,6 +340,8 @@ public class MentorService {
         CharactersDO masterChar = getCharacterById(masterCharId);
         String masterName = masterChar != null ? masterChar.getName() : "未知";
         log.info("{} (ID={}) 拜 {} (ID={}) 为师", discipleName, discipleCharId, masterName, masterCharId);
+        // 全服广播拜师成功通告（粉色文字，type=5）
+        broadcastMentorNotice(discipleChar, discipleName + " 拜 " + masterName + " 为师，师徒一心，共闯冒险岛！");
         return "恭喜！您已成功拜入 " + masterName + " 的门下！";
     }
 
@@ -355,6 +362,8 @@ public class MentorService {
         CharactersDO discipleChar = getCharacterById(discipleCharId);
         String name = discipleChar != null ? discipleChar.getName() : "未知";
         log.info("师父 {} 将徒弟 {} (ID={}) 逐出师门", masterCharId, name, discipleCharId);
+        // 全服广播逐出师门通告（粉色文字，type=5）
+        broadcastMentorNotice(discipleChar, name + " 被师父逐出了师门，从此各奔天涯。");
         return "已将 \"" + name + "\" 逐出师门。";
     }
 
@@ -387,6 +396,8 @@ public class MentorService {
         CharactersDO masterChar = getCharacterById(rel.getMasterCharacterId());
         String masterName = masterChar != null ? masterChar.getName() : "未知";
         log.info("{} (ID={}) 从 {} (ID={}) 门下出师", discipleChar.getName(), discipleCharId, masterName, rel.getMasterCharacterId());
+        // 全服广播出师通告（粉色文字，type=5）
+        broadcastMentorNotice(discipleChar, discipleChar.getName() + " 从 " + masterName + " 门下光荣出师，学有所成！");
         return "恭喜出师！\r\n师父：" + masterName + "\r\n" + rewardMsg;
     }
 
@@ -408,6 +419,8 @@ public class MentorService {
         CharactersDO discipleChar = getCharacterById(discipleCharId);
         String discipleName = discipleChar != null ? discipleChar.getName() : "未知";
         log.info("{} (ID={}) 退出了 {} (ID={}) 的师门", discipleName, discipleCharId, masterName, rel.getMasterCharacterId());
+        // 全服广播退出师门通告（粉色文字，type=5）
+        broadcastMentorNotice(discipleChar, discipleName + " 退出了 " + masterName + " 的师门，师徒缘尽。");
         return "您已退出 " + masterName + " 的师门。";
     }
 
@@ -563,6 +576,24 @@ public class MentorService {
     }
 
     // ==================== D. 内部工具方法 ====================
+
+    /**
+     * 全服广播拜师成功通告（粉色文字，聊天框显示）
+     * @param discipleChar 徒弟角色记录（用于获取所在世界）
+     * @param message      通告消息内容
+     */
+    private void broadcastMentorNotice(CharactersDO discipleChar, String message) {
+        try {
+            Integer worldId = discipleChar.getWorld();
+            if (worldId != null) {
+                Server.getInstance().broadcastMessage(worldId,
+                        PacketCreator.serverNotice(BroadcastPrefix.MENTOR.getType(), BroadcastPrefix.MENTOR.msg(message)));
+            }
+        } catch (Exception e) {
+            // 广播失败不影响核心业务
+            log.warn("师徒通告广播失败", e);
+        }
+    }
 
     private CharactersDO getCharacterById(int characterId) {
         CharactersMapper mapper = ServerManager.getApplicationContext().getBean(CharactersMapper.class);

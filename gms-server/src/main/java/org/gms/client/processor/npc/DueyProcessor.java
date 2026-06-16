@@ -42,6 +42,7 @@ import org.gms.server.DueyPackage;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Trade;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -483,6 +484,7 @@ public class DueyProcessor {
             try {
                 long timeNow = System.currentTimeMillis();
                 if (timeNow - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
+                    c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message2"));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }

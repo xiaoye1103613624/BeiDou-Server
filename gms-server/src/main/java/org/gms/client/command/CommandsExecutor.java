@@ -302,6 +302,8 @@ public class CommandsExecutor {
         addCommand("enableauth", EnableAuthCommand.class);
         // 开关经验获取
         addCommand("toggleexp", ToggleExpCommand.class);
+        // 开关头顶信息展示（经验倍率/掉落倍率/BOSS爆率/金币倍率/网络延迟）
+        addCommand("overhead", OverheadInfoCommand.class);
         // 查看房屋归属
         addCommand("mylawn", MapOwnerClaimCommand.class);
 

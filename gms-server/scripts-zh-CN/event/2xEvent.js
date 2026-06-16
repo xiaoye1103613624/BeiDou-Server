@@ -99,7 +99,8 @@ function start() {
     }
 
     world.setExpRate(currentRate * 2); // 将经验倍率调整为双倍
-    world.broadcastPacket(PacketCreator.serverNotice(6, "【双倍活动】BOSS扫描器检测到即将到来的复活节兔子袭击！GM团队已激活紧急经验池，在接下来的两小时内获得的经验值将翻倍！"));
+    var BroadcastPrefix = Java.type('org.gms.constants.string.BroadcastPrefix');
+    world.broadcastPacket(PacketCreator.serverNotice(BroadcastPrefix.DOUBLE_EVENT.getType(), BroadcastPrefix.DOUBLE_EVENT.getPrefix() + "BOSS扫描器检测到即将到来的复活节兔子袭击！GM团队已激活紧急经验池，在接下来的两小时内获得的经验值将翻倍！"));
 }
 /**
  * 结束双倍经验活动
@@ -123,7 +124,7 @@ function stop() {
     // 重置活动状态，允许再次开启
     em.setProperty("state", "0");
 
-    world.broadcastPacket(PacketCreator.serverNotice(6, "【双倍活动】很遗憾，紧急经验池(EXP)能量已耗尽需要重新充能，经验倍率已恢复正常。"));
+    world.broadcastPacket(PacketCreator.serverNotice(BroadcastPrefix.DOUBLE_EVENT.getType(), BroadcastPrefix.DOUBLE_EVENT.getPrefix() + "很遗憾，紧急经验池(EXP)能量已耗尽需要重新充能，经验倍率已恢复正常。"));
 }
 
 // ---------- 预留函数(空实现) ----------

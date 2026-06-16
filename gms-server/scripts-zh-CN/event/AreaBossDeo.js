@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const Point = Java.type('java.awt.Point');
 const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
 const PacketCreator = Java.type('org.gms.util.PacketCreator');
+const BroadcastPrefix = Java.type('org.gms.constants.string.BroadcastPrefix');
 const LoggerFactory = Java.type('org.slf4j.LoggerFactory');
 var log = null;
 var channel = null;
@@ -80,7 +81,7 @@ function start() {
     } catch (e) {
         console.error(`[事件脚本-野外BOSS] ${em.getName()} 在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID}) 时出错`,e);
     }
-    graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName}  ${BossNotice}`));     //聊天框输出当前地图范围的Boss登场消息
+    graysPrairie.broadcastMessage(PacketCreator.serverNotice(BroadcastPrefix.WORLD_BOSS.getType(), BroadcastPrefix.WORLD_BOSS.getPrefix() + BossName + "  " + BossNotice));     //聊天框输出当前地图范围的Boss登场消息
 
     em.schedule(methodName, Timer);
 }

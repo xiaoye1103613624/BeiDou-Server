@@ -22,17 +22,29 @@
 package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.util.I18nUtil;
+import org.gms.util.PacketCreator;
 
 /**
  * @author Matze
+ * NPC对话继续处理器
+ * 处理玩家在NPC对话框中的"下一步"/选择选项等操作，包含操作限流防止快速点击
  */
 public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
+        // NPC交互限流：防止快速连续点击导致脚本竞态条件或刷物品
+        if (currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
+            c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message2"));
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
         byte lastMsg = p.readByte(); // 00 (last msg type I think)
         byte action = p.readByte(); // 00 = end chat, 01 == follow
         // lastMsg等于2有returnText，不等于则没有

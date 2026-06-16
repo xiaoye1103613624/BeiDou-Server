@@ -15,7 +15,7 @@ var SKILL_LIST = [
 // ==================== 逻辑代码（一般不需要修改） ====================
 
 var SkillFactory = Java.type('org.gms.client.SkillFactory');
-var status = 0;
+var status = -1;
 var TITLE_TEXT = "#e#d技能学习中心#n#k";
 
 function start() {
@@ -24,23 +24,29 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) { cm.dispose(); return; }
-    if (mode == 0 && status >= 0) { cm.dispose(); return; }
-    if (mode == 1) status++; else status--;
+    // 标准模式处理：1=前进, -1=后退, 其他=关闭对话
+    if (mode === 1) {
+        status++;
+    } else if (mode === -1) {
+        status--;
+    } else {
+        cm.dispose();
+        return;
+    }
 
-    if (status == 0) {
+    if (status === 0) {
         // ===== 第一步：展示所有技能图标及学习状态 =====
         showSkillIcons();
-    } else if (status == 1) {
+    } else if (status === 1) {
         // ===== 第二步：确认是否执行学习 =====
-        if (selection == 0) {
+        if (selection === 0) {
             showConfirmDialog();
         } else {
             cm.dispose();
         }
-    } else if (status == 2) {
+    } else if (status === 2) {
         // ===== 第三步：执行学习并展示结果 =====
-        if (selection != 2) { cm.dispose(); return; }
+        if (selection !== 2) { cm.dispose(); return; }
         executeLearning();
     }
 }
@@ -108,7 +114,7 @@ function showConfirmDialog() {
     }
 
     text += "#b════════════════#k\r\n\r\n";
-    if (learnCount == 0) {
+    if (learnCount === 0) {
         text += "#g所有技能已学会，无需操作。#k";
         cm.sendOk(text);
         cm.dispose();
@@ -131,7 +137,7 @@ function executeLearning() {
         var sk = SKILL_LIST[i];
         try {
             var skill = SkillFactory.getSkill(sk.skillId);
-            if (skill == null) {
+            if (skill === null) {
                 failCount++;
                 resultText += "#s" + sk.skillId + "#  #b" + sk.name + "#k  →  #r技能不存在#k\r\n\r\n";
                 continue;
@@ -144,8 +150,8 @@ function executeLearning() {
                 continue;
             }
 
-            // 学习技能
-            cm.getPlayer().changeSkillLevel(skill, sk.level, sk.level, -1);
+            // 使用 teachSkill API 学习技能（自动处理类型转换和已学检测，比直接调用 changeSkillLevel 更安全）
+            cm.teachSkill(sk.skillId, sk.level, sk.level, -1);
             successCount++;
             resultText += "#s" + sk.skillId + "#  #b" + sk.name + "#k  →  #g学习成功 Lv." + sk.level + "#k\r\n\r\n";
 

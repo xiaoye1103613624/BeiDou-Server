@@ -719,12 +719,11 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a hello packet.
+     * 发送握手（Hello）封包
      *
-     * @param mapleVersion The maple client version.
-     * @param sendIv       the IV in use by the server for sending
-     * @param recvIv       the IV in use by the server for receiving
-     * @return
+     * @param mapleVersion 客户端版本号
+     * @param sendIv       服务端发送使用的 IV 向量
+     * @param recvIv       服务端接收使用的 IV 向量
      */
     public static Packet getHello(short mapleVersion, InitializationVector sendIv, InitializationVector recvIv) {
         OutPacket p = new ByteBufOutPacket();
@@ -739,31 +738,25 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a ping packet.
-     *
-     * @return The packet.
+     * 发送心跳（Ping）封包，保持客户端连接活跃
      */
     public static Packet getPing() {
         return OutPacket.create(SendOpcode.PING);
     }
 
     /**
-     * Gets a login failed packet.
+     * 获取登录失败封包
      * <p>
-     * Possible values for <code>reason</code>:<br> 3: ID deleted or blocked<br>
-     * 4: Incorrect password<br> 5: Not a registered id<br> 6: System error<br>
-     * 7: Already logged in<br> 8: System error<br> 9: System error<br> 10:
-     * Cannot process so many connections<br> 11: Only users older than 20 can
-     * use this channel<br> 13: Unable to log on as master at this ip<br> 14:
-     * Wrong gateway or personal info and weird korean button<br> 15: Processing
-     * request with that korean button!<br> 16: Please verify your account
-     * through email...<br> 17: Wrong gateway or personal info<br> 21: Please
-     * verify your account through email...<br> 23: License agreement<br> 25:
-     * Maple Europe notice =[ FUCK YOU NEXON<br> 27: Some weird full client
-     * notice, probably for trial versions<br>
+     * <code>reason</code> 可选值：<br> 3: ID已删除或封禁<br>
+     * 4: 密码错误<br> 5: 未注册的ID<br> 6: 系统错误<br>
+     * 7: 已登录<br> 8: 系统错误<br> 9: 系统错误<br> 10:
+     * 无法处理过多连接<br> 11: 仅20岁以上用户可使用此频道<br> 13: 无法在此IP以管理员身份登录<br> 14:
+     * 网关或个人信息错误<br> 15: 正在处理请求<br> 16: 请通过邮箱验证账户<br>
+     * 17: 网关或个人资料错误<br> 21: 请通过邮箱验证账户<br> 23: 许可协议<br> 25:
+     * 冒险岛欧洲区通知<br> 27: 客户端版本通知（可能为试用版）<br>
      *
-     * @param reason The reason logging in failed.
-     * @return The login failed packet.
+     * @param reason 登录失败原因码
+     * @return 登录失败封包
      */
     public static Packet getLoginFailed(int reason) {
         OutPacket p = OutPacket.create(SendOpcode.LOGIN_STATUS);
@@ -774,24 +767,19 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a login failed packet.
+     * 获取登录后错误封包（选择角色阶段）
      * <p>
-     * Possible values for <code>reason</code>:<br> 2: ID deleted or blocked<br>
-     * 3: ID deleted or blocked<br> 4: Incorrect password<br> 5: Not a
-     * registered id<br> 6: Trouble logging into the game?<br> 7: Already logged
-     * in<br> 8: Trouble logging into the game?<br> 9: Trouble logging into the
-     * game?<br> 10: Cannot process so many connections<br> 11: Only users older
-     * than 20 can use this channel<br> 12: Trouble logging into the game?<br>
-     * 13: Unable to log on as master at this ip<br> 14: Wrong gateway or
-     * personal info and weird korean button<br> 15: Processing request with
-     * that korean button!<br> 16: Please verify your account through
-     * email...<br> 17: Wrong gateway or personal info<br> 21: Please verify
-     * your account through email...<br> 23: Crashes<br> 25: Maple Europe notice
-     * =[ FUCK YOU NEXON<br> 27: Some weird full client notice, probably for
-     * trial versions<br>
+     * <code>reason</code> 可选值：<br> 2: ID已删除或封禁<br>
+     * 3: ID已删除或封禁<br> 4: 密码错误<br> 5: 未注册的ID<br>
+     * 6: 登录遇到问题？<br> 7: 已登录<br> 8: 登录遇到问题？<br>
+     * 9: 登录遇到问题？<br> 10: 无法处理过多连接<br> 11: 仅20岁以上用户可使用此频道<br>
+     * 12: 登录遇到问题？<br> 13: 无法在此IP以管理员身份登录<br> 14: 网关或个人信息错误<br>
+     * 15: 正在处理请求<br> 16: 请通过邮箱验证账户<br> 17: 网关或个人资料错误<br>
+     * 21: 请通过邮箱验证账户<br> 23: 崩溃<br> 25: 冒险岛欧洲区通知<br>
+     * 27: 客户端版本通知（可能为试用版）<br>
      *
-     * @param reason The reason logging in failed.
-     * @return The login failed packet.
+     * @param reason 登录失败原因码
+     * @return 登录失败封包
      */
     public static Packet getAfterLoginError(int reason) {//same as above o.o
         OutPacket p = OutPacket.create(SendOpcode.SELECT_CHARACTER_BY_VAC);
@@ -851,10 +839,10 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a successful authentication packet.
+     * 获取认证成功封包
      *
-     * @param c
-     * @return the successful authentication packet
+     * @param c 客户端连接
+     * @return 认证成功封包
      */
     public static Packet getAuthSuccess(Client c) {
         Server.getInstance().loadAccountCharacters(c);    // locks the login session until data is recovered from the cache or the DB.
@@ -887,14 +875,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet detailing a PIN operation.
+     * 获取 PIN 操作封包
      * <p>
-     * Possible values for <code>mode</code>:<br> 0 - PIN was accepted<br> 1 -
-     * Register a new PIN<br> 2 - Invalid pin / Reenter<br> 3 - Connection
-     * failed due to system error<br> 4 - Enter the pin
+     * <code>mode</code> 可选值：<br> 0 - PIN 验证通过<br> 1 - 注册新 PIN<br>
+     * 2 - PIN 无效 / 重新输入<br> 3 - 系统错误，连接失败<br> 4 - 请输入 PIN
      *
-     * @param mode The mode.
-     * @return
+     * @param mode 操作模式
      */
     private static Packet pinOperation(byte mode) {
         OutPacket p = OutPacket.create(SendOpcode.CHECK_PINCODE);
@@ -949,14 +935,14 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet detailing a server and its channels.
+     * 获取服务器与频道列表封包
      *
-     * @param serverId
-     * @param serverName  The name of the server.
-     * @param flag
-     * @param eventmsg
-     * @param channelLoad Load of the channel - 1200 seems to be max.
-     * @return The server info packet.
+     * @param serverId    服务器 ID
+     * @param serverName  服务器名称
+     * @param flag        服务器标识
+     * @param eventmsg    活动消息
+     * @param channelLoad 频道负载列表（1200 为满载）
+     * @return 服务器列表封包
      */
     public static Packet getServerList(int serverId, String serverName, int flag, String eventmsg, List<Channel> channelLoad) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERLIST);
@@ -984,9 +970,7 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet saying that the server list is over.
-     *
-     * @return The end of server list packet.
+     * 获取服务器列表结束标记封包
      */
     public static Packet getEndOfServerList() {
         OutPacket p = OutPacket.create(SendOpcode.SERVERLIST);
@@ -995,13 +979,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet detailing a server status message.
+     * 获取服务器负载状态封包
      * <p>
-     * Possible values for <code>status</code>:<br> 0 - Normal<br> 1 - Highly
-     * populated<br> 2 - Full
+     * <code>status</code> 可选值：<br> 0 - 正常<br> 1 - 拥挤<br> 2 - 爆满
      *
-     * @param status The server status.
-     * @return The server status packet.
+     * @param status 服务器状态
+     * @return 服务器状态封包
      */
     public static Packet getServerStatus(int status) {
         OutPacket p = OutPacket.create(SendOpcode.SERVERSTATUS);
@@ -1010,12 +993,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client the IP of the channel server.
+     * 获取频道服务器 IP 封包（告知客户端连接目标 IP 和端口）
      *
-     * @param inetAddr The InetAddress of the requested channel server.
-     * @param port     The port the channel is on.
-     * @param clientId The ID of the client.
-     * @return The server IP packet.
+     * @param inetAddr 频道服务器 IP 地址
+     * @param port     频道服务器端口
+     * @param clientId 客户端 ID
+     * @return 服务器 IP 封包
      */
     public static Packet getServerIP(InetAddress inetAddr, int port, int clientId) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVER_IP);
@@ -1029,11 +1012,11 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client the IP of the new channel.
+     * 获取换频道 IP 封包（告知客户端切换目标频道的 IP 和端口）
      *
-     * @param inetAddr The InetAddress of the requested channel server.
-     * @param port     The port the channel is on.
-     * @return The server IP packet.
+     * @param inetAddr 目标频道服务器 IP 地址
+     * @param port     目标频道服务器端口
+     * @return 换频道封包
      */
     public static Packet getChannelChange(InetAddress inetAddr, int port) {
         final OutPacket p = OutPacket.create(SendOpcode.CHANGE_CHANNEL);
@@ -1045,27 +1028,27 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet with a list of characters.
+     * 获取角色列表封包
      *
-     * @param c        The Client to load characters of.
-     * @param serverId The ID of the server requested.
-     * @param status   The charlist request result.
-     * @return The character list packet.
+     * @param c        客户端连接
+     * @param serverId 服务器 ID
+     * @param status   角色列表请求结果状态
+     * @return 角色列表封包
      * <p>
-     * Possible values for <code>status</code>:
-     * <br> 2: ID deleted or blocked<br>
-     * <br> 3: ID deleted or blocked<br>
-     * <br> 4: Incorrect password<br>
-     * <br> 5: Not an registered ID<br>
-     * <br> 6: Trouble logging in?<br>
-     * <br> 10: Server handling too many connections<br>
-     * <br> 11: Only 20 years or older<br>
-     * <br> 13: Unable to log as master at IP<br>
-     * <br> 14: Wrong gateway or personal info<br>
-     * <br> 15: Still processing request<br>
-     * <br> 16: Verify account via email<br>
-     * <br> 17: Wrong gateway or personal info<br>
-     * <br> 21: Verify account via email<br>
+     * <code>status</code> 可选值：
+     * <br> 2: ID已删除或封禁<br>
+     * <br> 3: ID已删除或封禁<br>
+     * <br> 4: 密码错误<br>
+     * <br> 5: 未注册的ID<br>
+     * <br> 6: 登录遇到问题？<br>
+     * <br> 10: 服务器处理过多连接<br>
+     * <br> 11: 仅20岁以上用户可用<br>
+     * <br> 13: 无法在此IP以管理员身份登录<br>
+     * <br> 14: 网关或个人信息错误<br>
+     * <br> 15: 仍在处理请求<br>
+     * <br> 16: 请通过邮箱验证账户<br>
+     * <br> 17: 网关或个人信息错误<br>
+     * <br> 21: 请通过邮箱验证账户<br>
      */
     public static Packet getCharList(Client c, int serverId, int status) {
         final OutPacket p = OutPacket.create(SendOpcode.CHARLIST);
@@ -1092,22 +1075,20 @@ public class PacketCreator {
     }
 
     /**
-     * Removes TV
-     *
-     * @return The Remove TV Packet
+     * 移除 MapleTV 封包
      */
     public static Packet removeTV() {
         return OutPacket.create(SendOpcode.REMOVE_TV);
     }
 
     /**
-     * Sends MapleTV
+     * 发送 MapleTV 封包
      *
-     * @param chr      The character shown in TV
-     * @param messages The message sent with the TV
-     * @param type     The type of TV
-     * @param partner  The partner shown with chr
-     * @return the SEND_TV packet
+     * @param chr      TV 中展示的角色
+     * @param messages TV 消息内容列表
+     * @param type     TV 类型（0=普通, 1=星形, 2=心形）
+     * @param partner  与 chr 一同展示的搭档角色
+     * @return SEND_TV 封包
      */
     public static Packet sendTV(Character chr, List<String> messages, int type, Character partner) {
         final OutPacket p = OutPacket.create(SendOpcode.SEND_TV);
@@ -1135,10 +1116,10 @@ public class PacketCreator {
     }
 
     /**
-     * Gets character info for a character.
+     * 获取角色完整信息封包（进入游戏场景）
      *
-     * @param chr The character to get info about.
-     * @return The character info packet.
+     * @param chr 目标角色
+     * @return 角色信息封包
      */
     public static Packet getCharInfo(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
@@ -1155,21 +1136,19 @@ public class PacketCreator {
     }
 
     /**
-     * Gets an empty stat update.
-     *
-     * @return The empty stat update packet.
+     * 获取空属性更新封包（启用玩家操作）
      */
     public static Packet enableActions() {
         return updatePlayerStats(EMPTY_STATUPDATE, true, null);
     }
 
     /**
-     * Gets an update for specified stats.
+     * 获取指定属性更新封包
      *
-     * @param stats         The list of stats to update.
-     * @param enableActions Allows actions after the update.
-     * @param chr           The update target.
-     * @return The stat update packet.
+     * @param stats         需要更新的属性列表
+     * @param enableActions 更新后是否允许操作
+     * @param chr           更新目标角色
+     * @return 属性更新封包
      */
     public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
@@ -1214,12 +1193,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client to change maps.
+     * 获取地图切换封包
      *
-     * @param to         The <code>MapleMap</code> to warp to.
-     * @param spawnPoint The spawn portal number to spawn at.
-     * @param chr        The character warping to <code>to</code>
-     * @return The map change packet.
+     * @param to         目标地图
+     * @param spawnPoint 出生传送点编号
+     * @param chr        切换地图的角色
+     * @return 地图切换封包
      */
     public static Packet getWarpToMap(MapleMap to, int spawnPoint, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
@@ -1260,12 +1239,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet to spawn a portal.
+     * 获取传送门生成封包
      *
-     * @param townId   The ID of the town the portal goes to.
-     * @param targetId The ID of the target.
-     * @param pos      Where to put the portal.
-     * @return The portal spawn packet.
+     * @param townId   目标城镇 ID
+     * @param targetId 目标对象 ID
+     * @param pos      传送门位置
+     * @return 传送门生成封包
      */
     public static Packet spawnPortal(int townId, int targetId, Point pos) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PORTAL);
@@ -1276,12 +1255,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet to spawn a door.
+     * 获取传送门（Door）生成封包
      *
-     * @param ownerid  The door's owner ID.
-     * @param pos      The position of the door.
-     * @param launched Already deployed the door.
-     * @return The remove door packet.
+     * @param ownerid  传送门拥有者 ID
+     * @param pos      传送门位置
+     * @param launched 是否已部署
+     * @return 传送门生成封包
      */
     public static Packet spawnDoor(int ownerid, Point pos, boolean launched) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_DOOR);
@@ -1292,11 +1271,11 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet to remove a door.
+     * 获取传送门（Door）移除封包
      *
-     * @param ownerId The door's owner ID.
-     * @param town
-     * @return The remove door packet.
+     * @param ownerId 传送门拥有者 ID
+     * @param town    true=通过传送门离开城镇, false=直接移除
+     * @return 传送门移除封包
      */
     public static Packet removeDoor(int ownerId, boolean town) {
         final OutPacket p;
@@ -1313,11 +1292,11 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet to spawn a special map object.
+     * 获取特殊地图对象（召唤兽）生成封包
      *
-     * @param summon
-     * @param animated Animated spawn?
-     * @return The spawn packet for the map object.
+     * @param summon   召唤兽对象
+     * @param animated 是否使用生成动画
+     * @return 召唤兽生成封包
      */
     public static Packet spawnSummon(Summon summon, boolean animated) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_SPECIAL_MAPOBJECT);
@@ -1336,11 +1315,11 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet to remove a special map object.
+     * 获取特殊地图对象（召唤兽）移除封包
      *
-     * @param summon
-     * @param animated Animated removal?
-     * @return The packet removing the object.
+     * @param summon   召唤兽对象
+     * @param animated 是否使用消失动画
+     * @return 召唤兽移除封包
      */
     public static Packet removeSummon(Summon summon, boolean animated) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_SPECIAL_MAPOBJECT);
@@ -1392,9 +1371,7 @@ public class PacketCreator {
     }
 
     /**
-     * Gets the response to a relog request.
-     *
-     * @return The relog response packet.
+     * 获取重新登录响应封包
      */
     public static Packet getRelogResponse() {
         OutPacket p = OutPacket.create(SendOpcode.RELOG_RESPONSE);
@@ -1403,40 +1380,41 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a server message packet.
+     * 获取服务器消息封包（默认滚动消息类型）
      *
-     * @param message The message to convey.
-     * @return The server message packet.
+     * @param message 消息内容
+     * @return 服务器消息封包
      */
     public static Packet serverMessage(String message) {
         return serverMessage(4, (byte) 0, message, true, false, 0);
     }
 
     /**
-     * Gets a server notice packet.
+     * 获取服务器通知封包
      * <p>
-     * Possible values for <code>type</code>:<br> 0: [Notice]<br> 1: Popup<br>
-     * 2: Megaphone<br> 3: Super Megaphone<br> 4: Scrolling message at top<br>
-     * 5: Pink Text<br> 6: Lightblue Text
+     * <code>type</code> 可选值：<br> 0: [公告Notice]<br> 1: 弹窗<br>
+     * 2: 扩音器<br> 3: 超级扩音器<br> 4: 顶部滚动消息<br>
+     * 5: 粉色文字<br> 6: 浅蓝色文字
      *
-     * @param type    The type of the notice.
-     * @param message The message to convey.
-     * @return The server notice packet.
+     * @param type    通知类型
+     * @param message 消息内容
+     * @return 服务器通知封包
      */
     public static Packet serverNotice(int type, String message) {
         return serverMessage(type, (byte) 0, message, false, false, 0);
     }
 
     /**
-     * Gets a server notice packet.
+     * 获取服务器通知封包（带 NPC 参数，用于 NPC 广播消息）
      * <p>
-     * Possible values for <code>type</code>:<br> 0: [Notice]<br> 1: Popup<br>
-     * 2: Megaphone<br> 3: Super Megaphone<br> 4: Scrolling message at top<br>
-     * 5: Pink Text<br> 6: Lightblue Text
+     * <code>type</code> 可选值：<br> 0: [公告Notice]<br> 1: 弹窗<br>
+     * 2: 扩音器<br> 3: 超级扩音器<br> 4: 顶部滚动消息<br>
+     * 5: 粉色文字<br> 6: 浅蓝色文字
      *
-     * @param type    The type of the notice.
-     * @param message The message to convey.
-     * @return The server notice packet.
+     * @param type    通知类型
+     * @param message 消息内容
+     * @param npc     广播 NPC ID
+     * @return 服务器通知封包
      */
     public static Packet serverNotice(int type, String message, int npc) {
         return serverMessage(type, 0, message, false, false, npc);
@@ -1463,17 +1441,19 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a server message packet.
+     * 获取服务器消息封包（完整参数版本）
      * <p>
-     * Possible values for <code>type</code>:<br> 0: [Notice]<br> 1: Popup<br>
-     * 2: Megaphone<br> 3: Super Megaphone<br> 4: Scrolling message at top<br>
-     * 5: Pink Text<br> 6: Lightblue Text<br> 7: BroadCasting NPC
+     * <code>type</code> 可选值：<br> 0: [公告Notice]<br> 1: 弹窗<br>
+     * 2: 扩音器<br> 3: 超级扩音器<br> 4: 顶部滚动消息<br>
+     * 5: 粉色文字<br> 6: 浅蓝色文字<br> 7: NPC 广播消息
      *
-     * @param type          The type of the notice.
-     * @param channel       The channel this notice was sent on.
-     * @param message       The message to convey.
-     * @param servermessage Is this a scrolling ticker?
-     * @return The server notice packet.
+     * @param type          消息类型
+     * @param channel       发送频道
+     * @param message       消息内容
+     * @param servermessage 是否为顶部滚动消息
+     * @param megaEar       普通扩音器是否可接收此超级扩音器消息
+     * @param npc           广播 NPC ID
+     * @return 服务器消息封包
      */
     private static Packet serverMessage(int type, int channel, String message, boolean servermessage, boolean megaEar, int npc) {
         OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
@@ -1494,15 +1474,14 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a Avatar Super Megaphone packet.
+     * 发送角色形象超级扩音器（Avatar Super Megaphone）封包
      *
-     * @param chr     The character name.
-     * @param medal   The medal text.
-     * @param channel Which channel.
-     * @param itemId  Which item used.
-     * @param message The message sent.
-     * @param ear     Whether or not the ear is shown for whisper.
-     * @return
+     * @param chr     发送的角色
+     * @param medal   勋章文本
+     * @param channel 频道
+     * @param itemId  使用的道具 ID
+     * @param message 消息内容列表
+     * @param ear     是否显示耳语接收标志
      */
     public static Packet getAvatarMega(Character chr, String medal, int channel, int itemId, List<String> message, boolean ear) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_AVATAR_MEGAPHONE);
@@ -1527,12 +1506,11 @@ public class PacketCreator {
     }
 
     /**
-     * Sends the Gachapon green message when a user uses a gachapon ticket.
+     * 发送扭蛋（Gachapon）中奖公告封包
      *
-     * @param item
-     * @param town
-     * @param player
-     * @return
+     * @param item   中奖物品
+     * @param town   所在城镇
+     * @param player 中奖玩家
      */
     public static Packet gachaponMessage(Item item, String town, Character player) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
@@ -1584,45 +1562,44 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a spawn monster packet.
+     * 获取怪物生成封包
      *
-     * @param life     The monster to spawn.
-     * @param newSpawn Is it a new spawn?
-     * @return The spawn monster packet.
+     * @param life     目标怪物
+     * @param newSpawn 是否为新生成的怪物
+     * @return 怪物生成封包
      */
     public static Packet spawnMonster(Monster life, boolean newSpawn) {
         return spawnMonsterInternal(life, false, newSpawn, false, 0, false);
     }
 
     /**
-     * Gets a spawn monster packet.
+     * 获取怪物生成封包（带生成特效）
      *
-     * @param life     The monster to spawn.
-     * @param newSpawn Is it a new spawn?
-     * @param effect   The spawn effect.
-     * @return The spawn monster packet.
+     * @param life     目标怪物
+     * @param newSpawn 是否为新生成的怪物
+     * @param effect   生成特效类型
+     * @return 怪物生成封包
      */
     public static Packet spawnMonster(Monster life, boolean newSpawn, int effect) {
         return spawnMonsterInternal(life, false, newSpawn, false, effect, false);
     }
 
     /**
-     * Gets a control monster packet.
+     * 获取怪物控制权封包
      *
-     * @param life     The monster to give control to.
-     * @param newSpawn Is it a new spawn?
-     * @param aggro    Aggressive monster?
-     * @return The monster control packet.
+     * @param life     目标怪物
+     * @param newSpawn 是否为新生成的怪物
+     * @param aggro    是否为主动攻击型怪物
+     * @return 怪物控制权封包
      */
     public static Packet controlMonster(Monster life, boolean newSpawn, boolean aggro) {
         return spawnMonsterInternal(life, true, newSpawn, aggro, 0, false);
     }
 
     /**
-     * Removes a monster invisibility.
+     * 移除怪物隐身状态封包（恢复可见性）
      *
-     * @param life
-     * @return
+     * @param life 目标怪物
      */
     public static Packet removeMonsterInvisibility(Monster life) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
@@ -1632,10 +1609,9 @@ public class PacketCreator {
     }
 
     /**
-     * Makes a monster invisible for Ariant PQ.
+     * 使怪物隐身（用于阿里安特组队任务 Ariant PQ）
      *
-     * @param life
-     * @return
+     * @param life 目标怪物
      */
     public static Packet makeMonsterInvisible(Monster life) {
         return spawnMonsterInternal(life, true, false, false, 0, true);
@@ -1706,14 +1682,15 @@ public class PacketCreator {
     }
 
     /**
-     * Internal function to handler monster spawning and controlling.
+     * 怪物生成与控制的内部实现方法
      *
-     * @param life              The mob to perform operations with.
-     * @param requestController Requesting control of mob?
-     * @param newSpawn          New spawn (fade in?)
-     * @param aggro             Aggressive mob?
-     * @param effect            The spawn effect to use.
-     * @return The spawn/control packet.
+     * @param life              目标怪物
+     * @param requestController 是否请求怪物控制权
+     * @param newSpawn          是否为新的生成（渐入动画）
+     * @param aggro             是否为主动攻击型怪物
+     * @param effect            生成特效类型
+     * @param makeInvis         是否使怪物隐身
+     * @return 怪物生成/控制封包
      */
     private static Packet spawnMonsterInternal(Monster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
         if (makeInvis) {
@@ -1773,11 +1750,11 @@ public class PacketCreator {
     }
 
     /**
-     * Handles monsters not being targettable, such as Zakum's first body.
+     * 生成无法被选中的假怪物（如扎昆第一形态）
      *
-     * @param life   The mob to spawn as non-targettable.
-     * @param effect The effect to show when spawning.
-     * @return The packet to spawn the mob as non-targettable.
+     * @param life   目标怪物
+     * @param effect 生成特效类型
+     * @return 假怪物生成封包
      */
     public static Packet spawnFakeMonster(Monster life, int effect) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
@@ -1802,10 +1779,10 @@ public class PacketCreator {
     }
 
     /**
-     * Makes a monster previously spawned as non-targettable, targettable.
+     * 将不可选中假怪物恢复为可选中真怪物状态
      *
-     * @param life The mob to make targettable.
-     * @return The packet to make the mob targettable.
+     * @param life 目标怪物
+     * @return 真怪物激活封包
      */
     public static Packet makeMonsterReal(Monster life) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER);
@@ -1823,10 +1800,10 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a stop control monster packet.
+     * 获取停止控制怪物封包
      *
-     * @param oid The ObjectID of the monster to stop controlling.
-     * @return The stop control monster packet.
+     * @param oid 怪物对象 ID
+     * @return 停止控制封包
      */
     public static Packet stopControllingMonster(int oid) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
@@ -1836,28 +1813,28 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a response to a move monster packet.
+     * 获取怪物移动响应封包
      *
-     * @param objectid  The ObjectID of the monster being moved.
-     * @param moveid    The movement ID.
-     * @param currentMp The current MP of the monster.
-     * @param useSkills Can the monster use skills?
-     * @return The move response packet.
+     * @param objectid  怪物对象 ID
+     * @param moveid    移动 ID
+     * @param currentMp 怪物当前 MP
+     * @param useSkills 是否允许怪物使用技能
+     * @return 怪物移动响应封包
      */
     public static Packet moveMonsterResponse(int objectid, short moveid, int currentMp, boolean useSkills) {
         return moveMonsterResponse(objectid, moveid, currentMp, useSkills, 0, 0);
     }
 
     /**
-     * Gets a response to a move monster packet.
+     * 获取怪物移动响应封包（带技能参数）
      *
-     * @param objectid   The ObjectID of the monster being moved.
-     * @param moveid     The movement ID.
-     * @param currentMp  The current MP of the monster.
-     * @param useSkills  Can the monster use skills?
-     * @param skillId    The skill ID for the monster to use.
-     * @param skillLevel The level of the skill to use.
-     * @return The move response packet.
+     * @param objectid   怪物对象 ID
+     * @param moveid     移动 ID
+     * @param currentMp  怪物当前 MP
+     * @param useSkills  是否允许怪物使用技能
+     * @param skillId    使用的技能 ID
+     * @param skillLevel 技能等级
+     * @return 怪物移动响应封包
      */
 
     public static Packet moveMonsterResponse(int objectid, short moveid, int currentMp, boolean useSkills, int skillId, int skillLevel) {
@@ -1872,12 +1849,13 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a general chat packet.
+     * 获取通用聊天封包
      *
-     * @param cidfrom The character ID who sent the chat.
-     * @param text    The text of the chat.
-     * @param show
-     * @return The general chat packet.
+     * @param cidfrom 发送者角色 ID
+     * @param text    聊天文本内容
+     * @param gm      是否为 GM 消息
+     * @param show    显示级别（0=所有人, 1=仅同队）
+     * @return 通用聊天封包
      */
     public static Packet getChatText(int cidfrom, String text, boolean gm, int show) {
         final OutPacket p = OutPacket.create(SendOpcode.CHATTEXT);
@@ -1889,12 +1867,14 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client to show an EXP increase.
+     * 获取经验值获取显示封包
      *
-     * @param gain   The amount of EXP gained.
-     * @param inChat In the chat box?
-     * @param white  White text or yellow?
-     * @return The exp gained packet.
+     * @param gain   获得的经验值量
+     * @param equip  装备加成量
+     * @param party  组队加成量
+     * @param inChat 是否在聊天栏显示
+     * @param white  是否白色文字（false=黄色）
+     * @return 经验显示封包
      */
     public static Packet getShowExpGain(int gain, int equip, int party, boolean inChat, boolean white) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
@@ -1919,10 +1899,10 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client to show a fame gain.
+     * 获取人气（Fame）获取显示封包
      *
-     * @param gain How many fame gained.
-     * @return The meso gain packet.
+     * @param gain 获得的人气量
+     * @return 人气显示封包
      */
     public static Packet getShowFameGain(int gain) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
@@ -1932,21 +1912,21 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client to show a meso gain.
+     * 获取金币获取显示封包
      *
-     * @param gain How many mesos gained.
-     * @return The meso gain packet.
+     * @param gain 获得的金币量
+     * @return 金币显示封包
      */
     public static Packet getShowMesoGain(int gain) {
         return getShowMesoGain(gain, false);
     }
 
     /**
-     * Gets a packet telling the client to show a meso gain.
+     * 获取金币获取显示封包（聊天窗模式）
      *
-     * @param gain   How many mesos gained.
-     * @param inChat Show in the chat window?
-     * @return The meso gain packet.
+     * @param gain   获得的金币量
+     * @param inChat 是否在聊天窗显示
+     * @return 金币显示封包
      */
     public static Packet getShowMesoGain(int gain, boolean inChat) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
@@ -1962,23 +1942,23 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client to show a item gain.
+     * 获取物品获取显示封包
      *
-     * @param itemId   The ID of the item gained.
-     * @param quantity How many items gained.
-     * @return The item gain packet.
+     * @param itemId   获得的物品 ID
+     * @param quantity 获得的物品数量
+     * @return 物品显示封包
      */
     public static Packet getShowItemGain(int itemId, short quantity) {
         return getShowItemGain(itemId, quantity, false);
     }
 
     /**
-     * Gets a packet telling the client to show an item gain.
+     * 获取物品获取显示封包（聊天窗模式）
      *
-     * @param itemId   The ID of the item gained.
-     * @param quantity The number of items gained.
-     * @param inChat   Show in the chat window?
-     * @return The item gain packet.
+     * @param itemId   获得的物品 ID
+     * @param quantity 获得的物品数量
+     * @param inChat   是否在聊天窗显示
+     * @return 物品显示封包
      */
     public static Packet getShowItemGain(int itemId, short quantity, boolean inChat) {
         final OutPacket p;
@@ -2009,11 +1989,11 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet telling the client that a monster was killed.
+     * 获取怪物击杀封包（死亡动画控制）
      *
-     * @param objId     The objectID of the killed monster.
-     * @param animation 0 = dissapear, 1 = fade out, 2+ = special
-     * @return The kill monster packet.
+     * @param objId     被击杀怪物的对象 ID
+     * @param animation 动画类型（0=直接消失, 1=渐隐, 2+=特殊动画）
+     * @return 怪物击杀封包
      */
     public static Packet killMonster(int objId, int animation) {
         OutPacket p = OutPacket.create(SendOpcode.KILL_MONSTER);
@@ -2173,12 +2153,12 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a packet spawning a player as a mapobject to other clients.
+     * 获取玩家地图对象生成封包（在其他玩家视角下生成该角色）
      *
-     * @param target        The client receiving this packet.
-     * @param chr           The character to spawn to other clients.
-     * @param enteringField Whether the character to spawn is not yet present in the map or already is.
-     * @return The spawn player packet.
+     * @param target        接收此封包的客户端
+     * @param chr           要生成的角色
+     * @param enteringField 是否为刚进入地图（true=从天而降效果, false=直接显示在当前位置）
+     * @return 玩家生成封包
      */
     public static Packet spawnPlayerMapObject(Client target, Character chr, boolean enteringField) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PLAYER);
@@ -3884,10 +3864,15 @@ public class PacketCreator {
     }
 
     /**
-     * Possible values for <code>operation</code>:<br> 2: Trade cancelled, by the
-     * other character<br> 7: Trade successful<br> 8: Trade unsuccessful<br>
-     * 9: Cannot carry more one-of-a-kind items<br> 12: Cannot trade on different maps<br>
-     * 13: Cannot trade, game files damaged<br>
+     * 获取交易结果封包
+     * <p>
+     * <code>operation</code> 可选值：<br> 2: 交易被对方取消<br>
+     * 7: 交易成功<br> 8: 交易失败<br>
+     * 9: 无法携带更多唯一物品<br> 12: 无法在不同地图交易<br>
+     * 13: 游戏文件损坏，无法交易<br>
+     *
+     * @param number    交易编号
+     * @param operation 操作结果码
      */
     public static Packet getTradeResult(byte number, byte operation) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
@@ -5000,12 +4985,12 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a player hint.
+     * 发送玩家提示气泡封包
      *
-     * @param hint   The hint it's going to send.
-     * @param width  How tall the box is going to be.
-     * @param height How long the box is going to be.
-     * @return The player hint packet.
+     * @param hint   提示内容
+     * @param width  气泡宽度
+     * @param height 气泡高度
+     * @return 玩家提示封包
      */
     public static Packet sendHint(String hint, int width, int height) {
         if (width < 1) {
@@ -6512,39 +6497,31 @@ public class PacketCreator {
     }
 
     /**
-     * Family Result Message
+     * 发送家族操作结果消息封包
      * <p>
-     * Possible values for <code>type</code>:<br>
-     * 64: You cannot add this character as a junior.
-     * 65: The name could not be found or is not online.
-     * 66: You belong to the same family.
-     * 67: You do not belong to the same family.<br>
-     * 69: The character you wish to add as\r\na Junior must be in the same
-     * map.<br>
-     * 70: This character is already a Junior of another character.<br>
-     * 71: The Junior you wish to add\r\nmust be at a lower rank.<br>
-     * 72: The gap between you and your\r\njunior must be within 20 levels.<br>
-     * 73: Another character has requested to add this character.\r\nPlease try
-     * again later.<br>
-     * 74: Another character has requested a summon.\r\nPlease try again
-     * later.<br>
-     * 75: The summons has failed. Your current location or state does not allow
-     * a summons.<br>
-     * 76: The family cannot extend more than 1000 generations from above and
-     * below.<br>
-     * 77: The Junior you wish to add\r\nmust be over Level 10.<br>
-     * 78: You cannot add a Junior \r\nthat has requested to change worlds.<br>
-     * 79: You cannot add a Junior \r\nsince you've requested to change
-     * worlds.<br>
-     * 80: Separation is not possible due to insufficient Mesos.\r\nYou will
-     * need %d Mesos to\r\nseparate with a Senior.<br>
-     * 81: Separation is not possible due to insufficient Mesos.\r\nYou will
-     * need %d Mesos to\r\nseparate with a Junior.<br>
-     * 82: The Entitlement does not apply because your level does not match the
-     * corresponding area.<br>
+     * <code>type</code> 可选值：<br>
+     * 64: 无法将此角色添加为下级。<br>
+     * 65: 角色名未找到或不在线。<br>
+     * 66: 你们属于同一家族。<br>
+     * 67: 你们不属于同一家族。<br>
+     * 69: 要添加为下级的角色必须在同一地图。<br>
+     * 70: 此角色已是其他角色的下级。<br>
+     * 71: 要添加的下级必须处于更低的辈分。<br>
+     * 72: 与下级的等级差距必须在20级以内。<br>
+     * 73: 其他角色已请求添加此角色，请稍后再试。<br>
+     * 74: 其他角色已请求传送，请稍后再试。<br>
+     * 75: 召唤失败，当前所在位置或状态不允许召唤。<br>
+     * 76: 家族上下辈分不能超过1000代。<br>
+     * 77: 要添加的下级必须超过10级。<br>
+     * 78: 无法添加已请求换世界的下级。<br>
+     * 79: 您已请求换世界，无法添加下级。<br>
+     * 80: 金币不足，无法与上级解除关系。需要 %d 金币。<br>
+     * 81: 金币不足，无法与下级解除关系。需要 %d 金币。<br>
+     * 82: 您的等级不符合当前区域，无法使用此家族权限。<br>
      *
-     * @param type The type
-     * @return Family Result packet
+     * @param type  消息类型
+     * @param mesos 金币数量（用于解除关系费用提示）
+     * @return 家族消息封包
      */
     public static Packet sendFamilyMessage(int type, int mesos) {
         OutPacket p = OutPacket.create(SendOpcode.FAMILY_RESULT);
@@ -6771,17 +6748,17 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a UI utility. 0x01 - Equipment Inventory. 0x02 - Stat Window. 0x03
-     * - Skill Window. 0x05 - Keyboard Settings. 0x06 - Quest window. 0x09 -
-     * Monsterbook Window. 0x0A - Char Info 0x0B - Guild BBS 0x12 - Monster
-     * Carnival Window 0x16 - Party Search. 0x17 - Item Creation Window. 0x1A -
-     * My Ranking O.O 0x1B - Family Window 0x1C - Family Pedigree 0x1D - GM
-     * Story Board /funny shet 0x1E - Envelop saying you got mail from an admin.
-     * lmfao 0x1F - Medal Window 0x20 - Maple Event (???) 0x21 - Invalid Pointer
-     * Crash
+     * 打开客户端 UI 界面封包
+     * <p>
+     * <code>ui</code> 常用值：<br> 0x01 - 装备窗口<br> 0x02 - 属性窗口<br>
+     * 0x03 - 技能窗口<br> 0x05 - 键盘设置<br> 0x06 - 任务窗口<br>
+     * 0x09 - 怪物图鉴窗口<br> 0x0A - 角色信息<br> 0x0B - 公会BBS<br>
+     * 0x12 - 怪物嘉年华窗口<br> 0x16 - 组队搜索<br> 0x17 - 物品制作窗口<br>
+     * 0x1A - 我的排名<br> 0x1B - 家族窗口<br> 0x1C - 家族族谱<br>
+     * 0x1D - GM公告板<br> 0x1E - 管理员邮件通知<br> 0x1F - 勋章窗口<br>
+     * 0x20 - 冒险岛活动<br> 0x21 - 无效指针（会导致客户端崩溃）<br>
      *
-     * @param ui
-     * @return
+     * @param ui UI 界面代码
      */
     public static Packet openUI(byte ui) {
         OutPacket p = OutPacket.create(SendOpcode.OPEN_UI);
@@ -6830,16 +6807,14 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a report response
+     * 发送举报响应封包
      * <p>
-     * Possible values for <code>mode</code>:<br> 0: You have succesfully
-     * reported the user.<br> 1: Unable to locate the user.<br> 2: You may only
-     * report users 10 times a day.<br> 3: You have been reported to the GM's by
-     * a user.<br> 4: Your request did not go through for unknown reasons.
-     * Please try again later.<br>
+     * <code>mode</code> 可选值：<br> 0: 举报成功。<br>
+     * 1: 无法定位该用户。<br> 2: 每天最多举报10次。<br>
+     * 3: 您已被其他用户举报给GM。<br> 4: 请求未通过，请稍后再试。<br>
      *
-     * @param mode The mode
-     * @return Report Reponse packet
+     * @param mode 举报结果模式
+     * @return 举报响应封包
      */
     public static Packet reportResponse(byte mode) {
         final OutPacket p = OutPacket.create(SendOpcode.SUE_CHARACTER_RESULT);
@@ -7061,20 +7036,17 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a gm effect packet (ie. hide, banned, etc.)
+     * 获取 GM 管理操作效果封包（隐身、封禁等）
      * <p>
-     * Possible values for <code>type</code>:<br> 0x04: You have successfully
-     * blocked access.<br>
-     * 0x05: The unblocking has been successful.<br> 0x06 with Mode 0: You have
-     * successfully removed the name from the ranks.<br> 0x06 with Mode 1: You
-     * have entered an invalid character name.<br> 0x10: GM Hide, mode
-     * determines whether or not it is on.<br> 0x1E: Mode 0: Failed to send
-     * warning Mode 1: Sent warning<br> 0x13 with Mode 0: + mapid 0x13 with Mode
-     * 1: + ch (FF = Unable to find merchant)
+     * <code>type</code> 可选值：<br> 0x04: 封禁成功。<br>
+     * 0x05: 解封成功。<br> 0x06 + Mode 0: 已从排名中移除角色名。<br>
+     * 0x06 + Mode 1: 输入了无效的角色名。<br> 0x10: GM 隐身（mode 控制开关）。<br>
+     * 0x1E + Mode 0: 警告发送失败<br> 0x1E + Mode 1: 警告已发送<br>
+     * 0x13 + Mode 0: 返回地图 ID<br> 0x13 + Mode 1: 返回频道号（FF=未找到商店）
      *
-     * @param type The type
-     * @param mode The mode
-     * @return The gm effect packet
+     * @param type GM 操作类型
+     * @param mode 操作模式
+     * @return GM 操作效果封包
      */
     public static Packet getGMEffect(int type, byte mode) {
         OutPacket p = OutPacket.create(SendOpcode.ADMIN_RESULT);
@@ -7280,17 +7252,15 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a "block" packet (ie. the cash shop is unavailable, etc)
+     * 获取阻止操作封包（地图相关限制）
      * <p>
-     * Possible values for <code>type</code>:<br> 1: The portal is closed for
-     * now.<br> 2: You cannot go to that place.<br> 3: Unable to approach due to
-     * the force of the ground.<br> 4: You cannot teleport to or on this
-     * map.<br> 5: Unable to approach due to the force of the ground.<br> 6:
-     * Only party members can enter this map.<br> 7: The Cash Shop is
-     * currently not available. Stay tuned...<br>
+     * <code>type</code> 可选值：<br> 1: 传送门暂时关闭。<br>
+     * 2: 无法前往该地点。<br> 3: 受地面力量影响，无法接近。<br>
+     * 4: 无法传送至此地图或在其中传送。<br> 5: 受地面力量影响，无法接近。<br>
+     * 6: 仅队伍成员可进入此地图。<br> 7: 商城暂时不可用，敬请期待...<br>
      *
-     * @param type The type
-     * @return The "block" packet.
+     * @param type 阻止类型
+     * @return 阻止操作封包
      */
     public static Packet blockedMessage(int type) {
         final OutPacket p = OutPacket.create(SendOpcode.BLOCKED_MAP);
@@ -7299,17 +7269,14 @@ public class PacketCreator {
     }
 
     /**
-     * Gets a "block" packet (ie. the cash shop is unavailable, etc)
+     * 获取阻止操作封包（频道/商城/交易限制）
      * <p>
-     * Possible values for <code>type</code>:<br> 1: You cannot move that
-     * channel. Please try again later.<br> 2: You cannot go into the cash shop.
-     * Please try again later.<br> 3: The Item-Trading Shop is currently
-     * unavailable. Please try again later.<br> 4: You cannot go into the trade
-     * shop, due to limitation of user count.<br> 5: You do not meet the minimum
-     * level requirement to access the Trade Shop.<br>
+     * <code>type</code> 可选值：<br> 1: 暂时无法切换频道，请稍后再试。<br>
+     * 2: 暂时无法进入商城，请稍后再试。<br> 3: 物品交易所暂时不可用，请稍后再试。<br>
+     * 4: 交易所人数已达上限，无法进入。<br> 5: 未达到进入交易所的最低等级要求。<br>
      *
-     * @param type The type
-     * @return The "block" packet.
+     * @param type 阻止类型
+     * @return 阻止操作封包
      */
     public static Packet blockedMessage2(int type) {
         final OutPacket p = OutPacket.create(SendOpcode.BLOCKED_SERVER);
@@ -7326,14 +7293,15 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a "levelup" packet to the guild or family.
+     * 发送升级通知封包（公会或家族频道广播）
      * <p>
-     * Possible values for <code>type</code>:<br> 0: <Family> ? has reached Lv.
-     * ?.<br> - The Reps you have received from ? will be reduced in half. 1:
-     * <Family> ? has reached Lv. ?.<br> 2: <Guild> ? has reached Lv. ?.<br>
+     * <code>type</code> 可选值：<br> 0: 家族 ? 已达到 Lv.?（来自 ? 的声望将减半）<br>
+     * 1: 家族 ? 已达到 Lv.?<br> 2: 公会 ? 已达到 Lv.?<br>
      *
-     * @param type The type
-     * @return The "levelup" packet.
+     * @param type     通知类型（0/1=家族, 2=公会）
+     * @param level    达到的等级
+     * @param charname 角色名
+     * @return 升级通知封包
      */
     public static Packet levelUpMessage(int type, int level, String charname) {
         final OutPacket p = OutPacket.create(SendOpcode.NOTIFY_LEVELUP);
@@ -7345,14 +7313,14 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a "married" packet to the guild or family.
+     * 发送结婚通知封包（公会或家族频道广播）
      * <p>
-     * Possible values for <code>type</code>:<br> 0: <Guild ? is now married.
-     * Please congratulate them.<br> 1: <Family ? is now married. Please
-     * congratulate them.<br>
+     * <code>type</code> 可选值：<br> 0: 公会成员 ? 已结婚，请大家祝福！<br>
+     * 1: 家族成员 ? 已结婚，请大家祝福！<br>
      *
-     * @param type The type
-     * @return The "married" packet.
+     * @param type     通知类型（0=公会, 1=家族）
+     * @param charname 角色名
+     * @return 结婚通知封包
      */
     public static Packet marriageMessage(int type, String charname) {
         final OutPacket p = OutPacket.create(SendOpcode.NOTIFY_MARRIAGE);
@@ -7363,13 +7331,15 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a "job advance" packet to the guild or family.
+     * 发送转职通知封包（公会或家族频道广播）
      * <p>
-     * Possible values for <code>type</code>:<br> 0: <Guild ? has advanced to
-     * a(an) ?.<br> 1: <Family ? has advanced to a(an) ?.<br>
+     * <code>type</code> 可选值：<br> 0: 公会成员 ? 已转职为 ?。<br>
+     * 1: 家族成员 ? 已转职为 ?。<br>
      *
-     * @param type The type
-     * @return The "job advance" packet.
+     * @param type     通知类型（0=公会, 1=家族）
+     * @param job      转职后的职业 ID
+     * @param charname 角色名
+     * @return 转职通知封包
      */
     public static Packet jobMessage(int type, int job, String charname) {
         OutPacket p = OutPacket.create(SendOpcode.NOTIFY_JOB_CHANGE);
@@ -7380,9 +7350,9 @@ public class PacketCreator {
     }
 
     /**
-     * @param type  - (0:Light&Long 1:Heavy&Short)
-     * @param delay - seconds
-     * @return
+     * @param type  屏幕震动类型（0=轻&长 1=重&短）
+     * @param delay 持续时间（秒）
+     * @return 屏幕震动封包
      */
     public static Packet trembleEffect(int type, int delay) {
         final OutPacket p = OutPacket.create(SendOpcode.FIELD_EFFECT);
@@ -7559,15 +7529,15 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a Snowball Message<br>
+     * 发送雪球游戏消息封包
      * <p>
-     * Possible values for <code>message</code>:<br> 1: ... Team's snowball has
-     * passed the stage 1.<br> 2: ... Team's snowball has passed the stage
-     * 2.<br> 3: ... Team's snowball has passed the stage 3.<br> 4: ... Team is
-     * attacking the snowman, stopping the progress<br> 5: ... Team is moving
-     * again<br>
+     * <code>message</code> 可选值：<br> 1: ...队伍的雪球已通过第1阶段。<br>
+     * 2: ...队伍的雪球已通过第2阶段。<br> 3: ...队伍的雪球已通过第3阶段。<br>
+     * 4: ...队伍正在攻击雪人，进度暂停<br> 5: ...队伍的雪球重新开始移动<br>
      *
-     * @param message
+     * @param team    队伍（0=下方, 1=上方）
+     * @param message 消息类型
+     * @return 雪球消息封包
      */
     public static Packet snowballMessage(int team, int message) {
         OutPacket p = OutPacket.create(SendOpcode.SNOWBALL_MESSAGE);
@@ -8104,10 +8074,10 @@ public class PacketCreator {
     }
 
     /**
-     * Sends a request to remove Mir<br>
+     * 发送移除龙（Mir）请求封包
      *
-     * @param chrId - Needs the specific Character ID
-     * @return The packet
+     * @param chrId 角色 ID
+     * @return 移除龙封包
      */
     public static Packet removeDragon(int chrId) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_DRAGON);
@@ -8116,14 +8086,13 @@ public class PacketCreator {
     }
 
     /**
-     * Changes the current background effect to either being rendered or not.
-     * Data is still missing, so this is pretty binary at the moment in how it
-     * behaves.
+     * 修改背景特效渲染状态（切换指定图层的显示/隐藏）
+     * 注：部分数据仍缺失，目前功能较为基础
      *
-     * @param remove     whether or not the remove or add the specified layer.
-     * @param layer      the targeted layer for removal or addition.
-     * @param transition the time it takes to transition the effect.
-     * @return a packet to change the background effect of a specified layer.
+     * @param remove     true=移除图层, false=添加图层
+     * @param layer      要操作的目标图层
+     * @param transition 特效过渡时间
+     * @return 背景特效修改封包
      */
     public static Packet changeBackgroundEffect(boolean remove, int layer, int transition) {
         OutPacket p = OutPacket.create(SendOpcode.SET_BACK_EFFECT);

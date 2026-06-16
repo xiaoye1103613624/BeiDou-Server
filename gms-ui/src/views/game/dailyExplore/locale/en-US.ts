@@ -9,6 +9,8 @@ export default {
   'dailyExplore.map.thumbnail': 'Map Image',
   'dailyExplore.map.fetchImage': 'Fetch',
   'dailyExplore.map.fetchAllImages': 'Fetch All',
+  'dailyExplore.map.download': 'Download',
+  'dailyExplore.map.downloadAll': 'Download All (ZIP)',
   'dailyExplore.map.fetchImageTip':
     'Download and cache map render from maplestory.io',
   'dailyExplore.map.noImage': 'N/A',

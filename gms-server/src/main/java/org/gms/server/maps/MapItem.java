@@ -181,8 +181,16 @@ public class MapItem extends AbstractMapObject {
         return type == 2 || type == 3 || hasExpiredOwnershipTime();
     }
 
+    /** 是否为独立掉落物品（远征BOSS每人独立一份时，初始120秒仅归属者可拾取） */
+    private boolean independentDrop = false;
+
     public final boolean hasExpiredOwnershipTime() {
-        return System.currentTimeMillis() - dropTime >= SECONDS.toMillis(15);
+        long expireSec = independentDrop ? 120 : 15;
+        return System.currentTimeMillis() - dropTime >= SECONDS.toMillis(expireSec);
+    }
+
+    public void setIndependentDrop(boolean independentDrop) {
+        this.independentDrop = independentDrop;
     }
 
     /**

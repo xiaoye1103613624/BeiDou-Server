@@ -32,6 +32,7 @@ import org.gms.client.inventory.Pet;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
+import org.gms.config.IndependentDropManager;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
@@ -824,6 +825,15 @@ public class MapleMap {
             return;
         }
 
+        // 独立掉落模式：远征BOSS为每个队员各生成一份独立掉落（利用原drop_data表，每人独立随机）
+        final EventInstanceManager eim = getEventInstance();
+        if (IndependentDropManager.isGlobalEnabled()
+                && IndependentDropManager.isIndependentDrop(mob.getId())
+                && eim != null) {
+            dropIndependentFromMonster(mob, eim);
+            return; // 不再走共享掉落
+        }
+
         final byte droptype = (byte) (mob.getStats().isExplosiveReward() ? 3 : mob.getStats().isFfaLoot() ? 2 : chr.getParty() != null ? 1 : 0);
         final int mobpos = mob.getPosition().x;
         float chRate = !mob.isBoss() ? chr.getDropRate() : chr.getBossDropRate();
@@ -859,6 +869,139 @@ public class MapleMap {
         }
 
         registerMobItemDrops(droptype, mobpos, chRate, pos, dropEntry, visibleQuestEntry, otherQuestEntry, globalEntry, chr, mob);
+    }
+
+    /**
+     * 独立掉落模式：为远征队伍中每个成员独立随机一份掉落
+     * 利用原 drop_data 表配置，每人的掉落归属自己，独立掉落的物品120秒保护期
+     */
+    private void dropIndependentFromMonster(final Monster mob, final EventInstanceManager eim) {
+        final List<Character> members = eim.getPlayers();
+        if (members == null || members.isEmpty()) {
+            return;
+        }
+
+        final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
+        final List<MonsterGlobalDropEntry> globalEntry = mi.getRelevantGlobalDrops(this.getId());
+        final Point pos = new Point(0, mob.getPosition().y);
+        final int mobpos = mob.getPosition().x;
+
+        for (final Character member : members) {
+            if (member == null || member.isAwayFromWorld()) {
+                continue;
+            }
+
+            final List<MonsterDropEntry> dropEntry = new ArrayList<>();
+            final List<MonsterDropEntry> visibleQuestEntry = new ArrayList<>();
+            final List<MonsterDropEntry> otherQuestEntry = new ArrayList<>();
+
+            final List<MonsterDropEntry> lootEntry = GameConfig.getServerBoolean("use_spawn_relevant_loot")
+                    ? mob.retrieveRelevantDrops()
+                    : mi.retrieveEffectiveDrop(mob.getId());
+            sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, member);
+
+            if (lootEntry.isEmpty()) {
+                continue;
+            }
+
+            final byte droptype = (byte) (mob.getStats().isExplosiveReward() ? 3
+                    : mob.getStats().isFfaLoot() ? 2
+                    : member.getParty() != null ? 1 : 0);
+            float chRate = !mob.isBoss() ? member.getDropRate() : member.getBossDropRate();
+
+            // 考虑 Showdown 状态
+            final MonsterStatusEffect stati = mob.getStati(MonsterStatus.SHOWDOWN);
+            if (stati != null) {
+                chRate *= (stati.getStati().get(MonsterStatus.SHOWDOWN).doubleValue() / 100.0 + 1.0);
+            }
+            // 考虑家族掉落加成
+            if (member.isFamilyBuff()) {
+                chRate *= member.getFamilyDrop();
+            }
+
+            byte d = 1;
+            // 每位队员独立生成普通掉落、全局掉落、任务掉落
+            d = dropItemsIndependent(dropEntry, pos, d, chRate, droptype, mobpos, member, mob);
+            d = dropGlobalItemsIndependent(globalEntry, pos, d, droptype, mobpos, member, mob);
+            d = dropItemsIndependent(visibleQuestEntry, pos, d, chRate, droptype, mobpos, member, mob);
+            dropItemsIndependent(otherQuestEntry, pos, d, chRate, droptype, mobpos, member, mob);
+        }
+    }
+
+    /**
+     * 独立掉落版的道具生成（与 dropItemsFromMonsterOnMap 逻辑一致，但标记为独立掉落）
+     */
+    private byte dropItemsIndependent(List<MonsterDropEntry> dropEntry, Point pos, byte d, float chRate, byte droptype, int mobpos, Character member, Monster mob) {
+        if (dropEntry.isEmpty()) {
+            return d;
+        }
+        Collections.shuffle(dropEntry);
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+
+        for (final MonsterDropEntry de : dropEntry) {
+            float cardRate = member.getCardRate(de.itemId);
+            int dropChance = (int) Math.min((float) de.chance * chRate * cardRate, Integer.MAX_VALUE);
+
+            if (Randomizer.nextInt(999999) < dropChance) {
+                if (droptype == 3) {
+                    pos.x = mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2)));
+                } else {
+                    pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
+                }
+                if (de.itemId == 0) { // 金币
+                    int mesos = Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum;
+                    if (mesos > 0) {
+                        if (member.getBuffedValue(BuffStat.MESOUP) != null) {
+                            mesos = NumberTool.doubleToInt(mesos * member.getBuffedValue(BuffStat.MESOUP).doubleValue() / 100.0);
+                        }
+                        mesos = NumberTool.floatToInt(mesos * member.getMesoRate());
+                        if (mesos <= 0) {
+                            mesos = Integer.MAX_VALUE;
+                        }
+                        spawnMesoDrop(mesos, calcDropPos(pos, mob.getPosition()), mob, member, false, droptype, true);
+                    }
+                } else {
+                    Item idrop;
+                    if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+                    } else {
+                        idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
+                    }
+                    spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, member, droptype, de.questid, true);
+                }
+                d++;
+            }
+        }
+        return d;
+    }
+
+    /**
+     * 独立掉落版的全局掉落生成
+     */
+    private byte dropGlobalItemsIndependent(List<MonsterGlobalDropEntry> globalEntry, Point pos, byte d, byte droptype, int mobpos, Character member, Monster mob) {
+        if (globalEntry.isEmpty()) {
+            return d;
+        }
+        Collections.shuffle(globalEntry);
+
+        for (final MonsterGlobalDropEntry de : globalEntry) {
+            if (Randomizer.nextInt(999999) < de.chance) {
+                if (droptype == 3) {
+                    pos.x = mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2)));
+                } else {
+                    pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
+                }
+                Item idrop;
+                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                    idrop = ItemInformationProvider.getInstance().randomizeStats((Equip) ItemInformationProvider.getInstance().getEquipById(de.itemId));
+                } else {
+                    idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
+                }
+                spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, member, droptype, de.questid, true);
+                d++;
+            }
+        }
+        return d;
     }
 
     public void dropItemsFromMonster(List<MonsterDropEntry> list, final Character chr, final Monster mob) {
@@ -1218,8 +1361,17 @@ public class MapleMap {
     }
 
     private void spawnDrop(final Item idrop, final Point dropPos, final MapObject dropper, final Character chr, final byte droptype, final short questid) {
+        spawnDrop(idrop, dropPos, dropper, chr, droptype, questid, false);
+    }
+
+    /**
+     * 生成掉落物品（带独立掉落标记）
+     * @param independentDrop true=独立掉落（120秒归属保护），false=普通掉落（15秒）
+     */
+    private void spawnDrop(final Item idrop, final Point dropPos, final MapObject dropper, final Character chr, final byte droptype, final short questid, final boolean independentDrop) {
         final MapItem mdrop = new MapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
+        mdrop.setIndependentDrop(independentDrop);
         spawnAndAddRangedMapObject(mdrop, c -> {
             Character chr1 = c.getPlayer();
 
@@ -1238,9 +1390,17 @@ public class MapleMap {
     }
 
     public final void spawnMesoDrop(final int meso, final Point position, final MapObject dropper, final Character owner, final boolean playerDrop, final byte droptype) {
+        spawnMesoDrop(meso, position, dropper, owner, playerDrop, droptype, false);
+    }
+
+    /**
+     * 生成金币掉落（带独立掉落标记）
+     */
+    public final void spawnMesoDrop(final int meso, final Point position, final MapObject dropper, final Character owner, final boolean playerDrop, final byte droptype, final boolean independentDrop) {
         final Point droppos = calcDropPos(position, position);
         final MapItem mdrop = new MapItem(meso, droppos, dropper, owner, owner.getClient(), droptype, playerDrop);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
+        mdrop.setIndependentDrop(independentDrop);
 
         spawnAndAddRangedMapObject(mdrop, c -> {
             mdrop.lockItem();

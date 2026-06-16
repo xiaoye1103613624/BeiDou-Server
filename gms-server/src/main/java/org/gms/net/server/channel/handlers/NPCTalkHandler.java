@@ -63,6 +63,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         }
 
         if (currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
+            c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message2"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         }

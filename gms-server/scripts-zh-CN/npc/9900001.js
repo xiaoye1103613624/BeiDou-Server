@@ -118,6 +118,7 @@ function action(mode, type, selection) {
         text += `\t${粉心.repeat(7)}\t 会员中心 \t${粉心.repeat(7)}${changeLine}`;
         text += `${redSelect(600, "会员中心")}\t${redSelect(603, "赞助中心")}\t${generalSelect(604, "全服双倍")}\t${generalSelect(605, "全服双爆")}${changeLine.repeat(2)}`;
         text += `${redSelect(602, "会员商店")}\t${redSelect(606, "时装洗练")}\t${redSelect(65, "删除物品")}\t${generalSelect(608, "CDK兑换")}${changeLine.repeat(2)}`;
+        text += `${redSelect(609, "动漫皮肤")}${changeLine.repeat(2)}`;
 
         text += changeLine.repeat(1);
         // =======================================其他============================================6
@@ -335,6 +336,9 @@ function doSelect(selection) {
             break;
         case 608:
             openNpc("xy/vip/CDK_兑换");
+            break;
+        case 609:
+            openNpc("xy/vip/动漫皮肤");
             break;
         case 900:
             openNpc("xy/gm/发送公告");

@@ -1,0 +1,17 @@
+export default {
+  'independentDrop.column.id': 'ID',
+  'independentDrop.column.mobId': '怪物ID',
+  'independentDrop.column.mobName': '怪物名称',
+  'independentDrop.column.enabled': '启用',
+  'independentDrop.column.operation': '操作',
+  'independentDrop.button.add': '新建配置',
+  'independentDrop.button.edit': '编辑',
+  'independentDrop.button.refresh': '刷新',
+  'independentDrop.save.success': '独立掉落配置保存成功',
+  'independentDrop.delete.success': '独立掉落配置已删除',
+  'independentDrop.delete.confirm': '确定要删除该独立掉落配置吗？',
+  'independentDrop.yes': '是',
+  'independentDrop.no': '否',
+  'independentDrop.placeholder.mobId': '请输入怪物ID',
+  'independentDrop.placeholder.mobName': '请输入怪物名称（备注）',
+};

@@ -437,4 +437,44 @@
             <int name="npc" value="9900001"/>
         </imgdir>
     </imgdir>
+    <!-- 自定义道具：xy一件售卖，复制自02022076，ID=02432076 -->
+    <imgdir name="2432076">
+        <imgdir name="info">
+            <canvas name="icon" width="27" height="29">
+                <vector name="origin" x="-3" y="29"/>
+                <string name="_outlink" value="Item/Consume/_Canvas/0202.img/02022076/info/icon"/>
+            </canvas>
+            <canvas name="iconRaw" width="27" height="27">
+                <vector name="origin" x="-3" y="29"/>
+                <string name="_outlink" value="Item/Consume/_Canvas/0202.img/02022076/info/iconRaw"/>
+            </canvas>
+            <int name="price" value="1"/>
+            <int name="slotMax" value="1"/>
+            <int name="tradeBlock" value="1"/>
+        </imgdir>
+        <imgdir name="spec">
+            <string name="script" value="02432076_sell"/>
+            <int name="npc" value="9900001"/>
+        </imgdir>
+    </imgdir>
+    <!-- 自定义道具：xy一键售卖（确认版），复制自02022078，ID=02432078 -->
+    <imgdir name="2432078">
+        <imgdir name="info">
+            <canvas name="icon" width="27" height="29">
+                <vector name="origin" x="-3" y="29"/>
+                <string name="_outlink" value="Item/Consume/_Canvas/0202.img/02022078/info/icon"/>
+            </canvas>
+            <canvas name="iconRaw" width="27" height="27">
+                <vector name="origin" x="-3" y="29"/>
+                <string name="_outlink" value="Item/Consume/_Canvas/0202.img/02022078/info/iconRaw"/>
+            </canvas>
+            <int name="price" value="1"/>
+            <int name="slotMax" value="1"/>
+            <int name="tradeBlock" value="1"/>
+        </imgdir>
+        <imgdir name="spec">
+            <string name="script" value="02432078_sell_confirm"/>
+            <int name="npc" value="9900001"/>
+        </imgdir>
+    </imgdir>
 </imgdir>

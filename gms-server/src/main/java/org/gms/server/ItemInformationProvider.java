@@ -172,46 +172,64 @@ public class ItemInformationProvider {
     }
 
 
+    /**
+     * 获取所有物品的ID和名称列表
+     * 首次调用时从WZ文件加载并缓存到itemNameCache，后续调用直接返回缓存
+     *
+     * @return 所有物品的[物品ID, 物品名称]列表
+     */
     public List<Pair<Integer, String>> getAllItems() {
         if (!itemNameCache.isEmpty()) {
             return itemNameCache;
         }
+        long startTime = System.currentTimeMillis();
+        log.info("[物品查询] 首次加载全部物品名称缓存...");
+
         List<Pair<Integer, String>> itemPairs = new ArrayList<>();
         Data itemsData;
+
         itemsData = stringData.getData("Cash.img");
         for (Data itemFolder : itemsData.getChildren()) {
             itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
         }
+
         itemsData = stringData.getData("Consume.img");
         for (Data itemFolder : itemsData.getChildren()) {
             itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
         }
+
         itemsData = stringData.getData("Eqp.img").getChildByPath("Eqp");
         for (Data eqpType : itemsData.getChildren()) {
             for (Data itemFolder : eqpType.getChildren()) {
                 itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
             }
         }
+
         itemsData = stringData.getData("Etc.img").getChildByPath("Etc");
         for (Data itemFolder : itemsData.getChildren()) {
             itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
         }
+
         itemsData = stringData.getData("Ins.img");
         for (Data itemFolder : itemsData.getChildren()) {
             itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
         }
+
         itemsData = stringData.getData("Pet.img");
         for (Data itemFolder : itemsData.getChildren()) {
             itemPairs.add(new Pair<>(Integer.parseInt(itemFolder.getName()), DataTool.getString("name", itemFolder, "NO-NAME")));
         }
+
+        // 缓存到itemNameCache，避免每次查询都重新加载WZ数据
+        itemNameCache = itemPairs;
+
+        long elapsed = System.currentTimeMillis() - startTime;
+        log.info("[物品查询] 全部物品名称缓存加载完成，总数={}，耗时={}ms", itemPairs.size(), elapsed);
+
         return itemPairs;
     }
 
     public List<Pair<Integer, String>> getAllEtcItems() {
-        if (!itemNameCache.isEmpty()) {
-            return itemNameCache;
-        }
-
         List<Pair<Integer, String>> itemPairs = new ArrayList<>();
         Data itemsData;
 
@@ -2446,14 +2464,36 @@ public class ItemInformationProvider {
 
     }
 
+    /**
+     * 根据物品名称模糊搜索物品ID和名称
+     * 遍历所有物品缓存进行名称匹配，并记录搜索耗时到服务端日志，便于排查性能问题
+     *
+     * @param search 搜索关键词（支持模糊匹配）
+     * @return 匹配的物品列表 [物品ID, 物品名称]
+     */
     public static ArrayList<Pair<Integer, String>> getItemsIDsFromName(String search) {
+        long startTime = System.currentTimeMillis();
         ArrayList<Pair<Integer, String>> retItems = new ArrayList<>();
         List<Pair<Integer, String>> allItems = getInstance().getAllItems();
+        long loadTime = System.currentTimeMillis();
+
+        String lowerSearch = search.toLowerCase();
         for (Pair<Integer, String> itemPair : allItems) {
-            if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+            if (itemPair.getRight().toLowerCase().contains(lowerSearch)) {
                 retItems.add(itemPair);
             }
         }
+        long endTime = System.currentTimeMillis();
+
+        log.info("[物品查询] 关键词=\"{}\"，总物品数={}，匹配结果={}，加载耗时={}ms，搜索耗时={}ms，总耗时={}ms",
+                search, allItems.size(), retItems.size(),
+                loadTime - startTime, endTime - loadTime, endTime - startTime);
+
+        // 分页后每页仅8条，即使数百结果也不会溢出；此处仅做极端情况记录
+        if (retItems.size() > 500) {
+            log.warn("[物品查询] 关键词=\"{}\" 匹配结果过多({}条)，建议缩小搜索范围", search, retItems.size());
+        }
+
         return retItems;
     }
 }

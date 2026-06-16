@@ -111,6 +111,22 @@ export function fetchAllMapImages() {
   );
 }
 
+// ==================== 地图图片下载 ====================
+
+/** 下载单张地图图片（PNG格式，文件名=地图ID.png） */
+export function downloadMapImage(id: number) {
+  return axios.get(`/dailyExplore/v1/downloadMapImage/${id}`, {
+    responseType: 'blob',
+  });
+}
+
+/** 批量下载所有已缓存地图图片（ZIP打包，文件名=地图ID.png） */
+export function downloadAllMapImages() {
+  return axios.get('/dailyExplore/v1/downloadAllMapImages', {
+    responseType: 'blob',
+  });
+}
+
 // ==================== 游戏参数 ====================
 
 export function getGameParams() {

@@ -1226,6 +1226,16 @@ public class Client extends ChannelInboundHandlerAdapter {
         lastPong = System.currentTimeMillis();
     }
 
+    /**
+     * 获取最后一次收到PONG响应的时间戳
+     * 用于计算网络延迟
+     *
+     * @return 最后PONG时间戳（毫秒）
+     */
+    public long getLastPong() {
+        return lastPong;
+    }
+
     public void checkIfIdle(final IdleStateEvent event) {
         final long pingedAt = System.currentTimeMillis();
         sendPacket(PacketCreator.getPing());
