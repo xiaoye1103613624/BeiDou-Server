@@ -33,13 +33,11 @@ function action(mode, type, selection) {
         //text += "#b  套制作升级#k\r\n\r\n";
 
         text += "#L0# " + 小烟花 + "45级\t\t\t\t宝石装备制作#l\r\n\r\n";
-        text += `\t\t${小烟花.repeat(6)}\r\n\r\n`;
         text += "#L1# " + 小烟花 + "45升级79 \t\t紫金装备制作#l\r\n";
         text += "#L2# " + 小烟花 + "79升级105 \t革命装备制作#l\r\n";
         text += "#L3# " + 小烟花 + "105升级140 \t女皇巨匠装备制作#l\r\n";
         text += "#L4# " + 小烟花 + "140升级160 \t埃苏装备制作#l\r\n";
         text += "#L5# " + 小烟花 + "160升级200 \t神秘之影装备制作#l\r\n\r\n";
-        text += `\t\t${小烟花.repeat(6)}\r\n\r\n`;
         text += "#L6# " + 小烟花 + "戒指制作#l\r\n";
         text += "#L7# " + 小烟花 + "盾牌制作#l\r\n";
         text += "#L8# " + 小烟花 + "135布莱克缤武器装备兑换,不可升级#l\r\n";

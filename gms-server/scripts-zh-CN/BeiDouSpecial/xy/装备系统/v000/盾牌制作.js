@@ -31,6 +31,7 @@ var needMaterial = [
 	 // [4001085, 1]//皮亚努斯的象征	
 ];
 
+var 返回图标 = "#fUI/UIWindow.img/itemSearch/BtBack/normal/0#";
 var selectIndex;
 var status = -1;
 
@@ -68,12 +69,16 @@ function action(mode, type, selection) {
             msg += "#r#L" + i + "#";
             msg += "#i" + rewardList[i] + "##z" + rewardList[i] + "##l\r\n";
         }
+        msg += "#g----------------------------------------------\r\n";
+        msg += "#L999#" + 返回图标 + "#l
+"
         // 发送选择界面
         cm.sendSimple("#r 装备兑换使者 #v4000110#\r\n选择你想要兑换的装备：\r\n" + msg);
     }
 
     // 第二页：校验背包、材料，弹出确认框
     else if (status == 1) {
+        if (selection == 999) { cm.dispose(); cm.openNpc(9900001, "xy/装备系统/v000/套装制作升级"); return; }
         selectIndex = selection;
         var targetItem = rewardList[selectIndex];
 

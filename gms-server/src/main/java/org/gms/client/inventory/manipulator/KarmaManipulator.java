@@ -20,6 +20,7 @@
 package org.gms.client.inventory.manipulator;
 
 import org.gms.client.inventory.Item;
+import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 
 /**
@@ -40,6 +41,10 @@ public class KarmaManipulator {
     }
 
     public static void toggleKarmaFlagToUntradeable(Item item) {
+        // 怪物卡片(2380000~2389999)允许自由交换，不转为不可交易
+        if (ItemId.isMonsterCard(item.getItemId())) {
+            return;
+        }
         short karmaFlag = getKarmaFlag(item);
         short flag = item.getFlag();
 

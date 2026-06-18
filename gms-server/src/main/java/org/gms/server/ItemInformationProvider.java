@@ -289,7 +289,8 @@ public class ItemInformationProvider {
         } else if (itemId >= 1900000 && itemId < 2000000) {
             theData = eqpStringData;
             cat = "Eqp/Taming";
-        } else if (itemId >= 1300000 && itemId < 1800000) {
+        } else if (itemId >= 1200000 && itemId < 1800000) {
+            // 1200000~1299999 为高版本副武器/次要武器，与主武器共用 Eqp/Weapon 分类
             theData = eqpStringData;
             cat = "Eqp/Weapon";
         } else if (itemId >= 4000000 && itemId < 5000000) {
@@ -1529,6 +1530,12 @@ public class ItemInformationProvider {
             return pickupRestrictionCache.get(itemId);
         }
 
+        // 怪物卡片(2380000~2389999)允许拾取多张，忽略 info/only 固有道具限制
+        if (ItemId.isMonsterCard(itemId)) {
+            pickupRestrictionCache.put(itemId, false);
+            return false;
+        }
+
         boolean bRestricted = false;
         if (itemId != 0) {
             Data data = getItemData(itemId);
@@ -1936,6 +1943,11 @@ public class ItemInformationProvider {
         }
 
         String islot = getEquipmentSlot(id);
+        // WZ中找不到该装备数据时，拒绝穿装并记录警告
+        if (islot == null) {
+            log.warn("Chr {} tried to equip unknown item {} (no WZ data)", chr.getName(), id);
+            return false;
+        }
         if (!EquipSlot.getFromTextSlot(islot).isAllowed(dst, isCash(id))) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());

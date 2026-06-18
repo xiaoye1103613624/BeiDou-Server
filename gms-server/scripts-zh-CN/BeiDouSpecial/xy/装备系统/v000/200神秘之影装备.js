@@ -81,6 +81,7 @@ var gailv = 60;  // 100% 成功
 
 // ============== 固定脚本结构（不动）==============
 var 金币图标 = "#fUI/UIWindow.img/QuestIcon/7/0#";
+var 返回图标 = "#fUI/UIWindow.img/itemSearch/BtBack/normal/0#";
 var sels;
 var status = -1;
 
@@ -116,8 +117,11 @@ function action(mode, type, selection) {
             msg += "#r#L" + i + "#";
             msg += "#i" + weapon[i][1] + ":##z" + weapon[i][1] + "# #b→→→#r #i" + weapon[i][0] + ":##z" + weapon[i][0] + "##l\r\n";
         }
+        msg += "#g----------------------------------------------\r\n";
+        msg += "#L999#" + 返回图标 + "#l\r\n";
         cm.sendSimple("#d装备合成系统 \t\t成功率: #r#e" + gailv + "%#d#n\r\n温馨提示：失败材料不返还，请选择：" + msg + "");
     } else if (status == 1) {
+        if (selection == 999) { cm.dispose(); cm.openNpc(9900001, "xy/装备系统/v000/套装制作升级"); return; }
         sels = selection;
         if (!cm.canHold(weapon[sels][0])) {
             cm.sendOk("#r背包空间不足,固有装备只能持有一个。");

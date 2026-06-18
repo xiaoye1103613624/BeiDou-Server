@@ -69,8 +69,11 @@ function action(mode, type, selection) {
             msg += "#r#L" + i + "#";
             msg += "#i" + weapon[i] + "##z" + weapon[i] + "##l\r\n";
         }
+        msg += "#g----------------------------------------------\r\n";
+        msg += "#L999#" + 返回图标 + "#l\r\n";
         cm.sendSimple("#b#e您好，制作#r布莱克武器#b需要以下材料，没有材料可不行哦\r\n\r\n" + msg + "");
     } else if (status == 1) {
+        if (selection == 999) { cm.dispose(); cm.openNpc(9900001, "xy/装备系统/v000/套装制作升级"); return; }
         sels = selection;
         if (!cm.canHold(weapon[sels])) {
             cm.sendNext("#r背包空间不足，固有装备只能持有一个。");

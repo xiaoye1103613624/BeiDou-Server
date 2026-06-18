@@ -7,13 +7,8 @@
 
 var DailyExploreConfigManager = Java.type("org.gms.config.DailyExploreConfigManager");
 
-// 持久化 Key（使用 CharacterExtendValue daily 类型，午夜自动清空）
 var EXTEND_KEY = "每日探索";
 
-/**
- * 加载探索数据（日清类型）
- * 返回格式：{ count: 已完成次数, currentMapId: 当前目标地图ID(0=无任务) }
- */
 function loadData() {
     var raw = cm.getCharacterExtendValue(EXTEND_KEY, true);
     if (raw && raw !== "" && raw !== "null") {
@@ -28,13 +23,21 @@ function saveData(data) {
 
 function getDailyLimit() { return DailyExploreConfigManager.getDailyLimit(); }
 
-/** 根据地图ID查找配置（用于显示地图名称和描述） */
+/** 根据地图ID查找配置（走内存缓存，不查DB） */
 function getMapConfig(mapId) {
-    var maps = DailyExploreConfigManager.queryEnabledMaps();
+    var maps = DailyExploreConfigManager.getEnabledMaps();  // 缓存，非DB
     for (var i = 0; i < maps.size(); i++) {
         if (maps.get(i).getMapId() == mapId) return maps.get(i);
     }
     return null;
+}
+
+/**
+ * 生成地图小地图的 UI WZ 路径，供 #f...# 展示
+ * 需要提前将 minimap PNG 导入到客户端 UIWindow.img/MapMinimap/{mapId}/0
+ */
+function getMapMinimapImg(mapId) {
+    return "#fUI/UIWindow.img/MapMinimap/" + mapId + "/0#";
 }
 
 function start() { levelMain(); }
@@ -67,6 +70,8 @@ function levelMain() {
             if (mn && mn !== "") text += "地图名称：#b" + mn + "#k\r\n";
             if (md && md !== "") text += "地图描述：#g" + md + "#k\r\n";
         }
+        // 地图小地图预览（需将导出的PNG导入到 UIWindow.img/MapMinimap/{mapId}/0）
+        text += getMapMinimapImg(data.currentMapId) + "\r\n";
         text += "\r\n";
         text += "#L1##r提交任务（第 " + (data.count + 1) + " 次探索）#k#l\r\n";
         text += "#L2##b放弃任务（重新随机，手续费 #r10万金币#k）#k#l\r\n";
@@ -108,7 +113,7 @@ function levelHandleMain(selection) {
 
 function startNewExplore(data) {
     // 从地图池随机选取
-    var maps = DailyExploreConfigManager.queryEnabledMaps();
+    var maps = DailyExploreConfigManager.getEnabledMaps();  // 缓存
     if (maps.isEmpty()) {
         cm.sendNextLevel("Main", "探索地图池为空，请联系管理员配置！");
         return;
@@ -154,7 +159,7 @@ function submitExplore(data) {
     text += "第 #r" + exploreNum + "#k 次探索完成！\r\n";
 
     // 发放每轮随机奖励（从奖励池中按权重随机选取 1~3 种）
-    var ringRewardPool = DailyExploreConfigManager.queryRingRewards();
+    var ringRewardPool = DailyExploreConfigManager.getRingRewards();  // 缓存
     if (!ringRewardPool.isEmpty()) {
         // 构建权重表
         var totalWeight = 0;
@@ -211,7 +216,7 @@ function submitExplore(data) {
     }
 
     // 发放完成奖励（里程碑式）
-    var finalRewards = DailyExploreConfigManager.queryRewardsByExploreCount(exploreNum);
+    var finalRewards = DailyExploreConfigManager.getRewardsByExploreCount(exploreNum);  // 缓存
     if (!finalRewards.isEmpty()) {
         text += "\r\n━━━ 完成奖励（第" + exploreNum + "次）━━━\r\n";
         for (var i = 0; i < finalRewards.size(); i++) {
@@ -266,7 +271,7 @@ function showRewardInfo() {
     text += "每日上限：" + dailyLimit + " 次（午夜重置）\r\n\r\n";
 
     text += "每轮随机奖励（完成每轮后随机抽取）：\r\n";
-    var rewards = DailyExploreConfigManager.queryRingRewards();
+    var rewards = DailyExploreConfigManager.getRingRewards();  // 缓存
     if (!rewards.isEmpty()) {
         for (var i = 0; i < rewards.size(); i++) {
             var r = rewards.get(i);
@@ -284,7 +289,7 @@ function showRewardInfo() {
     text += "\r\n完成奖励（达到指定探索次数时触发）：\r\n";
     var hasFinal = false;
     for (var n = 1; n <= dailyLimit; n++) {
-        var finalRewards = DailyExploreConfigManager.queryRewardsByExploreCount(n);
+        var finalRewards = DailyExploreConfigManager.getRewardsByExploreCount(n);  // 缓存，O(1) map lookup
         if (!finalRewards.isEmpty()) {
             hasFinal = true;
             text += "第 " + n + " 次：\r\n";

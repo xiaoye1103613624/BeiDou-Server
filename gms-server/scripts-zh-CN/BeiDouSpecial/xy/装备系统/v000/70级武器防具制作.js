@@ -39,8 +39,11 @@ function action(mode, type, selection) {
         for (var oKey in itemObjS) {
             text += "#L" + oKey + "##v" + oKey + "##b#z" + oKey + "##k\r\n";
         }
+        text += "#g----------------------------------------------\r\n";
+        text += "#L999#" + 返回图标 + "#l\r\n";
         cm.sendSimple(text);
     } else if (status == 1) {
+        if (selection == 999) { cm.dispose(); cm.openNpc(9900001, "xy/装备系统/v000/套装制作升级"); return; }
         if (!itemObjS[selection]) {
             cm.sendOk("数据错误！");
             cm.dispose();
@@ -57,8 +60,12 @@ function action(mode, type, selection) {
                 text += "#v" + needItems[i][0] + "##b#z" + needItems[i][0] + "##k x " + needItems[i][1] + " 你有 #r#c" + needItems[i][0] + "##k 个\r\n";
             }
         }
+        text += "#g----------------------------------------------\r\n";
+        text += "#L0#✅ 确认制作#l\r\n";
+        text += "#L999#" + 返回图标 + "#l\r\n";
         cm.sendSimple(text);
     } else if (status == 2) {
+        if (selection == 999) { status = -1; action(1, 0, 0); return; }
         var msg = "";
         var needItems = itemObjS[selected];
         for (var i = 0; i < needItems.length; i++) {
