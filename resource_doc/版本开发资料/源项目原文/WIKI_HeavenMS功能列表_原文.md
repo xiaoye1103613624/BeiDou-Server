@@ -1,0 +1,248 @@
+Welcome to HeavenMS wiki!
+
+---------------------------
+DEVELOPMENT STATUS:
+---------------------------
+
+Status: <span style="color:green">__Released__</span>.
+
+HeavenMS development achieved an acceptable state-of-art and will get into a halt. A heartfelt thanks for everyone that contributed in some way for the progress of this server!
+
+Although development is halted, support for fixing features that were implemented here is still up. You can still actively help us improve the server by issuing pull requests with informative details about what's changing.
+
+If you liked this project, please don't forget to __star__ the repo ;) .
+
+---------------------------
+DISCLAIMER:
+---------------------------
+
+This is NOT intended to be a PURE v83 MapleStory server emulator (acting
+under the clean WZ files, provided by Nexon/Wizet). There has been provided
+a whole array of edited WZ on the Drive to be used for this server. Although
+normal WZs will load properly, there is no guarantee in-game bugs and issues
+may arise because of some incompatibilities with the clean files.
+
+* HeavenMS staff has __no current intention__ to publicly open a server with this source, if that ever comes to happen this note will be lifted.
+
+* This server source is __NOT intended to be stable__ as is. Proper deadlock review and other maintenance checks are needed in order to make it stable for production use.
+
+---------------------------
+Feature list (as of rev203):
+---------------------------
+
+### PQs:
+
+* HPQ/KPQ/LPQ/LMPQ/OPQ/EllinPQ/PiratePQ/MagatiaPQ/HorntailPQ.
+* AmoriaPQ/TreasurePQ/ElnathPQ.
+* CWKPQ as Expedition-based event.
+* Expeditions: Scarga/Horntail/Showa/Balrog/Zakum/Pinkbean.
+* GuildPQ + Guild queue with multi-lobby systems available.
+* Brand-new PQs: BossRushPQ, CafePQ.
+* Mu Lung Dojo.
+* Capt. Latanica remade as an event (parties can now fight the boss).
+
+![alt text](https://i.imgur.com/Wo3WWtK.png "CafePQ")
+![alt text](https://i.imgur.com/qnchpGO.png "BossPQ")
+
+### Skills:
+
+* Some skills behaving oddly have been patched, such as Steal, Venomous Star/Stab and Mystic Doors.
+* Maker skill features properly developed.
+* Server is using heuristics to calculate fee costs for the Maker (errors sums up to 8k mesos, reagent errors stacks up comformant with it's level).
+* New skill: Chair Mastery (max lv 1) - Players having this passive skill can gain a significant boost of HP/MP recovery when sitting on a field/map chair.
+
+![alt text](https://i.imgur.com/FTuhRLg.png "Chair Mastery")
+![alt text](https://i.imgur.com/LcDdiDq.png "Maker")
+
+### Quests:
+
+* Doll house quest functional.
+* Quests can now reward properly items when matching a reward item with the player's job.
+* Quest rewards according to jobs works properly.
+* Reward selection and randomed reward works properly.
+* Loads of quests have been patched.
+* Meso requirement for starting/completing quests now must be met by the player.
+* Lots of job questlines (rewarding skills) have been patched/implemented.
+* Enhanced rewarding system: checks for stacking opportunities on the inventory before checking for new slots.
+* Improved the quest expiration system, one of the tweaks making the clock UI disappear when completing/expiring quests.
+* Reviewed Aran questline.
+* Reviewed 4th job skill questlines as a whole.
+* Complete overhaul on the 3rd job quiz (explorers), with all 40-question pool now made available.
+
+![alt text](https://i.imgur.com/uhL9gUT.png "3rd Job Quiz")
+![alt text](https://i.imgur.com/b1NQt2C.png "Quest Meso Requirement")
+
+### Player Social Network:
+
+* Guild and Alliance system fully functional.
+* Implemented Marriage system from the ground-up (excluding character packet encoding parts that were already present, proper credits given throughout the source files).
+* Beginners can create and join a "beginner-only" party (characters up to level 10).
+* Enhanced synchronization on Player Shops and Hired Merchants. Transactions made are instantly informed to the owner.
+* Game minirooms such as match cards and omok now has semi-functional password system.
+* Item pickup cooldown on non-owned/non-partyowned items functional.
+* Further improved the server's ranking system, now displaying properly daily player ranking movement.
+* Automated support for Player NPCs and Hall of Fame.
+
+![alt text](https://i.imgur.com/IoDuaYt.png "Hall of Fame")
+![alt text](https://i.imgur.com/MZ1yIIc.png "Engagement")
+![alt text](https://i.imgur.com/86PrK34.png "Marriage")
+
+### Cash & Items:
+
+* EXP/DROP/Cosmetic Coupons.
+* EXP/DROP coupons now appears as a buff effect when on active time.
+* Great deal of cash items functional.
+* New scroll: antibanish. For use only in cases where bosses send a player back to town.
+* Inventory system properly checks for item slot free space and ownership.
+* Storage with "Arrange Items" feature functional.
+* Spikes on shoes.
+* Vega's spell.
+* Owl of Minerva.
+* Pet item ignore.
+* New Year's card (New Year effect sometimes d/c's a player).
+* Kite.
+* Cash Shop Surprise.
+* Maple Life.
+
+![alt text](https://i.imgur.com/wWhBc2N.png "Kite")
+![alt text](https://i.imgur.com/d3VRMRx.png "Owl of Minerva")
+![alt text](https://i.imgur.com/RFSTl5v.png "Rate Coupons")
+
+### Monsters, Maps & Reactors:
+
+* Every monsterbook card is now droppable by overworld mobs.
+* Added meso drop data for basically every missing overworld mob.
+* Monsterbook displays drop data info conformant with the underlying DB (needs custom wz). See more on the MobBookUpdate feature.
+* Every skill/mastery book is now droppable by mobs.
+* Mobs now can drop more than one of the same equipment (number of possible drops defined at droptime, uses the minimum/maximum quantity fields on DB).
+* Improved map bounding checks for item drop points, assuring most of the items dropped will be available to pickup inside the accessible map area.
+* Limited item count on maps, smartly expiring oldest registered items, preventing potential item flooding.
+* Implemented Zombify disease status.
+* Added Boss HP Bar for dozens of bosses (needs provided custom wz).
+* If multiple bosses are on the same area, client will prioritize Boss HP bar of the target of the player.
+* Boats, elevator and other travelling mechanics fully working.
+* HP decreasing overtime on maps and mechanics to prevent them (consumables, equips) fully functional.
+* Crimson Balrog boat approaching visual effect made functional.
+* PQs, Taxis and other event-driven situations warps players at random spawnpoints, GMS-like.
+* Some reactors (PQ bonus boxes) spraying items on the map, instead of dropping everything at once.
+* Reactors pick items up smartly, checking for an option to pick up on many-items-nearby scenario.
+* Updated many scripted portals not implementing SFX properly.
+* Updated Crimsonwood, World Tour, Nihal Desert and Neo City, enabling quest completion and game progression in these areas.
+* Giant Cake (anniversary-themed boss) drops Maple equipments, Maple scrolls, summoning bags and many more interesting items.
+
+![alt text](https://i.imgur.com/199JH7n.png "Crog Boat")
+![alt text](https://i.imgur.com/yAvmU5K.png "Map bounds")
+![alt text](https://i.imgur.com/yJJCwO6.png "Updated monsterbook data")
+![alt text](https://i.imgur.com/1gvwV5Y.png "Neo City")
+
+### PQ potentials:
+
+* Lobby system - Multiple PQ instances on same channel.
+* Expedition system - Multiples parties can attempt on a same instance (lobbies and expeds are mutually-exclusive).
+* Guild queue system - Guilds can register themselves on a queue for the GPQ.
+* EIM Pool system - After the first instance setup, next event instances are loaded beforehand and set on a pooling queue, optimizing future loadouts.
+
+### Player potentials:
+
+* Adventurer Mount quests functional.
+* All Equipment levels up.
+* Player level rates.
+* Gain fame by quests.
+
+### Server potentials:
+
+* Multi-worlds.
+* Inventory auto-gather and auto-sorting feature.
+* Enhanced auto-pot system: pet uses as many potions as necessary to reach the desired threshold.
+* Enhanced buff system: smartly checks for the best available buff effects to be active on the player.
+* Enhanced AP auto-assigner: exactly matches AP with the needed for the player's current level, surplus assigned to the primary attribute.
+* Tweaked pet/mount hunger: calculations for fullness/tiredness takes active time of the subject into account.
+* NPC crafters (equips, plates/jewels, etc) now won't take items freely if the requirement conditions are not properly met.
+* Pet item pickup now gives preference to player attacks rather than forcing attack disables when automatically picking up.
+* Channel capacity bar functional and world servers with max capacity checks.
+* Disease status are now visible for other players, even when changing maps.
+* Poison damage value are now visible for other players.
+* Mastery book announcer displays droppers of needed books of a player, by reading underlying DB.
+* Custom jail system (needs provided custom wz).
+* Custom buyback system.
+* Delete Character (requires ENABLE_PIC activated).
+* Autosaver (periodically saves on DB current state of every player in-game).
+* Both fixed and randomized versions of HP/MP growth rate available, regarding player job (enable one at ServerConstants). Placeholder for HP/MP washing feature.
+* Reallocated mapobjectids utilization throughout the source, preventing issues such as "NPC disappearing mysteriously after some server time" from happening.
+* Implemented old GMS statup mechanic for novices level 10 or below. Usage of the edited localhost is mandatory on this.
+* Accounts can be created automatically when trying to login on an inexistent account -- credits to shavit.
+* Usage of Bcrypt (up-to-date) as the main password hashing algorithm, replacing old SHA's -- credits to shavit.
+
+![alt text](https://i.imgur.com/YEr52gi.png "Enhanced Buff system")
+![alt text](https://i.imgur.com/Ux1LpWA.png "Equipment levelup")
+![alt text](https://i.imgur.com/bhQqyNA.png "Guild Queue")
+![alt text](https://i.imgur.com/tdcX5Ul.png "Inventory autogather/sorter")
+
+### Admin/GM commands:
+
+* Server commands layered by GM levels.
+* Spawn Zakum/Horntail/Pinkbean.
+* New commands.
+
+### External tools:
+
+* MapleArrowFetcher - Updates min/max quantity dropped on all arrows drop data, calculations based on mob level and whether it's a boss or not.
+* MapleBossHpBarFetcher - Searches the quest WZ files and reports in all relevant data regarding mobs that has a boss HP bar whilst not having a proper "boss" label.
+* MapleCashDropFetcher - Searches the DB for any CASH drop data entry and lists them on a report file.
+* MapleCouponInstaller - Retrieves coupon info from the WZ and makes a SQL table with it. The server will use that table to gather info regarding rates and intervals.
+* MapleIdRetriever - Two behaviors: generates a SQL table with relation (id, name) of the handbook given as input. Given a file with names, outputs a file with ids.
+* MapleInvalidItemIdFetcher - Generates a file listing all inexistent itemid's currently laying on the DB.
+* MapleMapInfoRetriever - Basic tool for detecting missing info nodes on the map field structures (maps failing to have an info node on the WZ is an critical issue).
+* MapleMesoFetcher - Creates meso drop data for mobs with more than 4 items (thus overworld mobs), calculations based on mob level and whether it's a boss or not.
+* MapleMobBookIndexer - Generates a SQL table with all relations of cardid and mobid present in the mob book.
+* MapleMobBookUpdate - Generates a wz.xml that is a copy of the original MonsterBook.wz.xml, except it updates the drop data info in the book with those currently on DB.
+* MapleQuestItemCountFetcher - Searches the quest WZ files and reports in all relevant data regarding missing "count" labels on item acts at "complete quest".
+* MapleQuestItemFetcher - Searches the SQL tables and project files and reports in all relevant data regarding missing/erroneous quest items.
+* MapleQuestlineFetcher - Searches the quest WZ files and reports in all questids that currently doesn't have script files.
+* MapleQuestMesoFetcher - Searches the quest WZ files and reports in all relevant data regarding missing/erroneous quest fee checks.
+* MapleReactorDropFetcher - Searches the DB for reactors with drop data and reports in reactorids that are not yet coded.
+* MapleSkillMakerFetcher - Updates the DB Maker-related tables with the current info present on the WZs.
+* MapleSkillMakerReagentIndexer - Generates a new maker table describing all stat-improvements from the Maker reagents (those empowering crystals and jewels).
+
+### Project:
+
+* Organized project code.
+* Highly updated drop data.
+* Highly configurable server (see all server flags at ServerConstants).
+* Fixed/added some missing packets for MoveEnvironment, summons and others.
+* Uncovered many Send/Recv opcodes throughout the source.
+* Reviewed many Java object aspects that needed concurrency protection.
+* Usage of HikariCP to improve the DB connection management.
+* Protected many flaws with login management system.
+* Heavily reviewed future task management inside the project. Way less trivial schedules are spawned now, relieving task overload on the TimerManager.
+* ThreadTracker: embedded auditing tool for run-time deadlock scanning throughout the server source (relies heavily on memory usage, designed only for debugging purposes).
+
+![alt text](https://i.imgur.com/aG1UEaq.png "Environment-change objects")
+
+### Exploits patched:
+
+* Player being given free access to any character of any account once they have authenticated their account on login phase.
+* Player being given permission to delete any character of any account once they have authenticated their account on login phase.
+* Player being able to start/complete any quest freely.
+* Several assynchronous-oriented exploits patched, highlights on those involving Fredrick & Duey.
+
+### Localhost:
+
+* Removed the 'n' problem within NPC dialog.
+* Removed caps for MATK, WDEF, MDEF, ACC and AVOID.
+* Removed "AP excess" popup and "Admin/MWLB" action block, original credits to kevintjuh93.
+* Removed "You've gained a level!" popup, original credits to PrinceReborn.
+* Removed "Cannot enter MTS from this map." popup on maps that blocks transitions (such change channel, CS/MTS), rendering the buyback option now available for all maps.
+* Removed a check for players wishing to create/join a party being novices under level 10.
+* Set a new high cap for SPEED.
+* Removed the AP assign block for novices.
+* Removed a block that would show up when trying to apply an attack gem on equipments that aren't weapons.
+
+### Custom NPCs:
+
+* Agent E: Accessory crafter.
+* Donation Box: Instant-sell NPC.
+* Ace of Hearts & Coco: C. scroll crafter.
+* Spiegelmann: Instant-ore refiner NPC.
+
+---------------------------
