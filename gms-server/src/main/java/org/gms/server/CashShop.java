@@ -175,7 +175,11 @@ public class CashShop {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, ModifiedCashItemDO> loadedItems = new HashMap<>();
-            for (Data item : etc.getData("Commodity.img").getChildren()) {
+            Data commodityData = etc.getData("Commodity.img");
+            if (commodityData == null) {
+                throw new IllegalStateException("无法加载 Etc.wz/Commodity.img，WZ数据为空。请确认服务器从 gms-server/ 目录启动。");
+            }
+            for (Data item : commodityData.getChildren()) {
                 int sn = DataTool.getIntConvert("SN", item);
                 int itemId = DataTool.getIntConvert("ItemId", item);
                 int price = DataTool.getIntConvert("Price", item, 0);
@@ -220,7 +224,11 @@ public class CashShop {
             CashItemFactory.items = loadedItems;
 
             Map<Integer, List<Integer>> loadedPackages = new HashMap<>();
-            for (Data cashPackage : etc.getData("CashPackage.img").getChildren()) {
+            Data cashPackageData = etc.getData("CashPackage.img");
+            if (cashPackageData == null) {
+                throw new IllegalStateException("无法加载 Etc.wz/CashPackage.img，WZ数据为空。请确认服务器从 gms-server/ 目录启动。");
+            }
+            for (Data cashPackage : cashPackageData.getChildren()) {
                 List<Integer> cPackage = new ArrayList<>();
 
                 for (Data item : cashPackage.getChildByPath("SN").getChildren()) {

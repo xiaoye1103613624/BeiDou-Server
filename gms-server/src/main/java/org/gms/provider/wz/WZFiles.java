@@ -2,6 +2,8 @@ package org.gms.provider.wz;
 
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +27,7 @@ public enum WZFiles {
     SOUND("Sound"),
     UI("UI");
 
+    private static final Logger log = LoggerFactory.getLogger(WZFiles.class);
     private final String fileName;
     public static final String DIRECTORY = "wz";
 
@@ -38,7 +41,16 @@ public enum WZFiles {
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
         Path langPath = Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
 
-        return Files.exists(langPath) ? langPath : wzPath;
+        if (Files.exists(langPath)) {
+            return langPath;
+        }
+        if (Files.exists(wzPath)) {
+            return wzPath;
+        }
+        // 两个路径都不存在时，记录详细错误，帮助诊断工作目录问题
+        log.error("WZ目录不存在！语言路径：{}，默认路径：{}，当前工作目录：{}。请确认服务器从 gms-server/ 目录启动。",
+                langPath.toAbsolutePath(), wzPath.toAbsolutePath(), System.getProperty("user.dir"));
+        return wzPath;
     }
 
     public String getFilePath() {

@@ -1,54 +1,18 @@
 /**
- * 在线玩家列表 — 列出所有在线玩家，可选中查看详情及管理操作（跟踪玩家）
+ * 在线玩家列表 — 列出所有在线玩家，可选中查看详情及管理操作
  */
 var Server = Java.type("org.gms.net.server.Server");
-var status = 0;
-var selectedPlayer; // 选中的玩家对象
-var selectedChannel; // 选中玩家所在频道
 
 function start() {
     status = -1;
     action(1, 0, 0);
 }
 
-/**
- * 构建在线玩家列表文本，供多处复用
- * 使用 .toArray() 将 Java 集合转为 JS 数组，避免 GraalJS 下标访问兼容问题
- */
-function buildPlayerListText() {
-    var text = "#e在线玩家列表#n\r\n\r\n";
-    var onlineCount = 0;
-    // Server.getInstance().getWorlds() 返回 Java List，通过 toArray 转为 JS 数组安全遍历
-    var worlds = Server.getInstance().getWorlds().toArray();
-    for (var w = 0; w < worlds.length; w++) {
-        var channels = worlds[w].getChannels().toArray();
-        for (var c = 0; c < channels.length; c++) {
-            var players = channels[c].getPlayerStorage().getAllCharacters().toArray();
-            for (var i = 0; i < players.length; i++) {
-                var player = players[i];
-                onlineCount++;
-                text += "#L" + player.getId() + "# 玩家:#b" + player.getName()
-                    + "#k 等级:#r" + player.getLevel()
-                    + "#k 频道:#r" + channels[c].getId()
-                    + "#k 地图:#b" + player.getMap().getMapName() + "#k#l\r\n";
-            }
-        }
-    }
-    text = "#r当前在线人数：" + onlineCount + "#k\r\n" + text;
-    if (onlineCount == 0) {
-        text += "\r\n暂无在线玩家";
-    }
-    return text;
-}
+var selectedPlayer; // 选中的玩家对象
+var selectedChannel; // 选中玩家所在频道
 
 function action(mode, type, selection) {
-    // 玩家关闭对话框
-    if (mode == -1) {
-        cm.dispose();
-        return;
-    }
-    // 玩家点击结束/否
-    if (mode == 0) {
+    if (status == 0 && mode == 0) {
         cm.dispose();
         return;
     }
@@ -58,29 +22,56 @@ function action(mode, type, selection) {
         status--;
     }
 
+    // GM权限检查
+    if (cm.getPlayer().getGMLevel() < 1) {
+        cm.sendOk("你没有权限使用这个功能！");
+        cm.dispose();
+        return;
+    }
+
     if (status == 0) {
-        // GM权限检查
-        if (cm.getPlayer().gmLevel() < 1) {
-            cm.sendOk("你没有权限使用这个功能！");
-            cm.dispose();
-            return;
+        // 显示在线玩家列表
+        var text = "#e在线玩家列表#n\r\n\r\n";
+        var worlds = Server.getInstance().getWorlds();
+        var onlineCount = 0;
+        for (var w = 0; w < worlds.size(); w++) {
+            var world = worlds.get(w);
+            var channels = world.getChannels();
+            for (var c = 0; c < channels.size(); c++) {
+                var channel = channels.get(c);
+                var players = channel.getPlayerStorage().getAllCharacters();
+                for (var i = 0; i < players.size(); i++) {
+                    var player = players.get(i);
+                    onlineCount++;
+                    text += "#L" + player.getId() + "# 玩家:#b" + player.getName()
+                        + "#k 等级:#r" + player.getLevel()
+                        + "#k 频道:#r" + channel.getId()
+                        + "#k 地图:#b" + player.getMap().getMapName() + "#k#l\r\n";
+                }
+            }
         }
-        cm.sendSimple(buildPlayerListText());
+        text = "#r当前在线人数：" + onlineCount + "#k\r\n" + text;
+        if (onlineCount == 0) {
+            text += "\r\n暂无在线玩家";
+        }
+        cm.sendSimple(text);
 
     } else if (status == 1) {
         // 查找选中的玩家
         var targetId = selection;
         var found = false;
-        var worlds = Server.getInstance().getWorlds().toArray();
-        for (var w = 0; w < worlds.length && !found; w++) {
-            var channels = worlds[w].getChannels().toArray();
-            for (var c = 0; c < channels.length && !found; c++) {
-                var players = channels[c].getPlayerStorage().getAllCharacters().toArray();
-                for (var i = 0; i < players.length && !found; i++) {
-                    var player = players[i];
+        var worlds = Server.getInstance().getWorlds();
+        for (var w = 0; w < worlds.size() && !found; w++) {
+            var world = worlds.get(w);
+            var channels = world.getChannels();
+            for (var c = 0; c < channels.size() && !found; c++) {
+                var channel = channels.get(c);
+                var players = channel.getPlayerStorage().getAllCharacters();
+                for (var i = 0; i < players.size() && !found; i++) {
+                    var player = players.get(i);
                     if (player.getId() == targetId) {
                         selectedPlayer = player;
-                        selectedChannel = channels[c].getId();
+                        selectedChannel = channel.getId();
                         found = true;
                     }
                 }
@@ -106,7 +97,7 @@ function action(mode, type, selection) {
 
     } else if (status == 2) {
         if (selection == 0) {
-            // 跟踪玩家：跳转到目标玩家所在地图
+            // 跟踪玩家
             var targetMap = selectedPlayer.getMapId();
             var targetChannel = selectedPlayer.getClient().getChannel();
             cm.getPlayer().changeMap(targetMap);
@@ -117,7 +108,28 @@ function action(mode, type, selection) {
             cm.dispose();
         } else if (selection == 1) {
             // 返回列表
-            cm.sendSimple(buildPlayerListText());
+            status = 0;
+            var text = "#e在线玩家列表#n\r\n\r\n";
+            var worlds = Server.getInstance().getWorlds();
+            var onlineCount = 0;
+            for (var w = 0; w < worlds.size(); w++) {
+                var world = worlds.get(w);
+                var channels = world.getChannels();
+                for (var c = 0; c < channels.size(); c++) {
+                    var channel = channels.get(c);
+                    var players = channel.getPlayerStorage().getAllCharacters();
+                    for (var i = 0; i < players.size(); i++) {
+                        var player = players.get(i);
+                        onlineCount++;
+                        text += "#L" + player.getId() + "# 玩家:#b" + player.getName()
+                            + "#k 等级:#r" + player.getLevel()
+                            + "#k 频道:#r" + channel.getId()
+                            + "#k 地图:#b" + player.getMap().getMapName() + "#k#l\r\n";
+                    }
+                }
+            }
+            text = "#r当前在线人数：" + onlineCount + "#k\r\n" + text;
+            cm.sendSimple(text);
         }
     }
 }

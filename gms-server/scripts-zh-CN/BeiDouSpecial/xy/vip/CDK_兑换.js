@@ -73,10 +73,9 @@ function action(mode, type, selection) {
             // 发送全服公告
             try {
                 var PacketCreator = Java.type('org.gms.util.PacketCreator');
-                var BroadcastPrefix = Java.type('org.gms.constants.string.BroadcastPrefix');
                 var world = cm.getPlayer().getWorldServer();
-                world.broadcastPacket(PacketCreator.serverNotice(BroadcastPrefix.EXCHANGE.getType(),
-                    BroadcastPrefix.EXCHANGE.getPrefix() + "恭喜 " + cm.getPlayer().getName() + " 使用CDK兑换码获得了 " + redeemResult.getMessage()));
+                world.broadcastPacket(PacketCreator.serverNotice(6,
+                    "【CDK兑换】恭喜 " + cm.getPlayer().getName() + " 使用CDK兑换码获得了 " + redeemResult.getMessage()));
             } catch (e) {
                 // 公告发送失败不影响兑换流程
             }

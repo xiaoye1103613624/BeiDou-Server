@@ -64,8 +64,7 @@ function start() {
     }
 
     world.setDropRate(currentRate * 2); // 将掉落倍率调整为双倍
-    var BroadcastPrefix = Java.type('org.gms.constants.string.BroadcastPrefix');
-    world.broadcastPacket(PacketCreator.serverNotice(BroadcastPrefix.DOUBLE_EVENT.getType(), BroadcastPrefix.DOUBLE_EVENT.getPrefix() + "惊喜时刻来临！GM团队已激活紧急掉落池，在接下来的两小时内获得的掉落率将翻倍！"));
+    world.broadcastPacket(PacketCreator.serverNotice(6, "【双倍掉落】惊喜时刻来临！GM团队已激活紧急掉落池，在接下来的两小时内获得的掉落率将翻倍！"));
 }
 
 /**
@@ -90,7 +89,7 @@ function stop() {
     // 重置活动状态，允许再次开启
     em.setProperty("state", "0");
 
-    world.broadcastPacket(PacketCreator.serverNotice(BroadcastPrefix.DOUBLE_EVENT.getType(), BroadcastPrefix.DOUBLE_EVENT.getPrefix() + "很遗憾，紧急掉落池能量已耗尽，掉落倍率已恢复正常。"));
+    world.broadcastPacket(PacketCreator.serverNotice(6, "【双倍掉落】很遗憾，紧急掉落池能量已耗尽，掉落倍率已恢复正常。"));
 }
 
 // ---------- 预留函数(空实现) ----------

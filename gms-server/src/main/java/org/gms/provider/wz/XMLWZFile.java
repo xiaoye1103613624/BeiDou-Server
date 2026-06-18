@@ -72,6 +72,9 @@ public class XMLWZFile implements DataProvider {
         Path dataFile = root.resolve(path + ".xml");
         Path imageDataDir = root.resolve(path);
         if (!Files.exists(dataFile)) {
+            // 记录详细的文件缺失信息，帮助诊断WZ路径或工作目录问题
+            log.warn("WZ数据文件不存在：{}（绝对路径：{}），工作目录：{}",
+                    dataFile, dataFile.toAbsolutePath(), System.getProperty("user.dir"));
             return null;
         }
         final XMLDomMapleData domMapleData;
