@@ -84,13 +84,13 @@ function action(mode, type, selection) {
                 return;
             }
         }
-        cm.sendYesNo("#b是否要兑换#r布莱克武器系列#r #i" + weapon[sels] + "#? \r\n");
+        cm.sendYesNo("#b是否要兑换#r布莱克武器系列#r #i" + weapon[sels] + "##z" + weapon[sels] + "#? \r\n");
     } else if (status == 2) {
         for (var i = 0; i < req.length; i++) {
             cm.gainItem(req[i][0], -req[i][1]);
         }
         cm.gainItem(weapon[sels], 1);
-        cm.sendNext("#b已经兑换好了，请前往背包查看 #i" + weapon[sels] + "#");
+        cm.sendNext("#b已经兑换好了，请前往背包查看 #i" + weapon[sels] + "##z" + weapon[sels] + "#");
         cm.dispose();
     } else {
         //cm.sendNext("#r发生错误: mode : " + mode + " status : " + status);

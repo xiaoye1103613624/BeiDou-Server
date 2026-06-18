@@ -100,7 +100,7 @@ function action(mode, type, selection) {
         }
 
         // 确认兑换弹窗
-        cm.sendYesNo("#b确定要兑换装备 #r #i" + targetItem + "# 吗？");
+        cm.sendYesNo("#b确定要兑换装备 #r #i" + targetItem + "##z" + targetItem + "# 吗？");
     }
 
     // 第三页：扣除材料 + 发放装备，完成兑换
@@ -112,7 +112,7 @@ function action(mode, type, selection) {
         }
         // 发放装备
         cm.gainItem(targetItem, 1);
-        cm.sendNext("#b兑换成功！已获得装备 #i" + targetItem + "#");
+        cm.sendNext("#b兑换成功！已获得装备 #i" + targetItem + "##z" + targetItem + "#");
         cm.dispose();
     }
 

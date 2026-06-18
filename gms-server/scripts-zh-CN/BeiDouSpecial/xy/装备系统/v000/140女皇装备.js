@@ -137,37 +137,24 @@ function action(mode, type, selection) {
             cm.dispose();
 			return;
 		}
-        cm.sendYesNo("#b确定要合成：#r #i" + weapon[sels][0] + "#吗? \r\n");
-    } 
-    else if (status == 2) {
-		s1 = Math.floor(Math.random() * 100 + 1);
-		if(s1 <= gailv){
-			// 扣除材料
-			for (var i = 0; i < req.length; i++) {
-				cm.gainItem(req[i][0], -req[i][1]);
-			}
-			// 扣除金币
-			cm.gainMeso(-rem);
-			// 扣除旧装备
-			cm.gainItem(weapon[sels][1], -1);
-			// 发放新装备
-			cm.gainItem(weapon[sels][0], 1);
+        cm.sendYesNo("#b确定要合成：#r #i" + weapon[sels][0] + "##z" + weapon[sels][0] + "# 吗？\r\n");
 
-			cm.sendOk("#b合成成功！获得：#i" + weapon[sels][0] + "#");
-			cm.dispose();
-		} 
-		else {
-			// 失败只扣材料不扣装备
-			for (var i = 0; i < req.length; i++) {
-				cm.gainItem(req[i][0], -req[i][1]);
-			}
-			cm.gainMeso(-rem);
-			cm.sendOk("#r合成失败，材料已消失。");
-			cm.dispose();
-		}
-    } 
-    else {
-		//cm.sendOk("#r好的，谢谢惠顾，欢迎下次光临！");
+    } else if (status == 2) {
+        var s1 = Math.floor(Math.random() * 100 + 1);
+        if (s1 <= gailv) {
+            for (var i = 0; i < req.length; i++) cm.gainItem(req[i][0], -req[i][1]);
+            cm.gainMeso(-rem);
+            cm.gainItem(weapon[sels][1], -1);
+            cm.gainItem(weapon[sels][0], 1);
+            cm.sendOk("#b合成成功！获得：#i" + weapon[sels][0] + "##z" + weapon[sels][0] + "#");
+        } else {
+            for (var i = 0; i < req.length; i++) cm.gainItem(req[i][0], -req[i][1]);
+            cm.gainMeso(-rem);
+            cm.sendOk("#r合成失败，材料已消失。");
+        }
+        cm.dispose();
+
+    } else {
         cm.dispose();
     }
 }
