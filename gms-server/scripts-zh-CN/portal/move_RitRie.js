@@ -1,3 +1,2 @@
-function enter() {
-    return true;
+﻿function enter(pi) {
 }

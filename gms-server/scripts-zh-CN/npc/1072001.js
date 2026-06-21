@@ -20,60 +20,40 @@
 */
 
 /* Magician Job Instructor
-	Magician 2nd Job Advancement
-	Victoria Road : The Forest North of Ellinia (101020000)
 */
 
 var status;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == -1)
         cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
+    else {
+        if (mode == 1)
             status++;
-        } else {
+        else
             status--;
-        }
 
-        if (status == 0) {
-            if (cm.isQuestCompleted(100007)) {
-                cm.sendOk("你真是一个真正的英雄！");
-                cm.dispose();
-            } else if (cm.isQuestCompleted(100006)) {
-                cm.sendNext("好的，我会让你进去！打败里面的怪物，收集30个#b#t4031013##k，然后和我里面的一位同事交谈。他会给你#b#t4031012##k，证明你已经通过了测试。祝你好运。");
-                status = 4;
-            } else if (cm.isQuestStarted(100006)) {
-                cm.sendNext("嗯...这绝对是#b#p10201##k的来信...所以你来到这里是为了接受测试，成为一个魔法师进行第二次职业转职。好吧，我来给你解释一下测试。不要太担心，它并不是那么复杂。");
-            } else {
-                cm.sendOk("一旦你准备好了，我可以告诉你路线。");
-                cm.dispose();
-            }
-        } else if (status == 1) {
-            cm.sendNextPrev("我会送你去一个隐藏的地图。你会看到一些平时不会见到的怪物。它们看起来和普通的怪物一样，但态度完全不同。它们既不会提升你的经验等级，也不会给你提供物品。");
-        } else if (status == 2) {
-            cm.sendNextPrev("你在打倒那些怪物的时候，将能够获得一种名为#b#t4031013##k的大理石。这是一种由它们邪恶的心灵制成的特殊大理石。收集30个，然后去找我的一个同事谈谈。这就是你通过考验的方法。");
-        } else if (status == 3) {
-            cm.sendYesNo("一旦你进入，就不能离开，直到完成你的任务。如果你死了，你的经验等级会减少。所以你最好做好准备……那么，你现在想去吗？");
-        } else if (status == 4) {
-            cm.sendNext("好的，我会让你进去！打败里面的怪物，收集30个#b#t4031013##k，然后和我的同事交谈。他会给你#b#t4031012##k，这是你通过测试的证明。祝你好运。");
-            cm.completeQuest(100006);
-            cm.startQuest(100007);
-            cm.gainItem(4031009, -1);
-        } else if (status == 5) {
-            cm.warp(108000200, 0);
-            cm.dispose();
-        } else {
-            cm.dispose();
-        }
+			if (cm.haveItem(4031009)) {
+				if (status == 0)
+					cm.sendNext("噢, 你是 #b汉斯#k 介绍来的吗")
+				else if (status == 1)
+					cm.sendNextPrev("所以你要证明你的实力吗 ? 很好...");
+				else if (status == 2)
+					cm.sendNextPrev("我可以给你一次机会,请你把握.");
+				else if (status == 3)
+					cm.sendYesNo("请给我 #b30 #t4031013##k. 祝你好运.");
+				else if (status == 4) {
+					cm.warp(108000200, 0);
+					cm.dispose();
+				}
+			} else {
+				cm.sendOk("很抱歉,我需要 #b汉斯的信件#k 请去找汉斯拿取谢谢");
+				cm.dispose();
+			}
     }
-}
+}	

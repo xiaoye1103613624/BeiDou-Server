@@ -1,193 +1,249 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
+var 星星 = "#fEffect/CharacterEff/1114000/2/0#";
+var 爱心 = "#fEffect/CharacterEff/1022223/4/0#";
+var 红色箭头 = "#fUI/UIWindow/Quest/icon6/7#";
+var 挑战中心 = "#fEffect/CharacterEff1.img/QQ1408745/0/10#";
+var 粉心 = "#fEffect/CharacterEff/1112903/0/0#";
+var 群粉心 = "   "+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+"\r\n";
+var 正方形 = "#fUI/UIWindow/Quest/icon3/6#";
+var 提示 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
+var 蓝色箭头 = "#fUI/UIWindow/Quest/icon2/7#";
+var 图标1 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
+var 图标2 = "#fUI/UIWindow/Minigame/Omok/stone/0/black/0#";
+var 图标3 = "#fUI/UIWindow/Minigame/Omok/stone/1/white/0#";
+var 图标4 = "#fUI/UIWindow/Minigame/Omok/stone/2/black/0#";
+var 分割线 = "#fUI/Login.img/WorldSelect/channel/chgauge#";
+var fubenm = "挑战品客缤"; //副本名称
+var bossm = "品客缤"; //BOSS名称+大陆扩充
+var bossid = 8820001; //BOSSID
+var bossjyxs = "500万"; //BOSS经验显示
+var bossjy = 5000000; //BOSS经验
+var bossxlxs = "50 亿"; //BOSS血量显示
+var bossxl = 5000000000; //BOSS血量
+var minLevel = 120; //最低等级
+var maxLevel = 250; //最高等级
+var minPartySize = 1; //最低人数
+var maxPartySize = 6; //最高人数
+var TZCS = 3; //限制次数
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
+var cywp = 4110001; //消耗物品
+var xhwzsl = 5; //消耗物品数量
+var zlyqxs = "30 万"; //破攻要求显示
+var zlyq = 300000; //破攻要求
+var fubendt = 327090420; //副本地图
+var FBSJ = 1800; //限制时间 秒
+var FBSJXS = 30; //显示时间分钟
+var inmeso = 1; //入场金币
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* The Forgotten Temple Manager
- * 
- * Deep Place of Temple - Forgotten Twilight (270050000)
- * Vs Pink Bean Recruiter NPC
- * 
- * @author Ronan
- */
-
-var status = 0;
-var expedition;
-var expedMembers;
-var player;
-var em;
-const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-var exped = ExpeditionType.PINKBEAN;
-var expedName = "Twilight of the Gods";
-var expedBoss = "Pink Bean";
-var expedMap = "Twilight of Gods";
-
-var list = "你想做什么？#b\r\n\r\n#L1#查看当前远征队成员#l\r\n#L2#开始战斗！#l\r\n#L3#退出远征队#l";
+var propsToDiscard = [2022701, 2022702]; // 需要丢弃的道具ID列表
+// 导入 MapleInventoryType 枚举
+var MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
 
 function start() {
+    status = -1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-
-    player = cm.getPlayer();
-    expedition = cm.getExpedition(exped);
-    em = cm.getEventManager("PinkBeanBattle");
-
     if (mode == -1) {
         cm.dispose();
     } else {
-        if (mode == 0) {
+        if (status >= 0 && mode == 0) {
+            cm.sendOk("感谢你的光临！");
+            cm.dispose();
+            return;
+        }
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+            var bossLogCount = cm.getPlayer().getBossLog(fubenm);  // 获取玩家的副本挑战次数
+			var 扩充次数 = cm.getPlayer().getBossLog(bossm); // 获取玩家的扩充次数
+            var text = "";
+            text += "\r\n\t\t  " + 挑战中心 + "\r\n" + 群粉心 + "\r\n";
+            text += "                 #r#e" + 图标2 + "<" + fubenm + ">" + 图标2 + "#n\r\n\r\n";
+            text += "                 " + 图标1 + "#d 破攻要求:#r " + zlyqxs + " #k\r\n\r\n";
+            text += "                 " + 图标1 + "#d 当前破攻:#r " + cm.getPlayer().getDamage() / 10000 + " #k万\r\n\r\n";
+			text += "                 " + 图标1 + "#d 今日次数:#r " + bossLogCount + "#b/" + (TZCS + 扩充次数) + "次    \r\n\r\n"; // 显示扩充后的总次数
+            text += "                 " + 图标1 + "#d 副本时间:#b " + FBSJXS + " 分钟\r\n\r\n";
+			text += "                 " + 图标1 + "#d BOSS血量:#r " + bossxlxs + " \r\n";
+            text += "                 " + 图标1 + "#d 进入要求:#r #v" + cywp + "# * 5 #k张" + "\r\n\r\n";
+			
+            if (cm.getPlayer().getDamage() >= zlyq && cm.getLevel() >= minLevel) {
+                text += "\r\n\r\n    #L1#" + 图标3 + "#r确定进入" + 图标3 + "#l  ";
+                text += "    #L2#" + 图标3 + "#r掉落查询" + 图标3 + "#l     \r\n\r\n\r\n";
+            } else {
+                text += "\r\n\r\n\t\t\t  #r#e你的破攻不满足,无法带队进入#n\r\n\r\n";
+				cm.dispose(); // 结束对话
+            }
+
+            text += "" + 群粉心 + "\r\n\r\n";
+            text += " \r\n";
+            cm.sendSimple(text);
+        } else if (selection == 1) {
+            if (cm.getPlayerCount(fubendt) > 0) {
+                cm.sendOk("有人正在挑战，请稍等一会儿再来");
+                cm.dispose();
+                return;
+            } else if (!cm.haveItem(cywp, xhwzsl)) {
+                cm.sendOk("你没有#v" + cywp + "#，或者数量不足，无法进入");
+                cm.dispose();
+                return;
+			} else if (cm.getBossLog(fubenm) >= (TZCS + cm.getPlayer().getBossLog(bossm))) { // 检查扩充后的总次数
+                cm.sendOk("您今天已经挑战太多次了，请明天再来");
+                cm.dispose();
+                return;
+            } else if (cm.getPlayer().getMeso() < inmeso) {
+                cm.sendOk("你都没有足够的金币，还想白嫖我？");
+                cm.dispose();
+                return;
+            } else if (cm.getParty() == null) {
+                cm.sendOk("你没有队伍无法进入！");
+                cm.dispose();
+                return;
+            } else if (cm.partyMembersInMap() < minPartySize || cm.partyMembersInMap() > maxPartySize) {
+                cm.sendOk("请核对你的队伍人数！");
+                cm.dispose();
+                return;
+            } else {
+    var msg = '';
+        var notHere = '';
+        var party = cm.getPlayer().getParty().getMembers();  // 获取队伍成员
+        var it = party.iterator();
+
+        while (it.hasNext()) {
+            var cPlayer = it.next();
+            var chr = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());  // 获取队员角色
+            if (chr != null) {
+                // 检查队员破攻是否满足要求
+                if (chr.getDamage() < zlyq) { // 检查队员破攻是否低于 1万
+                    msg += chr.getName() + " 没有足够的破攻（低于 " + zlyqxs + "），无法进入！\r\n";
+                    break;  // 找到第一个不满足条件的队员，跳出循环
+                }
+                // 检查队员背包中是否有需要丢弃的道具
+                for (var i = 0; i < propsToDiscard.length; i++) {
+                    if (chr.haveItem(propsToDiscard[i])) {
+                        msg += chr.getName() + " 不能携带道具 #v" + propsToDiscard[i] + "# 进入！\r\n";
+                        break;  // 找到第一个不满足条件的队员，跳出循环
+                    }
+                }
+                if (msg.length > 0) break;  // 如果已经有消息，跳出循环
+            } else {
+                notHere += cPlayer.getName() + " ";  // 不在本地图的队员
+            }
+        }
+
+        // 如果有队员不在当前地图，显示提示
+        if ('' !== notHere) {
+            cm.sendOk(notHere + '不在本地图.');
             cm.dispose();
             return;
         }
 
-        if (status == 0) {
-            if (player.getLevel() < exped.getMinLevel() || player.getLevel() > exped.getMaxLevel()) { //Don't fit requirement, thanks Conrad
-                cm.sendOk("您不符合与" + expedBoss + "战斗的条件！");
-                cm.dispose();
-            } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l");
-                status = 1;
-            } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
-                if (expedition.isInProgress()) {
-                    cm.sendOk("你的探险已经在进行中，对于那些仍在战斗中的人，让我们为那些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
-                } else {
-                    cm.sendSimple(list);
-                    status = 2;
-                }
-            } else if (expedition.isRegistering()) { //If the expedition is registering
-                if (expedition.contains(player)) { //If you're in it but it hasn't started, be patient
-                    cm.sendOk("你已经注册了这次远征。请等待 #r" + expedition.getLeader().getName() + "#k 开始。");
-                    cm.dispose();
-                } else { //If you aren't in it, you're going to get added
-                    cm.sendOk(expedition.addMember(cm.getPlayer()));
-                    cm.dispose();
-                }
-            } else if (expedition.isInProgress()) { //Only if the expedition is in progress
-                if (expedition.contains(player)) { //If you're registered, warp you in
-                    var eim = em.getInstance(expedName + player.getClient().getChannel());
-                    if (eim.getIntProperty("canJoin") == 1) {
-                        eim.registerPlayer(player);
-                    } else {
-                        cm.sendOk("你的远征队已经开始对抗" + expedBoss + "的战斗。让我们为这些勇敢的灵魂祈祷。");
-                    }
-
-                    cm.dispose();
-                } else { //If you're not in by now, tough luck
-                    cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
-                }
-            }
-        } else if (status == 1) {
-            if (selection == 1) {
-                expedition = cm.getExpedition(exped);
-                if (expedition != null) {
-                    cm.sendOk("有人已经主动成为了远征队的领袖。试着加入他们吧！");
-                    cm.dispose();
-                    return;
-                }
-
-                var res = cm.createExpedition(exped);
-                if (res == 0) {
-                    cm.sendOk("#r" + expedBoss + " 远征#k 已经创建。\r\n\r\n再次与我交谈，查看当前队伍，或开始战斗！");
-                } else if (res > 0) {
-                    cm.sendOk("抱歉，您已经达到了此次远征的尝试配额！请另选他日再试……");
-                } else {
-                    cm.sendOk("在开始远征时发生了意外错误，请稍后重试。");
-                }
-
-                cm.dispose();
-
-            } else if (selection == 2) {
-                cm.sendOk("当然，并非每个人都能挑战" + expedBoss + "。");
-                cm.dispose();
-
-            }
-        } else if (status == 2) {
-            if (selection == 1) {
-                if (expedition == null) {
-                    cm.sendOk("无法加载远征队。");
-                    cm.dispose();
-                    return;
-                }
-                expedMembers = expedition.getMemberList();
-                var size = expedMembers.size();
-                if (size == 1) {
-                    cm.sendOk("你是探险队中唯一的成员。");
-                    cm.dispose();
-                    return;
-                }
-                var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
-                text += "\r\n\t\t1." + expedition.getLeader().getName();
-                for (var i = 1; i < size; i++) {
-                    text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
-                }
-                cm.sendSimple(text);
-                status = 6;
-            } else if (selection == 2) {
-                var min = exped.getMinSize();
-
-                var size = expedition.getMemberList().size();
-                if (size < min) {
-                    cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
-                    cm.dispose();
-                    return;
-                }
-
-                cm.sendOk("探险队将开始，现在将由护送你前往 #b" + expedMap + "#k。");
-                status = 4;
-            } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + "探险结束了。"));
-                cm.endExpedition(expedition);
-                cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");
-                cm.dispose();
-
-            }
-        } else if (status == 4) {
-            if (em == null) {
-                cm.sendOk("事件无法初始化，请在论坛上报告此问题。");
-                cm.dispose();
-                return;
-            }
-
-            em.setProperty("leader", player.getName());
-            em.setProperty("channel", player.getClient().getChannel());
-            if (!em.startInstance(expedition)) {
-                cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
-                cm.dispose();
-                return;
-            }
-
+        // 如果有队员破攻不足或背包中有需要丢弃的道具，显示提示
+        if (msg.length > 0) {
+            cm.sendOk(msg);
             cm.dispose();
+            return;
+        }
+                var party = cm.getParty().getMembers();
+                var memberCheckPassed = true;
+                var memberStatusText = "";
 
-        } else if (status == 6) {
-            if (selection > 0) {
-                var banned = expedMembers.get(selection - 1);
-                expedition.ban(banned);
-                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");
+                var it = party.iterator();
+                while (it.hasNext()) {
+                    var cPlayer = it.next();
+                    var chr = getPlayerStatus(cPlayer.getId());  // 使用新的 getPlayerStatus 函数
+                    if (chr == null) {
+                        memberCheckPassed = false;
+                        memberStatusText += cPlayer.getName() + " 不在线！\r\n";
+                    } else {
+                        if (chr.getMapId() != cm.getPlayer().getMapId()) {
+                            memberCheckPassed = false;
+                            memberStatusText += chr.getName() + " 不在当前地图！\r\n";
+                        }
+
+                        if (chr.getClient().getChannel() != cm.getClient().getChannel()) {
+                            memberCheckPassed = false;
+                            memberStatusText += chr.getName() + " 不在当前频道！\r\n";
+                        }
+
+                        // 正确调用 getInventory 方法
+                        var inventory = chr.getInventory(MapleInventoryType.ETC);  //这个ETC是背包其他栏，消耗道具使用 MapleInventoryType.USE 来检查
+                        if (inventory.countById(cywp) < xhwzsl) {
+                            memberCheckPassed = false;
+                            memberStatusText += chr.getName() + " 没有#v" + cywp + "#或数量不足！\r\n";
+                        }
+
+                        if (chr.getBossLog(fubenm) >= (TZCS + cm.getPlayer().getBossLog(bossm))) { // 检查扩充后的总次数
+                            memberCheckPassed = false;
+                            memberStatusText += chr.getName() + " 每日挑战次数已达上限！\r\n";
+                        }
+                    }
+                }
+
+                if (memberCheckPassed) {
+                    // 执行副本进入的逻辑
+                    var map = cm.getMap(fubendt);
+                    map.killAllMonsters(false);
+					cm.getMap(fubendt).resetFully(); //刷新地图
+                    cm.gainMeso(-inmeso); // 扣除金币
+                    cm.召唤怪物(bossid, bossxl, bossjy, 1, fubendt, 5, -42);
+                    cm.warpParty(fubendt); // 传送队伍
+                    cm.给团队每日(fubenm);
+					cm.给团队道具(cywp,-xhwzsl); 
+                   // cm.getPlayer().startMapTimeLimitTask(FBSJ, cm.getChannelServer().getMapFactory().getMap(910000000));       //这个给个人地图记时
+					// 遍历队伍成员并为每个成员启动限时任务
+					var party = cm.getParty().getMembers();
+					var it = party.iterator();
+					while (it.hasNext()) {
+					var cPlayer = it.next();
+					var chr = getPlayerStatus(cPlayer.getId()); // 获取队员角色
+					if (chr != null) {
+					// 为每个队员启动地图时间限制任务
+					chr.startMapTimeLimitTask(FBSJ, cm.getChannelServer().getMapFactory().getMap(910000000));
+					}
+				}
+
+                    cm.喇叭(2, "【" + cm.getName() + "】 队伍开始挑战 【" + bossm + " — " + fubenm + "】");
+                    cm.dispose();
+                } else {
+                    cm.sendOk("#r队伍成员存在问题：#k\r\n" + memberStatusText);
+                    cm.dispose();
+                }
+            }
+        } else if (selection == 2) {
+            if (cm.getLevel() < minLevel) {
+                cm.sendOk("您的等级不足" + minLevel + ",无法查看该副本掉落.");
                 cm.dispose();
-            } else {
-                cm.sendSimple(list);
-                status = 2;
+                return;
+            }
+            TT = cm.checkDrop(bossid);
+            cm.sendSimple(TT);
+            status = -1;
+        }
+    }
+}
+
+function getPlayerStatus(id) {
+    var cchr;
+    var 循环 = true;
+    if (循环 == true) {
+        var channels = Packages.handling.channel.ChannelServer.getAllInstances().iterator();
+        while (channels.hasNext()) {
+            var channel = channels.next();
+            var chrs = channel.getPlayerStorage().getAllCharacters().iterator();
+            while (chrs.hasNext()) {
+                var chr = chrs.next();
+                if (chr.getId() == id) {
+                    cchr = chr;
+                    循环 = false;
+                    break;
+                }
             }
         }
     }
+    return cchr;
 }

@@ -1,86 +1,49 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	Fairy Tale Fairy Crackers - Every Town()
 */
-/* Fairytail Crackers
-	Witch Tower Entrance (980040000)
-	Used to warp into the Jump Quest. Currently only used for GM events.
-	
-	First revision by Twdtwd.
- */
 
-var status;
-var stage = 1;
+var fromWitch = false;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+    if (cm.getMapId() == 980040000) {
+	fromWitch = true;
+	cm.sendSimple("#b(Hmmm...so if you touch the moving cracker wall or the rising chocolate, then you'll bounce out..) #kEh? Who are you? Which of those cats told you that you can find treasures here? Hmmm, well okay. Since you made it this far, might as well try it. Which of these difficulty levels do you want to take on?....#b#L0# #v03994115##l #L1# #v03994116##l #L2# #v03994117##l");
+    } else {
+	cm.sendSimple("Hey who are you? Are you...one of those Ninjas looking to steal some treasures from here? \r\n #L0##bTreasures?#l \r\n #L1##b(Secretly) Head over to Witch Tower#k#l");
+    }
 }
 
 function action(mode, type, selection) {
-    if (mode < 0) {
-        cm.dispose();
+    if (!fromWitch) {
+	switch (selection) {
+	    case 0:
+		cm.sendOk("T...treasures? Who...who said that? Do you think I'd tell you that the Pink Bean Hat made by the witch with Pink Bean that looks like this #v01002971:# can be obtained after clearing normal or hard mode 5 times, and Pink Bean Suit looks like this #v01052202:# can be obtained after getting Pink Bean Hat and go to grave yard through portal in the top right of Witch Tower Entrance? As if!..");
+		break;
+	    case 1:
+		cm.warp(980040000, 0);
+		break;
+	}
     } else {
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-        if (status == 0 && mode == 1) {
-            if (cm.getPlayer().isGM()) {
-                var event = "CLOSED";
-                var stage = cm.getClient().getChannelServer().getStoredVar(9000049);
-                if (stage == 1) {
-                    event = "EASY";
-                }
-                if (stage == 2) {
-                    event = "MEDIUM";
-                }
-                if (stage == 3) {
-                    event = "HARD";
-                }
-                cm.sendSimple("你好GM。\r\n当前活动是：#r" + event + "#k\r\n你想做什么？\r\n#b#L0#参加活动#l\r\n#L1#关闭活动#l\r\n#L2#将活动设置为简单#l\r\n#L3#将活动设置为中等#l\r\n#L4#将活动设置为困难#l");
-            } else {
-                var stage = cm.getClient().getChannelServer().getStoredVar(9000049);
-                if (stage == 0) {
-                    cm.sendOk("看起来塔还没有解锁。请等待GM解锁！");
-                } else {
-                    cm.warp(980040000 + stage * 1000, 0);
-                }
-                cm.dispose();
-            }
-        } else if (status == 1 && cm.getPlayer().isGM()) {
-            if (selection == 0) {
-                var stage = cm.getClient().getChannelServer().getStoredVar(9000049);
-                if (stage == 0) {
-                    cm.sendOk("看起来塔还没有解锁。请等待GM解锁！");
-                } else {
-                    cm.warp(980040000 + stage * 1000, 0);
-                }
-                cm.dispose();
-                return;
-            }
-            cm.getClient().getChannelServer().setStoredVar(9000049, selection - 1);
-            cm.dispose();
-        } else {
-            cm.dispose();
-        }
+	switch (selection) {
+	    case 0: {
+		var dh = cm.getEventManager("WitchTower_EASY");
+		dh.newInstance(cm.getName()).registerPlayer(cm.getPlayer());
+		break;
+	    }
+	    case 1: {
+		var aa = cm.getEventManager("WitchTower_Med");
+		aa.newInstance(cm.getName()).registerPlayer(cm.getPlayer());
+		break;
+	    }
+	    case 2: {
+		var dd = cm.getEventManager("WitchTower_Hard");
+		dd.newInstance(cm.getName()).registerPlayer(cm.getPlayer());
+		break;
+	    }
+	    default:
+		cm.sendOk("Unavailable");
+		break;
+	}
     }
+    cm.dispose();
 }

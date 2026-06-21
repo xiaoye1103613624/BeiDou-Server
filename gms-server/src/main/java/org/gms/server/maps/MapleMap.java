@@ -132,6 +132,12 @@ public class MapleMap {
     private final AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
     /** 已掉落物品计数 */
     private final AtomicInteger droppedItemCount = new AtomicInteger(0);
+    /** 轮回石碑：地图上当前存活的"轮回"怪物（同一时刻地图上只允许存在一只），为null表示无人施放 */
+    private volatile Monster reincarnationMonster;
+    /** 轮回石碑：施放"轮回"怪物的玩家角色ID，用于校验是否为本人重复施放 */
+    private volatile int reincarnationOwnerId;
+    /** 轮回石碑："轮回"怪物的怪物ID（沿用客户端已内置真实贴图的怪物9990100，无需自建占位图） */
+    private static final int REINCARNATION_MOB_ID = 9990100;
     /** 地图中的角色集合 */
     private final Collection<Character> characters = new LinkedHashSet<>();
     /** 地图中按队伍分组的角色 */
@@ -3977,13 +3983,18 @@ public class MapleMap {
             chrRLock.unlock();
         }
 
+        boolean dbgActive = isDbgActive();
         int numShouldSpawn = getNumShouldSpawn(numPlayers);
+        if (dbgActive) {
+            // 轮回石碑生效中：大幅提升刷怪数量，并无视生成点冷却时间，让玩家能持续刷到怪物
+            numShouldSpawn = Math.max(numShouldSpawn, monsterSpawn.size()) * 5;
+        }
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = new ArrayList<>(getMonsterSpawn());
             Collections.shuffle(randomSpawn);
             short spawned = 0;
             for (SpawnPoint spawnPoint : randomSpawn) {
-                if (spawnPoint.shouldSpawn()) {
+                if (dbgActive ? spawnPoint.shouldForceSpawn() : spawnPoint.shouldSpawn()) {
                     spawnMonster(spawnPoint.getMonster());
                     spawned++;
 
@@ -3993,6 +4004,59 @@ public class MapleMap {
                 }
             }
         }
+    }
+
+    /**
+     * 轮回石碑：判断地图上当前是否有存活的"轮回"怪物
+     * 用于respawn()提升刷怪速度，以及阻止其他玩家重复施放
+     *
+     * @return true表示地图上有存活的轮回怪物
+     */
+    public boolean isDbgActive() {
+        Monster mob = reincarnationMonster;
+        return mob != null && mob.isAlive();
+    }
+
+    /**
+     * 轮回石碑：在玩家当前位置召唤"轮回"怪物
+     * 同一时刻地图上只允许存在一只轮回怪物：
+     * - 若已有其他玩家施放且怪物仍存活，提示"地图上有人施放了轮回"并拒绝本次施放
+     * - 若是本人重复施放，或怪物已死亡，则允许重新召唤
+     * 怪物存活期间，respawn()会大幅提升本地图的刷怪数量与速度
+     *
+     * @param chr 施放轮回石碑的玩家
+     * @return true表示召唤成功
+     */
+    public boolean setDbg(final Character chr) {
+        if (isDbgActive() && reincarnationOwnerId != chr.getId()) {
+            chr.dropMessage(5, "地图上有人施放了轮回");
+            return false;
+        }
+
+        final Monster mob = new Monster(LifeFactory.getMonster(REINCARNATION_MOB_ID));
+        mob.setPosition(chr.getPosition());
+        mob.setFh(chr.getFh());
+        reincarnationOwnerId = chr.getId();
+        reincarnationMonster = mob;
+        mob.addListener(new MonsterListener() {
+            @Override
+            public void monsterKilled(int aniTime) {
+                if (reincarnationMonster == mob) {
+                    reincarnationMonster = null;
+                    reincarnationOwnerId = 0;
+                }
+            }
+
+            @Override
+            public void monsterDamaged(Character from, int trueDmg) {
+            }
+
+            @Override
+            public void monsterHealed(int trueHeal) {
+            }
+        });
+        spawnMonster(mob);
+        return true;
     }
 
     public void mobMpRecovery() {

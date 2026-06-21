@@ -1,0 +1,22738 @@
+- _name: SetItemInfo.img
+- _type: WzImage
+- _children:
+  - -1:
+    - _name: -1
+    - _type: SubProperty
+    - _value:
+      - child_count: 5
+    - _children:
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 集合之戒
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Short
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 50
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 50
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Short
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 50
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 50
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Short
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 50
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 50
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Short
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 50
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 50
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Short
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 50
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 50
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1114302
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 13:
+    - _name: 13
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 强力漫步者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003197
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052333
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072502
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082305
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 150
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포스워커 세트
+  - 14:
+    - _name: 14
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 神秘漫步者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003198
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052334
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072503
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082306
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 150
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아케인워커 세트
+  - 15:
+    - _name: 15
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 清风漫步者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003199
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052335
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072504
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082307
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 150
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 윈드워커 세트
+  - 16:
+    - _name: 16
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 迷雾漫步者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003200
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052336
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072505
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082308
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 150
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 미스트워커 세트
+  - 17:
+    - _name: 17
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 幸运漫步者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003201
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052337
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072506
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082309
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 150
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포춘워커 세트
+  - 18:
+    - _name: 18
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 阿加雷斯血色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 15
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 15
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003177
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052319
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072490
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082300
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102280
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1302153
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1402096
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1432087
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1442117
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1312066
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1322097
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1412066
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1422067
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1232013
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1542016
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 阿加雷斯血色武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아가레스 블러디 세트
+  - 19:
+    - _name: 19
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 艾里格斯血色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003178
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052320
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072491
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082301
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102281
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1372085
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1382105
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1212013
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1252013
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1552016
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 艾里格斯血色武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엘리고스 블러디 세트
+  - 20:
+    - _name: 20
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 伊布斯血色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003179
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052321
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072492
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082302
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102282
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1452112
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1462100
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1522017
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 伊布斯血色武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이포스 블러디 세트
+  - 21:
+    - _name: 21
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 赫尔巴斯血色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003180
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052322
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072493
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082303
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102283
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1332131
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1472123
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1242045
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 赫尔巴斯血色武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 핼파스 블러디 세트
+  - 22:
+    - _name: 22
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 维帕尔血色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003181
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052323
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072494
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082304
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102284
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1482085
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1492086
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1532017
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1222013
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1242013
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 在维帕尔血色武器中选择一个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 베파르 블러디 세트
+  - 23:
+    - _name: 23
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 梅兹的新月套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1032092
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1112583
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1132084
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 멜츠의 크레센트 문 세트
+  - 24:
+    - _name: 24
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 梅兹的旭日套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1012239
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1032093
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1112584
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1122104
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1132085
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incEVA:
+                - _name: incEVA
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Short
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 400
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 400
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 멜츠의 라이징 썬 세트
+  - 25:
+    - _name: 25
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 狮心套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 14
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 14
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003172
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102275
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082295
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1052314
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1072485
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1302152
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1402095
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1432086
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1442116
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1312065
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1322096
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1412065
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1422066
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1152108
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 狮心武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 25
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 20
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 30
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 라이온하트 세트
+  - 26:
+    - _name: 26
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 龙尾套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 14
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003173
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102276
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082296
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1052315
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1072486
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1372084
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1382104
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1152110
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 龙尾武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incINT:
+                - _name: incINT
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 30
+              - incINT:
+                - _name: incINT
+                - _type: Int
+                - _value: 20
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 40
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 드레곤테일 세트
+  - 27:
+    - _name: 27
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鹰翼套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003174
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102277
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082297
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1052316
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1072487
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1452111
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1462099
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1152111
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 鹰翼武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 25
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 20
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 30
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 팔콘윙 세트
+  - 28:
+    - _name: 28
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 渡鸦之魂套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003175
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102278
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082298
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1052317
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1072488
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1332130
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1472122
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1152112
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 渡鸦之魂器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 25
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 20
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 30
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 레이븐혼 세트
+  - 29:
+    - _name: 29
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲨齿套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003176
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102279
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082299
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1052318
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1072489
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1482084
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1492085
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1152113
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 鲨齿武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 25
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 20
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 30
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 샤크투스 세트
+  - 30:
+    - _name: 30
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 三国名将挑战者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1132086
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1152050
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1112596
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1122105
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Short
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 라르손의 챌린져 세트
+  - 31:
+    - _name: 31
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 2012考古套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003225
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1012260
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1022118
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 100
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 2011 고고학자 세트
+  - 32:
+    - _name: 32
+    - _type: SubProperty
+    - _value:
+      - child_count: 9
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险岛宝石套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - effectLink:
+        - _name: effectLink
+        - _type: String
+        - _value: Effect/SetItemInfoEff.img/32
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 26
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003242
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052357
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072521
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082314
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102294
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152060
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132092
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1302169
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1312068
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1322099
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1332144
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372096
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382120
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402106
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412067
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1422069
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1432095
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1442132
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1452125
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1462113
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1472136
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1482098
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1492097
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1522065
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1532069
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1362057
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 冒险岛宝石武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 50
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 50
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 100
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 2
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 5
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메이플 베릴 세트
+  - 33:
+    - _name: 33
+    - _type: SubProperty
+    - _value:
+      - child_count: 9
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险岛铂金套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - effectLink:
+        - _name: effectLink
+        - _type: String
+        - _value: Effect/SetItemInfoEff.img/33
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 26
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003243
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052358
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072522
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082315
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102295
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152061
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132093
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1302170
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1312069
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1322101
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1332145
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372097
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382121
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402107
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412068
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1422070
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1432096
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1442133
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1452126
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1462114
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1472137
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1482099
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1492098
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1522066
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1532070
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1362058
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 冒险岛铂金武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 200
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 6
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 6
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메이플 래티넘 세트
+  - 40:
+    - _name: 40
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 独角兽的朋友套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 유니콘 친구들 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000084
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 5000091
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000089
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 5000092
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000090
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 5000093
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80001037
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80001039
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 45:
+    - _name: 45
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 维克特班·雷昂套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 13
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003290
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052384
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072554
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082338
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102312
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1302175
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1402113
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1432101
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1442138
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1322136
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1312096
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1232016
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1542035
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 维克特班·雷昂武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 150
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 225
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 225
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 9
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 10
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 10
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 2
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+                  - 2:
+                    - _name: 2
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 10241
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 빅터 반 레온 세트
+  - 46:
+    - _name: 46
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 赫克斯班·雷昂套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003291
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052385
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072555
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082339
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102313
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1372102
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1382126
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1212016
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1252017
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1552035
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 赫克斯班·雷昂武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 150
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 225
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 225
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 9
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incINT:
+                - _name: incINT
+                - _type: Int
+                - _value: 10
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 10
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 2
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+                  - 2:
+                    - _name: 2
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 10241
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 헥스 반 레온 세트
+  - 47:
+    - _name: 47
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 塞林班·雷昂套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003292
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052386
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072556
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082340
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102314
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1452131
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1462120
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1522022
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 塞林班·雷昂武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 150
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 225
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 225
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 9
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 10
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 10
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 2
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+                  - 2:
+                    - _name: 2
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 10241
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 셀린 반 레온 세트
+  - 48:
+    - _name: 48
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 斯卡班·雷昂套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 9
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003293
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052387
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072557
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082341
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102315
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1332152
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1472143
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1362021
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1242051
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 斯卡班·雷昂武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 150
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 225
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 225
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 9
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 10
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 10
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 2
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+                  - 2:
+                    - _name: 2
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 10241
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 스카 반 레온 세트
+  - 49:
+    - _name: 49
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 梅尔班·雷昂套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003294
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052388
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072558
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082342
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102316
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1482104
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1492103
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1532039
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1222016
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1242016
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 梅尔班·雷昂武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 150
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 225
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 225
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 9
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 10
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 10
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 2
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+                  - 2:
+                    - _name: 2
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 10241
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메르 반 레온 세트
+  - 50:
+    - _name: 50
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 半月套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1032109
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1112661
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1132103
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 하프 문 세트
+  - 51:
+    - _name: 51
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 烈日套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1012283
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1032110
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1112662
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1122149
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1132104
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incEVA:
+                - _name: incEVA
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Short
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 400
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 400
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 블레이징 썬 세트
+  - 52:
+    - _name: 52
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 不朽英雄套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1112664
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1112665
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임모탈 히어로 세트
+  - 53:
+    - _name: 53
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 永恒英雄套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1112666
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1112667
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이터널 히어로 세트
+  - 54:
+    - _name: 54
+    - _type: SubProperty
+    - _value:
+      - child_count: 9
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 传说枫叶套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - effectLink:
+        - _name: effectLink
+        - _type: String
+        - _value: Effect/SetItemInfoEff.img/33
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 25
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003364
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052405
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072610
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082391
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102322
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152068
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132110
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1302192
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1312098
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1322138
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1332168
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372117
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382142
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402129
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412087
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1422089
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1432117
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1442154
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1452147
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1462136
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1472159
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1482120
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1492119
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1532059
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1522055
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 传说枫叶武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 200
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 7
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 11
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 레전드 메이플 세트
+  - 55:
+    - _name: 55
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 休彼德蔓奢华套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1012270
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102327
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1122162
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 2
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 100
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 슈피겔만 럭셔리 세트
+  - 56:
+    - _name: 56
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 海军舰长套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1082400
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102302
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 100
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 75
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 75
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 해군 함장 세트
+  - 57:
+    - _name: 57
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 不灭法老套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1132013
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1132136
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 从法老腰带中选一
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: 腰带
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072619
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1072629
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 从法老鞋中选一
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: 鞋
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1112682
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1112689
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 从法老戒指中选一
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: 戒指
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 120
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 120
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 200
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 불멸의 파라오 세트
+  - 58:
+    - _name: 58
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 运动会优胜组套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1042231
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1062148
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082401
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072618
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1152074
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1112681
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 100
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 150
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 150
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 200
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 운동회 우승팀 세트
+  - 69:
+    - _name: 69
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 君主英勇套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 16
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003443
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052429
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072641
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082416
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102362
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1302207
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1402142
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1432131
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1442170
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1312110
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1322150
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1412099
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1232034
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1542039
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1422099
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1232034
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 君主武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 350
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 350
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엠퍼러스 브레이브 세트
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+  - 70:
+    - _name: 70
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 君主记忆套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003444
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052430
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072642
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082417
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102363
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1372130
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1382158
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1212034
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1252019
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1552039
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 君主武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 350
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 350
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 2
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엠퍼러스 메모리스 세트
+  - 71:
+    - _name: 71
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 君主锋锐套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003445
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052431
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072643
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082418
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102364
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1452162
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1462152
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1522064
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 君主武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 350
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 350
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엠퍼러스 샤프니스 세트
+  - 72:
+    - _name: 72
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 君主迅捷套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 9
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003446
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052432
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072644
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082419
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102365
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1332184
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1472174
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1362056
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1242052
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 君主武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 350
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 350
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엠퍼러스 스위프트 세트
+  - 73:
+    - _name: 73
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 君主炽热套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003447
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052433
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072645
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082420
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102366
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1482135
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1492135
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1532068
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1222034
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1242034
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 君主武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 350
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 350
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엠퍼러스 퍼번트 세트
+  - 74:
+    - _name: 74
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 君主饰品套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1152079
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1132141
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1112712
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 100
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 엠퍼러스 장신구 세트
+  - 75:
+    - _name: 75
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 征服者饰品套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1152080
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1132142
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1112713
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 50
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 50
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 컨쿼러스 장신구 세트
+  - 76:
+    - _name: 76
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 公爵饰品套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1152081
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1132143
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1112714
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 100
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 50
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 50
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 듀크스 장신구 세트
+  - 79:
+    - _name: 79
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 利益公爵饰品套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1152083
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1112715
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 50
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 50
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 베네피트 듀크스 장신구 세트
+  - 81:
+    - _name: 81
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 雅典娜女神套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1082322
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1072534
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incSTR:
+                - _name: incSTR
+                - _type: Short
+                - _value: 5
+              - incDEX:
+                - _name: incDEX
+                - _type: Short
+                - _value: 5
+              - incINT:
+                - _name: incINT
+                - _type: Short
+                - _value: 5
+              - incLUK:
+                - _name: incLUK
+                - _type: Short
+                - _value: 5
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 여신 미네르바 세트
+  - 99:
+    - _name: 99
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 2012被发掘的遗物套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1012317
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1003528
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1022139
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 100
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 2012 발굴된 유물 세트
+  - 100:
+    - _name: 100
+    - _type: SubProperty
+    - _value:
+      - child_count: 9
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 9周年套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - effectLink:
+        - _name: effectLink
+        - _type: String
+        - _value: Effect/SetItemInfoEff.img/100
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 32
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003529
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052457
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082430
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072660
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102394
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152088
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132151
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1302212
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1312114
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1322154
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1332186
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1362060
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1372131
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1382160
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1402145
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1412102
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1422105
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1432135
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1442173
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1452165
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1462156
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1472177
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1482138
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1492138
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1522068
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1532073
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1212068
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1222063
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1242075
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1232070
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1542058
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1552058
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 冒险岛9周年武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 150
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 150
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 200
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 7
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 9주년 세트
+  - 102:
+    - _name: 102
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 魔族好友们套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 마족 친구들 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000007
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000008
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000009
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000228
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000229
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000230
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 103:
+    - _name: 103
+    - _type: SubProperty
+    - _value:
+      - child_count: 9
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 专属 9周年套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - effectLink:
+        - _name: effectLink
+        - _type: String
+        - _value: Effect/SetItemInfoEff.img/100
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 32
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003552
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052461
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082433
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072666
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102441
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152089
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132154
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1302227
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1312116
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1322162
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1332193
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1362067
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1372139
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1382168
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1402151
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1412104
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1422107
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1432138
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1442182
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1452170
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1462159
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1472179
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1482140
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1492152
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1522071
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1532074
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1212069
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1222064
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1242068
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1232063
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1542059
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1552059
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 专属 9周年武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 7
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 250
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 250
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 11
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 11
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 10
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 프리미엄 9주년 세트
+  - 104:
+    - _name: 104
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 豪华阿加雷斯套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 14
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1302228
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1312117
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1322163
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1402152
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1412105
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1422108
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1432139
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1442183
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1003589
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1052498
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1072703
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1082466
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1102445
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1232040
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 豪华阿加雷斯武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 그랜드 아가레스 세트
+  - 105:
+    - _name: 105
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 豪华艾里格斯套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 9
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1372140
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1382169
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1003590
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1052499
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1072704
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1082467
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1102446
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1212043
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1252030
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 豪华艾里格斯武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 그랜드 엘리고스 세트
+  - 106:
+    - _name: 106
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 豪华伊布斯套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1452171
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1462160
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1522072
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1003591
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1052500
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1072705
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1082468
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1102447
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 豪华伊布斯武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 그랜드 이포스 세트
+  - 107:
+    - _name: 107
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 豪华赫尔巴斯套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1332194
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1362068
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1472180
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1482141
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1003592
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1052501
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1072706
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1082469
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1102448
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1242043
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 豪华赫尔巴斯武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 그랜드 핼파스 세트
+  - 108:
+    - _name: 108
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 豪华维帕尔套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1482141
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1492153
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1532075
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1003593
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1052502
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1072707
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1082470
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1102449
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1222043
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1242046
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 豪华维帕尔武器中选择1个
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 350
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 350
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 15
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 그랜드 베파르 세트
+  - 111:
+    - _name: 111
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者红色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1000054
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1050237
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 레드 세트
+  - 112:
+    - _name: 112
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者绿色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1000055
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1050238
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 그린 세트
+  - 113:
+    - _name: 113
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者蓝色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1000056
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1050239
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 블루 세트
+  - 114:
+    - _name: 114
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者粉色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1001079
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1051287
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 핑크 세트
+  - 115:
+    - _name: 115
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者黄色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1001080
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1051288
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 옐로 세트
+  - 116:
+    - _name: 116
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者黑色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1000057
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1050240
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 블랙 세트
+  - 117:
+    - _name: 117
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者黑寡妇套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1001081
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1051289
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 블랙우먼 세트
+  - 118:
+    - _name: 118
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险勇者套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1072718
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1082477
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 100
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메소레인저 세트
+  - 119:
+    - _name: 119
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 混沌品克缤套装Ⅰ
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003621
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052526
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 10
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Short
+                - _value: 3
+              - incDEX:
+                - _name: incDEX
+                - _type: Short
+                - _value: 3
+              - incINT:
+                - _name: incINT
+                - _type: Short
+                - _value: 3
+              - incLUK:
+                - _name: incLUK
+                - _type: Short
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 카오스 핑크빈 세트 I
+  - 120:
+    - _name: 120
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 布莱克缤套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003622
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052527
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 10
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Short
+                - _value: 5
+              - incDEX:
+                - _name: incDEX
+                - _type: Short
+                - _value: 5
+              - incINT:
+                - _name: incINT
+                - _type: Short
+                - _value: 5
+              - incLUK:
+                - _name: incLUK
+                - _type: Short
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 블랙빈 세트
+  - 121:
+    - _name: 121
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 库珀金属部件套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 쿠퍼 메탈 파츠 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1612000
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1622000
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1652000
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 122:
+    - _name: 122
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 铜金属部件套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 브론즈 메탈 파츠 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1612001
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1622001
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1632000
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1642000
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1652001
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 50
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 123:
+    - _name: 123
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 钢铁金属部件套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아이언 메탈 파츠 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1612002
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1622002
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1632001
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1642001
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1652002
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 100
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 124:
+    - _name: 124
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 黄金金属部件套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 골드 메탈 파츠 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1612003
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1622003
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1632002
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1642002
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1652003
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 4
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 125:
+    - _name: 125
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 赤金金属部件套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 퓨어 골드 메탈 파츠 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1612004
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1622004
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1632003
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1642003
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1652004
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 126:
+    - _name: 126
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 混沌品克缤套装Ⅱ
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1022144
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1022182
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 混沌品克缤瞳印
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 27
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1302248
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1312135
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1322181
+              - 4:
+                - _name: 4
+                - _type: Int
+                - _value: 1332205
+              - 5:
+                - _name: 5
+                - _type: Int
+                - _value: 1362074
+              - 6:
+                - _name: 6
+                - _type: Int
+                - _value: 1372161
+              - 7:
+                - _name: 7
+                - _type: Int
+                - _value: 1382192
+              - 8:
+                - _name: 8
+                - _type: Int
+                - _value: 1402172
+              - 9:
+                - _name: 9
+                - _type: Int
+                - _value: 1412122
+              - 10:
+                - _name: 10
+                - _type: Int
+                - _value: 1422124
+              - 11:
+                - _name: 11
+                - _type: Int
+                - _value: 1432150
+              - 12:
+                - _name: 12
+                - _type: Int
+                - _value: 1452189
+              - 13:
+                - _name: 13
+                - _type: Int
+                - _value: 1462177
+              - 14:
+                - _name: 14
+                - _type: Int
+                - _value: 1472197
+              - 15:
+                - _name: 15
+                - _type: Int
+                - _value: 1482151
+              - 16:
+                - _name: 16
+                - _type: Int
+                - _value: 1492162
+              - 17:
+                - _name: 17
+                - _type: Int
+                - _value: 1522078
+              - 18:
+                - _name: 18
+                - _type: Int
+                - _value: 1532081
+              - 19:
+                - _name: 19
+                - _type: Int
+                - _value: 1212044
+              - 20:
+                - _name: 20
+                - _type: Int
+                - _value: 1222044
+              - 21:
+                - _name: 21
+                - _type: Int
+                - _value: 1232041
+              - 22:
+                - _name: 22
+                - _type: Int
+                - _value: 1242044
+              - 23:
+                - _name: 23
+                - _type: Int
+                - _value: 1252031
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 无爱武器中选一
+              - 24:
+                - _name: 24
+                - _type: Int
+                - _value: 1542060
+              - 25:
+                - _name: 25
+                - _type: Int
+                - _value: 1552060
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 카오스 핑크빈 세트 II
+  - 133:
+    - _name: 133
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 最强鲨鱼套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 최강의 상어 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000013
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000014
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000015
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000239
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 134:
+    - _name: 134
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 风暴套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 9
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 32
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003561
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052467
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082438
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072672
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102467
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152099
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132161
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1032148
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1212040
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1302249
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1312136
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1322182
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1332207
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1362075
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1372162
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1382193
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1402174
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1412123
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1422125
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1432151
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1442203
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1452190
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1462178
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1472198
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1482152
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1492163
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1522079
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1532082
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1222040
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1542061
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1552061
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1252045
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 风暴武器选一
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 7
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 300
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 템페스트 세트
+  - 135:
+    - _name: 135
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 品克缤狂人套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 핑크빈 매니아 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000017
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000018
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000019
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000240
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 5000452
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 140:
+    - _name: 140
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 宝宝龙套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 베이비 드래곤 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000243
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000244
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000245
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000020
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000021
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000022
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 142:
+    - _name: 142
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 时空套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1012331
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1022148
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1032156
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1122208
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1132182
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 6
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 6
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 6
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 6
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 6
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 6
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 미스틱 세트
+  - 149:
+    - _name: 149
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 小熊宠物套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 곰돌이 펫 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000249
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000250
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000251
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000026
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000027
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000028
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 157:
+    - _name: 157
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 运动会优胜组套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1042244
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1062158
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082219
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072345
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1152109
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1112761
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 4
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 90
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 90
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 30
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 30
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 150
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 150
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 5
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 40
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 40
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 9
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 200
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 5
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 5
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 50
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 50
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 운동회 우승팀 세트
+  - 158:
+    - _name: 158
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 南瓜宠物套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 펌킨 펫 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000256
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000257
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000258
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000029
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000030
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000031
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 162:
+    - _name: 162
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 斯泰拉套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 9
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 32
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003723
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1032166
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1052553
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072761
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1082494
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1102502
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132208
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1152118
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1212053
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1222040
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1302257
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1312143
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1322189
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1332215
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1362082
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1372169
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1382200
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1402186
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1412127
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1422130
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1432159
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1442210
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1452197
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1462185
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1472206
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1482160
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1492171
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1522086
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1532090
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1232059
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1242064
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1252057
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 斯泰拉武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 7
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 300
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 25
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 스텔라 세트
+  - 163:
+    - _name: 163
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 组队任务套装
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 36
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003418
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003419
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1002571
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1002572
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1002573
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1002574
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003267
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003856
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003857
+          - 10:
+            - _name: 10
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003858
+          - 11:
+            - _name: 11
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032060
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032061
+          - 13:
+            - _name: 13
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032101
+          - 14:
+            - _name: 14
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032100
+          - 15:
+            - _name: 15
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032102
+          - 16:
+            - _name: 16
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032103
+          - 17:
+            - _name: 17
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032104
+          - 18:
+            - _name: 18
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1032186
+          - 19:
+            - _name: 19
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072634
+          - 20:
+            - _name: 20
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072533
+          - 21:
+            - _name: 21
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072510
+          - 22:
+            - _name: 22
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072819
+          - 23:
+            - _name: 23
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1122010
+          - 24:
+            - _name: 24
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1122116
+          - 25:
+            - _name: 25
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1122117
+          - 26:
+            - _name: 26
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1122118
+          - 27:
+            - _name: 27
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1132094
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1132095
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1132096
+              - 4:
+                - _name: 4
+                - _type: Int
+                - _value: 1132097
+              - 5:
+                - _name: 5
+                - _type: Int
+                - _value: 1132098
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （腰带）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 班·雷昂战争腰带之一
+          - 28:
+            - _name: 28
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1022073
+          - 29:
+            - _name: 29
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1022123
+          - 30:
+            - _name: 30
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1022175
+          - 31:
+            - _name: 31
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1152127
+          - 32:
+            - _name: 32
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1152135
+          - 33:
+            - _name: 33
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003979
+          - 34:
+            - _name: 34
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072872
+          - 35:
+            - _name: 35
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1022245
+          - 36:
+            - _name: 36
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1022246
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+              - incPQEXPr:
+                - _name: incPQEXPr
+                - _type: Int
+                - _value: 3
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 4
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+              - incPQEXPr:
+                - _name: incPQEXPr
+                - _type: Int
+                - _value: 6
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+              - incPQEXPr:
+                - _name: incPQEXPr
+                - _type: Int
+                - _value: 9
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 16
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 35
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - expandToolTip:
+        - _name: expandToolTip
+        - _type: Int
+        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 파티 퀘스트 세트
+  - 164:
+    - _name: 164
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 终极套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 25
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 25
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003740
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052569
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082498
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072768
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102506
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1152119
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1132209
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1032168
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1302258
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1312145
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1322191
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1332216
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1362083
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1372170
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1382202
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1402187
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1412128
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1422131
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1432160
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1442211
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1452198
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1462186
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1472207
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1482161
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1492172
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 终极武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 300
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 얼티밋 세트
+  - 165:
+    - _name: 165
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 考拉宠物套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 코알라 펫 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000271
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000272
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000273
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000056
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000057
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000058
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 169:
+    - _name: 169
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 寒霜套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 22
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 22
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1003741
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1052570
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1082499
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072769
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1102507
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1302259
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1312146
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1322192
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1332217
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1362084
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372171
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382203
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402188
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412129
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1422132
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1432161
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1442212
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1452199
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1462187
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1472208
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1482162
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1492173
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 寒霜武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 300
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 프로스티 세트
+  - 171:
+    - _name: 171
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 命运序曲套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 운명의 전주곡
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 12
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 12
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1680000
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1680001
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1680002
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1680003
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1680004
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1680005
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1680006
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1680007
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1680008
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1680009
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1680010
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1680011
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 280
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 2
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 176:
+    - _name: 176
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 电击套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 일렉트릭 쇼크 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 12
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 12
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1680012
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1680013
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1680014
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1680015
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1680016
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1680017
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1680018
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1680019
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1680020
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1680021
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1680022
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1680023
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 4
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 4
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 177:
+    - _name: 177
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 绵软花蘑菇套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 말랑 주황버섯 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1680024
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1680025
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1680026
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1680027
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 30
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 30
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 10
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 178:
+    - _name: 178
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 松鼠宠物套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 다람쥐 펫 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000275
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000276
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000277
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000063
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000064
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000065
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 179:
+    - _name: 179
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050257
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070032
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (남)
+  - 180:
+    - _name: 180
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050258
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070037
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (남)
+  - 181:
+    - _name: 181
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050259
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070042
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (남)
+  - 182:
+    - _name: 182
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050260
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070033
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (남)
+  - 183:
+    - _name: 183
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050261
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070038
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (남)
+  - 184:
+    - _name: 184
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050262
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070043
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (남)
+  - 185:
+    - _name: 185
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050263
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070034
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (남)
+  - 186:
+    - _name: 186
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050264
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070039
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (남)
+  - 187:
+    - _name: 187
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050265
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070044
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (남)
+  - 188:
+    - _name: 188
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050266
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070035
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (남)
+  - 189:
+    - _name: 189
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050267
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070040
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (남)
+  - 190:
+    - _name: 190
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050268
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070045
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (남)
+  - 191:
+    - _name: 191
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050269
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070036
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (남)
+  - 192:
+    - _name: 192
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050270
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070041
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (남)
+  - 193:
+    - _name: 193
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1050271
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1070046
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (남)
+  - 194:
+    - _name: 194
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051314
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071049
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (여)
+  - 195:
+    - _name: 195
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051315
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071054
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (여)
+  - 196:
+    - _name: 196
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051316
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071059
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (여)
+  - 197:
+    - _name: 197
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051317
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071050
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (여)
+  - 198:
+    - _name: 198
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051318
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071055
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (여)
+  - 199:
+    - _name: 199
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051319
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071060
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (여)
+  - 200:
+    - _name: 200
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051320
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071051
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (여)
+  - 201:
+    - _name: 201
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051321
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071056
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (여)
+  - 202:
+    - _name: 202
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051322
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071061
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (여)
+  - 203:
+    - _name: 203
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051323
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071052
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (여)
+  - 204:
+    - _name: 204
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051324
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071057
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (여)
+  - 205:
+    - _name: 205
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051325
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071062
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (여)
+  - 206:
+    - _name: 206
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 原子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051326
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071053
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아토믹 세트 (여)
+  - 207:
+    - _name: 207
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 离子套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051327
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071058
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이온 세트 (여)
+  - 208:
+    - _name: 208
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 坡顿套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051328
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071063
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 포톤 세트 (여)
+  - 214:
+    - _name: 214
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 皇家英勇套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 14
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003770
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052580
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072786
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082506
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102514
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1302264
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1402191
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1432164
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1442219
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1312150
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1322199
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1412132
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1422136
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1232055
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 皇家武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 20
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 20
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 11
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 40070
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임페리얼 브레이브 세트
+  - 215:
+    - _name: 215
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 皇家记忆套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 9
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003771
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052581
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072787
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082507
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102515
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1372174
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1382206
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1212060
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1252059
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 皇家武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 20
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 20
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 11
+              - incINT:
+                - _name: incINT
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 40070
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임페리얼 메모리스 세트
+  - 216:
+    - _name: 216
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 皇家锋锐套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 8
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003772
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052582
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072788
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082508
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102516
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1452202
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1462190
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1522091
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 皇家武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 20
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 20
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 11
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 40070
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임페리얼 샤프니스 세트
+  - 217:
+    - _name: 217
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 皇家迅捷套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 9
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003773
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052583
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072789
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082509
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102517
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1332222
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1472211
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1362087
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1242058
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 皇家武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 20
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 20
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 11
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 40070
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임페리얼 스위프트 세트
+  - 218:
+    - _name: 218
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 皇家炽热套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 10
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003774
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052584
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072790
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082510
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102518
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1482165
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1492176
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1532095
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1222055
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1242057
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 皇家武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 20
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 20
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 9
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 11
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 10
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 40070
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임페리얼 퍼번트 세트
+  - 219:
+    - _name: 219
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 皇家饰品套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1152125
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1132216
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1113016
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 200
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 600
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 600
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임페리얼 장신구 세트
+  - 220:
+    - _name: 220
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 料理师套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003762
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052578
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 8
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 8
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 15
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 500
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요리사 세트
+  - 221:
+    - _name: 221
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 自由品克缤套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003780
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052588
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 10
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Short
+                - _value: 3
+              - incDEX:
+                - _name: incDEX
+                - _type: Short
+                - _value: 3
+              - incINT:
+                - _name: incINT
+                - _type: Short
+                - _value: 3
+              - incLUK:
+                - _name: incLUK
+                - _type: Short
+                - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 프릴리 핑크빈 세트
+  - 222:
+    - _name: 222
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 自由布莱克缤套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003781
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052589
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 10
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 15
+              - incSTR:
+                - _name: incSTR
+                - _type: Short
+                - _value: 5
+              - incDEX:
+                - _name: incDEX
+                - _type: Short
+                - _value: 5
+              - incINT:
+                - _name: incINT
+                - _type: Short
+                - _value: 5
+              - incLUK:
+                - _name: incLUK
+                - _type: Short
+                - _value: 5
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 프릴리 블랙빈 세트
+  - 223:
+    - _name: 223
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 2014万福
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 2013 복복복 비츠 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 12
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 12
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680028
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680029
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680030
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680040
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 2014万福-拼图C
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680031
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680032
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680033
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680041
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 2014万福-拼图F
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680034
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680035
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680036
+          - 10:
+            - _name: 10
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680037
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680042
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 2014万福-拼图J
+          - 11:
+            - _name: 11
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680038
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680039
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 100
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 224:
+    - _name: 224
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050273
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070047
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(남)
+  - 225:
+    - _name: 225
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050278
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070052
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(남)
+  - 226:
+    - _name: 226
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050274
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070048
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(남)
+  - 227:
+    - _name: 227
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050279
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070052
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(남)
+  - 228:
+    - _name: 228
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050275
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070049
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(남)
+  - 229:
+    - _name: 229
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050280
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070054
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(남)
+  - 230:
+    - _name: 230
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050276
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070050
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(남)
+  - 231:
+    - _name: 231
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050281
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070055
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(남)
+  - 232:
+    - _name: 232
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050277
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070051
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(남)
+  - 233:
+    - _name: 233
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（男）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1050282
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1070056
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(남)
+  - 234:
+    - _name: 234
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051335
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071064
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(여)
+  - 235:
+    - _name: 235
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051340
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071069
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(여)
+  - 236:
+    - _name: 236
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051336
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071065
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(여)
+  - 237:
+    - _name: 237
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051341
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071070
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(여)
+  - 238:
+    - _name: 238
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051337
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071066
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(여)
+  - 239:
+    - _name: 239
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051342
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071071
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(여)
+  - 240:
+    - _name: 240
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051338
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071067
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(여)
+  - 241:
+    - _name: 241
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051343
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071072
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(여)
+  - 242:
+    - _name: 242
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051339
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071068
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정 세트(여)
+  - 243:
+    - _name: 243
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 暴风雪套装（女）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1051344
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1071073
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 눈보라 세트(여)
+  - 244:
+    - _name: 244
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 妖精寒霜套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 28
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1003788
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1052590
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1082516
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072799
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1102530
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1212062
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1222057
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1302273
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1312152
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1322201
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1332224
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1362089
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372176
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382207
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402195
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412134
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1422138
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1432166
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1442222
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1452204
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1462192
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1472213
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1482167
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1492178
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1522093
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1532097
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1232056
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1242059
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 寒霜武器中选1
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+              - incMHP:
+                - _name: incMHP
+                - _type: Short
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Short
+                - _value: 300
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 요정의 프로스티 세트
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+  - 246:
+    - _name: 246
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: New魔族好友们套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: New 마족 친구들 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000281
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000282
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000283
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000072
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000073
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000074
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 247:
+    - _name: 247
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁塔比斯套装（战士）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 11
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 20
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 20
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 1000
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 1000
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 50
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 50
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 50
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 法弗纳武器中选1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 11
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003797
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1042254
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1062165
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1302275
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1312153
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1322203
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1402196
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1412135
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1422140
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1432167
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1442223
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루타비스 세트(전사)
+  - 248:
+    - _name: 248
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁塔比斯套装（魔法师）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incINT:
+                - _name: incINT
+                - _type: Int
+                - _value: 20
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 20
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 1000
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 1000
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 50
+              - incINT:
+                - _name: incINT
+                - _type: Int
+                - _value: 50
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 65
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 法弗纳武器中选1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003798
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1042255
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1062166
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1372177
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1382208
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루타비스 세트(마법사)
+  - 249:
+    - _name: 249
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁塔比斯套装（弓箭手）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 20
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 20
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 1000
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 1000
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 50
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 50
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 50
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 法弗纳武器中选1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003799
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1042256
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1062167
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1452205
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1462193
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루타비스 세트(궁수)
+  - 250:
+    - _name: 250
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁塔比斯套装（飞侠）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 20
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 20
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 1000
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 1000
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incLUK:
+                - _name: incLUK
+                - _type: Int
+                - _value: 50
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 50
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 50
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 法弗纳武器中选1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003800
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1042257
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1062168
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1332225
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1472214
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루타비스 세트(도적)
+  - 251:
+    - _name: 251
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁塔比斯套装（海盗）
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 20
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 20
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 1000
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 1000
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 50
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 50
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 50
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 法弗纳武器中选1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003801
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1042258
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1062169
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1482168
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1492179
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루타비스 세트 (해적)
+  - 253:
+    - _name: 253
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 天使神圣祝福
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 천사의 성스러운 축복
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000290
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000291
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000292
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000077
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000078
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000079
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 255:
+    - _name: 255
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 酸酸甜甜的白色情人节
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1022172
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1032182
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 20
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 새콤달콤 화이트데이
+  - 256:
+    - _name: 256
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁提鲁提
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루티루티 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000293
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000294
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000295
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000081
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000082
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000083
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 257:
+    - _name: 257
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 休彼德蔓强力套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1012373
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102556
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1122248
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 100
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 200
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 슈피겔만 스트롱 세트
+  - 258:
+    - _name: 258
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 小绵羊睡衣套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 아기양 잠옷 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003831
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052605
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082520
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072808
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1702415
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 265:
+    - _name: 265
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 可爱恶魔套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 쁘띠 데빌 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000296
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000297
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000298
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000098
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000099
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000100
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 266:
+    - _name: 266
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 鲁塔比斯宠物套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 루타비스 펫 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000309
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000310
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000311
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000101
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000102
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000103
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 268:
+    - _name: 268
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 10周年拼图套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 10주년 비츠세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 12
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 12
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680059
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680071
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1680077
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 10周年-拼图A
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680060
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680061
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680072
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1680078
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 10周年-拼图C
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680062
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680063
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680073
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1680079
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 10周年-拼图E
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680064
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680065
+          - 8:
+            - _name: 8
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680066
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680074
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1680080
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 10周年-拼图H
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680067
+          - 10:
+            - _name: 10
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680068
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680075
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1680081
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 10周年-拼图J
+          - 11:
+            - _name: 11
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680069
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680070
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680076
+              - 3:
+                - _name: 3
+                - _type: Int
+                - _value: 1680082
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 10周年-拼图L
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 9:
+            - _name: 9
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 50
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 50
+          - 12:
+            - _name: 12
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 25
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 25
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 50
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 50
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 273:
+    - _name: 273
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 高尔夫套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 골프 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003867
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1042264
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1060182
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1061206
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （下装）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 装备符合性别的裤子
+              - byGender:
+                - _name: byGender
+                - _type: Int
+                - _value: 1
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072823
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1082527
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1702424
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 274:
+    - _name: 274
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险岛白色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 7
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 冒险岛白色武器中选一
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 58
+        - _children:
+          - 0:
+            - _name: 0
+            - _type: Int
+            - _value: 1003864
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1052613
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1102563
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1012377
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1122253
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1212067
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1222062
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1232061
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1242066
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1252065
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1302278
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1312156
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1322206
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1332228
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1362093
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1372180
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1382212
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1402200
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1412138
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1422143
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1432170
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1442226
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1452208
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1462196
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1472217
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1482171
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1492182
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1522097
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1532101
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1132229
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1212071
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1222066
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1232062
+          - 33:
+            - _name: 33
+            - _type: Int
+            - _value: 1242067
+          - 34:
+            - _name: 34
+            - _type: Int
+            - _value: 1302279
+          - 35:
+            - _name: 35
+            - _type: Int
+            - _value: 1312157
+          - 36:
+            - _name: 36
+            - _type: Int
+            - _value: 1322207
+          - 37:
+            - _name: 37
+            - _type: Int
+            - _value: 1332229
+          - 38:
+            - _name: 38
+            - _type: Int
+            - _value: 1362094
+          - 39:
+            - _name: 39
+            - _type: Int
+            - _value: 1372181
+          - 40:
+            - _name: 40
+            - _type: Int
+            - _value: 1382213
+          - 41:
+            - _name: 41
+            - _type: Int
+            - _value: 1402202
+          - 42:
+            - _name: 42
+            - _type: Int
+            - _value: 1412139
+          - 43:
+            - _name: 43
+            - _type: Int
+            - _value: 1422144
+          - 44:
+            - _name: 44
+            - _type: Int
+            - _value: 1432171
+          - 45:
+            - _name: 45
+            - _type: Int
+            - _value: 1442227
+          - 46:
+            - _name: 46
+            - _type: Int
+            - _value: 1452209
+          - 47:
+            - _name: 47
+            - _type: Int
+            - _value: 1462197
+          - 48:
+            - _name: 48
+            - _type: Int
+            - _value: 1472218
+          - 49:
+            - _name: 49
+            - _type: Int
+            - _value: 1482172
+          - 50:
+            - _name: 50
+            - _type: Int
+            - _value: 1492183
+          - 51:
+            - _name: 51
+            - _type: Int
+            - _value: 1522098
+          - 52:
+            - _name: 52
+            - _type: Int
+            - _value: 1532102
+          - 53:
+            - _name: 53
+            - _type: Int
+            - _value: 1542069
+          - 54:
+            - _name: 54
+            - _type: Int
+            - _value: 1552069
+          - 55:
+            - _name: 55
+            - _type: Int
+            - _value: 1272035
+          - 56:
+            - _name: 56
+            - _type: Int
+            - _value: 1282034
+          - 57:
+            - _name: 57
+            - _type: Int
+            - _value: 1582038
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 6
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메이플 화이트 세트
+  - 275:
+    - _name: 275
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险岛黑色套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 9
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 83
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003863
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052612
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1102562
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1012376
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1122252
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1212066
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1222061
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1232060
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1242065
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1302277
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1312155
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1322205
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1332227
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1362092
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1372179
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1382211
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1402199
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1412137
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1422142
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1432169
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1442225
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1452207
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1462195
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1472216
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1482170
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1492181
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1522096
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1532100
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1132228
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1113034
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1342092
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1099010
+          - 33:
+            - _name: 33
+            - _type: Int
+            - _value: 1098005
+          - 34:
+            - _name: 34
+            - _type: Int
+            - _value: 1352605
+          - 35:
+            - _name: 35
+            - _type: Int
+            - _value: 1352008
+          - 36:
+            - _name: 36
+            - _type: Int
+            - _value: 1352108
+          - 37:
+            - _name: 37
+            - _type: Int
+            - _value: 1352405
+          - 38:
+            - _name: 38
+            - _type: Int
+            - _value: 1352505
+          - 39:
+            - _name: 39
+            - _type: Int
+            - _value: 1352705
+          - 40:
+            - _name: 40
+            - _type: Int
+            - _value: 1352205
+          - 41:
+            - _name: 41
+            - _type: Int
+            - _value: 1352215
+          - 42:
+            - _name: 42
+            - _type: Int
+            - _value: 1352225
+          - 43:
+            - _name: 43
+            - _type: Int
+            - _value: 1352235
+          - 44:
+            - _name: 44
+            - _type: Int
+            - _value: 1352245
+          - 45:
+            - _name: 45
+            - _type: Int
+            - _value: 1352255
+          - 46:
+            - _name: 46
+            - _type: Int
+            - _value: 1352265
+          - 47:
+            - _name: 47
+            - _type: Int
+            - _value: 1352275
+          - 48:
+            - _name: 48
+            - _type: Int
+            - _value: 1352285
+          - 49:
+            - _name: 49
+            - _type: Int
+            - _value: 1352295
+          - 50:
+            - _name: 50
+            - _type: Int
+            - _value: 1352905
+          - 51:
+            - _name: 51
+            - _type: Int
+            - _value: 1352915
+          - 52:
+            - _name: 52
+            - _type: Int
+            - _value: 1352927
+          - 53:
+            - _name: 53
+            - _type: Int
+            - _value: 1352934
+          - 54:
+            - _name: 54
+            - _type: Int
+            - _value: 1352944
+          - 55:
+            - _name: 55
+            - _type: Int
+            - _value: 1352955
+          - 56:
+            - _name: 56
+            - _type: Int
+            - _value: 1352965
+          - 57:
+            - _name: 57
+            - _type: Int
+            - _value: 1352974
+          - 58:
+            - _name: 58
+            - _type: Int
+            - _value: 1353005
+          - 59:
+            - _name: 59
+            - _type: Int
+            - _value: 1353104
+          - 60:
+            - _name: 60
+            - _type: Int
+            - _value: 1272019
+          - 61:
+            - _name: 61
+            - _type: Int
+            - _value: 1353304
+          - 62:
+            - _name: 62
+            - _type: Int
+            - _value: 1262047
+          - 63:
+            - _name: 63
+            - _type: Int
+            - _value: 1582041
+          - 64:
+            - _name: 64
+            - _type: Int
+            - _value: 1282036
+          - 65:
+            - _name: 65
+            - _type: Int
+            - _value: 1353207
+          - 66:
+            - _name: 66
+            - _type: Int
+            - _value: 1353408
+          - 67:
+            - _name: 67
+            - _type: Int
+            - _value: 1353506
+          - 68:
+            - _name: 68
+            - _type: Int
+            - _value: 1353605
+          - 69:
+            - _name: 69
+            - _type: Int
+            - _value: 1353307
+          - 70:
+            - _name: 70
+            - _type: Int
+            - _value: 1353706
+          - 71:
+            - _name: 71
+            - _type: Int
+            - _value: 1592030
+          - 72:
+            - _name: 72
+            - _type: Int
+            - _value: 1292020
+          - 73:
+            - _name: 73
+            - _type: Int
+            - _value: 1353805
+          - 74:
+            - _name: 74
+            - _type: Int
+            - _value: 1542070
+          - 75:
+            - _name: 75
+            - _type: Int
+            - _value: 1552070
+          - 76:
+            - _name: 76
+            - _type: Int
+            - _value: 1252064
+          - 77:
+            - _name: 77
+            - _type: Int
+            - _value: 1353104
+          - 78:
+            - _name: 78
+            - _type: Int
+            - _value: 1582039
+          - 79:
+            - _name: 79
+            - _type: Int
+            - _value: 1352806
+          - 80:
+            - _name: 80
+            - _type: Int
+            - _value: 1352814
+          - 81:
+            - _name: 81
+            - _type: Int
+            - _value: 1352825
+          - 82:
+            - _name: 82
+            - _type: Int
+            - _value: 1282019
+          - 83:
+            - _name: 83
+            - _type: Int
+            - _value: 1353504
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 500
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 8
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 8
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 300
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 300
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 14
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 14
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 20
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 32070
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 20
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 20
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 8
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 冒险岛黑色武器中选一
+          - subweapon:
+            - _name: subweapon
+            - _type: String
+            - _value: 冒险岛黑色辅助武器中选一
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+  - 278:
+    - _name: 278
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 莎莉曼德套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 샐리맨더 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003892
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1102583
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1050285
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1051352
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （套装）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 泰米多尔
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072831
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1702433
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+  - 284:
+    - _name: 284
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险岛棒球套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003909
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1102593
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1050291
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1051357
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （套服）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 装备符合性别的套服
+              - byGender:
+                - _name: byGender
+                - _type: Int
+                - _value: 1
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072836
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1702442
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 285:
+    - _name: 285
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 冒险岛赛手套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003922
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052638
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1082536
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1072844
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 9
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 200
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 200
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 100
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 메이플 레이서 세트
+  - 286:
+    - _name: 286
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 炼金术士套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 25
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003923
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052639
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1102595
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1212073
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1222068
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1232065
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1302280
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1312158
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1322208
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1332230
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1362095
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372182
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382214
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402203
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412140
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1412140
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1422145
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1432172
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1442228
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1452210
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1462198
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1472219
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1482173
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1492184
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1522099
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 9
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 7
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 7
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 12
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 500
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 500
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 200
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 与职业相符的混沌药水中选一
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 연금술사 세트
+  - 287:
+    - _name: 287
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 巨匠套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 4
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 35
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1032200
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1113055
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1212077
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1222072
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1232071
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1242076
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1302285
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1312162
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1322213
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1332235
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1362099
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1372186
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1382220
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1402204
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1412144
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1422149
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1432176
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1442232
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1452214
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1462202
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1472223
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1482177
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1492188
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1522103
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1532106
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1152154
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1262035
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1582022
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1272018
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1282018
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1592017
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1292019
+          - 33:
+            - _name: 33
+            - _type: Int
+            - _value: 1252058
+          - 34:
+            - _name: 34
+            - _type: Int
+            - _value: 1542075
+          - 35:
+            - _name: 35
+            - _type: Int
+            - _value: 1552075
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 10
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 40
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 40
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 15
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 巨匠武器中选一
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 마이스터 세트
+  - 288:
+    - _name: 288
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 圣翼骑士套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003911
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052632
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072837
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082535
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102594
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1132232
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 100
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 100
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 4
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 150
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 150
+              - incSpeed:
+                - _name: incSpeed
+                - _type: Int
+                - _value: 10
+              - incJump:
+                - _name: incJump
+                - _type: Int
+                - _value: 5
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 6
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 8
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 200
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 200
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incSTR:
+                - _name: incSTR
+                - _type: Int
+                - _value: 4
+              - incDEX:
+                - _name: incDEX
+                - _type: Int
+                - _value: 4
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Int
+                - _value: 10
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 2
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30291
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+                  - 2:
+                    - _name: 2
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 10241
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 13
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 세인트윙 나이트 세트
+  - 289:
+    - _name: 289
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 金标骑士套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 7
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 7
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003841
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052608
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072815
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082522
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102553
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1132233
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1152139
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incPDD:
+                - _name: incPDD
+                - _type: Short
+                - _value: 300
+              - incMDD:
+                - _name: incMDD
+                - _type: Short
+                - _value: 300
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 200
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 200
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 15
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 20396
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Short
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30107
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 20
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30602
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+          - 7:
+            - _name: 7
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incMHPr:
+                - _name: incMHPr
+                - _type: Short
+                - _value: 15
+              - incMMPr:
+                - _name: incMMPr
+                - _type: Short
+                - _value: 15
+              - incPAD:
+                - _name: incPAD
+                - _type: Short
+                - _value: 25
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 골드라벨 나이트 세트
+  - 300:
+    - _name: 300
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 身强力壮的铠鼠
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 힘세고 강한 딜로
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000111
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000112
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - activeSkill:
+                - _name: activeSkill
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 0:
+                    - _name: 0
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - id:
+                        - _name: id
+                        - _type: Int
+                        - _value: 80000113
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000320
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000321
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 5000322
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 301:
+    - _name: 301
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 超级明星套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 슈퍼스타 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 5
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 5
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1003945
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1050296
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1051362
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 装备符合性别的套服
+              - byGender:
+                - _name: byGender
+                - _type: Int
+                - _value: 1
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1072852
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1102608
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 1
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1702451
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 1
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 1
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 0
+  - 303:
+    - _name: 303
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 革命套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 8
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 33
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003946
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1052647
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1072853
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1082540
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1102612
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1212079
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1222074
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1232074
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1242080
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1302289
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1312165
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1322215
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1332238
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1362101
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1372188
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1382222
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1402210
+          - 18:
+            - _name: 18
+            - _type: Int
+            - _value: 1412147
+          - 19:
+            - _name: 19
+            - _type: Int
+            - _value: 1422152
+          - 20:
+            - _name: 20
+            - _type: Int
+            - _value: 1432178
+          - 21:
+            - _name: 21
+            - _type: Int
+            - _value: 1442234
+          - 22:
+            - _name: 22
+            - _type: Int
+            - _value: 1452216
+          - 23:
+            - _name: 23
+            - _type: Int
+            - _value: 1462204
+          - 24:
+            - _name: 24
+            - _type: Int
+            - _value: 1472226
+          - 25:
+            - _name: 25
+            - _type: Int
+            - _value: 1482179
+          - 26:
+            - _name: 26
+            - _type: Int
+            - _value: 1492190
+          - 27:
+            - _name: 27
+            - _type: Int
+            - _value: 1522105
+          - 28:
+            - _name: 28
+            - _type: Int
+            - _value: 1532109
+          - 29:
+            - _name: 29
+            - _type: Int
+            - _value: 1122262
+          - 30:
+            - _name: 30
+            - _type: Int
+            - _value: 1132242
+          - 31:
+            - _name: 31
+            - _type: Int
+            - _value: 1252046
+          - 32:
+            - _name: 32
+            - _type: Int
+            - _value: 1542074
+          - 33:
+            - _name: 33
+            - _type: Int
+            - _value: 1552074
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 4
+        - _children:
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 50
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 50
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 100
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 7
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 3
+              - incPDD:
+                - _name: incPDD
+                - _type: Int
+                - _value: 50
+              - incMDD:
+                - _name: incMDD
+                - _type: Int
+                - _value: 50
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 155
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 155
+              - incACC:
+                - _name: incACC
+                - _type: Int
+                - _value: 100
+              - incEVA:
+                - _name: incEVA
+                - _type: Int
+                - _value: 100
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 5
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 20396
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 7
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 15
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 15
+              - Option:
+                - _name: Option
+                - _type: SubProperty
+                - _value:
+                  - child_count: 1
+                - _children:
+                  - 1:
+                    - _name: 1
+                    - _type: SubProperty
+                    - _value:
+                      - child_count: 2
+                    - _children:
+                      - option:
+                        - _name: option
+                        - _type: Int
+                        - _value: 30601
+                      - level:
+                        - _name: level
+                        - _type: Int
+                        - _value: 14
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 革命武器中选一
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 레볼루션 세트
+  - 304:
+    - _name: 304
+    - _type: SubProperty
+    - _value:
+      - child_count: 7
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 快乐套装
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 딜라이트 세트
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 6
+      - parts:
+        - _name: parts
+        - _type: Int
+        - _value: 1
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 6
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680083
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680089
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 快乐-拼图A
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680084
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680090
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 快乐-拼图B
+          - 3:
+            - _name: 3
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680085
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680091
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 快乐-拼图C
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680086
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680092
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 快乐-拼图D
+          - 5:
+            - _name: 5
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680087
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680093
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 快乐-拼图E
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 4
+            - _children:
+              - 1:
+                - _name: 1
+                - _type: Int
+                - _value: 1680088
+              - 2:
+                - _name: 2
+                - _type: Int
+                - _value: 1680094
+              - typeName:
+                - _name: typeName
+                - _type: String
+                - _value: （装备）
+              - representName:
+                - _name: representName
+                - _type: String
+                - _value: 快乐-拼图F
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 4:
+            - _name: 4
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 100
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 100
+          - 6:
+            - _name: 6
+            - _type: SubProperty
+            - _value:
+              - child_count: 3
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 3
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 3
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 2
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+  - 305:
+    - _name: 305
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 不朽巨匠英雄套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1113063
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1113064
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 18
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 임모탈 마이스터 히어로 세트
+  - 306:
+    - _name: 306
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 永恒巨匠英雄套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 2
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1113065
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1113066
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 2
+            - _children:
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 18
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 10
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 이터널 마이스터 히어로 세트
+  - 307:
+    - _name: 307
+    - _type: SubProperty
+    - _value:
+      - child_count: 8
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 闪烁羽毛套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 2
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 17
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1003947
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1302292
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1312168
+          - 4:
+            - _name: 4
+            - _type: Int
+            - _value: 1322218
+          - 5:
+            - _name: 5
+            - _type: Int
+            - _value: 1332241
+          - 6:
+            - _name: 6
+            - _type: Int
+            - _value: 1372191
+          - 7:
+            - _name: 7
+            - _type: Int
+            - _value: 1382225
+          - 8:
+            - _name: 8
+            - _type: Int
+            - _value: 1402213
+          - 9:
+            - _name: 9
+            - _type: Int
+            - _value: 1412150
+          - 10:
+            - _name: 10
+            - _type: Int
+            - _value: 1422155
+          - 11:
+            - _name: 11
+            - _type: Int
+            - _value: 1432181
+          - 12:
+            - _name: 12
+            - _type: Int
+            - _value: 1442237
+          - 13:
+            - _name: 13
+            - _type: Int
+            - _value: 1452219
+          - 14:
+            - _name: 14
+            - _type: Int
+            - _value: 1462207
+          - 15:
+            - _name: 15
+            - _type: Int
+            - _value: 1472229
+          - 16:
+            - _name: 16
+            - _type: Int
+            - _value: 1482182
+          - 17:
+            - _name: 17
+            - _type: Int
+            - _value: 1492193
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - 2:
+            - _name: 2
+            - _type: SubProperty
+            - _value:
+              - child_count: 5
+            - _children:
+              - incPAD:
+                - _name: incPAD
+                - _type: Int
+                - _value: 5
+              - incMAD:
+                - _name: incMAD
+                - _type: Int
+                - _value: 5
+              - incAllStat:
+                - _name: incAllStat
+                - _type: Int
+                - _value: 10
+              - incMHP:
+                - _name: incMHP
+                - _type: Int
+                - _value: 300
+              - incMMP:
+                - _name: incMMP
+                - _type: Int
+                - _value: 300
+      - Desc:
+        - _name: Desc
+        - _type: SubProperty
+        - _value:
+          - child_count: 1
+        - _children:
+          - weapon:
+            - _name: weapon
+            - _type: String
+            - _value: 与职业相符的武器中选一
+      - jokerPossible:
+        - _name: jokerPossible
+        - _type: Int
+        - _value: 1
+      - zeroWeaponJokerPossible:
+        - _name: zeroWeaponJokerPossible
+        - _type: Int
+        - _value: 1
+      - setItemNameKR:
+        - _name: setItemNameKR
+        - _type: String
+        - _value: 샤이닝 페더 세트
+  - 310:
+    - _name: 310
+    - _type: SubProperty
+    - _value:
+      - child_count: 6
+    - _children:
+      - setItemName:
+        - _name: setItemName
+        - _type: String
+        - _value: 克里蒂亚斯套装
+      - completeCount:
+        - _name: completeCount
+        - _type: Short
+        - _value: 3
+      - ItemID:
+        - _name: ItemID
+        - _type: SubProperty
+        - _value:
+          - child_count: 3
+        - _children:
+          - 1:
+            - _name: 1
+            - _type: Int
+            - _value: 1032217
+          - 2:
+            - _name: 2
+            - _type: Int
+            - _value: 1152156
+          - 3:
+            - _name: 3
+            - _type: Int
+            - _value: 1162018
+      - Effect:
+        - _name: Effect
+        - _type: SubProperty
+        - _value:
+          - child_count: 1

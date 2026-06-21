@@ -1,96 +1,191 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+/**
+-- Odin JavaScript --------------------------------------------------------------------------------
+	Faito(Showa Exchange Quest) - Showa Town(801000300)
+-- By ---------------------------------------------------------------------------------------------
+	Information
+-- Version Info -----------------------------------------------------------------------------------
+	1.0 - First Version by Information
+	    - Base from Sean360 script, thanks
+---------------------------------------------------------------------------------------------------
+**/
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
+var status = -1;
+var eQuestChoices = new Array (4000064,4000065,4000066,4000075,4000077,4000089,4000090,4000091,4000092,4000093,4000094); 
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+var eQuestPrizes = new Array();
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-var status = 0;
-var eQuestChoices = [4000064, 4000065, 4000066, 4000075, 4000077, 4000089, 4000090, 4000091, 4000092, 4000093, 4000094];
-var eQuestPrizes = [];
-eQuestPrizes[0] = [[2000000, 1], [2000006, 1], [2000003, 5], [2000002, 5], [4020006, 2], [4020000, 2], [4020004, 2], [2000003, 10], [2000003, 20], [2000002, 10], [2000002, 20], [2022026, 15], [2022024, 15], [1002393, 1]];	// Crow feather
-eQuestPrizes[1] = [[2000006, 1], [2000002, 5], [4020006, 2], [2000002, 10], [2000003, 10], [2000002, 20], [2000003, 20], [2022024, 15], [2022026, 15]];	// Raccoon firewood
-eQuestPrizes[2] = [[2000006, 1], [2000002, 5], [2000003, 5], [4020000, 2], [2000003, 10], [2000002, 10], [2000003, 20], [2000002, 20], [2022024, 15], [1002393, 1]];	// Cloud foxtail
-eQuestPrizes[3] = [[2060003, 1000], [4010004, 2], [4010006, 2], [2022022, 5], [2022022, 10], [2022022, 15], [2022019, 5], [2022019, 10], [2022019, 15], [2001002, 15], [2001001, 15], [1102040, 1], [1102043, 1]];	// Tringular bandana of the nightghost
-eQuestPrizes[4] = [[2000003, 1], [2022019, 5], [2000006, 5], [4010002, 2], [4010003, 2], [2000006, 10], [2000006, 15], [2022019, 10], [2022019, 15], [2060003, 1000], [2061003, 1000], [1082150, 1], [1082149, 1]];	// Dark cloud foxtail
-eQuestPrizes[5] = [[2000006, 1], [2000003, 5], [2000002, 5], [2000003, 10], [2000003, 20], [2000002, 10], [2000002, 15], [2060003, 1000], [2061003, 1000], [2022026, 15], [1002395, 1]];   // Littleman A's badge
-eQuestPrizes[6] = [[2022019, 5], [2000006, 5], [4010003, 2], [2022019, 10], [2022019, 15], [2000006, 10], [2000006, 15], [2060003, 1000], [2061003, 1000]];                // Littleman B's name plate
-eQuestPrizes[7] = [[2000003, 1], [2000006, 1], [2022019, 1], [2000006, 5], [4010002, 2], [4020001, 2], [2022019, 10], [2022019, 15], [2000006, 10], [2000006, 15], [2060003, 1000], [2061003, 1000]];       // Littleman C's necklace
-eQuestPrizes[8] = [[2022019, 5], [2022022, 5], [4010006, 2], [2022019, 10], [2022019, 15], [2022022, 10], [2022022, 15], [2001002, 15], [2001001, 15], [1102043, 1]];	// Leader A's shades
-eQuestPrizes[9] = [[4010004, 5], [2022019, 5], [2022022, 15], [2022019, 15], [2001002, 15], [2001001, 15], [1102043, 1]];	// Leader B's charm
-eQuestPrizes[10] = [[1102207, 1], [1442026, 1], [1302037, 1], [2070007, 1], [2340000, 1], [2330005, 1], [2022060, 25], [2022061, 20], [2022062, 15]];	// Boss pomade
-var requiredItem = 0;
+eQuestPrizes[0] = new Array ([2000000,1],  // Red Potion
+    [2000006,1],	// Mana Elixir
+    [2000003,5], 	// Blue Potion
+    [2000002,5],	// White Potion
+    [4020006,2],	// Topaz Ore
+    [4020000,2],	// Garnet Ore
+    [4020004,2],	// Opal Ore
+    [2000003,10],	// Blue Potion
+    [2000003,20],	// Blue Potion
+    [2000002,10],	// White Potion
+    [2000002,20],	// White Potion
+    [2022026,15],	// Yakisoba
+    [2022024,15],	// Takoyaki (Octopus Ball)
+    [1002393,1]);	// Pink Bandana
+eQuestPrizes[1] = new Array ([2000006,1],	// Mana Elixir
+    [2000002,5],	// White Potion
+    [4020006,2],	// Topaz Ore
+    [2000002,10],	// White Potion
+    [2000003,10],	// Blue Potion
+    [2000002,20],	// White Potion
+    [2000003,20],	// Blue Potion
+    [2022024,15],	// Takoyaki (Octopus Ball)
+    [2022026,15]);	// Yakisoba
+eQuestPrizes[2] = new Array ([2000006,1],	// Mana Elixir
+    [2000002,5],	// White Potion
+    [2000003,5],	// Blue Potion
+    [4020000,2],	// Garnet Ore
+    [2000003,10],	// Blue Potion
+    [2000002,10],	// White Potion
+    [2000003,20],	// Blue Potion
+    [2000002,20],	// White Potion
+    [2022024,15],	// Takoyaki (Octopus Ball)
+    [1002393,1]);	// Pink Bandana
+eQuestPrizes[3] = new Array ([2060003,1000],	// Red Arrow for Bow
+    [4010004,2],	// Silver Ore
+    [4010006,2],	// Gold Ore
+    [2022022,5],	// Tempura (Dish)
+    [2022022,10],	// Tempura (Dish)
+    [2022022,15],	// Tempura (Dish)
+    [2022019,5],	// Kinoko Ramen (Pig Bone)
+    [2022019,10],	// Kinoko Ramen (Pig Bone)
+    [2022019,15],	// Kinoko Ramen (Pig Bone)
+    [2001002,15],	// Red Bean Sundae
+    [2001001,15],	// Ice Cream Pop
+    [1102040,1],	// Yellow Adventurer Cape
+    [1102043,1]);	// Brown Adventurer Cape
+eQuestPrizes[4] = new Array ([2000003,1],	//Blue Potion
+    [2022019,5],	// Kinoko Ramen (Pig Bone)
+    [2000006,5],	// Mana Elixir
+    [4010002,2],	// Mithril Ore
+    [4010003,2],	// Adamantium Ore
+    [2000006,10],	// Mana Elixir
+    [2000006,15],	// Mana Elixir
+    [2022019,10],	// Kinoko Ramen (Pig Bone)
+    [2022019,15],	// Kinoko Ramen (Pig Bone)
+    [2060003,1000],	// Red Arrow for Bow
+    [2061003,1000],	// Blue Arrow for Crossbow
+    [1082150,1],	// Grey Work Gloves
+    [1082149,1]);	// Brown Work Gloves
+eQuestPrizes[5] = new Array ([2000006,1],	// Mana Elixir
+    [2000003,5],	// Blue Potion
+    [2000002,5],	// White Potion
+    [2000003,10],	// Blue Potion
+    [2000003,20],	// Blue Potion
+    [2000002,10],	// White Potion
+    [2000002,15],	// White Potion
+    [2060003,1000],	// Red Arrow for Bow
+    [2061003,1000],	// Blue Arrow for Crossbow
+    [2022026,15],	// Yakisoba
+    [1002395,1]);	// Purple Bandana
+eQuestPrizes[6] = new Array ([2022019,5],	// Kinoko Ramen (Pig Bone)
+    [2000006,5],	// Mana Elixir
+    [4010003,2],	// Adamantium Ore
+    [2022019,10],	// Kinoko Ramen (Pig Bone)
+    [2022019,15],	// Kinoko Ramen (Pig Bone)
+    [2000006,10],	// Mana Elixir
+    [2000006,15],	// Mana Elixir
+    [2060003,1000],	// Red Arrow for Bow
+    [2061003,1000]);	// Blue Arrow for Crossbow
+eQuestPrizes[7] = new Array ([2000003,1],	// Blue Potion
+    [2000006,1],	// Mana Elixir
+    [2022019,1],	// Kinoko Ramen (Pig Bone)
+    [2000006,5],	// Mana Elixir
+    [4010002,2],	// Mithril Ore
+    [4020001,2],	// Amethyst Ore
+    [2022019,10],	// Kinoko Ramen (Pig Bone)
+    [2022019,15],	// Kinoko Ramen (Pig Bone)
+    [2000006,10],	// Mana Elixir
+    [2000006,15],	// Mana Elixir
+    [2060003,1000],	// Red Arrow for Bow
+    [2061003,1000]);	// Blue Arrow for Crossbow
+eQuestPrizes[8] = new Array ([2022019,5],	// Kinoko Ramen (Pig Bone)
+    [2022022,5],	// Tempura (Dish)
+    [4010006,2],	// Gold Ore
+    [2022019,10],	// Kinoko Ramen (Pig Bone)
+    [2022019,15],	// Kinoko Ramen (Pig Bone)
+    [2022022,10],	// Tempura (Dish)
+    [2022022,15],	// Tempura (Dish)
+    [2001002,15],	// Red Bean Sundae
+    [2001001,15],	// Ice Cream Pop
+    [1102043,1]);	// Brown Adventurer Cape
+eQuestPrizes[9] = new Array ([4010004,5],	// Silver Ore
+    [2022019,5],	// Kinoko Ramen (Pig Bone)
+    [2022022,15],	// Tempura (Dish)
+    [2022019,15],	// Kinoko Ramen (Pig Bone)
+    [2001002,15],	// Red Bean Sundae
+    [2001001,15],	// Ice Cream Pop
+    [1102043,1]);	// Brown Adventurer Cape
+eQuestPrizes[10] = new Array   ([2000006,1],	// Mana Elixir
+    [4020008,15],	// Black Crystal Ore
+    [2022018,5],	// Kinoko Ramen (Roasted Pork)
+    [2022018,10],	// Kinoko Ramen (Roasted Pork)
+    [2022018,15],	// Kinoko Ramen (Roasted Pork)
+    [2022000,10],	// Pure Water
+    [2022000,20],	// Pure Water
+    [2022025,15]);	// Takoyaki (Jumbo)
+var requiredItem  = 0;
 var lastSelection = 0;
-var prizeItem = 0;
+var prizeItem     = 0;
 var prizeQuantity = 0;
 var info;
 var itemSet;
 var reward;
 
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (mode == 1) {
+	status++;
     } else {
-        if (mode == 0 && status == 0) {
-            cm.sendOk("真的吗？如果你改变主意了，记得告诉我。");
-            cm.dispose();
-            return;
-        }
-        if (mode == 0 && status == 1) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        }
-        if (status == 0) {
-            cm.sendYesNo("如果你正在寻找一个能够准确描述各种物品特征的人，那么你现在就找到了。我目前正在寻找一样东西。你想听听我的故事吗？");
-        } else if (status == 1) {
-            var eQuestChoice = makeChoices(eQuestChoices);
-            cm.sendSimple(eQuestChoice);
-        } else if (status == 2) {
-            requiredItem = eQuestChoices[selection];
-            reward = eQuestPrizes[selection];
-            itemSet = (Math.floor(Math.random() * reward.length));
-            prizeItem = reward[itemSet][0];
-            prizeQuantity = reward[itemSet][1];
-            if (!cm.canHold(prizeItem)) {
-                cm.sendNext("如果你的装备、使用或其他物品栏已满，我无法给你奖励。请立即去看一下。");
-            } else if (cm.hasItem(requiredItem, 100)) {   // check they have >= 100 in Inventory
-                cm.gainItem(requiredItem, -100);
-                cm.gainItem(prizeItem, prizeQuantity);
-                cm.sendOk("嗯...如果不是这个小小的划痕...唉。恐怕我只能认定这是一个标准品质的物品。好吧，这是给你的#t" + prizeItem + "#。");
-            } else {
-                cm.sendOk("嘿，你以为你在干什么？去欺骗那些不懂得在说什么的人。不要来骗我！");
-            }
-            cm.dispose();
-        }
+	if (status == 0) {
+	    cm.sendOk("真的吗？让我知道，如果你改变了主意。");
+	    cm.safeDispose();
+	    return;
+	}
+	status--;
+    }
+
+    if (status == 0) {
+	cm.sendYesNo("如果你正在寻找某人，可以精确定位各种物品的特点，你看一个现在。目前，我正在寻找的东西。你想听听我的故事吗？");
+    } else if (status == 1) {
+	var eQuestChoice = makeChoices(eQuestChoices);
+	cm.sendSimple(eQuestChoice);
+    } else if (status == 2){
+	requiredItem = eQuestChoices[selection];
+	reward = eQuestPrizes[selection];
+	itemSet = (Math.floor(Math.random() * reward.length));
+	prizeItem = reward[itemSet][0];
+	prizeQuantity = reward[itemSet][1];
+	if (!cm.canHold(prizeItem)){
+	    cm.sendNext("什么？我不能给你奖励，确保你的道具栏有无满。");
+	} else if (checkQuantity(requiredItem) >= 100){   // check they have >= 100 in Inventory
+	    cm.gainItem(requiredItem,-100);
+	    cm.gainItem(prizeItem,prizeQuantity);
+	    cm.sendOk("嗯......如果不是因为这个小划痕......叹了口气。恐怕我只能认为这是一个标准的品质项目。那么，这里的 \r\n#t"+ prizeItem +"# 给你。");
+	} else{
+	    cm.sendOk("嘿，你觉得你在做什么？不是我去骗别人，不知道他在说什么！");
+	}
+	cm.safeDispose();
     }
 }
 
-function makeChoices(a) {
-    var result = "The items I'm looking for are 1,2,3 ... phew, too many to\r\nmention. Anyhow, if you gather up 100 of the same items,\r\nthen i may trade it with something similiar. What? You may\r\nnot know this, but i keep my end of the promise, so you\r\nneed not worry. Now, shall we trade?\r\n";
-    for (var x = 0; x < a.length; x++) {
-        result += " #L" + x + "##v" + a[x] + "##t" + a[x] + "##l\r\n";
+function makeChoices(a){
+    var result  = "我在寻找项目1,2,3... 太多了\r\n提。总之，如果你收集了相同的项目100个，\r\n然后我可以用类似的东西换它。什么？你可以\r\n不知道这一点，但我信守承诺我结束，所以你\r\n不用担心。现在，我们应该交易？\r\n";
+    for (var x = 0; x< a.length; x++){
+	result += " #L" + x + "##v" + a[x] + "##t" + a[x] + "##l\r\n";
     }
     return result;
+}
+function checkQuantity(itemId){
+    var itemCount = 0;
+    var iter = cm.getInventory(4).listById(itemId).iterator();
+    while (iter.hasNext()) {
+	itemCount += iter.next().getQuantity();
+    }
+    return itemCount;
 }

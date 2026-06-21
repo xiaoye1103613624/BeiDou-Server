@@ -1,106 +1,65 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- Assistant Travis
- -- By ---------------------------------------------------------------------------------------------
- Angel (get31720)
- -- Version Info -----------------------------------------------------------------------------------
- 1.0 - First Version by Angel
- 2.0 - Second Version by happydud3 & XotiCraze
- 3.0 - Third Version by RonanLana (HeavenMS)
- ---------------------------------------------------------------------------------------------------
- **/
-
-var status;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
+var status = -1;
 
 function action(mode, type, selection) {
-    if (mode == -1 || mode == 0) {
-        cm.dispose();
-        return;
-    } else if (mode == 1) {
-        status++;
+    if (mode == 1) {
+	status++;
     } else {
-        status--;
+	if (status == 0) {
+	    cm.dispose();
+	}
+	status--;
     }
-
-    var eim = cm.getEventInstance();
-    if (eim == null) {
-        cm.warp(680000000, 0);
-        cm.dispose();
-        return;
+    if (cm.getMapId() != 680000100) {
+	cm.dispose();
+	return;
     }
+    if (status == 0) {
+	cm.sendYesNo("您想进入结婚礼堂？？");
+    } else if (status == 1) {
 
-    var isMarrying = (cm.getPlayer().getId() == eim.getIntProperty("groomId") || cm.getPlayer().getId() == eim.getIntProperty("brideId"));
-
-    switch (status) {
-        case 0:
-            if (cm.getMapId() == 680000300) {
-                cm.sendYesNo("你确定要#r退出舞台#k并返回#b阿莫利亚#k吗？这样你将会#r跳过奖励关卡#k。");
-            } else {
-                var hasEngagement = false;
-                for (var x = 4031357; x <= 4031364; x++) {
-                    if (cm.haveItem(x, 1)) {
-                        hasEngagement = true;
-                        break;
-                    }
-                }
-
-                if (cm.haveItem(4000313) && isMarrying) {
-                    if (eim.getIntProperty("weddingStage") == 3) {
-                        cm.sendOk("你们完全征服了舞台！！！快去找#b#p9201007##k开始派对。");
-                        cm.dispose();
-                    } else if (hasEngagement) {
-                        if (!cm.createMarriageWishlist()) {
-                            cm.sendOk("您已经发送了您的愿望清单...");
-                        }
-                        cm.dispose();
-                    } else {
-                        cm.sendOk("哦，嘿，这场备受赞誉的派对的证件在哪里？哦，天啊，现在我们无法以这种速度继续下去……抱歉，派对结束了。");
-                    }
-                } else {
-                    if (eim.getIntProperty("weddingStage") == 3) {
-                        if (!isMarrying) {
-                            cm.sendYesNo("你们不会错过他们了吧？我们的超级明星们#r合作得非常出色#k，很快#b他们就会开始派对#k。你真的要#r退出节目#k，回到#b阿莫利亚#k吗？");
-                        } else {
-                            cm.sendOk("你们完全征服了舞台！！！快去找#b#p9201007##k开始派对。");
-                            cm.dispose();
-                        }
-                    } else {
-                        cm.sendYesNo("你确定要#r退出舞台#k并前往#b阿莫利亚#k吗？你将会#r跳过奖励阶段#k，家人。");
-                    }
-                }
-            }
-
-
-            break;
-
-        case 1:
-            cm.warp(680000000, 0);
-            cm.dispose();
-            break;
+	    var marr = cm.getQuestRecord(160001);
+	    var data = marr.getCustomData();
+	    if (data == null) {
+		marr.setCustomData("0");
+	        data = "0";
+	    }
+	    if (data.equals("1")) {
+		if (cm.getPlayer().getMarriageId() <= 0) {
+		    cm.sendOk("好像发生了错误了，您好像还没有跟任何人结婚！");
+		    cm.dispose();
+		    return;
+		}
+	    	var chr = cm.getMap().getCharacterById(cm.getPlayer().getMarriageId());
+	    	if (chr == null) {
+		    cm.sendOk("请确认您的另一半是否在同一张地图内。");
+		    cm.dispose();
+		    return;
+	    	}
+		var maps = Array(680000110, 680000300, 680000401);
+		for (var i = 0; i < maps.length; i++) {
+		    if (cm.getMap(maps[i]).getCharactersSize() > 0) {
+			cm.sendNext("礼堂内已经有另外一对新人正在举行婚礼，请稍后再来尝试。");
+			cm.dispose();
+			return;
+		    }
+		}
+		var map = cm.getMap(680000110);
+		cm.getPlayer().changeMap(map, map.getPortal(0));
+		chr.changeMap(map, map.getPortal(0));
+		cm.worldMessage(5, "<频道 " + cm.getClient().getChannel() + "> " + cm.getPlayer().getName() + " 与 " + chr.getName() + "即将步入礼堂，请大家快过来祝福他们。");
+	    } else {
+		if (cm.getMap(680000110).getCharactersSize() == 0) {
+		    cm.sendNext("现在礼堂没有举办任何婚礼喔，请稍后再来。");
+		    cm.dispose();
+		    return;
+		}
+		if (cm.haveItem(4150000)) {
+		    cm.warp(680000110,0);
+			cm.removeAll(4150000);
+		} else {
+		    cm.sendOk("请确认是否有#b#t4150000##k。");
+		}
+	    }
+	cm.dispose();
     }
 }

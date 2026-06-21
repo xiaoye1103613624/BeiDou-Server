@@ -194,6 +194,9 @@ public final class ScrollHandler extends AbstractPacketHandler {
         }
     }
 
+    /** 时装强化卷物品ID（适用于所有时装现金道具，不按常规装备分类码匹配） */
+    private static final int FASHION_CASH_SCROLL = 2040726;
+
     private static boolean canScroll(int scrollid, int itemid) {
         int sid = scrollid / 100;
 
@@ -203,6 +206,10 @@ public final class ScrollHandler extends AbstractPacketHandler {
                         canScroll(ItemId.BELT_STR_100_SCROLL, itemid);
 
             default:
+                if (scrollid == FASHION_CASH_SCROLL) {
+                    // 时装强化卷：通用于所有时装现金道具，不按装备分类码限制
+                    return ItemInformationProvider.getInstance().isCash(itemid);
+                }
                 return (scrollid / 100) % 100 == (itemid / 10000) % 100;
         }
     }

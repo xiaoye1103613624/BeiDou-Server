@@ -1,40 +1,18 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-function enter(pi) {
-    if (pi.isQuestCompleted(3706)) {
-        pi.playPortalSound();
-        pi.warp(240040612, "out00");
-        return true;
-    } else if (pi.isQuestStarted(100203) || pi.getPlayer().haveItem(4001094)) {
-        var em = pi.getEventManager("NineSpirit");
-        if (!em.startInstance(pi.getPlayer())) {
-            pi.message("当前地图已有其他玩家，请稍后再试");
-            return false;
-        } else {
-            pi.playPortalSound();
-            return true;
-        }
+﻿function enter(pi) {
+    if (pi.haveItem(4001094)) {
+	if (pi.getQuestStatus(3706) > 0) {
+	    if (pi.getPlayerCount(240040611) == 0) {
+		pi.removeNpc(240040611, 2081008);
+		pi.resetMap(240040611);
+		pi.playPortalSE();
+		pi.warp(240040611, "sp");
+	    } else {
+		pi.playerMessage(5, "有人已經在裡面，試圖完成任務。請稍後再試。");
+	    }
+	} else {
+	    pi.playerMessage(5, "你不必追求開始。請稍後再試。");
+	}
     } else {
-        pi.message("一股神秘力量阻挡了你的进入");
-        return false;
+	pi.playerMessage(5, "為了進入的前提下，你需要有九靈的蛋。");
     }
 }

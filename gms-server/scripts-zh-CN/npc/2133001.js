@@ -1,131 +1,69 @@
-/**
- * @author: Ronan
- * @npc: Ellin
- * @map: Ellin PQ
- * @func: Ellin PQ Coordinator
- */
-
-var status = 0;
-var mapid;
-
-function start() {
-    mapid = cm.getPlayer().getMapId();
-
-    status = -1;
-    action(1, 0, 0);
-}
-
+var status = -1;
+ 
+ 
+ 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (mode == 1) {
+	status++;
     } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            var ellinStr = ellinMapMessage(mapid);
-
-            if (mapid == 930000000) {
-                cm.sendNext(ellinStr);
-            } else if (mapid == 930000300) {
-                var eim = cm.getEventInstance();
-
-                if (eim.getIntProperty("statusStg4") == 0) {
-                    eim.showClearEffect(cm.getMap().getId());
-                    eim.setIntProperty("statusStg4", 1);
-                }
-
-                cm.sendNext(ellinStr);
-            } else if (mapid == 930000400) {
-                if (cm.haveItem(4001169, 20)) {
-                    if (cm.isEventLeader()) {
-                        cm.sendNext("哦，你带来了它们！我们现在可以继续了，我们要继续吗？");
-                    } else {
-                        cm.sendOk("你已经带来了他们，但你不是队长！请让队长把弹珠给我……");
-                        cm.dispose();
-
-                    }
-                } else {
-                    if (cm.getEventInstance().gridCheck(cm.getPlayer()) != 1) {
-                        cm.sendNext(ellinStr);
-
-                        cm.getEventInstance().gridInsert(cm.getPlayer(), 1);
-                        status = -1;
-                    } else {
-                        var mobs = cm.getMap().countMonsters();
-
-                        if (mobs > 0) {
-                            if (!cm.haveItem(2270004)) {
-                                if (cm.canHold(2270004, 10)) {
-                                    cm.gainItem(2270004, 10);
-                                    cm.sendOk("拿10个#t2270004#。首先，#r削弱#o9300174#的力量，一旦它的生命值降低，使用我给你的物品来捕捉它们。");
-                                    cm.dispose();
-
-                                } else {
-                                    cm.sendOk("在领取净化器之前，请确保你的使用物品栏有足够的空间！");
-                                    cm.dispose();
-
-                                }
-                            } else {
-                                cm.sendYesNo(ellinStr + "\r\n\r\nIt may be you are #rwilling to quit#k? Please double-think it, maybe your partners are still trying this instance.");
-                            }
-                        } else {
-                            cm.sendYesNo("你们已经捕捉到了所有的 #o9300174#。让队长把所有的 #b20 #t4001169##k 给我，然后我们继续。" + "\r\n\r\n也许你是 #rwilling to quit#k？请三思，也许你的队友还在努力尝试这个副本。");
-                        }
-                    }
-                }
-            } else {
-                cm.sendYesNo(ellinStr + "\r\n\r\nIt may be you are #rwilling to quit#k? Please double-think it, maybe your partners are still trying this instance.");
-            }
-        } else if (status == 1) {
-            if (mapid == 930000000) {
-            } else if (mapid == 930000300) {
-                cm.getEventInstance().warpEventTeam(930000400);
-            } else if (mapid == 930000400) {
-                if (cm.haveItem(4001169, 20) && cm.isEventLeader()) {
-                    cm.gainItem(4001169, -20);
-                    cm.getEventInstance().warpEventTeam(930000500);
-                } else {
-                    cm.warp(930000800, 0);
-                }
-            } else {
-                cm.warp(930000800, 0);
-            }
-
-            cm.dispose();
-        }
+	status--;
     }
+    switch(cm.getPlayer().getMapId()) {
+	case 930000000:
+	    cm.sendNext("欢迎，请进入。");
+	    break;
+	case 930000100:
+	    cm.sendNext("我们必须消除所有这些怪物的污染！");
+	    break;
+	case 930000200:
+	    cm.sendNext("请把怪物引到中间的#r桥上打死#k,获得稀释的毒素,一共要#r4瓶#k哦！然后到最右边的绿树一瓶瓶的扔出来通过任务!");
+	    break;
+	case 930000300:
+	    cm.warpParty(930000400);
+	    break;
+	case 930000400:
+	    if (cm.haveItem(4001169,10)) {
+        cm.warpParty(930000500, 0);
+		cm.gainItem(4001169,-10);
+	    } else if (!cm.haveItem(2270004)) {
+		//cm.gainItem(2270004,10);
+		
+		cm.warp(930000600);// 恢复原来的就删除这两条上下一条注释
+		cm.gainItem(4001163,1);// 恢复原来点就删除这两条与上下一条注释
+		
+		//cm.sendOk("你或者你的队员拿了10个#v4001169#,请净化这些怪物的好运气!");
+	    } else {
+		cm.sendOk("我们要净化这些被污染的怪物！让我从他们怪物大理石!");
+	    }
+	    break;
+	case 930000600:
+	    cm.sendNext("就是#v4001163#这个！放置在魔岩在坛！");
+	    break;
+	case 930000700:
+            if (cm.canHold(4001198,1)) {
+				cm.getPlayer().setBossLog("毒雾组队",0);
+	            /*cm.gainGP(+20);//给家族GP点				
+                cm.gainExpR(1400000);
+				cm.gainItem(4002001,1);
+				cm.gainItem(3992025,1);//muyao邮票*/
+	        cm.getPlayer().endPartyQuest(1206);
+	        cm.removeAll(4001161);
+	        cm.removeAll(4001162);
+	        cm.removeAll(4001163);
+	        cm.removeAll(4001164);
+	        cm.removeAll(4001169);
+	        cm.removeAll(2270004);
+	   // cm.gainItem(4310014,2);
+		cm.喇叭(1,"[组队副本] 玩家:<"+cm.getName()+">带领他的队伍完成毒雾组队副本,大家恭喜吧！！！");
+		cm.dispose();
+        cm.openNpc(2133000,"毒雾组队副本");
+	    cm.warp(910001000,0);
+	} else {
+		cm.getPlayer().dropMessage(5, "请确认你的其他栏有没有满");
+	}
+	    break;
+    }
+    cm.dispose();
 }
 
-function ellinMapMessage(mapid) {
-    switch (mapid) {
-        case 930000000:
-            return "Welcome to the Forest of Poison Haze. Proceed by entering the portal.";
 
-        case 930000100:
-            return "The #b#o9300172##k have taken the area. We have to eliminate all these contaminated monsters to proceed further.";
-
-        case 930000200:
-            return "A great spine has blocked the way ahead. To remove this barrier we must retrieve the poison the #b#o9300173##k carries to deter the overgrown spine. However, the poison in natural state can't be handled, as it is way too concentrated. Use the #bfountain#k over there to dilute it.";
-
-        case 930000300:
-            return "Oh great, you have reached me. We can now proceed further inside the forest.";
-
-        case 930000400:
-            return "The #b#o9300175##k took over this area. However they are not ordinary monsters, then regrow pretty fast, #rnormal weapon and magic does no harm to it#k at all. We have to purify all these contaminated monsters, using #b#t2270004##k! Let your group leader get me 20 Monster Marbles from them.";
-
-        case 930000600:
-            return "The root of all problems of the forest! Place the obtained Magic Stone on the Altar and prepare yourselves!";
-
-        case 930000700:
-            return "This is it, you guys did it! Thank you so much for purifying the forest!!";
-
-    }
-}

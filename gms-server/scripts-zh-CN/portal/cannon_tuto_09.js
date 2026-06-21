@@ -1,4 +1,5 @@
 function enter(pi) {
-    pi.openNpc(8, 1096005);
-    return true;
+    pi.sendDirectionStatus(3, 0);
+	pi.sendDirectionStatus(4, 1096005);
+	pi.openNpc(1096005);
 }

@@ -20,6 +20,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var cost = 6000;
+var status = 0;
 
 function start() {
     status = -1;
@@ -27,25 +28,25 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if(mode == -1) {
         cm.dispose();
     } else {
-        if (mode == 1) {
+        if(mode == 1) {
             status++;
         }
-        if (mode == 0) {
-            cm.sendNext("你一定是有一些事情要在这里处理，对吧？");
+        if(mode == 0) {
+            cm.sendNext("你有一些经济的负担而无法搭船对吧?");
             cm.dispose();
             return;
         }
-        if (status == 0) {
-            cm.sendYesNo("你好，我负责出售前往天空之城的船票。前往天空之城的船每10分钟出发一次，从整点开始，票价为#b" + cost + "金币#k。你确定要购买#b#t4031045##k吗？");
-        } else if (status == 1) {
-            if (cm.getMeso() >= cost && cm.canHold(4031045)) {
-                cm.gainItem(4031045, 1);
+        if(status == 0) {
+    cm.sendYesNo("你好,我是西拉斯。你想离开纳希沙漠到天空之城吗? 从这站到艾纳斯大陆的#b天空之城#k的船只\r需要花费#b"+cost+" 金币#k 购买#b#t4031045##k 才可以启航.");
+        } else if(status == 1) {
+            if(cm.getMeso() >= cost && cm.canHold(4031045)) {
+                cm.gainItem(4031045,1);
                 cm.gainMeso(-cost);
             } else {
-                cm.sendOk("你确定你有 #b" + cost + " 冒险币#k 吗？如果是的话，请检查你的杂项物品栏，看看是否已经满了。");
+                cm.sendOk("请问你有 #b"+cost+" 金币#k? 如果有的话,我劝您检查下身上其他栏位看是否有没有满了.");
             }
             cm.dispose();
         }

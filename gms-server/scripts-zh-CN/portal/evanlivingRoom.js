@@ -1,5 +1,5 @@
 function enter(pi) {
-    pi.playPortalSound();
-    pi.warp(100030102, "in00");
+	pi.playPortalSE();
+    pi.warp(100030102, "sp");
     return true;
 }  

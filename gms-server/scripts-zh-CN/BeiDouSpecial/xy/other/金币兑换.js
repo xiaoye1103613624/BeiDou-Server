@@ -143,7 +143,7 @@ function action(mode, type, selection) {
             cm.gainItem(item[0], qty);
 
             // 地图广播
-            cm.mapMessage(6, "[金币兑换] 玩家 " + cm.getPlayer().getName() + " 花费 " + formatNumber(totalCost) + " 金币购买了 " + qty + " 个 " + item[1] + "（含手续费 " + formatNumber(fee) + " 金币）");
+            cm.mapMessage(6, "[" + cm.getPlayer().getName() + "玩家] 花费 " + formatNumber(totalCost) + " 金币购买了 " + qty + " 个 " + item[1]);
             // 后台日志
             logExchange("金币→物品", item, qty, totalCost, fee);
             // 成功提示
@@ -181,7 +181,7 @@ function action(mode, type, selection) {
             cm.gainMeso(totalGold);
 
             // 地图广播
-            cm.mapMessage(6, "[金币兑换] 玩家 " + cm.getPlayer().getName() + " 用 " + qty + " 个 " + item[1] + " 兑换了 " + formatNumber(totalGold) + " 金币");
+            cm.mapMessage(6, "[" + cm.getPlayer().getName() + "玩家] 用 " + qty + " 个 " + item[1] + " 兑换了 " + formatNumber(totalGold) + " 金币");
             // 后台日志
             logExchange("物品→金币", item, qty, totalGold, 0);
             // 成功提示

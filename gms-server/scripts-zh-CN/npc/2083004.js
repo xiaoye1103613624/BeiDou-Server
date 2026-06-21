@@ -1,190 +1,223 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	NPC Name: 		Mark of the Squad
+	Map(s): 		Entrance to Horned Tail's Cave
+	Description: 		Horntail Battle starter
 */
-/*Mark of the Squad
- *
- *@author Alan (SharpAceX)
- *@author Ronan
- */
-
-var status = 0;
-var expedition;
-var expedMembers;
-var player;
-var em;
-const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-const exped = ExpeditionType.HORNTAIL;
-var expedName = "Horntail";
-var expedBoss = "mighty Horntail";
-
-var list = "你想做什么？#b\r\n\r\n#L1#查看当前远征队成员#l\r\n#L2#开始战斗！#l\r\n#L3#退出远征队#l";
+var status = -1;
 
 function start() {
-    action(1, 0, 0);
+    if (cm.getPlayer().getLevel() < 120) {
+        cm.sendOk("你必须高于120级的要求，试图挑战暗黑龙王.");
+        cm.dispose();
+        return;
+    }
+     if (cm.getPlayer().getBossLog("每日黑龙")> 3) {
+                    cm.sendOk("你今天已经完成挑战3次.");
+                    cm.dispose();
+                    return;
+                
+    }
+    var em = cm.getEventManager("HorntailBattle");
+
+    if (em == null) {
+        cm.sendOk("该事件未启动，请联系GM.");
+        cm.dispose();
+        return;
+    }
+    var prop = em.getProperty("state");
+
+    var marr = cm.getQuestRecord(160100);
+    var data = marr.getCustomData();
+    if (data == null) {
+        marr.setCustomData("0");
+        data = "0";
+    }
+    var time = parseInt(data);
+    if (prop == null || prop.equals("0")) {
+        var squadAvailability = cm.getSquadAvailability("Horntail");
+        if (squadAvailability == -1) {
+            status = 0;
+           /* if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
+                cm.sendOk("你已经走到暗黑龙王在过去的12个小时。剩余时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
+                cm.dispose();
+                return;
+            }*/
+            cm.sendYesNo("你在成为远征队的队长感兴趣?每日可以打#r3#n#k次");
+
+        } else if (squadAvailability == 1) {
+           /* if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
+                cm.sendOk("你已经走到暗黑龙王在过去的12个小时。剩余时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
+                cm.dispose();
+                return;
+            }*/
+            // -1 = Cancelled, 0 = not, 1 = true
+            var type = cm.isSquadLeader("Horntail");
+            if (type == -1) {
+                cm.sendOk("小队已经结束，请重新注册.");
+                cm.dispose();
+            } else if (type == 0) {
+                var memberType = cm.isSquadMember("Horntail");
+                if (memberType == 2) {
+                    cm.sendOk("从班长，你被禁止.");
+                    cm.dispose();
+                } else if (memberType == 1) {
+                    status = 5;
+                    cm.sendSimple("那你想做的事? \r\n#b#L0#查看队员#l \r\n#b#L1#加入队伍#l \r\n#b#L2#从队伍中撤离#l");
+                } else if (memberType == -1) {
+                    cm.sendOk("The squad has ended, please re-register.");
+                    cm.dispose();
+                } else {
+                    status = 5;
+                    cm.sendSimple("那你想做的事? \r\n#b#L0#查看队员#l \r\n#b#L1#加入队伍#l \r\n#b#L2#从队伍中撤离#l");
+                }
+            } else { // Is leader
+                status = 10;
+                cm.sendSimple("那你想做的事? \r\n#b#L0#查看队员#l \r\n#b#L1#删除成员#l \r\n#b#L2#编辑限制列表#l \r\n#r#L3#进入地图#l");
+            // TODO viewing!
+            }
+        } else {
+            var eim = cm.getDisconnected("HorntailBattle");
+            if (eim == null) {
+                var squd = cm.getSquad("Horntail");
+                if (squd != null) {
+                   /* if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
+                        cm.sendOk("你已经走到暗黑龙王在过去的12个小时。剩余时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
+                        cm.dispose();
+                        return;
+                    }*/
+                    cm.sendYesNo("队内对抗boss战已经开始.\r\n" + squd.getNextPlayer());
+                    status = 3;
+                } else {
+                    cm.sendOk("队内对抗boss战已经开始.");
+                    cm.safeDispose();
+                }
+            } else {
+                cm.sendYesNo("啊，你回来了。你想重新加入你的队伍在打?");
+                status = 1;
+            }
+        }
+    } else {
+        var eim = cm.getDisconnected("HorntailBattle");
+        if (eim == null) {
+            var squd = cm.getSquad("Horntail");
+            if (squd != null) {
+                /*if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
+                    cm.sendOk("你已经走到暗黑龙王在过去的12个小时。剩余时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
+                    cm.dispose();
+                    return;
+                }*/
+                cm.sendYesNo("队内对抗boss战已经开始.\r\n" + squd.getNextPlayer());
+                status = 3;
+            } else {
+                cm.sendOk("队内对抗boss战已经开始.");
+                cm.safeDispose();
+            }
+        } else {
+            cm.sendYesNo("啊，你回来了。你想重新加入你的队伍在打?");
+            status = 1;
+        }
+    }
 }
 
 function action(mode, type, selection) {
-
-    player = cm.getPlayer();
-    expedition = cm.getExpedition(exped);
-    em = cm.getEventManager("HorntailBattle");
-
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0) {
-            cm.dispose();
-            return;
-        }
-
-        if (status == 0) {
-            if (player.getLevel() < exped.getMinLevel() || player.getLevel() > exped.getMaxLevel()) { //Don't fit requirement, thanks Conrad
-                cm.sendOk("您不符合与" + expedBoss + "战斗的条件！");
-                cm.dispose();
-            } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个队伍来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l");
-                status = 1;
-            } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
-                if (expedition.isInProgress()) {
-                    cm.sendOk("你的探险已经在进行中，对于那些仍在战斗中的人，让我们为那些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
+    switch (status) {
+        case 0:
+            if (mode == 1) {
+                if (cm.registerSquad("Horntail", 5, " 已经成黑龙远征队队长,有想打黑龙的就一起去不.")) {
+					cm.setBossLog('每日黑龙');
+                    cm.sendOk("你已经被任命为球队的队长。在接下来的5分钟，你可以添加探险队的成员.");
                 } else {
-                    cm.sendSimple(list);
-                    status = 2;
+                    cm.sendOk("发生错误加入你的队伍.");
                 }
-            } else if (expedition.isRegistering()) { //If the expedition is registering
-                if (expedition.contains(player)) { //If you're in it but it hasn't started, be patient
-                    cm.sendOk("你已经注册了这次远征。请等待 #r" + expedition.getLeader().getName() + "#k 开始。");
-                    cm.dispose();
-                } else { //If you aren't in it, you're going to get added
-                    cm.sendOk(expedition.addMember(cm.getPlayer()));
-                    cm.dispose();
+            }
+            cm.dispose();
+            break;
+        case 1:
+            if (!cm.reAdd("HorntailBattle", "Horntail")) {
+                cm.sendOk("错误...请重试.");
+            }
+            cm.safeDispose();
+            break;
+        case 3:
+            if (mode == 1) {
+                var squd = cm.getSquad("Horntail");
+                if (squd != null && !squd.getAllNextPlayer().contains(cm.getPlayer().getName())) {
+                    squd.setNextPlayer(cm.getPlayer().getName());
+                    cm.sendOk("你已经预留了点.");
                 }
-            } else if (expedition.isInProgress()) { //Only if the expedition is in progress
-                if (expedition.contains(player)) { //If you're registered, warp you in
-                    var eim = em.getInstance(expedName + player.getClient().getChannel());
-                    if (eim.getIntProperty("canJoin") == 1) {
-                        eim.registerPlayer(player);
-                    } else {
-                        cm.sendOk("你的远征队已经开始对抗" + expedBoss + "的战斗。让我们为这些勇敢的灵魂祈祷。");
+            }
+            cm.dispose();
+            break;
+        case 5:
+            if (selection == 0) {
+                if (!cm.getSquadList("Horntail", 0)) {
+                    cm.sendOk("由于未知错误，为队伍的请求被拒绝.");
+                }
+            } else if (selection == 1) { // join
+                var ba = cm.addMember("Horntail", true);
+                if (ba == 2) {
+                    cm.sendOk("队伍目前已满，请稍后再试.");
+                } else if (ba == 1) {
+					cm.setBossLog('每日黑龙');
+                    cm.sendOk("您已成功加入了队伍");
+                } else {
+                    cm.sendOk("You are already part of the squad.");
+                }
+            } else {// withdraw
+                var baa = cm.addMember("Horntail", false);
+                if (baa == 1) {
+                    cm.sendOk("您已经从队伍成功及回收");
+                } else {
+                    cm.sendOk("你是不是队伍的一部分.");
+                }
+            }
+            cm.dispose();
+            break;
+        case 10:
+            if (mode == 1) {
+                if (selection == 0) {
+                    if (!cm.getSquadList("Horntail", 0)) {
+                        cm.sendOk("由于未知错误，为队伍的请求被拒绝.");
                     }
-
                     cm.dispose();
-                } else { //If you're not in by now, tough luck
-                    cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
+                } else if (selection == 1) {
+                    status = 11;
+                    if (!cm.getSquadList("Horntail", 1)) {
+                        cm.sendOk("由于未知错误，为队伍的请求被拒绝.");
+                        cm.dispose();
+                    }
+                } else if (selection == 2) {
+                    status = 12;
+                    if (!cm.getSquadList("Horntail", 2)) {
+                        cm.sendOk("由于未知错误，为队伍的请求被拒绝.");
+                        cm.dispose();
+                    }
+                } else if (selection == 3) { // get insode
+                    if (cm.getSquad("Horntail") != null) {
+                        var dd = cm.getEventManager("HorntailBattle");
+                        dd.startInstance(cm.getSquad("Horntail"), cm.getMap(), 160100);
+						cm.gainMeso(-1000000)
+                    } else {
+                        cm.sendOk("由于未知错误，为队伍的请求被拒绝.");
+                    }
                     cm.dispose();
                 }
-            }
-        } else if (status == 1) {
-            if (selection == 1) {
-                expedition = cm.getExpedition(exped);
-                if (expedition != null) {
-                    cm.sendOk("有人已经主动成为了远征队的领袖。试着加入他们吧！");
-                    cm.dispose();
-                    return;
-                }
-
-                var res = cm.createExpedition(exped);
-                if (res == 0) {
-                    cm.sendOk("#r" + expedBoss + " 远征#k 已经创建。\r\n\r\n再次与我交谈，查看当前队伍，或开始战斗！");
-                } else if (res > 0) {
-                    cm.sendOk("抱歉，您已经达到了此次远征的尝试配额！请另选他日再试……");
-                } else {
-                    cm.sendOk("在开始远征时发生了意外错误，请稍后重试。");
-                }
-
-                cm.dispose();
-
-            } else if (selection == 2) {
-                cm.sendOk("当然，并非每个人都能挑战" + expedBoss + "。");
-                cm.dispose();
-
-            }
-        } else if (status == 2) {
-            if (selection == 1) {
-                if (expedition == null) {
-                    cm.sendOk("无法加载远征。");
-                    cm.dispose();
-                    return;
-                }
-                expedMembers = expedition.getMemberList();
-                var size = expedMembers.size();
-                if (size == 1) {
-                    cm.sendOk("你是探险队中唯一的成员。");
-                    cm.dispose();
-                    return;
-                }
-                var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
-                text += "\r\n\t\t1." + expedition.getLeader().getName();
-                for (var i = 1; i < size; i++) {
-                    text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
-                }
-                cm.sendSimple(text);
-                status = 6;
-            } else if (selection == 2) {
-                var min = exped.getMinSize();
-
-                var size = expedition.getMemberList().size();
-                if (size < min) {
-                    cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
-                    cm.dispose();
-                    return;
-                }
-
-                cm.sendOk("祝你好运！整个里弗尔都指望你了。");
-                status = 4;
-            } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + "探险结束了。"));
-                cm.endExpedition(expedition);
-                cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");
-                cm.dispose();
-
-            }
-        } else if (status == 4) {
-            if (em == null) {
-                cm.sendOk("事件无法初始化，请在论坛上报告此问题。");
-                cm.dispose();
-                return;
-            }
-
-            em.setProperty("leader", player.getName());
-            em.setProperty("channel", player.getClient().getChannel());
-            if (!em.startInstance(expedition)) {
-                cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
-                cm.dispose();
-                return;
-            }
-
-            cm.dispose();
-
-        } else if (status == 6) {
-            if (selection > 0) {
-                var banned = expedMembers.get(selection - 1);
-                expedition.ban(banned);
-                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");
-                cm.dispose();
             } else {
-                cm.sendSimple(list);
-                status = 2;
+                cm.dispose();
             }
-        }
+            break;
+        case 11:
+            cm.banMember("Horntail", selection);
+            cm.dispose();
+            break;
+        case 12:
+            if (selection != -1) {
+                cm.acceptMember("Horntail", selection);
+            }
+            cm.dispose();
+            break;
+        default:
+            cm.dispose();
+            break;
     }
 }

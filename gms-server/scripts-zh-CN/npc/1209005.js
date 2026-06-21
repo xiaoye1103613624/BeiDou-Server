@@ -1,3 +1,4 @@
+
 var status = 0;
 
 function start() {
@@ -6,6 +7,6 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    cm.sendOk("好的，开始进行...");
+    cm.sendOk(":(");
     cm.dispose();
 }

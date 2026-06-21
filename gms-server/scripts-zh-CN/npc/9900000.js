@@ -1,121 +1,268 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+importPackage(java.util);
+importPackage(Packages.client);
+importPackage(Packages.server);
+importPackage(Packages.tools);
+importPackage(Packages.tools.packet);
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
+/* ========== 配置区 ========== */
+var 修炼等级上限 = 9999;
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+/* ========== 材料消耗配置（分区间） ========== */
+var 等级消耗表 = [
+    {区间上限: 999,   单次消耗: 10000},
+    {区间上限: 1999,  单次消耗: 20000},
+    {区间上限: 2999,  单次消耗: 30000},
+    {区间上限: 3999,  单次消耗: 40000},
+    {区间上限: 4999,  单次消耗: 50000},
+    {区间上限: 5999,  单次消耗: 60000},
+    {区间上限: 6999,  单次消耗: 70000},
+    {区间上限: 7999,  单次消耗: 80000},
+    {区间上限: 8999,  单次消耗: 90000},
+    {区间上限: 9999,  单次消耗: 100000}  // 最后一项覆盖到9999级
+];
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/*
- * @Name         NimaKIN
- * @Author:      Signalize
- * @Author:      MainlandHero - repurposed to be the style setter in-game for mesos
- * @NPC:         9900000
- * @Purpose:     Hair/Face/Eye Changer
- * @Map:         180000000
- */
-var status = 0;
-var beauty = 0;
-var haircolor = Array();
-var skin = [0, 1, 2, 3, 4, 5, 9, 10];
-var fhair = [31000, 31010, 31020, 31030, 31040, 31050, 31060, 31070, 31080, 31090, 31100, 31110, 31120, 31130, 31140, 31150, 31160, 31170, 31180, 31190, 31200, 31210, 31220, 31230, 31240, 31250, 31260, 31270, 31280, 31290, 31300, 31310, 31320, 31330, 31340, 31350, 31400, 31410, 31420, 31440, 31450, 31460, 31470, 31480, 31490, 31510, 31520, 31530, 31540, 31550, 31560, 31570, 31580, 31590, 31600, 31610, 31620, 31630, 31640, 31650, 31670, 31660, 31680, 31690, 31700, 31710, 31720, 31730, 31740, 31750, 31760, 31770, 31780, 31790, 31800, 31810, 31820, 31830, 31840, 31850, 31860, 31870, 31880, 31890, 31910, 31920, 31930, 31940, 31950, 34010, 34020, 34030, 34050, 34110];
-var hair = [30000, 30010, 30020, 30030, 30040, 30050, 30060, 30070, 30080, 30090, 30110, 30120, 30130, 30140, 30150, 30160, 30170, 30180, 30190, 30200, 30210, 30220, 30230, 30240, 30250, 30260, 30270, 30280, 30290, 30300, 30310, 30320, 30330, 30340, 30350, 30360, 30370, 30400, 30410, 30420, 30440, 30450, 30460, 30470, 30480, 30490, 30510, 30520, 30530, 30540, 30550, 30560, 30570, 30580, 30590, 30600, 30610, 30620, 30630, 30640, 30650, 30660, 30670, 30680, 30690, 30700, 30710, 30720, 30730, 30740, 30750, 30760, 30770, 30780, 30790, 30800, 30810, 30820, 30830, 30840, 30860, 30870, 30880, 30890, 30900, 30910, 30920, 30930, 30940, 30950, 30990, 33000, 33040, 33100];
-var hairnew = Array();
-var face = [20000, 20001, 20002, 20003, 20004, 20005, 20006, 20007, 20008, 20009, 20010, 20011, 20012, 20013, 20014, 20015, 20016, 20017, 20018, 20019, 20020, 20021, 20022, 20023, 20024, 20025, 20026, 20027, 20028, 20029, 20031, 20032];
-var fface = [21000, 21001, 21002, 21003, 21004, 21005, 21006, 21007, 21008, 21009, 21010, 21011, 21012, 21013, 21014, 21016, 21017, 21018, 21019, 21020, 21021, 21022, 21023, 21024, 21025, 21026, 21027, 21029, 21030];
-var facenew = Array();
-var colors = Array();
-var price = 100000;
+var 材料ID = 4001126; //修炼等级提交材料
+var 额外固定消耗 = 0; //可选项：每次升级额外加的固定值（设为0则取消）
 
-function pushIfItemExists(array, itemid) {
-    if ((itemid = cm.getCosmeticItem(itemid)) != -1 && !cm.isCosmeticEquipped(itemid)) {  // thanks Conrad for noticing NPC crashing the player when trying to display inexistent cosmetics
-        array.push(itemid);
-    }
+var 制作材料 = [4000000, 4000001, 4000002, 4310143];
+var 材料数量 = [50, 100, 20, 200];
+
+var 可附魔盾牌 = [1092067, 1092031, 1092032, 1092033, 1092040, 1092044, 1092062, 1092053, 1092063, 1092064];   // ★可自由增删 ID
+
+var 附魔道具ID = 3994730;          // ← 新增
+var 附魔道具消耗基数 = 1;          // ← 新增
+var 随机数 = Math.floor(Math.random() * 10);
+
+/* ========== 图标 ========== */
+var 分割线 = "#fMap/Back/zerek/拍卖/标题1#";
+var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
+var 提示 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
+
+/* ========== 数据库读写 ========== */
+function 读取修炼等级(charId) {
+    var conn = cm.getConnection();
+    var ps = conn.prepareStatement("SELECT count FROM xmwnjl WHERE characterid=? AND bossid='修炼等级'");
+    ps.setInt(1, charId);
+    var rs = ps.executeQuery();
+    var lv = 0;
+    if (rs.next()) lv = rs.getInt(1);
+    rs.close(); ps.close(); conn.close();
+    return lv;
 }
+function 写入修炼等级(charId, add) {
+    var accid = charId;
+    var bossid = "修炼等级";
+    var conn = cm.getConnection();
 
-function start() {
-    if (cm.getPlayer().gmLevel() < 1) {
-        cm.sendOk("嘿，怎么了？");
-        cm.dispose();
-        return;
-    }
+    // 先查有没有
+    var sel = "SELECT * FROM xmwnjl WHERE bossid = ? AND characterid = ?";
+    var pstmt = conn.prepareStatement(sel);
+    pstmt.setString(1, bossid);
+    pstmt.setInt(2, accid);
+    var rs = pstmt.executeQuery();
 
-    if (cm.getPlayer().isMale()) {
-        cm.sendSimple("嘿，你可以用" + price + "金币改变你的外观。你想要改变什么？\r\n#L0#肤色#l\r\n#L1#男性发型#l\r\n#L2#发色#l\r\n#L3#男性普通眼睛#l\r\n#L4#眼睛颜色#l");
+    if (rs.next()) {
+        // 已有记录，直接 +add
+        rs.close();
+        pstmt.close();
+        var up = "UPDATE xmwnjl SET count = count + ? WHERE bossid = ? AND characterid = ?";
+        var ps2 = conn.prepareStatement(up);
+        ps2.setInt(1, add);
+        ps2.setString(2, bossid);
+        ps2.setInt(3, accid);
+        ps2.executeUpdate();
+        ps2.close();
     } else {
-        cm.sendSimple("嘿，你可以用" + price + "金币改变你的外观。你想要改变什么？\r\n#L0#肤色#l\r\n#L5#女性发型#l\r\n#L2#发色#l\r\n#L6#女性眼睛#l\r\n#L4#眼睛颜色#l");
+        // 没有记录，插入一条
+        rs.close();
+        pstmt.close();
+        var ins = "INSERT INTO xmwnjl (time,bossid,count,characterid) VALUES (CURRENT_TIMESTAMP(),?,?,?)";
+        var ps3 = conn.prepareStatement(ins);
+        ps3.setString(1, bossid);
+        ps3.setInt(2, add);
+        ps3.setInt(3, accid);
+        ps3.executeUpdate();
+        ps3.close();
     }
+    conn.close();
+}
+function 读取盾牌附魔值(charId) {
+    var conn = cm.getConnection();
+    var ps = conn.prepareStatement("SELECT count FROM xmwnjl WHERE characterid=? AND bossid='盾牌附魔'");
+    ps.setInt(1, charId);
+    var rs = ps.executeQuery();
+    var v = 0;
+    if (rs.next()) v = rs.getInt(1);
+    rs.close(); ps.close(); conn.close();
+    return v;
+}
+function 写入盾牌附魔值(charId, v) {
+    var conn = cm.getConnection();
+    var ps = conn.prepareStatement(
+        "INSERT INTO xmwnjl(characterid,bossid,count) VALUES(?,?,?) ON DUPLICATE KEY UPDATE count=?");
+    ps.setInt(1, charId); ps.setString(2, "盾牌附魔");
+    ps.setInt(3, v);      ps.setInt(4, v);
+    ps.executeUpdate(); ps.close(); conn.close();
 }
 
+/* ========== 业务函数 ========== */
+function 获取等级消耗(当前等级) {
+    for (var i = 0; i < 等级消耗表.length; i++) {
+        if (当前等级 <= 等级消耗表[i].区间上限) {
+            return 等级消耗表[i].单次消耗;
+        }
+    }
+    // 如果超出所有配置（如>9999），返回最后一档
+    return 等级消耗表[等级消耗表.length - 1].单次消耗;
+}
+function 是附魔盾牌(id) {
+    for (var i = 0; i < 可附魔盾牌.length; i++) if (可附魔盾牌[i] == id) return true;
+    return false;
+}
+function 判断材料是否满足() {
+    for (var i = 0; i < 制作材料.length; i++)
+        if (!cm.haveItem(制作材料[i], 材料数量[i])) return false;
+    return true;
+}
+
+/* ========== 主流程 ========== */
+var status = -1;
+function start() {
+    status = -1;
+    action(1, 0, 0);
+}
 function action(mode, type, selection) {
-    status++;
-    if (mode != 1 || cm.getPlayer().gmLevel() < 1) {
+    if (mode == -1) { cm.dispose(); return; }
+    if (mode == 0 && status >= 0) { cm.sendOk("好的，下次再来！"); cm.dispose(); return; }
+    mode == 1 ? status++ : status--;
+
+    if (status == 0) {
+        if (cm.getPlayer().getMapId() == 180000001) { cm.dispose(); cm.openNpc(9900005); return; }
+        var 当前修炼等级 = 读取修炼等级(cm.getPlayer().getId());
+		var 盾牌图标列表 = "";
+		for (var i = 0; i < 可附魔盾牌.length; i++) {
+			盾牌图标列表 += "#v" + 可附魔盾牌[i] + "##z" + 可附魔盾牌[i] + "# ";
+		}
+        var text = "   #v1092067##r#e最强盾牌#b修炼中心#k - #n[无止境的突破自我] \r\n"
+                 + 分割线 + "\r\n"
+				 + "   " + 提示 + " 只有点装盾牌可以附魔。\r\n"
+                 + "   " + 提示 + " 当前修炼等级：#r" + 当前修炼等级 + "级\r\n"
+                 + "#L1#" + 正方箭头 + "#b 提高修炼等级#l\r\n"
+                 + "#L2#" + 正方箭头 + "#b 制作修炼盾牌#l\r\n"
+                 + "#L3#" + 正方箭头 + "#b 为盾牌附魔 #d[1级=1点全属性]#l\r\n\r\n"
+			//	 + 盾牌图标列表 + "\r\n"  // ← 动态插入图标
+                 + 分割线 + "\r\n";
+        cm.sendSimple(text);
+    } else if (status == 1) {
+        var 当前修炼等级 = 读取修炼等级(cm.getPlayer().getId());
+        if (selection == 1) {
+            bh = 1;
+                    // 【核心修改】根据等级区间获取消耗
+			var 单次消耗 = 获取等级消耗(当前修炼等级);
+			var 总消耗 = 单次消耗 + 额外固定消耗;  // 如需固定消耗就加上
+            cm.sendYesNo("当前修炼等级：#b" + 当前修炼等级 + "级#k\r\n"
+                       + "本次升级需要：#v" + 材料ID + "# x " + 总消耗 + "\r\n"
+                       + "是否升级？");
+        } else if (selection == 2) {
+            bh = 2;
+            if (!判断材料是否满足()) {
+                var eadd = "#e#r材料不足！#n#k\r\n";
+                for (var i = 0; i < 制作材料.length; i++)
+                    if (!cm.haveItem(制作材料[i], 材料数量[i]))
+                        eadd += "#v" + 制作材料[i] + "##z" + 制作材料[i] + "#  需求：" + 材料数量[i] + " 实际：#c" + 制作材料[i] + "#\r\n";
+                cm.sendOk(eadd);
+                cm.dispose();
+            } else {
+                for (var i = 0; i < 制作材料.length; i++) cm.gainItem(制作材料[i], -材料数量[i]);
+                cm.gainItem(可附魔盾牌[0], 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0);
+                cm.sendOk("制作成功！");
+                cm.喇叭(1, "玩家[" + cm.getPlayer().getName() + "] 合成了修炼盾牌，迈出变强第一步！");
+                cm.dispose();
+            }
+        } else if (selection == 3) {
+            bh = 3;
+            var 当前修炼等级 = 读取修炼等级(cm.getPlayer().getId());
+            var 道具消耗量 = 当前修炼等级 * 附魔道具消耗基数;   // ← 改名
+            var eqpOld = cm.getInventory(1).getItem(1);
+            if (eqpOld == null || !是附魔盾牌(eqpOld.getItemId())) {
+                cm.sendOk("请把可附魔盾牌放在装备栏第一格！");
+                cm.dispose();
+                return;
+            }
+            cm.sendYesNo("当前修炼等级：#b" + 当前修炼等级 + " 级#k\r\n"
+                       + "盾牌将获得：#b" + 当前修炼等级 + "点全属性#k\r\n"
+					   + "消耗道具：#b#v" + 附魔道具ID + "##z" + 附魔道具ID + "# x " + 道具消耗量 + "#k\r\n"
+                       + "#r#e是否继续？");
+        }
+    } else if (status == 2) {
+        var 当前修炼等级 = 读取修炼等级(cm.getPlayer().getId());
+        if (bh == 1) {
+                    // 【核心修改】根据等级区间获取消耗
+			var 单次消耗 = 获取等级消耗(当前修炼等级);
+			var 总消耗 = 单次消耗 + 额外固定消耗;  // 如需固定消耗就加上
+			
+            if (!cm.haveItem(材料ID, 总消耗)) {
+                cm.sendOk("#v" + 材料ID + "#不足！需要 " + 总消耗 + " 个");
+                cm.dispose();
+                return;
+            }
+            cm.gainItem(材料ID, -总消耗);
+            写入修炼等级(cm.getPlayer().getId(), 1);
+            var 新等级 = 读取修炼等级(cm.getPlayer().getId());
+            cm.sendOk("修炼等级提升！当前：#r" + 新等级 + "级#k\r\n");
+			cm.喇叭(2, "玩家 [" + cm.getPlayer().getName() + "] 将盾牌附魔修炼等级提升至 " + 新等级 + " 级！");
+            cm.dispose();
+        } else if (bh == 3) {
+    var 当前修炼等级 = 读取修炼等级(cm.getPlayer().getId());
+    var 道具消耗量 = 当前修炼等级 * 附魔道具消耗基数;
+
+    if (!cm.haveItem(附魔道具ID, 道具消耗量)) {
+        cm.sendOk("#v" + 附魔道具ID + "#不足！需要 " + 道具消耗量 + " 个");
         cm.dispose();
         return;
     }
-    if (status == 1) {
-        beauty = selection + 1;
-        if (cm.getMeso() > price) {
-            if (selection == 0) {
-                cm.sendStyle("Pick one?", skin);
-            } else if (selection == 1 || selection == 5) {
-                (selection == 1 ? hair : fhair).forEach(i => pushIfItemExists(hairnew, i));
-                cm.sendStyle("Pick one?", hairnew);
-            } else if (selection == 2) {
-                var baseHair = parseInt(cm.getPlayer().getHair() / 10) * 10;
-                for (var k = 0; k < 8; k++) {
-                    pushIfItemExists(haircolor, baseHair + k);
-                }
-                cm.sendStyle("Pick one?", haircolor);
-            } else if (selection == 3 || selection == 6) {
-                (selection == 3 ? face : fface).forEach(j => pushIfItemExists(facenew, j));
-                cm.sendStyle("Pick one?", facenew);
-            } else if (selection == 4) {
-                var baseFace = parseInt(cm.getPlayer().getFace() / 1000) * 1000 + parseInt(cm.getPlayer().getFace() % 100);
-                for (var i = 0; i < 9; i++) {
-                    pushIfItemExists(colors, baseFace + (i * 100));
-                }
-                cm.sendStyle("Pick one?", colors);
-            }
-        } else {
-            cm.sendNext("你的冒险币不够。很抱歉，没有" + price + "个冒险币，你将无法改变你的外观！");
-            cm.dispose();
-        }
-
-    } else if (status == 2) {
-        if (beauty == 1) {
-            cm.setSkin(skin[selection]);
-            cm.gainMeso(-price);
-        }
-        if (beauty == 2 || beauty == 6) {
-            cm.setHair(hairnew[selection]);
-            cm.gainMeso(-price);
-        }
-        if (beauty == 3) {
-            cm.setHair(haircolor[selection]);
-            cm.gainMeso(-price);
-        }
-        if (beauty == 4 || beauty == 7) {
-            cm.setFace(facenew[selection]);
-            cm.gainMeso(-price);
-        }
-        if (beauty == 5) {
-            cm.setFace(colors[selection]);
-            cm.gainMeso(-price);
-        }
+    var eqpOld = cm.getInventory(1).getItem(1);
+    if (eqpOld == null || !是附魔盾牌(eqpOld.getItemId())) {
+        cm.sendOk("请把可附魔盾牌放在装备栏第一格！");
         cm.dispose();
+        return;
+    }
+
+    /* 1. 直接复制新盾牌 */
+    var ii = Packages.server.MapleItemInformationProvider.getInstance();
+    var eqpNew = ii.getEquipById(eqpOld.getItemId()).copy();
+
+    /* 2. 属性直接等于修炼等级（完全覆盖） */
+    var 附魔值 = 当前修炼等级;
+    eqpNew.setStr (附魔值);
+    eqpNew.setDex (附魔值);
+    eqpNew.setInt (附魔值);
+    eqpNew.setLuk (附魔值);
+//    eqpNew.setHp  (附魔值);
+//    eqpNew.setMp  (附魔值);
+    eqpNew.setWatk(附魔值);
+    eqpNew.setMatk(附魔值);
+//    eqpNew.setWdef(附魔值);
+//    eqpNew.setMdef(附魔值);
+//    eqpNew.setAcc (附魔值);
+//    eqpNew.setAvoid(附魔值);
+
+    /* 3. 继承强化数据 */
+    eqpNew.setHands (eqpOld.getHands());
+    eqpNew.setSpeed (eqpOld.getSpeed());
+    eqpNew.setJump  (eqpOld.getJump());
+    eqpNew.setUpgradeSlots(eqpOld.getUpgradeSlots());
+    eqpNew.setLevel(eqpOld.getLevel());
+//    eqpNew.setFlag(1); // 上锁
+
+    /* 4. 换装备 */
+    cm.gainItem(附魔道具ID, -道具消耗量);
+    cm.gainItem(eqpOld.getItemId(), -1);
+    cm.addFromDrop(eqpNew);
+
+    cm.sendOk("附魔成功！盾牌全属性为 " + 附魔值 + " 点");
+    cm.喇叭(2, "玩家[" + cm.getPlayer().getName() + "] 将修炼盾牌附魔了 " + 附魔值 + " 点全属性！");
+    cm.dispose();
+        }
     }
 }

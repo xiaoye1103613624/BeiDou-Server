@@ -1,43 +1,45 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+﻿
 function enter(pi) {
-    if (pi.getPlayer().getMapId() == 240060000) {
-        if (pi.getEventInstance().getIntProperty("defeatedHead") >= 1) {
-            pi.playPortalSound();
-            pi.warp(240060100, 0);
-            return true;
-        } else {
-            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
-            return false;
-        }
-    } else if (pi.getPlayer().getMapId() == 240060100) {
-        if (pi.getEventInstance().getIntProperty("defeatedHead") >= 2) {
-            pi.playPortalSound();
-            pi.warp(240060200, 0);
-            return true;
-        } else {
-            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
-            return false;
+    var em = pi.getEventManager("HorntailBattle");
+    var ema = pi.getEventManager("ChaosHorntail");
+    if (em != null) {
+        var map = pi.getMapId();
+        var d1 = pi.getMap(240060000);
+        var d2 = pi.getMap(240060100);
+        if (map == 240060000) {
+            if (d1.getAllMonstersThreadsafe().size() <= 0 && em.getProperty("state") >= 2) {
+                em.warpAllPlayer(240060000, 240060100);
+                //		em.setProperty("state", "3");
+            } else {
+                pi.playerMessage("這個門還沒開起。");
+            }
+        } else if (map == 240060100) {
+            if (d2.getAllMonstersThreadsafe().size() <= 0 && em.getProperty("state") == 3) {
+                em.warpAllPlayer(240060100, 240060200);
+                em.setProperty("state", "4");
+            } else {
+                pi.playerMessage("這個門還沒開起。");
+            }
         }
     }
-    return false;
+    if (ema != null) {
+        var map = pi.getMapId();
+        var d1 = pi.getMap(240060001);
+        var d2 = pi.getMap(240060101);
+        if (map == 240060001) {
+            if (d1.getAllMonstersThreadsafe().size() <= 0 && ema.getProperty("state") >= 2) {
+                ema.warpAllPlayer(240060001, 240060101);
+                //		ema.setProperty("state", "3");
+            } else {
+                pi.playerMessage("這個門還沒開起。");
+            }
+        } else if (map == 240060101) {
+            if (d2.getAllMonstersThreadsafe().size() <= 0 && ema.getProperty("state") == 3) {
+                ema.warpAllPlayer(240060101, 240060201);
+                ema.setProperty("state", "4");
+            } else {
+                pi.playerMessage("這個門還沒開起。");
+            }
+        }
+    }
 }

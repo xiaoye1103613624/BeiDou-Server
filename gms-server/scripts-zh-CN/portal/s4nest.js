@@ -1,42 +1,40 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @author Moogra (BubblesDev)
- * @purpose Warps to the Junior Balrog map for the Rush Skill.
- */
-function enter(pi) {
-    if (pi.isQuestStarted(6241) || pi.isQuestStarted(6243)) {
-        if (pi.getWarpMap(924000100).countPlayers() == 0) {
-            pi.resetMapObjects(924000100);
-            pi.playPortalSound();
-            pi.warp(924000100, 0);
-
-            return true;
-        } else {
-            pi.getPlayer().message("当前有其他玩家正在地图内。");
-            return false;
-        }
-    }
-
-    pi.getPlayer().message("一股神秘的力量阻止你进入。");
-    return false;
+﻿function enter(pi) {
+	if (pi.getQuestStatus(6241) == 1 || pi.getQuestStatus(6243) == 1) {
+		if (pi.getJob() == 312) {
+			if (pi.haveItem(4001113)) {
+				if (pi.getPlayerCount(924000100) > 0) {
+					pi.playerMessage("有其他人在裡面挑戰請稍後再嘗試。");
+					return false;
+				}
+				var em = pi.getEventManager("s4nest");
+				if (em == null) {
+					pi.playerMessage("發現未知的錯誤請會報給管理員。");
+				} else {
+					em.startInstance(pi.getPlayer());
+					return true;
+				}
+			} else {
+				pi.playerMessage("由於沒有鳳凰的蛋所以無法進入。");
+			}
+		} else if (pi.getJob() == 322) {
+			if (pi.haveItem(4001114)) {
+				if (pi.getPlayerCount(924000100) > 0) {
+					pi.playerMessage("有其他人在裡面挑戰請稍後再嘗試。");
+					return false;
+				}
+				var em = pi.getEventManager("s4nest");
+				if (em == null) {
+					pi.playerMessage("發現未知的錯誤請會報給管理員。");
+				} else {
+					em.startInstance(pi.getPlayer());
+					return true;
+				}
+			} else {
+				pi.playerMessage("由於沒有菲瑞爾的蛋所以無法進入。");
+			}
+		}
+	} else {
+		pi.playerMessage("你不能進入這個地方。");
+	}
+	return false;
 }

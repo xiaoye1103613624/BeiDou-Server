@@ -1,32 +1,32 @@
-/* @author RonanLana */
-
 function enter(pi) {
-    var stage = ((Math.floor(pi.getMapId() / 100)) % 10) - 1;
-    var em = pi.getEventManager("TD_Battle" + stage);
-    if (em == null) {
-        pi.playerMessage(5, "TD战场第" + stage + "阶段发生意外错误，当前不可用。");
-        return false;
-    }
-
-    if (pi.getParty() == null) {
-        pi.playerMessage(5, "您当前未加入队伍，请创建队伍来挑战首领。");
-        return false;
-    } else if (!pi.isLeader()) {
-        pi.playerMessage(5, "必须由队长进入传送门才能开始战斗。");
-        return false;
-    } else {
-        var eli = em.getEligibleParty(pi.getParty());
-        if (eli.size() > 0) {
-            if (!em.startInstance(pi.getParty(), pi.getPlayer().getMap(), 1)) {
-                pi.playerMessage(5, "首领战斗已经开始，您暂时无法进入该区域。");
-                return false;
-            }
-        } else {
-            pi.playerMessage(5, "您的队伍至少需要2名成员才能挑战首领。");
-            return false;
-        }
-
-        pi.playPortalSound();
-        return true;
-    }
+	    if (pi.getPlayer().getParty() == null || !pi.isLeader()) {
+		pi.playerMessage("The leader of the party must be here.");
+	    } else {
+		var party = pi.getPlayer().getParty().getMembers();
+		var mapId = pi.getPlayer().getMapId();
+		var next = true;
+		var size = 0;
+		var it = party.iterator();
+		while (it.hasNext()) {
+			var cPlayer = it.next();
+			var ccPlayer = pi.getPlayer().getMap().getCharacterById(cPlayer.getId());
+			if (ccPlayer == null) {
+				next = false;
+				break;
+			}
+			size += (ccPlayer.isGM() ? 4 : 1);
+		}	
+		if (next && (pi.getPlayer().isGM() || size >= 2)) {
+	    	    for(var i = 0; i < 7; i++) {
+			if (pi.getMap(pi.getMapId() + 1 + i) != null && pi.getMap(pi.getMapId() + 1 + i).getCharactersSize() == 0) {
+		    		pi.warpParty(pi.getMapId() + 1 + i);
+				pi.dispose();
+		    		return;
+			}
+	    	    }
+			pi.playerMessage("Another party quest has already entered this channel.");
+		} else {
+			pi.playerMessage("All 2+ members of your party must be here.");
+		}
+	    }
 }

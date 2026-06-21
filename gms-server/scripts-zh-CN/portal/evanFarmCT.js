@@ -1,9 +1,8 @@
 function enter(pi) {
-    if (pi.isQuestStarted(22010) || pi.getPlayer().getJob().getId() != 2001) {
-        pi.playPortalSound();
-        pi.warp(100030310, 0);
-    } else {
-        pi.playerMessage(5, "未满足条件，无法进入茂密森林！");
-    }
-    return true;
+	if(pi.isQuestActive(22010) || pi.getPlayer().getJob() != 2001) {
+		pi.warp(100030310);
+	} else {
+		pi.playerMessage("Cannot enter the Lush Forest without a reason.");
+	}
+	return true;
 }

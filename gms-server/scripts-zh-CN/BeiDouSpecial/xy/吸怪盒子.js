@@ -103,7 +103,7 @@ function action(mode, type, selection) {
 }
 }
 			
-            cm.sendSimpleS(text,2);
+            cm.sendSimple(text,2);
         } else if (status == 1) {
             if (selection == 1) {
 				cm.getPlayer().starXg();

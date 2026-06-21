@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -509,18 +510,24 @@ public class LifeFactory {
             while (monsterSkillInfoData.getChildByPath(Integer.toString(i)) != null) {
                 int skillId = DataTool.getInt(i + "/skill", monsterSkillInfoData, 0);
                 int skillLv = DataTool.getInt(i + "/level", monsterSkillInfoData, 0);
-                MobSkillType type = MobSkillType.from(skillId).orElseThrow();
+                // 怪物数据中存在大量MobSkillType未收录的技能ID（如170/174/201等，多为079移植或客户端版本差异遗留的脏数据），
+                // 命中orElseThrow会在地图加载时直接抛异常导致整张地图崩溃，此处改为跳过该条未知技能而不中断加载
+                Optional<MobSkillType> typeOpt = MobSkillType.from(skillId);
+                if (typeOpt.isEmpty()) {
+                    i++;
+                    continue;
+                }
+                MobSkillType type = typeOpt.get();
                 skills.add(new MobSkillId(type, skillLv));
 
                 Data monsterSkillData = monsterData.getChildByPath("skill" + (i + 1));
                 if (monsterSkillData != null) {
-                    int animationTime = 0;
-                    for (Data effectEntry : monsterSkillData.getChildren()) {
-                        animationTime += DataTool.getIntConvert("delay", effectEntry, 0);
-                    }
+                    int animationTime = monsterSkillData.getChildren().stream().mapToInt(effectEntry -> DataTool.getIntConvert("delay", effectEntry, 0)).sum();
 
-                    MobSkill skill = MobSkillFactory.getMobSkillOrThrow(type, skillLv);
-                    mi.setMobSkillAnimationTime(skill, animationTime);
+                    // 部分自定义/高难度怪物配置的技能等级超出MobSkill.img现有数据范围（WZ数据缺失该等级），
+                    // 此处改为容错跳过动画耗时记录，避免地图怪物加载时直接抛异常导致地图加载中断
+                    MobSkillFactory.getMobSkill(type, skillLv)
+                            .ifPresent(skill -> mi.setMobSkillAnimationTime(skill, animationTime));
                 }
 
                 i++;

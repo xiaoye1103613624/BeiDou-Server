@@ -1,10 +1,7 @@
 function enter(pi) {
-    if (pi.getPlayer().getJob().getJobNiche() == 4) {
-        pi.playPortalSound();
-        pi.warp(610030530, 0);
-        return true;
+    if (java.lang.Math.floor(((pi.getPlayer().getJob() % 1000) / 100) * 100 - (pi.getPlayer().getJob() % 100)) == 400) {
+	pi.warp(610030530,0);
     } else {
-        pi.playerMessage(5, "※ 仅限飞侠职业进入该传送门！");
-        return false;
+	pi.playerMessage(5, "Only thieves may enter this portal.");
     }
 }

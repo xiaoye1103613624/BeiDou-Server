@@ -1,137 +1,70 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- Pila Present
- -- By ---------------------------------------------------------------------------------------------
- get31720 (RaGEZONE)
- -- Version Info -----------------------------------------------------------------------------------
- 1.0 - First Version by Angel
- 2.0 - Second Version by happydud3 & XotiCraze
- 3.0 - Third Version by RonanLana (HeavenMS)
- 4.0 - Fourth Version by Drago (MapleStorySA)
- ---------------------------------------------------------------------------------------------------
- **/
 var status = -1;
-
-var marriageRoom;
-var marriageAction = 0;
-var marriageGifts;
-
-function start() {
-    marriageRoom = cm.getPlayer().getMarriageInstance() != null;
-    if (!marriageRoom) {
-        marriageGifts = cm.getUnclaimedMarriageGifts();
-        marriageAction = (!marriageGifts.isEmpty() ? 2 : ((cm.haveItem(4031423) || cm.haveItem(4031424)) ? 1 : 0));
-    }
-
-    status = -1;
-    action(1, 0, 0);
-}
 
 function action(mode, type, selection) {
     if (mode == 1) {
-        status++;
+	status++;
     } else {
-        cm.dispose();
-        return;
+	cm.dispose();
+	return;
     }
-    if (marriageRoom) {
-        if (status == 0) {
-            var talk = "Hi there, welcome to the wedding's Gift Registry. From which spouse's wishlist would you like to take a look?";
-            var options = ["Groom", "Bride"];
-
-            cm.sendSimple(talk + "\r\n\r\n#b" + generateSelectionMenu(options) + "#k");
-        } else {
-            cm.sendMarriageWishlist(selection == 0);
-            cm.dispose();
-        }
-    } else {
-        if (marriageAction == 2) {     // unclaimed gifts
-            if (status == 0) {
-                var talk = "Hi there, it seems you have unclaimed gifts from your wedding. Claim them here on the wedding's Gift Registry reserve.";
-                cm.sendNext(talk);
-            } else {
-                cm.sendMarriageGifts(marriageGifts);
-                cm.dispose();
-            }
-        } else if (marriageAction == 1) {     // onyx prizes
-            if (status == 0) {
-                var msg = "Hello I exchange Onyx Chest for Bride and Groom and the Onyx Chest for prizes!#b";
-                var choice1 = ["I have an Onyx Chest for Bride and Groom", "I have an Onyx Chest"];
-                for (var i = 0; i < choice1.length; i++) {
-                    msg += "\r\n#L" + i + "#" + choice1[i] + "#l";
-                }
-                cm.sendSimple(msg);
-            } else if (status == 1) {
-                if (selection == 0) {
-                    if (cm.haveItem(4031424)) {
-                        if (cm.getPlayer().isMarried()) {   // thanks MedicOP for solving an issue here
-                            if (cm.getInventory(2).getNextFreeSlot() >= 0) {
-                                var rand = Math.floor(Math.random() * bgPrizes.length);
-                                cm.gainItem(bgPrizes[rand][0], bgPrizes[rand][1]);
-
-                                cm.gainItem(4031424, -1);
-                                cm.dispose();
-                            } else {
-                                cm.sendOk("你现在没有空闲的使用槽位。");
-                                cm.dispose();
-                            }
-                        } else {
-                            cm.sendOk("你必须结婚才能领取这个宝箱的奖品。");
-                            cm.dispose();
-                        }
-                    } else {
-                        cm.sendOk("你没有新人用的缟玛瑙宝箱。");
-                        cm.dispose();
-                    }
-                } else if (selection == 1) {
-                    if (cm.haveItem(4031423)) {
-                        if (cm.getInventory(2).getNextFreeSlot() >= 0) {
-                            var rand = Math.floor(Math.random() * cmPrizes.length);
-                            cm.gainItem(cmPrizes[rand][0], cmPrizes[rand][1]);
-
-                            cm.gainItem(4031423, -1);
-                            cm.dispose();
-                        } else {
-                            cm.sendOk("你现在没有空闲的使用槽位。");
-                            cm.dispose();
-                        }
-                    } else {
-                        cm.sendOk("你没有黑檀宝箱。");
-                        cm.dispose();
-                    }
-                }
-            }
-        } else {
-            cm.sendOk("嗨，欢迎来到阿莫利亚的婚礼礼品登记保留处。我们为新人和幸运的仪式参与者重新分配和提供礼物。");
-            cm.dispose();
-        }
+    if (status == 0) {
+	if (cm.getPlayer().getMarriageId() > 0) {
+	    cm.sendSimple("怎么了，看起来很伤心....\r\n#b#L0#我想要离婚。#l\r\n#L1#我想要从我装备栏删除我的戒指。#l#k");
+	} else  {
+	    cm.sendSimple("嗨，我可以为您做什么？？ \r\n#L1#我想要从我装备栏删除我的戒指。#l#k");
+	}
+    } else if (status == 1) {
+	if (selection == 0) {
+	    cm.sendYesNo("离婚？你确定吗？你想离婚？这不是玩笑吧...？");
+	} else {
+	    var selStr = "你想要删除什么戒指，让我看看。";
+	    var found = false;
+	    for (var i = 1112300; i < 1112312; i++) {
+		if (cm.haveItem(i)) {
+		    found = true;
+		    selStr += "\r\n#L" + i + "##v" + i + "##t" + i + "##l";
+			}
+	    }
+	    for (var i = 2240004; i < 2240016; i++) {
+		if (cm.haveItem(i)) {
+		    found = true;
+		    selStr += "\r\n#L" + i + "##v" + i + "##t" + i + "##l";
+			}
+	    }
+	    if (!found) {
+		cm.sendOk("身上没有任何戒指。");
+		cm.dispose();
+	    } else {
+		cm.sendSimple(selStr);
+	    }
+	}
+    } else if (status == 2) {
+	if (selection == -1) {
+	    var cPlayer = cm.getClient().getChannelServer().getPlayerStorage().getCharacterById(cm.getPlayer().getMarriageId());
+	    if (cPlayer == null) {
+	        cm.sendNext("请确定你的伴侣在线上。");
+	    } else {
+	    	cPlayer.dropMessage(1, "你的伴侣想要跟你离婚。");
+	    	cPlayer.setMarriageId(0);
+	    	cm.setQuestRecord(cPlayer, 160001, "0");
+	    	cm.setQuestRecord(cm.getPlayer(), 160001, "0");
+	    	cm.setQuestRecord(cPlayer, 160002, "0");
+	    	cm.setQuestRecord(cm.getPlayer(), 160002, "0");
+	    	cm.getPlayer().setMarriageId(0);
+                for (var i = 1112300; i < 1112312; i++) {
+                cm.gainItem(i, -1);
+	        }
+	    	cm.sendNext("成功离婚了。");
+	    }
+	} else {
+	    if (selection >= 1112300 && selection < 1112312) {
+		cm.gainItem(selection, -1);
+		cm.sendOk("你成功移除了戒指。");
+	    } else if (selection >= 2240004 && selection < 2240016) {
+		cm.gainItem(selection, -1);
+		cm.sendOk("你的订婚戒指已被删除。");
+	    }
+	}		
+	cm.dispose();
     }
-}
-
-function generateSelectionMenu(array) {
-    var menu = "";
-    for (var i = 0; i < array.length; i++) {
-        menu += "#L" + i + "#" + array[i] + "#l\r\n";
-    }
-    return menu;
 }

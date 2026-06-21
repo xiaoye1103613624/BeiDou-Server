@@ -1,30 +1,18 @@
 var status = 0;
-var request;
-
 function start() {
-    status = -1;
-    action(1, 0, 0);
+    cm.sendYesNo("请问你想要离开？？");
 }
-
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode != 1) {
+        if (mode == 0)
+            cm.sendOk("改变主意再来找我。");
         cm.dispose();
-    } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-        if (status == 0) {
-            cm.warpParty(980000000);
-            cm.cancelCPQLobby();
-            cm.dispose();
-        }
+        return;
+    }
+    status++;
+    if (status == 1) {
+        cm.warp(980000000, 0);
+        cm.dispose();
     }
 }
-

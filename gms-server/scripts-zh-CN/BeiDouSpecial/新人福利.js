@@ -57,7 +57,7 @@ function action(mode, type, selection)
 				+ "#b" + mesoQty + "#k 万金币\n"
 				+ "#b" + cashQty + "#k 万点券\n\n"
 				+ "祝您游戏愉快！");
-			cm.dropMessage(5,"【新人福利】玩家 [" + cm.getPlayer() + "] 加入游戏领取开荒金币"+mesoQty+"万＋点券"+cashQty+"万！");
+			cm.dropMessage(5,"[" + cm.getPlayer().getName() + "玩家] 加入游戏领取了开荒金币 " + mesoQty + " 万＋点券 " + cashQty + " 万！");
 			cm.dispose();
 		}
 		else

@@ -83,7 +83,7 @@ function action(mode, type, selection) {
             if (jobid % 1000 == 0) {
                 if (cm.getChar().getLevel() >= 8 && changeto == 200 || cm.getPlayer().getLevel() >= 10) {
                     cm.changeJobById(changeto);
-                    cm.dropMessage(5,"【转职系统】玩家 [" + cm.getPlayer() + "] 快速一转");
+                    cm.dropMessage(5,"[" + cm.getPlayer().getName() + "玩家] 快速完成一转！");
                 } else {
                     cm.sendOk("你还没有满足转职条件！");
                 }
@@ -92,14 +92,14 @@ function action(mode, type, selection) {
                     cm.changeJobById(changeto);
                 } else if (cm.getChar().getLevel() >= 30) {
                     cm.changeJobById(changeto);
-                    cm.dropMessage(5,"【转职系统】玩家 [" + cm.getPlayer() + "] 快速二转");
+                    cm.dropMessage(5,"[" + cm.getPlayer().getName() + "玩家] 快速完成二转！");
                 } else {
                     cm.sendOk("你还没有满足转职条件！");
                 }
             } else if (jobid % 10 == 0) {
                 if (cm.getChar().getLevel() >= 70) {
                     cm.changeJobById(changeto);
-                    cm.dropMessage(5,"【转职系统】玩家 [" + cm.getPlayer() + "] 快速三转");
+                    cm.dropMessage(5,"[" + cm.getPlayer().getName() + "玩家] 快速完成三转！");
                 } else {
                     cm.sendOk("你还没有满足转职条件！");
                 }
@@ -108,7 +108,7 @@ function action(mode, type, selection) {
                     cm.sendOk("骑士团共3转 已完成！");
                 } else if (cm.getChar().getLevel() >= 120) {
                     cm.changeJobById(changeto);
-                    cm.dropMessage(5,"【转职系统】玩家 [" + cm.getPlayer() + "] 快速四转");
+                    cm.dropMessage(5,"[" + cm.getPlayer().getName() + "玩家] 快速完成四转！");
                     
                     // 四转后自动初始化职业技能等级（使用四转后的职业ID）
                     initializeFourthJobSkills(changeto);

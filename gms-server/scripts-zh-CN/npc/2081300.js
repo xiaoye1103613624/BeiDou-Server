@@ -1,107 +1,113 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/*
- *@Author:  Moogra
- *@NPC:     4th Job Bowman Advancement NPC
- *@Purpose: Handles 4th job.
+/*  NPC : 瑞吉爾
+ 弓箭手 4转 任务脚本
+ 地圖代碼 (240010501)
  */
 
-var status;
+var status = -1;
+var pass = false;
 
 function start() {
-    status = -1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == 0 && status == 0) {
         cm.dispose();
-    } else {
-        if (mode == 0 && status == 0) {
+        return;
+    }
+    if (mode == 1)
+        status++;
+    else
+        status--;
+
+    if (status == 0) {
+        if (!(cm.getJob() == 311 || cm.getJob() == 321)) {
+            cm.sendOk("为什么你要见我??还有你想要问我关于什么事情????");
+            cm.dispose();
+            return;
+        } else if (cm.getPlayer().getLevel() < 120) {
+            cm.sendOk("你等级尚未到达120级.");
+            cm.dispose();
+            return;
+        } else {
+            if (cm.getQuestStatus(6924) == 2) {
+                pass = true;
+            }
+            if (cm.getJob() == 311) {
+                cm.sendSimple("恭喜你有资格4转. \r\n请问你想4转吗??\r\n#b#L0#我想成为神射手.#l\r\n#b#L1#像我想一下...#l");
+            } else if (cm.getJob() == 321) {
+                cm.sendSimple("恭喜你有资格4转. \r\n请问你想4转吗??\r\n#b#L0#我想成为箭神.#l\r\n#b#L1#像我想一下...#l");
+            } else {
+                cm.sendOk("好吧假如你想要4转麻烦再来找我");
+                cm.dispose();
+                return;
+            }
+        }
+    } else if (status == 1) {
+        if (selection == 1) {
+            cm.sendOk("好吧假如你想要4转麻烦再来找我");
             cm.dispose();
             return;
         }
-        if (mode == 1) {
-            status++;
+    //    if (cm.getPlayerStat("RSP") > (cm.getPlayerStat("LVL") - 120) * 3) {
+     //       cm.sendOk("你的技能点数还没点完..");
+     //       cm.dispose();
+     //       return;
+     //   }
+        if (pass) {
+            cm.sendNext("即将四转。");
         } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (cm.getLevel() < 120 || Math.floor(cm.getJobId() / 100) != 3) {
-                cm.sendOk("请不要现在打扰我，我正在集中精力。");
+            if (!cm.haveItem(4031860) || !cm.haveItem(4031861)) {
+                cm.sendOk("我需要#t4031860# x1 #t4031861# x1。");
                 cm.dispose();
-            } else if (!cm.isQuestCompleted(6924)) {
-                cm.sendOk("你还没有通过我的考验。在你通过考验之前，我无法提升你的等级。");
-                cm.dispose();
-            } else if (cm.getJobId() % 100 % 10 != 2) {
-                cm.sendYesNo("你在通过我的测试时表现得非常出色。你准备好晋升到第四职业了吗？");
+                return;
             } else {
-                cm.sendSimple("如果必要的话，我可以教你你职业的技能。\r\n#b#L0#教我我的职业技能。#l");
-                //cm.dispose();
+                cm.sendNext("即将四转。");
             }
-        } else if (status == 1) {
-            if (mode >= 1 && cm.getJobId() % 100 % 10 != 2) {
-                if (cm.canHold(2280003, 1)) {
-                    cm.changeJobById(cm.getJobId() + 1);
-                    if (cm.getJobId() == 312) {
-                        cm.teachSkill(3121002, 0, 10, -1);
-                        cm.teachSkill(3120005, 0, 10, -1);
-                        cm.teachSkill(3121007, 0, 10, -1);
-                    } else if (cm.getJobId() == 322) {
-                        cm.teachSkill(3221002, 0, 10, -1);
-                        cm.teachSkill(3220004, 0, 10, -1);
-                        cm.teachSkill(3221006, 0, 10, -1);
-                    }
-                    cm.gainItem(2280003, 1);
-                } else {
-                    cm.sendOk("请在#b使用#k的物品栏中留出一个空位，以接收一个技能书。");
-                }
-            } else if (mode >= 0 && cm.getJobId() % 100 % 10 == 2) {
-                if (cm.getJobId() == 312) {
-                    if (cm.getPlayer().getSkillLevel(3121008) == 0) {
-                        cm.teachSkill(3121008, 0, 10, -1);
-                    }
-                    if (cm.getPlayer().getSkillLevel(3121006) == 0) {
-                        cm.teachSkill(3121006, 0, 10, -1);
-                    }
-                    if (cm.getPlayer().getSkillLevel(3121004) == 0) {
-                        cm.teachSkill(3121004, 0, 10, -1);
-                    }
-                } else if (cm.getJobId() == 322) {
-                    if (cm.getPlayer().getSkillLevel(3221007) == 0) {
-                        cm.teachSkill(3221007, 0, 10, -1);
-                    }
-                    if (cm.getPlayer().getSkillLevel(3221005) == 0) {
-                        cm.teachSkill(3221005, 0, 10, -1);
-                    }
-                    if (cm.getPlayer().getSkillLevel(3221001) == 0) {
-                        cm.teachSkill(3221001, 0, 10, -1);
-                    }
-                }
-                cm.sendOk("事情已经完成。现在离开我。");
-            }
-
-            cm.dispose();
         }
+    } else if (status == 2) {
+        if (cm.canHold(2280003)) {
+            cm.gainItem(2280003, 1);
+            if (cm.getJob() == 311) {
+                cm.changeJob(312);
+                cm.teachSkill(3120005, 0, 10);
+                cm.teachSkill(3121007, 0, 10);
+                cm.teachSkill(3121002, 0, 10);
+				cm.teachSkill(3121000, 0, 10);
+                cm.teachSkill(3121003, 0, 10);
+                cm.teachSkill(3121004, 0, 10);
+				cm.teachSkill(3221003, 0, 10);
+                cm.teachSkill(3121006, 0, 10);
+                cm.teachSkill(3121008, 0, 10);
+				cm.teachSkill(3121009, 0, 5);
+                cm.gainItem(4031860, -1);
+                cm.gainItem(4031861, -1);
+                cm.sendNext("恭喜你转职为 #b神射手#k.我送你一些神秘小礼物^^");
+            } else {
+                cm.changeJob(322);
+                cm.teachSkill(3221006, 0, 10);
+                cm.teachSkill(3220004, 0, 10);
+                cm.teachSkill(3221002, 0, 10);
+				cm.teachSkill(3221000, 0, 10);
+                cm.teachSkill(3221001, 0, 10);
+                cm.teachSkill(3221005, 0, 10);
+				cm.teachSkill(3221003, 0, 10);
+                cm.teachSkill(3221007, 0, 10);
+                cm.teachSkill(3221008, 0, 5);
+                cm.gainItem(4031860, -1);
+                cm.gainItem(4031861, -1);
+                cm.sendNext("恭喜你转职为 #b箭神#k.我送你一些神秘小礼物^^");
+            }
+        } else {
+            cm.sendOk("你没有多的栏位请清空再来尝试一次!");
+            cm.dispose();
+            return;
+        }
+
+    } else if (status == 3) {
+        cm.sendNext("不要忘记了这一切都取决于你练了多少.");
+    } else if (status == 4) {
+        cm.sendNextPrev("我已你为荣.");
+        cm.dispose();
     }
 }

@@ -1,13 +1,16 @@
 function start() {
     var status = cm.getQuestStatus(20706);
-
+    
     if (status == 0) {
-        cm.sendNext("看起来这个地区没有什么可疑的东西。");
+        cm.sendNext("它看起来像有什么可疑的地方.");
     } else if (status == 1) {
         cm.forceCompleteQuest(20706);
-        cm.sendNext("你已经发现了影子！最好向#p1103001#报告。");
+        cm.sendNext("你已经发现的影子！最好是报告给 #p1103001#.");
     } else if (status == 2) {
-        cm.sendNext("影子已经被发现了。最好向#p1103001#报告一下。");
+        cm.sendNext("阴影已经被发现。最好是报告给 #p1103001#.");
     }
+    cm.dispose();
+}
+function action(mode, type, selection) {
     cm.dispose();
 }

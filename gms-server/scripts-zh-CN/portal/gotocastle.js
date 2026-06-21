@@ -1,10 +1,9 @@
 function enter(pi) {
-    if (pi.isQuestCompleted(2321)) {
-        pi.playPortalSound();
-        pi.warp(pi.isQuestCompleted(2324) ? 106020501 : 106020500, 0);
-        return true;
-    } else {
-        pi.playerMessage(5, "前路布满荆棘，无法通过！");
-        return false;
-    }
+	if (pi.isQuestActive(2324)) {
+	    pi.forceCompleteQuest(2324);
+	    pi.removeAll(2430015);
+	    pi.playerMessage("任務完成。");
+	}
+	pi.warp(106020501,0);
+	return true;
 }

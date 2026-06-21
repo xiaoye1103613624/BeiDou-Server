@@ -293,6 +293,9 @@ public class Character extends AbstractCharacterObject {
     private long jailExpiration = -1;
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
+    // 套装属性加成缓存：穿满指定件数后叠加的属性总和，随equipchanged一起重新计算
+    private transient int equipsetstr, equipsetdex, equipsetluk, equipsetint_, equipsetwatk, equipsetmagic, equipsetmaxhp, equipsetmaxmp;
+    private transient int equipsethpr, equipsetmpr;
     private int localchairrate;
     @Getter
     private boolean hidden;
@@ -331,6 +334,8 @@ public class Character extends AbstractCharacterObject {
     private final AtomicInteger exp = new AtomicInteger();
     private final AtomicInteger gachaExp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
+    /** 赞助/元宝余额(预留字段，暂不参与任何校验逻辑，仅供后续VIP及充值业务扩展使用) */
+    private final AtomicInteger money = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
     private int merchantmeso;
@@ -4938,6 +4943,104 @@ public class Character extends AbstractCharacterObject {
         return null;
     }
 
+    /**
+     * 获取角色在通用每日/累计次数记录表(bosslog)中指定key的当前计数
+     * 从079整合版移植，按角色ID+自定义key(bossid)记录，跨天(自然日)自动重置为0
+     *
+     * @param bossid 业务自定义记录标识(如"每日挖矿地图")
+     * @return 当前计数，未找到记录或已跨天重置时返回0
+     */
+    public int getBossLog(String bossid) {
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT `count`, `time` FROM bosslog WHERE characterid = ? AND bossid = ?")) {
+            ps.setInt(1, getId());
+            ps.setString(2, bossid);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return 0;
+                }
+                int count = rs.getInt("count");
+                Timestamp time = rs.getTimestamp("time");
+                if (time == null) {
+                    return count;
+                }
+                Calendar last = Calendar.getInstance();
+                last.setTimeInMillis(time.getTime());
+                Calendar now = Calendar.getInstance();
+                boolean sameDay = last.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                        && last.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR);
+                return sameDay ? count : 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 设置(更新)角色在通用每日/累计次数记录表(bosslog)中指定key的计数
+     * 从079整合版移植，存在则更新，不存在则插入(基于characterid+bossid唯一索引)
+     *
+     * @param bossid 业务自定义记录标识(如"每日挖矿地图")
+     * @param count  要写入的计数值
+     */
+    public void setBossLog(String bossid, int count) {
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO bosslog (characterid, bossid, `count`, `time`) VALUES (?, ?, ?, CURRENT_TIMESTAMP) " +
+                             "ON DUPLICATE KEY UPDATE `count` = ?, `time` = CURRENT_TIMESTAMP")) {
+            ps.setInt(1, getId());
+            ps.setString(2, bossid);
+            ps.setInt(3, count);
+            ps.setInt(4, count);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取角色的永久一次性记录计数（不会跨天重置）
+     * 用于一次性奖励领取、成就标记等永久记录场景
+     *
+     * @param logid 业务自定义记录标识
+     * @return 当前计数，未找到记录时返回0
+     */
+    public int getOneTimeLog(String logid) {
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT `count` FROM onetimelog WHERE characterid = ? AND logid = ?")) {
+            ps.setInt(1, getId());
+            ps.setString(2, logid);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("count");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 设置角色的永久一次性记录（计数+1，不会跨天重置）
+     * 存在则计数+1，不存在则插入默认计数1
+     *
+     * @param logid 业务自定义记录标识
+     */
+    public void setOneTimeLog(String logid) {
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO onetimelog (characterid, logid, `count`, `time`) VALUES (?, ?, 1, CURRENT_TIMESTAMP) " +
+                             "ON DUPLICATE KEY UPDATE `count` = `count` + 1, `time` = CURRENT_TIMESTAMP")) {
+            ps.setInt(1, getId());
+            ps.setString(2, logid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Inventory getInventory(InventoryType type) {
         return inventory[type.ordinal()];
     }
@@ -5062,6 +5165,20 @@ public class Character extends AbstractCharacterObject {
 
     public void setMeso(int meso) {
         this.meso.set(meso);
+    }
+
+    /**
+     * 获取赞助/元宝余额(预留字段，当前未接入任何充值/校验逻辑)
+     */
+    public int getMoney() {
+        return money.get();
+    }
+
+    /**
+     * 设置赞助/元宝余额(预留字段，当前未接入任何充值/校验逻辑)
+     */
+    public void setMoney(int money) {
+        this.money.set(money);
     }
 
     public int getMerchantMeso() {
@@ -6489,6 +6606,7 @@ public class Character extends AbstractCharacterObject {
         }
         chr.setRemainingSp(remainingSps);
         chr.setMeso(charactersDO.getMeso());
+        chr.setMoney(charactersDO.getMoney() != null ? charactersDO.getMoney() : 0);
         chr.setMerchantMeso(charactersDO.getMerchantmesos());
         chr.setGMLevel(charactersDO.getGm());
         chr.setSkinColor(SkinColor.getById(charactersDO.getSkincolor()));
@@ -6691,6 +6809,7 @@ public class Character extends AbstractCharacterObject {
             }
         }
         cdo.setMeso(chr.getMeso());
+        cdo.setMoney(chr.getMoney());
         cdo.setHpMpUsed(chr.getHpMpApUsed());
         if (chr.getMap() == null || chr.getMap().getId() == MapId.CRIMSONWOOD_VALLEY_1 || chr.getMap().getId() == MapId.CRIMSONWOOD_VALLEY_2) {
             cdo.setSpawnpoint(0);
@@ -6991,6 +7110,8 @@ public class Character extends AbstractCharacterObject {
             //equipspeed = 0;
             //equipjump = 0;
 
+            ItemInformationProvider setii = ItemInformationProvider.getInstance();
+            Map<Integer, Integer> setHandling = new HashMap<>();
             for (Item item : getInventory(InventoryType.EQUIPPED)) {
                 Equip equip = (Equip) item;
                 equipmaxhp += equip.getHp();
@@ -7003,6 +7124,40 @@ public class Character extends AbstractCharacterObject {
                 equipwatk += equip.getWatk();
                 //equipspeed += equip.getSpeed();
                 //equipjump += equip.getJump();
+
+                int setId = setii.getSetItemID(equip.getItemId());
+                if (setId > 0) {
+                    setHandling.merge(setId, 1, Integer::sum);
+                }
+            }
+
+            equipsetstr = equipsetdex = equipsetluk = equipsetint_ = 0;
+            equipsetwatk = equipsetmagic = equipsetmaxhp = equipsetmaxmp = 0;
+            equipsethpr = equipsetmpr = 0;
+            for (Map.Entry<Integer, Integer> entry : setHandling.entrySet()) {
+                StructSetItem set = setii.getSetItem(entry.getKey());
+                if (set == null) {
+                    continue;
+                }
+                int wornCount = entry.getValue();
+                for (Map.Entry<Integer, StructSetItem.SetItem> tierEntry : set.getItems().entrySet()) {
+                    if (tierEntry.getKey() > wornCount) {
+                        continue;
+                    }
+                    StructSetItem.SetItem se = tierEntry.getValue();
+                    equipsetstr += se.incSTR + se.incAllStat;
+                    equipsetdex += se.incDEX + se.incAllStat;
+                    equipsetint_ += se.incINT + se.incAllStat;
+                    equipsetluk += se.incLUK + se.incAllStat;
+                    equipsetwatk += se.incPAD;
+                    equipsetmagic += se.incMAD;
+                    equipsetmaxhp += se.incMHP;
+                    equipsetmaxmp += se.incMMP;
+                    equipsethpr += se.incMHPr;
+                    equipsetmpr += se.incMMPr;
+                    // 注：incPDD/incMDD/incACC/incEVA/incSpeed及潜能型Option加成暂未接入，
+                    // 因本服务端当前未实现物理/魔防、命中、回避、速度等属性的统一计算入口
+                }
             }
 
             equipchanged = false;
@@ -7016,6 +7171,24 @@ public class Character extends AbstractCharacterObject {
         localluk += equipluk;
         localmagic += equipmagic;
         localwatk += equipwatk;
+
+        // 叠加套装属性加成（固定值部分）
+        localdex += equipsetdex;
+        localint_ += equipsetint_;
+        localstr += equipsetstr;
+        localluk += equipsetluk;
+        localmagic += equipsetmagic;
+        localwatk += equipsetwatk;
+        localMaxHp += equipsetmaxhp;
+        localMaxMp += equipsetmaxmp;
+
+        // 套装的HP%/MP%加成在固定值叠加完成后按当前localMaxHp/MaxMp计算
+        if (equipsethpr > 0) {
+            localMaxHp += (int) (localMaxHp * (equipsethpr / 100.0));
+        }
+        if (equipsetmpr > 0) {
+            localMaxMp += (int) (localMaxMp * (equipsetmpr / 100.0));
+        }
     }
 
     public void reapplyLocalStats() {
@@ -7637,7 +7810,7 @@ public class Character extends AbstractCharacterObject {
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
             try {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, money = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -7751,7 +7924,8 @@ public class Character extends AbstractCharacterObject {
                     ps.setTimestamp(53, new Timestamp(lastExpGainTime));
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
-                    ps.setInt(56, id);
+                    ps.setInt(56, money.get()); // 赞助/元宝余额(预留字段)
+                    ps.setInt(57, id);
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {

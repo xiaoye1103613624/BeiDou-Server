@@ -12,133 +12,124 @@ var prize10 = Array(1442049, 3010172, 3010171, 3010169, 3010168, 3010161, 243011
 var status = 0;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (status >= 0 && mode == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-        if (status == 0) {
-            cm.sendNext("嘿，我是#p" + cm.getNpc() + "#k，如果你不忙的话……那我能跟你一起玩吗？我听说这附近有人聚集起来举办一个#revent#k，但我不想一个人去……嗯，你想和我一起去看看吗？");
-        } else if (status == 1) {
-            cm.sendSimple("哦？是什么样的活动？那就是...\r\n#L0##e1.#n#b 这是什么样的活动？#k#l\r\n#L1##e2.#n#b 给我解释一下活动游戏吧。#k#l\r\n#L2##e3.#n#b 好的，我们走吧！#k#l\r\n#L3##e4.#n#b 请用胜利证书兑换奖励物品。#k#l");
-        } else if (status == 2) {
-            if (selection == 0) {
-                cm.sendNext("这个月，冒险岛全球版正在庆祝其三周年！GM们将在整个活动期间举行惊喜GM活动，所以保持警惕，并确保参加至少一个活动以赢取丰厚奖品！");
-                cm.dispose();
-            } else if (selection == 1) {
-                cm.sendSimple("这个活动有很多游戏。在玩游戏之前了解如何玩会对你有很大帮助。选择你想了解更多的游戏吧！#b\r\n#L0# 欧拉欧拉#l\r\n#L1# 冒险岛体能测试#l\r\n#L2# 雪球#l\r\n#L3# 椰子收获#l\r\n#L4# OX问答#l\r\n#L5# 寻宝#l#k");
-            } else if (selection == 2) {
-                var marr = cm.getQuestRecord(100295);
-                if (marr.getCustomData() == null) {
-                    marr.setCustomData("0");
-                }
-                var dat = parseInt(marr.getCustomData());
-                if (dat + 3600000 >= cm.getCurrentTime()) {
-                    cm.sendNext("你在过去的一个小时内已经参加了这个活动。");
-                } else if (!cm.canHold(4031019)) {
-                    cm.sendNext("在你的背包里留点空间。");
-                } else if (cm.getChannelServer().getEvent() > -1 && !cm.haveItem(4031019)) {
-                    cm.getPlayer().saveLocation("EVENT");
-                    cm.getPlayer().setChalkboard(null);
-                    marr.setCustomData("" + cm.getCurrentTime());
-                    cm.warp(cm.getChannelServer().getEvent(), cm.getChannelServer().getEvent() == 109080000 || cm.getChannelServer().getEvent() == 109080010 ? 0 : "join00");
-                } else {
-                    cm.sendNext("要么活动还没有开始，你已经拥有了#b秘密卷轴#k，或者你在过去24小时内已经参与了这个活动。请稍后再试！");
-                }
-                cm.dispose();
-            } else if (selection == 3) {
-                var selStr = "Which Certificate of straight Win do you wish to exchange?";
-                for (var i = 0; i < quantities.length; i++) {
-                    selStr += "\r\n#b#L" + i + "##t" + (4031332 + i) + "# Exchange(" + quantities[i] + ")#l";
-                }
-                cm.sendSimple(selStr);
-                status = 9;
-            }
-        } else if (status == 3) {
-            if (selection == 0) {
-                cm.sendNext("#b[Ola Ola]#k 是一个游戏，参与者需要爬梯子到达顶部。通过选择正确的传送门，爬上去并移动到下一个级别。\r\n\r\n游戏包括三个级别，时间限制为#b6分钟#k。在[Ola Ola]期间，你#b无法跳跃、传送、加速，或使用药水或物品提高速度#k。还有一些欺诈性的传送门会把你带到一个奇怪的地方，所以请注意。");
-                cm.dispose();
-            } else if (selection == 1) {
-                cm.sendNext("#b[冒险岛体能测试]是一个类似于耐心之森的障碍赛跑#k。你可以通过克服各种障碍，在规定时间内到达最终目的地来赢得比赛。\r\n游戏包括四个关卡，时间限制为#b15分钟#k。在[冒险岛体能测试]期间，你将无法使用传送或加速技能。");
-                cm.dispose();
-            } else if (selection == 2) {
-                cm.sendNext("#b[雪球]#k 由两个队伍组成，枫叶队和故事队，两个队伍在有限的时间内争夺看哪个队伍将雪球滚得更远更大。如果比赛在规定时间内无法决定胜负，那么滚得更远的队伍获胜。\r\n要滚动雪球，按下#bCtrl#k进行攻击。所有远程攻击和技能攻击在这里都不起作用，#b只有近距离攻击才有效#k。\r\n如果角色触碰到雪球，他/她将被送回起点。攻击起点前面的雪人，以阻止对方队伍将雪球滚向前方。这是一个精心策划的战略，因为队伍将决定是攻击雪球还是雪人。");
-                cm.dispose();
-            } else if (selection == 3) {
-                cm.sendNext("“#b[椰子收获]#k 由两个队伍组成，枫叶队和故事队，两个队伍将争夺看谁能收集到最多的椰子。时间限制为#b5分钟#k。如果比赛打成平局，将额外奖励2分钟来决定胜者。如果由于某种原因比分保持平局，比赛将以平局结束。\r\n所有远程攻击和技能攻击在这里都不起作用，#b只有近身攻击才有效#k。如果你没有近身攻击的武器，你可以通过活动地图内的NPC购买。无论角色的等级、武器或技能如何，所有造成的伤害都是相同的。\r\n小心地图内的障碍和陷阱。如果角色在游戏中死亡，角色将被淘汰。最后一击椰子掉落之前的玩家获胜。只有掉落在地面上的椰子才计数，这意味着没有掉落的树上的椰子，或者偶尔的椰子爆炸都不计数。地图底部的贝壳中有一个隐藏的传送门，所以明智地使用它！”");
-                cm.dispose();
-            } else if (selection == 4) {
-                cm.sendNext("#b[OX Quiz]#k 是冒险岛中通过X和O来展示智慧的游戏。一旦你加入游戏，按下 #bM#k 打开小地图，看看X和O的位置。一共会有 #r10个问题#k，回答所有问题正确的角色将赢得游戏。\r\n\r\n问题给出后，使用梯子进入可能包含正确答案的区域，无论是X还是O。如果角色没有选择答案或者在时间限制内挂在梯子上，角色将被淘汰。请等到屏幕上的 [CORRECT] 消失后再继续前进。为了防止任何形式的作弊，OX Quiz期间所有聊天功能将被关闭。");
-                cm.dispose();
-            } else if (selection == 5) {
-                cm.sendNext("#b[寻宝]#k 是一个游戏，你的目标是在地图上的各个角落找到 #b宝藏卷轴#k，在 #r10分钟#k 内。会有许多神秘的宝箱隐藏起来，一旦你打开它们，会有许多物品从宝箱里浮出来。你的任务是从这些物品中挑选出宝藏卷轴。\r\n宝箱可以用 #b普通攻击#k 打开，一旦你拿到了宝藏卷轴，你可以通过负责交易物品的NPC将其交换成秘密卷轴。交易NPC可以在寻宝地图上找到，但你也可以通过立石港的 #bVikin#k 进行交易。\r\n\r\n这个游戏有许多隐藏的传送门和隐藏的传送点。要使用它们，只需在特定位置按下 #b上箭头#k，你就会被传送到另一个地方。试着跳来跳去，也许你会碰到隐藏的楼梯或绳索。还会有一个能带你到隐藏地点的宝箱，以及一个只能通过隐藏传送门找到的隐藏宝箱，所以试着四处寻找。\r\n\r\n在寻宝游戏中，所有攻击技能都将被 #r禁用#k，请使用普通攻击打开宝箱。");
-                cm.dispose();
-            }
-        } else if (status == 10) {
-            if (selection < 0 || selection > quantities.length) {
-                return;
-            }
-            var ite = 4031332 + selection;
-            var quan = quantities[selection];
-            var pri;
-            switch (selection) {
-                case 0:
-                    pri = prize1;
-                    break;
-                case 1:
-                    pri = prize2;
-                    break;
-                case 2:
-                    pri = prize3;
-                    break;
-                case 3:
-                    pri = prize4;
-                    break;
-                case 4:
-                    pri = prize5;
-                    break;
-                case 5:
-                    pri = prize6;
-                    break;
-                case 6:
-                    pri = prize7;
-                    break;
-                case 7:
-                    pri = prize8;
-                    break;
-                case 8:
-                    pri = prize9;
-                    break;
-                case 9:
-                    pri = prize10;
-                    break;
-                default:
-                    cm.dispose();
-                    return;
-            }
-            var rand = Math.floor(Math.random() * pri.length);
-            if (!cm.haveItem(ite, quan)) {
-                cm.sendOk("你需要 #b" + quan + " #t" + ite + "##k 与物品交换。");
-            } else if (cm.getInventory(1).getNextFreeSlot() <= -1 || cm.getInventory(2).getNextFreeSlot() <= -1 || cm.getInventory(3).getNextFreeSlot() <= -1 || cm.getInventory(4).getNextFreeSlot() <= -1) {
-                cm.sendOk("你需要为这个物品腾出空间。");
-            } else {
-                cm.gainItem(pri[rand], 1);
-                cm.gainItem(ite, -quan);
-                cm.gainMeso(100000 * selection); //temporary prize lolol
-            }
-            cm.dispose();
-        }
-    }
+	if (mode == -1) {
+		cm.dispose();
+	} else {
+		if (status >= 0 && mode == 0) {
+			cm.dispose();
+			return;
+		}	
+		if (mode == 1)
+			status++;
+		else
+			status--;
+		if (status == 0) {	
+			cm.sendNext("嘿，我是 #p" + cm.getNpc() + "#, 如果你不忙的话…那我可以和你一起出去吗？我听说这里有人聚集在这里 #活动#k 但我不想亲自去那里…好吧，你想和我一起去看看吗?");
+		} else if (status == 1) {	
+			cm.sendSimple("哈？什么样的事件？嗯，那是..\r\n#L0##e1.#n#b 它是什么样的事件?#k#l\r\n#L1##e2.#n#b 向我解释事件游戏.#k#l\r\n#L2##e3.#n#b 好吧，我们走吧!#k#l\r\n#L3##e4.#n#b请更换奖励项连胜证书.#k#l");
+		} else if (status == 2) {
+			if (selection == 0) {
+				cm.sendNext("这个月，全球正在庆祝其第三周年冒险岛! 用GM将在整个事件中举办一个惊喜的活动事件，所以GM举行，确保参加至少一项活动，为伟大的奖品!");
+				cm.dispose();
+			} else if (selection == 1) {
+				cm.sendSimple("这个事件有很多游戏。在你玩游戏之前，它会帮助你知道如何玩游戏。选择一个你想知道更多的! #b\r\n#L0# Ola Ola#l\r\n#L1# 冒险岛枫体能测试#l\r\n#L2# 滚雪球比赛#l\r\n#L3# 打椰子比赛#l\r\n#L4# 0X智力测试#l\r\n#L5# 寻宝#l#k");
+			} else if (selection == 2) {
+				if (!cm.canHold()) {
+					cm.sendNext("尽量腾出你的背包空间.");
+				} else if (cm.getChannelServer().getEvent() > -1) {
+					cm.saveReturnLocation("EVENT");
+					cm.getPlayer().setChalkboard(null);
+					cm.warp(cm.getChannelServer().getEvent(), cm.getChannelServer().getEvent() == 109080000 || cm.getChannelServer().getEvent() == 109080010 ? 0 : "join00");
+				} else {
+					cm.sendNext("无论是活动没有开始，你都已经有了 #b秘密卷轴#k, 或者你已经参加了这一活动在过去24小时内。请稍后再试!");
+				}
+				cm.dispose();
+			} else if (selection == 3) {
+				var selStr = "你想交换哪一个直接赢的证书?";
+				for (var i = 0; i < quantities.length; i++) {
+					selStr += "\r\n#b#L" + i + "##t" + (4031332 + i) + "# Exchange(" + quantities[i] + ")#l";
+				}
+				cm.sendSimple(selStr);
+				status = 9;
+			}
+		} else if (status == 3) {
+			if (selection == 0) {
+				cm.sendNext("#b[上楼 上楼]#k 是一个游戏，参与者爬梯子到达顶部。通过选择正确的光柱，从众多的光柱门中选择正确的光柱门，爬上你的方法. \r\n\r\n游戏由三个层次组成，时间限制是 #b6 分钟#k. 在[Ola Ola], 你 #b不能跳，瞬移，加速，或增加你的速度使用药剂或物品#k. 还有一些恶作剧的光柱门，将导致你到一个陌生的地方，所以请注意那些.");
+				cm.dispose();
+			} else if (selection == 1) {
+				cm.sendNext("#b[冒险岛的体能测试] 是一个种通过障碍物的#k 很像森林的耐心。你可以通过克服各种障碍，并在时限内到达最终目的地。 \r\n\r\n游戏由四个层次组成，时间限制是 #b15分钟#k.[冒险岛体能测试]时，你不可以使用传送或速度加成.");
+				cm.dispose();
+			} else if (selection == 2) {
+				cm.sendNext("#b[滚雪球]#k 由两队、枫叶队和故事队组成，两队的勋章也看不见 #b在有限的时间里，哪个队把雪球滚得越远，越大#k. 如果游戏不能在时间段内决定，那么就把雪球滚到更远的地方 \r\n\r\n卷起的雪，在未攻击它g #bCtrl#k. 所有远程攻击和技能为基础的攻击将不在这里能使用, #b只有关闭的攻击将工作#k. \r\n\r\n如果一个角色接触到雪球，他/她会被送回奇幻。在出发点前面的雪人攻击，以防止对方从滚动的雪前进。这是一个计划好的策略，因为团队将决定是否攻击滚雪球或雪人.");
+				cm.dispose();
+			} else if (selection == 3) {
+				cm.sendNext("#b[椰子比赛]#k 由两队，枫叶队和故事的团队，和两支出来勋章看不到#哪个团队收集了最多椰子#k. 时间限制 #b5 分钟#k. 如果游戏结束于一条领带，一个额外的2分钟将被授予确定获胜者。如果，为了某种原因，比分保持平局，那么游戏将以平局结束。\r\n \ r所有远程攻击技能的攻击将不会在这里工作，#市邦立的近距离攻击将#如果你不有一个近距离攻击的武器，你可以购买他们通过活动地图内的NPC。无论是性格、水平的武器或技能，所有赔偿的适用将是相同的。\r\n \ r \ nbeware的重重障碍和陷阱在地图。如果角色在游戏中死亡，玩家将被淘汰出局。在椰子下降的最后一个球员的球员。只有椰子砸到地上数，这意味着不要从树上掉下来的，或者偶尔的爆炸椰子就不算。还有一个隐藏的门在地图底部的一个壳，所以使用的是明智的!");
+				cm.dispose();
+			} else if (selection == 4) {
+				cm.sendNext("#b[0X智力测试]#k is a game of MapleStory smarts through X's and O's. Once you join the game, turn on the minimap by pressing #bM#k to see where the X and O are. A total of #r10 questions#k will be given, and the character that answers them all correctly wins the game. \r\n\r\nOnce the question is given, use the ladder to enter the area where the correct answer may be, be it X or O. If the character does not choose an answer or is hanging on the ladder past the time limit, the character will be eliminated. Please hold your position until [CORRECT] is off the screen before moving on. To prevent cheating of any kind, all types of chatting will be turned off during the OX Quiz.");
+				cm.dispose();
+			} else if (selection == 5) {
+				cm.sendNext("#b[寻宝]#k is a game in which your goal is to find the #btreasure scrolls#k that are hidden all over the map #rin 10 minutes#k. There will be a number of mysterious treasure chests hidden away, and once you break them apart, many items will surface from the chest. Your job is to pick out the treasure scroll from those items. \r\nTreasure chests can be destroyed using #bregular attacks#k, and once you have the treasure scroll in possession, you can trade it for the Scroll of Secrets through an NPC that's in charge of trading items. The trading NPC can be found on the Treasure Hunt map, but you can also trade your scroll through #bVikin#k of Lith Harbor.\r\n\r\nThis game has its share of hidden portals and hidden teleporting spots. To use them, press the #bup arrow#k at a certain spot, and you'll be teleported to a different place. Try jumping around, for you may also run into hidden stairs or ropes. There will also be a treasure chest that'll take you to a hidden spot, and a hidden chest that can only be found through the hidden portal, so try looking around.\r\n\r\nDuring the game of Treasure Hunt, all attack skills will be #rdisabled#k, so please break the treasure chest with the regular attack.");
+				cm.dispose();
+			}
+		} else if (status == 10) {
+			if (selection < 0 || selection > quantities.length) {
+				return;
+			}
+			var ite = 4031332 + selection;
+			var quan = quantities[selection];
+			var pri;
+			switch(selection) {
+				case 0:
+					pri = prize1;
+					break;
+				case 1:
+					pri = prize2;
+					break;
+				case 2:
+					pri = prize3;
+					break;
+				case 3:
+					pri = prize4;
+					break;
+				case 4:
+					pri = prize5;
+					break;
+				case 5:
+					pri = prize6;
+					break;
+				case 6:
+					pri = prize7;
+					break;
+				case 7:
+					pri = prize8;
+					break;
+				case 8:
+					pri = prize9;
+					break;
+				case 9:
+					pri = prize10;
+					break;
+				default:
+					cm.dispose();
+					return;
+			}
+			var rand = java.lang.Math.floor(java.lang.Math.random() * pri.length);
+			if (!cm.haveItem(ite, quan)) {
+				cm.sendOk("You need #b" + quan + " #t" + ite + "##k to exchange it with item.");
+			} else if (cm.getInventory(1).getNextFreeSlot() <= -1 || cm.getInventory(2).getNextFreeSlot() <= -1 || cm.getInventory(3).getNextFreeSlot() <= -1 || cm.getInventory(4).getNextFreeSlot() <= -1) {
+				cm.sendOk("You need space for this item.");
+			} else {
+				cm.gainItem(pri[rand], 1);
+				cm.gainItem(ite, -quan);
+				cm.gainMeso(100000 * selection); //temporary prize lolol
+			}
+			cm.dispose();
+		}
+	}
 }

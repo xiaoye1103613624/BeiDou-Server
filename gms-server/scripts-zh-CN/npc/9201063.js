@@ -1,116 +1,89 @@
+
+
+function start() { 
+ cm.sendOk("未被启用"); 
+ 	cm.dispose();
+} 
+
+
+
+/* Rinz the assistant
+	Orbis Random Hair/Hair Color Change.
+*/
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* Ari
-	NLC Random Hair/Hair Color Change.
-
-        GMS-like revised by Ronan -- contents found thanks to Mitsune (GamerBewbs), Waltzing, AyumiLove
-*/
-var status = 0;
+var 中条蓝 ="#fUI/ChatBalloon/tutorial/w#";
+var 中条猫 ="#fUI/ChatBalloon/37/n#";
+var 猫右 =  "#fUI/ChatBalloon/37/ne#";
+var 猫左 =  "#fUI/ChatBalloon/37/nw#";
+var 右 =    "#fUI/ChatBalloon/37/e#";
+var 左 =    "#fUI/ChatBalloon/37/w#";
+var 下条猫 ="#fUI/ChatBalloon/37/s#";
+var 猫下右 ="#fUI/ChatBalloon/37/se#";
+var 猫下左 ="#fUI/ChatBalloon/37/sw#";
+var 皇冠白 ="#fUI/GuildMark/Mark/Etc/00009004/16#";
+var status = -1;
 var beauty = 0;
-var hairprice = 1000000;
-var haircolorprice = 1000000;
-var mhair_e = Array(30250, 30400, 30430, 30440, 30490, 30730, 30830, 30870, 30880, 33100);
-var fhair_e = Array(31320, 31450, 31560, 31570, 31690, 31720, 31730, 31830, 34010);
-var hairnew = Array();
-
-function pushIfItemExists(array, itemid) {
-    if ((itemid = cm.getCosmeticItem(itemid)) != -1 && !cm.isCosmeticEquipped(itemid)) {
-        array.push(itemid);
-    }
-}
-
+var hair_Colo_new;
 function start() {
-    status = -1;
     action(1, 0, 0);
 }
-
 function action(mode, type, selection) {
-    if (mode < 1) {  // disposing issue with stylishs found thanks to Vcoc
-        cm.dispose();
+    if (mode == 0) {
+	cm.dispose();
+	return;
     } else {
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-        if (status == 0) {
-            cm.sendSimple("我是艾瑞助手。如果你碰巧有#b#t5150030##k或者#b#t5151025##k，那么让我来帮你换个发型怎么样？\r\n#L1#理发：#i5150030##t5150030##l\r\n#L2#染发：#i5151025##t5151025##l");
-        } else if (status == 1) {
-            if (selection == 1) {
-                beauty = 1;
-                hairnew = Array();
-                if (cm.getPlayer().getGender() == 0) {
-                    for (var i = 0; i < mhair_e.length; i++) {
-                        pushIfItemExists(hairnew, mhair_e[i] + parseInt(cm.getPlayer().getHair() % 10));
-                    }
-                }
-                if (cm.getPlayer().getGender() == 1) {
-                    for (var i = 0; i < fhair_e.length; i++) {
-                        pushIfItemExists(hairnew, fhair_e[i] + parseInt(cm.getPlayer().getHair() % 10));
-                    }
-                }
-                cm.sendYesNo("如果你使用了经验值券，你的发型将会随机改变，并有机会获得我设计的新实验性发型。你要使用 #b#t5150030##k 真的改变你的发型吗？");
-            } else if (selection == 2) {
-                beauty = 2;
-                haircolor = Array();
-                var current = parseInt(cm.getPlayer().getHair() / 10) * 10;
-                for (var i = 0; i < 8; i++) {
-                    pushIfItemExists(haircolor, current + i);
-                }
-                cm.sendYesNo("如果你使用普通的优惠券，你的发型将会随机改变。你还想使用 #b#t5151025##k 来改变吗？");
-            }
-        } else if (status == 2) {
-            cm.dispose();
-            if (beauty == 1) {
-                if (cm.haveItem(5150030)) {
-                    cm.gainItem(5150030, -1);
-                    cm.setHair(hairnew[Math.floor(Math.random() * hairnew.length)]);
-                    cm.sendOk("享受你的新发型吧！");
-                } else {
-                    cm.sendOk("嗯...看起来你没有我们指定的优惠券...恐怕我不能给你理发。对不起...");
-                }
-            }
-            if (beauty == 2) {
-                if (cm.haveItem(5151025)) {
-                    cm.gainItem(5151025, -1);
-                    cm.setHair(haircolor[Math.floor(Math.random() * haircolor.length)]);
-                    cm.sendOk("享受你的新发色吧！");
-                } else {
-                    cm.sendOk("嗯...看起来你没有我们指定的优惠券...恐怕我不能给你染发。很抱歉...");
-                }
-            }
-            if (beauty == 0) {
-                if (selection == 0 && cm.getMeso() >= hairprice) {
-                    cm.gainMeso(-hairprice);
-                    cm.gainItem(5150030, 1);
-                    cm.sendOk("享受！");
-                } else if (selection == 1 && cm.getMeso() >= haircolorprice) {
-                    cm.gainMeso(-haircolorprice);
-                    cm.gainItem(5151025, 1);
-                    cm.sendOk("享受！");
-                } else {
-                    cm.sendOk("你没有足够的金币来购买优惠券！");
-                }
-            }
-        }
+	status++;
+    }
+    if (status == 0) {
+	cm.sendSimple("                    #k"+皇冠白+" #r#e仙居#n#k "+皇冠白+"\r\n\r\n    "+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+"\r\n#e                   #r本功能免费#l\r\n#n#k                  #L1#随机更换当前#r发色#l\r\n\r\n    "+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+"");
+    } else if (status == 1) {
+	if (selection == 0) {
+	    var hair = cm.getPlayerStat("HAIR");
+	    hair_Colo_new = [];
+	    beauty = 1;
+	    if (cm.getPlayerStat("GENDER") == 0) {
+			
+		hair_Colo_new = [30020,30030,30040,30050,30060,30100,30110,30120,30130,30140,30150,30160,30170,30180,30190,30200,30210,30220,30230,30240,30250,30260,30270,30280,30290,30300,30310,30320,30330,30340,30350,30360,30370,30400,30410,30420,30430,30440,30450,30460,30470,30480,30490,30510,30520,30530,30540,30550,30560,30600,30610,30620,30630,30640,30650,30660,30670,30680,30700,30710,30720,30730,30740,30750,30760,30770,30780,30790,30800,30810,30820,30830,30840,30850,30860,30870,30880,30890,30900,30910,30920,30930,30940,30950,30990,33030,33040,33050,33060,33070,33080,33090,33100,33110,33120,33130,33140,33150,33160,33170,33200,33210,33220,33230,33240,33250,33260];
+	    } else {
+			
+		hair_Colo_new = [31010,31020,31030,31040,31050,31060,31070,31080,31090,31100,31110,31120,31130,31140,31150,31160,31170,31180,31190,31200,31210,31220,31230,31240,31250,31260,31270,31280,31290,31300,31310,31320,31330,31340,31350,31400,31410,31420,31430,31440,31450,31460,31470,31480,31490,31510,31520,31530,31540,31550,31560,31610,31620,31630,31640,31650,31660,31670,31680,31690,31700,31710,31720,31730,31740,31750,31760,31770,31780,31790,31800,31810,31820,31830,31840,31850,31860,31870,31880,31890,31910,31920,31930,31940,31950,31990,34010,34040,34050,34060,34070,34080,34090,34100,34110,34120,34130,34140,34150,34160,34170,34180,34200,34210,34220,34230,34240,34250,34260];
+	    }
+	    for (var i = 0; i < hair_Colo_new.length; i++) {
+		hair_Colo_new[i] = hair_Colo_new[i] + (hair % 10);
+	    }
+	    cm.sendYesNo("免费随机染发吗?");
+		cm.gainItem(5150004, 1);
+	} else if (selection == 1) {
+	    var currenthaircolo = Math.floor((cm.getPlayerStat("HAIR") / 10)) * 10;
+	    hair_Colo_new = [];
+	    beauty = 2;
+	    for (var i = 0; i < 8; i++) {
+		hair_Colo_new[i] = currenthaircolo + i;
+	    }
+	    cm.sendYesNo("是否要随机转换#r发色?\r\n请把当前对话框拖至不挡住人物的视线进行随机更换发色");
+		cm.gainItem(5151004,1);
+	}
+    } else if (status == 2){
+	if (beauty == 1) {
+	    if (cm.setRandomAvatar(5150004, hair_Colo_new) == 1) {
+        cm.dispose();
+	cm.openNpc(9201063);
+		//cm.openNpc(9310059,"随机染色");
+		//cm.sendOk("享受!");
+	    } else {
+		cm.sendOk("您貌似沒有#b#t5150004##k..");
+	    }
+	} else {
+	    if (cm.setRandomAvatar(5151004, hair_Colo_new) == 1) {
+	        cm.dispose();
+		cm.openNpc(9201063);//	cm.openNpc(9310059,"随机染色");
+	//	cm.sendOk("享受!");
+	    } else {
+		cm.sendOk("您貌似沒有#b#t5151004##k..");
+	    }
+	}
+//	cm.dispose();
+
     }
 }
+*/

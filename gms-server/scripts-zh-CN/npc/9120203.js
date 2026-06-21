@@ -1,61 +1,41 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-					   Matthias Butz <matze@odinms.de>
-					   Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/* Konpei
+	Showa
 */
 
-/**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Konpei - Near the Hideout (Beautiful Sky)(801040101)
- -- By ---------------------------------------------------------------------------------------------
- Ronan
- -- Version Info -----------------------------------------------------------------------------------
- 1.0 - First Version by Ronan
- ---------------------------------------------------------------------------------------------------
- **/
-
-var status;
+var flash;
+var status = 0;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+    flash = cm.haveItem(4000141);
+    action(1,0,0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (mode == 1) {
+	status++;
     } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
+	cm.sendOk("I really admire your toughness! Well, if you decide to return to Showa Town, let me know~!");
+	cm.dispose();
+	return;
+    }
 
-        if (status == 0) {
-            cm.sendNext("“啊，Boss已经被打败了。这真是个快乐的日子！恭喜大家。跟着这条路返回城镇。”");
-        } else if (status == 1) {
-            cm.warp(801000000);
-            cm.dispose();
-        }
+    if (status == 1) {
+	if (flash) {
+	    cm.sendNext("Oh wow, you did it! You know, that man sure stood firm. Hopefully this'll lead to some much-needed peace here, but I keep fearing for the worst. In any case, I'm just glad he's gone now.");
+	} else {
+	    cm.sendYesNo("Do you want to return to Showa Town?");
+	}
+    } else if (status == 2) {
+	if (flash) {
+	    cm.sendNext("That's right! The flashlight that the boss drops will be taken care of by me for future purposes. Now that we know who that really is, I feel like the peaceful days may be on its way. I have to admit, finding out the monster is indeed him... that caught me off guard.");
+	} else {
+	    cm.warp(801000000, 0);
+	    cm.dispose();
+	}
+    } else if (status == 3) {
+	cm.gainItem(4000141, -1);
+	cm.gainItem(2000004, 200);
+	cm.warp(801000000, 0);
+	cm.dispose();
     }
 }

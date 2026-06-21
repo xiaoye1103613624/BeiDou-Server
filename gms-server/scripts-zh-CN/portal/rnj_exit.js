@@ -1,5 +1,9 @@
 function enter(pi) {
-    pi.playPortalSound();
-    pi.warp(261000011, 0);
-    return true;
+	    pi.removeAll(4001130);
+	    pi.removeAll(4001131);
+	    pi.removeAll(4001132);
+	    pi.removeAll(4001133);
+	    pi.removeAll(4001134);
+	    pi.removeAll(4001135);
+    pi.warp(pi.getMapId() == 926100700 ? 910002000 : 910002000,0);
 }

@@ -1,97 +1,52 @@
-/*
-Growlie (that fatass uhh.. hungry lion or whatever)
-
-@author FightDesign (RageZONE)
-@author Ronan
-*/
-
-var status = 0;
-var chosen = -1;
-
-function clearStage(stage, eim) {
-  eim.setProperty(stage + "stageclear", "true");
-  eim.showClearEffect(true);
-
-  eim.giveEventPlayersStageReward(stage);
-}
-
-function start() {
-  status = -1;
-  action(1, 0, 0);
-}
+var status = -1;
+var random = java.lang.Math.floor(Math.random() * 9 + 1);
+var random1 = java.lang.Math.floor(Math.random() * 10 + 1);
+var random2 = java.lang.Math.floor(Math.random() * 10 + 1);
 
 function action(mode, type, selection) {
-  if (mode < 0) {
-      cm.dispose();
-
-  } else {
-      if (mode == 0 && status == 0) {
-          cm.dispose();
-          return;
-      }
-      if (mode == 0) {
-          status += ((chosen == 2) ? 1 : -1);
-      } else {
-          status++;
-      }
-
-      if (status == 0) {
-          if (cm.isEventLeader()) {
-              cm.sendSimple("吼！我是兴儿，时刻准备守护这片地方。你来这儿干什么？\r\n#b#L0# 请告诉我这片地方是怎么回事。#l\r\n#L1# 我带来了 #t4001101#。#l\r\n#L2# 我想离开这片地方。#l");
-          } else {
-              cm.sendSimple("吼！我是兴儿，时刻准备守护这片地方。你来这儿干什么？\r\n#b#L0# 请告诉我这片地方是怎么回事。#l\r\n#L2# 我想离开这片地方。#l");
-          }
-      } else if (status == 1) {
-          if (chosen == -1) {
-              chosen = selection;
-          }
-          if (chosen == 0) {
-              cm.sendNext("这片地方可以说是绝佳之处，每逢满月你都能品尝到月兔制作的美味年糕。");
-          } else if (chosen == 1) {
-              if (cm.haveItem(4001101, 10)) {
-                  cm.sendNext("哦……这不是月兔做的年糕吗？请把年糕给我。嗯……这些看起来很美味。下次再带更多的 #b#t4001101##k 来找我哦。一路平安！");
-              } else {
-                  cm.sendOk("我建议你检查一下，确保你确实收集了 #b10 个 #t4001101##k。");
-                  cm.dispose();
-              }
-          } else if (chosen == 2) {
-              cm.sendYesNo("你确定要离开吗？");
-          } else {
-              cm.dispose();
-
-          }
-      } else if (status == 2) {
-          if (chosen == 0) {
-              cm.sendNextPrev("在这片区域收集遍布各处的迎月花种子，然后把种子种在月牙附近的土壤里，就能看到迎月花盛开。迎月花有六种，每种都需要不同的土壤。土壤必须适合花的种子，这一点至关重要。");
-          } else if (chosen == 1) {
-              cm.gainItem(4001101, -10);
-
-              var eim = cm.getEventInstance();
-              clearStage(1, eim);
-
-              var map = eim.getMapInstance(cm.getPlayer().getMapId());
-              map.killAllMonstersNotFriendly();
-
-              eim.clearPQ();
-              cm.dispose();
-          } else {
-              if (mode == 1) {
-                  cm.warp(910010300);
-              } else {
-                  cm.sendOk("那你最好给我收集些美味的年糕，因为时间不多了，吼！");
-              }
-              cm.dispose();
-          }
-      } else if (status == 3) {
-          if (chosen == 0) {
-              cm.sendNextPrev("当迎月花盛开时，满月就会升起，那时月兔就会出现并开始舂米。你的任务是击退怪物，确保月兔能专心制作出最美味的年糕。");
-          }
-      } else if (status == 4) {
-          if (chosen == 0) {
-              cm.sendNextPrev("我希望你和你的队员们合作，给我弄来 10 个年糕。我强烈建议你在规定时间内把年糕给我。");
-          }
-      } else {
-          cm.dispose();
-      }
-  }
+    if (mode == 0 && status == 0) {
+        cm.dispose();
+        return;
+    }
+    if (mode == 1) {
+        status++;
+    } else {
+        status--;
+    }
+    if (status == 0) {
+        cm.sendSimple("你好，我是小老虎 #bRice Cakes#k...#b\r\n#L1#查看说明#l\r\n#L2#离开地图#l\r\n#L0#我给你带来了年糕!#l");
+    } else if (status == 1) {
+        if (selection == 0) {
+            if (!cm.isLeader()) {
+                cm.sendOk("请队长与我谈话.");
+            } else {
+                if (cm.haveItem(4001101,10)) {
+                   // cm.removeAll(4001101);
+                    cm.givePartyExp(2000);
+                    cm.endPartyQuest(1200);
+                    cm.warpParty(910010300);
+                    cm.gainMeso(+20000);//读取变量
+	                cm.givePartyItems(4170000,1);
+             
+cm.givePartyBossLog("每日月妙");
+cm.喇叭(3, "恭喜[" + cm.getPlayer().getName() + "]成功带领队友通关【组队任务 - 月妙副本】获得奖励！");
+        cm.dispose();
+                } else {
+                    cm.sendNext("你没有带来 #r10#k 块月妙的年糕... ");
+                }
+            }
+        } else if (selection == 1) {
+            cm.sendNext("请点击地块让它开花，6块土地全部开花时满月将出现。满月下会召唤月妙小仙子，每隔一段时间月妙小仙子会捣出年糕，收集 #r10 #k块年糕后交给队长然后交给NPC，即可通关。\r\n#r注：在月妙仙子捣年糕的时候保护它，月妙仙子被怪物攻击后死亡则任务失败.");
+        } else if (selection == 2) {
+        cm.removeAll(4001095);
+        cm.removeAll(4001096);
+        cm.removeAll(4001097);
+        cm.removeAll(4001098);
+        cm.removeAll(4001099);
+        cm.removeAll(4001100);
+     
+                    cm.warp(100000200);
+        }
+        cm.dispose();
+    }
 }

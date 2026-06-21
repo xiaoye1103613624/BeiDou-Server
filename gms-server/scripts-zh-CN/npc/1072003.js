@@ -19,59 +19,41 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* Thief Job Instructor
-	Thief 2nd Job Advancement
-	Victoria Road : Construction Site North of Kerning City (102040000)
+/* Magician Job Instructor
 */
 
 var status;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == -1)
         cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
+    else {
+        if (mode == 1)
             status++;
-        } else {
+        else
             status--;
-        }
 
-        if (status == 0) {
-            if (cm.isQuestCompleted(100010)) {
-                cm.sendOk("你真是一个真正的英雄！");
-                cm.dispose();
-            } else if (cm.isQuestCompleted(100009)) {
-                cm.sendNext("好的，我会让你进去！打败里面的怪物，收集30个黑暗弹珠，然后和我同事里面的一个同事交谈。他会给你#b英雄的证明#k，这是你通过测试的证明。祝你好运。");
-                status = 3;
-            } else if (cm.isQuestStarted(100009)) {
-                cm.sendNext("哦，这不是来自#b达克鲁#k的一封信吗？");
-            } else {
-                cm.sendOk("一旦你准备好了，我可以告诉你路线。");
-                cm.dispose();
-            }
-        } else if (status == 1) {
-            cm.sendNextPrev("所以你想证明你的技能？好吧...");
-        } else if (status == 2) {
-            cm.sendAcceptDecline("如果你准备好了，我会给你一个机会。");
-        } else if (status == 3) {
-            cm.sendOk("你需要收集 #b30 个 #t4031013#。祝你好运。");
-            cm.completeQuest(100009);
-            cm.startQuest(100010);
-            cm.gainItem(4031011, -1);
-        } else if (status == 4) {
-            cm.warp(108000400, 0);
-            cm.dispose();
-        } else {
-            cm.dispose();
-        }
+			if (cm.haveItem(4031011)) {
+				if (status == 0)
+					cm.sendNext("噢, 你是 #b达克鲁#k 介绍来的吗")
+				else if (status == 1)
+					cm.sendNextPrev("所以你要证明你的实力吗 ? 很好...");
+				else if (status == 2)
+					cm.sendNextPrev("我可以给你一次机会,请你把握.");
+				else if (status == 3)
+					cm.sendYesNo("请给我 #b30 #t4031013##k. 祝你好运.");
+				else if (status == 4) {
+					cm.warp(108000400, 0);
+					cm.dispose();
+				}
+			} else {
+				cm.sendOk("很抱歉,我需要 #b达克鲁的信件#k 请去找达克鲁拿取谢谢");
+				cm.dispose();
+			}
     }
-}
+}	

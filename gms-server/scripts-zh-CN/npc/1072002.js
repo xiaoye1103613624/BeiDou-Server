@@ -1,77 +1,59 @@
 /*
-        This file is part of the OdinMS Maple Story Server
-        Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-        Matthias Butz <matze@odinms.de>
-        Jan Christian Meyer <vimes@odinms.de>
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
+                       Matthias Butz <matze@odinms.de>
+                       Jan Christian Meyer <vimes@odinms.de>
 
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU Affero General Public License version 3
-        as published by the Free Software Foundation. You may not use, modify
-        or distribute this program under any other version of the
-        GNU Affero General Public License.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License version 3
+    as published by the Free Software Foundation. You may not use, modify
+    or distribute this program under any other version of the
+    GNU Affero General Public License.
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU Affero General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-        You should have received a copy of the GNU Affero General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* Bowman Job Instructor
-Hunter Job Advancement
-Warning Street : The Road to the Dungeon (106010000)
+/* Magician Job Instructor
 */
 
 var status;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == -1)
         cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
+    else {
+        if (mode == 1)
             status++;
-        } else {
+        else
             status--;
-        }
 
-        if (status == 0) {
-            if (cm.isQuestCompleted(100001)) {
-                cm.sendOk("你真是一个真正的英雄！");
-                cm.dispose();
-            } else if (cm.isQuestCompleted(100000)) {
-                cm.sendNext("好的，我会让你进去！打败里面的怪物，收集30个黑暗弹珠，然后和我里面的一位同事交谈。他会给你#b英雄的证明#k，证明你已经通过了测试。祝你好运。");
-                status = 3;
-            } else if (cm.isQuestStarted(100000)) {
-                cm.sendNext("哦，这不是来自#b雅典娜#k的一封信吗？");
-            } else {
-                cm.sendOk("一旦你准备好了，我可以告诉你路线。");
-                cm.dispose();
-            }
-        } else if (status == 1) {
-            cm.sendNextPrev("所以你想证明你的技能？好吧...");
-        } else if (status == 2) {
-            cm.sendAcceptDecline("I will give you a chance if you're ready.");
-        } else if (status == 3) {
-            cm.completeQuest(100000);
-            cm.startQuest(100001);
-            cm.gainItem(4031010, -1);
-            cm.sendOk("You will have to collect me #b30 #t4031013##k. Good luck.")
-        } else if (status == 4) {
-            cm.warp(108000100, 0);
-            cm.dispose();
-        } else {
-            cm.dispose();
-        }
+			if (cm.haveItem(4031010)) {
+				if (status == 0)
+					cm.sendNext("噢, 你是 #b赫丽娜#k 介绍来的吗")
+				else if (status == 1)
+					cm.sendNextPrev("所以你要证明你的实力吗 ? 很好...");
+				else if (status == 2)
+					cm.sendNextPrev("我可以给你一次机会,请你把握.");
+				else if (status == 3)
+					cm.sendYesNo("请给我 #b30 #t4031013##k. 祝你好运.");
+				else if (status == 4) {
+					cm.warp(108000100, 0);
+					cm.dispose();
+				}
+			} else {
+				cm.sendOk("很抱歉,我需要 #b赫丽娜的信件#k 请去找赫丽娜拿取谢谢");
+				cm.dispose();
+			}
     }
-}
+}	

@@ -1,148 +1,124 @@
-/*2101017.js
- *Cesar
- *@author Jvlaple
- */
+/**
+ * @author: OdinMS
+ * @editor: Eric
+ * @npc: Cesar
+ * @func: Ariant PQ (Outdated GMS-like text, AriantPQ is closed off and I am unable to get this.)
+*/
 
-var status = 0;
-var toBan = -1;
-var choice;
-var arena;
-var arenaName;
-var type;
-var map;
-const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-var exped;
-var expedicao;
-var expedMembers;
+importPackage(Packages.tools);
+importPackage(Packages.client);
+
+var status = -1;
+var sel;
 
 function start() {
-    action(1, 0, 0);
+    if ((cm.getPlayer().getLevel() < 50) && !cm.getPlayer().isGM()) {
+		cm.sendNext("你不在 level 20 and 30. 对不起，您可能不参加.");
+        cm.dispose();
+        return;
+    }
+    if(cm.getPlayer().getMapId() % 10 == 1)
+        cm.sendSimple("你对我有一个请求吗?\r\n#b#L0# 给我 #t2270002# and #t2100067#.#l\r\n#L1# 我该做什么?#l\r\n#L2# 让我离开这里.#l");
+    else
+        cm.sendSimple(cm.getPlayer().getAriantRoomLeaderName(((cm.getPlayer().getMapId() / 100) % 10) - 1) == cm.getPlayer().getName() ? "你想开始比赛吗?#b\r\n#b#L3# 准备进入战场!!#l\r\n#L1# 我想踢另一个角色.#l\r\n#L2# 让我离开这里.#l" : "你想要什么?#b\r\n#L2# 让我离开这里.#l");
 }
 
-function action(mode, type, selection) {
-
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0) {
+function action(mode, type, selection){
+    status++;
+    if (mode != 1) {
+        if (mode == 0 && type == 0)
+            status -= 2;
+        else {
             cm.dispose();
             return;
         }
-
-        const GameConstants = Java.type('org.gms.constants.game.GameConstants');
-        if (cm.getPlayer().getMapId() == 980010100 || cm.getPlayer().getMapId() == 980010200 || cm.getPlayer().getMapId() == 980010300) {
-            if (cm.getPlayer().getMapId() == 980010100) {
-                exped = ExpeditionType.ARIANT;
-                expedicao = cm.getExpedition(exped);
-
-            } else if (cm.getPlayer().getMapId() == 980010200) {
-                exped = ExpeditionType.ARIANT1;
-                expedicao = cm.getExpedition(exped);
-            } else {
-                exped = ExpeditionType.ARIANT2;
-                expedicao = cm.getExpedition(exped);
-            }
-
-            if (expedicao == null) {
+    }
+    if (cm.getPlayer().getMapId() % 10 == 1) {
+        if (status == 0) {
+            if (sel == undefined)
+                sel = selection;
+            if (sel == 0) {
+                if (cm.haveItem(2270002))
+                    cm.sendNext("你已经拥有 #b#t2270002##k.");
+                else if (cm.canHold(2270002) && cm.canHold(2100067)) {
+                    if (cm.haveItem(2100067))
+                        cm.removeAll(2100067);
+                    cm.gainItem(2270002, 32);
+                    cm.gainItem(2100067, 5);
+                    cm.sendNext("现在降低怪物的HP，并使用 #b#t2270002##k 吸收他们的力量!");
+                } else
+                    cm.sendNext("检查和查看是否使用库存是全");
+                cm.dispose();
+            } else if(sel == 1) {
+				status = 1;
+                cm.sendNext("你需要做什么？你一定是新来的。请允许我详细解释.");
+            } else
+                cm.sendYesNo("Are you sure you want to leave?"); //No GMS like.
+        } else if (status == 1) {
+            if (mode == 1) {
+                cm.warp(980010020);
                 cm.dispose();
                 return;
             }
-
-            expedMembers = expedicao.getMemberList();
-            if (status == 0) {
-                if (cm.isLeaderExpedition(exped)) {
-                    cm.sendSimple("你想做什么？#b\r\n#L1#查看当前成员#l\r\n#L2#禁止成员#l\r\n#L3#开始战斗#l\r\n#L4#离开竞技场#l");
-                    status = 1;
-                } else {
-                    var toSend = "Current members inside this arena:\r\n#b";
-                    toSend += cm.getExpeditionMemberNames(exped);
-                    cm.sendOk(toSend);
-                    cm.dispose();
-                }
-            } else if (status == 1) {
-                if (selection == 1) {
-                    var toSend = "Current members inside this arena:\r\n#b";
-                    toSend += cm.getExpeditionMemberNames(exped);
-                    cm.sendOk(toSend);
-                    cm.dispose();
-                } else if (selection == 2) {
-                    var size = expedMembers.size();
-                    if (size == 1) {
-                        cm.sendOk("你是探险队中唯一的成员。");
-                        cm.dispose();
-                        return;
-                    }
-                    var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
-                    text += "\r\n\t\t1." + expedicao.getLeader().getName();
-                    for (var i = 1; i < size; i++) {
-                        text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
+		} else if (status == 2) {
+            cm.sendNextPrev("这真的很简单。你会得到 #b#t2270002##k 从我身上，你的任务就是要消除一个集合的量 HP从怪物，然后使用 #b#t2270002##k 吸取其巨大的力量.");
+        } else if (status == 3)
+            cm.sendNextPrev("很简单。如果你吸收了怪物的力量#b#t2270002##k, 然后你会做 #b#t4031868##k, 这是女王阿列达爱。与大多数珠宝战斗获胜。为了赢得比赛，为了防止别人的吸收，这实际上是一个聪明的想法.");
+        else if (status == 4)
+            cm.sendNextPrev("一件事. #r你可能不会使用宠物.#k理解?~!");
+        else if (status == 5)
+            cm.dispose();
+    } else {
+        var nextchar = cm.getMap(cm.getPlayer().getMapId()).getCharacters().iterator();
+        if (status == 0) {
+            if (sel == undefined)
+                sel = selection;
+            if (sel == 1)
+                if (cm.getPlayerCount(cm.getPlayer().getMapId()) > 1) {
+                    var text = "你想从谁的房间里踢一脚?"; //Not GMS like text
+                    var name;
+                    for (var i = 0; nextchar.hasNext(); i++) {
+                        name = nextchar.next().getName();
+                        if (!cm.getPlayer().getAriantRoomLeaderName(((cm.getPlayer().getMapId() / 100) % 10) - 1).equals(name))
+                            text += "\r\n#b#L" + i + "#" + name + "#l";
                     }
                     cm.sendSimple(text);
-                    status = 6;
-                } else if (selection == 3) {
-                    if (expedicao.getMembers().size() < 1) {
-                        cm.sendOk("需要一个玩家来开始战斗。");
-                        cm.dispose();
-                    } else {
-                        if (cm.getParty() != null) {
-                            cm.sendOk("你不能以团队形式进入战斗。");
-                            cm.dispose();
-                            return;
-                        }
-
-                        var errorMsg = cm.startAriantBattle(exped, cm.getPlayer().getMapId());
-                        if (errorMsg != "") {
-                            cm.sendOk(errorMsg);
-                        }
-
-                        cm.dispose();
-                    }
-                } else if (selection == 4) {
-                    cm.mapMessage(5, "The Leader of the arena left.");
-                    expedicao.warpExpeditionTeam(980010000);
-                    cm.endExpedition(expedicao);
-                    cm.dispose();
-                }
-            } else if (status == 6) {
-                if (selection > 0) {
-                    var banned = expedMembers.get(selection - 1);
-                    expedicao.ban(banned);
-                    cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");
-                    cm.dispose();
                 } else {
-                    cm.sendSimple(list);
-                    status = 2;
+                    cm.sendNext("现在没有什么可以被踢的角色。");
+                    cm.dispose();
                 }
-            }
-        } else if (GameConstants.isAriantColiseumArena(cm.getPlayer().getMapId())) {
-            if (cm.getPlayer().getMapId() == 980010101) {
-                exped = ExpeditionType.ARIANT;
-                expedicao = cm.getExpedition(exped);
-            } else if (cm.getPlayer().getMapId() == 980010201) {
-                exped = ExpeditionType.ARIANT1;
-                expedicao = cm.getExpedition(exped);
+            else if (sel == 2) {
+                if (cm.getPlayer().getAriantRoomLeaderName(((cm.getPlayer().getMapId() / 100) % 10) - 1) == cm.getPlayer().getName())
+                    cm.sendYesNo("你确定你要离开吗？你是竞技场的领袖，所以如果你离开，整个战斗竞技场将关闭.");
+                else
+                    cm.sendYesNo("你确定你要离开吗?"); //No GMS like.
+            } else if (sel == 3)
+                if (cm.getPlayerCount(cm.getPlayer().getMapId()) > 0 )
+                    cm.sendYesNo("房间都是一套，没有其他的角色可以加入这场战斗的竞技场。你想现在开始游戏吗?");
+                else {
+                    cm.sendNext("你至少需要2名参与者来开始比赛.");
+                    cm.dispose();
+                }
+        } else if (status == 1) {
+            if (sel == 1) {
+                for (var i = 0; nextchar.hasNext(); i++)
+                    if (i == selection) {
+                        nextchar.next().changeMap(cm.getMap(980010000));
+                        break;
+                    } else
+                        nextchar.next();
+                cm.sendNext("玩家被踢出了舞台."); //Not GMS like
+            } else if(sel == 2) {
+                if (cm.getPlayer().getAriantRoomLeaderName(((cm.getPlayer().getMapId() / 100) % 10) - 1) != cm.getPlayer().getName())
+                    cm.warp(980010000);
+                else {
+                    cm.getPlayer().removeAriantRoom((cm.getPlayer().getMapId() / 100) % 10);
+                    cm.mapMessage(6, cm.getPlayer().getName() + " 已经离开了舞台，所以舞台上现在将关闭.");
+                    cm.warpMap(980010000);
+                }
             } else {
-                exped = ExpeditionType.ARIANT2;
-                expedicao = cm.getExpedition(exped);
+				cm.startAriantPQ(cm.getPlayer().getMapId() + 1);
             }
-            if (status == 0) {
-                var gotTheBombs = expedicao.getProperty("gotBomb" + cm.getChar().getId());
-                if (gotTheBombs != null) {
-                    cm.sendOk("我已经给了你炸弹，请立刻击败 #b天蝎座#k！");
-                    cm.dispose();
-                } else if (cm.canHoldAll([2270002, 2100067], [50, 5])) {
-                    cm.sendOk("我已经给了你(5) #b#e炸弹#k#n和(50) #b#e元素岩石#k#n。\r\n使用元素岩石来捕捉蝎子，以获取#r#e灵魂宝石#k#n！");
-                    expedicao.setProperty("gotBomb" + cm.getChar().getId(), "1");
-                    cm.gainItem(2270002, 50);
-                    cm.gainItem(2100067, 5);
-                    cm.dispose();
-                } else {
-                    cm.sendOk("你的背包好像已经满了。");
-                    cm.dispose();
-                }
-            }
-        } else {
-            cm.sendOk("嗨，你听说过阿里安特角斗场战斗竞技场吗？这是一个供20级到30级玩家参与的竞争活动！");
             cm.dispose();
         }
     }

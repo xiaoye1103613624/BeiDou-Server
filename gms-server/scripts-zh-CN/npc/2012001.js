@@ -1,32 +1,43 @@
+/*
+	NPC Name: 		Rini
+	Map(s): 		Orbis: Station<To Ellinia> (200000111)
+	Description: 		Orbis Ticketing Usher
+*/
+var status = 0;
+
 function start() {
-    if (cm.haveItem(4031047)) {
-        var em = cm.getEventManager("Boats");
-        if (em.getProperty("entry") == "true") {
-            cm.sendYesNo("你想去魔法密林了吗？");
-        } else {
-            cm.sendOk("魔法密林的船已经出发了，请耐心等待下一班。");
-            cm.dispose();
-        }
-    } else {
-        cm.sendOk("确保你有一张魔法密林船票才能乘坐这艘船。检查你的背包。");
-        cm.dispose();
-    }
+    status = -1;
+    boat = cm.getEventManager("Boats");
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode <= 0) {
-        cm.sendOk("好的，如果你改变主意，就跟我说话！");
-        cm.dispose();
-        return;
+    status++;
+    if(mode == 0) {
+	cm.sendNext("等你考虑好再来找我。");
+	cm.dispose();
+	return;
     }
-
-    var em = cm.getEventManager("Boats");
-    if (em.getProperty("entry") == "true") {
-        cm.warp(200000112);
-        cm.gainItem(4031047, -1);
-        cm.dispose();
-    } else {
-        cm.sendOk("魔法密林的船已经准备好出发了，请耐心等待下一班。");
-        cm.dispose();
+    if (status == 0) {
+	if(boat == null) {
+	    cm.sendNext("找不到脚本请联系GM！");
+	    cm.dispose();
+	} else if(boat.getProperty("entry").equals("true")) {
+	    cm.sendYesNo("你想要搭船？？");
+	} else if(boat.getProperty("entry").equals("false") && boat.getProperty("docked").equals("true")) {
+	    cm.sendNext("很抱歉本班船准备开走,乘坐时间表可以通过售票展台查看.");
+	    cm.dispose();
+	} else {
+	    cm.sendNext("很抱歉本班船已经走了,乘坐时间表可以通过售票展台查看.");
+	    cm.dispose();
+	}
+    } else if(status == 1) {
+	if(!cm.haveItem(4031047)) {
+	    cm.sendNext("不! 你没有#b#t4031047##k 所以我不能放你走!");
+	} else {
+	    cm.gainItem(4031047, -1);
+	    cm.warp(200000112, 0);
+	}
+	cm.dispose();
     }
 }

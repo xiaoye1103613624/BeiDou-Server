@@ -407,6 +407,49 @@ public class AbstractPlayerInteraction {
     }
 
     /**
+     * 获取玩家在通用每日/累计次数记录表(bosslog)中指定key的当前计数
+     * 供脚本调用，等价于079整合版的pi.getPlayer().getBossLog(key)
+     *
+     * @param bossid 业务自定义记录标识(如"每日挖矿地图")
+     * @return 当前计数
+     */
+    public int getBossLog(String bossid) {
+        return getPlayer().getBossLog(bossid);
+    }
+
+    /**
+     * 设置玩家在通用每日/累计次数记录表(bosslog)中指定key的计数
+     * 供脚本调用，等价于079整合版的pi.getPlayer().setBossLog(key, count)
+     *
+     * @param bossid 业务自定义记录标识(如"每日挖矿地图")
+     * @param count  要写入的计数值
+     */
+    public void setBossLog(String bossid, int count) {
+        getPlayer().setBossLog(bossid, count);
+    }
+
+    /**
+     * 获取角色的永久一次性记录计数（不会跨天重置）
+     * 供脚本cm.getOneTimeLog(key)使用，用于一次性奖励/成就标记等永久记录
+     *
+     * @param logid 业务自定义记录标识
+     * @return 当前计数，未找到记录时返回0
+     */
+    public int getOneTimeLog(String logid) {
+        return getPlayer().getOneTimeLog(logid);
+    }
+
+    /**
+     * 设置角色的永久一次性记录（计数+1，不会跨天重置）
+     * 供脚本cm.setOneTimeLog(key)使用
+     *
+     * @param logid 业务自定义记录标识
+     */
+    public void setOneTimeLog(String logid) {
+        getPlayer().setOneTimeLog(logid);
+    }
+
+    /**
      * 检查玩家是否拥有指定数量的物品
      *
      * @param itemid   物品ID
@@ -1732,18 +1775,48 @@ public class AbstractPlayerInteraction {
      */
     public void spawnMonster(int id, int x, int y) {
         Monster monster = LifeFactory.getMonster(id);
+        if (monster == null) {
+            log.warn("spawnMonster 调用失败: 怪物ID {} 在WZ数据中不存在", id);
+            return;
+        }
         monster.setPosition(new Point(x, y));
         getPlayer().getMap().spawnMonster(monster);
     }
 
     /**
-     * 通过ID获取怪物实例
+     * 通过ID获取怪物实例（静默检查，不存在时返回null不打印ERROR日志）
+     * 先用getMonsterLevel轻量检查Mob.wz数据是否存在，避免触发LifeFactory的ERROR日志
      *
      * @param mid 怪物ID
-     * @return 怪物对象
+     * @return 怪物对象，不存在返回null
      */
     public Monster getMonsterLifeFactory(int mid) {
+        // getMonsterLevel对数据节点不存在的怪物返回-1（无ERROR日志）
+        if (LifeFactory.getMonsterLevel(mid) == -1) {
+            return null;
+        }
         return LifeFactory.getMonster(mid);
+    }
+
+    /**
+     * 根据名称搜索怪物ID列表
+     * 从WZ字符串数据中搜索匹配的怪物名称
+     *
+     * @param search 搜索关键词
+     * @return 匹配的怪物列表（包含ID和名称）
+     */
+    public ArrayList<Pair<Integer, String>> getMobsIDsFromName(String search) {
+        return MonsterInformationProvider.getMobsIDsFromName(search);
+    }
+
+    /**
+     * 根据怪物ID获取怪物名称
+     *
+     * @param id 怪物ID
+     * @return 怪物名称，不存在返回空字符串
+     */
+    public String getMobNameFromId(int id) {
+        return MonsterInformationProvider.getInstance().getMobNameFromId(id);
     }
 
     /**

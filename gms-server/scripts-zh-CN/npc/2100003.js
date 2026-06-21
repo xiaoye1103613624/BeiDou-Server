@@ -1,3 +1,4 @@
+
 var status = 0;
 
 function start() {
@@ -6,6 +7,6 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    cm.openShopNPC(2100003);
+    cm.openShop(54);
     cm.dispose();
 }

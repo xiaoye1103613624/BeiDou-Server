@@ -1,33 +1,11 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as
- published by the Free Software Foundation version 3 as published by
- the Free Software Foundation. You may not use, modify or distribute
- this program under any other version of the GNU Affero General Public
- License.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
- 
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * @author BubblesDev
- * @author Ronan
- * @NPC Tory
- */
-
-var status = 0;
-var em = null;
-
+﻿var status = 0;
+var minLevel = 8;
+var maxLevel = 200;
+var minPartySize = 1;
+var maxPartySize = 6;
+var cishuxianzhi = 10; //限制次数
+var maxjinbi = 50000; //判断征集令金币
+var 邪恶小兔2 = "#fEffect/CharacterEff/1112960/3/1#";
 function start() {
     status = -1;
     action(1, 0, 0);
@@ -41,91 +19,139 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1) {
+        if (mode == 1)
             status++;
-        } else {
+        else
             status--;
-        }
-
-        if (cm.getMapId() == 100000200) {
-            if (status == 0) {
-                em = cm.getEventManager("HenesysPQ");
-                if (em == null) {
-                    cm.sendOk("月妙组队任务遇到了错误。");
+        if (status == 0) {
+            var yhms = "";
+            yhms += "                " + 邪恶小兔2 + "#r#e月秒副本#n" + 邪恶小兔2 + "\r\n\r\n";
+            yhms += "副本进入要求如下：\r\n";
+            yhms += "①人数限制: " + minPartySize + " #b- #r" + maxPartySize + "#k队员\t②等级限制：#r " + minLevel + " #b- #r" + maxLevel + "级 #k\r\n"
+            yhms += "每天只能挑战:#b" + cishuxianzhi + "#k次 你今天已进入:#b" + cm.getPlayer().get每日记录("月秒副本") + "#k次#k\r\n"
+            yhms += "等级限制：" + minLevel + " - " + maxLevel + "  人数限制：" + minPartySize + " - " + maxPartySize + " 经验指数：#r适中#k\r\n";
+            // yhms += "2、限制次数:每天可进行" + maxenter + "次\r\n";
+            //yhms += "2、今日已进行: #b" + cm.getBossLog(Log) + " #k次       \r\n"
+            yhms += "#L0##b开始 月秒副本 #l    \r\n\r\n";
+          //  yhms += "#L2##b#r#v4031560#30张 兑换 #v1142817#年糕汤狂爱者#l\r\n\r\n";
+          //  yhms += "#L4##b#r#v4031560#5张 兑换 #v1142816#尝过年糕的人#l\r\n\r\n";
+			//yhms += "#L6##b#r#v4031560#20张 兑换 #v3800670##z3800670##l\r\n\r\n";
+            cm.sendSimple(yhms);
+        } else if (status == 1) {
+            if (selection == 0) {
+                if (cm.getParty() == null) { // 没有组队
+                    cm.sendOk("请组队后和我谈话。");
+                    cm.dispose();
+                } else if (!cm.isLeader()) { // 不是队长
+                    cm.sendOk("请叫队长和我谈话。");
+                    cm.dispose();
+                } else if (!cm.getParty每日记录("月秒副本", 10)) { //判断组队是否2次
+                    cm.sendOk("队伍中队友挑战次数已经用完10次！");
                     cm.dispose();
                     return;
-                } else if (cm.isUsingOldPqNpcStyle()) {
-                    action(1, 0, 0);
-                    return;
-                }
-
-                cm.sendSimple("#e#b<组队任务: 迎月花山丘>\r\n#k#n" + em.getProperty("party") + "\r\n\r\n我是达尔利。这里有一座美丽的山丘，迎月花在那里盛开。山丘上住着一只老虎，名叫兴儿，它似乎在找吃的。你想前往迎月花山丘，与你的队友们联手帮助兴儿吗？#b\r\n#L0#我想参加组队任务。\r\n#L1#我想" + (cm.getPlayer().isRecvPartySearchInviteEnabled() ? "禁用" : "启用") + "队伍搜索。\r\n#L2#我想了解更多详情。\r\n#L3#我想兑换一件年糕的帽子。");
-            } else if (status == 1) {
-                if (selection == 0) {
-                    if (cm.getParty() == null) {
-                        cm.sendOk("嗨！我是达尔利。这个地方笼罩着满月的神秘气息，任何人都不能独自进入这里。");
-                        cm.dispose();
-                    } else if (!cm.isLeader()) {
-                        cm.sendOk("如果你想进入这里，你的队伍队长必须和我交谈。和你的队长说一下这件事。");
+                    // }else if( cm.getPlayer().getBossLog("月秒副本") >= cishuxianzhi) {
+                    // cm.sendOk("您好,限定每天只能挑战"+ cishuxianzhi +"次！");
+                    // cm.dispose();
+                    // return;
+                } else {
+                    cm.givePartyItems(4001095, -1, true);
+                    cm.givePartyItems(4001096, -1, true);
+                    cm.givePartyItems(4001097, -1, true);
+                    cm.givePartyItems(4001098, -1, true);
+                    cm.givePartyItems(4001099, -1, true);
+                    cm.givePartyItems(4001101, -1, true);
+                    var party = cm.getParty().getMembers();
+                    var mapId = cm.getPlayer().getMapId();
+                    var next = true;
+                    var levelValid = 0;
+                    var inMap = 0;
+                    var it = party.iterator();
+                    while (it.hasNext()) {
+                        var cPlayer = it.next();
+                        if ((cPlayer.getLevel() >= minLevel) && (cPlayer.getLevel() <= maxLevel)) {
+                            levelValid += 1;
+                        } else {
+                            next = false;
+                        }
+                        if (cPlayer.getMapid() == mapId) {
+                            inMap += 1;
+                        }
+                    }
+                    if (party.size() < minPartySize || party.size() > maxPartySize || inMap < minPartySize) {
+                        next = false;
+                    }
+                    if (next) {
+                        var em = cm.getEventManager("HenesysPQ");
+                        if (em == null) {
+                            cm.sendOk("此任务正在建设当中。");
+                        } else {
+                            var prop = em.getProperty("state");
+                            if (prop.equals("0") || prop == null) {
+                                em.startInstance(cm.getParty(), cm.getMap());
+                                //cm.getPlayer().setBossLog("月秒副本");//给团队次数
+                                cm.giveParty每日记录("月秒副本");
+                                // cm.setPartyBosslog("月秒副本");//给团队次数
+                                //cm.喇叭(2, "[" + cm.getPlayer().getName() + "]开始带领他的队伍挑战【月妙副本】，让我们祝福他们！！");
+                                cm.removeAll(4001022);
+                                cm.removeAll(4001023);
+                                cm.dispose();
+                                return;
+                            } else {
+                                cm.sendOk("任务正在进行中...请稍等!");
+                            }
+                        }
                         cm.dispose();
                     } else {
-                        var eli = em.getEligibleParty(cm.getParty());
-                        if (eli.size() > 0) {
-                            if (!em.startInstance(cm.getParty(), cm.getPlayer().getMap(), 1)) {
-                                cm.sendOk("已经有人在尝试这个组队任务了。请等待他们完成，或者寻找其他频道。");
-                            }
-                        } else {
-                            cm.sendOk("你还不能开始这个组队任务，因为你的队伍人数可能不在规定范围内，或者你的一些队员不符合参与条件，又或者他们不在这个地图里。如果你在寻找队员方面有困难，可以试试队伍搜索。");
-                        }
-
+                        cm.sendOk("请确认你的组队员：\r\n\r\n#b1、组队员必须要" + minPartySize + "人及以上，" + maxPartySize + "人及以下。\r\n2、组队员等级必须要在" + minLevel + "级以上" + maxLevel + "级以下。\r\n\r\n（#r如果仍然错误, 重新下线,再登陆 或者请重新组队。#k#b）");
                         cm.dispose();
                     }
-                } else if (selection == 1) {
-                    var psState = cm.getPlayer().toggleRecvPartySearchInvite();
-                    cm.sendOk("你的队伍搜索状态现在是: #b" + (psState ? "启用" : "禁用") + "#k。如果你想再次更改状态，随时和我交谈。");
+                } //判断组队
+            } else if (selection == 1) {
+                cm.sendOk("请确认你的组队员：\r\n\r\n#b1、组队员必须要" + minPartySize + "人以上，" + maxPartySize + "人以下。\r\n2、组队员等级必须要在" + minLevel + "级以上" + maxLevel + "级以下。\r\n\r\n（#r如果仍然错误, 重新下线,再登陆 或者请重新组队。#k#b）");
+                cm.dispose();
+            } else if (selection == 2) {
+                if (cm.haveItem(4031560, 30)) {
+                    cm.gainItem(4031560, -30);
+                    cm.给属性装备(1142817, 0, 0, 4, 4, 4, 4, 50, 50, 4, 10, 2, 2, 2, 2, 2, 2);
+                    cm.sendOk("恭喜你兑换成功！");
+                    cm.worldMessage(6, "[" + cm.getName() + "] : 使用30张达克鲁的邮票在月妙NPC兑换了【年糕汤狂爱者勋章】大家快恭喜他！");
                     cm.dispose();
-                } else if (selection == 2) {
-                    cm.sendOk("#e#b<组队任务: 迎月花山丘>#k#n\r\n从地图底部的花朵上收集迎月花种子，然后把它们扔到舞台上方的平台旁边。迎月花种子的颜色必须匹配才能让种子生长，所以要不断尝试直到找到正确的组合。当所有种子都种下后，也就是任务的第二阶段开始了，在月妙为饥饿的兴儿准备年糕时进行侦查。一旦兴儿吃饱了，你的任务就完成了。");
+                } else {
+                    cm.sendOk("#v4031560# 不足30张无法兑换！");
+                    cm.dispose();
+                }
+            } else if (selection == 4) {
+                if (cm.haveItem(4031560, 5)) {
+                    cm.gainItem(4031560, -5);
+                    cm.给属性装备(1142816, 0, 0, 2, 2, 2, 2, 30, 30, 3, 6, 1, 1, 1, 1, 1, 1);
+                    cm.sendOk("恭喜你兑换成功！");
+                    cm.worldMessage(6, "[" + cm.getName() + "] : 使用5张达克鲁的邮票在月妙NPC兑换了【年糕勋章】大家快恭喜他！");
                     cm.dispose();
                 } else {
-                    cm.sendYesNo("所以你想用 #b20 个 #b#t4001101##k 兑换这件专属设计的帽子吗？");
+                    cm.sendOk("#v4031560# 不足5张无法兑换！");
+                    cm.dispose();
                 }
-            } else {
-                if (cm.hasItem(4001101, 20)) {
-                    if (cm.canHold(1002798)) {
-                        cm.gainItem(4001101, -20);
-                        cm.gainItem(1002798, 1);
-                        cm.sendNext("给你。尽情享用！");
-                    }
+            } else if (selection == 6) {
+				
+                if (cm.haveItem(4031560, 20)) {
+                    cm.gainItem(4031560, -20);
+                    cm.gainItem(3800670, 1);
+                    cm.sendOk("恭喜你兑换成功！");
+                    cm.worldMessage(6, "[" + cm.getName() + "] : 使用20张达克鲁的邮票在月妙NPC兑换了【月妙的幸运年糕】大家快恭喜他！");
+                    cm.dispose();
                 } else {
-                    cm.sendNext("你还没有足够的 #t4001101# 来兑换它！");
-                }
-
-                cm.dispose();
-            }
-        } else if (cm.getMapId() == 910010100) {
-            if (status == 0) {
-                cm.sendYesNo("感谢你帮助喂养兴儿。事实上，你们团队已经因走到这一步而获得了奖励。这个问题现在已经解决了，但现在又出现了另一个问题，如果你感兴趣，可以找那边的 #b达尔米#k 了解信息。那么，你现在要直接返回射手村吗？");
-            } else if (status == 1) {
-                if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
-                    cm.warp(100000200);
+                    cm.sendOk("#v4031560# 不足20张无法兑换！");
+                    cm.dispose();
+                }				
+            } else if (selection == 3) {
+                if (cm.getMeso() >= maxjinbi) { //判断多少金币
+                    cm.gainMeso( - maxjinbi); //扣除多少金币
+                    cm.全服黄色喇叭(cm.getPlayer().getName() + " [副本征集令]" + " : " + "[月秒副本]需要勇士一起完成,我已在副本门口!");
+                    cm.dispose();
                 } else {
-                    cm.sendOk("看起来你的某个背包空间不足。请先检查一下，以便正确获得奖励。");
+                    cm.sendOk("你的冒险币不足" + maxjinbi + "。无法发送征集令");
+                    cm.dispose();
                 }
-                cm.dispose();
-            }
-        } else if (cm.getMapId() == 910010400) {
-            if (status == 0) {
-                cm.sendYesNo("那么，你现在要返回射手村吗？");
-            } else if (status == 1) {
-                if (cm.getEventInstance() == null) {
-                    cm.warp(100000200);
-                } else if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
-                    cm.warp(100000200);
-                } else {
-                    cm.sendOk("看起来你的某个背包空间不足。请先检查一下，以便正确获得奖励。");
-                }
-                cm.dispose();
             }
         }
     }

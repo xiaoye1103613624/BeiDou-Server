@@ -1,6 +1,7 @@
 function enter(pi) {
-    // unexpected warp condition noticed thanks to IxianMace
-
-    pi.openNpc(1063011, "ThiefPassword");
-    return false;
+    if (pi.isQuestActive(3925)) {
+	pi.forceCompleteQuest(3925);
+	pi.playerMessage("Quest complete.");
+    }
+    pi.warp(260010402, 0);
 }

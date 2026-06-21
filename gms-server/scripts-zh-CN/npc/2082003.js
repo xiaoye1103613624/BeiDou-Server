@@ -1,11 +1,29 @@
+/*
+	NPC Name: 		Cobra - Retired dragon trainer
+	Map(s): 		Leafre : Cabin
+*/
+var status = 0;
+
 function start() {
-    cm.sendSimple("如果你有翅膀，我相信你可以去那里。但是，仅仅这样还不够。如果你想穿越比刀锋还锋利的风，你还需要坚硬的鳞片。我是唯一知道回去的半人半龙……如果你想去那里，我可以变你。无论你是什么，此刻，你将成为一只#b龙#k……\r\n#L0##b我想成为一只龙。#k#l");
+    status = -1;
+    action(1, 0, 0);
 }
 
-function action(m, t, s) {
-    if (m > 0) {
-        cm.useItem(2210016);
-        cm.warp(200090500, 0);
+function action(mode, type, selection) {
+    if (status >= 0 && mode == 0) {
+	cm.dispose();
+	return;
     }
-    cm.dispose();
-}  
+    if (mode == 1)
+	status++;
+    else
+	status--;
+
+    if (status == 0) {
+	cm.sendSimple("如果你有翅膀，我敢肯定，你可以去那里。但是，这本身并没有足够的。如果你想要飞，虽然风这比刀片锋利，你需要坚韧的尺度为好。我是唯一半身左边那个知道回来的路上......如果你想去那里，我可以改变你。不管你是什么，这一刻，你会成为一个 #b龙#k...\r\n #L0##b我想变成一只龙.#k#l");
+    } else if (status == 1) {
+	cm.useItem(2210016);
+	cm.warp(200090500, 0);
+	cm.dispose();
+    }
+}

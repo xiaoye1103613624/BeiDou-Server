@@ -1,9 +1,7 @@
-/*
- [CelticMS] Monster Carnival Reviving Field 1
- */
-
 function enter(pi) {
-    pi.warp(980000101, 0);
-    pi.playPortalSound();
-    return true;
+    if ( pi.getPlayer().getCarnivalParty().getTeam() == 0 ) {
+	pi.warp( pi.getMapId() - 1, "red_revive" );
+    } else {
+	pi.warp( pi.getMapId() - 1, "blue_revive" );
+    }
 }

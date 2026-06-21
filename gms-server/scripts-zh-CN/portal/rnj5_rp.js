@@ -1,57 +1,10 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- *@author Ronan
- *rnj5_rp
- */
-
 function enter(pi) {
-    var mapplayer = "stage6_comb" + (pi.getMapId() % 10);
-    var eim = pi.getEventInstance();
-
-    var comb = eim.getProperty(mapplayer);
-
-    var name = pi.getPortal().getName().substring(2, 4);
-    var portalId = parseInt(name, 10);
-
-
-    var pRow = Math.floor(portalId / 10);
-    var pCol = (portalId % 10);
-
-    if (pCol == parseInt(comb.substring(pRow, pRow + 1), 10)) {    //climb
-        if (pRow < 9) {
-            pi.playPortalSound();
-            pi.warp(pi.getMapId(), pi.getPortal().getId() + 4);
-        } else {
-            if (eim.getIntProperty("statusStg6") == 0) {
-                eim.setIntProperty("statusStg6", 1);
-                eim.giveEventPlayersStageReward(6);
-            }
-
-            pi.playPortalSound();
-            pi.warp(pi.getMapId(), 1);
-        }
-
-    } else {    //fail
-        pi.playPortalSound();
-        pi.warp(pi.getMapId(), 2);
-    }
-
-    return true;
+    var em = pi.getEventManager("Romeo");
+    //pi.playerMessage(5, "stage6_" + (((pi.getMapId() % 10) | 0) - 1) + "_" + (pi.getPortal().getName().substring(2, 3)) + "_" + (pi.getPortal().getName().substring(3, 4)) + "");
+    //pi.playerMessage(5, em.getProperty("stage6_" + (((pi.getMapId() % 10) | 0) - 1) + "_" + (pi.getPortal().getName().substring(2, 3)) + "_" + (pi.getPortal().getName().substring(3, 4)) + ""));
+    //if (em != null && em.getProperty("stage6_" + (((pi.getMapId() % 10) | 0) - 1) + "_" + (pi.getPortal().getName().substring(2, 3)) + "_" + (pi.getPortal().getName().substring(3, 4)) + "").equals("1")) {
+     //   pi.warpS(pi.getMapId(), (pi.getPortal().getId() >= 51 ? 13 : (pi.getPortal().getId() + 4)));
+    //} else {
+       pi.warpS(pi.getMapId(), (pi.getPortal().getId() >= 51 ? 13 : (pi.getPortal().getId() + 4)));
+    //}
 }

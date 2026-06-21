@@ -1,130 +1,102 @@
-/* 
-    This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-               Matthias Butz <matze@odinms.de>
-               Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/**
- * @author: Ronan
- * @npc: Romeo
- * @func: MagatiaPQ area NPC
- */
-
-var status;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
 function action(mode, type, selection) {
-    if (mode == -1) {
+    var em = cm.getEventManager("Romeo");
+    if (em == null) {
+        cm.sendOk("Please try again later.");
         cm.dispose();
-    } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        var eim = cm.getEventInstance();
-
-        if (!eim.isEventCleared()) {
-            if (status == 0) {
-                if (eim.getIntProperty("npcShocked") == 0 && cm.haveItem(4001131, 1)) {
-                    cm.gainItem(4001131, -1);
-                    eim.setIntProperty("npcShocked", 1);
-
-                    cm.sendNext("哦？你给我信？像这样的时候，应该是什么…… 哇！伙计们，有大事发生了。集合起来，从现在开始，事情会比以往更加艰难！");
-                    eim.dropMessage(6, "Romeo seemed very much in shock after reading Juliet's Letter.");
-
-                    cm.dispose();
-
-                } else if (eim.getIntProperty("statusStg4") == 1) {
-                    var door = cm.getMap().getReactorByName("rnj3_out3");
-
-                    if (door.getState() == 0) {
-                        cm.sendNext("让我为你开门。");
-                        door.hitReactor(cm.getClient());
-                    } else {
-                        cm.sendNext("请快点，朱丽叶有麻烦了。");
-                    }
-
-                    cm.dispose();
-
-                } else if (cm.haveItem(4001134, 1) && cm.haveItem(4001135, 1)) {
-                    if (cm.isEventLeader()) {
-                        cm.gainItem(4001134, -1);
-                        cm.gainItem(4001135, -1);
-                        cm.sendNext("太好了！你手头上有艾尔卡德诺和泽尼玛斯特的文件。现在我们可以继续了。");
-
-                        eim.showClearEffect();
-                        eim.giveEventPlayersStageReward(4);
-                        eim.setIntProperty("statusStg4", 1);
-
-                        cm.getMap().killAllMonsters();
-                        cm.getMap().getReactorByName("rnj3_out3").hitReactor(cm.getClient());
-                    } else {
-                        cm.sendOk("请让你们的领导把文件传给我。");
-                    }
-
-                    cm.dispose();
-
-                } else {
-                    cm.sendYesNo("我们必须继续战斗，拯救朱丽叶，请保持你的速度。如果你感觉不太好，无法继续，你的同伴和我都会理解……那么，你打算撤退吗？");
-                }
-            } else {
-                cm.warp(926100700, 0);
-                cm.dispose();
-            }
-        } else {
-            if (status == 0) {
-                if (eim.getIntProperty("escortFail") == 0) {
-                    cm.sendNext("最终，朱丽叶安全了！多亏了你的努力，我们成功将她从尤利特的魔掌中解救出来，尤利特现在将因为反抗马加提亚而受到审判。从现在开始，他将开始接受康复治疗，我们将密切关注他的努力，确保他将不再在未来制造麻烦。");
-                } else {
-                    cm.sendNext("朱丽叶现在安全了，尽管战斗对她造成了一定的伤害……多亏了你们的努力，我们才能将她从尤利特的魔爪中解救出来，尤利特现在将因其反抗马加提亚而受到审判。谢谢你。");
-                    status = 2;
-                }
-            } else if (status == 1) {
-                cm.sendNext("现在，请将这份礼物视为我们对你的感激之情的接受表示。");
-            } else if (status == 2) {
-                if (cm.canHold(4001159)) {
-                    cm.gainItem(4001159, 1);
-
-                    if (eim.getIntProperty("normalClear") == 1) {
-                        cm.warp(926100600, 0);
-                    } else {
-                        cm.warp(926100500, 0);
-                    }
-                } else {
-                    cm.sendOk("确保你的杂项物品栏有空间。");
-                }
-
-                cm.dispose();
-            } else {
-                cm.warp(926100600, 0);
-                cm.dispose();
-            }
-        }
+        return;
     }
+    switch (cm.getPlayer().getMapId()) {
+    case 261000011:
+        cm.removeAll(4001130);
+        cm.removeAll(4001131);
+        cm.removeAll(4001132);
+        cm.removeAll(4001133);
+        cm.removeAll(4001134);
+        cm.removeAll(4001135);
+        if (cm.getPlayer().getParty() == null || !cm.isLeader()) {
+            cm.sendOk("队长必须在这里，请让他和我说话.");
+        } else {
+            var party = cm.getPlayer().getParty().getMembers();
+            var mapId = cm.getPlayer().getMapId();
+            var next = true;
+            var size = 0;
+            var it = party.iterator();
+            while (it.hasNext()) {
+                var cPlayer = it.next();
+                var ccPlayer = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());
+                if (ccPlayer == null || ccPlayer.getLevel() < 100 || ccPlayer.getLevel() > 200) {
+                    next = false;
+                    break;
+                }
+                size += (1);
+            }
+            if (next && (size == 4)) {
+                var prop = em.getProperty("state");
+                if (prop.equals("0") || prop == null) {
+                    em.startInstance(cm.getPlayer().getParty(), cm.getPlayer().getMap());
+                } else {
+                    cm.sendOk("Another party quest has already entered this channel.");
+                }
+            } else {
+                cm.sendOk("All 4 members of your party must be here and above level 100.");
+            }
+        }
+        break;
+    case 926100000:
+        cm.sendOk("You should try investigating around here. Look at the files in the Library until you can find the entrance to the Lab.");
+        break;
+    case 926100001:
+        cm.sendOk("Please, eliminate all the monsters! I'll come right behind you.");
+        break;
+    case 926100100:
+        cm.sendOk("These beakers have leaks in them. We must pour the Suspicious Liquid to the beakers' brims so we can continue.");
+        break;
+    case 926100200:
+        if (cm.haveItem(4001130, 1)) {
+            cm.sendOk("再点我一次，才能过关！");
+            cm.gainItem(4001130, -1);
+            em.setProperty("stage", "1");
+        } else if (cm.haveItem(4001134, 1)) {
+            cm.gainItem(4001134, -1);
+            cm.sendOk("太感谢你了，现在你们能进去了，中间的门。队长进入吧！");
+            em.setProperty("stage4", "1");
+        } else if (cm.haveItem(4001135, 1) && cm.isLeader()) {
+		//cm.givePartyItems(4170016, 1);
+		cm.warpParty(926100300);
+	
+            cm.gainItem(4001135, -1);
+            cm.sendOk("太感谢你了，现在你们能进去了.");
+            em.setProperty("stage4", "2");
+            // cm.getMap().getReactorByName("rnj3_out3").hitReactor(cm.getClient());
+        } else {
+            cm.sendOk("法师通过右边的门，获取通关材料交给队长，队长重新点我一次。");
+        }
+        break;
+    case 926100300:
+        cm.sendOk("每个队员都必须走到实验室的顶端.");
+        break;
+    case 926100400:
+        cm.sendOk("Whenever you are ready, we shall go and save my love.");
+        break;
+    case 926100401:
+		// 9300205
+		cm.spawnMobOnMap(9300205,1,49,149,926100500,55555555); // 召唤副本BOSS
+        cm.warpParty(926100500); //urete
+        break;
+	case 926100500:
+		if (cm.getMap().getAllMonstersThreadsafe().size() == 0) {
+			//cm.gainItem(4170016, 1);//奖励物品 男女蛋
+			
+			cm.gainExp(100000);
+			cm.setBossLog('男女副本');
+			cm.setBossLog('每日男女');
+			cm.喇叭(3, "玩家：[" + cm.getName() + "]带领他的队伍完成了[罗密欧副本]！")
+			cm.warp(261000011,0);
+		}else {
+			cm.sendOk("请打败地图上的所有怪物。");
+			cm.dispose();
+	    }
+	break;
+    }
+    cm.dispose();
 }

@@ -1,101 +1,159 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
+var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
+var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
+var 广播 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
+var 皇冠白 = "#fUI/GuildMark/Mark/Etc/00009004/15#";
+var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
+var 奖励 = "#fUI/UIWindow/Quest/reward#";
+var 红蓝点 = "#fEffect/CharacterEff.img/1032054/0/0#";
+var 蓝星 = "#fEffect/CharacterEff.img/1052203/1/0#";
+var 红星 = "#fEffect/CharacterEff.img/1052203/2/0#";
+var 大蓝星 = "#fEffect/CharacterEff.img/1022223/2/0#";
+var 大红星 = "#fEffect/CharacterEff.img/1022223/1/0#";
+var 蓝点 = "#fEffect/CharacterEff.img/1022223/6/0#";
+var 红点 = "#fEffect/CharacterEff.img/1022223/7/0#";
+var say = 0;
+var pt = 0;
+var 消耗 = 15000;
+var 血量 = 50000000000;
+var 队长战力 = 40000;
+var 队员战力 = 25000;
+var down = 150;
+var up = 255;
+var say = 0;
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
+var ul_nums = [
+    "#fUI/UIWindow/KeyConfig/key/11#",
+    "#fUI/UIWindow/KeyConfig/key/2#",
+    "#fUI/UIWindow/KeyConfig/key/3#",
+    "#fUI/UIWindow/KeyConfig/key/4#",
+    "#fUI/UIWindow/KeyConfig/key/5#",
+    "#fUI/UIWindow/KeyConfig/key/6#",
+    "#fUI/UIWindow/KeyConfig/key/7#",
+    "#fUI/UIWindow/KeyConfig/key/8#",
+    "#fUI/UIWindow/KeyConfig/key/9#",
+    "#fUI/UIWindow/KeyConfig/key/10#",
+];
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+// 检测玩家当前仙级
+function getxmwnjlc(log) {
+    return getxmwnjljsc(log);
+}
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Shuri the Tour Guide - Orbis (200000000)
- -- By ---------------------------------------------------------------------------------------------
- Information & Xterminator
- -- Version Info -----------------------------------------------------------------------------------
- 1.0 - First Version
- ---------------------------------------------------------------------------------------------------
- **/
-
-var pay = 2000;
-var ticket = 4031134;
-var msg;
-var check;
-
-var status = 0;
+function getxmwnjljsc(jiluid) {
+    var xmsjfh = 0;
+    zhjsid = cm.getPlayer().getId();
+    var conn = cm.getConnection();
+    var sql = "SELECT * FROM xmwnjl WHERE characterid = " + zhjsid + " AND bossid = '" + jiluid + "' ;";
+    var pstmt = conn.prepareStatement(sql);
+    var result = pstmt.executeQuery();		
+    if (result.next()) {
+        xmsjfh = result.getInt("count");
+    } 
+    result.close();
+    pstmt.close();
+    conn.close();
+    return xmsjfh;
+}
 
 function start() {
-    cm.sendSimple("你听说过那个可以欣赏到壮观海景的海滩吗，它叫做 #b#m110000000##k，离 #m" + cm.getPlayer().getMapId() + "# 有一点距离。我可以带你去那里，只需要 #b" + pay + " 冒险币#k，或者如果你带了 #b#t" + ticket + "##k，那就可以免费进去。\r\n\r\n#L0##b我付 " + pay + " 冒险币.#k#l\r\n#L1##b我有 #t" + ticket + "##k#l\r\n#L2##b#t" + ticket + "# 是什么？#k#l");
+    // ? 修复：检查变量是否存在 + 提供默认值
+    核心 = cm.itemQuantity(4001126) || 0;  // 如果 itemQuantity 不存在，使用 0
+    chr = cm.getPlayer();
+    pt = chr.getParty();
+    点券 = chr.getCSPoints(1) || 0;
+    等级 = chr.getLevel();
+    赞助 = cm.getmoneyb() || 0;
+
+    // ? 修复：检查 BossLog 是否存在，并设置默认值（防止null/undefined）
+    妖塔 = chr.getBossLog("通天塔层数1") || 0;
+    次数 = chr.getBossLog("通天塔次数") || 0;
+    战斗力 = chr.getBossLog("战斗力") || 0;
+    永久 = chr.getBossLog("通天塔永久记录") || 0;
+
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1 || (mode == 0 && status == 0)) {
+    if (mode == -1 || (status == 0 && mode == 0)) {
         cm.dispose();
-    } else {
-        if (mode == 0 && status == 1) {
-            cm.sendNext("你一定有一些事情要处理。你一定因为旅行和打猎而感到疲倦。去休息一下，如果你改变主意了，再来找我谈谈吧。");
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-        if (status == 1) {
-            if (selection == 0 || selection == 1) {
-                check = selection;
-                if (selection == 0) {
-                    msg = "You want to pay #b" + pay + " mesos#k and leave for #m110000000#?";
-                } else if (selection == 1) {
-                    msg = "So you have #b#t" + ticket + "##k? You can always head over to #m110000000# with that.";
-                }
-                cm.sendYesNo(msg + " Okay!! Please beware that you may be running into some monsters around there though, so make sure not to get caught off-guard. Okay, would you like to head over to #m110000000# right now?");
-            } else if (selection == 2) {
-                cm.sendNext("你一定对#b#t" + ticket + "##k很好奇。是的，我能理解。#t" + ticket + "#是一种物品，只要你拥有它，就可以免费前往#m110000000#。这是一种非常稀有的物品，我们甚至不得不购买，但不幸的是，我在几个星期前的一个长周末丢失了我的。");
-                status = 3;
-            }
-        } else if (status == 2) {
-            if (check == 0) {
-                if (cm.getMeso() < pay) {
-                    cm.sendOk("我觉得你缺少冒险币。你知道，有很多方法可以赚钱，比如……卖掉你的盔甲……打败怪物……做任务……你知道我在说什么。");
-                    cm.dispose();
-                } else {
-                    cm.gainMeso(-pay);
-                    access = true;
-                }
-            } else if (check == 1) {
-                if (!cm.haveItem(ticket)) {
-                    cm.sendOk("嗯，#b#t" + ticket + "##k到底在哪里呢？你确定你有它们吗？请再检查一遍。");
-                    cm.dispose();
-                } else {
-                    access = true;
-                }
-            }
-            if (access) {
-                cm.getPlayer().saveLocation("FLORINA");
-                cm.warp(110000000, "st00");
-                cm.dispose();
-            }
-        } else if (status == 3) {
-            cm.sendNext("你一定对#b#t" + ticket + "##k很好奇。是的，我能理解。#t" + ticket + "#是一种物品，只要你拥有它，就可以免费前往#m110000000#。这是一种非常稀有的物品，我们甚至不得不购买，但不幸的是，我在几个星期前的一个长周末丢失了我的。");
-        } else if (status == 4) {
-            cm.sendPrev("I came back without it, and it just feels awful not having it. Hopefully someone picked it up and put it somewhere safe. Anyway this is my story and who knows, you may be able to pick it up and put it to good use. If you have any questions, feel free to ask");
-        } else if (status == 5) {
-            cm.dispose();
-        }
-
+        return;
     }
+    if (mode == 1) status++;
+    else status--;
+
+    if (status == 0) {
+        var say = "";  // 修复：改用局部变量 var say
+		say += "\t#r#e   	     "+ 红星 + ""+ 大红星 + ""+ 红点 + "通 天 塔"+ 红蓝点 + ""+ 蓝点 + ""+ 大蓝星 + ""+ 蓝星 + "#k#n \r\n\r\n";
+        say += 广播 + ":#k这里是通天塔,只有达到仙帝境界才可挑战。#k\r\n";
+        say += 广播 + ":#k每层都有奖励,每1层都会出现一只BOSS哦。#k\r\n";
+        say += 广播 + ":#k全部通关奖励大量#r累积充值#k与#r各种高级材料。#k\r\n";
+		say += 广播 + ":#k月卡会员通关53层获得#r双倍#k奖励。#k\r\n";
+		say += 广播 + ":#k每日最多通关一次，最多进入三次。#k\r\n";
+		say += 感叹号 + "[挑战中途如果放弃，再次进入会继续挑战当前层]\r\n";
+    //    say += 感叹号 + "[历史最高层数]:[ #b" + _showScore(永久) + "#k ]\r\n";
+        say += 感叹号 + "[今日挑战层数]:[ #b" + _showScore(妖塔) + "#k / #b" + _showScore(53) + "#k ]\r\n";
+        say += 感叹号 + "[每天进入次数]:[ #r" + _showScore(次数) + "#k / #b" + _showScore(3) + "#k ]\r\n\r\n";
+		
+        say += "\t\t\t\t #L0#" + 正方箭头 + "[#r开始挑战副本#k]#l\r\n";
+        // say += "#k#L1#" + 正方箭头 + "[#b查看最牛排行#k]#l\r\n";
+
+        cm.sendSimple(say);  // sendSimple 可能需要参数调整
+    } else if (status == 1) {
+        switch (selection) {
+            case 0:
+                // 检查妖塔是否 >= 53（避免 undefined 导致错误）
+                if (妖塔 >= 53) {
+                    cm.getPlayer().dropMessage(5, "已到达顶点，您是绝对的巅峰王者！请明日再来！");
+                    cm.dispose();
+                    return;
+                }
+                // 检查地图是否有人（修复判断逻辑）
+                if (cm.getPlayerCount(253000008) > 0) {
+                    cm.sendOk("里面已经有人在挑战...");
+                    cm.dispose();
+                    return;
+                }
+				        // 获取玩家当前仙级
+				var 当前仙级 = getxmwnjlc("XM飞升系统_仙级");
+				// 检查是否达到仙帝境界（仙帝对应的索引是 13）
+				if (当前仙级 < 12) {
+					cm.sendOk("你尚未达到仙帝境界，无法开启通天塔！");
+					cm.dispose();
+					return;  // 重要：必须 return，否则继续执行会报错
+				}
+                // 修复 openNpc（可能需替换为 warp）
+                cm.openNpc(2010005, 88888);  
+                // 或者改用 Warp：cm.warp(253000008);
+                break;
+            case 1:
+                // 确保 displayBossLogRanks 方法存在
+                cm.displayBossLogRanks("通天塔层数1");
+                cm.dispose();
+                break;
+        }
+    }
+}
+
+function extend(text, num) { //空格
+    var curLength = text.toString().length;
+    if (curLength < num) {
+        for (var i = 0; i < num - curLength; i++) {
+            text += " ";
+        }
+    }
+    return text;
+}
+
+function _showScore(num, ext) {
+    var showTxt = "";
+    var tempNums = num.toString().split("");
+    for (var i = 0; i < tempNums.length; i++) {
+        showTxt += ul_nums[parseInt(tempNums[i])];
+    }
+    var sss = "";
+    for (var i = tempNums.length; i < ext; i++) {
+        sss += " ";
+    }
+    return showTxt + sss;
 }

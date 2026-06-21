@@ -1,68 +1,57 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-var toMap = [211040200, 220050300, 220000000, 240030000];
-var inMap = [211000000, 220000000, 221000000, 240000000];
-var cost = [10000, 25000, 25000, 65000];
+var map;
+var cost;
 var location;
-var status;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
+var mapname;
+var status = -1;
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (mode == 1) {
+	status++;
     } else {
-        if (mode == 0 && type > 0) {
-            cm.sendNext("嗯，请仔细考虑一下。这不便宜，但您绝对不会对我们的顶级服务感到失望！");
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
+	cm.sendNext("嗯......想想吧。这是出租车公司价值的服务！你永远不会后悔！");
+	cm.dispose();
+	return;
+    }
 
-        if (status == 0) {
-            for (var i = 0; i < toMap.length; i++) {
-                if (inMap[i] == cm.getPlayer().getMap().getId()) {
-                    location = i;
-                    break;
-                }
-            }
-            cm.sendNext("你好！这辆出租车会比箭头飞得更快，把你带到奥西里亚的危险地方！我们从#m" + inMap[location] + "#到奥西里亚大陆上的#b#m" + toMap[location] + "##k去！费用是#b" + cost[location] + " 枚金币#k。我知道有点贵，但能避开所有危险区域，绝对物有所值！");
-        } else if (status == 1) {
-            cm.sendYesNo("你想支付 #b" + cost[location] + " 冒险币#k 前往 #b#m" + toMap[location] + "##k 吗？");
-        } else if (status == 2) {
-            if (cm.getMeso() < cost[location]) {
-                cm.sendNext("你似乎没有足够的金币。非常抱歉，除非你付款，否则我无法帮助你。多打怪赚更多金币，等你有足够的金币再回来吧。");
-            } else {
-                cm.warp(toMap[location], location != 1 ? 0 : 1);
-                cm.gainMeso(-cost[location]);
-            }
-            cm.dispose();
-        }
+    if (status == 0) {
+	switch (cm.getMapId()) {
+	    case 540000000: // CBD
+		map = 541020000;
+		cost = 30000;
+		mapname = "乌鲁城";
+		break;
+	    case 240000000: // Leafre
+		map = 240030000;
+		cost = 55000;
+		mapname = "神木村-龙森林路口";
+		break;
+	    case 220000000: // Ludi
+		map = 220050300;
+		cost = 45000;
+		mapname = "时间通道";
+		break;
+	    case 211000000: // El Nath
+		map = 211040200;
+		cost = 45000;
+		mapname = "冰雪峡谷II";
+		break;
+	    default:
+		map = 211040200;
+		cost = 45000;
+		mapname = "冰雪峡谷II";
+		break;
+	}
+	cm.sendNext("你好！这种子弹出租车将带你从任何危险区域 #m"+cm.getMapId()+"# 到 #b#m"+map+"##k 再 "+mapname+"! 运输费用 #b"+cost+" 金币#k 可能看起来很贵，但并不多，当你想方便地通过危险区域运输!");
+    } else if (status == 1) {
+	cm.sendYesNo("#b你需要支付金币#k 传送到 #b#m"+map+"##k?");
+    } else if (status == 2) {
+	if (cm.getMeso() < cost) {
+	    cm.sendNext("你看起来没啥钱可以支付,很抱歉我们不收乞丐搭车的,滚吧!!!");
+	    cm.dispose();
+	} else {
+	    cm.gainMeso(-cost);
+	    cm.warp(map, 0);
+	    cm.dispose();
+	}
     }
 }

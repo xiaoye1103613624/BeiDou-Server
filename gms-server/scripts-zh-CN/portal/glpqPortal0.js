@@ -1,12 +1,14 @@
 function enter(pi) {
-    if (pi.getEventInstance().getIntProperty("glpq1") == 0) {
-        pi.getEventInstance().dropMessage(5, "※ 当前路径已被封锁！");
-        return false;
-
-    } else {
-        pi.playPortalSound();
-        pi.warp(610030200, 0);
-        return true;
+    var em = pi.getEventManager("CWKPQ");
+    if (em != null) {
+	if (em.getProperty("glpq1").equals("1")) {
+	    em.setProperty("glpq1", "2");
+	    pi.warp(pi.getMapId(), 0);
+	    pi.mapMessage("[Expedition] An adventurer has passed through the portal!");
+	} else if (em.getProperty("glpq1").equals("2")){
+	    pi.warp(610030200, 0);
+	} else {
+	    pi.playerMessage(5, "Please make sure the leader has briefed Jack first about the situation!");
+	}
     }
 }
-

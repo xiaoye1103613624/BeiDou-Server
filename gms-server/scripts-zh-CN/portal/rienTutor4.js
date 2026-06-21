@@ -1,33 +1,8 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
-	Author: kevintjuh93
-*/
 function enter(pi) {
-    if (!pi.isQuestCompleted(21013)) {
-        pi.message("你必须完成任务后才能进入下一张地图。");
-        return false;
+    if (pi.getQuestStatus(21013) == 2) {
+	pi.playPortalSE();
+	pi.warp(140090500, 1);
+    } else {
+	pi.playerMessage(5, "再進入下一張地圖之前，請先完成任務。");
     }
-    pi.playPortalSound();
-    pi.warp(140090500, 1);
-    return true;
 }

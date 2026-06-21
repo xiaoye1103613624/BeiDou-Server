@@ -1,51 +1,70 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* Author: Xterminator
-	NPC Name: 		Trainer Frod
-	Map(s): 		Victoria Road : Pet-Walking Road (100000202)
-	Description: 		Pet Trainer
-*/
-
+var status = 0;
 function start() {
-    if (cm.haveItem(4031035)) {
-        cm.sendNext("嗯，那是我哥的信！可能是在责备我觉得自己没在工作之类的事情...嗯？啊...你听从我哥的建议，训练了你的宠物并且到了这里，是吧？太棒了！既然你为了到这里努力了，我会提高你和宠物的亲密度等级。");
-    } else {
-        cm.sendOk("我哥叫我照顾宠物障碍赛道，但是……因为我离他太远了，我忍不住想要四处闲逛……嘿嘿，既然看不见他，那就随便放松几分钟吧。");
-        cm.dispose();
-    }
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode < 1) {
+    if (mode == -1) {
         cm.dispose();
     } else {
-        if (cm.getPlayer().getNoPets() == 0) {
-            cm.sendNextPrev("“嗯... 你真的带着你的宠物来到这里吗？这些障碍是为宠物准备的。你没有宠物来这里干什么？滚出去！”");
-        } else {
-            cm.gainItem(4031035, -1);
-            cm.gainTameness(2);
-            cm.sendNextPrev("你觉得呢？你不觉得你和你的宠物已经更亲近了吗？如果你有时间，再次训练你的宠物通过这个障碍课程……当然，要得到我哥哥的许可。");
+        if (mode == 0) {
+            cm.dispose();
+            return;
         }
-        cm.dispose();
+        if (mode == 1)
+            status++;
+        if (status == 0) {
+            var txt = "";
+            txt = "我是每日跑商第7环NPC哦！\r\n\r\n";
+
+            if (cm.getBossLog('每日跑商') == 6) {
+            //if (cm.getPS() == 6){// cm.getPS()  的意思是 读取跑商值如果等于1 就得出他跑商已经完成了第一环 就运行他进行第二环跑商!
+
+                txt += "#L1##b请收集#v2001000##z2001000#50个交给我！#l\r\n\r\n";
+                txt += "   需要任务物品：#v2001000# [#r#c2001000##k/50]\r\n";
+               // txt += "\r\n   奖励：点券*3000 ";
+               // txt += "\r\n#L2#送你到对应地图？需要200点券#l";
+                cm.sendSimple(txt);
+            }else{
+				if (cm.getBossLog('每日跑商') < 6) {
+                txt += "请完成前面的任务再来找我！\r\n";
+                cm.sendOk(txt);
+                cm.dispose();
+				}else{
+                //txt += "你已经完成过了然后你去找.黄金海岸-红螃蟹海滩Ⅱ-飞天猪!\r\n";
+                txt += "你已经完成了!\r\n";
+                txt += "下一环里恩-仓库管理员 普斯拉。\r\n";
+                cm.sendOk(txt);
+                cm.dispose();
+				}
+            }
+
+        } else if (status == 2) {
+			if (cm.getPlayer().getCSPoints(1) > 200){
+				cm.gainNX(-200);	//加减点券
+                cm.warp(100000202, 0);
+                cm.dispose();
+			}else{
+                cm.sendOk("点券不足.");
+                cm.dispose();
+			}
+		} else if (selection == 1) {
+            if (cm.haveItem(2001000,50)){
+                cm.setBossLog('每日跑商');
+                cm.gainItem(2001000,-50);
+			
+				//cm.gainNX(3000); //点卷
+				Packages.handling.world.World.Broadcast.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(11,cm.getC().getChannel(),"[每日跑商]" + " : " + " 玩家[" + cm.getPlayer().getName() + "]完成了每日跑商第七环,获得大量奖励！",true).getBytes()); //喇叭  
+                cm.sendOk("跑商第7环完成!然后你去找.里恩 - 仓库管理员 普斯拉。进行下一环！");
+                cm.dispose();
+            }else{
+                cm.sendOk("请收集#v2001000##z2001000#50个交给我！");
+                cm.dispose();
+            }
+        }else if (selection == 2) {
+                cm.sendYesNo("送你到对应地图？需要200点券");
+        }
     }
 }

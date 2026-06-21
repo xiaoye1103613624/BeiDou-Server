@@ -1,34 +1,41 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/* Author: Xterminator
+	NPC Name: 		Bush
+	Map(s): 		Victoria Road : Nautilus Harbor (120000000)
+	Description: 		Quest
 */
+var status = 0;
+var item;
 
-/*
--- JavaScript -----------------
-Bart - Nautilus' Port
--- Created By --
-    Cody (Cyndicate)
--- Function --
-No specific function, useless text.
--- GMS LIKE --
-*/
 function start() {
-    cm.sendOk("我需要睁大眼睛寻找敌人，尽管我的海鸥朋友帮了我，所以情况并不那么糟糕。");
-    cm.dispose();
+    status = -1;
+    action(1, 0, 0);
+}
+
+function action(mode, type, selection) {
+    if (mode == 1)
+	status++;
+    else
+	status--;
+    if (status == 0) {
+	if (cm.getQuestStatus(2186) == 1) {
+	    var rand = Math.floor(Math.random() * 2);
+	    if (rand == 0 && !cm.haveItem(4031853)) {
+		item = 4031853;
+	    } else if (rand == 1) {
+		item = 4031854;
+	    } else {
+		item = 4031855;
+	    }
+	    cm.gainItem(item, 1);
+	    if (item == 4031853) {
+		cm.sendNext("我发现了眼镜！！");
+	    } else {
+		cm.sendOk("我发现了一副眼镜但它似乎不是真正的眼镜...");
+	    }
+	} else {
+		cm.sendOk("这草丛看起来很碍眼...");
+		cm.dispose();
+	}
+	cm.dispose();
+}
 }

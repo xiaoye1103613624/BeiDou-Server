@@ -1,25 +1,31 @@
-/**
- * 东方神州系列地图脚本
- * 北斗项目组	https://github.com/BeiDouMS/BeiDou-Server
- * 作者：@Magical-H
- * 2025-01-02 17:33:23
- */
-var mapID_out = 702070400;
+/*
+	少林妖僧 -- 出口NPC
+*/
+var status = 0;
 
 function start() {
-    cm.sendYesNoLevel('','Out',`你要离开#b#e#m${cm.getMapId()}##k#n 回到 #b#e#m${mapID_out}##k#n 吗？`);
-}
+	status = -1;
+	action(1, 0, 0);
+	}
 
-function level() {
-    leveldispose();
+function action(mode, type, selection) {
+	if (mode == -1) {
+		cm.dispose();
+	} else if (mode == 0) {
+		cm.sendOk("好的如果要出去随时来找我.");
+		cm.dispose();
+	} else {
+		if (mode == 1)
+			status++;
+		else
+			status--;		
+	if (status == 0) {		
+		cm.sendYesNo("您是否要出去呢?" );	
+	} else if (status == 1)  {
+		cm.warp(702070400,0);
+		cm.resetReactors();
+		cm.dispose();	
+	}
+
 }
-function levelnull() {
-    leveldispose();
-}
-function leveldispose() {
-    cm.dispose();
-}
-function levelOut() {
-    cm.warp(mapID_out);
-    cm.dispose();
 }

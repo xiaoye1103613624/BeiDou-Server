@@ -1,17 +1,9 @@
 function enter(pi) {
-    var eim = pi.getEventInstance();
-    var area = eim.getIntProperty("statusStg5");
-    var reg = 2;
-
-    if ((area >> reg) % 2 == 0) {
-        area |= (1 << reg);
-        eim.setIntProperty("statusStg5", area);
-
-        pi.playPortalSound();
-        pi.warp(926100301 + reg, 0); //next
-        return true;
+    var em = pi.getEventManager("Romeo");
+    if (em != null && em.getProperty("stage6_2").equals("0")) {
+	pi.warp(926100303,0);
+	em.setProperty("stage6_2", "1");
     } else {
-        pi.playerMessage(5, "该房间正在被探索中。");
-        return false;
+	pi.playerMessage(5, "有人已经进入这个入口了.");
     }
 }

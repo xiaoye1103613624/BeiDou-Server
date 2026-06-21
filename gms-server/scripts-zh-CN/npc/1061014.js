@@ -1,198 +1,175 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/* Mu Young
+	Boss Balrog
 */
-/*
- *
- *@author Ronan
- */
 
-var status = 0;
-var expedition;
-var expedMembers;
-var player;
-var em;
-const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-const exped = ExpeditionType.BALROG_NORMAL;
-var expedName = "Balrog";
-var expedBoss = "Balrog";
-var expedMap = "Balrog's Tomb";
 
-var list = "你想做什么？#b\r\n\r\n#L1#查看当前远征队成员#l\r\n#L2#开始战斗！#l\r\n#L3#退出远征队#l";
-
-function start() {
-    action(1, 0, 0);
-}
+var status = -1;
 
 function action(mode, type, selection) {
+    switch (status) {
+	case -1:
+	    status = 0;
+	    switch (cm.getChannelNumber()) {
+		default:
+		    cm.sendNext("目前模式为 #i3994116# 如果你想加入这个模式请按下一步  条件是 等级 50 ~ 等级 120 / 远征队人数 1 ~ 30 个");
+		    break;
+	    }
+	    break;
+	case 0:
+	    var em = cm.getEventManager("BossBalrog");
 
-    player = cm.getPlayer();
-    expedition = cm.getExpedition(exped);
-    em = cm.getEventManager("BalrogBattle");
+	    if (em == null) {
+		cm.sendOk("目前副本出了一点问题，请联系GM！");
+		cm.safeDispose();
+		return;
+	    }
 
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0) {
-            cm.dispose();
-            return;
-        }
+	var prop = em.getProperty("state");
+	if (prop == null || prop.equals("0")) {
+		var squadAvailability = cm.getSquadAvailability("BossBalrog");
+		if (squadAvailability == -1) {
+		    status = 1;
+		    cm.sendYesNo("现在可以申请远征队，你想成为远征队队长吗？");
 
-        if (status == 0) {
-            if (player.getLevel() < exped.getMinLevel() || player.getLevel() > exped.getMaxLevel()) { //Don't fit requirement, thanks Conrad
-                cm.sendOk("您不符合与" + expedBoss + "战斗的条件！");
-                cm.dispose();
-            } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l\r\n\#L3#我想了解一下这次远征的信息...#l");
-                status = 1;
-            } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
-                if (expedition.isInProgress()) {
-                    cm.sendOk("你的探险已经在进行中，对于那些仍在战斗中的人，让我们为那些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
-                } else {
-                    cm.sendSimple(list);
-                    status = 2;
-                }
-            } else if (expedition.isRegistering()) { //If the expedition is registering
-                if (expedition.contains(player)) { //If you're in it but it hasn't started, be patient
-                    cm.sendOk("你已经注册了这次远征。请等待 #r" + expedition.getLeader().getName() + "#k 开始。");
-                    cm.dispose();
-                } else { //If you aren't in it, you're going to get added
-                    cm.sendOk(expedition.addMember(cm.getPlayer()));
-                    cm.dispose();
-                }
-            } else if (expedition.isInProgress()) { //Only if the expedition is in progress
-                if (expedition.contains(player)) { //If you're registered, warp you in
-                    var eim = em.getInstance(expedName + player.getClient().getChannel());
-                    if (eim.getIntProperty("canJoin") == 1) {
-                        eim.registerPlayer(player);
-                    } else {
-                        cm.sendOk("你的远征队已经开始对抗" + expedBoss + "的战斗。让我们为这些勇敢的灵魂祈祷。");
-                    }
-
-                    cm.dispose();
-                } else { //If you're not in by now, tough luck
-                    cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
-                }
-            }
-        } else if (status == 1) {
-            if (selection == 1) {
-                expedition = cm.getExpedition(exped);
-                if (expedition != null) {
-                    cm.sendOk("有人已经主动成为了远征队的领袖。试着加入他们吧！");
-                    cm.dispose();
-                    return;
-                }
-
-                var res = cm.createExpedition(exped);
-                if (res == 0) {
-                    cm.sendOk("#r" + expedBoss + " 远征#k 已经创建。\r\n\r\n再次与我交谈，查看当前队伍，或开始战斗！");
-                } else if (res > 0) {
-                    cm.sendOk("抱歉，您已经达到了此次远征的尝试配额！请另选他日再试……");
-                } else {
-                    cm.sendOk("在开始远征时发生了意外错误，请稍后重试。");
-                }
-
-                cm.dispose();
-
-            } else if (selection == 2) {
-                cm.sendOk("当然，并非每个人都能挑战" + expedBoss + "。");
-                cm.dispose();
-
-            } else {
-                cm.sendSimple("Hi there. I am #b#nMu Young#n#k, the temple Keeper. This temple is currently under siege by the Balrog troops. We currently do not know who gave the orders. " +
-                    "For a few weeks now, the #e#b Order of the Altair#n#k has been sending mercenaries, but they were eliminated every time." +
-                    " So, traveler, would you like to try your luck at defeating this unspeakable horror?\r\n  #L1#What is the #eOrder of the Altair?");
-
-                status = 10;
-            }
-        } else if (status == 2) {
-            if (selection == 1) {
-                if (expedition == null) {
-                    cm.sendOk("无法加载远征。");
-                    cm.dispose();
-                    return;
-                }
-                expedMembers = expedition.getMemberList();
-                var size = expedMembers.size();
-                if (size == 1) {
-                    cm.sendOk("你是探险队中唯一的成员。");
-                    cm.dispose();
-                    return;
-                }
-                var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
-                text += "\r\n\t\t1." + expedition.getLeader().getName();
-                for (var i = 1; i < size; i++) {
-                    text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
-                }
-                cm.sendSimple(text);
-                status = 6;
-            } else if (selection == 2) {
-                var min = exped.getMinSize();
-                var size = expedition.getMemberList().size();
-                if (size < min) {
-                    cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
-                    cm.dispose();
-                    return;
-                }
-
-                cm.sendOk("探险队即将出发，你现在将被护送到 #b" + expedMap + "#k。");
-                status = 4;
-            } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + "探险结束了。"));
-                cm.endExpedition(expedition);
-                cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");
-                cm.dispose();
-
-            }
-        } else if (status == 4) {
-            if (em == null) {
-                cm.sendOk("事件无法初始化，请在论坛上报告此问题。");
-                cm.dispose();
-                return;
-            }
-
-            em.setProperty("leader", player.getName());
-            em.setProperty("channel", player.getClient().getChannel());
-            if (!em.startInstance(expedition)) {
-                cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
-                cm.dispose();
-                return;
-            }
-
-            cm.dispose();
-
-        } else if (status == 6) {
-            if (selection > 0) {
-                var banned = expedMembers.get(selection - 1);
-                expedition.ban(banned);
-                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");
-                cm.dispose();
-            } else {
-                cm.sendSimple(list);
-                status = 2;
-            }
-        } else if (status == 10) {
-            cm.sendOk("Altair之序是一群精英雇佣兵，他们监督世界经济和战斗行动。它是在40年前黑魔法师被打败后成立的，希望能预见下一次可能的攻击。");
-            cm.dispose();
-        }
+		} else if (squadAvailability == 1) {
+		    // -1 = Cancelled, 0 = not, 1 = true
+		    var type = cm.isSquadLeader("BossBalrog");
+		    if (type == -1) {
+				cm.sendOk("已经结束了申请。");
+				cm.safeDispose();
+		    } else if (type == 0) {
+			var memberType = cm.isSquadMember("BossBalrog");
+			if (memberType == 2) {
+			    cm.sendOk("在远征队的制裁名单。");
+			    cm.safeDispose();
+			} else if (memberType == 1) {
+			    status = 5;
+			    cm.sendSimple("你要做什么? \r\n#b#L0#加入远征队#l \r\n#b#L1#退出远征队#l \r\n#b#L2#查看远征队名单#l");
+			} else if (memberType == -1) {
+			    cm.sendOk("远征队员已经达到30名，请稍后再试。");
+			    cm.safeDispose();
+			} else {
+			    status = 5;
+			    cm.sendSimple("你要做什么? \r\n#b#L0#查看远征队名单#l \r\n#b#L1#加入远征队#l \r\n#b#L2#退出远征队#l");
+			}
+		    } else { // Is leader
+			status = 10;
+			cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#管理远征队成员。#l \r\n#b#L2#编辑限制列表。#l \r\n#r#L3#进入地图。#l");
+		    // TODO viewing!
+		    }
+	    } else {
+			var eim = cm.getDisconnected("BossBalrog");
+			if (eim == null) {
+				cm.sendOk("远征队的挑战已经开始.");
+				cm.safeDispose();
+			} else {
+				cm.sendYesNo("你要继续进行远征任务吗？");
+				status = 2;
+			}
+	    }
+	} else {
+			var eim = cm.getDisconnected("BossBalrog");
+			if (eim == null) {
+				cm.sendOk("远征队的挑战已经开始.");
+				cm.safeDispose();
+			} else {
+				cm.sendYesNo("你要继续进行远征任务吗？");
+				status = 2;
+			}
+		}
+	    break;
+	case 1:
+	    if (mode == 1) {
+		    var lvl = cm.getPlayerStat("LVL");
+		    if (lvl >= 50 && lvl <= 250) {
+			if (cm.registerSquad("BossBalrog", 5, " 已经成为了远征队队长。如果你想加入远征队，请重新打开对话申请加入远征队。")) {
+				cm.sendOk("你已经成为了远征队队长。接下来的5分钟，请等待队员们的申请。");
+			} else {
+				cm.sendOk("未知错误.");
+			}
+		    } else {
+			cm.sendNext("有一个远征队成员的等级不是50到120之间。");
+		    }
+	    } else {
+		cm.sendOk("如果你想再次申请远征队的话请告诉我。")
+	    }
+	    cm.safeDispose();
+	    break;
+	case 2:
+		if (!cm.reAdd("BossBalrog", "BossBalrog")) {
+			cm.sendOk("由于未知的错误，操作失败。");
+		}
+		cm.safeDispose();
+		break;
+	case 5:
+	    if (selection == 0) {
+		if (!cm.getSquadList("BossBalrog", 0)) {
+		    cm.sendOk("由于未知的错误，操作失败。");
+		    cm.safeDispose();
+		} else {
+		    cm.dispose();
+		}
+	    } else if (selection == 1) { // join
+		var ba = cm.addMember("BossBalrog", true);
+		if (ba == 2) {
+		    cm.sendOk("远征队员已经达到30名，请稍后再试。");
+		    cm.safeDispose();
+		} else if (ba == 1) {
+		    cm.sendOk("申请加入远征队成功，请等候队长指示。");
+		    cm.safeDispose();
+		} else {
+		    cm.sendOk("你已经参加了远征队，请等候队长指示。");
+		    cm.safeDispose();
+		}
+	    } else {// withdraw
+		var baa = cm.addMember("BossBalrog", false);
+		if (baa == 1) {
+		    cm.sendOk("成功退出远征队。");
+		    cm.safeDispose();
+		} else {
+		    cm.sendOk("你没有参加远征队。");
+		    cm.safeDispose();
+		}
+	    }
+	    break;
+	case 10:
+	    if (selection == 0) {
+		if (!cm.getSquadList("BossBalrog", 0)) {
+		    cm.sendOk("由于未知的错误，操作失败。");
+		}
+		cm.safeDispose();
+	    } else if (selection == 1) {
+		status = 11;
+		if (!cm.getSquadList("BossBalrog", 1)) {
+		    cm.sendOk("由于未知的错误，操作失败。");
+		}
+		cm.safeDispose();
+	    } else if (selection == 2) {
+		status = 12;
+		if (!cm.getSquadList("BossBalrog", 2)) {
+		    cm.sendOk("由于未知的错误，操作失败。");
+		}
+		cm.safeDispose();
+	    } else if (selection == 3) { // get insode
+		if (cm.getSquad("BossBalrog") != null) {
+		    var dd = cm.getEventManager("BossBalrog");
+		    dd.startInstance(cm.getSquad("BossBalrog"), cm.getMap());
+		    cm.dispose();
+		} else {
+		    cm.sendOk("由于未知的错误，操作失败。");
+		    cm.safeDispose();
+		}
+	    }
+	    break;
+	case 11:
+	    cm.banMember("BossBalrog", selection);
+	    cm.dispose();
+	    break;
+	case 12:
+	    if (selection != -1) {
+		cm.acceptMember("BossBalrog", selection);
+	    }
+	    cm.dispose();
+	    break;
     }
 }

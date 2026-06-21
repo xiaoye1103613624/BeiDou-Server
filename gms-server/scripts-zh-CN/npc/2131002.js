@@ -1,10 +1,10 @@
-/* Author: aaroncsn <MapleSea Like, Incomplete>
+/* Author: aaroncsn(MapleSea Like)(Incomplete)
 	NPC Name: 		Euryth
 	Map(s): 		Elin Forest:Altair Camp(300000000)
 	Description: 		Unknown
 */
 
-function start() {
-    cm.sendOk("我的名字是#p2131002#... 你看，我是一个仙女。人们告诉我我不像仙女，但是... 我喜欢用金属物品制作东西。嘘，不要告诉任何人，但我也喜欢混合武术。");
-    cm.dispose();
-}
+function start(){
+	cm.sendOk("My name is Euryth... As you can see, I am a fairy. People tell me I do not act fairy-like, but... I like making things out of metal objects. Shhh, don't tell this to anyone, but I also like MMA.");
+	cm.dispose();
+	}

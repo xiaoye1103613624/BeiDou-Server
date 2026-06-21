@@ -19,8 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-/*
+/*	
 	Author: Traitor
 	Map(s):	So Gong's maps
 	Desc:   doesn't do anything man. ANYTHING.
@@ -28,15 +27,9 @@
 
 function enter(pi) {
     if (pi.getPlayer().getMap().getMonsterById(9300216) != null) {
-        pi.getPlayer().enteredScript("dojang_Msg", pi.getPlayer().getMap().getId());
-        pi.getPlayer().finishDojoTutorial();
-        pi.getClient().getChannelServer().resetDojo(pi.getPlayer().getMap().getId());
-        pi.getClient().getChannelServer().dismissDojoSchedule(pi.getPlayer().getMap().getId(), pi.getParty());
-        pi.playPortalSound();
         pi.warp(925020001, 0);
-        return true;
     } else {
-        pi.getPlayer().message("萧公：哈哈！你想像个懦夫一样逃跑吗？我不会让你这么容易逃掉的！");
-        return false;
+        pi.getPlayer().dropMessage(6, "所以，武功：哈哈！你要逃跑像一個懦夫？我不會讓你得逞，很容易！");
     }
+    return true;
 }

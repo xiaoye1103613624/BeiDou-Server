@@ -1,158 +1,138 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 /* Author: Xterminator
 	NPC Name: 		Cloy
 	Map(s): 		Victoria Road : Henesys Park (100000200)
 	Description: 		Pet Master
- */
-var status = -2;
-var sel;
-
-function start() {
-    status = -2
-    action(1, 0, 0);
-}
+*/
+var status = -1;
 
 function action(mode, type, selection) {
-
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == -1) {
-            cm.sendNext("嗯...你是不是偶然间在抚养我的孩子？我完善了一个使用生命之水给玩偶注入生命的咒语。人们称之为#b宠物#k。如果你身边有一个，随时可以问我问题。");
-        } else if (status == 0) {
-            cm.sendSimple("你想了解更多什么？#b\r\n#L0#告诉我更多关于宠物的信息。#l\r\n#L1#我如何养宠物？#l\r\n#L2#宠物也会死吗？#l\r\n#L3#布朗和黑色小猫的指令是什么？#l\r\n#L4#棕色小狗的指令是什么？#l\r\n#L5#粉红和白色兔子的指令是什么？#l\r\n#L6#小魔龙的指令是什么？#l\r\n#L7#圣诞麋鹿的指令是什么？#l\r\n#L8#黑色猪的指令是什么？#l\r\n#L9#熊猫的指令是什么？#l\r\n#L10#哈士奇的指令是什么？#l\r\n#L11#迪诺龙、妮诺龙的指令是什么？#l\r\n#L12#猴子的指令是什么？#l\r\n#L13#火鸡的指令是什么？#l\r\n#L14#白虎的指令是什么？#l\r\n#L15#企鹅的指令是什么？#l\r\n#L16#金猪的指令是什么？#l\r\n#L17#机器人的指令是什么？#l\r\n#L18#迷你雪吉拉的指令是什么？#l\r\n#L19#巴洛谷的指令是什么？#l\r\n#L20#宝宝龙的指令是什么？#l\r\n#L21#绿色/红色/蓝色龙的指令是什么？#l\r\n#L22#黑龙的指令是什么？#l\r\n#L23#黑色鬼精灵的指令是什么？#l\r\n#L24#豪猪的指令是什么？#l\r\n#L25#雪人的指令是什么？#l\r\n#L26#臭鼬的指令是什么？#l\r\n#L27#请教我如何转移宠物能力点。#l");
-        } else if (status == 1) {
-            sel = selection;
-            if (selection == 0) {
-                status = 3;
-                cm.sendNext("所以你想了解更多关于宠物的事情。很久以前，我制作了一个玩偶，喷洒了生命之水，并对它施了咒语，创造出了一个神奇的动物。我知道这听起来不可思议，但它是一个变成了真实生物的玩偶。它们非常理解并且能很好地跟随人类。");
-            } else if (selection == 1) {
-                status = 6;
-                cm.sendNext("根据您给出的指令，宠物可能会喜欢、讨厌，并对其显示其他种类的反应。如果您给宠物一个指令，它能很好地跟随您，您的亲密度会提高。双击宠物，您可以检查亲密度、等级、饱食度等等...");
-            } else if (selection == 2) {
-                status = 11;
-                cm.sendNext("垂死……嗯，严格来说它们并不算是活着的，所以我不知道是否用“垂死”这个词合适。它们是用我的魔法力量和生命之水变成活物的娃娃。当然，它们活着的时候，就像活生生的动物一样……");
-            } else if (selection == 3) {
-                cm.sendNext("这些是#r棕色小猫和黑色小猫#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏猫, 不行, 坏女孩, 坏男孩#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 笨蛋#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1~30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b说话, 说, 聊天#k (等级 10 ~ 30)\r\n#b可爱#k (等级 10 ~ 30)\r\n#b站起来, 站立, 起来#k (等级 20 ~ 30)");
-            } else if (selection == 4) {
-                cm.sendNext("这些是#r棕色小狗#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏狗, 不行, 坏女孩, 坏男孩#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 坏狗, 笨蛋#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1~30)\r\n#b撒尿#k (等级 1 ~ 30)\r\n#b说话, 说, 聊天#k (等级 10 ~ 30)\r\n#b趴下#k (等级 10 ~ 30)\r\n#b站起来, 站, 起立#k (等级 20 ~ 30)");
-            } else if (selection == 5) {
-                cm.sendNext("这些是#r粉红兔子和白兔子#k的指令。指令旁边提到的等级是宠物需要的等级才能响应。\r\n#b坐#k (等级 1 ~ 30)\r\n#b坏, 不行, 坏女孩, 坏男孩#k (等级 1 ~ 30)\r\n#b站起来, 站立, 起立#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1~30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b说话, 说, 聊天#k (等级 10 ~ 30)\r\n#b拥抱#k (等级 10 ~ 30)\r\n#b睡觉, 困, 上床#k (等级 20 ~ 30)");
-            } else if (selection == 6) {
-                cm.sendNext("这些是#r小魔龙#k的指令。指令旁边提到的等级是宠物需要的等级才能响应。\r\n#bsit#k (等级 1 ~ 30)\r\n#bbad, no, badgirl, badboy#k (等级 1 ~ 30)\r\n#bup, stand, rise#k (等级 1 ~ 30)\r\n#biloveyou#k (等级 1~30)\r\n#bpee#k (等级 1 ~ 30)\r\n#btalk, say, chat#k (等级 10 ~ 30)\r\n#bthelook, charisma#k (等级 10 ~ 30)\r\n#bdown#k (等级 10 ~ 30)\r\n#bgoodboy, goodgirl#k (等级 20 ~ 30)");
-            } else if (selection == 7) {
-                cm.sendNext("这些是#r圣诞麋鹿#k的指令。指令旁边提到的等级显示了宠物需要的等级才能响应。\r\n#bsit#k (等级 1 ~ 30)\r\n#bbad, no, badgirl, badboy#k (等级 1 ~ 30)\r\n#bup, stand#k (等级 1 ~ 30)\r\n#bstupid, ihateyou, dummy#k (等级 1 ~ 30)\r\n#bmerryxmas, merrychristmas#k (等级 1 ~ 30)\r\n#biloveyou#k (等级 1~30)\r\n#bpoop#k (等级 1 ~ 30)\r\n#btalk, say, chat#k (等级 11 ~ 30)\r\n#blonely, alone#k (等级 11 ~ 30)\r\n#bcutie#k (等级 11 ~ 30)\r\n#bmush, go#k (等级 21 ~ 30)");
-            } else if (selection == 8) {
-                cm.sendNext("这些是#r黑猪#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏猪, 不行, 坏女孩, 坏男孩#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1~30)\r\n#b握手#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 笨蛋#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 10 ~ 30)\r\n#b微笑#k (等级 10 ~ 30)\r\n#b魅力, 魅力#k (等级 20 ~ 30)");
-            } else if (selection == 9) {
-                cm.sendNext("这些是#r熊猫#k的指令。指令旁边提到的等级是宠物需要达到的等级才能响应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b放松, 休息#k (等级 1 ~ 30)\r\n#b坏, 不行, 坏孩子, 坏孩子#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b站起来, 站立, 起立#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 10 ~ 30)\r\n#b让我们玩#k (等级 10 ~ 30)\r\n#b嗯, 呃#k (等级 10 ~ 30)\r\n#b睡觉#k (等级 20 ~ 30)");
-            } else if (selection == 10) {
-                cm.sendNext("这些是#r哈士奇#k的指令。指令旁边提到的等级是宠物需要达到的等级才能响应。\r\n#bsit#k (等级 1 ~ 30)\r\n#bbad, no, badgirl, badboy#k (等级 1 ~ 30)\r\n#bstupid, ihateyou, baddog, dummy#k (等级 1 ~ 30)\r\n#bhand#k (等级 1 ~ 30)\r\n#bpoop#k (等级 1 ~ 30)\r\n#biloveyou#k (等级 1 ~ 30)\r\n#bdown#k (等级 10 ~ 30)\r\n#btalk, chat, say#k (等级 10 ~ 30)\r\n#bup, stand, rise#k (等级 20 ~ 30)");
-            } else if (selection == 11) {
-                cm.sendNext("这些是#r迪诺龙和妮诺龙#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏孩子, 不行, 坏男孩, 坏女孩#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b微笑, 笑#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 笨蛋#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 10 ~ 30)\r\n#b可爱#k (等级 10 ~ 30)\r\n#b睡觉, 小睡, 困#k (等级 20 ~ 30)");
-            } else if (selection == 12) {
-                cm.sendNext("这些是#r猴子#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b休息#k (等级 1 ~ 30)\r\n#b坏孩子, 不乖#k (等级 1 ~ 30)\r\n#b撒尿#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b站起来#k (等级 1 ~ 30)\r\n#b说话, 聊天#k (等级 10 ~ 30)\r\n#b玩耍#k (等级 10 ~ 30)\r\n#b我想你#k (等级 10 ~ 30)\r\n#b睡觉, 上床睡觉, 困了#k (等级 20 ~ 30)");
-            } else if (selection == 13) {
-                cm.sendNext("这些是#r火鸡#k的指令。指令旁边提到的等级是宠物需要达到的等级才能响应。\r\n#bsit#k (等级 1 ~ 30)\r\n#bno, rudeboy, mischief#k (等级 1 ~ 30)\r\n#bstupid#k (等级 1 ~ 30)\r\n#biloveyou#k (等级 1 ~ 30)\r\n#bup, stand#k (等级 1 ~ 30)\r\n#btalk, chat, gobble#k (等级 10 ~ 30)\r\n#byes, goodboy#k (等级 10 ~ 30)\r\n#bsleepy, birdnap, doze#k (等级 20 ~ 30)\r\n#bbirdeye, thanksgiving, fly, friedbird, imhungry#k (等级 30)");
-            } else if (selection == 14) {
-                cm.sendNext("这些是#r白虎#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏孩子, 不行, 坏男孩, 坏女孩#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b休息, 放松#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 笨蛋#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 10 ~ 30)\r\n#b悲伤, 伤心#k (等级 10 ~ 30)\r\n#b等待#k (等级 20 ~ 30)");
-            } else if (selection == 15) {
-                cm.sendNext("这些是 #r企鹅#k 的指令。指令旁边提到的等级是宠物需要达到的等级才能执行该指令。\r\n#b坐#k (等级 1 ~ 30)\r\n#b坏, 不行, 坏孩子, 坏女孩#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b站起来, 站, 起来#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 10 ~ 30)\r\n#b拥抱, 抱抱我#k (等级 10 ~ 30)\r\n#b挥动, 举手#k (等级 10 ~ 30)\r\n#b睡觉#k (等级 20 ~ 30)\r\n#b亲吻, 亲亲, 亲一个#k (等级 20 ~ 30)\r\n#b飞#k (等级 20 ~ 30)\r\n#b可爱, 可爱的#k (等级 20 ~ 30)");
-            } else if (selection == 16) {
-                cm.sendNext("这些是 #r金猪#k 的指令。指令旁边提到的等级显示了宠物需要的等级才能响应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏孩子, 不行, 坏蛋, 坏女孩#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 11 ~ 30)\r\n#b爱我, 拥抱我#k (等级 11 ~ 30)\r\n#b睡觉, 困了, 去睡觉#k (等级 21 ~ 30)\r\n#b无视 / 印象深刻 / 离开#k (等级 21 ~ 30)\r\n#b翻滚, 给我钱#k (等级 21 ~ 30)");
-            } else if (selection == 17) {
-                cm.sendNext("这些是#r机器人#k的指令。指令旁边提到的等级显示了宠物需要的等级才能响应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b站起来, 站立, 起立#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 笨蛋#k (等级 1 ~ 30)\r\n#b坏, 不, 坏女孩, 坏男孩#k (等级 1 ~ 30)\r\n#b攻击, 冲锋#k (等级 1 ~ 30)\r\n#b我爱你#k (等级 1 ~ 30)\r\n#b好, 魅力, 魅力#k (等级 11 ~ 30)\r\n#b说话, 聊天, 聊天, 说#k (等级 11 ~ 30)\r\n#b变装, 变化, 变形#k (等级 11 ~ 30)");
-            } else if (selection == 18) {
-                cm.sendNext("这些是#r迷你雪吉拉#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b坏孩子, 不乖, 坏男孩, 坏女孩#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b跳舞, 舞动, 摇摆#k (等级 1 ~ 30)\r\n#b可爱, 可爱宝贝, 漂亮, 可爱的#k (等级 1 ~ 30)\r\n#b我爱你, 喜欢你, 我的爱#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说#k (等级 11 ~ 30)\r\n#b睡觉, 小睡, 困了, 去睡觉#k (等级 11 ~ 30)");
-            } else if (selection == 19) {
-                cm.sendNext("这些是#r巴洛谷#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#bliedown#k (等级 1 ~ 30)\r\n#bno|bad|badgirl|badboy#k (等级 1 ~ 30)\r\n#biloveyou|mylove|likeyou#k (等级 1 ~ 30)\r\n#bcute|cutie|pretty|adorable#k (等级 1 ~ 30)\r\n#bpoop#k (等级 1 ~ 30)\r\n#bsmirk|crooked|laugh#k (等级 1 ~ 30)\r\n#bmelong#k (等级 11 ~ 30)\r\n#bgood|thelook|charisma#k (等级 11 ~ 30)\r\n#bspeak|talk|chat|say#k (等级 11 ~ 30)\r\n#bsleep|nap|sleepy#k (等级 11 ~ 30)\r\n#bgas#k (等级 21 ~ 30)");
-            } else if (selection == 20) {
-                cm.sendNext("这些是#r宝宝龙#k的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b不行|坏|坏女孩|坏男孩#k (等级 1 ~ 30)\r\n#b我爱你|爱你#k (等级 1 ~ 30)\r\n#b拉屎#k (等级 1 ~ 30)\r\n#b笨蛋|讨厌你|傻瓜#k (等级 1 ~ 30)\r\n#b可爱#k (等级 11 ~ 30)\r\n#b说话|聊天|说#k (等级 11 ~ 30)\r\n#b睡觉|困|上床#k (等级 11 ~ 30)");
-            } else if (selection == 21) {
-                cm.sendNext("这些是#r绿/红/蓝龙#k的指令。指令旁边提到的等级显示了宠物需要的等级才能响应。\r\n#b坐#k (等级 15 ~ 30)\r\n#b不|坏|坏女孩|坏男孩#k (等级 15 ~ 30)\r\n#b我爱你|爱你#k (等级 15 ~ 30)\r\n#b便便#k (等级 15 ~ 30)\r\n#b笨蛋|讨厌你|傻瓜#k (等级 15 ~ 30)\r\n#b说|聊天|说话#k (等级 15 ~ 30)\r\n#b睡觉|困|上床#k (等级 15 ~ 30)\r\n#b变身#k (等级 21 ~ 30)");
-            } else if (selection == 22) {
-                cm.sendNext("这些是#r黑龙#k的指令。指令旁边提到的等级是宠物需要达到的等级才能响应。\r\n#b坐下#k (等级 15 ~ 30)\r\n#b不行|坏|坏女孩|坏男孩#k (等级 15 ~ 30)\r\n#b我爱你|爱你#k (等级 15 ~ 30)\r\n#b拉屎#k (等级 15 ~ 30)\r\n#b笨蛋|讨厌你|傻瓜#k (等级 15 ~ 30)\r\n#b说话|聊天|说#k (等级 15 ~ 30)\r\n#b睡觉|困|上床#k (等级 15 ~ 30)\r\n#b可爱, 变化#k (等级 21 ~ 30)");
-            } else if (selection == 23) {
-                cm.sendNext("这些是#r黑色鬼精灵#k的指令。指令旁边提到的等级是宠物需要达到的等级才能执行该指令。\r\n#bsit#k (等级 1 ~ 30)\r\n#bno|bad|badgirl|badboy#k (等级 1 ~ 30)\r\n#bplaydead, poop#k (等级 1 ~ 30)\r\n#btalk|chat|say#k (等级 1 ~ 30)\r\n#biloveyou, hug#k (等级 1 ~ 30)\r\n#bsmellmyfeet, rockout, boo#k (等级 1 ~ 30)\r\n#btrickortreat#k (等级 1 ~ 30)\r\n#bmonstermash#k (等级 1 ~ 30)");
-            } else if (selection == 24) {
-                cm.sendNext("这些是#r豪猪#k的指令。指令旁边提到的等级显示了宠物需要的等级才能执行该指令。\r\n#bsit#k (等级 1 ~ 30)\r\n#bno|bad|badgirl|badboy#k (等级 1 ~ 30)\r\n#biloveyou|hug|goodboy#k (等级 1 ~ 30)\r\n#btalk|chat|say#k (等级 1 ~ 30)\r\n#bcushion|sleep|knit|poop#k (等级 1 ~ 30)\r\n#bcomb|beach#k (等级 10 ~ 30)\r\n#btreeninja#k (等级 20 ~ 30)\r\n#bdart#k (等级 20 ~ 30)");
-            } else if (selection == 25) {
-                cm.sendNext("这些是 #r雪人#k 的指令。指令旁边提到的等级显示了宠物需要的等级才能回应。\r\n#b坐下#k (等级 1 ~ 30)\r\n#b笨蛋, 我讨厌你, 笨蛋#k (等级 1 ~ 30)\r\n#b我爱你, 我的爱, 我喜欢你#k (等级 1 ~ 30)\r\n#b圣诞快乐#k (等级 1 ~ 30)\r\n#b可爱, 可爱, 可爱, 漂亮#k (等级 1 ~ 30)\r\n#b梳理, 海滩/坏, 不, 坏女孩, 坏男孩#k (等级 1 ~ 30)\r\n#b说话, 聊天, 说/睡觉, 困了, 去睡觉#k (等级 10 ~ 30)\r\n#b变化#k (等级 20 ~ 30)");
-            } else if (selection == 26) {
-                cm.sendNext("这些是#r臭鼬#k的指令。指令旁边提到的等级显示了宠物需要的等级才能响应。\r\n#bsit#k (等级 1 ~ 30)\r\n#bbad/no/badgirl/badboy#k (等级 1 ~ 30)\r\n#brestandrelax, poop#k (等级 1 ~ 30)\r\n#btalk/chat/say, iloveyou#k (等级 1 ~ 30)\r\n#bsnuggle/hug, sleep, goodboy#k (等级 1 ~ 30)\r\n#bfatty, blind, badbreath#k (等级 10 ~ 30)\r\n#bsuitup, bringthefunk#k (等级 20 ~ 30)");
-            } else if (selection == 27) {
-                status = 14;
-                cm.sendNext("为了转移宠物的能力点、亲密度和等级，需要使用宠物能力点重置卷轴。如果你把这个卷轴带到艾琳尼亚的仙女玛尔那里，她会把宠物的等级和亲密度转移到另一个宠物身上。我特别给你这个是因为我能感受到你对宠物的情感。不过，我不能白白地把它给你。我可以以25万金币的价格把这本书卖给你。哦，我差点忘了！即使你有了这本书，如果没有新的宠物来转移能力点的话，它也没用。");
-            }
-            if (selection > 2 && selection < 27) {
-                cm.dispose();
-            }
-        } else if (status == 2) {
-            if (sel == 0) {
-                cm.sendNextPrev("但是生命之水只在世界树的最底部出现一点点，所以我不能给它太多生命时间……我知道，这很不幸……但即使它再次变成玩偶，我总是可以把生命注入它，所以在你和它在一起的时候要对它好。");
-            } else if (sel == 1) {
-                cm.sendNextPrev("和宠物交谈，关注它，它的亲密度将提高，最终它的整体等级也会提高。随着亲密度的提高，宠物的整体等级也会很快提高。随着整体等级的提高，有一天宠物甚至可能会稍微像人一样说话，所以努力提升它。当然，这并不容易……");
-            } else if (sel == 2) {
-                cm.sendNextPrev("一段时间后……没错，它们停止了移动。魔法效果消失，生命之水干涸后，它们就会变回木偶。但这并不意味着它们永远停止了，因为一旦你倒上生命之水，它们就会重新活过来。");
-            } else if (sel == 27) {
-                cm.sendYesNo("25万金币将被扣除。你真的想购买吗？");
-            }
-        } else if (status == 3) {
-            if (sel == 0) {
-                cm.sendNextPrev("哦，是的，当你给它们特殊指令时，它们会做出反应。你可以责备它们，爱护它们……这都取决于你如何照顾它们。它们害怕离开主人，所以要对它们好，向它们展示爱。它们会很快感到伤心和孤独……");
-            } else if (sel == 1) {
-                cm.sendNextPrev("它可能是一个活的玩偶，但它们也有生命，所以它们也会感到饥饿。#b饱食度#k 显示宠物的饥饿水平。100 是最高值，数值越低，宠物就越饥饿。一段时间后，它甚至不会听从你的命令，而会主动进攻，所以要小心。");
-
-            } else if (sel == 2) {
-                cm.sendNextPrev("即使它有一天再次移动，看到它们完全停止还是很伤心的。请在它们还活着并移动时对它们好一点。也要好好喂养它们。知道有一些活着的东西只跟随并听从你，是不是很好呢？");
-            } else if (sel == 27) {
-                if (cm.getMeso() < 250000 || !cm.canHold(4160011)) {
-                    cm.sendOk("请检查您的背包是否有空位，或者您是否没有足够的金币。");
-                } else {
-                    cm.gainMeso(-250000);
-                    cm.gainItem(4160011, 1);
-                }
-                cm.dispose();
-            }
-        } else if (status == 4) {
-            if (sel != 1) {
-                cm.dispose();
-            }
-            cm.sendNextPrev("哦，是的！宠物不能吃普通的人类食物。相反，我的弟子#bDoofus#k在Henesys市场上出售#b宠物食品#k，所以如果你需要给你的宠物喂食，就去Henesys找他吧。最好提前买好食物，等宠物真的饿了再喂食。");
-        } else if (status == 5) {
-            cm.sendNextPrev("哦，如果你长时间不给宠物喂食，它会自己回家。你可以把它从家里带出来喂食，但这对宠物的健康不太好，所以尽量定期喂养它，这样它就不会降到那个程度了，好吗？我觉得这样就可以了。");
-        } else {
-            cm.dispose();
-        }
+    if (status == 1 && mode == 0 || status == 5 && mode == 1 || status == 10 && mode == 1 || status == 13 && mode == 1 || status == 15 && mode == 0　|| status == 0 && mode == -1) {
+	cm.dispose();
+	return;
+	}
+    if (mode == 1)
+	status++;
+    else
+	status--;
+    if (status == 0) {
+	cm.sendNext("你... 是不是将我的孩子带在身边呢？　藉由使用生命水的魔法，我成功研发出赋予玩偶生命的魔法。　而人们将我获得生命的孩子称为 #b宠物#k。　如果持有宠物的话，任何事情都可以来问我。");
+	} else if (status == 1) {
+        cm.sendSimple("对于什么问题感到有兴趣呢？#b\r\n#L0#请针对宠物说明。#l\r\n#L1#宠物要怎么养？#l\r\n#L2#宠物也是会死吗？#l\r\n#L3#请告诉宠物猫,黑色猫的命令语。#l\r\n#L4#请告诉宠物狗的命令语。#l\r\n#L5#请告诉粉红兔，白兔的命令语。#l\r\n#L6#请告诉小魔龙。#l\r\n#L7#请告诉麋鹿的命令语。#l\r\n#L8#请告诉黑色猪的命令语。#l\r\n#L9#请告诉熊猫的命令语。#l\r\n#L10#请告诉哈士奇的命令语。#l\r\n#L11#请告诉迪诺龙、妮诺龙的命令语。#l\r\n#L12#请告诉猴子的命令语。#l\r\n#L13#请告诉电子鸡的命令语。#l\r\n#L14#请告诉白虎的命令语。#l\r\n#L15#请告诉企鹅的密令语。#l\r\n#L16#请告诉黄金猪的命令语。#l\r\n#L17#请告诉机器人的命令语。#l\r\n#L18#请告诉迷你雪吉拉的命令语。#l\r\n#L19#请告诉巴洛谷的命令语。#l\r\n#L20#请告诉神奇宝贝的命令语。#l\r\n#L21#请告诉绿红蓝的命令语。#l\r\n#L22#请告诉黑龙的命令语。#l\r\n#L23#请告诉黑色鬼精灵的命令语。#l\r\n#L24#请告诉豪猪的命令语。#l\r\n#L25#请告诉雪宝的命令语。#l\r\n#L26#请告诉臭鼬的命令语。#l\r\n#L27#请告诉我转移宠物亲密度的方法。#l");
+    } else if (status == 2) {
+	if (selection == 0) {
+	    status = 3;
+	    cm.sendNext("想对宠物有所了解嘛。很久以前，我再做出的木偶身上用了生命水，透过魔法成功的做出了魔法动物。虽然难以相信，木偶成了有生命的生命体。它们能听懂人类的话，是很乖巧可爱的家伙。");
+	} else if (selection == 1) {
+	    status = 6;
+	    cm.sendNext("宠物对于特别的指令会有高兴和难过等不同的反应。给宠物下指令后，听主人的话，就会提高与主人之间的亲密度。双击宠物的话就能看到亲密度，等级，饱满度等资讯。");
+	} else if (selection == 2) {
+	    status = 11;
+	    cm.sendNext("死掉啊！其实这些小家伙并不是真正活着的，所以它们会死，我也不知道对不对啊。这些小家伙是将我的魔法力量与生命水的力量灌注在木偶身体里做出来的。当然当它们活动的时候，是与其他动物没什么两样");
+	} else if (selection == 3) {
+	    cm.sendNext("#r褐色小猫，黑色小猫#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b座#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 4) {
+	    cm.sendNext("#r褐色小狗#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 5) {
+	    cm.sendNext("#r粉红兔子，白色兔子#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b抱抱#k (等级 10 ~ 30)\r\n#b睡觉, 困了, 去睡觉#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 6) {
+	    cm.sendNext("#r小魔龙#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 7) {
+	    cm.sendNext("#r麋鹿#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b圣诞快乐，圣诞快乐#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 11 ~ 30)\r\n#b寂寞, 孤独#k (等级 11 ~ 30)\r\n#b撒娇#k (等级 11 ~ 30)\r\n#b走#k (等级 21 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 8) {
+	    cm.sendNext("#r黑色猪#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 9) {
+	    cm.sendNext("#r熊猫#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 10) {
+	    cm.sendNext("#r哈士奇#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 11) {
+	    cm.sendNext("#r迪诺龙、妮诺龙#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 12) {
+	    cm.sendNext("#r猴子#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 13) {
+	    cm.sendNext("#r电子鸡#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 14) {
+	    cm.sendNext("#r白虎#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 15) {
+	    cm.sendNext("#r企鹅#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 16) {
+	    cm.sendNext("#r黄金猪#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 17) {
+	    cm.sendNext("#r机器人#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 18) {
+	    cm.sendNext("#r迷你雪吉拉#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 19) {
+	    cm.sendNext("#r巴洛谷#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 20) {
+	    cm.sendNext("#r神奇宝贝#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 21) {
+	    cm.sendNext("#r绿红蓝#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 22) {
+	    cm.sendNext("#r黑龙#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 23) {
+	    cm.sendNext("#r黑色鬼精灵#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 24) {
+	    cm.sendNext("#r豪猪#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 25) {
+	    cm.sendNext("#r雪宝#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 26) {
+	    cm.sendNext("#r臭鼬#k的指令语旁边的等级意味着能够使用那条指令的宠物的等级。\r\n#b坐#k (等级 1 ~ 30)\r\n#b不要, 住手, 不行, 不可以#k (等级 1 ~ 30)\r\n#b笨蛋, 傻瓜, 讨厌#k (等级 1 ~ 30)\r\n#b爱你#k (等级 1~30)\r\n#b便便#k (等级 1 ~ 30)\r\n#b说, 说吧, 说话#k (等级 10 ~ 30)\r\n#b撒娇#k (等级 10 ~ 30)\r\n#b站, 站起来, 起来#k (等级 20 ~ 30)");
+	    cm.dispose();
+	} else if (selection == 27) {
+	    status = 14;
+	    cm.sendNext("为了移动宠物能力值需要魔法卷轴，带着这本书给艾灵森林的妖精玛莉的话，就可以将你真心培育的宠物等级和亲密度移动其他宠物身上去。只给对于宠物如此关心的你而已，免费给你有点困难，所以只要支付25万枫币的话，就可以把书让给你，对了，即使有咒文书，如果没有可移动的新宠物，也是没有用的。");
+	}
+    } else if (status == 3) {
+	cm.sendNext("可是那生命水只在世界树的根部长出来一点点而已，不能赋予那些孩子太多的时间真可惜啊！不过就算变成木偶也能再赋予它生命，在一起要好好疼它哦。");
+    } else if (status == 4) {
+	cm.sendNextPrev("对了小家伙队特别指令会有所反应的。会闹也会学乖一切都靠你发现了。小家伙们很害怕离开主人身边，要经常疼它们。别让它们孤独哦");
+    cm.dispose();
+	} else if (status == 6) {
+	cm.sendNext("经常和宠物聊天，关心它，亲密度就会提高，宠物的等级也会跟着提高。亲密度提高到某一程度时，宠物就会升级，等级高的话，还会学人说话，要努力抚养，当然不是那么容易吧");
+    } else if (status == 7) {
+	cm.sendNextPrev("虽然是木偶，可是这些家伙也有生命，也会觉得肚子饿的。#b饱满度#k是显示肚子饱的程度的，最高是100，降到一定程度的，宠物会不听话等等，变得神经质呢。要多花点心思啊。");
+    } else if (status == 8) {
+	cm.sendNextPrev("对了！宠物不大喜欢吃人类的食物。我的徒弟#b科尔#k在弓箭手村的市集里卖#b宠物食品#k，如果需要食物就到弓箭手村去。最好先买好食物，以防宠物失去力气哦。");
+    } else if (status == 9) {
+	cm.sendNext("阿对了！如果太久没喂宠物吃东西的话它会自己回家。虽然下次将它拿出来在喂它也可以，但因为对健康不好，所以每一餐都要准时喂食喔。解说能够理解吗?");
+	cm.safeDispose();
+	} else if (status == 11) {
+	cm.sendNext("过一段时间后对了！这些家伙会停掉的。就会恢复到原本木偶的样子。魔法的力量和生命水用光的话，不过并不是永远停掉哦，再给它擦上生命水的话，就能复活哦。");
+    } else if (status == 12) {
+	cm.sendNextPrev("虽然能让它们恢复过来，不过停止还是让人满伤心的锁已在它们活着的时候一定要好好爱护它们啊。可要记得按时喂它们。有一个生命，一直追随你、关注你，你不觉得这是非常快乐的事情吗？");
+    cm.dispose();
+	} else if (status == 15) {
+	cm.sendYesNo("将减去25万枫币，确定要购买吗？");
+    } else if (status == 16) {
+	if (cm.getMeso() < 250000) {
+	    cm.sendOk("请确认是否有足够的枫币，或者其他栏是否满了。");
+	} else {
+	    cm.gainMeso(-250000);
+	    cm.gainItem(4160011, 1);
+	}
+	cm.safeDispose();
+	return;
     }
 }

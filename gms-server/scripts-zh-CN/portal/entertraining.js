@@ -1,19 +1,13 @@
 function enter(pi) {
-    if (pi.isQuestStarted(1041)) {
-        pi.playPortalSound();
-        pi.warp(1010100, 4);
-    } else if (pi.isQuestStarted(1042)) {
-        pi.playPortalSound();
-        pi.warp(1010200, 4);
-    } else if (pi.isQuestStarted(1043)) {
-        pi.playPortalSound();
-        pi.warp(1010300, 4);
-    } else if (pi.isQuestStarted(1044)) {
-        pi.playPortalSound();
-        pi.warp(1010400, 4);
+    if (pi.getQuestStatus(1041) == 1) {
+	pi.warp(1010100, 4);
+    } else if (pi.getQuestStatus(1042) == 1) {
+	pi.warp(1010200, 4);
+    } else if (pi.getQuestStatus(1043) == 1) {
+	pi.warp(1010300, 4);
+    } else if (pi.getQuestStatus(1044) == 1) {
+	pi.warp(1010400, 4);
     } else {
-        pi.message("只有接受了麦加训练的人才可以进入训练场");
-        return false;
+	pi.playerMessage(5, "只有經過訓練的冒險家才可以進入的。");
     }
-    return true;
 }

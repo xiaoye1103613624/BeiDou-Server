@@ -28,6 +28,8 @@ export default {
   'warehouse.items.operation': 'Operation',
   'warehouse.items.delete.confirm':
     'Are you sure to delete this warehouse item?',
+  'warehouse.items.deleteBatch.confirm':
+    'Delete selected warehouse items? This cannot be undone!',
   'warehouse.gameParams.accountShared': 'Account Shared',
   'warehouse.gameParams.maxStack': 'Max Stack',
   'warehouse.validate.itemId': 'Please enter item ID',
@@ -36,4 +38,6 @@ export default {
   'warehouse.config.deleteBatch.confirm':
     'Delete selected configs? This cannot be undone!',
   'warehouse.validate.selectFirst': 'Please select items to delete first',
+  'warehouse.config.refreshNames': 'Refresh Item Names',
+  'warehouse.config.refreshNames.success': 'Updated {count} item name(s)',
 };

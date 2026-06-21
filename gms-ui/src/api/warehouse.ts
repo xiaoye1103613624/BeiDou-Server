@@ -60,6 +60,11 @@ export function deleteWarehouseItem(id: number) {
   return axios.delete(`/warehouse/v1/deleteWarehouseItem/${id}`);
 }
 
+/** 批量删除仓库物品记录 */
+export function deleteWarehouseItemBatch(ids: number[]) {
+  return axios.post('/warehouse/v1/deleteWarehouseItemBatch', ids);
+}
+
 /** 获取有仓库数据的账号ID列表 */
 export function getAccountList() {
   return axios.get<number[]>('/warehouse/v1/getAccountList');
@@ -75,4 +80,9 @@ export function getCharacterList(accountId: number) {
 /** 获取仓库游戏参数 */
 export function getGameParams() {
   return axios.get<WarehouseGameParamsState>('/warehouse/v1/getGameParams');
+}
+
+/** 一键根据WZ数据更新仓库白名单配置的物品名称 */
+export function refreshItemNames() {
+  return axios.post<number>('/warehouse/v1/refreshItemNames');
 }

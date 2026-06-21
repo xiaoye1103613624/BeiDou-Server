@@ -68,6 +68,13 @@ public class WarehouseController {
         return ResultBody.success(null);
     }
 
+    @Tag(name = "/warehouse/" + ApiConstant.LATEST)
+    @Operation(summary = "一键根据WZ数据更新仓库白名单配置的物品名称")
+    @PostMapping("/" + ApiConstant.LATEST + "/refreshItemNames")
+    public ResultBody<Integer> refreshItemNames() {
+        return ResultBody.success(warehouseService.refreshItemNames());
+    }
+
     // ==================== 物品存取 ====================
 
     @Tag(name = "/warehouse/" + ApiConstant.LATEST)
@@ -107,6 +114,14 @@ public class WarehouseController {
     @DeleteMapping("/" + ApiConstant.LATEST + "/deleteWarehouseItem/{id}")
     public ResultBody<Object> deleteWarehouseItem(@PathVariable("id") Long id) {
         warehouseService.deleteWarehouseItem(id);
+        return ResultBody.success(null);
+    }
+
+    @Tag(name = "/warehouse/" + ApiConstant.LATEST)
+    @Operation(summary = "批量删除仓库物品记录")
+    @PostMapping("/" + ApiConstant.LATEST + "/deleteWarehouseItemBatch")
+    public ResultBody<Object> deleteWarehouseItemBatch(@RequestBody SubmitBody<List<Long>> request) {
+        warehouseService.deleteWarehouseItemBatch(request.getData());
         return ResultBody.success(null);
     }
 

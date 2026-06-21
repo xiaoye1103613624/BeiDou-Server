@@ -95,10 +95,8 @@ function levelMain() {
 
         // VIP传送：物品配置了掉落地图即可传送（VIP物品判断暂时注释）
         var vipItemId = PaohuanConfigManager.getVipItemId();
-        cm.dropMessage(5, `VIP物品：${vipItemId}`)
         if (vipItemId > 0 && cm.haveItem(vipItemId)) {
             var dropMap = PaohuanConfigManager.queryDropMap(data.activeItemId);
-            cm.dropMessage(5, `掉落地图：${dropMap}`)
             if (dropMap > 0) {
                 text += "#L" + SEL_TELEPORT + "##d传送至掉落地图#k#l\r\n";
             }
@@ -372,6 +370,7 @@ function doTeleport(data) {
         return;
     }
     cm.getPlayer().saveLocationOnWarp();
+    cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + cm.getPlayer().getClient().getChannelServer().getMapFactory().getMap(dropMap).getMapName());
     cm.warp(dropMap);
     cm.dispose();
 }

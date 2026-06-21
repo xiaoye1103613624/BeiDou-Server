@@ -1,58 +1,45 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Third Eos Rock - Ludibrium : Eos Tower 41st Floor (221021700)
 */
-/*      Author: Xterminator, Moogra
-	NPC Name: 		Third Eos Rock
-	Map(s): 		Ludibrium : Eos Tower 41st Floor (221021700)
-	Description: 		Brings you to 71st Floor or 1st Floor
-*/
+
 var status = 0;
 var map;
+var portal;
 
 function start() {
-    if (cm.haveItem(4001020)) {
-        cm.sendSimple("你可以使用#b#t4001020##k来激活#b#p2040026##k。你想要传送到这些石头中的哪一个？#b\r\n#L0##p2040025#（71层）#l\r\n#L1##p2040027#（1层）#l");
-    } else {
-        cm.sendOk("有一块魔法石可以让你传送到#b#p2040025#或#p2040027##k，但如果没有卷轴是无法激活它的。");
-        cm.dispose();
-    }
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode < 1) {
-        cm.dispose();
-    } else {
-        status++;
-        if (status == 1) {
-            if (selection == 0) {
-                cm.sendYesNo("您可以使用#b#t4001020##k来激活#b#p2040025##k。您要传送到第71层的#b#p2040025##k吗？");
-                map = 221022900;
-            } else {
-                cm.sendYesNo("您可以使用#b#t4001020##k来激活#b#p2040027##k。您要传送到第1层的#b#p2040027##k吗？");
-                map = 221020000;
-            }
-        } else if (status == 2) {
-            cm.gainItem(4001020, -1);
-            cm.warp(map, map % 1000 == 900 ? 3 : 4);
-            cm.dispose();
-        }
+    if (status >= 0 && mode == 0) {
+	cm.dispose();
+	return;
+    }
+    if (mode == 1)
+	status++;
+    else
+	status--;
+    if (status == 0) {
+	if (cm.haveItem(4001020)) {
+	    cm.sendSimple("需要什么服务吗？？#b\r\n#L0#爱奥斯塔 (71楼)#l\r\n#L1#爱奥斯塔 (1楼)#l");
+	} else {
+	    cm.sendOk("你需要有#t4001020# 才可以启动。");
+	    cm.dispose();
+	}
+    } else if (status == 1) {
+	if (selection == 0) {
+	    cm.sendYesNo("你是否要使用#t4001020# 传送到#m221022900# 呢？？");
+	    map = 221022900;
+	    portal = 3;
+	} else {
+	    cm.sendYesNo("你是否要使用#t4001020# 传送到#m221020000# 呢？？");
+	    map = 221020000;
+	    portal = 4;
+	}
+    } else if (status == 2) {
+	cm.gainItem(4001020, -1);
+	cm.warp(map, portal);
+	cm.dispose();
     }
 }

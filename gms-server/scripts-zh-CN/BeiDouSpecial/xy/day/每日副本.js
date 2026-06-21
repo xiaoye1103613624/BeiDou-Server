@@ -426,7 +426,7 @@ function action(mode, type, selection) {
         selectedDungeonIdx = selection;
         var d = dungeons[selectedDungeonIdx];
 
-        cm.getPlayer().dropMessage(6, "[每日副本] 已传送到 " + d.name + "（" + d.mapName + "）");
+        cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + d.mapName);
         cm.warp(d.mapId);
         cm.dispose();
 
@@ -595,7 +595,7 @@ function claimDailyReward(progress) {
     }
 
     // 地图广播
-    cm.mapMessage(6, "[每日副本] 恭喜玩家 " + cm.getPlayer().getName() + " 完成了全部每日副本，领取了额外奖励！");
+    cm.mapMessage(6, "[" + cm.getPlayer().getName() + "玩家] 完成了全部每日副本，领取了额外奖励！");
 
     cm.sendOk("#b🎉 恭喜完成全部每日副本！#k\r\n\r\n"
         + "每日额外奖励：" + rewardText + "\r\n"
@@ -654,7 +654,7 @@ function doSweep(progress) {
     text += "所有副本完成次数已增加 #r" + sweepRounds + "#k 次\r\n\r\n";
     text += "请前往「领取副本奖励」和「每日奖励」领取！";
 
-    cm.getPlayer().dropMessage(6, "[每日副本] VIP扫荡完成！所有副本 +" + sweepRounds + " 次，快去领取奖励吧！");
+    cm.getPlayer().dropMessage(6, "[" + cm.getPlayer().getName() + "玩家] VIP扫荡完成！所有副本 +" + sweepRounds + " 次，快去领取奖励吧！");
     cm.sendOk(text);
     cm.dispose();
 }

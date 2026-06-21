@@ -1,15 +1,10 @@
 function enter(pi) {
-    var eim = pi.getEventInstance();
-    if (eim != null) {
-        if (eim.getIntProperty("glpq6") < 3) {
-            pi.playerMessage(5, "传送门尚未开启。");
-            return false;
-        } else {
-            pi.playPortalSound();
-            pi.warp(610030700, 0);
-            return true;
-        }
+    var em = pi.getEventManager("CWKPQ");
+    if (em != null) {
+	if (!em.getProperty("glpq6").equals("3")){
+	    pi.playerMessage("The portal is not opened yet.");
+	} else {
+	    pi.warp(610030700, 0);
+	}
     }
-
-    return false;
 }

@@ -1,31 +1,43 @@
+/* 
+	NPC Name: 		Cherry
+	Map(s): 		Victoria Road : Ellinia Station (101000300)
+	Description: 		Ellinia Ticketing Usher
+*/
+var status = 0;
+
 function start() {
-    if (cm.haveItem(4031045)) {
-        var em = cm.getEventManager("Boats");
-        if (em.getProperty("entry") == "true") {
-            cm.sendYesNo("你想去天空之城吗？");
-        } else {
-            cm.sendOk("飞往天空之城的船只已经启程，请耐心等待下一班。");
-            cm.dispose();
-        }
-    } else {
-        cm.sendOk("确保你有一张飞往天空之城的船票才能乘坐这艘船。检查你的物品栏。");
-        cm.dispose();
-    }
+    status = -1;
+    boat = cm.getEventManager("Boats");
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode <= 0) {
-        cm.sendOk("好的，如果你改变主意，就跟我说话！");
-        cm.dispose();
-        return;
+    status++;
+    if(mode == 0) {
+	cm.sendNext("你有一些经济的负担而无法搭船对吧?");
+	cm.dispose();
+	return;
     }
-    var em = cm.getEventManager("Boats");
-    if (em.getProperty("entry") == "true") {
-        cm.warp(101000301);
-        cm.gainItem(4031045, -1);
-        cm.dispose();
-    } else {
-        cm.sendOk("飞往天空之城的船已经准备好起飞了，请耐心等待下一班。");
-        cm.dispose();
+    if (status == 0) {
+	if(boat == null) {
+	    cm.sendNext("找不到脚本请联系GM！");
+	    cm.dispose();
+	} else if(boat.getProperty("entry").equals("true")) {
+	    cm.sendYesNo("你想要搭船？？");
+	} else if(boat.getProperty("entry").equals("false") && boat.getProperty("docked").equals("true")) {
+	    cm.sendNext("很抱歉本班船准备开走,乘坐时间表可以通过售票展台查看.");
+	    cm.dispose();
+	} else {
+	    cm.sendNext("请耐心等待几分钟，正在整理里面中！");
+	    cm.dispose();
+	}
+    } else if(status == 1) {
+	if(!cm.haveItem(4031045)) {
+	    cm.sendNext("不! 你没有#b#t4031045##k 所以我不能放你走!.");
+	} else {
+	    cm.gainItem(4031045, -1);
+	    cm.warp(101000301, 0);
+	}
+	cm.dispose();
     }
-}	
+}

@@ -1,34 +1,11 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
-@	Author : Moogra
-@	NPC = Aqua Balloon
-@	Map = Hidden-Street <Stage 6>
-@	NPC MapId = 922010600
-@	Function = LPQ - 6th Stage
+	Aqua Balloon - LudiPQ 6th stage NPC
 */
 
 function start() {
-    cm.sendOk("尝试找到正确的数字组合来达到顶部。");
+    cm.sendNext("嗨，我是#p2040041# 第六阶段非常简单，只要顺着口号都能过关的，那么剩下时间交给你啰~");
+}
+
+function action(mode, type, selection) {
     cm.dispose();
 }

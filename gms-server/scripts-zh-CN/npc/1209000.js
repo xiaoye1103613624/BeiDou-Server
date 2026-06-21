@@ -1,53 +1,48 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+/* global cm */
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 var status = -1;
 
-function start() {
-    action(1, 0, 0);
-}
 
 function action(mode, type, selection) {
-    if (mode == 0 && type == 0) {
-        status--;
-    } else if (mode == -1) {
-        cm.dispose();
-        return;
+    if (cm.getQuestStatus(21002) == 0) {
+	if (mode == 1) {
+	    status++;
+	} else {
+	    status--;
+	}
+	if (status == 0) {
+	    cm.sendNext("您醒了，#b小乖乖#k 受伤的伤口还好吗？，什么？你说现在情况吗？");
+	} else if (status == 1) {
+	    cm.sendNextPrev("逃难的准备几乎都做好了。可以搭载的人全部都坐上了方舟了。逃生船飞行期间会由神兽守护，没有什么好担心的。现在只要收拾好就会立刻前往维多利亚港。");
+	} else if (status == 2) {
+	    cm.sendNextPrev("狂狼勇士的同伴吗...? 他们... 去找黑魔法师了。 在我们逃难的期间会阻止黑法师. 什么? 连你也要去找黑魔法师？ 不行！ 你不是受了伤吗？ 跟我们一起逃亡吧！");
+	} else if (status == 3) {
+	    cm.forceStartQuest(21002, "1");
+	    // Ahh, Oh No. The kid is missing
+	    //cm.showWZEffect2("Effect/Direction1.img/aranTutorial/Trio");
+	    cm.dispose();
+	}
     } else {
-        status++;
+	if (mode == 1) {
+	    status++;
+	} else {
+	    status--;
+	}
+	if (status == 0) {
+	    cm.sendSimple("情况很紧急。你想知道什么？ \r #b#L0#黑魔法师？#l \r #b#L1#逃难准备？#l \r #b#L2#同伴们？#l");
+	} else if (status == 1) {
+	    switch (selection) {
+		case 0:
+		    cm.sendOk("听说黑魔法师就在不远处。因为成为黑魔法师布下的龙群阻挡，根本无法通过森林。所以我们打造了逃生船。现在只能飞往维多利亚岛逃难...");
+		    break;
+		case 1:
+		    cm.sendOk("逃难几乎都做好了。可以搭载的人全部都上方舟了。现在只剩下几个人搭乘后就可以出发前往维多利亚岛。神兽答应在逃生船飞行的其间阻挡空中的攻击...没有人会留下来守护这里...");
+		    break;
+		case 2:
+		    cm.sendOk("你的同伴... 他们已经去找黑魔法师了。 他们说要带我们去逃难的期间阻止黑魔法师...还说因为您受伤了，所以不带您去。等孩子都救出来后，您也跟我们一起逃走吧！ 狂狼勇士！");
+		    break;
+	    }
+	    cm.safeDispose();
+	}
     }
-    if (mode == 1) {
-        status++;
-    } else {
-        status--;
-    }
-    if (status == 0) {
-        cm.sendNext("阿兰，你醒了！你感觉怎么样？嗯？你想知道发生了什么事情吗？");
-    } else if (status == 1) {
-        cm.sendNext("我们几乎准备好逃跑了。你不用担心。我尽可能找到的每个人都已经登上了方舟，神树也同意引领我们的道路。一旦完成剩下的准备工作，我们就会立即前往金银岛。");
-    } else if (status == 2) {
-        cm.sendNext("其他的英雄们？他们已经离开去对抗黑魔法师了。他们在为我们争取时间逃跑。什么？你想和他们一起战斗吗？不！你不能！你受伤了。你必须和我们一起离开！");
-    } else if (status == 3) {
-        //cm.setQuestProgress(21002, 1);
-        cm.showIntro("Effect/Direction1.img/aranTutorial/Trio");
-        cm.dispose();
-    }
-} 
+}

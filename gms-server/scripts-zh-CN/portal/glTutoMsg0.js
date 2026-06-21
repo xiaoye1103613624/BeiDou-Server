@@ -19,11 +19,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /*
-@author kevintjuh93
+By kevintjuh93
 */
-function enter(pi) {
-    pi.showInstruction("离开这个区域，将无法再回来。", 150, 5);
-    return true;
+function enter(pi) { 
+	    pi.showInstruction("Once you leave this area you won't be able to return.", 150, 5);
 }  

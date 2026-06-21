@@ -1,17 +1,7 @@
 function enter(pi) {
-    var eim = pi.getEventInstance();
-
-    if (eim.isEventCleared()) {
-        if (pi.isEventLeader()) {
-            pi.playPortalSound();
-            eim.warpEventTeam(930000800);
-            return true;
-        } else {
-            pi.playerMessage(5, "请等待队长先通过传送门");
-            return false;
-        }
-    } else {
-        pi.playerMessage(5, "请先消灭剧毒魔像");
-        return false;
-    }
+	if ((pi.getMap().getAllMonstersThreadsafe().size() == 0 || pi.getMap().getMonsterById(9300183) != null) && (pi.getMap().getReactorByName("") == null || pi.getMap().getReactorByName("").getState() == 1)) {
+		pi.warp(930000700,0);
+	} else {
+		pi.playerMessage(5, "請打完BOSS再出去");
+	}
 }

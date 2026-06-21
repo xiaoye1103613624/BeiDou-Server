@@ -1,11 +1,9 @@
-function enter(pi) {
-    pi.playPortalSound();
-    if (pi.isQuestStarted(22005)) {
-        pi.playPortalSound();
-        pi.warp(900020100, 0);
-    } else {
-        pi.playPortalSound();
-        pi.warp(100030301, 0);
+/*function enter(pi) {
+	if(pi.isQuestActive(22005)){
+		pi.playPortalSE();
+		pi.warp(900020100);
+	} else{
+		pi.warp(100030301);
     }
-    return true;
-}  
+	return true;
+}  */

@@ -29,6 +29,8 @@ export default {
   'warehouse.items.createTime': '存入时间',
   'warehouse.items.operation': '操作',
   'warehouse.items.delete.confirm': '确定要删除该仓库物品吗？此操作不可撤销。',
+  'warehouse.items.deleteBatch.confirm':
+    '确定批量删除选中的仓库物品吗？此操作不可撤销！',
   'warehouse.gameParams.accountShared': '账号共享',
   'warehouse.gameParams.maxStack': '最大堆叠',
   'warehouse.validate.itemId': '请输入物品ID',
@@ -37,4 +39,7 @@ export default {
   'warehouse.config.deleteBatch.confirm':
     '确定批量删除选中的仓库配置吗？此操作不可撤销！',
   'warehouse.validate.selectFirst': '请先勾选要删除的配置',
+  'warehouse.config.refreshNames': '一键更新物品名称',
+  'warehouse.config.refreshNames.success':
+    '更新完成，共更新 {count} 条物品名称',
 };

@@ -1,26 +1,7 @@
 function enter(pi) {
-    if (pi.isQuestActive(21739)) {
-        var mapobj1 = pi.getWarpMap(920030000);
-        var mapobj2 = pi.getWarpMap(920030001);
-
-        if (mapobj1.countPlayers() == 0 && mapobj2.countPlayers() == 0) {
-            mapobj1.resetPQ(1);
-            mapobj2.resetPQ(1);
-
-            const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
-            const Point = Java.type('java.awt.Point');
-            mapobj2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300348), new Point(591, -34));
-
-            pi.playPortalSound();
-            pi.warp(920030000, 2);
-            return true;
-        } else {
-            pi.message("该区域已被其他玩家挑战中。");
-            return false;
-        }
+    if (pi.isQuestActive(21738)) {
+	pi.warp(920030000,0);
     } else {
-        pi.playPortalSound();
-        pi.warp(200060001, 2);
-        return true;
+	pi.warp(200060001,0);
     }
 }

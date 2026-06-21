@@ -1,180 +1,172 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
-                       Matthias Butz <matze@odinms.de>
-                       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License version 3
-    as published by the Free Software Foundation. You may not use, modify
-    or distribute this program under any other version of the
-    GNU Affero General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/*Jack
- *
- *@author Alan (SharpAceX)
- *@author Ronan
- */
-
-var status = 0;
-var expedition;
-var expedMembers;
-var player;
-var em;
-const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-var cwkpq = ExpeditionType.CWKPQ;
-var list = "你想做什么？#b\r\n\r\n#L1#查看当前远征队成员#l\r\n#L2#开始战斗！#l\r\n#L3#退出远征队#l";
+var status = -1;
 
 function start() {
-    action(1, 0, 0);
+	cm.removeAll(4001256);
+	cm.removeAll(4001257);
+	cm.removeAll(4001258);
+	cm.removeAll(4001259);
+	cm.removeAll(4001260);
+		if (cm.getPlayer().getLevel() < 90) {
+			cm.sendOk("There is a level requirement of 90 to attempt Crimsonwood Keep.");
+			cm.dispose();
+			return;
+		}
+    var em = cm.getEventManager("CWKPQ");
+
+    if (em == null) {
+	cm.sendOk("The event isn't started, please contact a GM.");
+	cm.dispose();
+	return;
+    }
+    var prop = em.getProperty("state");
+
+    if (prop == null || prop.equals("0")) {
+	var squadAvailability = cm.getSquadAvailability("CWKPQ");
+	if (squadAvailability == -1) {
+	    status = 0;
+	    cm.sendYesNo("Are you interested in becoming the leader of the expedition Squad?");
+
+	} else if (squadAvailability == 1) {
+	    // -1 = Cancelled, 0 = not, 1 = true
+	    var type = cm.isSquadLeader("CWKPQ");
+	    if (type == -1) {
+		cm.sendOk("The squad has ended, please re-register.");
+		cm.dispose();
+	    } else if (type == 0) {
+		var memberType = cm.isSquadMember("CWKPQ");
+		if (memberType == 2) {
+		    cm.sendOk("You been banned from the squad.");
+		    cm.dispose();
+		} else if (memberType == 1) {
+		    status = 5;
+		    cm.sendSimple("What do you want to do? \r\n#b#L0#Check out members#l \r\n#b#L1#Join the squad#l \r\n#b#L2#Withdraw from squad#l \r\n#b#L3#Check out jobs#l");
+		} else if (memberType == -1) {
+		    cm.sendOk("The squad has ended, please re-register.");
+		    cm.dispose();
+		} else {
+		    status = 5;
+		    cm.sendSimple("What do you want to do? \r\n#b#L0#Check out members#l \r\n#b#L1#Join the squad#l \r\n#b#L2#Withdraw from squad#l \r\n#b#L3#Check out jobs#l");
+		}
+	    } else { // Is leader
+		status = 10;
+		cm.sendSimple("What do you want to do? \r\n#b#L0#Check out members#l \r\n#b#L1#Remove member#l \r\n#b#L2#Edit restricted list#l \r\n#b#L3#Check out jobs#l \r\n#r#L4#Enter map#l");
+	    // TODO viewing!
+	    }
+	} else {
+			var eim = cm.getDisconnected("CWKPQ");
+			if (eim == null) {
+				cm.sendOk("The squad's battle against the boss has already begun.");
+				cm.safeDispose();
+			} else {
+				cm.sendYesNo("Ah, you have returned. Would you like to join your squad in the fight again?");
+				status = 1;
+			}
+	}
+    } else {
+			var eim = cm.getDisconnected("CWKPQ");
+			if (eim == null) {
+				cm.sendOk("The battle against the boss has already begun.");
+				cm.safeDispose();
+			} else {
+				cm.sendYesNo("Ah, you have returned. Would you like to join your squad in the fight again?");
+				status = 1;
+			}
+    }
 }
 
 function action(mode, type, selection) {
-
-    player = cm.getPlayer();
-    expedition = cm.getExpedition(cwkpq);
-    em = cm.getEventManager("CWKPQ");
-
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0) {
-            cm.dispose();
-            return;
-        }
-
-        if (status == 0) {
-            if (player.getLevel() < cwkpq.getMinLevel() || player.getLevel() > cwkpq.getMaxLevel()) { //Don't fit requirement, thanks Conrad
-                cm.sendOk("你不符合条件参加枫叶城要塞派对任务！");
-                cm.dispose();
-            } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<组队任务：红树林要塞>\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个队伍来尝试#r红树林要塞组队任务#k吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l");
-                status = 1;
-            } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
-                if (expedition.isInProgress()) {
-                    cm.sendOk("你的探险已经在进行中，对于那些仍在战斗中的人，让我们为那些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
-                } else {
-                    cm.sendSimple(list);
-                    status = 2;
-                }
-            } else if (expedition.isRegistering()) { //If the expedition is registering
-                if (expedition.contains(player)) { //If you're in it but it hasn't started, be patient
-                    cm.sendOk("你已经注册了这次远征。请等待 #r" + expedition.getLeader().getName() + "#k 开始。");
-                    cm.dispose();
-                } else { //If you aren't in it, you're going to get added
-                    cm.sendOk(expedition.addMember(cm.getPlayer()));
-                    cm.dispose();
-                }
-            } else if (expedition.isInProgress()) { //Only if the expedition is in progress
-                if (expedition.contains(player)) { //If you're registered, warp you in
-                    em.getInstance("CWKPQ" + player.getClient().getChannel()).registerPlayer(player);
-                    cm.dispose();
-                } else { //If you're not in by now, tough luck
-                    cm.sendOk("另一支探险队已经采取了主动行动来完成赤血城堡派对任务，让我们为那些勇敢的灵魂祈祷吧。");
-                    cm.dispose();
-                }
-            }
-        } else if (status == 1) {
-            if (selection == 1) {
-                expedition = cm.getExpedition(cwkpq);
-                if (expedition != null) {
-                    cm.sendOk("有人已经主动成为了远征队的领袖。试着加入他们吧！");
-                    cm.dispose();
-                    return;
-                }
-
-                var res = cm.createExpedition(cwkpq);
-                if (res == 0) {
-                    cm.sendOk("“#r红树林要塞派对任务远征#k已经创建。\r\n\r\n再次与我交谈以查看当前团队，或开始战斗！”");
-                } else if (res > 0) {
-                    cm.sendOk("抱歉，您已经达到了此次远征的尝试配额！请另选他日再试……");
-                } else {
-                    cm.sendOk("在启动远征时发生了意外错误，请稍后重试。");
-                }
-
-                cm.dispose();
-
-            } else if (selection == 2) {
-                cm.sendOk("当然，并不是每个人都愿意尝试红树林要塞派对任务。");
-                cm.dispose();
-
-            }
-        } else if (status == 2) {
-            if (selection == 1) {
-                if (expedition == null) {
-                    cm.sendOk("无法加载远征队。");
-                    cm.dispose();
-                    return;
-                }
-                expedMembers = expedition.getMemberList();
-                var size = expedMembers.size();
-                if (size == 1) {
-                    cm.sendOk("你是探险队中唯一的成员。");
-                    cm.dispose();
-                    return;
-                }
-                var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
-                text += "\r\n\t\t1." + expedition.getLeader().getName();
-                for (var i = 1; i < size; i++) {
-                    text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
-                }
-                cm.sendSimple(text);
-                status = 6;
-            } else if (selection == 2) {
-                var min = cwkpq.getMinSize();
-                var size = expedition.getMemberList().size();
-                if (size < min) {
-                    cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
-                    cm.dispose();
-                    return;
-                }
-
-                cm.sendOk("探险队即将出发，你现在将被护送至#b神木村彩虹组队任务祭坛入口#k。");
-                status = 4;
-            } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + "探险结束了。"));
-                cm.endExpedition(expedition);
-                cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");
-                cm.dispose();
-
-            }
-        } else if (status == 4) {
-            if (em == null) {
-                cm.sendOk("事件无法初始化，请在论坛上报告此问题。");
-                cm.dispose();
-                return;
-            }
-
-            em.setProperty("leader", player.getName());
-            em.setProperty("channel", player.getClient().getChannel());
-            if (!em.startInstance(expedition)) {
-                cm.sendOk("另一支探险队已经采取了主动行动，完成了红木城堡派对任务，让我们为那些勇敢的灵魂祈祷吧。");
-                cm.dispose();
-                return;
-            }
-
-            cm.dispose();
-
-        } else if (status == 6) {
-            if (selection > 0) {
-                var banned = expedMembers.get(selection - 1);
-                expedition.ban(banned);
-                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");
-                cm.dispose();
-            } else {
-                cm.sendSimple(list);
-                status = 2;
-            }
-        }
+    switch (status) {
+	case 0:
+	    	if (mode == 1) {
+			if (!cm.haveItem(4032012, 1)) {
+				cm.sendOk("You need 1 Crimson Heart to apply.");
+			} else if (cm.registerSquad("CWKPQ", 5, " has been named the Leader of the squad. If you would you like to join please register for the Expedition Squad within the time period.")) {
+				cm.sendOk("You have been named the Leader of the Squad. For the next 5 minutes, you can add the members of the Expedition Squad.");
+			} else {
+				cm.sendOk("An error has occurred adding your squad.");
+			}
+	    	}
+	    cm.dispose();
+	    break;
+	case 1:
+		if (!cm.reAdd("CWKPQ", "CWKPQ")) {
+			cm.sendOk("Error... please try again.");
+		}
+		cm.safeDispose();
+		break;
+	case 5:
+	    if (selection == 0 || selection == 3) {
+		if (!cm.getSquadList("CWKPQ", selection)) {
+		    cm.sendOk("Due to an unknown error, the request for squad has been denied.");
+		}
+	    } else if (selection == 1) { // join
+		var ba = cm.addMember("CWKPQ", true);
+		if (ba == 2) {
+		    cm.sendOk("The squad is currently full, please try again later.");
+		} else if (ba == 1) {
+		    cm.sendOk("You have joined the squad successfully");
+		} else {
+		    cm.sendOk("You are already part of the squad.");
+		}
+	    } else {// withdraw
+		var baa = cm.addMember("CWKPQ", false);
+		if (baa == 1) {
+		    cm.sendOk("You have withdrawed from the squad successfully");
+		} else {
+		    cm.sendOk("You are not part of the squad.");
+		}
+	    }
+	    cm.dispose();
+	    break;
+	case 10:
+	    if (mode == 1) {
+		if (selection == 0 || selection == 3) {
+		    if (!cm.getSquadList("CWKPQ", selection)) {
+			cm.sendOk("Due to an unknown error, the request for squad has been denied.");
+		    }
+		    cm.dispose();
+		} else if (selection == 1) {
+		    status = 11;
+		    if (!cm.getSquadList("CWKPQ", 1)) {
+			cm.sendOk("Due to an unknown error, the request for squad has been denied.");
+			cm.dispose();
+		    }
+		} else if (selection == 2) {
+		    status = 12;
+		    if (!cm.getSquadList("CWKPQ", 2)) {
+			cm.sendOk("Due to an unknown error, the request for squad has been denied.");
+			cm.dispose();
+		    }
+		} else if (selection == 4) { // get insode
+		    if (cm.getSquad("CWKPQ") != null) {
+			if (cm.haveItem(4032012, 1)) {
+			    cm.gainItem(4032012, -1);
+			    var dd = cm.getEventManager("CWKPQ");
+			    dd.startInstance(cm.getSquad("CWKPQ"), cm.getMap());
+			} else {
+		 	    cm.sendOk("Where is my Crimson Heart?");
+			}
+		    } else {
+			cm.sendOk("Due to an unknown error, the request for squad has been denied.");
+		    }
+		    cm.dispose();
+		}
+	    } else {
+		cm.dispose();
+	    }
+	    break;
+	case 11:
+	    cm.banMember("CWKPQ", selection);
+	    cm.dispose();
+	    break;
+	case 12:
+	    if (selection != -1) {
+		cm.acceptMember("CWKPQ", selection);
+	    }
+	    cm.dispose();
+	    break;
+	default:
+	    cm.dispose();
+	    break;
     }
 }

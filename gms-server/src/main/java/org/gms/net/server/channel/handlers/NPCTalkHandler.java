@@ -62,7 +62,9 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
             return;
         }
 
-        if (currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
+        // NPC对话冷却限制：可通过 game_config 的 use_npc_race_condition 开关控制是否启用
+        if (GameConfig.getServerBoolean("use_npc_race_condition")
+                && currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
             c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message2"));
             c.sendPacket(PacketCreator.enableActions());
             return;

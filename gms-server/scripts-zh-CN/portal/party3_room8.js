@@ -1,10 +1,8 @@
-function enter(pi) {
-    if (pi.getEventInstance().getIntProperty("statusStg8") == 1) {
-        pi.playPortalSound();
-        pi.warp(920011000, 0);
-        return true;
-    } else {
-        pi.playerMessage(5, "当前无法使用仓库，因为精灵的力量仍在塔内生效。");
-        return false;
-    }
+﻿function enter(pi) {
+	if (pi.getPlayer().getParty() != null && pi.isLeader()) {
+		pi.warpParty(920011000);
+		pi.playPortalSE();
+	} else {
+		pi.playerMessage(5,"請隊長進入洞口。");
+	}
 }

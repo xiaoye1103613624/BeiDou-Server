@@ -1,15 +1,15 @@
 function enter(pi) {
-    var eim = pi.getEventInstance();
-    if (eim != null) {
-        if (eim.getIntProperty("glpq5") < 5) {
-            pi.playerMessage(5, "传送门尚未开启。");
-            return false;
-        } else {
-            pi.playPortalSound();
-            pi.warp(610030600, 0);
-            return true;
-        }
+    var em = pi.getEventManager("CWKPQ");
+    if (em != null) {
+	if (!em.getProperty("glpq5").equals("5")){
+	    pi.playerMessage("The portal is not opened yet.");
+	} else {
+	pi.removeAll(4001256);
+	pi.removeAll(4001257);
+	pi.removeAll(4001258);
+	pi.removeAll(4001259);
+	pi.removeAll(4001260);
+	    pi.warp(610030600, 0);
+	}
     }
-
-    return false;
 }

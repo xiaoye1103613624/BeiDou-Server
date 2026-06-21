@@ -1,86 +1,75 @@
-var status = 0;
-var ticketSelection = -1;
-var text = "这是检票口。";
-var hasTicket = false;
-var NLC = false;
-var em;
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+status = -1;
+close = false;
+oldSelection = -1;
 
 function start() {
-    cm.sendSimple("选择你的目的地。\r\n#L0##b废都广场#l\r\n#L1#进入建筑工地#l\r\n#L2#新叶城#l");
+    var text = "这里是检票口";
+    if (cm.haveItem(4031713) || cm.haveItem(4031036) || cm.haveItem(4031037) || cm.haveItem(4031038))
+        text += " 你要使用这票??#b";
+    else
+        close = true;
+    if (cm.haveItem(4031713))
+        text += "\r\n#L3##t4031713#";
+    for (var i = 0; i < 3; i++)
+        if (cm.haveItem(4031036 + i))
+            text += "\r\n#L" + i + "##t" + (4031036 + i) +"#";
+    if (close) {
+        cm.sendOk(text);
+        cm.dispose();
+    } else
+        cm.sendSimple(text);
 }
 
 function action(mode, type, selection) {
-    em = cm.getEventManager("Subway");
-
-    if (mode == -1) {
+    status++;
+    if (mode != 1) {
+        if(mode == 0)
+            cm.sendNext("你必须有一些经济负担，对吧？");
         cm.dispose();
         return;
-    } else if (mode == 0) {
-        cm.dispose();
-        return;
-    } else {
-        status++;
     }
-    if (status == 1) {
-        if (selection == 0) {
-            var em = cm.getEventManager("KerningTrain");
-            if (!em.startInstance(cm.getPlayer())) {
-                cm.sendOk("客运车已经满了。稍后再试一次。");
-            }
-
-            cm.dispose();
-
-        } else if (selection == 1) {
-            if (cm.haveItem(4031036) || cm.haveItem(4031037) || cm.haveItem(4031038)) {
-                text += "您将立即被带进去。您想使用哪张票？#b";
-                for (var i = 0; i < 3; i++) {
-                    if (cm.haveItem(4031036 + i)) {
-                        text += "\r\n#b#L" + (i + 1) + "##t" + (4031036 + i) + "#";
-                    }
-                }
-                cm.sendSimple(text);
-                hasTicket = true;
-            } else {
-                cm.sendOk("看起来你好像没有门票！");
+    if (status == 0) {
+        if (selection == 3) {
+            var em = cm.getEventManager("Subway");
+            if (em.getProperty("entry") == "true")
+                cm.sendYesNo("它看起来像有足够的空间用于这搭。请将您的车票准备好，所以我可以让你的车程将是漫长的，但你会得到你的目的地就好了。你怎么看？你想要得到这个拼车？");
+            else {
+                cm.sendNext("我们停止接收票前1分钟了，所以请务必要在这里的时间。");
                 cm.dispose();
-
             }
-        } else if (selection == 2) {
-            if (!cm.haveItem(4031711) && cm.getPlayer().getMapId() == 103000100) {
-                cm.sendOk("看起来你没有门票！你可以从贝尔那里买一张。");
-                cm.dispose();
-                return;
-            }
-            if (em.getProperty("entry") == "true") {
-                cm.sendYesNo("列车已经进站,请出示你的票，这样我就可以让你进去了。乘坐时间不会很长，你会安全到达目的地的。你觉得怎么样？想要乘坐这趟列车吗？");
-            } else {
-                cm.sendNext("我们将在列车开车前1分钟开始检票进入。进入之后请耐心等待几分钟。请注意，地铁将准时发车，我们将在那之前1分钟停止接收车票，请做好时间管理。");
-                cm.dispose();
-
-            }
+        }else{
+            cm.sendNext("好运~~"); //Not GMS-like
         }
-    } else if (status == 2) {
-        if (hasTicket) {
-            ticketSelection = selection;
-            if (ticketSelection > -1) {
-                cm.gainItem(4031035 + ticketSelection, -1);
-                cm.warp(103000897 + (ticketSelection * 3), "st00");  // thanks IxianMace for noticing a few scripts having misplaced warp SP's
-                hasTicket = false;
-                cm.dispose();
-                return;
-            }
+        oldSelection = selection;
+    } else if (status == 1) {
+        if (oldSelection == 3) {
+            cm.gainItem(4031713, -1);
+            cm.warp(600010004);
+        } else {
+            cm.gainItem(4031036 + oldSelection, -1);
+            cm.warp(103000900 + (oldSelection * 3));
         }
-
-        if (cm.haveItem(4031711)) {
-            if (em.getProperty("entry") == "false") {
-                cm.sendNext("我们将在列车开车前1分钟开始检票进入。进入之后请耐心等待几分钟。请注意，地铁将准时发车，我们将在那之前1分钟停止接收车票，请做好时间管理。");
-            } else {
-                cm.gainItem(4031711, -1);
-                cm.warp(600010004);
-            }
-
-            cm.dispose();
-
-        }
+        cm.dispose();
     }
 }

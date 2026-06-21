@@ -1,10 +1,8 @@
 function enter(pi) {
-    if (pi.getMap().getReactorByName("rnj3_out3").getState() == 1) {
-        pi.playPortalSound();
-        pi.warp(926100203, 0); //next
-        return true;
+    var em = pi.getEventManager("Romeo");
+    if (em != null && em.getProperty("stage4").equals("2")) {
+	pi.warp(926100203,0);
     } else {
-        pi.playerMessage(5, "传送门尚未开启。");
-        return false;
+	pi.playerMessage(5, "下一关尚未打开.");
     }
 }

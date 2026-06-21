@@ -239,12 +239,14 @@ function level4() {
 function levelWildernessBoss(selection) {
 	cm.gainMeso(-wildernessBoss[selection][1]);
 	cm.getPlayer().saveLocationOnWarp();
+	cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + getMapLabel(wildernessBoss[selection][2]));
 	cm.warp(wildernessBoss[selection][0]);
 	cm.dispose();
 }
 function levelBoss(selection) {
 	cm.gainMeso(-bossmaps[selection][1]);
 	cm.getPlayer().saveLocationOnWarp();
+	cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + getMapLabel(bossmaps[selection][2]));
 	cm.warp(bossmaps[selection][0]);
 	cm.dispose();
 }
@@ -252,6 +254,7 @@ function levelBoss(selection) {
 function levelLevelUp(selection) {
 	cm.gainMeso(-monstermaps[selection][1]);
 	cm.getPlayer().saveLocationOnWarp();
+	cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + getMapLabel(monstermaps[selection][2]));
 	cm.warp(monstermaps[selection][0]);
 	cm.dispose();
 }
@@ -259,6 +262,7 @@ function levelLevelUp(selection) {
 function levelTown(selection) {
 	cm.gainMeso(-townmaps[selection][1]);
 	cm.getPlayer().saveLocationOnWarp();
+	cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + getMapLabel(townmaps[selection][2]));
 	cm.warp(townmaps[selection][0]);
 	cm.dispose();
 }
@@ -266,7 +270,13 @@ function levelTown(selection) {
 function levelFuben(selection) {
 	cm.gainMeso(-fubenmaps[selection][1]);
 	cm.getPlayer().saveLocationOnWarp();
+	cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 " + getMapLabel(fubenmaps[selection][2]));
 	cm.warp(fubenmaps[selection][0]);
 	cm.dispose();
+}
+
+// 从地图标签文本中提取纯地图名（去掉颜色码和费用说明）
+function getMapLabel(raw) {
+	return String(raw).replace(/#[a-zA-Z]/g, "").replace(/（.*?）/g, "").replace(/\t.*/g, "").trim();
 }
 //----------------------------------------------------------------------------------

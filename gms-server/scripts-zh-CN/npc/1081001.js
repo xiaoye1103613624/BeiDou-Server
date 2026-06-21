@@ -1,63 +1,34 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 /**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Pison - Florina Beach(110000000)
- -- By ---------------------------------------------------------------------------------------------
- Information & Xterminator
- -- Version Info -----------------------------------------------------------------------------------
- 1.3 - Fixed saved location [Ronan]
- 1.2 - Fixed and cleanup [Shootsource]
- 1.1 - Add null map check [Xterminator]
- 1.0 - First Version
- ---------------------------------------------------------------------------------------------------
- **/
-var status = 0;
-var returnmap;
-
-function start() {
-    returnmap = cm.getPlayer().peekSavedLocation("FLORINA");
-    if (returnmap == -1) {
-        returnmap = 104000000;
-    }
-    cm.sendNext("所以你想离开 #b#m110000000##k 吗？如果你想的话，我可以带你回到 #b#m" + returnmap + "##k。");
-}
+	Pison - Florina Beach(110000000)
+**/
+var status = -1;
+var returnmap = -1;
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
-
-    } else if (mode == 0) {
-        cm.sendNext("你一定有一些事情要在这里处理。在#m" + returnmap + "#休息一下也不错。看看我，我是如此喜欢这里，结果我最终在这里定居了。哈哈哈，无论如何，当你想回去的时候再来找我说话。");
-        cm.dispose();
-
-    } else if (mode == 1) {
-        status++;
-        if (status == 1) {
-            cm.sendYesNo("你确定要返回#b#m" + returnmap + "##k吗？好吧，我们得赶紧出发了。你想现在回#m" + returnmap + "#吗？")
-        } else {
-            cm.getPlayer().getSavedLocation("FLORINA");
-            cm.warp(returnmap);
-            cm.dispose();
-        }
+    if (mode == 1) {
+	status++;
+    } else {
+	cm.sendNext("你不回去 #m"+returnmap+"# 那真是太棒了!\r\n看看我在这边还不是过得好好，和你讲话仿佛回到了以前呢!");
+	cm.safeDispose();
+	return;
     }
+    if (status == 0) {
+	returnmap = cm.getSavedLocation("FLORINA");
+	cm.sendSimple("所以你想离开 #b#m110000000##k? 如果你想我可以帮助你回到 #b#m"+returnmap+"##k. 但是需要1500金币 r\n\r\n#L0##b 我愿意付 1500 金币.#l");
+    } else if (status == 1) {
+	cm.sendYesNo("你确定你想回到 #b#m"+returnmap+"##k? 好吧，我们得走快点了");
+    } else if (status == 2) {
+	if (cm.getMeso() < 1500) {
+		cm.sendOk("好像金币不足耶!");
+		cm.dispose();
+	} else {
+	if (returnmap < 0) {
+		returnmap = 104000000;
+	}
+	cm.gainMeso(-1500);
+	cm.warp(returnmap, 0);
+	cm.clearSavedLocation("FLORINA");
+	cm.dispose();
+    }
+}
 }

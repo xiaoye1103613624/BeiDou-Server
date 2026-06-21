@@ -1,92 +1,71 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/*
-@	Author : Raz
-@       Author : Ronan
-@
-@	NPC = Lime Balloon
-@	Map = Hidden-Street <Stage 4>
-@	NPC MapId = 922010400
-@	Function = LPQ - 4th Stage
-@
-*/
-
-var status = 0;
-var curMap, stage;
+/* ==================
+ 脚本类型:  NPC	    
+ 脚本作者：故事丶     
+ 联系方式：840645183  
+ =====================
+ */
+//load("nashorn:mozilla_compat.js");
+ 
+var status;
+var exp = 5000;
 
 function start() {
-    curMap = cm.getMapId();
-    stage = Math.floor((curMap - 922010100) / 100) + 1;
-
     status = -1;
+    playerStatus = cm.isLeader();
     action(1, 0, 0);
-}
-
-function clearStage(stage, eim, curMap) {
-    eim.setProperty(stage + "stageclear", "true");
-    eim.showClearEffect(true);
-
-    eim.linkToNextStage(stage, "lpq", curMap);  //opens the portal to the next map
 }
 
 function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
-    } else if (mode == 0) {
-        cm.dispose();
     } else {
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
         var eim = cm.getPlayer().getEventInstance();
-
-        if (eim.getProperty(stage.toString() + "stageclear") != null) {
-            cm.sendNext("快点，去下一个阶段，传送门已经打开了！");
-        } else {
-            if (eim.isEventLeader(cm.getPlayer())) {
-                var state = eim.getIntProperty("statusStg" + stage);
-
-                if (state == -1) {           // preamble
-                    cm.sendOk("嗨。欢迎来到#b玩具塔副本阶段"+ stage +"#k。在这个阶段，有几种生物隐藏在这座塔的内部阴影中。其中一些无法通过物理手段击败，因此需要使用魔法攻击来完成任务，而其他一些则相反。这次给我带来6个#t4001022#。");
-                    eim.setProperty("statusStg" + stage, 0);
-                } else {                      // check stage completion
-                    if (cm.haveItem(4001022, 6)) {
-                        cm.sendOk("干得好！你已经收集了所有6个#b#t4001022#。#k");
-                        cm.gainItem(4001022, -6);
-
-                        eim.setProperty("statusStg" + stage, 1);
-                        clearStage(stage, eim, curMap);
+        var stage4status = eim.getProperty("stage4status");
+        if (stage4status == null) {
+            if (playerStatus) {
+                var map = eim.getMapInstance(cm.getPlayer().getMapId());
+                var passes = cm.haveItem(4001022, 5);
+                var stage4leader = eim.getProperty("stage4leader");
+                if (stage4leader == "done") {
+                    if (passes) {
+                        party = eim.getPlayers();
+                        map = cm.getMapId();
+                        //cm.removeAll(4001022);
+                        cm.gainItem(4001022,-5);
+                        clear(4, eim, cm);
+                        cm.givePartyExp(exp, party);
+                        cm.sendOk("恭喜你们通过了第4阶段。现在通过传送门到达下一个阶段吧……");
+                        cm.dispose();
                     } else {
-                        cm.sendNext("抱歉，你没有全部6个 #b#t4001022#。#k");
+                        cm.sendNext("你确定给我带来了6张#i4001022#？请检查一下自己的背包是否足够。");
                     }
+                    cm.dispose();
+                } else {
+                    cm.sendOk("欢迎来到 玩具之城 - (#r组队任务#k)第#b4#k阶段\r\n\r\n到处走走看看。请你和你的队员一起带来#r5张通行证#k给我……");
+                    eim.setProperty("stage4leader", "done");
+                    cm.dispose();
                 }
             } else {
-                cm.sendNext("请告诉你的#b队长#k来找我谈话。");
+                cm.sendNext("欢迎来到 玩具之城 - (#r组队任务#k)第#b4#k阶段\r\n\r\n到处走走看看。带来#r5张通行证#k给我,如果你成功拿到了通行证请交给你们的组长。然后再请他转交给我……");
+                cm.dispose();
             }
+        } else {
+            cm.sendNext("恭喜你们通过了第4阶段。现在通过传送门到达下一个阶段吧……");
+            cm.dispose();
         }
-
-        cm.dispose();
+    }
+}
+function clear(stage, eim, cm) {
+    eim.setProperty("stage" + stage.toString() + "status", "clear");
+    cm.showEffect(true, "quest/party/clear");
+    cm.playSound(true, "Party1/Clear");
+    cm.environmentChange(true, "gate");
+    var map = eim.getMapInstance(cm.getPlayer().getMapId());
+    var mf = eim.getMapFactory();
+    map = mf.getMap(922010400);
+    var nextStage = eim.getMapInstance(922010500);
+    var portal = nextStage.getPortal("next00");
+    if (portal != null) {
+        portal.setScriptName("lpq5");
     }
 }

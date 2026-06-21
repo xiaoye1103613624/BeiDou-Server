@@ -1,14 +1,12 @@
-/**
- ----------------------------------------------------------------------------------
- Whale Between Lith harbor and Rien.
+var status = -1;
 
- 1200006 Puro
-
- Credits to: MapleSanta
- ----------------------------------------------------------------------------------
- **/
-
-function start() {
-    cm.sendOk("目前的海流很平静，这意味着我们可能会比预期更早到达立斯港。");
-    cm.dispose();
+function action(mode, type, selection) {
+    if (mode == 1)
+	status++;
+    else
+	status--;
+    if (status == 0) {
+        cm.sendOk("今天天气真好啊?");
+	cm.dispose();
+    }
 }

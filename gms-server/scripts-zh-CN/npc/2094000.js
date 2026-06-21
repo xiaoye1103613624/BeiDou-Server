@@ -1,32 +1,22 @@
-/*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/**
- * @author: Ronan
- * @npc: Guon
- * @map: 251010404 - Over the Pirate Ship
- * @func: Pirate PQ
- */
-
 var status = 0;
-var em = null;
+var fbmc = "百草堂-(海盗副本)";//副本名称
+var minLevel = 50;//最低等级
+var maxLevel = 250;//最高等级
+var minPartySize = 1;//最少人数
+var maxPartySize = 6;//最多人数
+var cishuxianzhi = 10;//限制次数
+var maxjinbi = 50000;//判断征集令金币
+var eventname = "Pirate";//副本配置文件
+
+
+function checkMap() {
+    var map = [925100000, 925100100, 925100200, 925100201, 925100202, 925100300, 925100301, 925100302, 925100400, 925100400, 925100500];
+    for(var i = 0 ; i < map.length; i++) {
+        if(cm.getPlayerCount(map[i]))
+            return false;
+    }
+    return true;
+}
 
 function start() {
     status = -1;
@@ -34,59 +24,150 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == 1)
+        status++;
+    else {
         cm.dispose();
-    } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            em = cm.getEventManager("PiratePQ");
-            if (em == null) {
-                cm.sendOk("海盗组队任务遇到了一个错误。");
-                cm.dispose();
-                return;
-            } else if (cm.isUsingOldPqNpcStyle()) {
-                action(1, 0, 0);
-                return;
+        return;
+    }
+    if (status == 0) {
+            var tex2 = "";
+            var text = "";
+            for (i = 0; i < 15; i++) {
+                text += "";
             }
-
-            cm.sendSimple("#e#b<组队任务：海盗船>\r\n#k#n" + em.getProperty("party") + "\r\n\r\n救命啊！我的儿子被绑在可怕的#r海盗领主#k手中。我需要你的帮助... 你能组建或加入一个队伍来救他吗？请让你的#b队伍领袖#k与我交谈或者组建一个队伍。#b\r\n#L0#我想参加这个组队任务。\r\n#L1#我想" + (cm.getPlayer().isRecvPartySearchInviteEnabled() ? "禁用" : "启用") + "组队搜索。\r\n#L2#我想了解更多详情。");
-        } else if (status == 1) {
-            if (selection == 0) {
-                if (cm.getParty() == null) {
-                    cm.sendOk("只有当你加入一个队伍时，你才能参加派对任务。");
+		//显示物品ID图片用的代码是  #v这里写入ID#
+            text += "#k\t\t\t\t欢迎来到#r" + fbmc + "#k\r\n副本进入要求如下：\r\n①人数限制:#r " + minPartySize + " #b- #r" + maxPartySize + "#k队员\t②等级限制：#r " + minLevel + " #b- #r" + maxLevel + "级 #k\r\n"
+		text += "#k每天只能挑战:#b"+ cishuxianzhi +"#k次 你今天已进入:#b"+ cm.getPlayer().getBossLog("海盗副本") +"#k次#k\r\n"
+            text += "#L1##r开始组队副本#l     \r\n\r\n"
+		// text += "#L15##r兑换海盗副本透明属性时装#l\r\n\r\n"
+		//text += "#L10##r收集150个#v4002002#兑换#v1022048##z1022048#全属性+5#l\r\n\r\n"
+		// text += "#L11##r收集200个#v4002002#兑换#v1072356##z1072356##l\r\n\r\n"
+		// text += "#L12##r收集200个#v4002002#兑换#v1072357##z1072357##l\r\n\r\n"
+		// text += "#L13##r收集200个#v4002002#兑换#v1072358##z1072358##l\r\n\r\n"
+		// text += "#L14##r收集200个#v4002002#兑换#v1072359##z1072359##l\r\n\r\n"
+            cm.sendSimple(text);
+} else if (selection == 1) {
+cm.removeAll(4001117);
+cm.removeAll(4031437);
+cm.removeAll(4001120);
+cm.removeAll(4001121);
+cm.removeAll(4001260);
+cm.removeAll(4001122);
+    if (cm.getPlayer().getParty() == null || !cm.isLeader()) {
+        cm.sendOk("请找队长来找我。");
+	cm.dispose();
+                } else if (!cm.getPartyBossLog("海盗副本", 10)) { //判断组队是否2次
+                    cm.sendOk("队伍中队友挑战次数已经用完10次！");
                     cm.dispose();
-                } else if (!cm.isLeader()) {
-                    cm.sendOk("你的队长必须与我交谈才能开始这个组队任务。");
-                    cm.dispose();
-                } else {
-                    var eli = em.getEligibleParty(cm.getParty());
-                    if (eli.size() > 0) {
-                        if (!em.startInstance(cm.getParty(), cm.getPlayer().getMap(), 1)) {
-                            cm.sendOk("另一个队伍已经进入了该频道的#r组队任务#k。请尝试其他频道，或者等待当前队伍完成。");
-                        }
-                    } else {
-                        cm.sendOk("你目前无法开始这个组队任务，因为你的队伍可能不符合人数要求，有些队员可能不符合尝试条件，或者他们不在这张地图上。如果你找不到队员，可以尝试使用组队搜索功能。");
-                    }
-
-                    cm.dispose();
-                }
-            } else if (selection == 1) {
-                var psState = cm.getPlayer().toggleRecvPartySearchInvite();
-                cm.sendOk("你的组队搜索状态现在是：#b" + (psState ? "enabled" : "disabled") + "#k。想要改变状态时随时找我。");
-                cm.dispose();
+                    return;
+		//}else if( cm.getPlayer().getBossLog("海盗副本") > cishuxianzhi) {
+            //cm.sendOk("您好,限定每天只能挑战"+ cishuxianzhi +"次！");
+                //cm.dispose();
+			//return;
             } else {
-                cm.sendOk("#e#b<组队任务：海盗船>#k#n\r\n在这个组队任务中，你的任务是逐步穿过船舱，与途中的所有海盗和坏蛋战斗。当你到达#r海盗领主#k时，根据之前阶段打开的宝箱数量，boss会变得更加强大，所以要保持警惕。如果打开了这些宝箱，将会给你的船员带来许多额外的奖励，值得一试！祝你好运。");
-                cm.dispose();
+        var party = cm.getPlayer().getParty().getMembers();
+        var mapId = cm.getPlayer().getMapId();
+        var next = true;
+        var size = 0;
+        var it = party.iterator();
+	var party = cm.getParty().getMembers();
+        while (it.hasNext()) {
+		var cPlayer = it.next();
+		var ccPlayer = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());
+		if (ccPlayer == null || ccPlayer.getLevel() < minLevel || ccPlayer.getLevel() > maxLevel) {
+			next = false;
+			break;
+		}
+	}
+        if (party.size() >= minPartySize && next) {
+            if(checkMap()) {
+                var em = cm.getEventManager("Pirate");
+                if (em == null) {
+                    cm.sendOk("找不到脚本，请联系GM！！");
+			cm.dispose();
+                } else {
+                    em.startInstance(cm.getPlayer().getParty(), cm.getPlayer().getMap());
+			//cm.getPlayer().setBossLog("海盗副本");//给团队次数
+			//cm.给团队每日("海盗副本");
+			//cm.setPartyBosslog("海盗副本");//给团队次数
+			cm.givePartyBossLog("海盗副本");
+			cm.dispose();
+                }
+            } else {
+                cm.sendOk("目前有人在打啰～");
+		cm.dispose();
             }
+        }else {
+            cm.sendOk("需要" + minPartySize + "至" + maxPartySize + "个人 等级必须是" + minLevel+ "到" + maxLevel + "级");
+		cm.dispose();
         }
     }
+
+} else if (selection == 2) {
+            if (cm.getMeso() >= maxjinbi){//判断多少金币
+                cm.gainMeso(- maxjinbi );//扣除多少金币
+		cm.全服黄色喇叭(cm.getPlayer().getName() + " [副本征集令]" + " : " + "[" + fbmc + "]需要勇士一起完成,我已在副本门口!");
+                cm.dispose();
+                }else{
+                    cm.sendOk("你的冒险币不足" + maxjinbi + "。无法发送征集令");
+                    cm.dispose();
+    }
+} else if (selection == 3) {
+	cm.dispose();
+	cm.openNpc(2094000, 1);
+} else if (selection == 10) {
+	        if (cm.haveItem(4002002,150)) {
+	           cm.gainItem(4002002,-150);
+                   cm.给属性装备(1022048, 0, 0, 5, 5, 5, 5, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0);
+               //cm.worldMessage(6,"恭喜玩家：["+cm.getName()+"]在毒物森林副本兑换了彩虹耳环!大家快恭喜他!");
+	           cm.dispose();
+			 }   else  {
+			   cm.sendNext("你还没有收集到#v4002002#200个，请收集到后再来兑换！");
+			   cm.dispose();
+	}
+} else if (selection == 11) {
+	        if (cm.haveItem(4002002,120)) {
+	           cm.gainItem(4002002,-120);
+                   cm.给属性装备(1072356, 0, 0, 5, 5, 5, 5, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0);
+               //cm.worldMessage(6,"恭喜玩家：["+cm.getName()+"]在毒物森林副本兑换了彩虹耳环!大家快恭喜他!");
+	           cm.dispose();
+			 }   else  {
+			   cm.sendNext("你还没有收集到#v4002002#200个，请收集到后再来兑换！");
+			   cm.dispose();
+	}
+} else if (selection == 12) {
+	        if (cm.haveItem(4002002,200)) {
+	           cm.gainItem(4002002,-200);
+	           cm.gainItem(1072357,1);
+               //cm.worldMessage(6,"恭喜玩家：["+cm.getName()+"]在毒物森林副本兑换了彩虹耳环!大家快恭喜他!");
+	           cm.dispose();
+			 }   else  {
+			   cm.sendNext("你还没有收集到#v4002002#200个，请收集到后再来兑换！");
+			   cm.dispose();
+	}
+} else if (selection == 13) {
+	        if (cm.haveItem(4002002,200)) {
+	           cm.gainItem(4002002,-200);
+	           cm.gainItem(1072358,1);
+               //cm.worldMessage(6,"恭喜玩家：["+cm.getName()+"]在毒物森林副本兑换了彩虹耳环!大家快恭喜他!");
+	           cm.dispose();
+			 }   else  {
+			   cm.sendNext("你还没有收集到#v4002002#200个，请收集到后再来兑换！");
+			   cm.dispose();
+	}
+} else if (selection == 14) {
+	        if (cm.haveItem(4002002,200)) {
+	           cm.gainItem(4002002,-200);
+	           cm.gainItem(1072359,1);
+               //cm.worldMessage(6,"恭喜玩家：["+cm.getName()+"]在毒物森林副本兑换了彩虹耳环!大家快恭喜他!");
+	           cm.dispose();
+			 }   else  {
+			   cm.sendNext("你还没有收集到#v4002002#200个，请收集到后再来兑换！");
+			   cm.dispose();
+	}
+}else if (selection == 15) {
+	cm.dispose();
+	cm.openNpc(2094000,"海盗装备升级");
+}
 }

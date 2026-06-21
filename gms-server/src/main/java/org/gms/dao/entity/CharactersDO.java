@@ -66,6 +66,9 @@ public class CharactersDO implements Serializable {
 
     private Integer meso;
 
+    /** 赞助/元宝余额(预留字段，用于后续VIP及充值业务扩展) */
+    private Integer money;
+
     @Column("hpMpUsed")
     private Integer hpMpUsed;
 

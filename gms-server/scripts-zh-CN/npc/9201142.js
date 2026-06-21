@@ -1,27 +1,53 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 var status = -1;
 
-function start() {
-    cm.sendOk("年轻人，你似乎对自己很自豪，是吗？你能面对这个真正的噩梦之地吗？如果你认为你能做到，那就继续吧，嘿嘿嘿嘿嘿。");
-    cm.dispose();
+function action(mode, type, selection) {
+    if (mode == 1) {
+	status++;
+    } else {
+	if (status == 0) {
+	    cm.dispose();
+		return;
+	}
+	status--;
+    }
+    	if (status == 0) {
+	        cm.sendSimple("Hello~I am Witch Malady.#b\r\n\r\n#L0#Go to Defeat Olivia - Easy (Level 10)#l\r\n#L1#Go to Defeat Olivia - Medium (Level 30)#l\r\n#L2#Go to Defeat Olivia - Hard (Level 70)#l");
+    	    } else if (status == 1) {
+   		    var em = cm.getEventManager("Olivia");
+    		    if (em == null) {
+			cm.sendOk("Please try again later.");
+			cm.dispose();
+			return;
+    		    }
+		    if (cm.getPlayer().getParty() == null || !cm.isLeader()) {
+			cm.sendOk("The leader of the party must be here.");
+		    } else {
+			var s = selection;
+			var party = cm.getPlayer().getParty().getMembers();
+			var mapId = cm.getPlayer().getMapId();
+			var next = true;
+			var size = 0;
+			var it = party.iterator();
+			while (it.hasNext()) {
+				var cPlayer = it.next();
+				var ccPlayer = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());
+				if (ccPlayer == null || ccPlayer.getLevel() < (s == 0 ? 10 : (s == 1 ? 30 : 70))) {
+					next = false;
+					break;
+				}
+				size++;
+			}	
+			if (next && size >= 2) {
+		    		if (em.getInstance("Olivia" + s) == null) {
+					em.startInstance_Party("" + s, cm.getPlayer());
+		    		} else {
+					cm.sendOk("Another party quest has already entered this channel.");
+		    		}
+			} else {
+				cm.sendOk("All members of your party must be here.");
+			}
+		    }
+	        cm.dispose();
+            }
+			
 }

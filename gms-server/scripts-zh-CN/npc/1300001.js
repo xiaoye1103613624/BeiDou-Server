@@ -1,47 +1,34 @@
-/*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-var status;
+var status = 0;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
-}
+	status = -1;
+	action(1, 0, 0);
+	}
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            cm.sendOk("让仪式开始吧，我们不能让大家等待！嘿咳~嘿咳~嘿~~");
-            cm.dispose();
-        }
-    }
+	if (mode == -1) {
+		cm.dispose();
+	} else if (mode == 0) {
+		cm.sendOk("需要的时候再来找我。");
+		cm.dispose();
+	} else {
+		if (mode == 1)
+			status++;
+		else
+			status--;		
+	if (status == 0) {		
+		cm.sendYesNo("您是否想要领#b#t4032388##k？");	
+	} else if (status == 1)  {
+		if (!cm.canHold(4032388)) {
+		cm.sendOk("请空出一些其他栏位...");
+		cm.dispose();
+		} else if (cm.haveItem(4032388)) {
+		cm.sendOk("您好像已经有了#b#t4032388##k了...")
+		cm.dispose();
+		} else {
+		cm.gainItem(4032388, 1);
+		cm.dispose();	
+	}
+}
+}
 }

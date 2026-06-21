@@ -1,31 +1,28 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-function start() {
-    cm.sendYesNo("你想退出公会任务吗？");
-}
+var status = -1;
 
 function action(mode, type, selection) {
-    if (mode == 1) {
-        cm.warp(101030104);
+    if (mode != 1) {
+	cm.sendOk("完成公会任务的好运气!");
+	cm.dispose();
+	return;
     }
-    cm.dispose();
+status++;
+    if (status == 0) {
+	if (cm.isPlayerInstance()) {
+		cm.sendSimple("你想做什么? \r\n #L0#离开家族任务#l");
+	} else {
+		cm.sendOk("对不起，我不能为你做任何事!");
+		cm.dispose();
+	}
+    }
+    else if (status == 1) {
+	cm.sendYesNo("你确定你想做的吗？你将不能回来!");
+    }
+    else if (status == 2) {
+	if (cm.isPlayerInstance()) { 
+		cm.getPlayer().getEventInstance().removePlayer(cm.getPlayer());
+	}
+	cm.dispose();
+	return;
+    }
 }

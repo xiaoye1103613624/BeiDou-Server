@@ -1,16 +1,12 @@
-var status = 0;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
+var status = -1;
 
 function action(mode, type, selection) {
-    if (cm.haveItemWithId(1902016, true)) {
-        cm.warp(140010210, 0);
-    } else {
-        cm.sendOk("这是什么？如果你是来浪费我的时间的，滚开！");
+    if (mode == 1)
+	status++;
+    else
+	status--;
+    if (status == 0) {
+        cm.sendOk("是人类吗？？没事的话赶紧离开这里吧！");
+	cm.dispose();
     }
-
-    cm.dispose();
 }

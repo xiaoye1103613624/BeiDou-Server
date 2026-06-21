@@ -1,308 +1,288 @@
-/**
- * @author: Ronan
- * @npc: Chamberlain Eak
- * @map: Orbis - Tower of Goddess
- * @func: Orbis PQ
- */
-
-var status = 0;
-var em = null;
-
-function isStatueComplete() {
-    for (var i = 1; i <= 6; i++) {
-        if (cm.getMap().getReactorByName("scar" + i).getState() < 1) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-function clearStage(stage, eim) {
-    eim.setProperty("statusStg" + stage, "1");
-    eim.showClearEffect(true);
-}
-
 function start() {
     status = -1;
+
     action(1, 0, 0);
 }
-
 function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
-    } else {
-        if (mode == 0 && status == 0) {
+    }
+    else {
+        if (status >= 0 && mode == 0) {
+
+            cm.sendOk("欢迎下次再来挑战！");
             cm.dispose();
             return;
         }
         if (mode == 1) {
             status++;
-        } else {
+        }
+        else {
             status--;
         }
-
-        if (cm.getPlayer().getMapId() == 920011200) { //exit
-            cm.warp(200080101);
-            cm.dispose();
-            return;
-        }
-        if (!cm.isEventLeader()) {
-            if (cm.getPlayer().getMapId() == 920010000) {
-                cm.warp(920010000, 2);
-                cm.dispose();
-                return;
+        if (status == 0) {	
+            var tex2 = "";
+            var text = "";
+            for (i = 0; i < 10; i++) {
+                text += "";
             }
-
-            cm.sendOk("我只想和你们的队长谈话！");
-            cm.dispose();
-            return;
-        }
-
-        var eim = cm.getEventInstance();
-
-        switch (cm.getPlayer().getMapId()) {
-            case 920010000:
-                if (eim.getIntProperty("statusStg0") != 1) {
-                    eim.warpEventTeamToMapSpawnPoint(920010000, 2);
-                    eim.giveEventPlayersExp(3500);
-                    clearStage(0, eim);
-
-                    cm.sendNext("请救救雅典娜，她被远古精灵困在封印中，远古精灵是我们塔楼的恐怖存在！他把雅典娜雕像的所有部分都弄丢了，我们必须把它们全部找回来！哦，请原谅我，我是塔楼的管家易克。我是雅典娜的皇家仆人。");
-                } else {
-                    cm.warp(920010000, 2);
-                }
-                cm.dispose();
-                break;
-            case 920010100:
-                if (isStatueComplete()) {
-                    if (eim.getIntProperty("statusStg7") == -1) {
-                        eim.warpEventTeam(920010800);
-                    } else if (eim.getIntProperty("statusStg8") == -1) {
-                        cm.sendOk("哦！你带来了#t4001055#！请把它放在雕像的底座上，让雅典娜重生！");
-                    } else {
-                        cm.sendOk("谢谢你救了雅典娜！请和她交谈…");
-                    }
-                } else {
-                    cm.sendOk("请拯救雅典娜！收集她雕像的六块碎片，然后与我交谈以取回最后一块碎片！");
-                }
-                break;
-            case 920010200: //walkway
-                if (!cm.haveItem(4001050, 30)) {
-                    cm.sendOk("收集这个阶段怪物身上的30个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
-                } else {
-                    cm.sendOk("你已经找到了它们！这里是第一块雕像碎片。");
-                    cm.removeAll(4001050);
-                    cm.gainItem(4001044, 1); //first piece
-                    eim.giveEventPlayersExp(3500);
-                    clearStage(1, eim);
-                }
-                break;
-            case 920010300: //storage
-                if (eim.getIntProperty("statusStg2") != 1) {
-                    if (cm.getMap().countMonsters() == 0 && cm.getMap().countItems() == 0) {
-                        if (cm.canHold(4001045)) {
-                            cm.sendOk("哦，我找到了第二块雕像碎片。拿去吧。");
-                            cm.gainItem(4001045, 1);
-                            eim.giveEventPlayersExp(3500);
-                            clearStage(2, eim);
-                            eim.setProperty("statusStg2", "1");
-                        } else {
-                            cm.sendOk("我已经找到了第二块雕像碎片。在你的背包中腾出一个空位来拿它。");
-                        }
-                    } else {
-                        cm.sendOk("在这个房间里找到隐藏的第二块雕像碎片。");
-                    }
-                } else {
-                    cm.sendOk("干得好。去找其他雕像碎片。");
-                }
-
-                break;
-            case 920010400: //lobby
-                if (eim.getIntProperty("statusStg3") == -1) {
-                    cm.sendOk("请找到本周的唱片，并将其放在音乐播放器上。\r\n#v4001056# 星期日\r\n#v4001057# 星期一\r\n#v4001058# 星期二\r\n#v4001059# 星期三\r\n#v4001060# 星期四\r\n#v4001061# 星期五\r\n#v4001062# 星期六");
-                } else if (eim.getIntProperty("statusStg3") == 0) {
-                    cm.getMap().getReactorByName("stone3").forceHitReactor(1);
-                    cm.sendOk("哦，这音乐... 它和环境非常搭配。做得好，一个箱子出现在场地上。从中取出雕像的一部分！");
-                    eim.giveEventPlayersExp(3500);
-                    clearStage(3, eim);
-                    eim.setProperty("statusStg3", "2");
-
-                } else {
-                    cm.sendOk("非常感谢你！");
-                }
-                break;
-            case 920010500: //sealed
-                if (eim.getIntProperty("statusStg4") == -1) {
-                    var total = 3;
-                    for (var i = 0; i < 2; i++) {
-                        var rnd = Math.round(Math.random() * total);
-                        total -= rnd;
-
-                        eim.setProperty("stage4_" + i, rnd);
-                    }
-                    eim.setProperty("stage4_2", "" + total);
-
-                    eim.setProperty("statusStg4", "0");
-                }
-                if (eim.getIntProperty("statusStg4") == 0) {
-                    var players = Array();
-                    var total = 0;
-                    for (var i = 0; i < 3; i++) {
-                        var z = cm.getMap().getNumPlayersInArea(i);
-                        players.push(z);
-                        total += z;
-                    }
-                    if (total != 3) {
-                        const GameConfig = Java.type('org.gms.config.GameConfig');
-                        if(GameConfig.getServerBoolean("use_enable_solo_expeditions") && eim.getPlayerCount() == 1){
-                            cm.getMap().getReactorByName("stone4").forceHitReactor(1);
-                            eim.giveEventPlayersExp(3500);
-                            clearStage(4, eim);
-                        }else{
-                            cm.sendOk("这些平台上需要有在场的3名玩家。");
-                        }
-                    } else {
-                        var num_correct = 0;
-                        for (var i = 0; i < 3; i++) {
-                            if (eim.getProperty("stage4_" + i) === ("" + players[i])) {
-                                num_correct++;
-                            }
-                        }
-                        if (num_correct == 3) {
-                            cm.sendOk("你找到了正确的组合！地图顶部出现了一个宝箱，去拿取里面的雕像碎片吧！");
-                            cm.getMap().getReactorByName("stone4").forceHitReactor(1);
-                            eim.giveEventPlayersExp(3500);
-                            clearStage(4, eim);
-                        } else {
-                            eim.showWrongEffect();
-                            if (num_correct > 0) {
-                                cm.sendOk("一个平台上有正确数量的玩家。");
-                            } else {
-                                cm.sendOk("所有的平台上都有错误的玩家数量。");
-                            }
-                        }
-                    }
-                } else {
-                    cm.sendOk("干得好！请去找其他碎片，拯救雅典娜！");
-                }
-                cm.dispose();
-                break;
-            case 920010600: //lounge
-                if (eim.getIntProperty("statusStg5") == -1) {
-                    if (!cm.haveItem(4001052, 40)) {
-                        cm.sendOk("在这个阶段从怪物身上收集40个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
-                    } else {
-                        cm.sendOk("你已经找到了它们！这里是第五块雕像碎片。");
-                        cm.removeAll(4001052);
-                        cm.gainItem(4001048, 1); //fifth piece
-                        eim.giveEventPlayersExp(3500);
-                        clearStage(5, eim);
-                        eim.setIntProperty("statusStg5", 1);
-                    }
-                } else {
-                    cm.sendOk("你已经找到了所有的东西。去搜索塔的其他房间吧。");
-                }
-                break;
-            case 920010700: //on the way up
-                if (eim.getIntProperty("statusStg6") == -1) {
-                    var rnd1 = Math.floor(Math.random() * 5);
-
-                    var rnd2 = Math.floor(Math.random() * 5);
-                    while (rnd2 == rnd1) {
-                        rnd2 = Math.floor(Math.random() * 5);
-                    }
-
-                    if (rnd1 > rnd2) {
-                        rnd1 = rnd1 ^ rnd2;
-                        rnd2 = rnd1 ^ rnd2;
-                        rnd1 = rnd1 ^ rnd2;
-                    }
-
-                    var comb = "";
-                    for (var i = 0; i < rnd1; i++) {
-                        comb += "0";
-                    }
-                    comb += "1";
-                    for (var i = rnd1 + 1; i < rnd2; i++) {
-                        comb += "0";
-                    }
-                    comb += "1";
-                    for (var i = rnd2 + 1; i < 5; i++) {
-                        comb += "0";
-                    }
-
-                    eim.setProperty("stage6_c", "" + comb);
-
-                    eim.setProperty("statusStg6", "0");
-                }
-
-                var comb = eim.getProperty("stage6_c");
-
-                if (eim.getIntProperty("statusStg6") == 0) {
-                    var react = "";
-                    var total = 0;
-                    for (var i = 1; i <= 5; i++) {
-                        if (cm.getMap().getReactorByName("" + i).getState() > 0) {
-                            react += "1";
-                            total += 1;
-                        } else {
-                            react += "0";
-                        }
-                    }
-
-                    if (total != 2) {
-                        cm.sendOk("地图顶部需要精确地推动两个杠杆。");
-                    } else {
-                        var num_correct = 0;
-                        var psh_correct = 0;
-                        for (var i = 0; i < 5; i++) {
-                            if (react.charCodeAt(i) == comb.charCodeAt(i)) {
-                                num_correct++;
-                                if (react.charAt(i) == '1') {
-                                    psh_correct++;
-                                }
-                            }
-                        }
-                        if (num_correct == 5) {
-                            cm.sendOk("你找到了正确的组合！从里面取出雕像碎片！");
-                            cm.getMap().getReactorByName("stone6").forceHitReactor(1);
-                            eim.giveEventPlayersExp(3500);
-                            clearStage(6, eim);
-                        } else {
-                            eim.showWrongEffect();
-                            if (psh_correct >= 1) {
-                                cm.sendOk("其中一个推动的杠杆是正确的。");
-                            } else {
-                                cm.sendOk("两个推杆都是错误的。");
-                            }
-                        }
-                    }
-                } else {
-                    cm.sendOk("干得漂亮！去看看其他的部分吧。");
-                }
-                break;
-            case 920010800:
-                cm.sendNext("请找到一种方法来打败远古精灵！一旦你通过种植种子找到了黑暗食人花并打死它，远古精灵就会出现！打败它，拿到生命草来拯救雅典娜！！");
-                break;
-            case 920010900:
-                if (eim.getProperty("statusStg8") == "1") {
-                    cm.sendNext("这是塔的监狱。你可能会在这里找到一些好东西，只要确保尽快解决前面的谜题。");
-                } else {
-                    cm.sendNext("在那里你找不到任何雕像碎片。爬上梯子返回中心塔，然后到其他地方去搜索。一旦你救了雅典娜，你可以回到这里拿下面的好东西。");
-                }
-                break;
-            case 920011000:
-                if (cm.getMap().countMonsters() > 0) {
-                    cm.sendNext("这是塔楼的隐藏房间。在清除了这个房间上的所有怪物之后，与我交谈以获得进入宝藏房间的权限，留下中央塔楼的通道。");
-                } else {
-                    cm.warp(920011100, "st00");
-                }
-                break;
-        }
-        cm.dispose();
+	if (cm.getMapId() == 920011200) { //inside orbis pq
+    for (var i = 4001044; i < 4001064; i++) {
+        cm.removeAll(i); //holy
     }
-}
+    cm.warp(910000000);
+    cm.dispose();
+    return;
+    }
+    var em = cm.getEventManager("OrbisPQ");
+    if (em == null) {
+    cm.sendOk("脚本出错，请联系管理员。");
+    cm.dispose();
+    return;
+    }
+    if (!cm.isLeader()) {
+    cm.sendOk("我只能跟你的队长说话。");
+    cm.dispose();
+    return;
+    }
+     if (em.getProperty("pre") == "0") {
+		if(cm.getPlayer().haveItem(4001063, 10) && cm.getPlayer().getMapId() == 920010000) {
+			cm.givePartyExp(10000);
+			cm.gainItem(4001063, -10);
+			em.setProperty("pre", "1");
+		} else{
+		//	cm.sendOk("我被远古精灵困在这座塔，快收集材料让我出去。");
+			cm.dispose();
+			return;
+		}
+    }
+	if (cm.getMapId() == 920010000) {
+            clear();
+        cm.warpParty(920010100);//打云给经验
+		cm.dispose();
+        return;
+		}
+	if (cm.getMapId() == 920010100) {		
+	   if (!cm.haveItem(4001055)) {
+		}else {
+        cm.sendOk("你已经完成了此任务,请把生命草放在女神雕像中间,唤醒女神完成任务。");
+		cm.dispose();
+		return;
+		}
+        if (em.getProperty("stage").equals("6")) {
+        if (em.getProperty("finished").equals("0")) {
+            cm.warpParty(920010800); 
+			cm.dispose();
+        } else {
+            cm.sendOk("谢谢你救了我们，请您找女神说话。");
+			cm.dispose();
+        }
+		
+        } else {
+        cm.sendOk("请收集六个女神雕像的碎片在缝补女神雕像，然后来找我谈话将带你前往最后一关寻找生命草。");
+		cm.dispose();
+        }
+		cm.dispose();
+        return;
+		}
+	if (cm.getMapId() == 920010200) {
+        if (!cm.haveItem(4001050,10)) {
+		cm.sendOk("我需要#b#t4001050# 10个#k，目前有#c4001050#个。");
+		cm.dispose();
+        } else {
+        cm.removeAll(4001050);
+        cm.gainItem(4001044,1); //first piece
+		cm.gainItem(4001049,1);
+        cm.givePartyExp(10000);
+		em.setProperty("stage1", "2");
+        clear();
+		cm.dispose();
+		}}
+	if (cm.getMapId() == 920010300) {
+        if (em.getProperty("stage2").equals("2")) {
+        cm.sendOk("你都已经完成了还不出去再这里干嘛？\r\n");
+		cm.dispose();
+        } else if (!cm.haveItem(4001051,5)) {
+        cm.sendOk("我需要#b#t4001051# 5个#k，目前有#c4001051#个。");
+		cm.dispose();
+        } else {
+        cm.removeAll(4001051);
+        cm.gainItem(4001045,1); //second piece
+        cm.givePartyExp(10000);
+		em.setProperty("stage2", "2");
+        clear();
+		cm.dispose();
+        }
+		}
+	if (cm.getMapId() == 920010400) {
+        if (em.getProperty("stage3").equals("0")) {
+        cm.sendOk("请找到今天的唱片，并把它放入音乐盒拨放\r\n#v4001056#星期日\r\n#v4001057#星期一\r\n#v4001058#星期二\r\n#v4001059#星期三\r\n#v4001060#星期四\r\n#v4001061#星期五\r\n#v4001062#星期六\r\n");
+        cm.dispose();
+		} else if (em.getProperty("stage3").equals("1")) {
+        if (cm.canHold(4001046,1)) {
+            cm.gainItem(4001046,1); //third piece
+			cm.gainItem(4001047,1); //fourth
+            cm.givePartyExp(10000);
+            clear();
+            em.setProperty("stage3", "2");
+			cm.dispose();
+        } else {
+            cm.sendOk("请清出一些空间。");
+			cm.dispose();
+        }
+        } else {
+        cm.sendOk("谢谢你。");
+		cm.dispose();
+        }
+		cm.dispose();
+        return;
+		}
+	if (cm.getMapId() == 920010500) {
+	    if (em.getProperty("stage4").equals("0")) {
+		var players = Array();
+		var total = 0;
+		for (var i = 0; i < 3; i++) {
+		}
+		if (total != 3) {
+			cm.gainItem(4001047,1);
+		    cm.sendOk("恭喜获得女神的第四个碎片，赶紧进入下一关吧！");
+		} else {
+		    var num_correct = 0;
+		    for (var i = 0; i < 1; i++) {
+			if (em.getProperty("stage4_" + i).equals("" + players[i])) {
+			    num_correct++;
+			}
+		    }
+		    if (num_correct == 3) {
+			if (cm.canHold(4001047,1)) {
+	    		clear();
+			    cm.gainItem(4001047,1); //fourth
+			    cm.givePartyExp(10000);
+	    		em.setProperty("stage4", "2");
+				cm.dispose();
+			} else {
+			    cm.sendOk("请腾出空间!");
+				cm.dispose();
+			}
+			cm.dispose();
+		    } else {
+    	    		cm.showEffect(true, "quest/party/wrong_kor");
+    	    		cm.playSound(true, "Party1/Failed");
+			if (num_correct > 0) {
+			    cm.sendOk("一个平台是正确的.");
+				cm.dispose();
+			} else {
+			    cm.sendOk("所有的平台都是错误的.");
+				cm.dispose();
+
+			}
+			cm.dispose();
+		    }
+		}
+	    } else {
+		cm.sendOk("门被打开！ 走！");
+		cm.dispose();
+	    }
+	    cm.dispose();
+	    return;
+		}
+	if (cm.getMapId() == 920010600) {
+        if (!cm.haveItem(4001052,10)) {	
+		cm.sendOk("我需要#b#t4001052# 10个#k，目前有#c4001052#个。");
+		cm.dispose();
+        } else {
+        cm.removeAll(4001052);
+        cm.gainItem(4001048,1); //fifth piece
+		cm.gainItem(4001049,1);
+        cm.givePartyExp(10000);
+		em.setProperty("stage10", "2");
+        clear();
+		cm.dispose();
+        }
+		cm.dispose();
+        return;
+		}
+	if (cm.getMapId() == 920010700) {
+		if (em.getProperty("stage6").equals("2")) {
+        cm.sendOk("你都已经完成了还不出去再这里干嘛？\r\n");
+		cm.dispose();
+        } else if (em.getProperty("stage6").equals("0")) {
+		var react = Array();
+		var total = 0;
+	    	for(var i = 0; i < 3; i++) {
+		    if (cm.getMap().getReactorByName("" + (i + 1)).getState() > 0) {
+			react.push("1");
+			total += 1;
+		    } else {
+			react.push("0");
+		    }
+	    	}
+		if (total != 2) {
+		    cm.sendOk("地图顶部需要有两个个锁定杆朝下,请按压下吧.");
+			cm.dispose();
+		} else {
+		    var num_correct = 0;
+		    for (var i = 0; i < 3; i++) {
+			if (em.getProperty("stage62_" + i).equals("" + react[i])) {
+			    num_correct++;
+			}
+		    }
+		    if (num_correct == 3) {
+			if (cm.canHold(4001049,1)) {
+	    		    clear();
+			    cm.gainItem(4001049,1); 
+			    cm.givePartyExp(10000);
+	    		em.setProperty("stage6", "2");
+				cm.dispose();
+			} else {
+			    cm.sendOk("请腾出空间!");
+				cm.dispose();
+			}
+		    } else {
+    	    		cm.showEffect(true, "quest/party/wrong_kor");
+    	    		cm.playSound(true, "Party1/Failed");
+			if (num_correct >= 1) { //this should always be true
+			    cm.sendOk("其中一个杠杆是正确的.");
+				cm.dispose();
+			} else {
+			    cm.sendOk("这两个杠杆是错误的.");
+				cm.dispose();
+			}
+		    }
+		}
+	    } else {
+		cm.sendOk("谢谢!!");
+		cm.dispose();
+	    }
+	    return;
+		}
+	if (cm.getMapId() == 920010800) {
+		if (em.getProperty("finished").equals("2")) {
+        cm.sendOk("你还在等什么？还不赶紧出去拯救米勒娃");
+		cm.dispose();
+		} else if (cm.haveItem(4001054,1)) {
+		cm.gainItem(4001054,-1); 
+		cm.gainItem(4001055,1); 
+		em.setProperty("finished", "2");
+		cm.sendOk("好了.我给你换好生命草了,赶紧拿去拯救米勒娃吧。");
+		cm.dispose();
+        } else {
+	    cm.sendOk("请找到一个方法来战胜小精灵的爸爸！一旦你把#r①#k#v4001053#丢入花盆种种植发现黑色食人花，你就会发现小精灵的爸爸！战胜它得到#r②#k#v4001054#再次丢入花盆种植得到#r③#k#v4001055#来拯救米勒娃(或者找我换)！！！"); 
+		cm.dispose();
+	    return;
+		}}
+	if (cm.getMapId() == 920010900) {
+        cm.sendOk("这是塔的监狱。你可能会发现一些好吃的东西在这里，但除此之外，我不认为我们有什么在这里件。"); 
+		cm.dispose();
+        return;
+		}
+	if (cm.getMapId() == 920011000) {
+        cm.sendOk("这是隐藏的房间塔。你可能会发现一些好吃的东西在这里，但除此之外，我不认为我们有什么在这里件。"); 
+		cm.dispose();
+        return;
+    }
+    cm.dispose();
+}}}
 
 function clear() {
     cm.showEffect(true, "quest/party/clear");

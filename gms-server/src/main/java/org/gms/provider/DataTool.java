@@ -102,7 +102,12 @@ public class DataTool {
         if (data == null || data.getData() == null) {
             return 0;// DEF?
         }
-        return (Integer) data.getData();
+        Object numData = data.getData();
+        if (numData instanceof Integer) {
+            return (Integer) numData;
+        } else {
+            return (Short) numData;
+        }
     }
 
     public static int getInt(String path, Data data) {
@@ -175,6 +180,9 @@ public class DataTool {
      * @return Int值或默认值
      */
     public static int getInt(String path, Data data, int def) {
+        if (data == null) {
+            return def;
+        }
         return getInt(data.getChildByPath(path), def);
     }
 

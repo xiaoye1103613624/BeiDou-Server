@@ -1,12 +1,8 @@
-/**
- * 骑士团-女皇之路（MapID：130030001）
- * 触发召唤NPC利林跟随
- * @param pi
- * @returns {boolean}
- */
 function enter(pi) {
-    pi.spawnGuide();// 生成（召唤）新手引导NPC
-    pi.talkGuide("欢迎来到北斗世界！我是利琳。我会负责引导你，直到你达到10级并成为见习骑士。双击我获取更多信息！");// 让引导NPC对玩家发送消息
-    pi.blockPortal();// 阻止玩家通过传送门（防止玩家提前离开新手引导区域）
-    return true;// 返回 `true`，表示事件执行成功
+    if (pi.getQuestStatus(20021) == 0) {
+	pi.playerSummonHint(true);
+	pi.summonMsg("歡迎來到楓之谷的世界! 我的名字是 提酷, 我會是你的指導老師！ 我會在這裡回答你的問題，並指導你直到等級10等，成為騎士團之前如果你有任何疑問，可以點擊我！");
+//	pi.forceCompleteQuest(20100);
+	pi.forceCompleteQuest(20021);
+    }
 }

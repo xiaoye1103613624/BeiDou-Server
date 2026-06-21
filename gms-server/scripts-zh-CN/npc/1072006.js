@@ -19,58 +19,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Bowman Job Instructor - Ant Tunnel For Bowman (108000100)
- -- By ---------------------------------------------------------------------------------------------
- Unknown
- -- Version Info -----------------------------------------------------------------------------------
- 1.2 - Cleanup by Moogra
- 1.1 - Statement fix [Information]
- 1.0 - First Version by Unknown
- ---------------------------------------------------------------------------------------------------
- **/
-
-var status;
-var completed;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+    if (cm.haveItem(4031013,30)) {
+        cm.sendNext("wow 果然是个大侠恭喜通过这次个考验 你已经是个强大的弓箭手了所以我将颁赠给你神秘的小礼物.");
+		cm.removeAll(4031013);
+		cm.gainItem(4031011, -1);
+		cm.gainItem(4031012, 1);
+    } else {
+        cm.sendOk("你还没有 #b30 #t4031013##k. 请收集完毕再来找我,祝你好运.");
+        cm.dispose();
+    }
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (cm.haveItem(4031013, 30)) {
-                completed = true;
-                cm.sendOk("你是一个真正的英雄！拿着这个，雅典娜会承认你的。");
-            } else {
-                completed = false;
-                cm.sendSimple("你需要收集 #b30 #t4031013##k。祝你好运。\r\n#b#L1#我想离开#l");
-            }
-        } else if (status == 1) {
-            if (completed) {
-                cm.removeAll(4031013);
-                cm.completeQuest(100001);
-                cm.startQuest(100002);
-                cm.gainItem(4031012);
-            }
-
-            cm.warp(106010000, 9);
-            cm.dispose();
-        }
-    }
+    if (mode == 1) {
+        cm.warp(100000201, 0);
+		cm.removeAll(4031013);
+		cm.gainItem(4031010, -1);
+		cm.gainItem(4031012, 1);
+	}
+	cm.dispose();
 }

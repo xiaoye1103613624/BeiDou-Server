@@ -1,6 +1,5 @@
 function enter(pi) {
-    pi.getPlayer().saveLocation("MIRROR");
-    pi.playPortalSound();
-    pi.warp(926010000, 4);
-    return true;
+	pi.saveLocation("MULUNG_TC");
+	pi.warp(926010000,0);
+	return true;
 }

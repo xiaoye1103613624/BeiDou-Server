@@ -47,7 +47,7 @@ function action(mode, type, selection) {
     }
     else if (status === 4 && type === 1) {
         cm.getChar().executeRebornAsId(jobId);
-        cm.dropMessage(0,"恭喜 " + cm.getPlayer() + "进行了第" + cm.getChar().getReborns() + " 次重生");
+        cm.dropMessage(0,"[" + cm.getPlayer().getName() + "玩家] 完成了第 " + cm.getChar().getReborns() + " 次转世重生！");
         cm.dispose();
     }
 }

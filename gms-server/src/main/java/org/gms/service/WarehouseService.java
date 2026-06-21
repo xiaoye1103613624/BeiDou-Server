@@ -171,6 +171,37 @@ public class WarehouseService {
         WarehouseManager.load(configMapper.selectAll());
     }
 
+    /**
+     * 一键根据物品ID从 WZ 数据更新仓库白名单配置的物品名称。
+     * <p>
+     * 遍历所有配置，通过 {@link ItemInformationProvider} 查询最新物品名称并回填，
+     * 查询失败或返回空的物品保持原名称不变。
+     * </p>
+     *
+     * @return 实际更新（名称发生变化）的条数
+     */
+    @Transactional
+    public int refreshItemNames() {
+        List<WarehouseConfigDO> configs = configMapper.selectAll();
+        int updated = 0;
+        for (WarehouseConfigDO config : configs) {
+            String newName;
+            try {
+                newName = ItemInformationProvider.getInstance().getName(config.getItemId());
+            } catch (Exception e) {
+                log.warn("查询物品 {} 名称失败", config.getItemId(), e);
+                continue;
+            }
+            if (newName != null && !newName.equals(config.getItemName())) {
+                config.setItemName(newName);
+                configMapper.update(config);
+                updated++;
+            }
+        }
+        refreshConfigCache();
+        return updated;
+    }
+
     // ==================== 物品存取 ====================
 
     /**
@@ -376,6 +407,16 @@ public class WarehouseService {
     @Transactional
     public void deleteWarehouseItem(Long id) {
         itemMapper.deleteById(id);
+    }
+
+    /**
+     * 批量删除仓库物品记录（管理员操作）。
+     *
+     * @param ids 仓库物品ID列表
+     */
+    @Transactional
+    public void deleteWarehouseItemBatch(List<Long> ids) {
+        itemMapper.deleteBatchByIds(ids);
     }
 
     // ==================== 查询辅助 ====================

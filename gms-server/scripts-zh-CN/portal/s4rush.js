@@ -1,35 +1,30 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/**
- * @author Moogra (BubblesDev)
- * @purpose Warps to the Junior Balrog map for the Rush Skill.
- */
 function enter(pi) {
-    if (pi.isQuestStarted(6110)) {
-        pi.playPortalSound();
-        pi.warp(910500100, 0);
-        return true;
+    if (pi.getQuestStatus(6110) == 1) {
+	 if (pi.getParty() != null) {
+	     if (!pi.isLeader()) {
+		 pi.playerMessage("請找隊伍隊長來找我。");
+	     } else {
+		 if (pi.getParty().getMembers().size < 2) {
+		    pi.playerMessage("隊伍人數必須大於兩個以上。");
+		 } else {
+		      if (!pi.isAllPartyMembersAllowedJob(1)) {
+			  pi.playerMessage("隊伍裡有人職業不符合。");
+		      } else {
+			  var em = pi.getEventManager("4jrush");
+			  if (em == null) {
+			      pi.playerMessage("尚未找到副本，請聯繫管理員。");
+			  } else {
+			      em.startInstance(pi.getParty(), pi.getMap());
+			      return true;
+			  }
+		      }
+		 }
+	     }
+	 } else {
+	     pi.playerMessage(5, "尚未組隊，請組隊後再來找我。");
+	 }
     } else {
-        pi.getPlayer().message("一股神秘的力量阻止你进入。");
-        return false;
+	pi.playerMessage("由於太過強大您無法進入。");
     }
+    return false;
 }

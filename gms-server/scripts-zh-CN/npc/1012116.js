@@ -1,4 +1,4 @@
-function start() {
-    cm.sendNext("看起来这个地区没有什么可疑的东西。");
-    cm.dispose();
+function action(mode, type, selection) {
+    cm.sendNext("它看起来像有什么可疑的地方。");
+    cm.safeDispose();
 }

@@ -1,47 +1,23 @@
-/*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* 
-	Map(s): 		Empress' Road : Training Forest II
-	Description: 		Takes you to Timu's Forest
-*/
-
-var jobtype = 2;
-
 function enter(pi) {
-    if (pi.isQuestStarted(20301) || pi.isQuestStarted(20302) || pi.isQuestStarted(20303) || pi.isQuestStarted(20304) || pi.isQuestStarted(20305)) {
-        var map = pi.getClient().getChannelServer().getMapFactory().getMap(108010600 + (10 * jobtype));
-        if (map.countPlayers() > 0) {
-            pi.message("已有其他玩家正在该区域搜索。");
-            return false;
-        }
-
-        if (pi.haveItem(4032101 + jobtype, 1)) {
-            pi.message("你已挑战过变身术士，请向骑士长报告你的成功。" );
-            return false;
-        }
-
-        pi.playPortalSound();
-        pi.warp(108010600 + (10 * jobtype), "out00");
+    if (pi.getQuestStatus(20301) == 1 ||
+	pi.getQuestStatus(20302) == 1 ||
+	pi.getQuestStatus(20303) == 1 ||
+	pi.getQuestStatus(20304) == 1 ||
+	pi.getQuestStatus(20305) == 1) {
+	if (pi.getPlayerCount(108010620) == 0) {
+	    if (pi.haveItem(4032179, 1)) {
+		pi.removeNpc(108010620, 1104100);
+		var map = pi.getMap(108010620);
+		map.killAllMonsters(false);
+		map.spawnNpc(1104100, new java.awt.Point(263, 88));
+		pi.warp(108010620, 0);
+	    } else {
+		pi.playerMessage("You do not have the Erev Search Warrent to do so, please get it from Nineheart.");
+	    }
+	} else {
+	    pi.playerMessage("The forest is already being searched by someone else. Better come back later.");
+	}
     } else {
-        pi.playPortalSound();
-        pi.warp(130010110, "out00");
+	pi.warp(130010110, 0);
     }
-    return true;
 }

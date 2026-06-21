@@ -5,28 +5,19 @@
 
 var status = -1;
 
-function start() {
-    action(1, 0, 0);
-}
-
 function action(mode, type, selection) {
-    if (mode == -1 || mode == 0 && type > 0) {
-        cm.dispose();
-        return;
-    }
-
     if (mode == 1) {
-        status++;
+	status++;
     } else {
-        status--;
+	status--;
     }
     if (status == 0) {
-        cm.sendNext("我是黑翼的傀儡师弗朗西斯。你竟敢打扰我的木偶……这真的让我很生气，但这一次我会放过你。但如果我再发现你这样做，我发誓以黑魔法师的名义让你付出代价。");
+	cm.sendNextS("我是#p1204001#黑色翅膀的成员，你怎么敢来打扰我呢?? 你害我的老毛病又犯了，我发誓要效忠于黑魔法师，要是我抓住你了，我会让你付出代价的！", 9);
     } else if (status == 1) {
-        cm.sendNextPrev("#b(黑翼？嗯？他们是谁？这一切与黑魔法师有什么关系？嗯，也许你应该把这些信息报告给特鲁。)#k");
+	cm.sendNextPrevS("#b(黑色翅膀? 他们是谁? 而怎么会又跟黑魔法师扯到关系，也许该报告才对。)#k", 3);
     } else if (status == 2) {
-        cm.completeQuest(21719);
-        cm.warp(105040200, 10);//104000004 
-        cm.dispose();
+	cm.forceStartQuest(21760, "0");
+	cm.warp(105070300, 3);
+	cm.dispose();
     }
 }

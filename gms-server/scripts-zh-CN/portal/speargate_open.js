@@ -1,37 +1,24 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+Stage 2: Exit Door - Guild Quest
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
-    Stage 2: Exit Door - Guild Quest
-    @Author Lerk
+@Author Lerk
 */
 
 function enter(pi) {
-    if (pi.getPlayer().getMap().getReactorByName("speargate").getState() == 4) {
-        pi.playPortalSound();
-        pi.warp(990000401, 0);
+    if (pi.getMap().getReactorByName("speargate").getState() == 4) {
+        pi.warp(990000401);
         return true;
     } else {
-        pi.getPlayer().dropMessage(5, "前方的道路尚未开放。");
+	var map = pi.getPlayer().getEventInstance().getMapFactory().getMap(990000440);
+	if (map.getReactorByName("spear1").getState() >= 1 && map.getReactorByName("spear2").getState() >= 1 &&
+		map.getReactorByName("spear3").getState() >= 1 && map.getReactorByName("spear4").getState() >= 1) {
+		//reactors activated ....
+
+        		pi.warp(990000401);
+        		return true;
+		//just in case, we aren't giving gp (:
+	}
+        pi.playerMessage("This way forward is not open yet.");
         return false;
     }
 }

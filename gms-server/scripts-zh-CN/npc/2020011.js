@@ -19,120 +19,89 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+//BY MOOGRA
+/* Robeira
+	Magician 3rd job advancement
+	El Nath: Chief's Residence (211000001)
+	Custom Quest 100100, 100102
+*/
 
-status = -1;
+var status = 0;
 var job;
-var sel;
-actionx = {"Mental": false, "Physical": false};
 
 function start() {
-    var jobBase = parseInt(cm.getJobId() / 100);
-    var jobStyle = 4;
-    if (!(cm.getPlayer().getLevel() >= 70 && jobBase == jobStyle && cm.getJobId() % 10 == 0)) {
-        if (cm.getPlayer().getLevel() >= 50 && jobBase % 10 == jobStyle) {
-            status++;
-            action(1, 0, 1);
-            return;
-        }
-
-        cm.sendNext("你好。");
-        cm.dispose();
-        return;
-    }
-    if (cm.haveItem(4031058)) {
-        actionx["Mental"] = true;
-    } else if (cm.haveItem(4031057)) {
-        actionx["Physical"] = true;
-    }
-    cm.sendSimple("你需要我做什么吗？#b" + (cm.getJobId() % 10 == 0 ? "\r\n#L0#我想进行第三次职业转职。" : "") + "\r\n#L1#请允许我进行扎昆地牢任务。");
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    status++;
-    if (mode == 0 && type == 0) {
-        status -= 2;
-    } else if (mode != 1 || (status > 2 && !actionx["Mental"]) || status > 3) {
-        if (mode == 0 && type == 1) {
-            cm.sendNext("下定决心。");
-        }
-        cm.dispose();
-        return;
-    }
-    if (actionx["Mental"]) {
-        if (status == 0) {
-            cm.sendNext("做得好，完成了测试的智力部分。你明智地回答了所有问题。我必须说，你展现出的智慧水平让我印象深刻。在我们进行下一步之前，请先把项链交给我。");
-        } else if (status == 1) {
-            cm.sendYesNo("好的！现在，通过我，你将变成一个更加强大的冒险家。在这之前，请确保你的SP已经被充分使用了，你需要至少使用到70级之前获得的所有SP来进行第三次职业转职。哦，还有，由于你已经在第二次职业转职时选择了你的职业方向，所以在第三次职业转职时就不需要再次选择了。你现在要进行转职吗？");
-        } else if (status == 2) {
-            if (cm.getPlayer().getRemainingSp() > 0) {
-                if (cm.getPlayer().getRemainingSp() > (cm.getLevel() - 70) * 3) {
-                    cm.sendNext("请在继续之前使用你所有的SP。");
-                    cm.dispose();
-                    return;
-                }
-            }
-            if (cm.getJobId() % 10 == 0) {
-                cm.gainItem(4031058, -1);
-                cm.changeJobById(cm.getJobId() + 1);
-                cm.getPlayer().removePartyQuestItem("JBQ");
-            }
-
-            if (Math.floor(cm.getJobId() / 10) == 41) {
-                cm.sendNext("你已经正式被封为#b无影人#k。这本技能书为无影人引入了一系列新的攻击技能，利用影子进行复制和替代，包括#b金钱攻击#k（用金币代替MP，并根据投掷的金币数量对怪物造成伤害）和#b影分身#k（创建一个模仿每一个动作的影子，使无影人能够像两个隐士一样攻击怪物）。利用这些技能来对抗以前可能难以征服的怪物。");
-            } else {
-                cm.sendNext("你已经正式被任命为#b独行客#k。技能书中的新技能之一是#b分身术#k，你可以召唤其他强盗一起攻击多个怪物。独行客还可以利用游戏币进行多种操作，从攻击怪物（#b金钱炸弹#k，将地面上的游戏币引爆）到自我防御（#b金钱护盾#k，减少武器伤害）。");
-            }
-
-        } else if (status == 3) {
-            cm.sendNextPrev("我也给了你一些SP和AP；这应该能让你开始了。你现在确实成为了一个强大的盗贼。不过要记住，现实世界将等待着你，那里会有更艰难的障碍需要克服。当你觉得自己无法训练自己达到更高的境界时，那时候，只有那时候，来找我。我会在这里等着。");
-        }
-    } else if (actionx["Physical"]) {
-        if (status == 0) {
-            cm.sendNext("完成了测试的体能部分，做得很棒。我知道你能做到。现在你已经通过了测试的前半部分，接下来是后半部分。请先把项链给我。");
-        } else if (status == 1) {
-            if (cm.haveItem(4031057)) {
-                cm.gainItem(4031057, -1);
-                cm.getPlayer().setPartyQuestItemObtained("JBQ");
-            }
-            cm.sendNextPrev("这是测试的第二部分。这个测试将决定你是否足够聪明，可以迈向伟大的下一步。在Ossyria的雪地上有一个被雪覆盖的黑暗区域，被称为圣地，即使怪物也无法到达。在这个区域的中心，有一块被称为圣石的巨大石头。你需要献上一件特殊的物品作为祭品，然后圣石将在当场测试你的智慧。");
-        } else if (status == 2) {
-            cm.sendNextPrev("你需要诚实而坚定地回答每一个问题。如果你能正确回答所有问题，那么圣石将正式接受你，并交给你#b#t4031058##k。把项链拿回来，我会帮助你迈向下一步。祝你好运。");
-        }
-    } else if (cm.getPlayer().gotPartyQuestItem("JB3") && selection == 0) {
-        cm.sendNext("去，和#b#p1052001#对话，然后给我带来#b#t4031057#。");
-        cm.dispose();
-    } else if (cm.getPlayer().gotPartyQuestItem("JBQ") && selection == 0) {
-        cm.sendNext("去，和#b#p2030006#对话#k，然后给我带来#b#t4031058##k。");
+    if (mode == -1) {
         cm.dispose();
     } else {
-        if (sel == undefined) {
-            sel = selection;
-        }
-        if (sel == 0) {
-            if (cm.getPlayer().getLevel() >= 70 && cm.getJobId() % 10 == 0) {
-                if (status == 0) {
-                    cm.sendYesNo("欢迎。我是#b#p2020011##k，所有盗贼的首领，愿意分享我的街头知识和艰难生活给那些愿意倾听的人。你似乎已经准备好迈出这一步，准备好迎接第三职业转职的挑战。太多的盗贼来来去去，无法达到第三职业转职的标准。你呢？你准备好接受考验，进行第三职业转职了吗？");
-                } else if (status == 1) {
-                    cm.getPlayer().setPartyQuestItemObtained("JB3");
-                    cm.sendNext("好的。你将接受盗贼的两个重要方面的测试：力量和智慧。我现在会向你解释测试的物理部分。还记得在废弃都市的#b#p1052001##k吗？去找他，他会告诉你测试的第一部分的细节。请完成任务，并从#p1052001#那里得到#b#t4031057##k。");
-                } else if (status == 2) {
-                    cm.sendNextPrev("测试的心理部分只能在你通过了测试的身体部分之后才能开始。#b#t4031057##k 将证明你确实通过了测试。我会提前告诉#b#p1052001##k你要前往那里，所以做好准备。这不会很容易，但我对你有着最大的信心。祝你好运。");
-                }
-            }
-        } else {
-            if (cm.getPlayer().getLevel() >= 50) {
-                cm.sendOk("首领居住委员会授予你#b特许#k，让你成为#r反击扎昆的团队的一部分#k。祝你前程似锦。");
-                if (!(cm.isQuestStarted(100200) || cm.isQuestCompleted(100200))) {
-                    cm.startQuest(100200);
-                }
-                const GameConfig = Java.type('org.gms.config.GameConfig');
-                if (GameConfig.getServerBoolean("use_enable_solo_expeditions") && !cm.isQuestCompleted(100201)) {
-                    cm.completeQuest(100201);
-                }
-            } else {
-                cm.sendOk("你太弱了，无法成为#rcounteroffensive团队对抗扎昆#k的一部分。至少达到#blevel 50#k，然后再和我说话。");
-            }
+        if (mode == 0 && status == 1) {
+            cm.sendOk("等您下定决心再次找我吧.");
             cm.dispose();
+            return;
+        }
+        if (mode == 1)
+            status++;
+        else
+            status--;
+        if (status == 0) {
+		if (cm.getJob() == 411 || cm.getJob() == 421 || cm.getJob() == 412 || cm.getJob() == 422) {	
+	    cm.sendOk("您属于盗贼部,但是您已经成功三转了,已经超越了教官的强度了!");
+	    cm.dispose();
+	    return;
+		}
+            if (!(cm.getJob()==410 ||cm.getJob()==420)) {
+				cm.sendOk("请找您的转职教官,您不属于盗贼部的滚吧!");
+                cm.dispose();
+                return;
+			} else if (cm.getPlayer().getLevel() < 70) {
+				cm.sendOk("你的等级尚未满70等");
+				cm.dispose();
+				return;		
+            }	
+			if (cm.haveItem(4031057, 1)){
+                cm.sendNext("恭喜你到达这里,最后我将给你一个考验!");			
+            } else if (!(cm.haveItem(4031057,1))) {
+				cm.warp(103000003);
+                cm.sendOk("去找 #r达克鲁#k 他会帮助你的!");
+                cm.dispose();
+            } else if (cm.getPlayer().getRemainingSp() <= (cm.getLevel() - 70) * 3) {
+                cm.sendNext("你的技能点数还没点完..");
+		} else {
+                cm.sendOk("你还不能转职...");
+                cm.dispose();
+            }
+        } else if (status == 1) {
+            if (cm.haveItem(4031058, 1)) {
+                if (cm.getJob()==410) {
+                    cm.changeJob(411);
+                    //cm.getPlayer().gainAp(5);
+					cm.gainItem(4031057, -1);
+					cm.gainItem(4031058, -1);
+					cm.sendOk("恭喜转职了!");
+					cm.worldMessage("‘转职快报’：恭喜玩家."+ cm.getChar().getName() +"  成功三转-暗杀者让我们热烈的祝福他/她吧！");
+                    cm.dispose();
+                } else if (cm.getJob()==420) {
+                    cm.changeJob(421);
+                    //cm.getPlayer().gainAp(5);
+					cm.gainItem(4031057, -1);
+					cm.gainItem(4031058, -1);
+                    cm.sendOk("恭喜转职了!");
+					cm.worldMessage("‘转职快报’：恭喜玩家."+ cm.getChar().getName() +"  成功三转-神偷让我们热烈的祝福他/她吧！");
+                    cm.dispose();
+                }
+            } else if (cm.haveItem(4031057, 1))
+                cm.sendAcceptDecline("你准备承担最终测试??");
+            else
+                cm.sendAcceptDecline("但是，我可以让你更加强大。虽然你必须证明不仅是你的实力，但你的知识。你准备好挑战了吗？");
+        } else if (status == 2) {
+            if (cm.haveItem(4031057, 1)) {
+                cm.sendOk("去找神圣的石头测验吧!!.");
+                cm.dispose();
+            }
         }
     }
 }

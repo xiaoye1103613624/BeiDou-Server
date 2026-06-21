@@ -1,57 +1,41 @@
 /**
- Author: xQuasar
- NPC: Kyrin - Pirate Job Advancer
- Inside Test Room
- **/
+	Author: xQuasar
+	NPC: Kyrin - Pirate Job Advancer
+	Inside Test Room
+**/
 
 var status;
 
 function start() {
     status = -1;
-    action(1, 0, 0);
+    action(1,0,0);
 }
 
-function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (cm.getMapId() == 108000502) {
-                if (!(cm.haveItem(4031856, 15))) {
-                    cm.sendSimple("你还没有给我带来所有的水晶。我期待你的进展，伙计！\r\n#b#L1#我想离开#l");
-                } else {
-                    status++;
-                    cm.sendNext("哇，你给我带来了15个#b#t4031856##k！恭喜你。让我现在把你传送出去。");
-                }
-            } else if (cm.getMapId() == 108000501) {
-                if (!(cm.haveItem(4031857, 15))) {
-                    cm.sendSimple("你还没有给我带来所有的水晶。我期待你的进展，伙计！\r\n#b#L1#我想离开#l");
-                } else {
-                    status++;
-                    cm.sendNext("哇，你给我带来了15个#b#t4031857##k！恭喜你。让我现在把你传送出去。");
-                }
-            } else {
-                cm.sendNext("错误，请报告此问题。");
-                cm.dispose();
-            }
-        } else if (status == 1) {   // thanks Lame for noticing players getting stuck in area in certain scenarios
-            cm.removeAll(4031856);
-            cm.removeAll(4031857);
-            cm.warp(120000101, 0);
-            cm.dispose();
-        } else if (status == 2) {
-            cm.warp(120000101, 0);
-            cm.dispose();
-        }
+function action(mode,type,selection) {
+    if (status == -1) {
+	if (cm.getMapId() == 108000500) {
+	    if (!(cm.haveItem(4031857,15))) {
+		cm.sendNext("快去收集 15个 #b列风结晶#k 给我.");
+		cm.dispose();
+	    } else {
+		status = 2;
+		cm.sendNext("wow 果然是个大侠恭喜通过这次个考验 你已经是个强大的海盗了所以我将颁赠给你神秘的小礼物.");
+	    }
+	} else if (cm.getMapId() == 108000502) {
+	    if (!(cm.haveItem(4031856,15))) {
+		cm.sendNext("快去收集15个 #b强大力量结晶#k 给我.");
+		cm.dispose();
+	    } else {
+		status = 2;
+		cm.sendNext("wow 果然是个大侠恭喜通过这次个考验 你已经是个强大的海盗了所以我将颁赠给你神秘的小礼物.");
+	    }
+	} else {
+	    cm.sendNext("错误请再尝试一次.");
+	    cm.dispose();
+	}
+    } else if (status == 2) {
+	cm.gainItem(4031012, 1);
+	cm.warp(120000101,0);
+	cm.dispose();
     }
 }

@@ -60,6 +60,9 @@
                 >
                   {{ $t('button.delete') }}（{{ configSelectedKeys.length }}）
                 </a-button>
+                <a-button @click="refreshItemNamesClick">
+                  {{ $t('warehouse.config.refreshNames') }}
+                </a-button>
               </a-space>
             </a-col>
           </a-row>
@@ -195,6 +198,13 @@
                 <a-button type="primary" @click="loadItemsData">
                   {{ $t('button.search') }}
                 </a-button>
+                <a-button
+                  v-if="itemsSelectedKeys.length > 0"
+                  status="danger"
+                  @click="batchDeleteItemsClick"
+                >
+                  {{ $t('button.delete') }}（{{ itemsSelectedKeys.length }}）
+                </a-button>
               </a-space>
             </a-col>
           </a-row>
@@ -222,6 +232,8 @@
           <!-- 物品列表 -->
           <a-table
             row-key="id"
+            :row-selection="{ type: 'checkbox', showCheckedAll: true }"
+            v-model:selected-keys="itemsSelectedKeys"
             :loading="itemsLoading"
             :data="itemsTableData"
             :pagination="false"
@@ -379,7 +391,9 @@
     deleteConfigBatch,
     getWarehouseItems,
     deleteWarehouseItem,
+    deleteWarehouseItemBatch,
     getGameParams,
+    refreshItemNames,
   } from '@/api/warehouse';
   import { Message } from '@arco-design/web-vue';
 
@@ -534,6 +548,20 @@
     configModalVisible.value = false;
   };
 
+  /** 一键更新物品名称：根据物品ID从WZ数据查询并回填仓库配置中的物品名称 */
+  const refreshItemNamesClick = async () => {
+    setConfigLoading(true);
+    try {
+      const { data } = await refreshItemNames();
+      Message.success(
+        t('warehouse.config.refreshNames.success', { count: data })
+      );
+      await loadConfigData();
+    } finally {
+      setConfigLoading(false);
+    }
+  };
+
   // ==================== 物品管理 ====================
 
   const { loading: itemsLoading, setLoading: setItemsLoading } =
@@ -588,6 +616,26 @@
     } finally {
       setItemsLoading(false);
     }
+  };
+
+  /** 物品表格多选 key 列表 */
+  const itemsSelectedKeys = ref<number[]>([]);
+
+  /** 批量删除仓库物品 */
+  const batchDeleteItemsClick = () => {
+    if (itemsSelectedKeys.value.length === 0) {
+      Message.warning(t('warehouse.validate.selectFirst'));
+      return;
+    }
+    if (!window.confirm(t('warehouse.items.deleteBatch.confirm'))) return;
+    setItemsLoading(true);
+    deleteWarehouseItemBatch(itemsSelectedKeys.value as number[])
+      .then(() => {
+        Message.success(t('message.success'));
+        itemsSelectedKeys.value = [];
+        return loadItemsData();
+      })
+      .finally(() => setItemsLoading(false));
   };
 
   const onTabChange = (key: string | number) => {

@@ -23,16 +23,16 @@
 Kerning PQ: 1st stage to 2nd stage portal
 */
 
+
 function enter(pi) {
     var eim = pi.getPlayer().getEventInstance();
     var target = eim.getMapInstance(103000801);
 
     if (eim.getProperty("1stageclear") != null) {
-        pi.playPortalSound();
         pi.getPlayer().changeMap(target, target.getPortal("st00"));
         return true;
     } else {
-        pi.getPlayer().dropMessage(5, "传送门尚未开启。");
+        pi.playerMessage("The warp is currently unavailable.");
         return false;
     }
 }

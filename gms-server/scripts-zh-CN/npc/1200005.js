@@ -1,14 +1,12 @@
-/**
- ----------------------------------------------------------------------------------
- Whale Between Lith harbor and Rien.
+var status = -1;
 
- 1200005 Puro
-
- Credits to: MapleSanta
- ----------------------------------------------------------------------------------
- **/
-
-function start() {
-    cm.sendOk("啊，这太无聊了……鲸鱼在控制船，所以我除了抬头望着云外什么都做不了。");
-    cm.dispose()
+function action(mode, type, selection) {
+    if (mode == 1)
+	status++;
+    else
+	status--;
+    if (status == 0) {
+        cm.sendOk("今天天气真好啊?");
+	cm.dispose();
+    }
 }

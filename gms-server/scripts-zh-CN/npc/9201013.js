@@ -1,30 +1,58 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+var status = -1;
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* Victoria
-    @author Ronan
- */
-
-function start() {
-    cm.sendOk("欢迎来到大教堂。\r\n想在大教堂结婚的#b情侣#k应该首先与#r#p9201005##k#b预约#k。在预约的时间到来时，#b双方#k必须在同一频道出现在这里，并通过与#r#p9201002##k交谈开始仪式（有一个10分钟的容错政策）。一旦预约成功，双方可以#b分发门票#k给朋友或熟人成为婚礼的客人。\r\n在新郎和新娘进入建筑物后，仪式将开始接受#b客人#k。向#r#p9201005##k展示#b#t4000313##k以进入内部房间。没有门票的人不允许进入舞台！");
-    cm.dispose();
+function action(mode, type, selection) {
+    if (mode == 1) {
+	status++;
+    } else {
+	if (status == 0) {
+	    cm.dispose();
+	}
+	status--;
+    }
+    if (status == 0) {
+	cm.sendYesNo("你想要预定一个婚礼？？");
+    } else if (status == 1) {
+	if (cm.getPlayer().getMarriageId() <= 0) {
+	    cm.sendOk("你是不是搞错了？？");
+	} else if (!cm.canHold(4150000,60)) {
+	    cm.sendOk("请空出一些其他栏。。");
+	} else if (!cm.haveItem(5251004,1) && !cm.haveItem(5251005,1) && !cm.haveItem(5251006,1)) {
+	    cm.sendOk("请先从购物商场买预约票。");
+	} else {
+	    var chr = cm.getMap().getCharacterById(cm.getPlayer().getMarriageId());
+	    if (chr == null) {
+		cm.sendOk("确保你的伴侣在地图上。");
+		cm.dispose();
+		return;
+	    }
+	    var marr = cm.getQuestRecord(160001);
+	    var data = marr.getCustomData();
+	    if (data == null) {
+		marr.setCustomData("0");
+	        data = "0";
+	    }
+	    if (data.equals("0")) {
+		marr.setCustomData("1");
+		cm.setQuestRecord(chr, 160001, "1");
+		var num = 0;
+		if (cm.haveItem(5251006,1)) {
+		    cm.gainItem(5251006,-1);
+		    num = 60;
+		} else if (cm.haveItem(5251005,1)) {
+		    cm.gainItem(5251005,-1);
+		    num = 30;
+		} else if (cm.haveItem(5251004,1)) {
+		    cm.gainItem(5251004,-1);
+		    num = 10;
+		}
+		cm.setQuestRecord(cm.getPlayer(), 160002, num + "");
+		cm.setQuestRecord(chr, 160002, num + "");
+		cm.sendNext("你现在有资格为婚礼。这里是婚礼请柬，大家希望邀请将要求他们的客人。");
+		cm.gainItemPeriod(4150000,num,1);
+	    } else {
+		cm.sendOk("我想你已经结婚或者已经做了预约。");
+	    }
+	}
+	cm.dispose();
+    }
 }

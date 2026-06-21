@@ -1,31 +1,43 @@
+/* 
+	NPC Name: 		Sunny
+	Map(s): 		Orbis: Station<To Ludibrium> (200000121)
+	Description: 		Orbis Ticketing Usher
+*/
+var status = 0;
+
 function start() {
-    if (cm.haveItem(4031074)) {
-        var em = cm.getEventManager("Trains");
-        if (em.getProperty("entry") == "true") {
-            cm.sendYesNo("你想去玩具城吗？");
-        } else {
-            cm.sendOk("到玩具城的火车已经开出，请耐心等待下一班。");
-            cm.dispose();
-        }
-    } else {
-        cm.sendOk("确保你有前往玩具城的车票才能乘坐这趟火车。检查你的背包。");
-        cm.dispose();
-    }
+    status = -1;
+    train = cm.getEventManager("Trains");
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode <= 0) {
-        cm.sendOk("好的，如果你改变主意，就跟我说话！");
-        cm.dispose();
-        return;
+    status++;
+    if(mode == 0) {
+	cm.sendNext("等你考虑好再来找我。");
+	cm.dispose();
+	return;
     }
-    var em = cm.getEventManager("Trains");
-    if (em.getProperty("entry") == "true") {
-        cm.warp(200000122);
-        cm.gainItem(4031074, -1);
-        cm.dispose();
-    } else {
-        cm.sendOk("去玩具城的火车已经准备好了，下一班请耐心等候。");
-        cm.dispose();
+    if (status == 0) {
+	if(train == null) {
+	    cm.sendNext("找不到脚本请联系GM！");
+	    cm.dispose();
+	} else if (train.getProperty("entry").equals("true")) {
+	    cm.sendYesNo("你想要搭船？？");
+	} else if (train.getProperty("entry").equals("false") && train.getProperty("docked").equals("true")) {
+	    cm.sendNext("很抱歉本班船准备开走,乘坐时间表可以通过售票展台查看.");
+	    cm.dispose();
+	} else {
+	    cm.sendNext("请耐心等待几分钟，正在整理里面中！");
+	    cm.dispose();
+	}
+    } else if(status == 1) {
+	if(!cm.haveItem(4031074)) {
+	    cm.sendNext("不! 你没有#b#t4031047##k 所以我不能放你走!");
+	} else {
+	    cm.gainItem(4031074, -1);
+	    cm.warp(200000122, 0);
+	}
+	cm.dispose();
     }
 }

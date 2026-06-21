@@ -1,6 +1,14 @@
-var status = -1;
+// 定义项目数组，存储每个项目的当前地图ID和重返地图ID
+var projects = [
+    { 当前地图ID: 252030001, 重返地图ID: 252030100 }, //10万 
+	{ 当前地图ID: 211040401, 重返地图ID: 910540200 }, //30万
+	{ 当前地图ID: 555000100, 重返地图ID: 555000201 }, //50万 - 2030006
+	{ 当前地图ID: 803000505, 重返地图ID: 803200000 }, //300万 - 2030006
+	{ 当前地图ID: 209000000, 重返地图ID: 209000002 }  //500万
+];
 
 function start() {
+    status = -1;
     action(1, 0, 0);
 }
 
@@ -8,73 +16,65 @@ function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
     } else {
-        if (status == 1 && mode == 0) {
+        if (status >= 0 && mode == 0) {
             cm.dispose();
             return;
         }
-
         if (mode == 1) {
             status++;
         } else {
             status--;
         }
-        var eim = cm.getEventInstance();
-        if (eim == null) {
-            cm.sendNext("活动还没有开始...");
-            cm.dispose();
-            return;
-        }
-        switch (cm.getPlayer().getMapId()) {
-            case 610030100:
-                if (status == 0) {
-                    cm.sendNext("啊，你成功进来了。让我快告诉你：他们已经抓住我们了。守护大师们大约一分钟后就要来这里了。我们最好赶紧。");
-                } else if (status == 1) {
-                    cm.sendNext("通往扭曲大师的传送门已经坏了。我们必须找到另一条路，一条会让我们经历许多死亡陷阱的路。");
-                } else if (status == 2) {
-                    cm.sendNext("你可以在这附近找到传送门……你最好快点找到它。我会赶上来的。");
+
+        if (status == 0) {
+            var text = "请选择操作：\r\n";
+            text += "#b#L0#【点击重返BOSS战场】#l\r\n\r\n";
+            cm.sendSimple(text);
+        } else if (status == 1) {
+            if (selection == 0) {
+                // === 新增：每日次数检测 ===
+                var dailyKey = "远征副本每日重返";   // 自定义 key，可随意改
+                var todayUsed = cm.getPlayer().getBossLog(dailyKey); // 读今日已用次数
+                if (todayUsed >= 3) {
+                    cm.sendOk("今天你已经重返战场 3 次，请明天再来！");
                     cm.dispose();
+                    return;
                 }
-                break;
-            case 610030200:
-                if (status == 0) {
-                    cm.sendNext("这太成功了！现在，对于这条路，我相信我们需要每个冒险家职业的人才能通过。");
-                } else if (status == 1) {
-                    cm.sendNext("他们需要运用他们的技能在被称为"Sigils"的东西上。一旦这五个都完成了，我们就可以继续前进。");
-                    cm.dispose();
+                var 当前地图ID = cm.getMapId(); // 获取当前地图ID
+
+                // 遍历项目数组，检查每个项目
+                for (var i = 0; i < projects.length; i++) {
+                    if (当前地图ID == projects[i].当前地图ID) {
+                        var 重返地图 = cm.getMap(projects[i].重返地图ID);
+                        if (重返地图) {
+                            var 怪物列表 = 重返地图.getAllMonstersThreadsafe();
+                            var 怪物数量 = 怪物列表.size();
+                            if (怪物数量 > 0) {
+                                cm.warp(projects[i].重返地图ID, 0); // 传送玩家到指定的重返地图
+								// === 新增：记录次数 ===
+								cm.getPlayer().setBossLog(dailyKey);
+								var dailyKey = "远征副本每日重返";
+								var todayUsed = cm.getPlayer().getBossLog(dailyKey);
+								cm.getPlayer().dropMessage(5, "远征副本每日重返 " + todayUsed + "/3次。");   //红字私聊提示
+                                cm.dispose();
+                                return;
+                            } else {
+                                cm.sendOk("当前频道重返地图没有怪物，无法进行传送。");
+                                cm.dispose();
+                                return;
+                            }
+                        } else {
+                            cm.sendOk("无法找到重返地图，请检查地图ID是否正确。");
+                            cm.dispose();
+                            return;
+                        }
+                    }
                 }
-                break;
-            case 610030300:
-                if (status == 0) {
-                    cm.sendNext("现在我们这里有更多的封印。至少需要五名冒险家爬到最顶端并穿过传送门。但要注意：这张地图上并非所有的墙壁或地面都是看起来的那样，所以要小心行事！");
-                } else if (status == 1) {
-                    cm.sendNext("哦，还要小心这些致命陷阱：巨石。它们真的很厉害。祝你好运。");
-                    cm.dispose();
-                }
-                break;
-            case 610030400:
-                if (status == 0) {
-                    cm.sendNext("现在我们这里有更多的封印。然而，其中一些并不起作用。在这里，所有职业都必须发挥自己的作用，因为至少有一个封印是由他们的职业技能激活的，但是每个职业可能有多个封印，所以一定要测试它们全部。");
-                } else if (status == 1) {
-                    cm.sendNext("这些吸血蝙蝠会挡住你的路，但它们只是一种干扰。要摆脱它们，让五名冒险者同时站在中左平台上。要通过，尝试每一个符文，直到它们生效。");
-                    cm.dispose();
-                }
-                break;
-            case 610030500:
-                if (status == 0) {
-                    cm.sendNext("惊讶你能走到这一步！你在这里看到的是红木城堡的雕像，但是没有任何武器。");
-                } else if (status == 1) {
-                    cm.sendNext("有五个房间，每个房间附近都有一个雕像标记。");
-                } else if (status == 2) {
-                    cm.sendNext("我怀疑这些房间中每一个都有雕像的五把武器之一。");
-                } else if (status == 3) {
-                    cm.sendNext("把武器带回来，把它们恢复到掌握之遗物中！");
-                    cm.dispose();
-                }
-                break;
-            case 610030700:
-                cm.sendNext("那真是一次出色的表现！这条路通向扭曲大师的军械库。");
+
+                // 如果没有匹配的项目
+                cm.sendOk("你当前不在指定的地图，无法进行检测。");
                 cm.dispose();
-                break;
+            }
         }
     }
 }

@@ -1,53 +1,32 @@
 /*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* Papulatus
-	Origin of Clock Tower (922020300)
-	Time Leap quest NPC.
+ * Papulatus
  */
 
-var status;
+var status = -1;
 
-function start() {  // thanks iPunchEm for NPC visibility
-    status = -1;
+function start() {
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (mode == 1) {
+	status++;
     } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-"You don't belong to this world... Return now."
-        } else if (status == 1) {
-            cm.warp(220080000);
-            cm.dispose();
-        }
+	if (status >= 1) {
+	    status--;
+	} else {
+	    cm.dispose();
+	    return;
+	}
+    }
+    if (status == 0) {
+	cm.sendNext("您准备好返回到原始时间段了吗？维度裂缝目前处于打开状态。请记住，这是我第一次这样做，因此有可能失败。也就是说，我是 非常有信心，它将成功！我将确保您能回到原来的时间！");
+    } else if (status == 1) {
+	cm.sendNextPrev("现在，在我们开始之前，请考虑一下您过去所居住的时间和地点。“裂缝的维度”将认清想法，并将您带到那个地方。 以后见！");
+    } else if (status == 2) {
+	cm.teachSkill(5121010, 0, 10);
+	cm.forceCompleteQuest(6363);
+	cm.warp(120000200, 0);
+	cm.dispose();
     }
 }
