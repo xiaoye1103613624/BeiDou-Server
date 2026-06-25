@@ -140,6 +140,11 @@ public final class ItemConstants {
         return itemId == ItemId.ANTI_BANISH_SCROLL;
     }
 
+    /** 突破石：消耗后按概率累加角色的额外伤害上限（itemId 02614000-02614021） */
+    public static boolean isBreakthroughStone(int itemId) {
+        return itemId >= 2614000 && itemId <= 2614021;
+    }
+
     public static boolean isCleanSlate(int scrollId) {
         return scrollId > 2048999 && scrollId < 2049004;
     }

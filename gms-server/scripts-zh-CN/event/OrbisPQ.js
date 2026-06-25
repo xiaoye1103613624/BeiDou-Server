@@ -19,23 +19,37 @@
 */
 
 /**
+ * @description: 天空之城组队任务脚本
+ *               处理51-70级玩家的组队任务，特色机制为收集魔法云恢复女神内侍官的力量
+ *               全员职业集齐可获得随机增益效果
  * @author: Ronan
  * @event: Orbis PQ
  */
 
+/** 是否为组队任务 */
 var isPq = true;
+/** 最小/最大玩家数 */
 var minPlayers = 5, maxPlayers = 6;
+/** 最小/最大等级要求 */
 var minLevel = 51, maxLevel = 70;
+/** 进入地图ID */
 var entryMap = 920010000;
+/** 退出地图ID */
 var exitMap = 920011200;
+/** 招募地图ID */
 var recruitMap = 200080101;
+/** 通关地图ID */
 var clearMap = 920011300;
 
+/** 最小地图ID范围 */
 var minMapId = 920010000;
+/** 最大地图ID范围 */
 var maxMapId = 920011300;
 
-var eventTime = 45;     // 45 minutes
+/** 事件时间限制（分钟） */
+var eventTime = 45;
 
+/** 最大等待室数量 */
 const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');

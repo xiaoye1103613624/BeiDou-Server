@@ -85,7 +85,7 @@ function action(mode, type, selection) {
         // 将字符串复制8次
         text += `\t${皇冠.repeat(6)}\t 常用功能 \t${皇冠.repeat(6)}${changeLine}`;
         text += `\t\t\t${redSelect(3, "[传送自由]")}\t${redSelect(71, "[专车接送]")}\t${redSelect(11, "[匠人街]")}\t${changeLine.repeat(2)}`;
-        text += `${generalSelect(0, "新人福利")}\t${generalSelect(113, "新手礼包")}\t${generalSelect(112, "等级奖励")}\t${generalSelect(69, "快速转职")}\t${changeLine.repeat(2)}`;
+        text += `${generalSelect(0, "新人福利")}\t${generalSelect(73, "新人问问")}\t${generalSelect(113, "新手礼包")}\t${generalSelect(112, "等级奖励")}\t${generalSelect(69, "快速转职")}\t${changeLine.repeat(2)}`;
         text += `${redSelect(62, "快捷商店")}\t${generalSelect(165, "卷轴中心")}\t${generalSelect(4, "爆率一览")}\t${generalSelect(302, "学习技能")}\t${changeLine.repeat(2)}`;
 
         text += changeLine.repeat(1);
@@ -93,7 +93,7 @@ function action(mode, type, selection) {
         text += `\t${粉心.repeat(7)}\t 牛马每日 \t${粉心.repeat(7)}${changeLine}`;
         text += `${redSelect(1, "每日签到")}\t${redSelect(2, "在线奖励")}\t${generalSelect(200, "每日探索")}\t${redSelect(201, "每日副本")}${changeLine.repeat(2)}`;
         text += `${redSelect(202, "每日跑环")}\t${generalSelect(203, "跑环仓库")}\t${generalSelect(204, "每日副本")}\t${generalSelect(205, "每日BOSS")}${changeLine.repeat(2)}`;
-        text += `${redSelect(220, "高级BOSS")}${changeLine.repeat(2)}`;
+        text += `${redSelect(220, "高级BOSS")}\t${generalSelect(206, "双倍领取")}${changeLine.repeat(2)}`;
 
         text += changeLine.repeat(1);
         // =======================================收集功能============================================3
@@ -124,8 +124,8 @@ function action(mode, type, selection) {
         text += `${redSelect(166, "仓库管理")}\t${generalSelect(167, "物品兑换")}\t${generalSelect(168, "金币赌博")}\t${generalSelect(169, "金币抽奖")}${changeLine.repeat(2)}`;
         text += `${generalSelect(170, "金币兑换")}\t${generalSelect(170, "道具抽奖")}\t${generalSelect(171, "枫叶兑换")}\t${generalSelect(172, "答题")}\t${changeLine.repeat(2)}`;
         text += `${generalSelect(174, "皇家发型")}\t${generalSelect(173, "精美点装")}\t${generalSelect(175, "物品兑换")}\t${generalSelect(176, "益智答题")}\t${changeLine.repeat(2)}`;
-        text += `${generalSelect(177, "发色选择")}\t${generalSelect(509, "时装升星")}\t${generalSelect(511, "口令礼包")}${changeLine.repeat(2)}`;
-        text += `${generalSelect(510, "一键回收")}${changeLine.repeat(2)}`;
+        text += `${generalSelect(177, "发色选择")}\t${generalSelect(509, "时装升星")}\t${generalSelect(511, "口令礼包")}\t${generalSelect(178, "现金商店")}${changeLine.repeat(2)}`;
+        text += `${generalSelect(510, "一键回收")}\t${generalSelect(179, "银行系统")}${changeLine.repeat(2)}`;
 
 
         // text += "#L999#测试脚本>>>未上线#l\t\r\n";
@@ -186,6 +186,9 @@ function doSelect(selection) {
             break;
         case 0:
             openNpc("新人福利");
+            break;
+        case 73:
+            openNpc("新人问问");
             break;
         case 1:
             openNpc("每日签到");
@@ -303,6 +306,12 @@ function doSelect(selection) {
         case 511:
             openNpc("xy/other/口令礼包");
             break;
+        case 178:
+            openNpc("xy/other/现金商店");
+            break;
+        case 179:
+            openNpc("xy/other/银行系统");
+            break;
         case 200:
             openNpc("xy/day/每日探索");
             break;
@@ -320,6 +329,9 @@ function doSelect(selection) {
             break;
         case 205:
             openNpc("xy/day/每日Boss");
+            break;
+        case 206:
+            openNpc("xy/day/每日双倍领取");
             break;
         case 300:
             openNpc("xy/mentor/师徒系统");

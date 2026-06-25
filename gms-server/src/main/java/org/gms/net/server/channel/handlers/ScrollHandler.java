@@ -174,6 +174,10 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 if (equipSlot < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE)) {
                     chr.equipChanged(); // 通知客户端装备发生变化
                 }
+                if (scrollSuccess == Equip.ScrollResult.SUCCESS) {
+                    // 每日活跃-装备砸卷：成功砸卷一次累计一次进度
+                    org.gms.config.DailyActiveManager.addProgress(chr.getId(), "zhuangbei_zhajuan", 1);
+                }
             } finally {
                 c.releaseClient(); // 释放客户端资源
             }

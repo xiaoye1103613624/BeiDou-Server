@@ -34,7 +34,7 @@ function action(mode, type, selection) {
         text += "#k\t\t\t#r 做好挑战 " + fbmc + "" + 麦格纳斯 + " 了么 #k\r\n\r\n进入要求如下：\r\n①人数限制:#r " + minPartySize + " #b- #r" + maxPartySize + "#k队员\t②等级限制：#r " + minLevel + " #b- #r" + maxLevel + "级 #k\r\n"
         text += "#k每天只能挑战:#b" + cishuxianzhi + "#k次 你今天已进入:#b" + cm.getPlayer().get每日记录("麦格纳斯次数") + "#k次#k\r\n"
         text += "挑战BOSS需要3000w金币\r\n"
-        text += "#k战力高于:#b400万#k才可进入[当前战力:#b" + cm.getPlayer().GetCombat() / 10000 + "万#k]#k\r\n"
+        text += "#k战力高于:#b400万#k才可进入[当前战力:#b" + cm.getPlayer().getCombatPower() / 10000 + "万#k]#k\r\n"
         // text += "#k需要#v4001127#1个#k\r\n"
         if (!cm.getParty每日记录("麦格纳斯次数", cishuxianzhi)) { //判断组队是否2次
             text += "当前队伍状况:#r 队伍中队友挑战次数已经用完#k\r\n\r\n"
@@ -95,7 +95,7 @@ function action(mode, type, selection) {
                     var cPlayer = it.next();
                     var chr = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());
                     if (chr != null) {
-                        if (chr.GetCombat() < 4000000) {
+                        if (chr.getCombatPower() < 4000000) {
                             msg += chr.getName() + " "
                         }
                     } else {

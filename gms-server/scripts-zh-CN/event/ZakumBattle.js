@@ -39,6 +39,7 @@ var eventTime = 120;     // 120 minutes
 const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
+const DailyActiveManager = Java.type('org.gms.config.DailyActiveManager');
 minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
 if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
     minLevel = 1 , maxLevel = 999;
@@ -226,6 +227,17 @@ function monsterKilled(mob, eim) {
         eim.clearPQ();
 
         mob.getMap().broadcastZakumVictory();
+
+        // 每日活跃-通关副本：扎昆通关时，给在场全部远征队成员各记1次进度
+        addPqClearProgress(eim);
+    }
+}
+
+/** 每日活跃-通关副本：给当前远征队全部在场成员累计1次pq_clear进度 */
+function addPqClearProgress(eim) {
+    var party = eim.getPlayers();
+    for (var i = 0; i < party.size(); i++) {
+        DailyActiveManager.addProgress(party.get(i).getId(), "pq_clear", 1);
     }
 }
 

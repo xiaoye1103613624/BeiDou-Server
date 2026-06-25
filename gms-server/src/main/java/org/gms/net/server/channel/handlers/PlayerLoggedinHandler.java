@@ -48,6 +48,7 @@ import org.gms.net.server.channel.Channel;
 import org.gms.net.server.channel.CharacterIdChannelPair;
 import org.gms.net.server.coordinator.session.Hwid;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
+import org.gms.service.StaminaService;
 import org.gms.net.server.coordinator.world.EventRecallCoordinator;
 import org.gms.net.server.guild.Alliance;
 import org.gms.net.server.guild.Guild;
@@ -55,7 +56,6 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
-import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
     private final NoteService noteService;
 
-    private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    private static final StaminaService staminaService = ServerManager.getApplicationContext().getBean(StaminaService.class);
 
     public PlayerLoggedinHandler(NoteService noteService) {
         this.noteService = noteService;
@@ -225,14 +225,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.newClient(c);
             }
 
-            // 增加参数判断，避免给客户端发未知包导致异常
-            if (GameConfig.getServerBoolean("use_server_auto_pot")) {
-                byte hpAlert = hpMpAlertService.getHpAlert(player.getId());
-                byte mpAlert = hpMpAlertService.getMpAlert(player.getId());
-                // 仅同步给本人：该包属于客户端本地设置且不含角色标识，广播给他人可能污染其本地配置。
-                // 后续如需扩展系统设置字段，可在该包尾部追加，保持前两个字节为 HP/MP 警报。
-                player.sendPacket(PacketCreator.updateClientSettings(hpAlert, mpAlert));
-            }
+            // HP/MP警报仅在开启自动吃药时同步，伤害上限字段(突破石累加值)与该开关无关，每次登录都下发；
+            // 仅同步给本人：该包属于客户端本地设置且不含角色标识，广播给他人可能污染其本地配置。
+            player.resyncDisplayDamageCap();
             cserv.addPlayer(player);
             wserv.addPlayer(player);
             player.setEnteredChannelWorld();
@@ -339,6 +334,16 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
             //展示服务信息
             noteService.show(player);
+            //每日体力发放提示（炼金体力账号通用，每日首次登录/访问炼金NPC时自动结算）
+            try {
+                var staminaResult = staminaService.getOrCreateWithRefillInfo(player.getAccountId());
+                if (staminaResult.refilledToday()) {
+                    player.dropMessage(6, "[炼金体力] 今日体力已发放 " + StaminaService.DAILY_REFILL
+                            + " 点，当前体力：" + staminaResult.stamina().getStamina() + "/" + StaminaService.MAX_STAMINA);
+                }
+            } catch (Exception e) {
+                log.error("登录体力发放提示失败", e);
+            }
             //异常地图掉线信息提示
             c.getSysRescue().showMapChangeMessage(player);
 

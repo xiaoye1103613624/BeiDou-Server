@@ -941,6 +941,9 @@ public class Server {
         // 主动清理每日零点需要清理的数据
         new BossLogTask().run();
         new ExtendValueTask().run();
+
+        // 启动装备战力排行榜定时刷新任务(每小时重新统计前10名)
+        org.gms.server.EquipPowerRankingManager.startRankingRefresh();
         log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();

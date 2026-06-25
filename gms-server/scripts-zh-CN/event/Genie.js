@@ -20,18 +20,40 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @description: 精灵运输系统脚本
+ *               处理天空之城(Orbis)与阿里安特(Ariant)之间的精灵传送
+ * @author: OdinMS Team
+ * @event: Genie Transportation
+ */
+
+/** 天空之城候车室 */
 var Orbis_btf;
+/** 开往天空之城的精灵 */
 var Genie_to_Orbis;
+/** 天空之城停靠点 */
 var Orbis_docked;
+/** 阿里安特候车室 */
 var Ariant_btf;
+/** 开往阿里安特的精灵 */
 var Genie_to_Ariant;
+/** 阿里安特停靠点 */
 var Ariant_docked;
+/** 天空之城售票处 */
+var Orbis_Station;
 
-//Time Setting is in millisecond
-var closeTime = 4 * 60 * 1000; //The time to close the gate
-var beginTime = 5 * 60 * 1000; //The time to begin the ride
-var rideTime = 5 * 60 * 1000; //The time that require move to destination
+/** 时间设置（单位：毫秒） */
+/** 关闭入口的时间 (4分钟) */
+var closeTime = 4 * 60 * 1000;
+/** 出发前的准备时间 (5分钟) */
+var beginTime = 5 * 60 * 1000;
+/** 到达目的地所需的时间 (5分钟) */
+var rideTime = 5 * 60 * 1000;
 
+/**
+ * 初始化函数
+ * 修正交通工具旅行时间并获取地图实例
+ */
 function init() {
     closeTime = em.getTransportationTime(closeTime);
     beginTime = em.getTransportationTime(beginTime);
@@ -48,20 +70,31 @@ function init() {
     scheduleNew();
 }
 
+/**
+ * 设置新的精灵运行周期
+ * 重置停靠状态并安排关闭入口和出发任务
+ */
 function scheduleNew() {
     em.setProperty("docked", "true");
     Orbis_docked.setDocked(true);
     Ariant_docked.setDocked(true);
 
     em.setProperty("entry", "true");
-    em.schedule("stopEntry", closeTime); //The time to close the gate
-    em.schedule("takeoff", beginTime); //The time to begin the ride
+    em.schedule("stopEntry", closeTime);
+    em.schedule("takeoff", beginTime);
 }
 
+/**
+ * 关闭精灵入口
+ */
 function stopEntry() {
     em.setProperty("entry", "false");
 }
 
+/**
+ * 精灵出发处理
+ * 将候车室的玩家传送到精灵上，并安排到达任务
+ */
 function takeoff() {
     Orbis_btf.warpEveryone(Genie_to_Ariant.getId());
     Ariant_btf.warpEveryone(Genie_to_Orbis.getId());
@@ -72,9 +105,13 @@ function takeoff() {
     Orbis_docked.setDocked(false);
     Ariant_docked.setDocked(false);
 
-    em.schedule("arrived", rideTime); //The time that require move to destination
+    em.schedule("arrived", rideTime);
 }
 
+/**
+ * 精灵到达目的地处理
+ * 将精灵上的玩家传送到对应站点
+ */
 function arrived() {
     Genie_to_Orbis.warpEveryone(Orbis_Station.getId(), 0);
     Genie_to_Ariant.warpEveryone(Ariant_docked.getId(), 1);
@@ -84,6 +121,9 @@ function arrived() {
     scheduleNew();
 }
 
+/**
+ * 取消预定的事件/任务调度
+ */
 function cancelSchedule() {}
 
 // ---------- FILLER FUNCTIONS ----------
@@ -117,4 +157,3 @@ function clearPQ(eim) {}
 function allMonstersDead(eim) {}
 
 function playerUnregistered(eim, player) {}
-

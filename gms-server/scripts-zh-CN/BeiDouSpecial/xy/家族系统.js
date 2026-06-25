@@ -13,6 +13,7 @@ var PacketCreator = Java.type("org.gms.util.PacketCreator");
 var DatabaseConnection = Java.type("org.gms.util.DatabaseConnection");
 var Server = Java.type("org.gms.net.server.Server");
 var I18nUtil = Java.type("org.gms.util.I18nUtil");
+var GameConfig = Java.type("org.gms.config.GameConfig");
 
 // ==================== 常量 ====================
 var SEL_BACK = 0;
@@ -55,6 +56,10 @@ function action(mode, type, selection) {
             handleCreateFinal();
         } else if (pendingAction == "joinList") {
             handleJoinGuild(selection);
+        } else if (pendingAction == "donate") {
+            handleDonateConfirm(selection);
+        } else if (pendingAction == "doubleBuff") {
+            handleDoubleBuffConfirm();
         } else {
             cm.dispose();
         }
@@ -98,6 +103,11 @@ function showMainMenu() {
     if (cm.getPlayer().getGuildRank() == 1) {
         text += "#L3##b扩充成员上限#k（#r" + EXPAND_COST_NX + "点券#k 增加" + EXPAND_SIZE + "人，最多" + MAX_CAPACITY + "人）#l\r\n";
     }
+    text += "#L4##b查看贡献 / 捐献金币换贡献#k#l\r\n";
+    if (cm.getPlayer().getGuildRank() == 1) {
+        var doubleBuffCost = GameConfig.getServerInt("guild_double_buff_meso_cost");
+        text += "#L5##b开启家族双爆#k（经验+掉落双倍，需#r" + (doubleBuffCost / 10000) + "W金币#k）#l\r\n";
+    }
     text += "\r\n#L" + SEL_BACK + "##g返回首页#k#l\r\n";
 
     cm.sendSimple(text);
@@ -130,6 +140,11 @@ function handleMainSelection(selection) {
     } else if (selection == 3) {
         pendingAction = "expand";
         showExpandConfirm();
+    } else if (selection == 4) {
+        showContributeMenu();
+    } else if (selection == 5) {
+        pendingAction = "doubleBuff";
+        showDoubleBuffConfirm();
     } else {
         cm.dispose();
     }
@@ -465,6 +480,69 @@ function handleExpandConfirm() {
 
     cashShop.gainCash(1, -EXPAND_COST_NX);
     cm.sendOk("扩充成功！家族成员上限已提升至 " + guild.getCapacity() + "人。已扣除 " + EXPAND_COST_NX + "点券。");
+    cm.dispose();
+}
+
+// ==================== 贡献查看 / 捐献 ====================
+function showContributeMenu() {
+    var player = cm.getPlayer();
+    var mesoPerPoint = GameConfig.getServerInt("guild_donate_meso_per_contribution");
+
+    var text = "\t\t#r#e< 家族贡献 >#k#n\r\n\r\n";
+    text += "家族当前等级：#b" + cm.getGuildLevel() + "#k\r\n";
+    text += "家族总贡献(GP)：#b" + cm.getGuildTotalContribution() + "#k\r\n";
+    text += "我的累计贡献：#b" + cm.getGuildContribution() + "#k\r\n\r\n";
+    text += "捐献 #r" + mesoPerPoint + "#k 金币可换取 #b1#k 点家族贡献，将立即计入家族GP并可能使家族升级。\r\n\r\n";
+    text += "请输入要捐献的金币数量：";
+
+    pendingAction = "donate";
+    cm.sendGetNumber(text, mesoPerPoint, mesoPerPoint, 1000000000);
+}
+
+function handleDonateConfirm(selection) {
+    var mesoAmount = selection;
+    if (cm.donateGuildContribution(mesoAmount)) {
+        cm.sendOk("捐献成功！已扣除 " + mesoAmount + " 金币，家族贡献+" + Math.floor(mesoAmount / GameConfig.getServerInt("guild_donate_meso_per_contribution")) + "。");
+    } else {
+        cm.sendOk("捐献失败！可能是金币不足或金额过低，未扣除任何金币。");
+    }
+    cm.dispose();
+}
+
+// ==================== 家族双爆 ====================
+function showDoubleBuffConfirm() {
+    if (cm.getPlayer().getGuildRank() != 1) {
+        cm.sendOk("只有族长才能开启家族双爆！");
+        cm.dispose();
+        return;
+    }
+
+    var cost = GameConfig.getServerInt("guild_double_buff_meso_cost");
+    var duration = GameConfig.getServerInt("guild_double_buff_duration");
+    var meso = cm.getPlayer().getMeso();
+
+    var text = "\t\t#r#e< 开启家族双爆 >#k#n\r\n\r\n";
+    text += "持续时间：#b" + duration + "#k 分钟\r\n";
+    text += "消耗金币：#r" + cost + "#k\r\n";
+    text += "当前金币：#b" + meso + "#k\r\n\r\n";
+
+    if (meso < cost) {
+        text += "金币不足，无法开启！";
+        cm.sendOk(text);
+        cm.dispose();
+        return;
+    }
+
+    text += "确定要支付 " + cost + " 金币，为全体在线家族成员开启 " + duration + " 分钟双爆吗？";
+    cm.sendYesNo(text);
+}
+
+function handleDoubleBuffConfirm() {
+    if (cm.activateGuildDoubleBuff()) {
+        cm.sendOk("家族双爆已开启！全体在线成员的经验与掉落已翻倍。");
+    } else {
+        cm.sendOk("开启失败！可能是金币不足或你不是族长。");
+    }
     cm.dispose();
 }
 

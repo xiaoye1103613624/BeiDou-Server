@@ -130,7 +130,7 @@ public class MonsterAggroCoordinator {
         pae.toNextUpdate = (int) Math.ceil((120000L / GameConfig.getServerDouble("mob_status_aggro_interval")) / Math.pow(2, pae.expireStreak + pae.currentDamageInstances));
     }
 
-    private static void insertEntryDamage(PlayerAggroEntry pae, int damage) {
+    private static void insertEntryDamage(PlayerAggroEntry pae, long damage) {
         synchronized (pae) {
             long totalDamage = pae.averageDamage;
             totalDamage *= pae.currentDamageInstances;
@@ -174,7 +174,7 @@ public class MonsterAggroCoordinator {
      * @param cid    角色ID
      * @param damage 本次造成的伤害
      */
-    public void addAggroDamage(Monster mob, int cid, int damage) { // assumption: should not trigger after dispose()
+    public void addAggroDamage(Monster mob, int cid, long damage) { // assumption: should not trigger after dispose()
         if (!mob.isAlive()) {
             return;
         }

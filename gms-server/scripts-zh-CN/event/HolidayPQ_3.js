@@ -19,25 +19,37 @@
 */
 
 /**
+ * @description: 节日组队任务脚本 - 高级
+ *               处理41-50级玩家的节日PQ，特色机制为保护雪人并使其进化
+ *               玩家需要收集雪之精气喂养雪人，雪人进化到最高级后召唤BOSS Scrooge
  * @author: Ronan
- * @event: Holiday PQ
+ * @event: Holiday PQ Level 3
  */
 
-// GMS-like event string data thanks to iHealForLove
-
+/** 是否为组队任务 */
 var isPq = true;
+/** 最小/最大玩家数 */
 var minPlayers = 3, maxPlayers = 6;
+/** 最小/最大等级要求 */
 var minLevel = 41, maxLevel = 50;
+/** 进入地图ID */
 var entryMap = 889100021;
+/** 退出地图ID */
 var exitMap = 889100022;
+/** 招募地图ID */
 var recruitMap = 889100020;
+/** 通关地图ID */
 var clearMap = 889100022;
 
+/** 最小地图ID范围 */
 var minMapId = 889100021;
+/** 最大地图ID范围 */
 var maxMapId = 889100021;
 
-var eventTime = 25;     // 25 minutes
+/** 事件时间限制（分钟） */
+var eventTime = 25;
 
+/** 最大等待室数量 */
 const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
@@ -377,4 +389,3 @@ function snowmanSnackFake(eim) {
 function cancelSchedule() {}
 
 function dispose(eim) {}
-

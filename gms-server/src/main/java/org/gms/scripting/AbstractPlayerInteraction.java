@@ -2383,4 +2383,67 @@ public class AbstractPlayerInteraction {
         return getPlayer().getCurrentOnlineTime();
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 公会(家族)等级 / 贡献 / 双爆 相关脚本桥接方法
+
+    /**
+     * 获取当前角色所在公会等级，未加入公会返回0
+     */
+    public int getGuildLevel() {
+        Guild guild = getPlayer().getGuild();
+        return guild != null ? guild.getLevel() : 0;
+    }
+
+    /**
+     * 获取当前角色个人累计公会贡献
+     */
+    public int getGuildContribution() {
+        return getPlayer().getGuildContribution();
+    }
+
+    /**
+     * 获取当前角色所在公会的总贡献(GP)，未加入公会返回0
+     */
+    public int getGuildTotalContribution() {
+        Guild guild = getPlayer().getGuild();
+        return guild != null ? guild.getGP() : 0;
+    }
+
+    /**
+     * 捐献金币换取公会贡献，金币不足或未加入公会时返回false
+     *
+     * @param mesoAmount 捐献的金币数量
+     */
+    public boolean donateGuildContribution(int mesoAmount) {
+        Guild guild = getPlayer().getGuild();
+        if (guild == null || mesoAmount <= 0) {
+            return false;
+        }
+        int mesoPerPoint = GameConfig.getServerInt("guild_donate_meso_per_contribution");
+        int gainedContribution = mesoAmount / mesoPerPoint;
+        if (gainedContribution <= 0 || getPlayer().getMeso() < mesoAmount) {
+            return false;
+        }
+        getPlayer().gainMeso(-mesoAmount, true);
+        guild.addContribution(getPlayer(), gainedContribution);
+        return true;
+    }
+
+    /**
+     * 会长付费开启公会双爆(经验+掉落同时翻倍)，非会长或金币不足返回false
+     */
+    public boolean activateGuildDoubleBuff() {
+        Guild guild = getPlayer().getGuild();
+        if (guild == null || guild.getLeaderId() != getPlayer().getId()) {
+            return false;
+        }
+        int cost = GameConfig.getServerInt("guild_double_buff_meso_cost");
+        if (getPlayer().getMeso() < cost) {
+            return false;
+        }
+        getPlayer().gainMeso(-cost, true);
+        guild.activateDoubleBuff(GameConfig.getServerInt("guild_double_buff_duration"));
+        return true;
+    }
+
 }

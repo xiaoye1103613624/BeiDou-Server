@@ -90,6 +90,15 @@ var RATE = 1;
 
 // ===== Java类型导入 =====
 var InventoryType = Java.type('org.gms.client.inventory.InventoryType');
+var ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');
+
+/**
+ * 校验装备ID是否在WZ数据中真实存在（与9031003.js装备鉴定的存在性校验方式一致）
+ * @returns true=WZ里有该装备数据
+ */
+function equipExistsInWz(itemId) {
+    return ItemInformationProvider.getInstance().getEquipStats(itemId) != null;
+}
 
 // ===== 武器类型前缀 → 中文名 =====
 var WEAPON_TYPE_NAME = {
@@ -216,15 +225,16 @@ var CHAIN_NODES = [
             146: 1462241, 147: 1472263, 148: 1482218, 149: 1492233
         }
     },
-    // {
-    //     key: "justice", name: "<正义>枫叶武器系列", weaponLevel: 145,
-    //     otherMaterials: [[4011007, 120], [4021009, 120], [4000313, 120], [4001126, 1200]],
-    //     items: {
-    //         130: 1302200, 131: 1312106, 132: 1322146, 133: 1332177, 137: 1372126, 138: 1382152,
-    //         140: 1402138, 141: 1412094, 142: 1422097, 143: 1432126, 144: 1442164, 145: 1452156,
-    //         146: 1462146, 147: 1472168, 148: 1482129, 149: 1492129
-    //     }
-    // },
+    {
+        // 该节点物品ID是否存在于WZ数据由equipExistsInWz()运行时校验，缺失的类型会在buildTypeChain()里自动跳过
+        key: "justice", name: "<正义>枫叶武器系列", weaponLevel: 145,
+        otherMaterials: [[4011007, 120], [4021009, 120], [4000313, 120], [4001126, 1200]],
+        items: {
+            130: 1302200, 131: 1312106, 132: 1322146, 133: 1332177, 137: 1372126, 138: 1382152,
+            140: 1402138, 141: 1412094, 142: 1422097, 143: 1432126, 144: 1442164, 145: 1452156,
+            146: 1462146, 147: 1472168, 148: 1482129, 149: 1492129
+        }
+    },
     {
         key: "royalBaron", name: "皇家班·雷昂武器系列", weaponLevel: 150,
         otherMaterials: [[4011007, 140], [4021009, 140], [4000313, 140], [4001126, 1400]],
@@ -339,7 +349,7 @@ function buildTypeChain(weaponType) {
     for (var i = 0; i < CHAIN_NODES.length; i++) {
         var node = CHAIN_NODES[i];
         var itemId = node.items[weaponType];
-        if (itemId != null) {
+        if (itemId != null && equipExistsInWz(itemId)) {
             chain.push({
                 itemId: itemId,
                 name: node.name,

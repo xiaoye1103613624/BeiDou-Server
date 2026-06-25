@@ -164,10 +164,10 @@ public class SpawnPoint {
             }
 
             @Override
-            public void monsterDamaged(Character from, int trueDmg) {}
+            public void monsterDamaged(Character from, Long trueDmg) {}
 
             @Override
-            public void monsterHealed(int trueHeal) {}
+            public void monsterHealed(Long trueHeal) {}
         });
         if (mobTime == 0) {
             nextPossibleSpawn = Server.getInstance().getCurrentTime() + mobInterval;

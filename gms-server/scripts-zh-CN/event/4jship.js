@@ -19,27 +19,51 @@
 */
 /**
  * @Author Ronan
- * Event - Kyrin's Test Quest
- **/
+ * @Event Kyrin's Test Quest
+ * @Description 第四职业海盗的凯琳试炼任务脚本（船舰测试）
+ *              玩家需要在限定时间内生存并完成试炼挑战
+ */
 
+/** 任务入口地图ID */
 var entryMap = 912010000;
+/** 任务出口地图ID */
 var exitMap = 120000101;
 
+/** 任务地图ID范围 - 最小值 */
 var minMapId = 912010000;
+/** 任务地图ID范围 - 最大值 */
 var maxMapId = 912010200;
 
-var eventTime = 4; //4 minutes
+/** 任务时限（分钟） */
+var eventTime = 4;
 
+/** 最大同时进行任务的场次数量 */
 const maxLobbies = 7;
 
+/**
+ * 获取最大任务场次数量
+ * 
+ * @returns {number} 最大场次数量
+ */
 function getMaxLobbies() {
     return maxLobbies;
 }
 
+/**
+ * 初始化事件
+ * 设置允许玩家进入任务状态
+ */
 function init() {
     em.setProperty("noEntry", "false");
 }
 
+/**
+ * 设置任务实例
+ * 
+ * @param {number} level - 玩家等级
+ * @param {number} lobbyid - 场次ID
+ * @returns {object} 事件实例管理器
+ */
 function setup(level, lobbyid) {
     var eim = em.newInstance("4jship_" + lobbyid);
     eim.setProperty("level", level);
@@ -55,14 +79,36 @@ function setup(level, lobbyid) {
     return eim;
 }
 
+/**
+ * 任务设置完成后的回调函数
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function afterSetup(eim) {}
 
+/**
+ * 重新生成任务阶段
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function respawnStages(eim) {}
 
+/**
+ * 设置玩家可以离开状态
+ * 任务开始1分钟后允许玩家离开
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function playerCanLeave(eim) {
     eim.setIntProperty("canLeave", 1);
 }
 
+/**
+ * 玩家生存检测
+ * 任务开始2分钟后检测玩家是否存活
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function playerSurvived(eim) {
     if (eim.getLeader().isAlive()) {
         eim.setIntProperty("canLeave", 2);
@@ -72,37 +118,84 @@ function playerSurvived(eim) {
     }
 }
 
+/**
+ * 玩家进入任务处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerEntry(eim, player) {
     var map = eim.getMapInstance(entryMap);
     player.changeMap(map, map.getPortal(0));
 }
 
+/**
+ * 玩家取消注册处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerUnregistered(eim, player) {}
 
+/**
+ * 玩家退出任务处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     eim.dispose();
     em.setProperty("noEntry", "false");
 }
 
+/**
+ * 玩家离开队伍处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerLeft(eim, player) {}
 
+/**
+ * 任务超时处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function scheduledTimeout(eim) {
     var player = eim.getPlayers().get(0);
     playerExit(eim, player);
     player.changeMap(exitMap);
 }
 
+/**
+ * 玩家断开连接处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerDisconnected(eim, player) {
     playerExit(eim, player);
 }
 
+/**
+ * 玩家切换地图处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} chr - 角色对象
+ * @param {number} mapid - 目标地图ID
+ */
 function changedMap(eim, chr, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
         playerExit(eim, chr);
     }
 }
 
+/**
+ * 完成任务处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function clearPQ(eim) {
     eim.stopEventTimer();
     eim.setEventCleared();
@@ -115,16 +208,47 @@ function clearPQ(eim) {
     em.setProperty("noEntry", "false");
 }
 
+/**
+ * 怪物被击杀处理
+ * 
+ * @param {object} mob - 怪物对象
+ * @param {object} eim - 事件实例管理器
+ */
 function monsterKilled(mob, eim) {}
 
+/**
+ * 玩家离开队伍处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function leftParty(eim, player) {}
 
+/**
+ * 队伍解散处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function disbandParty(eim) {}
 
+/**
+ * 获取怪物价值
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {number} mobId - 怪物ID
+ * @returns {number} 怪物价值
+ */
 function monsterValue(eim, mobId) {
     return 1;
 }
 
+/**
+ * 友方NPC被击杀处理
+ * 当友方NPC被击杀时结束任务
+ * 
+ * @param {object} mob - 怪物对象（此处指友方NPC）
+ * @param {object} eim - 事件实例管理器
+ */
 function friendlyKilled(mob, eim) {
     if (em.getProperty("noEntry") != "false") {
         var player = eim.getPlayers().get(0);
@@ -133,14 +257,30 @@ function friendlyKilled(mob, eim) {
     }
 }
 
+/**
+ * 所有怪物被击杀处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ */
 function allMonstersDead(eim) {}
 
+/**
+ * 取消计划任务
+ */
 function cancelSchedule() {}
 
+/**
+ * 释放资源
+ */
 function dispose() {}
 
 
 // ---------- FILLER FUNCTIONS ----------
 
+/**
+ * 队长变更处理
+ * 
+ * @param {object} eim - 事件实例管理器
+ * @param {object} leader - 新队长
+ */
 function changedLeader(eim, leader) {}
-

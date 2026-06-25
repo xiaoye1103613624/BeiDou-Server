@@ -63,6 +63,7 @@ import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -78,7 +79,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -97,8 +97,8 @@ public class Monster extends AbstractLoadedLife {
     private ChangeableStats ostats = null;
     /** 怪物属性 */
     private MonsterStats stats;
-    /** 当前生命值 */
-    private final AtomicInteger hp = new AtomicInteger(1);
+    /** 当前生命值（long以支持超过int范围的自定义超大血量BOSS） */
+    private final AtomicLong hp = new AtomicLong(1);
     /** 累计最大生命值加治愈量，用于经验分配计算 */
     private final AtomicLong maxHpPlusHeal = new AtomicLong(1);
     /** 当前魔法值 */
@@ -295,23 +295,23 @@ public class Monster extends AbstractLoadedLife {
         return r;
     }
 
-    public int getHp() {
+    public long getHp() {
         return hp.get();
     }
 
-    public synchronized void addHp(int hp) {
+    public synchronized void addHp(long hp) {
         if (this.hp.get() <= 0) {
             return;
         }
         this.hp.addAndGet(hp);
     }
 
-    public synchronized void setStartingHp(int hp) {
+    public synchronized void setStartingHp(long hp) {
         stats.setHp(hp);    // refactored mob stats after non-static HP pool suggestion thanks to twigs
         this.hp.set(hp);
     }
 
-    public int getMaxHp() {
+    public long getMaxHp() {
         return stats.getHp();
     }
 
@@ -415,8 +415,8 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    public synchronized Integer applyAndGetHpDamage(int delta, boolean stayAlive) {
-        int curHp = hp.get();
+    public synchronized Long applyAndGetHpDamage(long delta, boolean stayAlive) {
+        long curHp = hp.get();
         if (curHp <= 0) {       // this monster is already dead
             return null;
         }
@@ -425,17 +425,17 @@ public class Monster extends AbstractLoadedLife {
             if (stayAlive) {
                 curHp--;
             }
-            int trueDamage = Math.min(curHp, delta);
+            long trueDamage = (long) Math.min(curHp, delta); // 单次伤害量始终在int范围内，HP血池才需要long
 
             hp.addAndGet(-trueDamage);
             return trueDamage;
         } else {
-            int trueHeal = -delta;
-            int hp2Heal = curHp + trueHeal;
-            int maxHp = getMaxHp();
+            long trueHeal = -delta;
+            long hp2Heal = curHp + trueHeal;
+            long maxHp = getMaxHp();
 
             if (hp2Heal > maxHp) {
-                trueHeal -= (hp2Heal - maxHp);
+                trueHeal -= (int) (hp2Heal - maxHp);
             }
 
             hp.addAndGet(trueHeal);
@@ -467,7 +467,7 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    public boolean damage(Character attacker, int damage, boolean stayAlive) {
+    public boolean damage(Character attacker, long damage, boolean stayAlive) {
         boolean lastHit = false;
 
         this.lockMonster();
@@ -516,8 +516,8 @@ public class Monster extends AbstractLoadedLife {
      * @param damage
      * @param stayAlive
      */
-    private void applyDamage(Character from, int damage, boolean stayAlive, boolean fake) {
-        Integer trueDamage = applyAndGetHpDamage(damage, stayAlive);
+    private void applyDamage(Character from, long damage, boolean stayAlive, boolean fake) {
+        Long trueDamage = applyAndGetHpDamage(damage, stayAlive);
         if (trueDamage == null) {
             return;
         }
@@ -539,12 +539,12 @@ public class Monster extends AbstractLoadedLife {
         broadcastMobHpBar(from);
     }
 
-    public void applyFakeDamage(Character from, int damage, boolean stayAlive) {
+    public void applyFakeDamage(Character from, long damage, boolean stayAlive) {
         applyDamage(from, damage, stayAlive, true);
     }
 
     public void heal(int hp, int mp) {
-        Integer hpHealed = applyAndGetHpDamage(-hp, false);
+        Long hpHealed = applyAndGetHpDamage(-hp, false);
         if (hpHealed == null) {
             return;
         }
@@ -557,7 +557,9 @@ public class Monster extends AbstractLoadedLife {
         setMp(mp2Heal);
 
         if (hp > 0) {
-            getMap().broadcastMessage(PacketCreator.healMonster(getObjectId(), hp, getHp(), getMaxHp()));
+            int curHpForPacket = (int) Math.min(getHp(), Integer.MAX_VALUE);
+            int maxHpForPacket = (int) Math.min(getMaxHp(), Integer.MAX_VALUE);
+            getMap().broadcastMessage(PacketCreator.healMonster(getObjectId(), hp, curHpForPacket, maxHpForPacket));
         }
 
         maxHpPlusHeal.addAndGet(hpHealed);
@@ -1009,7 +1011,7 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    private void dispatchMonsterDamaged(Character from, int trueDmg) {
+    private void dispatchMonsterDamaged(Character from, Long trueDmg) {
         MonsterListener[] listenersList;
         statiLock.lock();
         try {
@@ -1023,7 +1025,7 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    private void dispatchMonsterHealed(int trueHeal) {
+    private void dispatchMonsterHealed(Long trueHeal) {
         MonsterListener[] listenersList;
         statiLock.lock();
         try {
@@ -1057,6 +1059,36 @@ public class Monster extends AbstractLoadedLife {
         }
 
         return curId;
+    }
+
+    /**
+     * 获取该怪物的伤害排行榜（按伤害值降序），用于Boss击杀播报（如世界Boss多人击杀只展示前N名）
+     *
+     * @param topN 取前N名，传<=0表示返回全部参战玩家
+     * @return 按伤害降序排列的 (角色ID, 伤害值) 列表
+     */
+    public List<Pair<Integer, Long>> getDamageRanking(int topN) {
+        List<Pair<Integer, Long>> ranking = new ArrayList<>(takenDamage.size());
+        for (Entry<Integer, AtomicLong> e : takenDamage.entrySet()) {
+            ranking.add(new Pair<>(e.getKey(), e.getValue().get()));
+        }
+        ranking.sort((a, b) -> Long.compare(b.right, a.right));
+
+        if (topN > 0 && ranking.size() > topN) {
+            return ranking.subList(0, topN);
+        }
+        return ranking;
+    }
+
+    /**
+     * 获取该怪物承受的总伤害（所有参战玩家伤害之和），用于计算伤害占比
+     */
+    public long getTotalTakenDamage() {
+        long total = 0;
+        for (AtomicLong dmg : takenDamage.values()) {
+            total += dmg.get();
+        }
+        return total;
     }
 
     public boolean isAlive() {
@@ -1105,7 +1137,8 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public Packet makeBossHPBarPacket() {
-        return PacketCreator.showBossHP(getId(), getHp(), getMaxHp(), getTagColor(), getTagBgColor());
+        // HP超过int范围(21.47亿)时用customShowBossHP按比例缩放显示，避免血条封包溢出
+        return PacketCreator.customShowBossHP((byte) 5, getId(), getHp(), getMaxHp(), getTagColor(), getTagBgColor());
     }
 
     public boolean hasBossHPBar() {
@@ -1712,7 +1745,7 @@ public class Monster extends AbstractLoadedLife {
          */
         @Override
         public void run() {
-            int curHp = hp.get();
+            long curHp = hp.get();
             if (curHp <= 1) {
                 MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
                 service.interruptMobStatus(map.getId(), status);
@@ -1721,7 +1754,7 @@ public class Monster extends AbstractLoadedLife {
 
             int damage = dealDamage;
             if (damage >= curHp) {
-                damage = curHp - 1;
+                damage = (int) (curHp - 1);
                 if (type == 1 || type == 2) {
                     MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
                     service.interruptMobStatus(map.getId(), status);
@@ -1838,7 +1871,7 @@ public class Monster extends AbstractLoadedLife {
         if (ostats != null) {
             return ostats.hp;
         }
-        return stats.getHp();
+        return (int) Math.min(stats.getHp(), Integer.MAX_VALUE);
     }
 
     public final void setOverrideStats(final OverrideMonsterStats ostats) {
@@ -2157,7 +2190,7 @@ public class Monster extends AbstractLoadedLife {
      * Applied damage input for this mob, enough damage taken implies an aggro
      * target update for the attacker shortly.
      */
-    public void aggroMonsterDamage(Character attacker, int damage) {
+    public void aggroMonsterDamage(Character attacker, long damage) {
         MonsterAggroCoordinator mmac = this.getMapAggroCoordinator();
         mmac.addAggroDamage(this, attacker.getId(), damage);
 

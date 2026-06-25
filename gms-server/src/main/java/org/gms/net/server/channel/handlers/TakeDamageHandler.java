@@ -70,7 +70,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         p.readInt();
         byte damagefrom = p.readByte();
         p.readByte(); //Element
-        int damage = p.readInt();
+        long damage = p.readLong();
         int oid = 0, monsteridfrom = 0, pgmr = 0, direction = 0;
         int pos_x = 0, pos_y = 0, fake = 0;
         boolean is_pgmr = false, is_pg = true, is_deadly = false;
@@ -204,7 +204,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         int id = jobid * 10000 + 1002;
                         Skill manaReflectSkill = SkillFactory.getSkill(id);
                         if (chr.isBuffFrom(BuffStat.MANA_REFLECTION, manaReflectSkill) && chr.getSkillLevel(manaReflectSkill) > 0 && manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).makeChanceResult()) {
-                            int bouncedamage = (damage * manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).getX() / 100);
+                            long bouncedamage = (damage * manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).getX() / 100);
                             if (bouncedamage > attacker.getMaxHp() / 5) {
                                 bouncedamage = attacker.getMaxHp() / 5;
                             }
@@ -238,7 +238,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             if (attacker != null) {
                 if (damagefrom == -1) {
                     if (chr.getBuffedValue(BuffStat.POWERGUARD) != null) { // PG works on bosses, but only at half of the rate.
-                        int bouncedamage = (int) (damage * (chr.getBuffedValue(BuffStat.POWERGUARD).doubleValue() / (attacker.isBoss() ? 200 : 100)));
+                        long bouncedamage = (long)(damage * (chr.getBuffedValue(BuffStat.POWERGUARD).doubleValue() / (attacker.isBoss() ? 200 : 100)));
                         bouncedamage = Math.min(bouncedamage, attacker.getMaxHp() / 10);
                         damage -= bouncedamage;
                         map.damageMonster(chr, attacker, bouncedamage);
@@ -282,7 +282,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
                 int mploss = (int) (damage * (chr.getBuffedValue(BuffStat.MAGIC_GUARD).doubleValue() / 100.0));
-                int hploss = damage - mploss;
+                int hploss = (int) damage - mploss;
 
                 int curmp = chr.getMp();
                 if (mploss > curmp) {
@@ -300,18 +300,18 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 } else {
                     chr.gainMeso(-mesoloss, false);
                 }
-                chr.addMPHP(-damage, -mpattack);
+                chr.addMPHP((int) -damage, -mpattack);
             } else {
                 if (chr.isRidingBattleship()) {
-                    chr.decreaseBattleshipHp(damage);
+                    chr.decreaseBattleshipHp((int) damage);
                 }
-                chr.addMPHP(-damage, -mpattack);
+                chr.addMPHP((int) -damage, -mpattack);
             }
         }
         if (!chr.isHidden()) {
-            map.broadcastMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
+            map.broadcastMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), (int) damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         } else {
-            map.broadcastGMMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
+            map.broadcastGMMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), (int) damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         }
         if (MapId.isDojo(map.getId())) {
             chr.setDojoEnergy(chr.getDojoEnergy() + GameConfig.getServerInt("dojo_energy_dmg"));

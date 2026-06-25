@@ -17,7 +17,7 @@ function start() {
 	var it = party.iterator();
 	while (it.hasNext()) {
 	    var cPlayer = it.next();
-	    if ((cPlayer.getLevel() >= 25 && cPlayer.getLevel() <= 260) || cPlayer.getJobId() == 900) {
+	    if ((cPlayer.getLevel() >= 25 && cPlayer.getLevel() <= 200) || cPlayer.getJobId() == 900) {
 		levelValid += 1;
 	    } else {
 		next = false;
@@ -32,12 +32,11 @@ function start() {
 	if (next) {
 	    var em = cm.getEventManager("WuGongPQ");
 	    if (em == null) {
-		cm.sendOk("当前副本有问题，请联络管理员....");
+		cm.sendOk("发生未知错误,请稍后再试....");
 	    } else {
 		var prop = em.getProperty("state");
 		if (prop.equals("0") || prop == null) {
 		    em.startInstance(cm.getParty(),cm.getMap());
-			cm.喇叭(3, "【" + cm.getName() + "】 开始挑战 【蜈蚣】，此副本专爆积分与金币！");
 	            cm.dispose();
 		    return;
 		} else {

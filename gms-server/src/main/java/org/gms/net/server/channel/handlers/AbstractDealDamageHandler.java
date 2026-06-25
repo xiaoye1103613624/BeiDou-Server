@@ -29,6 +29,9 @@ import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
+import org.gms.config.EquipDamageBonusManager;
+import org.gms.config.SetDamageBonusManager;
+import org.gms.config.ExtraDamageConfigManager;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -385,7 +388,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             }
                         }
                     } else if (attack.skill == Marauder.ENERGY_DRAIN || attack.skill == ThunderBreaker.ENERGY_DRAIN || attack.skill == NightWalker.VAMPIRE || attack.skill == Assassin.DRAIN) {
-                        player.addHP(Math.min(monster.getMaxHp(), Math.min((int) ((double) totDamage * (double) SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(SkillFactory.getSkill(attack.skill))).getX() / 100.0), player.getCurrentMaxHp() / 2)));
+                        player.addHP((int) Math.min(monster.getMaxHp(), Math.min((int) ((double) totDamage * (double) SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(SkillFactory.getSkill(attack.skill))).getX() / 100.0), player.getCurrentMaxHp() / 2)));
                     } else if (attack.skill == Bandit.STEAL) {
                         Skill steal = SkillFactory.getSkill(Bandit.STEAL);
                         if (monster.getStolen().size() < 1) { // One steal per mob <3
@@ -579,24 +582,99 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                     if (attack.skill == Paladin.HEAVENS_HAMMER) {
                         if (!monster.isBoss()) {
-                            damageMonsterWithSkill(player, map, monster, monster.getHp() - 1, attack.skill, 1777);
+                            damageMonsterWithSkill(player, map, monster, (int) Math.min(monster.getHp() - 1, Integer.MAX_VALUE), attack.skill, 1777);
                         } else {
                             int HHDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Paladin.HEAVENS_HAMMER).getEffect(player.getSkillLevel(SkillFactory.getSkill(Paladin.HEAVENS_HAMMER))).getDamage() / 100));
                             damageMonsterWithSkill(player, map, monster, (int) (Math.floor(Math.random() * (HHDmg / 5) + HHDmg * .8)), attack.skill, 1777);
                         }
                     } else if (attack.skill == Aran.COMBO_TEMPEST) {
                         if (!monster.isBoss()) {
-                            damageMonsterWithSkill(player, map, monster, monster.getHp(), attack.skill, 0);
+                            damageMonsterWithSkill(player, map, monster, (int) Math.min(monster.getHp(), Integer.MAX_VALUE), attack.skill, 0);
                         } else {
                             int TmpDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Aran.COMBO_TEMPEST).getEffect(player.getSkillLevel(SkillFactory.getSkill(Aran.COMBO_TEMPEST))).getDamage() / 100));
                             damageMonsterWithSkill(player, map, monster, (int) (Math.floor(Math.random() * (TmpDmg / 5) + TmpDmg * .8)), attack.skill, 0);
                         }
                     } else {
-                        if (attack.skill == Aran.BODY_PRESSURE) {
-                            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), totDamageToOneMonster));
+                        // 装备伤害加成：按穿戴装备单独配置的百分比/Boss百分比/固定段伤叠加到本次普通伤害上
+                        long boostedDamage = totDamageToOneMonster;
+                        EquipDamageBonusManager.Bonus equipBonus = player.getEquipDamageBonus();
+                        // 套装伤害加成：按穿戴套装达到的件数档位配置的百分比/Boss百分比叠加到本次普通伤害上
+                        SetDamageBonusManager.Bonus setBonus = player.getSetDamageBonus();
+                        if (equipBonus != EquipDamageBonusManager.Bonus.EMPTY || setBonus != SetDamageBonusManager.Bonus.EMPTY) {
+                            int pct = equipBonus.damagePct() + setBonus.damagePct();
+                            if (monster.isBoss()) {
+                                pct += equipBonus.bossDamagePct() + setBonus.bossDamagePct();
+                            }
+                            if (pct != 0) {
+                                boostedDamage += boostedDamage * pct / 100;
+                            }
+                            boostedDamage += equipBonus.fixedDamage();
+                            boostedDamage = Math.max(boostedDamage, 0L);
+
+                            // 逐件装备/逐套装档位列出加成明细，每条配置项单独一行HINT展示；同一角色2秒内最多弹一次，避免刷屏；可在game_config中关闭
+                            boolean hasDetail = !equipBonus.items().isEmpty() || !setBonus.items().isEmpty();
+                            if (hasDetail && GameConfig.getServerBoolean("equip_damage_bonus_hint_enabled")
+                                    && player.tryEquipBonusHintCooldown(2000L)) {
+                                StringBuilder equipHint = new StringBuilder();
+                                for (EquipDamageBonusManager.ItemBonus ib : equipBonus.items()) {
+                                    if (ib.damagePct() != 0) {
+                                        long contrib = (long) totDamageToOneMonster * ib.damagePct() / 100;
+                                        equipHint.append(ib.itemName()).append(": 伤害+")
+                                                .append(EquipDamageBonusManager.formatNumber(contrib)).append("\n");
+                                    }
+                                    if (monster.isBoss() && ib.bossDamagePct() != 0) {
+                                        long bossContrib = (long) totDamageToOneMonster * ib.bossDamagePct() / 100;
+                                        equipHint.append(ib.itemName()).append(": Boss加成伤害+")
+                                                .append(EquipDamageBonusManager.formatNumber(bossContrib)).append("\n");
+                                    }
+                                    if (ib.fixedDamage() != 0L) {
+                                        equipHint.append(ib.itemName()).append(": 固定伤害+")
+                                                .append(EquipDamageBonusManager.formatNumber(ib.fixedDamage())).append("\n");
+                                    }
+                                }
+                                for (SetDamageBonusManager.SetBonus sb : setBonus.items()) {
+                                    if (sb.damagePct() != 0) {
+                                        long contrib = (long) totDamageToOneMonster * sb.damagePct() / 100;
+                                        equipHint.append(sb.setName()).append("(").append(sb.tierCount()).append("件): 伤害+")
+                                                .append(EquipDamageBonusManager.formatNumber(contrib)).append("\n");
+                                    }
+                                    if (monster.isBoss() && sb.bossDamagePct() != 0) {
+                                        long bossContrib = (long) totDamageToOneMonster * sb.bossDamagePct() / 100;
+                                        equipHint.append(sb.setName()).append("(").append(sb.tierCount()).append("件): Boss加成伤害+")
+                                                .append(EquipDamageBonusManager.formatNumber(bossContrib)).append("\n");
+                                    }
+                                }
+                                if (equipHint.length() > 0) {
+                                    equipHint.setLength(equipHint.length() - 1);
+                                    int lineCount = equipHint.toString().split("\n").length;
+                                    player.sendPacket(PacketCreator.sendHint("#r" + equipHint + "#k", 0, Math.max(14 * lineCount, 14)));
+                                }
+                            }
                         }
 
-                        map.damageMonster(player, monster, totDamageToOneMonster);
+                        if (attack.skill == Aran.BODY_PRESSURE) {
+                            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), boostedDamage));
+                        }
+
+                        map.damageMonster(player, monster, boostedDamage);
+
+                        // 额外伤害：按角色总属性×可配置比例系数计算，叠加到本次普通伤害之上单独结算
+                        long extraDamage = ExtraDamageConfigManager.calcExtraDamage(player, boostedDamage);
+                        if (extraDamage > 0 && monster.isAlive()) {
+                            map.damageMonster(player, monster, extraDamage);
+                            if (ExtraDamageConfigManager.isShowHint()) {
+                                player.sendPacket(PacketCreator.sendHint("#r额外伤害 → " + extraDamage + "#k", 0, 10));
+                            }
+                            if (ExtraDamageConfigManager.isShowMessage()) {
+                                player.dropMessage(-1, "【额外伤害 → " + extraDamage + "】");
+                            }
+                        }
+
+                        // 队伍伤害统计：把本次最终伤害(含装备加成+额外伤害)广播给同地图所有人，供客户端ImGui排行榜汇总；
+                        // 注：HEAVENS_HAMMER/COMBO_TEMPEST 走 damageMonsterWithSkill 单独路径，未覆盖在本次广播范围内。
+                        if (boostedDamage > 0 || extraDamage > 0) {
+                            map.broadcastMessage(PacketCreator.updateTeamDamage(player.getId(), player.getName(), boostedDamage + extraDamage, monster.getId()));
+                        }
                     }
                     if (monster.isBuffed(MonsterStatus.WEAPON_REFLECT) && !attack.magic) {
                         for (MobSkillId msId : monster.getSkills()) {
@@ -996,6 +1074,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
                 }
+            }
+
+            if (chr.getExtraDamageCap() > 0) {
+                // 突破石累加的额外伤害上限，叠加到理论最大伤害，避免合法的高伤害被误判为作弊
+                calcDmgMax += chr.getExtraDamageCap();
             }
 
             for (int j = 0; j < ret.numDamage; j++) {

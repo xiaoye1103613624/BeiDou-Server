@@ -1,69 +1,93 @@
 /*
-This file is part of the OdinMS Maple Story Server
-Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-Matthias Butz <matze@odinms.de>
-Jan Christian Meyer <vimes@odinms.de>
+    This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+    Matthias Butz <matze@odinms.de>
+    Jan Christian Meyer <vimes@odinms.de>
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation version 3 as published by
-the Free Software Foundation. You may not use, modify or distribute
-this program under any other version of the GNU Affero General Public
-License.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @author: ThreeStep
+ * @event: 野外BOSS - 沃勒福
+ * @description: 飞侠职业专属野外BOSS刷新脚本，负责定时生成BOSS并广播通知
+ */
+
+// Java类导入
 const Point = Java.type('java.awt.Point');
 const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
 const PacketCreator = Java.type('org.gms.util.PacketCreator');
 const LoggerFactory = Java.type('org.slf4j.LoggerFactory');
+
+// 运行时变量
 var log = null;
 var channel = null;
 var isinit = false;
 
+// BOSS配置参数
+/** BOSS所在地图ID - 飞侠职业区域 */
 var MapID = 677000009;
+/** BOSS怪物ID */
 var BossID = 9400613;
+/** BOSS名称 */
 var BossName = "沃勒福";
-/**刷新时间，分钟;  Generation time in minutes*/
+/** BOSS刷新间隔（分钟） */
 var BossTime = 180;
-/**指定Boss刷新的XY坐标位置; Specify the XY coordinate position for Boss refresh*/
+/** BOSS刷新位置坐标 */
 var point = new Point(Math.floor((Math.random() * 100) + 300), -841);
-var BossNotice= "出现的瞬间，月光在它蛇鳞状的皮毛上折射出千重幻影，所有目睹者的视网膜上同时烙下旋转的倒五芒星‌";
+/** BOSS登场公告消息 */
+var BossNotice = "出现的瞬间，月光在它蛇鳞状的皮毛上折射出千重幻影，所有目睹者的视网膜上同时烙下旋转的倒五芒星";
 
-const methodName = "start";     //指定当前事件刷新Boss的函数，无需改动
+/** 刷新函数名称常量 */
+const methodName = "start";
+
 /**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Zeno Spawner
- -- Edited by --------------------------------------------------------------------------------------
- ThreeStep - based on xQuasar's King Clang spawner
- **/
+ * 初始化函数
+ * 获取频道ID和日志实例，启动BOSS刷新任务
+ */
 function init() {
     channel = em.getChannelServer().getId();
     log = LoggerFactory.getLogger(em.getName());
-  
     scheduleNew();
 }
 
+/**
+ * 安排新的BOSS刷新任务
+ * 服务器启动时立即执行一次，之后定时检测并生成BOSS
+ */
 function scheduleNew() {
-    setupTask = em.schedule(methodName, 0);    //服务器启动时生成。每指定时间，服务器事件会检查boss是否存在，如果不存在，会立即生成boss。
+    setupTask = em.schedule(methodName, 0);
 }
 
+/**
+ * 取消已安排的任务
+ */
 function cancelSchedule() {
     if (setupTask != null) {
         setupTask.cancel(true);
     }
 }
 
+/**
+ * BOSS刷新主函数
+ * 检查BOSS是否已存在，不存在则生成并广播公告
+ */
 function start() {
     var graysPrairie = em.getChannelServer().getMapFactory().getMap(MapID);
-    var Timer = em.getBossTime(BossTime * 60 * 1000);  //转为毫秒并加载时间倍率修正
+    var Timer = em.getBossTime(BossTime * 60 * 1000);
 
     if (graysPrairie.getMonsterById(BossID) != null) {
         em.schedule(methodName, Timer);
@@ -73,20 +97,19 @@ function start() {
     BossName = BossObj.getName() || BossName;
     try {
         graysPrairie.spawnMonsterOnGroundBelow(BossObj, point);
-        if(isinit) {
-            log.info(`[事件脚本-野外BOSS] ${em.getName()} 已在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID})，检测间隔：${Timer / 60 / 1000} 分钟`);
+        if (isinit) {
+            log.info(`[事件脚本-野外BOSS] ${em.getName()} 已在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x}, ${point.y}) 生成 ${BossName}(${BossID})，检测间隔：${Timer / 60 / 1000} 分钟`);
         } else {
             isinit = true;
         }
     } catch (e) {
-        console.error(`[事件脚本-野外BOSS] ${em.getName()} 在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID}) 时出错`,e);
+        console.error(`[事件脚本-野外BOSS] ${em.getName()} 在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x}, ${point.y}) 生成 ${BossName}(${BossID}) 时出错`, e);
     }
-    graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName}  ${BossNotice}`));     //聊天框输出当前地图范围的Boss登场消息
-
+    graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName} ${BossNotice}`));
     em.schedule(methodName, Timer);
 }
 
-// ---------- FILLER FUNCTIONS ----------
+// ---------- 预留函数(空实现) ----------
 
 function dispose() {}
 

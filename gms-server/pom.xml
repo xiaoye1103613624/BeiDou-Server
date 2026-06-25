@@ -231,6 +231,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <!-- 显式指定较新版本，避免回退到Maven内置的3.1版默认值（该版本与JDK21+Lombok注解处理器组合时会导致部分@Getter/@Setter方法未生成） -->
+                <version>3.13.0</version>
                 <configuration>
                     <parameters>true</parameters>
                 </configuration>

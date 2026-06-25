@@ -69,6 +69,10 @@ public class CharactersDO implements Serializable {
     /** 赞助/元宝余额(预留字段，用于后续VIP及充值业务扩展) */
     private Integer money;
 
+    /** 突破石累加的额外伤害上限 */
+    @Column("extra_damage_cap")
+    private Long extraDamageCap;
+
     @Column("hpMpUsed")
     private Integer hpMpUsed;
 
@@ -117,6 +121,9 @@ public class CharactersDO implements Serializable {
     private Integer guildid;
 
     private Integer guildrank;
+
+    @Column("guild_contribution")
+    private Integer guildContribution;
 
     private Integer messengerid;
 

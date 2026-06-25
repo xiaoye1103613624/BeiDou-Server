@@ -116,7 +116,7 @@ function action(mode, type, selection) {
             var chr = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());  // 获取队员角色
             if (chr != null) {
                 // 检查队员战力是否满足要求
-                if (chr.GetCombat() < zlyq) { // 检查队员战力是否低于 1万
+                if (chr.getCombatPower() < zlyq) { // 检查队员战力是否低于 1万
                     msg += chr.getName() + " 没有足够的战力（低于 " + zlyqxs + "），无法进入！\r\n";
                     break;  // 找到第一个不满足条件的队员，跳出循环
                 }

@@ -24,6 +24,7 @@ package org.gms.net.server.guild;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.GameConfig;
+import org.gms.config.GuildLevelConfig;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
@@ -78,8 +79,10 @@ public class Guild {
     private String notice;
     /** 公会ID */
     private int id;
-    /** 公会GP值 */
+    /** 公会GP值（即家族总贡献，决定公会等级） */
     private int gp;
+    /** 公会当前等级，由gp按GuildLevelConfig换算得出，非数据库持久化字段 */
+    private volatile int level = 1;
     /** 公会徽标 */
     private int logo;
     /** 公会徽标颜色 */
@@ -135,6 +138,7 @@ public class Guild {
                 notice = rs.getString("notice");
                 signature = rs.getInt("signature");
                 allianceId = rs.getInt("allianceId");
+                level = GuildLevelConfig.getLevelForContribution(gp);
             }
 
             try (PreparedStatement ps = con.prepareStatement("SELECT id, name, level, job, guildrank, allianceRank FROM characters WHERE guildid = ? ORDER BY guildrank ASC, name ASC")) {
@@ -287,6 +291,15 @@ public class Guild {
      */
     public int getGP() {
         return gp;
+    }
+
+    /**
+     * 获取公会当前等级（由gp换算，不持久化到数据库）
+     *
+     * @return 公会等级
+     */
+    public int getLevel() {
+        return level;
     }
 
     /**
@@ -981,6 +994,55 @@ public class Guild {
         this.writeToDB(false);
         this.guildMessage(GuildPackets.updateGP(this.id, this.gp));
         this.guildMessage(PacketCreator.getGPMessage(amount));
+        checkLevelUp();
+    }
+
+    /**
+     * 检查gp变化后是否达到新等级，若升级则刷新全体在线成员的被动加成并广播提示
+     */
+    private void checkLevelUp() {
+        int newLevel = GuildLevelConfig.getLevelForContribution(this.gp);
+        if (newLevel > this.level) {
+            this.level = newLevel;
+            for (GuildCharacter mgc : getMembers()) {
+                Character chr = mgc.getCharacter();
+                if (chr != null) {
+                    chr.recalcLocalStats();
+                    chr.dropMessage(6, "家族升级至 " + newLevel + " 级，全体成员四维与攻击力加成已提升！");
+                }
+            }
+        }
+    }
+
+    /**
+     * 角色为公会贡献GP（被动升级所得或主动捐献金币兑换），同步记录个人累计贡献
+     *
+     * @param chr    贡献的角色
+     * @param amount 贡献数量
+     */
+    public synchronized void addContribution(Character chr, int amount) {
+        if (amount == 0) {
+            return;
+        }
+        chr.gainGuildContribution(amount);
+        gainGP(amount);
+    }
+
+    /**
+     * 族长付费开启全公会双爆（经验+掉落同时翻倍），复用现有per-character经验/掉落加成机制
+     *
+     * @param durationMinutes 持续时间（分钟）
+     */
+    public void activateDoubleBuff(int durationMinutes) {
+        int durationMs = durationMinutes * 60000;
+        for (GuildCharacter mgc : getMembers()) {
+            Character chr = mgc.getCharacter();
+            if (chr != null) {
+                chr.sendPacket(PacketCreator.familyBuff(4, 4, 1, durationMs));
+                chr.setFamilyBuff(true, 2, 2);
+                chr.startFamilyBuffTimer(durationMs);
+            }
+        }
     }
 
     /**

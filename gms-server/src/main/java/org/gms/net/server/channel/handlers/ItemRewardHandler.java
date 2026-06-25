@@ -54,6 +54,11 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
 
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
+        if (rewards.getLeft() <= 0 || rewards.getRight().isEmpty()) {
+            // 该物品未配置奖励数据（总概率为0），直接放行操作以避免Randomizer.nextInt(0)异常
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
         for (RewardItem reward : rewards.getRight()) {
             if (!InventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
                 c.sendPacket(PacketCreator.getShowInventoryFull());

@@ -51,6 +51,10 @@ public final class FaceExpressionHandler extends AbstractPacketHandler {
             try {   // expecting players never intends to wear the emote 0 (default face, that changes back after 5sec timeout)
                 if (chr.isLoggedInWorld()) {
                     chr.changeFaceExpression(emote);
+                    if (emote == 2) {
+                        // 每日活跃-笑一笑十年少：F2(大笑)表情对应的固定emote编号
+                        org.gms.config.DailyActiveManager.addProgress(chr.getId(), "laugh", 1);
+                    }
                 }
             } finally {
                 c.releaseClient();

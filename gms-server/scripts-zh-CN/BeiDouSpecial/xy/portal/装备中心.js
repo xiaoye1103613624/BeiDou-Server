@@ -30,6 +30,7 @@ function showMenu() {
     text += "#L104#装备强化  #d强化装备属性#k#l\r\n";
     text += "#L111#装备进阶  #d提升装备品阶#k#l\r\n";
     text += "#L506#血衣合成  #d合成血衣套装#k#l\r\n";
+    text += "#L508#装备鉴定  #d鉴定/重铸装备词条#k#l\r\n";
     text += "\r\n━━━ 属性提升 ━━━\r\n";
     text += "#L502#天赋学习  #d消耗AP加点基础属性#k#l\r\n";
     text += "#L503##r经验戒指#k  #d购买提升经验的戒指#k#l\r\n";
@@ -47,6 +48,7 @@ function doSelect(selection) {
         case 104: openSub("装备强化"); break;
         case 111: openSub("装备进阶"); break;
         case 506: openSub("xy/血衣合成"); break;
+        case 508: openSub("xy/装备系统/v002/装备鉴定"); break;
         case 502: openSub("xy/天赋学习"); break;
         case 503: openSub("xy/经验戒指"); break;
         case 504: openSub("xy/时装洗练"); break;

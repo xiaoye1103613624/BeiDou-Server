@@ -1,502 +1,117 @@
+/**
+ * @description 药剂师（炼药）副职业系统
+ * 1. 体力：账号级共享（同账号下所有角色共用一份），每日首次进入自动发放100点，上限1000点；
+ *    可通过体力药水恢复（不会超过上限）。
+ * 2. 炼药师等级：角色级隔离，分5级——入门/普通/职业/大师/宗师，累计经验只增不减，升级不重置为0。
+ *    各等级所需累计经验：入门0~800，普通800~2400，职业2400~66400，大师66400~194400，宗师194400以上（无上限）。
+ * 3. 炼制不同品级药水获得固定经验：入门8/普通16/职业64/大师128/宗师256，
+ *    消耗对应体力：入门1/普通2/职业4/大师8/宗师16；炼药师等级需达到对应品级才能炼制。
+ * 4. 产出/材料物品ID均为占位（TODO：正式数据确定后替换 POTION_ITEM_IDS / STAMINA_POTION_ITEM_ID）。
+ * 数据库操作全部在 org.gms.service.AlchemistService / StaminaService 中完成。
+ */
 
+var AlchemistManager = Java.type("org.gms.config.AlchemistManager");
+var StaminaManager = Java.type("org.gms.config.StaminaManager");
 
-/*
-	作者：狗哥
-	QQ联系：1418181168
-	制作时间：2022年/6月/28日
-*/
+var characterId;
+var accountId;
 
-var 感叹号0 = "#fUI/UIWindow/Quest/icon0#";
-var 感叹号1 = "#fUI/UIWindow/Quest/icon1#";
-var 开 = "#fUI/Basic/CheckBox/0#";   //有框框 无√
-var 关 = "#fUI/Basic/CheckBox/1#";   //有框框 有√
-var xx = "#fItem/Etc/0427/04270001/Icon9/0#";  //小黄星
-var 分割线 = "#fUI/Login.img/WorldSelect/channel/chgauge#";
-var 广播 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
-var 是 = 2146000001;
-var 否 = 2146000002;
-var 返回 = 2146000003;
-var 类型选择;
-var 制作选择;
-var 展示 = "核心界面";
-var 功能名称 = "新手装制作系统";
-var 列表 = [
-	{
-		制作类型: "", F1坐标: 2147000000, 编辑1: "\t   ", 编辑2: "",
-		制作列表: [
-			{
-				代码: 1003242, 金币: 500000, 开放天数: 1,
-				需求条件: [
-				//	{ 物品代码: 4260000, 数量: 1 },
-				//	{ 物品代码: 4260001, 数量: 1 },
-				//	{ 物品代码: 4260002, 数量: 1 },
-					{ 物品代码: 4001126, 数量: 100 },
-					
-					
-					]
-			},
-			{
-				代码: 1052357, 金币: 500000, 开放天数: 1,
-				需求条件: [
-				//	{ 物品代码: 4260000, 数量: 1 },
-				//	{ 物品代码: 4260001, 数量: 1 },
-				//	{ 物品代码: 4260002, 数量: 1 },
-					{ 物品代码: 4001126, 数量: 100 },
-					
-					]
-			},
-			{
-				代码: 1082314, 金币: 500000, 开放天数: 1,
-				需求条件: [
-				//	{ 物品代码: 4260000, 数量: 1 },
-				//	{ 物品代码: 4260001, 数量: 1 },
-				//	{ 物品代码: 4260002, 数量: 1 },
-					{ 物品代码: 4001126, 数量: 100 },
-					
-					]
-			},
-			{
-				代码: 1102294, 金币: 500000, 开放天数: 1,
-				需求条件: [
-				//	{ 物品代码: 4260000, 数量: 1 },
-				//	{ 物品代码: 4260001, 数量: 1 },
-				//	{ 物品代码: 4260002, 数量: 1 },
-					{ 物品代码: 4001126, 数量: 100 },
-					
-					]
-			},
-			{
-				代码: 1132092, 金币: 500000, 开放天数: 1,
-				需求条件: [
-				//	{ 物品代码: 4260000, 数量: 1 },
-				//	{ 物品代码: 4260001, 数量: 1 },
-				//	{ 物品代码: 4260002, 数量: 1 },
-					{ 物品代码: 4001126, 数量: 100 },
-					
-					]
-			},
-			{
-				代码: 1072521, 金币: 500000, 开放天数: 1,
-				需求条件: [
-				//	{ 物品代码: 4260000, 数量: 1 },
-				//	{ 物品代码: 4260001, 数量: 1 },
-				//	{ 物品代码: 4260002, 数量: 1 },
-					{ 物品代码: 4001126, 数量: 100 },
+// TODO: 占位物品ID，正式数据确定后替换。下标对应品级 0=入门 1=普通 2=职业 3=大师 4=宗师
+var POTION_ITEM_IDS = [9031900, 9031901, 9031902, 9031903, 9031904];
+// TODO: 占位体力药水物品ID，使用后恢复的体力值同样为占位数值
+var STAMINA_POTION_ITEM_ID = 9031909;
+var STAMINA_POTION_RESTORE = 50;
 
+// ==================== 入口 ====================
 
-					]
-			},
-			{
-				代码: 1003364, 金币: 5000000, 开放天数: 1,				//下面是专属紫金制作
-				需求条件: [
-					{ 物品代码: 1003242, 数量: 2 },
-				//	{ 物品代码: 4260000, 数量: 10 },
-				//	{ 物品代码: 4260001, 数量: 10 },
-				//	{ 物品代码: 4260002, 数量: 10 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					
-					]
-			},
-			{
-				代码: 1052405, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1052357, 数量: 2 },
-				//	{ 物品代码: 4260000, 数量: 10 },
-				//	{ 物品代码: 4260001, 数量: 10 },
-				//	{ 物品代码: 4260002, 数量: 10 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-			{
-				代码: 1082391, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1082314, 数量: 2 },
-				//	{ 物品代码: 4260000, 数量: 10 },
-				//	{ 物品代码: 4260001, 数量: 10 },
-				//	{ 物品代码: 4260002, 数量: 10 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-			{
-				代码: 1102322, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1102294, 数量: 2 },
-				//	{ 物品代码: 4260000, 数量: 10 },
-				//	{ 物品代码: 4260001, 数量: 10 },
-				//	{ 物品代码: 4260002, 数量: 10 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-			{
-				代码: 1132110, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1132092, 数量: 2 },
-				//	{ 物品代码: 4260000, 数量: 10 },
-				//	{ 物品代码: 4260001, 数量: 10 },
-				//	{ 物品代码: 4260002, 数量: 10 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-			{
-				代码: 1072610, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1072521, 数量: 2 },
-				//	{ 物品代码: 4260000, 数量: 10 },
-				//	{ 物品代码: 4260001, 数量: 10 },
-				//	{ 物品代码: 4260002, 数量: 10 },
-					{ 物品代码: 4001126, 数量: 500 },
-
-				]
-			},
-			{
-				代码: 1402039, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1332056, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1382039, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1452045, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1492022, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1482022, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1462040, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1472055, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1432040, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1402129, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				{ 物品代码: 1402039, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1332168, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				{ 物品代码: 1332056, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1382142, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				{ 物品代码: 1382039, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1452147, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				    { 物品代码: 1452045, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1492119, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				    { 物品代码: 1492022, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1482120, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				    { 物品代码: 1482022, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1462136, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				    { 物品代码: 1462040, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1472159, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				    { 物品代码: 1472055, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-						{
-				代码: 1432117, 金币: 5000000, 开放天数: 1,
-				需求条件: [
-				    { 物品代码: 1432040, 数量: 2 },
-					{ 物品代码: 4001126, 数量: 500 },
-					
-					]
-			},
-
-		]
-	},
-]
-
-var max;
-var 取最高值;
 function start() {
-	status = -1;
-
-	action(1, 0, 0);
+    characterId = cm.getPlayer().getId();
+    accountId = cm.getClient().getAccID();
+    levelMain();
 }
 
-function action(mode, type, selection) {
-	if (mode == -1) {
-		cm.dispose();
-	} else {
-		if (status >= 0 && mode == 0) {
-			cm.dispose();
-			return;
-		}
-		if (mode == 1) {
-			status++;
-		} else {
-			status--;
-		}
-		if (status == 0) {
-			var text = "#d\r\n";
-			text += " #g┏━#r冒险岛提示#g━━━━━━━━━━━━━━━━┓\r\n";
-			text += "\t#d" + 广播 + " 欢迎来到 [#r" + 功能名称 + "#d]\r\n";
-			text += " #g┗━━━━━━━━━━━━━━━━━━━━━━┛#d\r\n";
-			/*for (var i = 0; i < 列表.length; i++) {
-				var is_1 = 列表[i];
-				if (类型选择 == is_1.制作类型) {
-					制作选择 = is_1.制作列表;
-					text += "" + is_1.编辑1 + "#L" + is_1.F1坐标 + "#[#b" + is_1.制作类型 + "#d]" + 关 + "#l" + is_1.编辑2 + "";
-				} else {
-					text += "" + is_1.编辑1 + "#L" + is_1.F1坐标 + "#[#b" + is_1.制作类型 + "#d]" + 开 + "#l" + is_1.编辑2 + "";
-				}
-				if ((i + 1) % 4 == 0) {
-					text += "\r\n";
-				}
-			}*/
-			制作选择 = 列表[0].制作列表;
-			//text += "  " + 分割线 + "  制作内容展示  " + 分割线 + "\r\n";
-			text += " \t\t\t\t" + xx + "  制作内容展示  " + xx + "\r\n";
-			for (var j = 0; j < 制作选择.length; j++) {
-				if (制作选择[j].开放天数 >= 读取开服天数()) {
-					text += "#L" + j + "#制作:#v" + 制作选择[j].代码 + ":##z" + 制作选择[j].代码 + "##l\r\n";
-				}
-			}
-			text += "\r\n";
-			cm.sendYesNo(text);
-		} else if (status == 1) {
-			sele1 = selection;
-			var 检测F1坐标 = false;
-			for (var i = 0; i < 列表.length; i++) {
-				var is_1 = 列表[i];
-				if (sele1 == is_1.F1坐标) {
-					类型选择 = is_1.制作类型;
-					检测F1坐标 = true;
-					start();
-					return;
-				}
-			}
-			if (检测F1坐标 == false) {
-				var text = "#d\r\n";
-				var is_2 = 制作选择[sele1];
-				var 检测要求 = true;
-				text += " #g┏━#r冒险岛提示#g━━━━━━━━━━━━━━━━━━┓\r\n#d";
-				text += "\t      " + 感叹号0 + "表示不满足条件 \t" + 感叹号1 + "表示满足条件    \r\n\r\n";
-				text += "\t 制作道具：#v" + is_2.代码 + ":##b#z" + is_2.代码 + "##d\r\n";
-				text += " #g┗━━━━━━━━━━━━━━━━━━━━━━━━┛#d\r\n\r\n";
-				if (is_2.金币 != 0 && is_2.金币 != null) {
-					if (cm.getMeso() < is_2.金币) {
-						检测要求 = false;
-						text += "  " + 感叹号0 + "需要金币：[#r" + is_2.金币 + "#d] 缺少:[#r" + (is_2.金币 - cm.getMeso()) + "#d]\r\n";
-					} else {
-						text += "  " + 感叹号1 + "需要金币：[#r" + is_2.金币 + "#d]\r\n";
-					}
-				}
-				取最高值 = new Array();
-				text += "\r\n 需要材料：\r\n";
-				for (var j = 0; j < is_2.需求条件.length; j++) {
-					var is_3 = is_2.需求条件[j];
-					取最高值.push(is_3.数量);
-					if (物品数量(is_3.物品代码) < is_3.数量) {
-						检测要求 = false;
-						text += "  " + 感叹号0 + "道具：#v" + is_3.物品代码 + ":##b#z" + is_3.物品代码 + "##r" + is_3.数量 + "#d个 缺少:[#r" + (is_3.数量 - 物品数量(is_3.物品代码)) + "#d]\r\n";
-					} else {
-						text += "  " + 感叹号1 + "道具：#v" + is_3.物品代码 + ":##b#z" + is_3.物品代码 + "##r" + is_3.数量 + "#d个\r\n";
-					}
-				}
-				text += "\r\n";
-				if (检测要求 == true) {
-					if (!cm.canHold(is_2.代码, 1)) {
-						text += "\t\t\t\t\t\t\t\t[#r背包空间不足#d]\r\n";
-						cm.sendOk(text);
-						status = -1;
-						return;
-					} else {
-						text += "\t\t\t\t\t\t\t\t#r#e是否要制作呢？#n#l\r\n";
-						cm.sendYesNo(text);
-					}
-				} else {
-					text += "\t\t\t\t\t\t\t\t[#r条件不满足#d]\r\n";
-					cm.sendOk(text);
-					status = -1;
-					return;
-				}
-			}
-		} else if (status == 2) {
-			sele2 = selection;
-			switch (sele2) {
-				case 返回:
-					start();
-					return;
-				default:
-					var is_2 = 制作选择[sele1];
-					if (is_2.金币 != 0 && is_2.金币 != null) {
-						cm.gainMeso(-is_2.金币);
-					}
-					for (var j = 0; j < is_2.需求条件.length; j++) {
-						var is_3 = is_2.需求条件[j];
-						cm.gainItem(is_3.物品代码, -is_3.数量);
-					}
-					//cm.gainItem(is_2.代码,1,0,10,10,10,10,0,0,10,10,0,0,0,0,0,0);
-					cm.gainItem(is_2.代码,1);
-					var itemName = cm.getItemName(is_2.代码);
-					cm.喇叭(1, "[新手套装] 玩家: [" + cm.getPlayer().getName() + "] 在匠人街制作了【新手装备】，恭喜他吧 ！");
-					
-					cm.sendOk("#e#d制作完成！\r\n获得物品：#v" + is_2.代码 + ":##b#z" + is_2.代码 + "# #d数量：#r1#d 个");
+// ==================== 主菜单 ====================
 
-					status = -1;
-					return;
-			}
-		}
-	}
+function levelMain() {
+    var info = AlchemistManager.getInfo(characterId);
+    if (!info.get("success")) {
+        cm.sendOk("炼药师信息查询失败：" + info.get("message"));
+        cm.dispose();
+        return;
+    }
+    var stamina = StaminaManager.getStamina(accountId);
+    var tierName = info.get("tierName");
+    var progress = info.get("progress");
+    var tierSize = info.get("tierSize");
+    var progressText = info.get("isMax") ? (progress + "（宗师无上限）") : (progress + "/" + tierSize);
+
+    var text = "#e药剂师#n\r\n\r\n"
+        + "剩余体力：#r" + stamina + "#k/1000（体力是账号通用的）\r\n"
+        + "副职等级：#b" + tierName + "级炼药师#k(" + progressText + ")\r\n\r\n"
+        + "#L0#炼制药水#l\r\n"
+        + "#L1#使用体力药水#l\r\n"
+        + "#L9#离开#l";
+    cm.sendNextSelectLevel("HandleMain", text);
 }
 
-function 物品数量(itemid) {
-	return cm.getPlayer().getItemQuantity(itemid, false);
+function levelHandleMain(selection) {
+    if (selection === 0) {
+        levelChooseBrewTier();
+        return;
+    }
+    if (selection === 1) {
+        levelUseStaminaPotion();
+        return;
+    }
+    cm.dispose();
 }
 
-/*
-switch (sele1) {
-	case 商店:
-		break;
-	case 赠送:
-		break;
-	case 仓库:
-		break;
-	case 查看:
-		break;
-	default:
-		break;
-}
-//cm.sendOk("感谢光临");
-//cm.sendYesNo("更换发型吗？");
-//cm.sendGetNumber("#e#d请输入数量：", 1, 1, 32767);
-//cm.sendSimple(txt);//用于选择
-//cm.openNpc(9310065, 0);//链接NPC
-//cm.sendNextPrev("（#p9120025#眯"+status+"起眼睛2）");上一页，下一页
+// ==================== 炼制药水 ====================
 
-*/
-
-function 读取开服天数() {
-	return 1;
+function levelChooseBrewTier() {
+    var info = AlchemistManager.getInfo(characterId);
+    if (!info.get("success")) {
+        cm.sendOk("炼药师信息查询失败：" + info.get("message"));
+        cm.dispose();
+        return;
+    }
+    var currentTierIndex = info.get("tierIndex");
+    var tierCount = AlchemistManager.getTierCount();
+    var text = "请选择要炼制的药水品级：\r\n\r\n";
+    for (var i = 0; i <= currentTierIndex && i < tierCount; i++) {
+        text += "#L" + i + "##b" + AlchemistManager.getTierName(i) + "#k药水#l\r\n";
+    }
+    cm.sendNextSelectLevel("HandleBrewTier", text);
 }
 
-function 字体美化(length, content, boolean) {
-	var str = "";
-	var cs = "";
-	if (content.length > length) {
-		str = content;
-	} else {
-		for (var j = 0; j < length - content.getBytes("GB2312").length; j++) {
-			cs += " ";
-		}
-	}
-	if (boolean == true) {
-		str = content + cs;
-	} else {
-		str = cs + content;
-	}
-	return str;
+function levelHandleBrewTier(selection) {
+    var tierIndex = selection;
+    var result = AlchemistManager.brew(characterId, accountId, tierIndex);
+    if (result.get("success")) {
+        var itemId = POTION_ITEM_IDS[tierIndex];
+        var gained = cm.canHold(itemId, 1);
+        if (gained) {
+            cm.gainItem(itemId, 1);
+        }
+        cm.sendOkLevel("Main", "炼制成功！获得经验：#r" + result.get("brewExp") + "#k，剩余体力：#r" + result.get("staminaLeft") + "#k"
+            + (gained ? "" : "\r\n（背包空间不足，未能获得药水实物）"));
+    } else {
+        cm.sendOkLevel("Main", "炼制失败：" + result.get("message"));
+    }
 }
 
-function 数目美化(num, length) {//数字美化
-	var ul_nums = [
-		"#fUI/UIWindow/KeyConfig/key/11#",
-		"#fUI/UIWindow/KeyConfig/key/2#",
-		"#fUI/UIWindow/KeyConfig/key/3#",
-		"#fUI/UIWindow/KeyConfig/key/4#",
-		"#fUI/UIWindow/KeyConfig/key/5#",
-		"#fUI/UIWindow/KeyConfig/key/6#",
-		"#fUI/UIWindow/KeyConfig/key/7#",
-		"#fUI/UIWindow/KeyConfig/key/8#",
-		"#fUI/UIWindow/KeyConfig/key/9#",
-		"#fUI/UIWindow/KeyConfig/key/10#",
-	];
-	var showTxt = "";
-	var tempNums = num.toString().split("");
-	for (var i = 0; i < tempNums.length; i++) {
-		showTxt += ul_nums[parseInt(tempNums[i])];
-	}
-	var sss = "";
-	for (var i = tempNums.length; i < length; i++) {
-		sss += " ";
-	}
-	return sss + showTxt;
+// ==================== 使用体力药水 ====================
+
+function levelUseStaminaPotion() {
+    if (!cm.haveItem(STAMINA_POTION_ITEM_ID, 1)) {
+        cm.sendOkLevel("Main", "您没有体力药水。");
+        return;
+    }
+    cm.gainItem(STAMINA_POTION_ITEM_ID, -1);
+    var result = StaminaManager.addStamina(accountId, STAMINA_POTION_RESTORE);
+    if (result.get("success")) {
+        cm.sendOkLevel("Main", "使用体力药水成功，当前体力：#r" + result.get("stamina") + "#k/1000");
+    } else {
+        cm.sendOkLevel("Main", "使用失败：" + result.get("message"));
+    }
 }

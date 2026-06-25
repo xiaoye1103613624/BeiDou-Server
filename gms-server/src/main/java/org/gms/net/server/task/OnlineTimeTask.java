@@ -47,7 +47,15 @@ public class OnlineTimeTask implements Runnable {
                 if (isNextDay || onlineTime < 0) {
                     onlineTime = 0;
                 }
+                int oldOnlineTime = chr.getCurrentOnlineTime();
                 chr.setCurrentOnlineTime(onlineTime);
+
+                // 每日活跃-在线奖励：每满30分钟(1800秒)在线累计1次进度，跨天后onlineTime被重置为0，自然停止累计
+                int oldTier = Math.max(oldOnlineTime, 0) / 1800;
+                int newTier = Math.max(onlineTime, 0) / 1800;
+                if (newTier > oldTier && !isNextDay) {
+                    org.gms.config.DailyActiveManager.addProgress(chr.getId(), "online_reward", newTier - oldTier);
+                }
             }
         }
         running.set(false);

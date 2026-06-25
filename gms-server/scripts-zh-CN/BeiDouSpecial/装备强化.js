@@ -6,8 +6,30 @@
  *   1. 通过NPC对指定装备进行多等级强化
  *   2. 强化数据从数据库读取，属性通过 safeAddStat() 安全叠加
  *   3. 支持唯一限制、成功率、失败销毁
+ *   4. 星级文本与装备鉴定.js的词条文本共用 owner 字段做Tooltip展示（同一个自由文本行），
+ *      写入前会先用 stripOldStarToken() 只摘掉旧的星级token，保留真实绑定名/词条文本，
+ *      避免两个系统互相覆盖对方写进 owner 字段的内容
  * ==================
  */
+
+/**
+ * 从 owner 文本里只摘掉旧的星级token（"*" ~ "*****" 或 "N*"），
+ * 真实绑定名/装备鉴定.js写的词条文本原样保留
+ */
+function stripOldStarToken(ownerText) {
+    if (!ownerText) {
+        return "";
+    }
+    var parts = ownerText.split(/\s+/).filter(function (p) { return p.length > 0; });
+    var rest = [];
+    for (var i = 0; i < parts.length; i++) {
+        if (/^\d*\*$/.test(parts[i])) {
+            continue;
+        }
+        rest.push(parts[i]);
+    }
+    return rest.join(" ");
+}
 
 var status = -1;
 var EquipEnhanceManager, InventoryType, ItemInformationProvider;
@@ -323,19 +345,23 @@ function handleEnhanceConfirm(selection) {
         applyStatsSafe(selectedItem, levelCfg);
         // 强化等级直接写入装备对象（随 inventoryequipment 表持久化）
         selectedItem.setEnhanceLevel(nextStar);
-        // owner 纯展示：显示星星，超5星改为"数字★"格式防止超长变成问号
+        // owner 纯展示：显示星星，超5星改为"数字*"格式防止超长
+        // 注意：用ASCII的"*"而不是Unicode的"★"，因为v83客户端字体子集里没有★的字形，
+        // 显示会变成占位乱码（即使服务端GBK编码本身是对的）
         var starStr;
         if (nextStar <= 0) {
             starStr = "";
         } else if (nextStar <= 5) {
             starStr = "";
             for (var s = 0; s < nextStar; s++) {
-                starStr += "★";
+                starStr += "*";
             }
         } else {
-            starStr = nextStar + "★";
+            starStr = nextStar + "*";
         }
-        selectedItem.setOwner(starStr);
+        // 只替换星级token，保留 owner 字段里可能已有的真实绑定名/装备鉴定.js写的词条文本
+        var restOwnerText = stripOldStarToken(selectedItem.getOwner());
+        selectedItem.setOwner(starStr ? (restOwnerText ? starStr + " " + restOwnerText : starStr) : restOwnerText);
         // 通知客户端刷新装备属性显示
         cm.getPlayer().forceUpdateItem(selectedItem);
 

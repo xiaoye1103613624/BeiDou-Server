@@ -44,6 +44,7 @@ import org.gms.net.server.coordinator.world.MonsterAggroCoordinator;
 import org.gms.net.server.services.task.channel.MobMistService;
 import org.gms.net.server.services.task.channel.OverallService;
 import org.gms.net.server.services.type.ChannelServices;
+import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.World;
 import org.gms.util.NumberTool;
@@ -1586,7 +1587,7 @@ public class MapleMap {
         return count;
     }
 
-    public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
+    public boolean damageMonster(final Character chr, final Monster monster, final long damage) {
         if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
                 Monster mons = chr.getMap().getMonsterByOid(object.getObjectId());
@@ -1655,6 +1656,38 @@ public class MapleMap {
         } finally {
             monster.unlockMonster();
         }
+    }
+
+    /**
+     * Boss击杀后向全服(跨频道)广播伤害排行榜聊天框日志，取伤害最高的前10名参战玩家
+     * 适用于世界Boss等多人混战场景，所有参战玩家无论在哪个频道/地图都能看到播报
+     *
+     * @param monster 被击杀的Boss怪物
+     */
+    private void broadcastBossKillLog(Monster monster) {
+        List<Pair<Integer, Long>> ranking = monster.getDamageRanking(10);
+        if (ranking.isEmpty()) {
+            return;
+        }
+
+        long totalDamage = monster.getTotalTakenDamage();
+        PlayerStorage playerStorage = getWorldServer().getPlayerStorage();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[BOSS讨伐播报] ").append(monster.getName())
+                .append(" (Lv.").append(monster.getStats().getLevel())
+                .append(" 最大HP:").append(monster.getMaxHp()).append(") 已被击败！伤害排行TOP").append(ranking.size()).append("：");
+
+        int rank = 1;
+        for (Pair<Integer, Long> entry : ranking) {
+            Character participant = playerStorage.getCharacterById(entry.left);
+            String name = participant != null ? participant.getName() : "未知玩家";
+            double percent = totalDamage > 0 ? (entry.right * 100.0 / totalDamage) : 0;
+            sb.append(String.format("\r\n%d. %s  伤害:%,d  占比:%.1f%%", rank, name, entry.right, percent));
+            rank++;
+        }
+
+        getWorldServer().dropMessage(6, sb.toString());
     }
 
     public void killMonster(final Monster monster, final Character chr, final boolean withDrops) {
@@ -1739,7 +1772,18 @@ public class MapleMap {
                         dropFromMonster(dropOwner, monster, false);
                     }
 
+                    // 每日活跃-挑战BOSS/击杀野外精英：以实际击杀credit归属角色(dropOwner)计数，未产生掉落credit时退回chr
+                    Character activeOwner = dropOwner != null ? dropOwner : chr;
+                    if (monster.isBoss()) {
+                        org.gms.config.DailyActiveManager.addProgress(activeOwner.getId(), "challenge_boss", 1);
+                    }
+                    if (org.gms.config.DailyActiveManager.isEliteMob(monster.getId())) {
+                        org.gms.config.DailyActiveManager.addProgress(activeOwner.getId(), "kill_elite", 1);
+                    }
+
                     if (monster.hasBossHPBar()) {
+                        broadcastBossKillLog(monster);
+
                         for (Character mc : this.getAllPlayers()) {
                             if (mc.getTargetHpBarHash() == monster.hashCode()) {
                                 mc.resetPlayerAggro();
@@ -4048,11 +4092,11 @@ public class MapleMap {
             }
 
             @Override
-            public void monsterDamaged(Character from, int trueDmg) {
+            public void monsterDamaged(Character from, Long trueDmg) {
             }
 
             @Override
-            public void monsterHealed(int trueHeal) {
+            public void monsterHealed(Long trueHeal) {
             }
         });
         spawnMonster(mob);
@@ -4505,12 +4549,12 @@ public class MapleMap {
             }
 
             @Override
-            public void monsterDamaged(Character from, int trueDmg) {
+            public void monsterDamaged(Character from, Long trueDmg) {
                 ht.addHp(trueDmg);
             }
 
             @Override
-            public void monsterHealed(int trueHeal) {
+            public void monsterHealed(Long trueHeal) {
                 ht.addHp(-trueHeal);
             }
         });
@@ -4526,13 +4570,13 @@ public class MapleMap {
                 }
 
                 @Override
-                public void monsterDamaged(Character from, int trueDmg) {
+                public void monsterDamaged(Character from, Long trueDmg) {
                     // thanks Halcyon for noticing HT not dropping loots due to propagated damage not registering attacker
                     ht.applyFakeDamage(from, trueDmg, true);
                 }
 
                 @Override
-                public void monsterHealed(int trueHeal) {
+                public void monsterHealed(Long trueHeal) {
                     ht.addHp(trueHeal);
                 }
             });

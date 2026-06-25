@@ -1,8 +1,4 @@
-
-
-
-function start() {
-	cm.dispose();
-	cm.openNpc(2013000,"女神组队副本");
+function action(mode, type, selection) {
+    cm.sendStorage();
+    cm.dispose();
 }
-

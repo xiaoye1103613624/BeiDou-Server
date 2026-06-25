@@ -34,7 +34,10 @@ import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
+import org.gms.config.EquipDamageBonusManager;
+import org.gms.config.SetDamageBonusManager;
 import org.gms.config.GameConfig;
+import org.gms.config.GuildLevelConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
@@ -198,6 +201,10 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int guildRank;
+    /** 公会(家族)个人累计贡献，决定公会GP/等级，永久累加不重置 */
+    @Setter
+    @Getter
+    private int guildContribution;
     /** 联盟等级 */
     @Setter
     @Getter
@@ -337,6 +344,12 @@ public class Character extends AbstractCharacterObject {
     /** 赞助/元宝余额(预留字段，暂不参与任何校验逻辑，仅供后续VIP及充值业务扩展使用) */
     private final AtomicInteger money = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
+    /** 客户端原生显示的伤害上限(19W999)，突破石增加的额外上限叠加在该基础值之上同步给客户端 */
+    public static final long BASE_DISPLAY_DAMAGE_CAP = 199999L;
+    /** 突破石累加的额外伤害上限(叠加在理论最大伤害之上，不挂在装备上)，持久化到characters.extra_damage_cap */
+    private final AtomicLong extraDamageCap = new AtomicLong();
+    /** 装备伤害加成HINT提示的上次弹出时间戳，用于2秒冷却去重 */
+    private final AtomicLong equipBonusHintLastShown = new AtomicLong();
     private long totalExpGained = 0;
     private int merchantmeso;
     @Getter
@@ -5086,6 +5099,29 @@ public class Character extends AbstractCharacterObject {
         return job.getId() / 1000;
     }
 
+    /**
+     * 实时战力计算：与 EquipPowerRankingManager 的离线排行榜SQL公式保持一致，
+     * 但直接读取内存中已装备的物品，不依赖数据库批量任务，可随时获取任意角色的当前战力。
+     * 公式：四维属性总和(str+dex+int+luk) + (法师职业用matk*4，其余职业用watk*10)
+     * 法师判定：(jobId / 100) % 10 == 2，与排行榜SQL中的 (c.job DIV 100) % 10 = 2 完全一致
+     */
+    public long getCombatPower() {
+        long statSum = 0;
+        long watkSum = 0;
+        long matkSum = 0;
+        for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
+            if (!(item instanceof Equip)) {
+                continue;
+            }
+            Equip equip = (Equip) item;
+            statSum += equip.getStr() + equip.getDex() + equip.getInt() + equip.getLuk();
+            watkSum += equip.getWatk();
+            matkSum += equip.getMatk();
+        }
+        boolean isMage = (job.getId() / 100) % 10 == 2;
+        return statSum + (isMage ? matkSum * 4 : watkSum * 10);
+    }
+
     public int getFh() {
         Point pos = this.getPosition();
         pos.y -= 6;
@@ -5165,6 +5201,56 @@ public class Character extends AbstractCharacterObject {
 
     public void setMeso(int meso) {
         this.meso.set(meso);
+    }
+
+    /** 获取突破石累加的额外伤害上限 */
+    public long getExtraDamageCap() {
+        return extraDamageCap.get();
+    }
+
+    public void setExtraDamageCap(long extraDamageCap) {
+        this.extraDamageCap.set(extraDamageCap);
+    }
+
+    /** 突破石使用成功时调用：累加额外伤害上限，返回累加后的总值 */
+    public long gainExtraDamageCap(int amount) {
+        return extraDamageCap.addAndGet(amount);
+    }
+
+    /** 客户端应同步显示的伤害上限总值 = 原生19W999 + 突破石累加值，用于通过封包下发给客户端外置插件写内存 */
+    public long getDisplayDamageCap() {
+        return BASE_DISPLAY_DAMAGE_CAP + extraDamageCap.get();
+    }
+
+    /**
+     * 突破石使用成功等需要立即生效的场合调用：把当前应显示的伤害上限重新下发给客户端，
+     * 避免要求玩家重新登录才能让 BeiDou-ijl15 插件把新的内存上限写进去。
+     * HP/MP 警报字段沿用玩家本地配置值，与登录时下发的逻辑保持一致。
+     */
+    public void resyncDisplayDamageCap() {
+        byte hpAlert = GameConfig.getServerBoolean("use_server_auto_pot") ? hpMpAlertService.getHpAlert(getId()) : 0;
+        byte mpAlert = GameConfig.getServerBoolean("use_server_auto_pot") ? hpMpAlertService.getMpAlert(getId()) : 0;
+        sendPacket(PacketCreator.updateClientSettings(hpAlert, mpAlert, getDisplayDamageCap()));
+    }
+
+    /** 汇总当前穿戴装备的伤害加成配置(不缓存，配置量小，按需计算) */
+    public EquipDamageBonusManager.Bonus getEquipDamageBonus() {
+        return EquipDamageBonusManager.aggregate(this);
+    }
+
+    /** 汇总当前穿戴套装达到的件数档位伤害加成配置(不缓存，配置量小，按需计算) */
+    public SetDamageBonusManager.Bonus getSetDamageBonus() {
+        return SetDamageBonusManager.aggregate(this);
+    }
+
+    /** 装备伤害加成HINT提示的冷却判定：距上次弹出超过cooldownMs才返回true并刷新时间戳 */
+    public boolean tryEquipBonusHintCooldown(long cooldownMs) {
+        long now = System.currentTimeMillis();
+        long last = equipBonusHintLastShown.get();
+        if (now - last < cooldownMs) {
+            return false;
+        }
+        return equipBonusHintLastShown.compareAndSet(last, now);
     }
 
     /**
@@ -5728,7 +5814,10 @@ public class Character extends AbstractCharacterObject {
 
         try {
             Server.getInstance().memberLevelJobUpdate(this.mgc);
-            //Server.getInstance().getGuild(guildid, world, mgc).gainGP(40);
+            Guild guild = getGuild();
+            if (guild != null) {
+                guild.addContribution(this, GameConfig.getServerInt("guild_contribution_per_level_up"));
+            }
             int allianceId = getGuild().getAllianceId();
             if (allianceId > 0) {
                 Server.getInstance().allianceMessage(allianceId, GuildPackets.updateAllianceJobLevel(this), getId(), -1);
@@ -6607,6 +6696,7 @@ public class Character extends AbstractCharacterObject {
         chr.setRemainingSp(remainingSps);
         chr.setMeso(charactersDO.getMeso());
         chr.setMoney(charactersDO.getMoney() != null ? charactersDO.getMoney() : 0);
+        chr.setExtraDamageCap(charactersDO.getExtraDamageCap() != null ? charactersDO.getExtraDamageCap() : 0L);
         chr.setMerchantMeso(charactersDO.getMerchantmesos());
         chr.setGMLevel(charactersDO.getGm());
         chr.setSkinColor(SkinColor.getById(charactersDO.getSkincolor()));
@@ -6633,6 +6723,7 @@ public class Character extends AbstractCharacterObject {
         chr.setJobRankMove(charactersDO.getJobRankMove());
         chr.setGuildId(charactersDO.getGuildid());
         chr.setGuildRank(charactersDO.getGuildrank());
+        chr.setGuildContribution(charactersDO.getGuildContribution() != null ? charactersDO.getGuildContribution() : 0);
         chr.setAllianceRank(charactersDO.getAllianceRank());
         chr.setFamilyId(charactersDO.getFamilyId());
         chr.setBookCover(charactersDO.getMonsterbookcover());
@@ -6810,6 +6901,7 @@ public class Character extends AbstractCharacterObject {
         }
         cdo.setMeso(chr.getMeso());
         cdo.setMoney(chr.getMoney());
+        cdo.setExtraDamageCap(chr.getExtraDamageCap());
         cdo.setHpMpUsed(chr.getHpMpApUsed());
         if (chr.getMap() == null || chr.getMap().getId() == MapId.CRIMSONWOOD_VALLEY_1 || chr.getMap().getId() == MapId.CRIMSONWOOD_VALLEY_2) {
             cdo.setSpawnpoint(0);
@@ -7313,6 +7405,20 @@ public class Character extends AbstractCharacterObject {
                 }
                 // Add throwing stars to dmg.
             }
+
+            // 公会(家族)等级被动加成：四维 + 双攻(物攻/魔攻同时加成)
+            Guild guild = getGuild();
+            if (guild != null) {
+                int guildLevel = guild.getLevel();
+                int statBonus = GuildLevelConfig.getStatBonus(guildLevel);
+                localstr += statBonus;
+                localdex += statBonus;
+                localint_ += statBonus;
+                localluk += statBonus;
+                int atkBonus = GuildLevelConfig.getAtkBonus(guildLevel);
+                localwatk += atkBonus;
+                localmagic += atkBonus;
+            }
         } finally {
             statWlock.unlock();
             chrLock.unlock();
@@ -7582,6 +7688,23 @@ public class Character extends AbstractCharacterObject {
             } catch (SQLException se) {
                 se.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 增加个人公会贡献并立即落库（贡献永久累加，不随其他存档周期合并，避免漏存）
+     *
+     * @param amount 增加数量
+     */
+    public void gainGuildContribution(int amount) {
+        this.guildContribution += amount;
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE characters SET guild_contribution = ? WHERE id = ?")) {
+            ps.setInt(1, this.guildContribution);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            log.error("Could not save guild contribution for character {}", id, se);
         }
     }
 

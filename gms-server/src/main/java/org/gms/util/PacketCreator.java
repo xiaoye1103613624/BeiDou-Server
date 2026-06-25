@@ -4744,7 +4744,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet damageMonster(int oid, int damage) {
+    public static Packet damageMonster(int oid, long damage) {
         return damageMonster(oid, damage, 0, 0);
     }
 
@@ -4752,11 +4752,11 @@ public class PacketCreator {
         return damageMonster(oid, -heal, curhp, maxhp);
     }
 
-    private static Packet damageMonster(int oid, int damage, int curhp, int maxhp) {
+    private static Packet damageMonster(int oid, long damage, int curhp, int maxhp) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(oid);
         p.writeByte(0);
-        p.writeInt(damage);
+        p.writeLong(damage);
         p.writeInt(curhp);
         p.writeInt(maxhp);
         return p;
@@ -7405,7 +7405,7 @@ public class PacketCreator {
         p.writeByte(1); // direction ?
         p.writeInt(damage);
         p.writeInt(remainingHp);
-        p.writeInt(mob.getMaxHp());
+        p.writeInt((int) Math.min(mob.getMaxHp(), Integer.MAX_VALUE));
         return p;
     }
 
@@ -8242,6 +8242,37 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
         p.writeByte(hp);
         p.writeByte(mp);
+        return p;
+    }
+
+    /**
+     * 客户端系统设置回显（扩展版）：HP/MP 警报阈值 + 当前应显示的伤害上限总值。
+     * 伤害上限字段由 BeiDou-ijl15 外置插件的 HpMpAlert.cpp 同一个 ProcessPacket hook 解析，
+     * 紧跟在原有 hp/mp 两字节之后，保持向后兼容（旧客户端忽略尾部多余字节）。
+     */
+    public static Packet updateClientSettings(byte hp, byte mp, long displayDamageCap) {
+        OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
+        p.writeByte(hp);
+        p.writeByte(mp);
+        p.writeLong(displayDamageCap);
+        return p;
+    }
+
+    /**
+     * 队伍伤害统计：单次造成伤害的播报包，广播给同地图所有玩家(含攻击者自己)。
+     * 客户端 BeiDou-ijl15 的 TeamDamageRank 模块按 charId 汇总成排行榜数据，用 ImGui 渲染。
+     *
+     * @param charId   造成伤害的角色ID
+     * @param charName 造成伤害的角色名(供未在视野内/还没收到该角色出现包的情况下也能显示名字)
+     * @param damage   本次造成的伤害值(可能是多段攻击中的一段，客户端按charId累加)
+     * @param monsterId 被攻击的怪物ID(用于客户端区分"打哪个怪"，0表示未指定)
+     */
+    public static Packet updateTeamDamage(int charId, String charName, long damage, int monsterId) {
+        OutPacket p = OutPacket.create(SendOpcode.TEAM_DAMAGE_UPDATE);
+        p.writeInt(charId);
+        p.writeString(charName);
+        p.writeLong(damage);
+        p.writeInt(monsterId);
         return p;
     }
 

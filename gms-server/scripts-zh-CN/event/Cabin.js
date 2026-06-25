@@ -11,6 +11,12 @@
     this program under any other version of the GNU Affero General Public
     License.
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,36 +27,40 @@
 */
 
 /**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Cabin between Orbis and Leafre
- -- By ---------------------------------------------------------------------------------------------
- Information
- -- Version Info -----------------------------------------------------------------------------------
- 1.5 - Fix for infinity looping [Information]
- 1.4 - Ship/boat is now showed
- - Removed temp message[Information]
- - Credits to Snow, superraz777 for old source
- - Credits to Titan, Kool for the ship/boat packet
- 1.3 - Removing some function since is not needed [Information]
- - Remove register player menthod [Information]
- 1.2 - It should be 2 ships not 1 [Information]
- 1.1 - Add timer variable for easy edit [Information]
- 1.0 - First Version by Information
- ---------------------------------------------------------------------------------------------------
- **/
+ * @description: 天空之城与神木村飞行舱运输脚本
+ *               处理天空之城(Orbis)与神木村(Leafre)之间的飞行舱运输
+ * @author: OdinMS Team
+ * @event: Cabin Transportation
+ */
 
+/** 天空之城候车室 */
 var Orbis_btf;
+/** 神木村候车室 */
 var Leafre_btf;
+/** 开往天空之城的飞行舱 */
 var Cabin_to_Orbis;
+/** 开往神木村的飞行舱 */
 var Cabin_to_Leafre;
+/** 天空之城停靠点 */
 var Orbis_docked;
+/** 神木村停靠点 */
 var Leafre_docked;
+/** 天空之城车站 */
+var Orbis_Station;
+/** 神木村车站 */
+var Leafre_Station;
 
-//Time Setting is in millisecond
-var closeTime = 4 * 60 * 1000; //The time to close the gate
-var beginTime = 5 * 60 * 1000; //The time to begin the ride
-var rideTime = 5 * 60 * 1000; //The time that require move to destination
+/** 入口关闭时间（毫秒） */
+var closeTime = 4 * 60 * 1000;
+/** 出发准备时间（毫秒） */
+var beginTime = 5 * 60 * 1000;
+/** 飞行时间（毫秒） */
+var rideTime = 5 * 60 * 1000;
 
+/**
+ * 初始化函数
+ * 设置交通工具时间配置并初始化地图对象
+ */
 function init() {
     closeTime = em.getTransportationTime(closeTime);
     beginTime = em.getTransportationTime(beginTime);
@@ -68,20 +78,32 @@ function init() {
     scheduleNew();
 }
 
+/**
+ * 安排新的运输周期
+ * 设置停靠状态并调度入口关闭和出发任务
+ */
 function scheduleNew() {
     em.setProperty("docked", "true");
     Orbis_docked.setDocked(true);
     Leafre_docked.setDocked(true);
 
     em.setProperty("entry", "true");
-    em.schedule("stopEntry", closeTime); //The time to close the gate
-    em.schedule("takeoff", beginTime); //The time to begin the ride
+    em.schedule("stopEntry", closeTime);
+    em.schedule("takeoff", beginTime);
 }
 
+/**
+ * 停止入口进入
+ * 设置入口状态为关闭
+ */
 function stopEntry() {
     em.setProperty("entry", "false");
 }
 
+/**
+ * 出发处理
+ * 将候车室玩家传送到飞行舱，设置飞行状态
+ */
 function takeoff() {
     Orbis_btf.warpEveryone(Cabin_to_Leafre.getId());
     Leafre_btf.warpEveryone(Cabin_to_Orbis.getId());
@@ -93,9 +115,13 @@ function takeoff() {
     Orbis_docked.setDocked(false);
     Leafre_docked.setDocked(false);
 
-    em.schedule("arrived", rideTime); //The time that require move to destination
+    em.schedule("arrived", rideTime);
 }
 
+/**
+ * 到达处理
+ * 将飞行舱内玩家传送到目的地车站，安排下一轮运输
+ */
 function arrived() {
     Cabin_to_Orbis.warpEveryone(Orbis_Station.getId(), 0);
     Cabin_to_Leafre.warpEveryone(Leafre_Station.getId(), 0);
@@ -106,6 +132,9 @@ function arrived() {
     scheduleNew();
 }
 
+/**
+ * 取消调度任务
+ */
 function cancelSchedule() {}
 
 
@@ -140,4 +169,3 @@ function clearPQ(eim) {}
 function allMonstersDead(eim) {}
 
 function playerUnregistered(eim, player) {}
-

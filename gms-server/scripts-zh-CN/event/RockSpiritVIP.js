@@ -19,23 +19,48 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @description: VIP石头精灵战斗脚本
+ *               处理天空之城VIP石头精灵战斗任务，玩家需要在限定时间内击败石头精灵
+ * @author: OdinMS Team
+ * @event: Rock Spirit VIP Battle
+ */
+
+/** 入口地图 */
 var entryMap;
+/** 出口地图 */
 var exitMap;
+/** 另一战斗地图 */
 var otherMap;
 
+/** 最小地图ID范围 */
 var minMapId = 103040410;
+/** 最大地图ID范围 */
 var maxMapId = 103040460;
 
+/** 最小玩家数 */
 var minPlayers = 1;
+/** 战斗时间限制（分钟） */
 var fightTime = 30;
+/** 战斗计时器（毫秒） */
 var timer = 1000 * 60 * fightTime;
 
+/**
+ * 初始化函数
+ * 设置入口、出口和战斗地图
+ */
 function init() {
     exitMap = em.getChannelServer().getMapFactory().getMap(103040400);
     entryMap = em.getChannelServer().getMapFactory().getMap(103040440);
     otherMap = em.getChannelServer().getMapFactory().getMap(103040450);
 }
 
+/**
+ * 设置事件实例
+ * @param {number} level - 难度等级
+ * @param {number} lobbyid - 等待室ID
+ * @returns {object} 事件实例管理器
+ */
 function setup(level, lobbyid) {
     var eim = em.newInstance("RockSpiritVIP_" + lobbyid);
     eim.setProperty("level", level);
@@ -46,8 +71,16 @@ function setup(level, lobbyid) {
     return eim;
 }
 
+/**
+ * 设置完成后的回调
+ * @param {object} eim - 事件实例管理器
+ */
 function afterSetup(eim) {}
 
+/**
+ * 重生怪物
+ * @param {object} eim - 事件实例管理器
+ */
 function respawn(eim) {
     var map = eim.getMapInstance(entryMap.getId());
     var map2 = eim.getMapInstance(otherMap.getId());
@@ -58,20 +91,40 @@ function respawn(eim) {
     eim.schedule("respawn", 10000);
 }
 
-
+/**
+ * 玩家进入事件处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerEntry(eim, player) {
     var amplifierMap = eim.getMapInstance(entryMap.getId());
     player.changeMap(amplifierMap, 1);
     eim.schedule("timeOut", timer);
 }
 
+/**
+ * 玩家复活处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ * @returns {boolean} 是否允许复活
+ */
 function playerRevive(eim, player) {
     player.respawn(eim, exitMap);
     return false;
 }
 
+/**
+ * 玩家死亡处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerDead(eim, player) {}
 
+/**
+ * 玩家断开连接处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerDisconnected(eim, player) {
     if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
         eim.unregisterPlayer(player);
@@ -81,6 +134,12 @@ function playerDisconnected(eim, player) {
     }
 }
 
+/**
+ * 玩家切换地图处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ * @param {number} mapid - 地图ID
+ */
 function changedMap(eim, player, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
         if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
@@ -92,10 +151,20 @@ function changedMap(eim, player, mapid) {
     }
 }
 
+/**
+ * 获取怪物价值
+ * @param {object} eim - 事件实例管理器
+ * @param {number} mobId - 怪物ID
+ * @returns {number} 怪物价值
+ */
 function monsterValue(eim, mobId) {
     return -1;
 }
 
+/**
+ * 结束事件
+ * @param {object} eim - 事件实例管理器
+ */
 function end(eim) {
     var party = eim.getPlayers();
     for (var i = 0; i < party.size(); i++) {
@@ -104,27 +173,69 @@ function end(eim) {
     eim.dispose();
 }
 
+/**
+ * 玩家离开队伍处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function leftParty(eim, player) {}
 
+/**
+ * 队伍解散处理
+ * @param {object} eim - 事件实例管理器
+ */
 function disbandParty(eim) {}
 
+/**
+ * 玩家注销处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerUnregistered(eim, player) {}
 
+/**
+ * 玩家退出事件处理
+ * @param {object} eim - 事件实例管理器
+ * @param {object} player - 玩家对象
+ */
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     player.changeMap(exitMap, exitMap.getPortal(0));
 }
 
+/**
+ * 取消调度任务
+ */
 function cancelSchedule() {}
 
+/**
+ * 释放资源
+ */
 function dispose() {}
 
+/**
+ * 通关组队任务
+ * @param {object} eim - 事件实例管理器
+ */
 function clearPQ(eim) {}
 
+/**
+ * 怪物被击杀处理
+ * @param {object} mob - 怪物对象
+ * @param {object} eim - 事件实例管理器
+ */
 function monsterKilled(mob, eim) {}
 
+/**
+ * 所有怪物死亡处理
+ * @param {object} eim - 事件实例管理器
+ */
 function allMonstersDead(eim) {}
 
+/**
+ * 超时处理
+ * @param {object} eim - 事件实例管理器
+ */
 function timeOut(eim) {
     end(eim);
 }
@@ -134,4 +245,3 @@ function timeOut(eim) {
 function scheduledTimeout(eim) {}
 
 function changedLeader(eim, leader) {}
-

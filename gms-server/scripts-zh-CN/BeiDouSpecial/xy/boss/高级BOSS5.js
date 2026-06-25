@@ -75,7 +75,7 @@ function action(mode, type, selection) {
         text += "\t\t\t\t#b[" + fubenm + "]----#r[" + bossm + "]#k\r\n\r\n#g挑战要求：\r\n"
 		text += "\t#k费用消耗: #r " + inmesoxs + " #k金币  物品消耗: #r " + xhwzsl + " #k个#b#v" + xhwzid + "#\r\n\r\n"
 		text += "\t#k人数限制:#r " + minPartySize + " #b- #r" + maxPartySize + " #k人  等级限制:#r " + minLevel + " #b- #r" + maxLevel + " #k级 \r\n\r\n"
-		text += "\t#k战力要求: #r" + zlyqxs + " #k  您当前战力: #r"+cm.getPlayer().GetCombat()/10000+" #k万\r\n\r\n"
+		text += "\t#k战力要求: #r" + zlyqxs + " #k  您当前战力: #r"+cm.getPlayer().getCombatPower()/10000+" #k万\r\n\r\n"
 
         text += "\t#r[" + bossm + "]#k血量: #r" + bossxlxs + "   #k基础经验值: #r" + bossjyxs + " \r\n\r\n"
 		text += "\t#b[" + fubenm + "]#k每日限挑战: #r" + TZCS + " #k次  您已挑战: #r" + cm.getBossLog(""+fubenm+"") + " #k次\r\n\r\n"
@@ -84,7 +84,7 @@ function action(mode, type, selection) {
         
         //text += "\t#k主要掉物: \r\n\t#v" + dlwup1 + "##v" + dlwup2 + "##v" + dlwup3 + "##v" + dlwup4 + "##v" + dlwup5 + "##v" + dlwup6 + "##v" + dlwup7 + "##v" + dlwup8 + "##v" + dlwup9 + "##v" + dlwup10 + "#\r\n\r\n"
 		
-        if (cm.getPlayer().GetCombat() >= zlyq && cm.getLevel() >= minLevel) { 
+        if (cm.getPlayer().getCombatPower() >= zlyq && cm.getLevel() >= minLevel) { 
         text += "\t\t#e#L1##b#v4031569#挑战#r[" + bossm + "]#v4031569##l#n\r\n\r\n"
         }else {
         text += "\t#r#e您得战力或者等级太低,还无法进入#n\r\n\r\n"

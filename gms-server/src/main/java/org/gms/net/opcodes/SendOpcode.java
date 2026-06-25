@@ -357,6 +357,7 @@ public enum SendOpcode implements Opcode {
     VEGA_SCROLL(0x166), // VEGA卷轴
 
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
+    TEAM_DAMAGE_UPDATE(0x1001), // 队伍伤害统计：广播单次造成的伤害数据给同地图玩家(供客户端ImGui排行榜使用)
     ;
     private int code = -2;
 

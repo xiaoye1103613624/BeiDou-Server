@@ -1,441 +1,238 @@
+/**
+ * @description 宝石系统：1.宝石合成 2.宝石镶嵌
+ * 1. 宝石合成：消耗2个N级宝石合成1个N+1级宝石，1~16级，逐级翻倍（与"母矿合成"思路一致）。
+ *    宝石等级/物品ID/合成金币消耗统一存储在 xy_gem_level 配置表（默认 enabled=0，数据确认后改为1）。
+ * 2. 宝石镶嵌：消耗对应等级宝石 + 属性水晶 + 金币，为身上已穿戴的装备永久叠加属性
+ *    （直接写入装备的力量/敏捷/智力/运气/物攻/魔攻字段，随 inventoryequipment 表持久化）。
+ *    叠加值通过 EquipEnhanceManager.safeAddStat 钳制到 [0,32767]，防止 short 溢出。
+ *    消耗配置统一存储在 xy_gem_socket_level 配置表（默认 enabled=0，数据确认后改为1）。
+ * 3. 建议先完成装备强化再来镶嵌：本脚本不限制顺序，仅做提示，具体规则待后续确认。
+ */
 
+var GemManager = Java.type("org.gms.config.GemManager");
+var InventoryType = Java.type("org.gms.client.inventory.InventoryType");
+var ItemInformationProvider = Java.type("org.gms.server.ItemInformationProvider");
 
-/*
-	作者：狗哥
-	QQ联系：1418181168
-	制作时间：2022年/6月/28日
-*/
+var synthesisCache = [];
+var socketCache = [];
+var pendingSynthesis = null;
+var pendingSocket = null; // {equip, slot, gemLevelCfg, socketCfg}
 
-var 感叹号0 = "#fUI/UIWindow/Quest/icon0#";
-var 感叹号1 = "#fUI/UIWindow/Quest/icon1#";
-var 开 = "#fUI/Basic/CheckBox/0#";   //有框框 无√
-var 关 = "#fUI/Basic/CheckBox/1#";   //有框框 有√
-var xx = "#fItem/Etc/0427/04270001/Icon9/0#";  //小黄星
-var 分割线 = "#fUI/Login.img/WorldSelect/channel/chgauge#";
-var 广播 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
-var 是 = 2146000001;
-var 否 = 2146000002;
-var 返回 = 2146000003;
-var 类型选择;
-var 制作选择;
-var 展示 = "核心界面";
-var 功能名称 = "饰品制作系统";
-var 列表 = [
-	{
-		制作类型: "副本装备展示", F1坐标: 2147000001, 编辑1: "\t\t\t  ", 编辑2: "",
-		制作列表: [
-			{
-				装备代码: 1112907, 金币: 10000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 3994742, 数量: 5 },
-				]
-			},
-			{
-				装备代码: 1113131, 金币: 2000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1113189, 数量: 2 },
-					{ 物品代码: 1113190, 数量: 2 },
-					{ 物品代码: 1113191, 数量: 2 },
-					{ 物品代码: 1113192, 数量: 2 },
-					{ 物品代码: 1113193, 数量: 2 },
-					{ 物品代码: 1113194, 数量: 2 },
-				]
-			},		
-			{
-				装备代码: 1113064, 金币: 100000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 2511127, 数量: 1 },
-					{ 物品代码: 4000463, 数量: 88 },
-					{ 物品代码: 4000038, 数量: 888 },
-					{ 物品代码: 4000313, 数量: 3888 },
-				]
-			},
-		/*	{
-				装备代码: 1012251, 金币: 2000000, 开放天数: 1, //发光的鼻子
-				需求条件: [
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012012, 数量: 1 },
-					{ 物品代码: 1012013, 数量: 1 },
-					{ 物品代码: 1012014, 数量: 1 },
-					{ 物品代码: 1012015, 数量: 1 },
-					{ 物品代码: 1012016, 数量: 1 },
-					{ 物品代码: 1012017, 数量: 1 },
-					{ 物品代码: 1012018, 数量: 1 },
-					{ 物品代码: 1012019, 数量: 1 },
-					{ 物品代码: 1012020, 数量: 1 },
-				]
-			},
-			{
-				装备代码: 1012191, 金币: 2000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1012309, 数量: 1 },
-					{ 物品代码: 1012188, 数量: 1 },
-					{ 物品代码: 1012189, 数量: 1 },
-					{ 物品代码: 1012190, 数量: 1 },
-				]
-			},
-			{
-				装备代码: 1022271, 金币: 2000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1022047, 数量: 1 },
-					{ 物品代码: 1022058, 数量: 1 },
-					{ 物品代码: 1022060, 数量: 1 },
-					{ 物品代码: 1022067, 数量: 1 },
-				]
-			},
-			{
-				装备代码: 1032327, 金币: 10000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1032035, 数量: 1 },
-					{ 物品代码: 1032047, 数量: 1 },
-					{ 物品代码: 1032058, 数量: 1 },
-				]
-			},
-			{
-				装备代码: 1142796, 金币: 20000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1142072, 数量: 1 },
-					{ 物品代码: 4001266, 数量: 6 },
-				]
-			},
-			{
-				装备代码: 1142574, 金币: 20000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1142072, 数量: 1 },
-					{ 物品代码: 4001266, 数量: 6 },
-				]
-			},
-			{
-				装备代码: 1142210, 金币: 300000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1142796, 数量: 1 },
-					{ 物品代码: 1142574, 数量: 1 },
-					{ 物品代码: 4001266, 数量: 9 },
-				]
-			},
-			{
-				装备代码: 1142609, 金币: 300000000, 开放天数: 1,  //耀眼蓝宝石
-				需求条件: [
-					{ 物品代码: 1142833, 数量: 1 },
-					{ 物品代码: 1142072, 数量: 1 },
-					{ 物品代码: 1142796, 数量: 1 },
-					{ 物品代码: 1142574, 数量: 1 },
-					{ 物品代码: 1142210, 数量: 1 },
-					{ 物品代码: 4001266, 数量: 18 },
-					{ 物品代码: 3993003, 数量: 20 },
-				]
-			},
-			*/
-			
-			{
-				装备代码: 1113231, 金币: 10000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112763, 数量: 1 },
-					{ 物品代码: 1112767, 数量: 1 },
-					{ 物品代码: 1112771, 数量: 1 },
-					{ 物品代码: 1112775, 数量: 1 },
-				]
-			},
-
-			
-			{
-				装备代码: 1112765, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112766, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112764, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112765, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112763, 金币: 1000000, 开放天数: 1, //S级
-				需求条件: [
-					{ 物品代码: 1112764, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112777, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112778, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112776, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112777, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112775, 金币: 1000000, 开放天数: 1, //S级
-				需求条件: [
-					{ 物品代码: 1112776, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112773, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112774, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112772, 金币: 1000000, 开放天数: 1, 
-				需求条件: [
-					{ 物品代码: 1112773, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112771, 金币: 1000000, 开放天数: 1, //S级
-				需求条件: [
-					{ 物品代码: 1112772, 数量: 3 },
-				]
-			},
-			
-			{
-				装备代码: 1112769, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112770, 数量: 3 },
-				]
-			},
-			
-			{
-				装备代码: 1112768, 金币: 1000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1112769, 数量: 3 },
-				]
-			},
-			{
-				装备代码: 1112767, 金币: 1000000, 开放天数: 1,  //S级
-				需求条件: [
-					{ 物品代码: 1112768, 数量: 3 },
-				]
-			},
-
-			{
-				装备代码: 1012251, 金币: 2000000, 开放天数: 1,
-				需求条件: [
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-					{ 物品代码: 1012011, 数量: 1 },
-				]
-			},
-			
-			
-			
-		]
-	},
-]
+// ==================== 入口 ====================
 
 function start() {
-	status = -1;
-
-	action(1, 0, 0);
+    levelMain();
 }
 
-function action(mode, type, selection) {
-	if (mode == -1) {
-		cm.dispose();
-	} else {
-		if (status >= 0 && mode == 0) {
-			cm.dispose();
-			return;
-		}
-		if (mode == 1) {
-			status++;
-		} else {
-			status--;
-		}
-		if (status == 0) {
-			var text = "#d\r\n";
-			text += " #g┏━#r冒险岛提示#g━━━━━━━━━━━━━━━━┓\r\n";
-			text += "\t#d" + 广播 + " 欢迎来到 [#r" + 功能名称 + "#d]\r\n";
-			text += "\t#d" + 广播 + " 下方请选择您要制作的道具类型\r\n";
-			text += " #g┗━━━━━━━━━━━━━━━━━━━━━━┛#d\r\n";
-			/*for (var i = 0; i < 列表.length; i++) {
-				var is_1 = 列表[i];
-				if (类型选择 == is_1.制作类型) {
-					制作选择 = is_1.制作列表;
-					text += "" + is_1.编辑1 + "#L" + is_1.F1坐标 + "#[#b" + is_1.制作类型 + "#d]" + 关 + "#l" + is_1.编辑2 + "";
-				} else {
-					text += "" + is_1.编辑1 + "#L" + is_1.F1坐标 + "#[#b" + is_1.制作类型 + "#d]" + 开 + "#l" + is_1.编辑2 + "";
-				}
-			}*/
-			制作选择 = 列表[0].制作列表;
-			类型选择 = "副本装备展示";
-			检测F1坐标 = true;
-			if (类型选择 != null) {
-				text += " \t\t\t\t" + xx + "  制作内容展示  " + xx + "\r\n";
-				for (var j = 0; j < 制作选择.length; j++) {
-					if (制作选择[j].开放天数 >= 读取开服天数()) {
-						text += "#L" + j + "#制作:#v" + 制作选择[j].装备代码 + ":##z" + 制作选择[j].装备代码 + "##l\r\n";
-					}
-				}
-			}
-			text += "\r\n";
-			cm.sendYesNo(text);
-		} else if (status == 1) {
-			sele1 = selection;
-			var 检测F1坐标 = false;
-			for (var i = 0; i < 列表.length; i++) {
-				var is_1 = 列表[i];
-				if (sele1 == is_1.F1坐标) {
-					类型选择 = is_1.制作类型;
-					检测F1坐标 = true;
-					start();
-					return;
-				}
-			}
-			if (检测F1坐标 == false) {
-				var text = "#d\r\n";
-				var is_2 = 制作选择[sele1];
-				var 检测要求 = true;
-				text += " #g┏━#r冒险岛提示#g━━━━━━━━━━━━━━━━━━┓\r\n#d";
-				text += "\t\t\t  #L" + 返回 + "#" + xx + "[#b返回上一页#d]" + xx + "#l\r\n\r\n";
-				text += "\t      " + 感叹号0 + "表示不满足条件 \t" + 感叹号1 + "表示满足条件    \r\n\r\n";
-				text += "\t 制作道具：#v" + is_2.装备代码 + ":##b#z" + is_2.装备代码 + "##d\r\n";
-				text += " #g┗━━━━━━━━━━━━━━━━━━━━━━━━┛#d\r\n\r\n";
-				if (is_2.金币 != 0 && is_2.金币 != null) {
-					if (cm.getMeso() < is_2.金币) {
-						检测要求 = false;
-						text += "  " + 感叹号0 + "需要金币：[#r" + is_2.金币 + "#d] 缺少:[#r" + (is_2.金币 - cm.getMeso()) + "#d]\r\n";
-					} else {
-						text += "  " + 感叹号1 + "需要金币：[#r" + is_2.金币 + "#d]\r\n";
-					}
-				}
-				text += "\r\n 需要材料：\r\n";
-				for (var j = 0; j < is_2.需求条件.length; j++) {
-					var is_3 = is_2.需求条件[j];
-					if (物品数量(is_3.物品代码) < is_3.数量) {
-						检测要求 = false;
-						text += "  " + 感叹号0 + "道具：#v" + is_3.物品代码 + ":##b#z" + is_3.物品代码 + "# #r" + is_3.数量 + "#d个 缺少:[#r" + (is_3.数量 - 物品数量(is_3.物品代码)) + "#d]\r\n";
-					} else {
-						text += "  " + 感叹号1 + "道具：#v" + is_3.物品代码 + ":##b#z" + is_3.物品代码 + "# #r" + is_3.数量 + "#d个\r\n";
-					}
-				}
-				text += "\r\n";
-				if (检测要求 == true) {
-					if (!cm.canHold(is_2.装备代码, 1)) {
-						text += "\t\t\t\t\t\t\t\t[#r背包空间不足#d]\r\n";
-					} else {
-						text += "\t\t\t\t\t\t\t 是否要制作呢？\r\n";
-						text += "\t\t\t\t\t\t";
-						text += "#L" + 是 + "#" + xx + "#r是#d" + xx + "#l ";
-						text += "#L" + 否 + "#" + xx + "#k否#d" + xx + "#l\r\n\r\n";
-					}
-				} else {
-					text += "\t\t\t\t\t\t\t\t[#r条件不满足#d]\r\n";
-				}
-				cm.sendYesNo(text);
-			}
-		} else if (status == 2) {
-			sele2 = selection;
-			switch (sele2) {
-				case 是:
-					var is_2 = 制作选择[sele1];
-					if (is_2.金币 != 0 && is_2.金币 != null) {
-						cm.gainMeso(-is_2.金币);
-					}
-					for (var j = 0; j < is_2.需求条件.length; j++) {
-						var is_3 = is_2.需求条件[j];
-						cm.gainItem(is_3.物品代码, -is_3.数量);
-					}
-					cm.gainItem(is_2.装备代码, 1);
-					cm.sendOk("#e#d制作完成！获得物品：#v" + is_2.装备代码 + ":##b#z" + is_2.装备代码 + "#");
-					var itemName = cm.getItemName(is_2.装备代码);
-					cm.喇叭(2, "" + cm.getName() + ":在 匠人街饰品大师 制作出了 "+ itemName +"");
-					status = -1;
-					return;
-				case 否:
-					start();
-					break;
-				case 返回:
-					start();
-					break;
-				default:
-					break;
-			}
-		}
-	}
+function levelMain() {
+    var text = "#e宝石系统#n\r\n\r\n"
+        + "#L0#宝石合成（2个低级宝石合成1个高级宝石）#l\r\n"
+        + "#L1#宝石镶嵌（消耗宝石+属性水晶为装备永久加属性）#l\r\n"
+        + "#L9#离开#l";
+    cm.sendNextSelectLevel("HandleMain", text);
 }
 
-function 物品数量(itemid) {
-	return cm.getPlayer().getItemQuantity(itemid, false);
+function levelHandleMain(selection) {
+    if (selection === 0) {
+        levelSynthesisMenu();
+    } else if (selection === 1) {
+        levelSocketEquipMenu();
+    } else {
+        cm.dispose();
+    }
 }
 
-/*
-switch (sele1) {
-	case 商店:
-		break;
-	case 赠送:
-		break;
-	case 仓库:
-		break;
-	case 查看:
-		break;
-	default:
-		break;
-}
-//cm.sendOk("感谢光临");
-//cm.sendYesNo("更换发型吗？");
-//cm.sendGetNumber("#e#d请输入数量：", 1, 1, 32767);
-//cm.sendSimple(txt);//用于选择
-//cm.openNpc(9310065, 0);//链接NPC
-//cm.sendNextPrev("（#p9120025#眯"+status+"起眼睛2）");上一页，下一页
+// ==================== 宝石合成 ====================
 
-*/
+function levelSynthesisMenu() {
+    synthesisCache = [];
+    var levels = GemManager.queryEnabledGemLevels();
+    var text = "#e宝石合成#n\r\n（消耗2个同等级宝石，合成1个高一级宝石）\r\n\r\n";
 
-function 读取开服天数() {
-	return 1;
-}
+    for (var i = 0; i < levels.size(); i++) {
+        var cur = levels.get(i);
+        var next = GemManager.queryGemLevel(cur.getGemLevel() + 1);
+        if (next == null) continue; // 已是最高级或下一级未启用，不可合成
 
-function 字体美化(length, content, boolean) {
-	var str = "";
-	var cs = "";
-	if (content.length > length) {
-		str = content;
-	} else {
-		for (var j = 0; j < length - content.getBytes("GB2312").length; j++) {
-			cs += " ";
-		}
-	}
-	if (boolean == true) {
-		str = content + cs;
-	} else {
-		str = cs + content;
-	}
-	return str;
+        var have = cm.getPlayer().getItemQuantity(cur.getItemId(), false);
+        var meso = cur.getSynthesisMesoCost();
+        var idx = synthesisCache.length;
+        text += "#L" + idx + "##t" + cur.getItemId() + "##k x2 → #t" + next.getItemId() + "##k x1";
+        if (meso > 0) text += "（金币:" + meso + "）";
+        text += "　当前持有:" + have + "#l\r\n";
+        synthesisCache.push({ from: cur, to: next });
+    }
+
+    if (synthesisCache.length === 0) {
+        text += "暂无可合成的宝石（数据待定，敬请期待）。\r\n\r\n";
+    }
+    text += "\r\n#L9#返回#l";
+    cm.sendNextSelectLevel("HandleSynthesis", text);
 }
 
-function 数目美化(num, length) {//数字美化
-	var ul_nums = [
-		"#fUI/UIWindow/KeyConfig/key/11#",
-		"#fUI/UIWindow/KeyConfig/key/2#",
-		"#fUI/UIWindow/KeyConfig/key/3#",
-		"#fUI/UIWindow/KeyConfig/key/4#",
-		"#fUI/UIWindow/KeyConfig/key/5#",
-		"#fUI/UIWindow/KeyConfig/key/6#",
-		"#fUI/UIWindow/KeyConfig/key/7#",
-		"#fUI/UIWindow/KeyConfig/key/8#",
-		"#fUI/UIWindow/KeyConfig/key/9#",
-		"#fUI/UIWindow/KeyConfig/key/10#",
-	];
-	var showTxt = "";
-	var tempNums = num.toString().split("");
-	for (var i = 0; i < tempNums.length; i++) {
-		showTxt += ul_nums[parseInt(tempNums[i])];
-	}
-	var sss = "";
-	for (var i = tempNums.length; i < length; i++) {
-		sss += " ";
-	}
-	return sss + showTxt;
+function levelHandleSynthesis(selection) {
+    if (selection < 0 || selection >= synthesisCache.length) {
+        levelMain();
+        return;
+    }
+    pendingSynthesis = synthesisCache[selection];
+    var from = pendingSynthesis.from;
+    var to = pendingSynthesis.to;
+
+    var text = "是否消耗 #b#t" + from.getItemId() + "##k x2 + 金币" + from.getSynthesisMesoCost()
+        + " 合成 #b#t" + to.getItemId() + "##k x1？";
+    cm.sendYesNoLevel("SynthesisMenu", "DoSynthesis", text);
+}
+
+function levelDoSynthesis() {
+    var pair = pendingSynthesis;
+    pendingSynthesis = null;
+    if (pair == null) {
+        cm.dispose();
+        return;
+    }
+    var from = pair.from;
+    var to = pair.to;
+
+    if (!cm.haveItem(from.getItemId(), 2)) {
+        cm.sendOkLevel("Main", "宝石数量不足，无法合成。");
+        return;
+    }
+    if (cm.getMeso() < from.getSynthesisMesoCost()) {
+        cm.sendOkLevel("Main", "金币不足，无法合成。");
+        return;
+    }
+    if (!cm.canHold(to.getItemId(), 1)) {
+        cm.sendOkLevel("Main", "背包空间不足，无法合成。");
+        return;
+    }
+
+    cm.gainItem(from.getItemId(), -2);
+    if (from.getSynthesisMesoCost() > 0) {
+        cm.gainMeso(-from.getSynthesisMesoCost());
+    }
+    cm.gainItem(to.getItemId(), 1);
+
+    cm.sendOkLevel("Main", "合成成功！获得 #t" + to.getItemId() + "# x1");
+}
+
+// ==================== 宝石镶嵌 ====================
+
+function levelSocketEquipMenu() {
+    socketCache = [];
+    var text = "#e宝石镶嵌#n\r\n#r建议先完成装备强化再来镶嵌#k\r\n\r\n请选择身上已穿戴的装备：\r\n\r\n";
+
+    var inv = cm.getPlayer().getInventory(InventoryType.EQUIPPED);
+    var iter = inv.list().iterator();
+    var idx = 0;
+    while (iter.hasNext()) {
+        var item = iter.next();
+        if (item == null) continue;
+        var name = ItemInformationProvider.getInstance().getName(item.getItemId());
+        text += "#L" + idx + "#" + name + "#l\r\n";
+        socketCache.push({ equip: item, slot: item.getPosition() });
+        idx++;
+    }
+
+    if (socketCache.length === 0) {
+        text += "身上没有已穿戴的装备。\r\n\r\n";
+    }
+    text += "\r\n#L9#返回#l";
+    cm.sendNextSelectLevel("HandleSocketEquip", text);
+}
+
+function levelHandleSocketEquip(selection) {
+    if (selection < 0 || selection >= socketCache.length) {
+        levelMain();
+        return;
+    }
+    pendingSocket = { equip: socketCache[selection].equip, slot: socketCache[selection].slot };
+    levelSocketGemMenu();
+}
+
+function levelSocketGemMenu() {
+    var levels = GemManager.queryEnabledGemLevels();
+    var text = "#e选择用于镶嵌的宝石#n\r\n\r\n";
+    var idx = 0;
+    var cache = [];
+
+    for (var i = 0; i < levels.size(); i++) {
+        var lv = levels.get(i);
+        var socketCfg = GemManager.querySocketLevel(lv.getGemLevel());
+        if (socketCfg == null) continue; // 该等级宝石未配置镶嵌效果
+
+        var have = cm.getPlayer().getItemQuantity(lv.getItemId(), false);
+        text += "#L" + idx + "##t" + lv.getItemId() + "##k（持有:" + have + "）#l\r\n";
+        cache.push({ gemLevel: lv, socketCfg: socketCfg });
+        idx++;
+    }
+
+    if (cache.length === 0) {
+        text += "暂无可用于镶嵌的宝石（数据待定，敬请期待）。\r\n\r\n";
+    }
+    text += "\r\n#L9#返回#l";
+    socketCache = cache; // 复用变量名存放本级缓存（与装备选择列表互斥使用）
+    cm.sendNextSelectLevel("HandleSocketGem", text);
+}
+
+function levelHandleSocketGem(selection) {
+    if (selection < 0 || selection >= socketCache.length) {
+        levelSocketEquipMenu();
+        return;
+    }
+    var pick = socketCache[selection];
+    pendingSocket.gemLevelCfg = pick.gemLevel;
+    pendingSocket.socketCfg = pick.socketCfg;
+    levelConfirmSocket();
+}
+
+function levelConfirmSocket() {
+    var cfg = pendingSocket.socketCfg;
+    var text = "本次镶嵌将消耗：\r\n"
+        + "#t" + pendingSocket.gemLevelCfg.getItemId() + "# x1\r\n"
+        + "#t" + cfg.getCrystalItemId() + "# x" + cfg.getCrystalCount() + "\r\n"
+        + "金币 x" + cfg.getMesoCost() + "\r\n\r\n"
+        + "本次提升的属性：\r\n";
+
+    var stats = [];
+    if (cfg.getStrAdd() > 0) stats.push("力量+" + cfg.getStrAdd());
+    if (cfg.getDexAdd() > 0) stats.push("敏捷+" + cfg.getDexAdd());
+    if (cfg.getIntAdd() > 0) stats.push("智力+" + cfg.getIntAdd());
+    if (cfg.getLukAdd() > 0) stats.push("运气+" + cfg.getLukAdd());
+    if (cfg.getWatkAdd() > 0) stats.push("物攻+" + cfg.getWatkAdd());
+    if (cfg.getMatkAdd() > 0) stats.push("魔攻+" + cfg.getMatkAdd());
+    text += (stats.length > 0 ? stats.join(", ") : "无") + "\r\n\r\n是否继续提升？";
+
+    cm.sendYesNoLevel("SocketEquipMenu", "DoSocket", text);
+}
+
+function levelDoSocket() {
+    var equip = pendingSocket.equip;
+    var gemLevelCfg = pendingSocket.gemLevelCfg;
+    var cfg = pendingSocket.socketCfg;
+    pendingSocket = null;
+
+    if (!cm.haveItem(gemLevelCfg.getItemId(), 1)) {
+        cm.sendOkLevel("Main", "宝石不足，无法镶嵌。");
+        return;
+    }
+    if (!cm.haveItem(cfg.getCrystalItemId(), cfg.getCrystalCount())) {
+        cm.sendOkLevel("Main", "属性水晶不足，无法镶嵌。");
+        return;
+    }
+    if (cm.getMeso() < cfg.getMesoCost()) {
+        cm.sendOkLevel("Main", "金币不足，无法镶嵌。");
+        return;
+    }
+
+    cm.gainItem(gemLevelCfg.getItemId(), -1);
+    cm.gainItem(cfg.getCrystalItemId(), -cfg.getCrystalCount());
+    if (cfg.getMesoCost() > 0) {
+        cm.gainMeso(-cfg.getMesoCost());
+    }
+
+    GemManager.applySocketStats(equip, cfg);
+    cm.getPlayer().forceUpdateItem(equip);
+
+    cm.sendOkLevel("Main", "镶嵌成功！属性已永久写入装备。");
 }

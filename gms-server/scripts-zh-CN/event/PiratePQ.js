@@ -19,25 +19,40 @@
 */
 
 /**
+ * @description: 海盗组队任务脚本
+ *               处理55-100级玩家的组队任务，特色机制为解救无恙击败海盗领主
+ *               包含多个阶段的挑战，打破箱子推进关卡
  * @author: Ronan
  * @event: Pirate PQ
  */
 
+/** 是否为组队任务 */
 var isPq = true;
-var isGrindMode = false;     // stages done after breaking all boxes on maps
+/** 是否为磨模式（打破所有箱子后完成阶段） */
+var isGrindMode = false;
 
+/** 最小/最大玩家数 */
 var minPlayers = 3, maxPlayers = 6;
+/** 最小/最大等级要求 */
 var minLevel = 55, maxLevel = 100;
+/** 进入地图ID */
 var entryMap = 925100000;
+/** 退出地图ID */
 var exitMap = 925100700;
+/** 招募地图ID */
 var recruitMap = 251010404;
+/** 通关地图ID */
 var clearMap = 925100600;
 
+/** 最小地图ID范围 */
 var minMapId = 925100000;
+/** 最大地图ID范围 */
 var maxMapId = 925100500;
 
-var eventTime = 4;     // 4 minutes
+/** 事件时间限制（分钟） */
+var eventTime = 4;
 
+/** 最大等待室数量 */
 const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');

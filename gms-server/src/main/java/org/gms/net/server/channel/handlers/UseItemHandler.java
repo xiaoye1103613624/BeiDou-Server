@@ -93,6 +93,21 @@ public final class UseItemHandler extends AbstractPacketHandler {
                     chr.dropMessage(5, I18nUtil.getMessage("UseItemHandler.message1"));
                 }
                 return;
+            } else if (ItemConstants.isBreakthroughStone(itemId)) {
+                // 突破石：按WZ配置的incALB(累加值)和success(成功率)进行概率突破，叠加到角色额外伤害上限上(不挂在装备上)
+                int incALB = ii.getInfoInt(itemId, "incALB", 0);
+                int success = ii.getInfoInt(itemId, "success", 0);
+
+                remove(c, slot);
+
+                if (ItemInformationProvider.rollSuccessChance(success)) {
+                    long total = chr.gainExtraDamageCap(incALB);
+                    chr.dropMessage(5, "突破成功！额外伤害上限增加了 " + incALB + "，当前累计额外伤害上限：" + total + "。");
+                    chr.resyncDisplayDamageCap();
+                } else {
+                    chr.dropMessage(5, "突破失败，该突破石已消失，请重新尝试。");
+                }
+                return;
             }
 
             remove(c, slot);

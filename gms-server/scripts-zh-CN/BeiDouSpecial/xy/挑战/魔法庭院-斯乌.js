@@ -65,13 +65,13 @@ function action(mode, type, selection) {
             text += "\r\n\t\t  " + 挑战中心 + "\r\n" + 群粉心 + "\r\n";
             text += "                 #r#e" + 图标2 + "<" + fubenm + ">" + 图标2 + "#n\r\n\r\n";
             text += "                 " + 图标1 + "#d 战力要求:#r " + zlyqxs + " #k\r\n\r\n";
-            text += "                 " + 图标1 + "#d 当前战力:#r " + cm.getPlayer().GetCombat() / 10000 + " #k万\r\n\r\n";
+            text += "                 " + 图标1 + "#d 当前战力:#r " + cm.getPlayer().getCombatPower() / 10000 + " #k万\r\n\r\n";
 			text += "                 " + 图标1 + "#d 今日次数:#r " + bossLogCount + "#b/" + (TZCS + 扩充次数) + "次    \r\n\r\n"; // 显示扩充后的总次数
             text += "                 " + 图标1 + "#d 副本时间:#b " + FBSJXS + " 分钟\r\n\r\n";
 			text += "                 " + 图标1 + "#d BOSS血量:#r " + bossxlxs + " \r\n";
             text += "                 " + 图标1 + "#d 进入要求:#r #v" + cywp + "# * 15 #k张" + "\r\n\r\n";
 			
-            if (cm.getPlayer().GetCombat() >= zlyq && cm.getLevel() >= minLevel) {
+            if (cm.getPlayer().getCombatPower() >= zlyq && cm.getLevel() >= minLevel) {
                 text += "\r\n\r\n    #L1#" + 图标3 + "#r确定进入" + 图标3 + "#l  ";
                 text += "    #L2#" + 图标3 + "#r掉落查询" + 图标3 + "#l     \r\n\r\n\r\n";
             } else {
@@ -118,7 +118,7 @@ function action(mode, type, selection) {
             var chr = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());  // 获取队员角色
             if (chr != null) {
                 // 检查队员战力是否满足要求
-                if (chr.GetCombat() < zlyq) { // 检查队员战力是否低于 1万
+                if (chr.getCombatPower() < zlyq) { // 检查队员战力是否低于 1万
                     msg += chr.getName() + " 没有足够的战力（低于 " + zlyqxs + "），无法进入！\r\n";
                     break;  // 找到第一个不满足条件的队员，跳出循环
                 }

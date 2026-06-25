@@ -229,6 +229,12 @@ public class MiniGame extends AbstractMapObject {
     private void minigameMatchFinished() {
         updateMiniGameBox();
 
+        // 每日活跃-休闲娱乐：一局对战结束(无论胜负/和棋)即算双方参与过一次小游戏
+        org.gms.config.DailyActiveManager.addProgress(owner.getId(), "minigame", 1);
+        if (visitor != null) {
+            org.gms.config.DailyActiveManager.addProgress(visitor.getId(), "minigame", 1);
+        }
+
         if (ownerquit) {
             owner.closeMiniGame(true);
         } else if (visitorquit) {

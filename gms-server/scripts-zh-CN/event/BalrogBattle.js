@@ -33,7 +33,7 @@ var clearMap = 105100301;
 
 var minMapId = 105100300;
 var maxMapId = 105100301;
-
+// 巨型蝙蝠怪
 var minMobId = 8830000;
 var maxMobId = 8830006;
 var bossMobId = 8830003;
@@ -44,6 +44,7 @@ var releaseClawTime = 1;
 const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
+const DailyActiveManager = Java.type('org.gms.config.DailyActiveManager');
 minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
 if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
     minLevel = 1 , maxLevel = 999;
@@ -265,6 +266,9 @@ function monsterKilled(mob, eim) {
             eim.dispatchRaiseQuestMobCount(bossMobId, entryMap);
             eim.dispatchRaiseQuestMobCount(9101003, entryMap); // thanks Atoot for noticing quest not getting updated after boss kill
             mob.getMap().broadcastBalrogVictory(eim.getLeader().getName());
+
+            // 每日活跃-通关副本：巨型蝙蝠怪(Balrog)通关时，给在场全部远征队成员各记1次进度
+            addPqClearProgress(eim);
         } else {
             if (count == 1) {
                 var mapobj = eim.getInstanceMap(entryMap);
@@ -277,6 +281,14 @@ function monsterKilled(mob, eim) {
         if (isBalrogBody(mob)) {
             eim.schedule("spawnSealedBalrog", 10 * 1000);
         }
+    }
+}
+
+/** 每日活跃-通关副本：给当前远征队全部在场成员累计1次pq_clear进度 */
+function addPqClearProgress(eim) {
+    var party = eim.getPlayers();
+    for (var i = 0; i < party.size(); i++) {
+        DailyActiveManager.addProgress(party.get(i).getId(), "pq_clear", 1);
     }
 }
 

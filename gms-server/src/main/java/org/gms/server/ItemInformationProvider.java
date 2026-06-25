@@ -604,6 +604,26 @@ public class ItemInformationProvider {
         return ret;
     }
 
+    /**
+     * 读取物品 info 节点下的任意自定义整型字段（如突破石的 incALB、success 等非标准字段）
+     *
+     * @param itemId       物品ID
+     * @param fieldName    info 节点下的字段名
+     * @param defaultValue 字段不存在时的默认值
+     * @return 字段值，物品不存在或字段不存在时返回 defaultValue
+     */
+    public int getInfoInt(int itemId, String fieldName, int defaultValue) {
+        Data item = getItemData(itemId);
+        if (item == null) {
+            return defaultValue;
+        }
+        Data fieldData = item.getChildByPath("info/" + fieldName);
+        if (fieldData == null) {
+            return defaultValue;
+        }
+        return DataTool.getInt(fieldData, defaultValue);
+    }
+
     public int getMeso(int itemId) {
         if (getMesoCache.containsKey(itemId)) {
             return getMesoCache.get(itemId);

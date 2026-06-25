@@ -48,8 +48,8 @@ public class MonsterStats {
     public boolean changeable;
     /** 经验值 */
     public int exp;
-    /** 生命值 */
-    public int hp;
+    /** 生命值（long以支持超过int范围的自定义超大血量BOSS） */
+    public long hp;
     /** 魔法值 */
     public int mp;
     /** 等级 */
@@ -170,7 +170,7 @@ public class MonsterStats {
      *
      * @return 生命值
      */
-    public int getHp() {
+    public long getHp() {
         return hp;
     }
 
@@ -179,7 +179,7 @@ public class MonsterStats {
      *
      * @param hp 生命值
      */
-    public void setHp(int hp) {
+    public void setHp(long hp) {
         this.hp = hp;
     }
 
