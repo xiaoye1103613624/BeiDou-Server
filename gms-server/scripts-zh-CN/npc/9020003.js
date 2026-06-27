@@ -651,7 +651,7 @@ function printf (msg, ws){
 function getmoneyb() {
 	accid = cm.getPlayer().getAccountID();
 	xmfhz = 0;
-	var conn = Packages.database.DatabaseConnection.getConnection();
+	var conn = Packages.org.gms.util.DatabaseConnection.getConnection();
 	var sql = "SELECT * FROM accounts WHERE id = "+accid+"   ;";
 	var pstmt = conn.prepareStatement(sql);
 	var result = pstmt.executeQuery();
@@ -663,7 +663,7 @@ function getmoneyb() {
 	return xmfhz;
 }
 function gainmoneyb(accid, xiezhi) {
-    var conn = Packages.database.DatabaseConnection.getConnection();
+    var conn = Packages.org.gms.util.DatabaseConnection.getConnection();
 	var sql = "UPDATE accounts SET 单笔充值 = 单笔充值+"+xiezhi+"  WHERE id = "+accid+"  ;";
     var pstmt = conn.prepareStatement(sql);
 	pstmt.executeUpdate();

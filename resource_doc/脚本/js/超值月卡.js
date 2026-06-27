@@ -121,12 +121,12 @@ function action(mode, type, selection) {
 				cm.getPlayer().setlpjf(cm.getPlayer().getlpjf()+188); //累计积分
 				cm.sendOk("办理月卡成功，30天使用权");
 				cm.getItemLog("月卡明细","\r\n【"+cm.getName()+"】 开通了  188  月卡，  还有  "+cm.getPlayer().getmoney()+"  赞助\r\n")
-				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了开心冒险岛月卡特权！！");
-				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了开心冒险岛月卡特权！！");
-				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了开心冒险岛月卡特权！！");
-				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了开心冒险岛月卡特权！！");
-				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了开心冒险岛月卡特权！！");
-				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了开心冒险岛月卡特权！！");
+				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了萧曳冒险岛月卡特权！！");
+				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了萧曳冒险岛月卡特权！！");
+				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了萧曳冒险岛月卡特权！！");
+				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了萧曳冒险岛月卡特权！！");
+				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了萧曳冒险岛月卡特权！！");
+				cm.喇叭(2, "恭喜玩家：[" + cm.getPlayer().getName() + "]成功办理了萧曳冒险岛月卡特权！！");
 				cm.dispose();
 				}else {
 					cm.sendOk("购买月卡失败！(原因)\r\n\r\n#r1.可能您没有188个赞助\r\n\r\n2.可能您已经拥有#i5010019#了");

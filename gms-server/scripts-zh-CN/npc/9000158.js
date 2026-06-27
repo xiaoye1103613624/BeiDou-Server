@@ -117,7 +117,7 @@ function action(mode, type, selection) {
             for (i = 0; i < 10; i++) {
                 text += "";
             }
-            text += "           #r"+小雪花+"欢迎来到开心冒险岛人气系统"+小雪花+"#k#n\r\n"
+            text += "           #r"+小雪花+"欢迎来到萧曳冒险岛人气系统"+小雪花+"#k#n\r\n"
             text += "#r#e----------------------------------------------#k#n\r\n";
             text += "     			  目前拥有人气值：#r[" + cm.getPlayer().getFame() + "]           #k#n\r\n"
             text += "当前金币拥有：#r[" + cm.getPlayer().getMeso() + "]#k    目前点券拥有：#r["+cm.getPlayer().getCSPoints(1)+"]#k#n\r\n"

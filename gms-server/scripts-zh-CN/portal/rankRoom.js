@@ -1,5 +1,5 @@
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     
     switch (pi.getMapId()) {
 	case 130000000:

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.paohuan')">
+    <a-card class="general-card" :title="$t('menu.customGameplay.paohuan')">
       <a-tabs v-model:active-key="activeTab">
         <!-- Tab 1: 物品池管理 -->
         <a-tab-pane key="config" :title="$t('paohuan.tab.config')">

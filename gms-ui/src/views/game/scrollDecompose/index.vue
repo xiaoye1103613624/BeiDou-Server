@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.scrollDecompose')">
+    <a-card class="general-card" :title="$t('menu.materials.scrollDecompose')">
       <a-tabs v-model:active-key="activeTab">
         <!-- Tab 1: 分解配置（白名单） -->
         <a-tab-pane

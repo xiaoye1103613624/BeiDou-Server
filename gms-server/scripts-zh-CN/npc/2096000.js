@@ -609,7 +609,7 @@ function getLog(logName) {
 
 function sqlSelect(sql) {
 	if (rc == true) {
-		var data = Packages.database.DatabaseConnection;
+		var data = Packages.org.gms.util.DatabaseConnection;
 		var con = data.getConnection();
 	} else {
 		var data = Packages.database.DBConPool;
@@ -637,7 +637,7 @@ function sqlSelect(sql) {
 
 function sqlMultiPurpose(sql) {//
 	if (rc == true) {
-		var data = Packages.database.DatabaseConnection;
+		var data = Packages.org.gms.util.DatabaseConnection;
 		var con = data.getConnection();
 	} else {
 		var data = Packages.database.DBConPool;

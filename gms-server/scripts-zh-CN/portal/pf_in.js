@@ -3,7 +3,7 @@
     Made by Daenerys
 */
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(863100008,"west00");
     return true;
 }

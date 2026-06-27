@@ -2,8 +2,8 @@ function enter(pi) {
         if (pi.getPlayer().getParty() != null && pi.getMap().getAllMonstersThreadsafe().size() == 0 && pi.isLeader()) {
                 //pi.warpParty_Instanced(921120600);
 				pi.warpParty(921120100);
-                pi.playPortalSE();
+                pi.playPortalSound();
         } else {
-                pi.playerMessage(5,"请先消灭所有的怪物。");
+                pi.playerMessage(5,"璇峰厛娑堢伃鎵€鏈夌殑鎬墿銆?);
         }
 }

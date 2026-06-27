@@ -73,7 +73,7 @@ function action(mode, type, selection) {
                         } else {
                             next = false;
                         }
-                        if (cPlayer.getMapid() == mapId) {
+                        if (cPlayer.getMapId() == mapId) {
                             inMap += 1;
                         }
                     }

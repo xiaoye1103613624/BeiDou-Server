@@ -8,12 +8,12 @@
  *   展示顺序与截图一致：上衣/裤裙/鞋子/帽子/脸饰/眼饰/耳饰/项链/披风/手套。
  */
 
-var DatabaseConnection = Java.type('database.DatabaseConnection');
+var DatabaseConnection = Java.type('org.gms.util.DatabaseConnection');
 
 function start() {
     var add = "#e#b装备战力排行榜#k#n\r\n更新战斗力会自动更新装备排行榜哦~\r\n\r\n";
     add += 查询排行榜文本();
-    cm.sendSimple(add);
+    cm.sendNext(add);
 }
 
 function action(mode, type, selection) {
@@ -56,6 +56,7 @@ function 查询排行榜文本() {
     } finally {
         if (rs != null) { try { rs.close(); } catch (e2) {} }
         if (ps != null) { try { ps.close(); } catch (e2) {} }
+        if (con != null) { try { con.close(); } catch (e2) {} }
     }
     return text;
 }

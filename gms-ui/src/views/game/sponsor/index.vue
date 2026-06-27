@@ -24,7 +24,12 @@
         :scroll="{ x: 1100 }"
       >
         <template #columns>
-          <a-table-column title="ID" data-index="id" :width="70" align="center" />
+          <a-table-column
+            title="ID"
+            data-index="id"
+            :width="70"
+            align="center"
+          />
           <a-table-column
             :title="$t('sponsor.column.name')"
             data-index="name"
@@ -40,28 +45,66 @@
           <a-table-column :title="$t('sponsor.column.rewards')" :width="300">
             <template #cell="{ record }">
               <a-space v-if="record.rewards && record.rewards.length > 0">
-                <a-tag v-for="(r, i) in record.rewards" :key="i" :color="r.type === 'nx' ? 'orangered' : r.type === 'meso' ? 'gold' : 'arcoblue'">
-                  {{ r.type === 'nx' ? '点券' : r.type === 'meso' ? '金币' : `道具#${r.id}` }}×{{ r.qty }}
+                <a-tag
+                  v-for="(r, i) in record.rewards"
+                  :key="i"
+                  :color="
+                    r.type === 'nx'
+                      ? 'orangered'
+                      : r.type === 'meso'
+                      ? 'gold'
+                      : 'arcoblue'
+                  "
+                >
+                  {{
+                    r.type === 'nx'
+                      ? '点券'
+                      : r.type === 'meso'
+                      ? '金币'
+                      : `道具#${r.id}`
+                  }}×{{ r.qty }}
                 </a-tag>
               </a-space>
               <span v-else>-</span>
             </template>
           </a-table-column>
-          <a-table-column :title="$t('sponsor.column.enabled')" :width="80" align="center">
+          <a-table-column
+            :title="$t('sponsor.column.enabled')"
+            :width="80"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-tag :color="record.enabled === 1 ? 'green' : 'red'">
                 {{ record.enabled === 1 ? '启用' : '禁用' }}
               </a-tag>
             </template>
           </a-table-column>
-          <a-table-column :title="$t('sponsor.column.comment')" data-index="comment" :width="150" ellipsis />
-          <a-table-column :title="$t('sponsor.column.operation')" :width="120" align="center" fixed="right">
+          <a-table-column
+            :title="$t('sponsor.column.comment')"
+            data-index="comment"
+            :width="150"
+            ellipsis
+          />
+          <a-table-column
+            :title="$t('sponsor.column.operation')"
+            :width="120"
+            align="center"
+            fixed="right"
+          >
             <template #cell="{ record }">
               <a-space>
-                <a-button type="text" size="mini" status="warning" @click="editClick(record)">
+                <a-button
+                  type="text"
+                  size="mini"
+                  status="warning"
+                  @click="editClick(record)"
+                >
                   {{ $t('sponsor.button.edit') }}
                 </a-button>
-                <a-popconfirm :content="$t('sponsor.delete.confirm')" @ok="deleteClick(record.id)">
+                <a-popconfirm
+                  :content="$t('sponsor.delete.confirm')"
+                  @ok="deleteClick(record.id)"
+                >
                   <a-button type="text" size="mini" status="danger">
                     {{ $t('sponsor.button.delete') }}
                   </a-button>
@@ -106,14 +149,17 @@
   loadData();
 
   const createClick = () => formRef.value?.initForm(null);
-  const editClick = (record: SponsorConfigForm) => formRef.value?.initForm(record);
+  const editClick = (record: SponsorConfigForm) =>
+    formRef.value?.initForm(record);
 
   const deleteClick = async (id: number) => {
     try {
       await deleteSponsorConfig(id);
       Message.success('已删除');
       loadData();
-    } catch { /* interceptor handles */ }
+    } catch {
+      /* interceptor handles */
+    }
   };
 </script>
 

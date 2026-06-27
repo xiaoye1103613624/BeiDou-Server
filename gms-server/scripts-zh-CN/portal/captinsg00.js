@@ -7,11 +7,11 @@ function enter(pi) {
 
 	    captMap.resetFully();
 
-	    pi.playPortalSE();
+	    pi.playPortalSound();
 	    pi.warp(541010100, "sp");
 	} else {
 	    if (pi.getMap(541010100).getSpeedRunStart() == 0 && (pi.getMonsterCount(541010100) <= 0 || pi.getMap(541010100).isDisconnected(pi.getPlayer().getId()))) {
-		pi.playPortalSE();
+		pi.playPortalSound();
 		pi.warp(541010100, "sp");
 	    } else {
 		pi.playerMessage(5, "The battle against the boss has already begun, so you may not enter this place.");

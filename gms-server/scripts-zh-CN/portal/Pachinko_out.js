@@ -1,5 +1,5 @@
-function enter(pi) {
-    var returnMap = pi.getSavedLocation("PACH");
+﻿function enter(pi) {
+    var returnMap = pi.getPlayer().getSavedLocation("PACH");
     if (returnMap < 0) {
         returnMap = 102000000;
     }
@@ -8,7 +8,7 @@ function enter(pi) {
     if (portal == null) {
         portal = target.getPortal(0);
     }
-    pi.clearSavedLocation("PACH");
+    pi.getPlayer().clearSavedLocation("PACH");
     pi.getPlayer().changeMap(target, portal);
     return true;
 }

@@ -1,4 +1,4 @@
-var 开心冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
+var 萧曳冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
 var 蓝心 = "#fEffect/CharacterEff/1022223/4/0#";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/0#";//红桃心
 var dd = " #r冒险岛一条龙服务#k★#bQQ:1408745#k★";

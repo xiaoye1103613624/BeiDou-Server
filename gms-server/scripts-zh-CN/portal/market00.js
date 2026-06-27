@@ -1,10 +1,10 @@
-/*
+﻿/*
 Return from Free Market Script
 */
 
 function enter(pi) {
-    var returnMap = pi.getSavedLocation("FREE_MARKET");
-    pi.clearSavedLocation("FREE_MARKET");
+    var returnMap = pi.getPlayer().getSavedLocation("FREE_MARKET");
+    pi.getPlayer().clearSavedLocation("FREE_MARKET");
 
     if (returnMap < 0) {
 	returnMap = 102000000; // to fix people who entered the fm trough an unconventional way

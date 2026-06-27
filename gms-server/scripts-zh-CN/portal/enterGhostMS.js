@@ -4,7 +4,7 @@
 */
 
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(100020401,1);
     return true;
 }

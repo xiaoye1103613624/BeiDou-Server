@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.levelReward')">
+    <a-card class="general-card" :title="$t('menu.growth.levelReward')">
       <!-- 操作栏 -->
       <a-row>
         <a-col>

@@ -1,4 +1,4 @@
-load('nashorn:mozilla_compat.js');
+﻿load('nashorn:mozilla_compat.js');
 /*
  * This file is part of the OdinMS Maple Story Server
  * Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
@@ -27,8 +27,8 @@ load('nashorn:mozilla_compat.js');
 importPackage(org.server.maps);
 
 function enter(pi) {
-	var returnMap = pi.getSavedLocation("PVP");
-	pi.clearSavedLocation("PVP");
+	var returnMap = pi.getPlayer().getSavedLocation("PVP");
+	pi.getPlayer().clearSavedLocation("PVP");
 	if (returnMap < 0) {
 		returnMap = 102000000;
 	}

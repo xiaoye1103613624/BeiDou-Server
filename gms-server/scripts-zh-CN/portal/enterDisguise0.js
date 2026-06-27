@@ -3,7 +3,7 @@ function enter(pi) {
 	if (pi.haveItem(4032179)) { // Search warrent
 	    pi.playerMessage("The erev search begins.");
 	}
-	pi.playPortalSE();
+	pi.playPortalSound();
 	pi.warp(130010000, 3);
     } else {
 	pi.playerMessage("Only the knights of Cygnus may enter.");

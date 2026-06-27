@@ -4,7 +4,7 @@
     Made by Daenerys
 */
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(103030101,1);
     return true;
 }

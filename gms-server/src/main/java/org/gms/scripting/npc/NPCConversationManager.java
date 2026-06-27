@@ -1497,6 +1497,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendOk(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_OK);
         nextLevelContext.setNextLevel(nextLevel);
+        nextLevelContext.setLastLevel(nextLevel);
     }
 
     /**
@@ -1650,6 +1651,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendOk(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_OK);
         nextLevelContext.setNextLevel(nextLevel);
+        nextLevelContext.setLastLevel(nextLevel);
     }
 
     /**

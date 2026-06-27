@@ -10,7 +10,7 @@ function enter(pi) {
 		}
 		//pi.gainNX(3000);
 		pi.warpParty(240080050);
-		pi.playPortalSE();
+		pi.playPortalSound();
 	} else {
 		pi.playerMessage(5,"This portal is not available.");
 	}

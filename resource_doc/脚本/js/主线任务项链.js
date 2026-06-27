@@ -214,7 +214,7 @@ function action(mode, type, selection) {
     if (status == 0) {
 		
 		var dj =cm.getPlayer().getLevel()
-		var text = "\r\n   " + 心 + " " + 心 + "  " + 心 + "   #r#e < 开心冒险岛 > #k#n " + 心 + "  " + 心 + "  " + 心 + " \r\n\r\n";
+		var text = "\r\n   " + 心 + " " + 心 + "  " + 心 + "   #r#e < 萧曳冒险岛 > #k#n " + 心 + "  " + 心 + "  " + 心 + " \r\n\r\n";
 			// text += " #k" + 闹钟图标 + "时间:#r" + hour + "#k#b:#r" + minute + "#k#b:#r" + second + "\t";
 			text +="满阶:#r15阶#b	#bLv150满级#k#r"+dj+"#k\r\n\r\n";
 			var ss =true;
@@ -243,7 +243,7 @@ function action(mode, type, selection) {
     } else if (status == 1) {
 		s = selection
         var dj =cm.getPlayer().getLevel()
-		var text = "\r\n   " + 心 + " " + 心 + "  " + 心 + "   #r#e < 开心冒险岛 > #k#n " + 心 + "  " + 心 + "  " + 心 + " \r\n\r\n";
+		var text = "\r\n   " + 心 + " " + 心 + "  " + 心 + "   #r#e < 萧曳冒险岛 > #k#n " + 心 + "  " + 心 + "  " + 心 + " \r\n\r\n";
 			text += " #k" + 闹钟图标 + "时间:#r" + hour + "#k#b:#r" + minute + "#k#b:#r" + second + "\r\n";
 			text +="#d任务需要:\r\n"
 			for(var i=0;i<任务物品.length;i++){

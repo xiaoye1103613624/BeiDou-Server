@@ -1,4 +1,4 @@
-﻿var baseid = 221040000;
+var baseid = 221040000;
 var dungeonid = 221040001;
 var dungeons = 39;
 
@@ -42,7 +42,7 @@ function enter(pi) {
         }
         pi.playerMessage(5, "目前所有地下城都在使用，請稍後在嘗試。");
     } else {
-        pi.playPortalSE();
+        pi.playPortalSound();
         pi.warp(baseid, "MD00");
     }
 }

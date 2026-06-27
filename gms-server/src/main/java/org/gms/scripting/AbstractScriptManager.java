@@ -46,6 +46,30 @@ public abstract class AbstractScriptManager {
     private final ScriptEngineFactory sef;
 
     /**
+     * Nashorn兼容层polyfill脚本
+     * GraalJS不支持Nashorn的importPackage/importClass/load("nashorn:mozilla_compat.js")等全局函数，
+     * 此polyfill提供空实现，确保使用这些遗留API的脚本能正常加载。
+     * 实际业务代码均使用全限定类名（如java.lang.System），不依赖importPackage的符号导入。
+     */
+    private static final String NASHORN_COMPAT_SCRIPT = """
+            // Nashorn兼容层polyfill（GraalJS不支持这些Nashorn全局函数）
+            this.importPackage = function(pkg) { /* no-op: GraalJS中通过Packages.xxx访问 */ };
+            this.importClass = function(cls) { /* no-op */ };
+            this.load = function(path) {
+                if (path === 'nashorn:mozilla_compat.js') {
+                    return; // Nashorn兼容脚本已在polyfill中覆盖，无需加载
+                }
+                throw new Error('load() not supported in GraalJS: ' + path);
+            };
+            // Nashorn兼容：GraalJS中Java String被转为JS string，无.equals()方法
+            if (typeof String.prototype.equals === 'undefined') {
+                String.prototype.equals = function(other) {
+                    return this == other;
+                };
+            }
+            """;
+
+    /**
      * 构造函数
      * 初始化GraalJS脚本引擎工厂
      */
@@ -86,6 +110,8 @@ public abstract class AbstractScriptManager {
         enableScriptHostAccess(graalScriptEngine);
 
         try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
+            // 先注入Nashorn兼容层，再执行脚本（解决importPackage/load等未定义问题）
+            engine.eval(NASHORN_COMPAT_SCRIPT);
             engine.eval(br);
         } catch (final ScriptException | IOException t) {
             log.warn(I18nUtil.getLogMessage("AbstractScriptManager.getInvocableScriptEngine.warn1"), path, t);

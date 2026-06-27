@@ -96,7 +96,7 @@ function action(b, e, c) {
           cm.dispose();
           return;
         }
-        if (d.getMapid() != e) {
+        if (d.getMapId() != e) {
           cm.sendOk(
             "  #e#r队伍中有人不在线或者不在同一地图！"
           );

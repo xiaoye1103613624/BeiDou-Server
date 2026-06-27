@@ -1907,6 +1907,12 @@ public class Character extends AbstractCharacterObject {
             map.addPlayer(this);
             visitMap(map);
 
+            // 调试模式：进入地图时在聊天框打印地图信息
+            if (GameConfig.getServerBoolean("use_debug") && isGM()) {
+                dropMessage(5, "[DEBUG] 进入地图 ID: " + map.getId() + " | 名称: " + map.getMapName()
+                        + " | 返回地图: " + map.getReturnMapId());
+            }
+
             prtLock.lock();
             try {
                 if (party != null) {
@@ -2073,6 +2079,50 @@ public class Character extends AbstractCharacterObject {
 
         for (Monster monster : controlledMonsters) {
             monster.aggroRedirectController();
+        }
+    }
+
+    /** 吸怪盒子：定时把怪物钳制回锚点的任务句柄，为空表示未开启 */
+    private volatile ScheduledFuture<?> mobVacuumTask;
+
+    /** 吸怪盒子是否已开启 */
+    public boolean isMobVacuumActive() {
+        return mobVacuumTask != null;
+    }
+
+    /**
+     * 开启吸怪：把当前地图所有怪物吸到玩家当前坐标，并持续钳制在该点，
+     * 直到调用 {@link #stopMobVacuum()}（手动关闭或离开地图时自动释放）
+     *
+     * @return true表示本次成功开启；false表示当前地图已经开启过，未重复开启
+     */
+    public boolean startMobVacuum() {
+        if (mobVacuumTask != null) {
+            return false;
+        }
+
+        final MapleMap vacuumMap = this.getMap();
+        final Point anchor = new Point(this.getPosition());
+
+        for (Monster mob : vacuumMap.getAllMonsters()) {
+            mob.resetMobPosition(anchor);
+        }
+
+        mobVacuumTask = TimerManager.getInstance().register(() -> {
+            for (Monster mob : vacuumMap.getAllMonsters()) {
+                if (!anchor.equals(mob.getPosition())) {
+                    mob.resetMobPosition(anchor);
+                }
+            }
+        }, 800, 800);
+        return true;
+    }
+
+    /** 关闭吸怪：取消钳制任务，怪物恢复正常行为 */
+    public void stopMobVacuum() {
+        if (mobVacuumTask != null) {
+            TimerManager.getInstance().stop(mobVacuumTask);
+            mobVacuumTask = null;
         }
     }
 
@@ -5998,6 +6048,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void leaveMap() {
+        stopMobVacuum();
         releaseControlledMonsters();
         visibleMapObjects.clear();
         setChair(-1);

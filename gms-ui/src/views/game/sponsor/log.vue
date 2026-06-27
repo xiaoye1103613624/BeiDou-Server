@@ -45,18 +45,49 @@
         :scroll="{ x: 1000 }"
       >
         <template #columns>
-          <a-table-column title="ID" data-index="id" :width="70" align="center" />
-          <a-table-column :title="$t('sponsor.column.playerName')" data-index="playerName" :width="120" />
-          <a-table-column :title="$t('sponsor.column.type')" :width="100" align="center">
+          <a-table-column
+            title="ID"
+            data-index="id"
+            :width="70"
+            align="center"
+          />
+          <a-table-column
+            :title="$t('sponsor.column.playerName')"
+            data-index="playerName"
+            :width="120"
+          />
+          <a-table-column
+            :title="$t('sponsor.column.type')"
+            :width="100"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-tag :color="record.type === 1 ? 'green' : 'blue'">
-                {{ record.type === 1 ? $t('sponsor.type.1') : $t('sponsor.type.2') }}
+                {{
+                  record.type === 1
+                    ? $t('sponsor.type.1')
+                    : $t('sponsor.type.2')
+                }}
               </a-tag>
             </template>
           </a-table-column>
-          <a-table-column :title="$t('sponsor.column.amount2')" data-index="amount" :width="100" align="right" />
-          <a-table-column :title="$t('sponsor.column.detail')" data-index="detail" :width="200" ellipsis />
-          <a-table-column :title="$t('sponsor.column.createTime')" data-index="createTime" :width="160" />
+          <a-table-column
+            :title="$t('sponsor.column.amount2')"
+            data-index="amount"
+            :width="100"
+            align="right"
+          />
+          <a-table-column
+            :title="$t('sponsor.column.detail')"
+            data-index="detail"
+            :width="200"
+            ellipsis
+          />
+          <a-table-column
+            :title="$t('sponsor.column.createTime')"
+            data-index="createTime"
+            :width="160"
+          />
         </template>
       </a-table>
     </a-card>

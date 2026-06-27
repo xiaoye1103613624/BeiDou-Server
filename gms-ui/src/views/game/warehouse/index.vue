@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.warehouse')">
+    <a-card class="general-card" :title="$t('menu.materials.warehouse')">
       <a-tabs v-model:active-key="activeTab" @change="onTabChange">
         <!-- Tab 1: 仓库配置（白名单） -->
         <a-tab-pane key="config" :title="$t('warehouse.tab.config')">

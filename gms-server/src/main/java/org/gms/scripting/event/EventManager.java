@@ -24,12 +24,14 @@ package org.gms.scripting.event;
 import org.gms.client.Character;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
+import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.World;
+import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,7 @@ import org.gms.server.expeditions.Expedition;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
+import org.gms.server.maps.MapManager;
 import org.gms.server.quest.Quest;
 import org.gms.exception.EventInstanceInProgressException;
 
@@ -278,6 +281,15 @@ public class EventManager {
      */
     public Channel getChannelServer() {
         return cserv;
+    }
+
+    /**
+     * 获取地图工厂（委托给频道服务器）
+     * 兼容旧版Nashorn脚本中的em.getMapFactory()调用
+     * @return 地图工厂
+     */
+    public MapManager getMapFactory() {
+        return cserv.getMapFactory();
     }
 
     /**
@@ -635,6 +647,27 @@ public class EventManager {
         }
 
         return false;
+    }
+
+    /**
+     * 启动远征队实例（带地图参数，脚本兼容）
+     * @param exped 远征队
+     * @param map 地图（暂未使用，由事件脚本内部管理）
+     * @return 是否成功启动
+     */
+    public boolean startInstance(Expedition exped, MapleMap map) {
+        return startInstance(exped);
+    }
+
+    /**
+     * 启动远征队实例（带地图和NPC参数，脚本兼容）
+     * @param exped 远征队
+     * @param map 地图（暂未使用，由事件脚本内部管理）
+     * @param npcId NPC ID（暂未使用）
+     * @return 是否成功启动
+     */
+    public boolean startInstance(Expedition exped, MapleMap map, int npcId) {
+        return startInstance(exped);
     }
 
     /**
@@ -1304,6 +1337,97 @@ public class EventManager {
     public int getBossTime(int BossTime) {
         return (int) (BossTime * GameConfig.getServerFloat("boss_respawn_mob_time_rate"));
     }
+
+    /**
+     * 设置世界掉落倍率
+     * @param drop 掉落倍率，1.0=默认，2.0=双倍
+     */
+    public void setDropRate(float drop) {
+        this.getWorldServer().setDropRate(drop);
+    }
+
+    /**
+     * 设置世界经验倍率
+     * @param exp 经验倍率，1.0=默认，2.0=双倍
+     */
+    public void setExpRate(float exp) {
+        this.getWorldServer().setExpRate(exp);
+    }
+
+    /**
+     * 开启双倍经验活动（脚本兼容方法）
+     * @param multiplier 经验倍率，如4表示4倍经验
+     */
+    public void startDoubleExp(int multiplier) {
+        this.getWorldServer().setExpRate((float) multiplier);
+    }
+
+    /**
+     * 向全世界广播黄色系统消息（复用PacketCreator.sendYellowTip + World.broadcastPacket）
+     * @param msg 消息内容
+     */
+    public void broadcastYellowMsg(String msg) {
+        this.getWorldServer().broadcastPacket(PacketCreator.sendYellowTip(msg));
+    }
+
+    /**
+     * 广播服务器公告消息
+     * @param type 消息类型：5=粉色文字，6=浅蓝色文字，>1000000=物品公告(顶部滚动)
+     * @param msg 消息内容
+     * @param gmOnly true=仅GM可见（频道内），false=全服可见
+     */
+    public void broadcastServerMsg(int type, String msg, boolean gmOnly) {
+        Packet packet;
+        if (type >= 1000000) {
+            // 物品类型公告（使用顶部滚动消息展示物品相关公告）
+            packet = PacketCreator.serverNotice(4, msg);
+        } else {
+            packet = PacketCreator.serverNotice(Math.abs(type), msg);
+        }
+        if (gmOnly) {
+            // 仅GM可见时使用频道GM广播
+            cserv.broadcastGMPacket(packet);
+        } else {
+            this.getWorldServer().broadcastPacket(packet);
+        }
+    }
+
+    /**
+     * 广播玩家消息（复用Channel.dropMessage向当前频道所有玩家发送）
+     * @param type 消息类型（同serverNotice的type参数）
+     * @param msg 消息内容
+     */
+    public void broadcastPlayerMsg(int type, String msg) {
+        cserv.dropMessage(type, msg);
+    }
+
+    /**
+     * 将指定地图的所有玩家传送到目标地图（复用MapleMap.warpEveryone）
+     * @param fromMapId 源地图ID
+     * @param toMapId 目标地图ID
+     */
+    public void warpAllPlayer(int fromMapId, int toMapId) {
+        MapleMap fromMap = cserv.getMapFactory().getMap(fromMapId);
+        if (fromMap != null) {
+            fromMap.warpEveryone(toMapId);
+        }
+    }
+
+    /**
+     * 设置世界事件标记（用于自动事件系统）
+     */
+    public void setWorldEvent() {
+        setProperty("worldEvent", "true");
+    }
+
+    /**
+     * 调度随机事件（由自动化事件脚本调用，选择一个随机事件启动）
+     */
+    public void scheduleRandomEvent() {
+        // 标记随机事件已触发，具体事件选择由脚本层控制
+        setProperty("randomEvent", "true");
+    }
+
     /**
      * 填充EIM队列
      */

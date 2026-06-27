@@ -4,7 +4,7 @@ var 小烟花 ="#fMap/MapHelper/weather/squib/squib4/1#";
 var dd = " ";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/0#";
 var 群粉心 = ""+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+"\r\n";
-var 开心冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
+var 萧曳冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
 
 var 心 = "#fUI/GuildMark.img/Mark/Etc/00009001/14#";
 var shx1 ="#fUI/ChatBalloon/dead/n#";
@@ -33,7 +33,7 @@ function action(mode, type, selection) {
     if (status == 0) {
 		 var selStr = "\r\n";	
 
-			selStr +=  ""+dd+"\r\n\t\t\t"+开心冒险岛+"\r\n"+群粉心+""
+			selStr +=  ""+dd+"\r\n\t\t\t"+萧曳冒险岛+"\r\n"+群粉心+""
 
 			selStr +=""+zgw1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+shx1+ygw1+"\r\n"	
 		 //cm.getPlayer().gainOneTimeLogcs("成就",+1);

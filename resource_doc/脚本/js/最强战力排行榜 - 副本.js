@@ -13,7 +13,7 @@ var 笑脸9 ="#fUI/GuildMark/Mark/Etc/00009025/9#";
 var 笑脸11 ="#fUI/GuildMark/Mark/Etc/00009025/11#";
 var 笑脸13 ="#fUI/GuildMark/Mark/Etc/00009025/13#";
 var 笑脸16 ="#fUI/GuildMark/Mark/Etc/00009025/16#";
-var 开心冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
+var 萧曳冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
 var txt, GDP, UDP;
 var ca = java.util.Calendar.getInstance();
 var hour = ca.get(java.util.Calendar.HOUR_OF_DAY); //获得小时

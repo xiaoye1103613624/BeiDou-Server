@@ -6,7 +6,7 @@
     制作日期：2023-09-14
     功能类型：需要授权才可以使用
 */
-var 开心冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
+var 萧曳冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
 var dd = " ";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/0#";
 var 下方向 = "#fEffect/CharacterEff/Shaman/modeSelect/arrow/4/0#";
@@ -227,7 +227,7 @@ function action(mode, type, selection) {
 	
         if (status == 0) {
             var text = "#k";
-            text += ""+dd+"\r\n\t\t\t"+开心冒险岛+"\r\n"+群粉心+""
+            text += ""+dd+"\r\n\t\t\t"+萧曳冒险岛+"\r\n"+群粉心+""
 ;
 		//	cm.召唤怪物(100100, 100000000000, 10000000, 1, 200000301, 162,174); 
             //text +="\r\n\t" + b7 + "  #r#d欢迎来到~e新 开心 "+b8+"~e 聚合功能 e~"+b9+"#n#k #n\r\n\r\n";

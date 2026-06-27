@@ -6,7 +6,7 @@ try {
 		//} else {
 			pi.warpParty(((pi.getPlayer().getMapId() / 100) + 1) * 100 - (pi.getPlayer().getMapId() % 100));
 		//}
-		pi.playPortalSE();
+		pi.playPortalSound();
 	} else {
 		pi.playerMessage(5,"Please get the leader in this portal, and make sure Ice Knight is here.");
 	}

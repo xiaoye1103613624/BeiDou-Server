@@ -107,7 +107,7 @@ function action(mode, type, selection) {
                 mapId = cm.getMapId();
                 var next = true;
                 for (var i = 0; i < party.size(); i++) {
-                    if ((party.get(i).getLevel() < 50) || (party.get(i).getMapid() != mapId)) {
+                    if ((party.get(i).getLevel() < 50) || (party.get(i).getMapId() != mapId)) {
                         next = false;
                     }
                 }

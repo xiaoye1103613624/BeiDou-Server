@@ -16,7 +16,7 @@ function enter(pi) {
 				}
 				if (cleared) {
 					pi.warpParty(pi.getMapId() + 100);
-					pi.playPortalSE();
+					pi.playPortalSound();
 				} else {
 					pi.playerMessage(5,"This portal is not available yet.");
 				}

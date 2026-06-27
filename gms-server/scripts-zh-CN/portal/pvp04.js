@@ -1,6 +1,6 @@
 function enter(pi) {
     pi.saveLocation("PVP");
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(555000400, "out00");
 	return true;
 }

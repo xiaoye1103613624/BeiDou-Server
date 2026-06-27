@@ -44,7 +44,7 @@ function action(mode, type, selection) {
 			} else {
 				next = false;
 			}
-			if (cPlayer.getMapid() == mapId) {
+			if (cPlayer.getMapId() == mapId) {
 				inMap += (cPlayer.getJobId() == 900 ? 6 : 1);
 			}
 		}

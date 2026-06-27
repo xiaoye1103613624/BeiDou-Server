@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.gachapon')">
+    <a-card class="general-card" :title="$t('menu.lottery.gachapon')">
       <a-row
         ><a-col>
           <a-space>

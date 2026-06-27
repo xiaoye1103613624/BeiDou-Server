@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.equipEnhance')">
+    <a-card class="general-card" :title="$t('menu.equipment.equipEnhance')">
       <!-- 操作栏 -->
       <a-row>
         <a-col>

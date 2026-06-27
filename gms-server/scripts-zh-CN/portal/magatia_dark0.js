@@ -4,5 +4,5 @@ function enter(pi) {
 	} else {
 		pi.warp(261020700, 0);
 	}
-	pi.playPortalSE();
+	pi.playPortalSound();
 }

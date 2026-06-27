@@ -1,5 +1,5 @@
 ﻿function enter(pi) {
-    var returnMap = pi.getSavedLocation("FISHING");
+    var returnMap = pi.getPlayer().getSavedLocation("FISHING");
     if (returnMap < 0) {
         returnMap = 102000000;
     }
@@ -7,6 +7,6 @@
     var portal = target.getPortal(0);
 
 
-    pi.clearSavedLocation("FISHING");
+    pi.getPlayer().clearSavedLocation("FISHING");
     pi.getPlayer().changeMap(target, portal);
 }

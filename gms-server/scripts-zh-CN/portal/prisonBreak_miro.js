@@ -6,7 +6,7 @@ function enter(pi) {
 				} else {
 					pi.warp(921160300 + ((Math.floor(java.lang.Math.random() * 6) | 0) * 10), 0);
 				}
-				pi.playPortalSE();
+				pi.playPortalSound();
         } else {
                 pi.playerMessage(5,"This portal is not available. Kill all monsters.");
         }

@@ -1,5 +1,5 @@
-function enter(pi) {
-    pi.warp(pi.getSavedLocation("CRYSTALGARDEN"));
-    pi.clearSavedLocation("CRYSTALGARDEN");
+﻿function enter(pi) {
+    pi.warp(pi.getPlayer().getSavedLocation("CRYSTALGARDEN"));
+    pi.getPlayer().clearSavedLocation("CRYSTALGARDEN");
     return true;
 }

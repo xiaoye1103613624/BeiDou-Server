@@ -7,6 +7,6 @@ function enter(pi) {
     if (morph == 2210003) {
 	pi.cancelItem(2210003);
     }
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(240040600, "east00");
 }

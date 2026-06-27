@@ -6,9 +6,9 @@ try {
 		} else {
 			pi.warpParty(((pi.getPlayer().getMapId() / 100) + 1) * 100 - (pi.getPlayer().getMapId() % 100));
 		}
-		pi.playPortalSE();
+		pi.playPortalSound();
 	} else {
-		pi.playerMessage(5,"请确保邪摩斯在这里。");
+		pi.playerMessage(5,"璇风‘淇濋偑鎽╂柉鍦ㄨ繖閲屻€?);
 	}
 } catch (e) {
 	pi.playerMessage(5, "Error: " + e);

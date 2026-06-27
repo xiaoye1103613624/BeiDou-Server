@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.guild')">
+    <a-card class="general-card" :title="$t('menu.growth.guild')">
       <a-row>
         <a-col>
           <a-space>

@@ -5,5 +5,5 @@ function enter(pi) {
 	pi.getPlayer().gainSP(1);
     }
     pi.warp(106010102,0);
-    pi.playPortalSE();
+    pi.playPortalSound();
 }

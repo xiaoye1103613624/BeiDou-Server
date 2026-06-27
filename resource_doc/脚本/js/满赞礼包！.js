@@ -114,8 +114,8 @@ function action(mode, type, selection) {
             //cm.gainItem(1142688,0,0,5,5,5,5,5,5,5,5,5,5,5,5,30,50);//VIP勋章*/
             cm.sendOk("满赞礼包领取成功！");
 			cm.worldMessage(5,"满赞公告：玩家["+cm.getName()+"]成功领取了满赞礼包，感觉美滋滋！");//1师给弹窗
-			/*cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到开心冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
-			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到开心冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
+			/*cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到萧曳冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
+			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到萧曳冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
             cm.dispose();*/
                 } else {
                     cm.sendOk("#g你已经领取过一次了，不可以重复领取哦！\r\n");

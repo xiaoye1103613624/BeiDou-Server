@@ -265,8 +265,10 @@ public final class Channel {
             disconnectAwayPlayers();
             players.disconnectAll();
 
-            eventSM.dispose();
-            eventSM = null;
+            if (eventSM != null) {
+                eventSM.dispose();
+                eventSM = null;
+            }
 
             mapManager.dispose();
             mapManager = null;

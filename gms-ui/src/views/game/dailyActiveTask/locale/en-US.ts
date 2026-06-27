@@ -1,0 +1,20 @@
+export default {
+  'dailyActiveTask.column.id': 'ID',
+  'dailyActiveTask.column.taskKey': 'Task Key',
+  'dailyActiveTask.column.taskName': 'Task Name',
+  'dailyActiveTask.column.targetCount': 'Target Count',
+  'dailyActiveTask.column.rewardMeso': 'Reward Meso',
+  'dailyActiveTask.column.rewardItemId': 'Reward Item ID',
+  'dailyActiveTask.column.rewardItemCount': 'Reward Item Count',
+  'dailyActiveTask.column.extraConfig': 'Extra Config',
+  'dailyActiveTask.column.sortOrder': 'Sort Order',
+  'dailyActiveTask.column.enabled': 'Enabled',
+  'dailyActiveTask.column.operation': 'Operation',
+  'dailyActiveTask.button.edit': 'Edit',
+  'dailyActiveTask.save.success': 'Saved successfully',
+  'dailyActiveTask.delete.success': 'Deleted successfully',
+  'dailyActiveTask.delete.confirm':
+    'Are you sure to delete this task? This cannot be undone.',
+  'dailyActiveTask.title.basic': 'Basic Config',
+  'dailyActiveTask.title.reward': 'Reward Config',
+};

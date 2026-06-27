@@ -1,6 +1,6 @@
 var MapleInventoryManipulator = Java.type('server.MapleInventoryManipulator');
 var MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-var DatabaseConnection = Java.type('database.DatabaseConnection');
+var DatabaseConnection = Java.type('org.gms.util.DatabaseConnection');
 var 点券图标 = "#fUI/CashShop/CashItem/0#";
 var status = 0;
 var ringnum = 0;

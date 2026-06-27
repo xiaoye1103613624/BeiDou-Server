@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.dailyBoss')">
+    <a-card class="general-card" :title="$t('menu.growth.dailyBoss')">
       <a-tabs v-model:active-key="activeTab">
         <!-- Tab 1: Boss池管理 -->
         <a-tab-pane key="pool" :title="$t('dailyBoss.tab.pool')">

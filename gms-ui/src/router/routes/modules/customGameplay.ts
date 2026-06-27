@@ -33,6 +33,26 @@ const CUSTOM_GAMEPLAY: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'paohuan',
+      name: 'Paohuan',
+      component: () => import('@/views/game/paohuan/index.vue'),
+      meta: {
+        locale: 'menu.customGameplay.paohuan',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'dailyActiveTask',
+      name: 'DailyActiveTask',
+      component: () => import('@/views/game/dailyActiveTask/index.vue'),
+      meta: {
+        locale: 'menu.customGameplay.dailyActiveTask',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

@@ -1,8 +1,8 @@
 function enter(pi) {
     if (pi.getQuestStatus(21010) == 2) {
-	pi.playPortalSE();
+	pi.playPortalSound();
 	pi.warp(140090200, 1);
     } else {
-	pi.playerMessage(5, "再進入下一張地圖之前，請先完成任務。");
+	pi.playerMessage(5, "鍐嶉€插叆涓嬩竴寮靛湴鍦栦箣鍓嶏紝璜嬪厛瀹屾垚浠诲嫏銆?);
     }
 }

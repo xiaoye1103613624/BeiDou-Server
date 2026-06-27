@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.dailyExplore')">
+    <a-card class="general-card" :title="$t('menu.growth.dailyExplore')">
       <a-tabs v-model:active-key="activeTab">
         <!-- Tab 1: 地图池管理 -->
         <a-tab-pane key="map" :title="$t('dailyExplore.tab.map')">

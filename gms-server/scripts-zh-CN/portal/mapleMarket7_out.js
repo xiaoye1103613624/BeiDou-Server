@@ -1,5 +1,5 @@
-function enter(pi) {
-    pi.playPortalSE();
-    pi.warp(pi.getSavedLocation("EVENT"), 0);
-    pi.clearSavedLocation("EVENT");
+﻿function enter(pi) {
+    pi.playPortalSound();
+    pi.warp(pi.getPlayer().getSavedLocation("EVENT"), 0);
+    pi.getPlayer().clearSavedLocation("EVENT");
 }

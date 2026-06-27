@@ -294,14 +294,14 @@ public class NPCScriptManager extends AbstractScriptManager {
                 NextLevelContext nextLevelContext = c.getCM().getNextLevelContext();
                 switch (nextLevelContext.getLevelType()) {
                     case NextLevelType.SEND_SELECT -> {
-                        if (mode == 0) {
+                        if (mode == 0 || selection < 0) {
                             dispose(c, true);
                             return;
                         }
                         iv.invokeFunction("level" + nextLevelContext.getPrefix() + selection);
                     }
                     case NextLevelType.GET_INPUT_NUMBER, NextLevelType.SEND_NEXT_SELECT -> {
-                        if (mode == 0) {
+                        if (mode == 0 || selection < 0) {
                             dispose(c, true);
                             return;
                         }

@@ -86,6 +86,10 @@ function levelChooseBrewTier() {
 
 function levelHandleBrewTier(selection) {
     var tierIndex = selection;
+    if (tierIndex < 0 || tierIndex >= POTION_ITEM_IDS.length) {
+        cm.sendOkLevel("Main", "无效的选择，请重试。");
+        return;
+    }
     var result = AlchemistManager.brew(characterId, accountId, tierIndex);
     if (result.get("success")) {
         var itemId = POTION_ITEM_IDS[tierIndex];

@@ -9,7 +9,7 @@ var myDate = new Date();
 var year = myDate.getFullYear();
 var month = myDate.getMonth() + 1;
 var days = myDate.getDate();
-var DatabaseConnection = Java.type('database.DatabaseConnection');
+var DatabaseConnection = Java.type('org.gms.util.DatabaseConnection');
 
 
 function start() {

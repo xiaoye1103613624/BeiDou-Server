@@ -21,7 +21,7 @@ function enter(pi) {
 	    return;
     }
     if (pi.getQuestStatus(questid) == state) {
-	pi.playPortalSE();
+	pi.playPortalSound();
 	pi.warp(pi.getMapId() + 1, "sp");
     } else {
 	if (mapid == 130030001) {

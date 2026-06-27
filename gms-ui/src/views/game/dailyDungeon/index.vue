@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.dailyDungeon')">
+    <a-card class="general-card" :title="$t('menu.growth.dailyDungeon')">
       <a-tabs v-model:active-key="activeTab">
         <!-- Tab 1: 副本配置 -->
         <a-tab-pane key="config" :title="$t('dailyDungeon.tab.config')">

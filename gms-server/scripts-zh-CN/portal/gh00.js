@@ -1,6 +1,6 @@
 ﻿function enter(pi) {
-    var returnMap = pi.getSavedLocation("TURNEGG");
-    pi.clearSavedLocation("TURNEGG");
+    var returnMap = pi.getPlayer().getSavedLocation("TURNEGG");
+    pi.getPlayer().clearSavedLocation("TURNEGG");
     if (returnMap < 0) {
 	returnMap = 102000000;
     }
@@ -10,7 +10,7 @@
 	portal = target.getPortal(0);
     }
     if (pi.getMapId() != target) {
-	pi.playPortalSE();
+	pi.playPortalSound();
 	pi.getPlayer().changeMap(target, portal);
     }
 }

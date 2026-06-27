@@ -352,6 +352,14 @@ public class Expedition {
         }
     }
 
+    public void unban(int cid) {
+        banned.remove(Integer.valueOf(cid));
+    }
+
+    public List<Integer> getBanned() {
+        return new LinkedList<>(banned);
+    }
+
     public void monsterKilled(Character chr, Monster mob) {
         for (int expeditionBoss : EXPEDITION_BOSSES) {
             if (mob.getId() == expeditionBoss) { //If the monster killed was a boss

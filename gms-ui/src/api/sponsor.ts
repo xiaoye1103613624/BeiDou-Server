@@ -38,7 +38,7 @@ export interface SponsorLog {
   playerId: number;
   playerName: string;
   accountId: number;
-  type: number;       // 1=CDK兑换 2=管理员添加
+  type: number; // 1=CDK兑换 2=管理员添加
   amount: number;
   detail: string;
   createTime: string;

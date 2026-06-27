@@ -1,4 +1,4 @@
-﻿/*
+/*
  All Time Temple portal
  */
 
@@ -92,7 +92,7 @@ function enter(pi) {
 
         case 270040000:
             if (pi.haveItem(4032002)) {
-                pi.playPortalSE();
+                pi.playPortalSound();
                 pi.warp(270040100, "out00");
                 pi.gainItem(4032002,-1);
                 pi.playerMessage("現在移動至神殿內部..");
@@ -106,10 +106,10 @@ function enter(pi) {
             return false;
     }
     if (pi.getQuestStatus(quest) == 2) {
-        pi.playPortalSE();
+        pi.playPortalSound();
         pi.warp(tomap, "out00");
     } else {
-        pi.playPortalSE();
+        pi.playPortalSound();
         pi.warp(uncompletedmap, 0);
         pi.playerMessage("有一股很強的力量阻擋著...");
     }

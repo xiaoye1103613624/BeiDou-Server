@@ -64,17 +64,24 @@ export interface ToyCollectionProgress {
 
 /** 获取所有分类列表（含物品列表） */
 export function getCategoryList() {
-  return axios.get<ToyCollectionCategory[]>('/toyCollection/v1/getCategoryList');
+  return axios.get<ToyCollectionCategory[]>(
+    '/toyCollection/v1/getCategoryList'
+  );
 }
 
 /** 获取单个分类配置 */
 export function getCategory(id: number) {
-  return axios.get<ToyCollectionCategory>(`/toyCollection/v1/getCategory/${id}`);
+  return axios.get<ToyCollectionCategory>(
+    `/toyCollection/v1/getCategory/${id}`
+  );
 }
 
 /** 保存分类配置（新增或更新，含物品列表） */
 export function saveCategory(data: ToyCollectionCategory) {
-  return axios.post<ToyCollectionCategory>('/toyCollection/v1/saveCategory', data);
+  return axios.post<ToyCollectionCategory>(
+    '/toyCollection/v1/saveCategory',
+    data
+  );
 }
 
 /** 删除分类配置 */

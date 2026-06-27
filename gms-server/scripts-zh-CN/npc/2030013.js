@@ -5,6 +5,7 @@
 */
 
 var status = 0;
+var ExpeditionType = Java.type("org.gms.server.expeditions.ExpeditionType");
 
 function action(mode, type, selection) {
     if (cm.getPlayer().getMapId() == 211042200) { //艰苦洞穴Ⅲ
@@ -27,11 +28,6 @@ function action(mode, type, selection) {
                 cm.dispose();
                 return;
             }
-            // if (cm.getPlayer().getfenquChannel() != 3) {
-                // cm.sendOk("进阶扎昆只能在 3 频道挑战。");
-                // cm.dispose();
-                // return;
-            // }
             var em = cm.getEventManager("ChaosZakum");
             if (em == null) {
                 cm.sendOk("配置清单为空，请联系管理员。");
@@ -47,8 +43,8 @@ function action(mode, type, selection) {
             }
             var time = parseInt(data);
             if (prop == null || prop.equals("0")) {
-                var squadAvailability = cm.getSquadAvailability("ChaosZak");
-                if (squadAvailability == -1) {
+                var exped = cm.getExpedition(ExpeditionType.CHAOS_ZAKUM);
+                if (exped == null) {
                     status = 1;
                     if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
                         cm.sendOk("You have already went to Chaos Zakum in the past 12 hours. Time left: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
@@ -56,74 +52,36 @@ function action(mode, type, selection) {
                         return;
                     }
                     cm.sendYesNo("现在可以申请远征队，你想成为远征队队长吗？");
-                } else if (squadAvailability == 1) {
+                } else if (cm.isLeaderExpedition(ExpeditionType.CHAOS_ZAKUM)) {
                     if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
                         cm.sendOk("You have already went to Chaos Zakum in the past 12 hours. Time left: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
                         cm.dispose();
                         return;
                     }
-                    // -1 = Cancelled, 0 = not, 1 = true
-                    var type = cm.isSquadLeader("ChaosZak");
-                    if (type == -1) {
-                        cm.sendOk("已经结束了申请。");
-                        cm.safeDispose();
-                    } else if (type == 0) {
-                        var memberType = cm.isSquadMember("ChaosZak");
-                        if (memberType == 2) {
-                            cm.sendOk("在远征队的制裁名单。");
-                            cm.safeDispose();
-                        } else if (memberType == 1) {
-                            status = 5;
-                            cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
-                        } else if (memberType == -1) {
-                            cm.sendOk("远征队员已经达到30名，请稍后再试。");
-                            cm.safeDispose();
-                        } else {
-                            status = 5;
-                            cm.sendSimple("你现在想做什么？ \r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
-                        }
-                    } else { // Is leader
-                        status = 10;
-                        cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#管理远征队成员。#l \r\n#b#L2#编辑限制列表。#l \r\n#r#L3#进入地图。#l");
-                        // TODO viewing!
-                    }
+                    status = 10;
+                    cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#管理远征队成员。#l \r\n#b#L2#编辑限制列表。#l \r\n#r#L3#进入地图。#l");
                 } else {
-                    var eim = cm.getDisconnected("ChaosZakum");
-                    if (eim == null) {
-                        var squd = cm.getSquad("ChaosZak");
-                        if (squd != null) {
-                            if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
-                                cm.sendOk("You have already went to Chaos Zakum in the past 12 hours. Time left: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
-                                cm.dispose();
-                                return;
-                            }
-                            cm.sendYesNo("The squad's battle against the boss has already begun.\r\n" + squd.getNextPlayer());
-                            status = 3;
-                        } else {
-                            cm.sendOk("The squad's battle against the boss has already begun.");
-                            cm.safeDispose();
-                        }
+                    if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
+                        cm.sendOk("You have already went to Chaos Zakum in the past 12 hours. Time left: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
+                        cm.dispose();
+                        return;
+                    }
+                    if (exped.getBanned().contains(cm.getPlayer().getId())) {
+                        cm.sendOk("在远征队的制裁名单。");
+                        cm.safeDispose();
+                    } else if (exped.getMembers().containsKey(cm.getPlayer().getId())) {
+                        status = 5;
+                        cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
                     } else {
-                        cm.sendYesNo("Ah, you have returned. Would you like to join your squad in the fight again?");
-                        status = 2;
+                        status = 5;
+                        cm.sendSimple("你现在想做什么？ \r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
                     }
                 }
             } else {
-                var eim = cm.getDisconnected("ChaosZakum");
+                var eim = cm.getPlayer().getEventInstance();
                 if (eim == null) {
-                    var squd = cm.getSquad("ChaosZak");
-                    if (squd != null) {
-                        if (time + (12 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
-                            cm.sendOk("You have already went to Chaos Zakum in the past 12 hours. Time left: " + cm.getReadableMillis(cm.getCurrentTime(), time + (12 * 3600000)));
-                            cm.dispose();
-                            return;
-                        }
-                        cm.sendYesNo("The squad's battle against the boss has already begun.\r\n" + squd.getNextPlayer());
-                        status = 3;
-                    } else {
-                        cm.sendOk("The squad's battle against the boss has already begun.");
-                        cm.safeDispose();
-                    }
+                    cm.sendOk("The squad's battle against the boss has already begun.");
+                    cm.safeDispose();
                 } else {
                     cm.sendYesNo("Ah, you have returned. Would you like to join your squad in the fight again?");
                     status = 2;
@@ -132,8 +90,11 @@ function action(mode, type, selection) {
             break;
         case 1:
             if (mode == 1) {
-                if (cm.registerSquad("ChaosZak", 5, " 已经成为了远征队队长。如果你想加入远征队，请重新打开对话申请加入远征队。")) {
+                var result = cm.createExpedition(ExpeditionType.CHAOS_ZAKUM);
+                if (result == 0) {
                     cm.sendOk("你已经成为了远征队队长。接下来的5分钟，请等待队员们的申请。");
+                } else if (result == 1) {
+                    cm.sendOk("你今天已经达到远征次数上限。");
                 } else {
                     cm.sendOk("An error has occurred adding your squad.");
                 }
@@ -143,90 +104,120 @@ function action(mode, type, selection) {
             cm.safeDispose();
             break;
         case 2:
-            if (!cm.reAdd("ChaosZakum", "ChaosZak")) {
-                cm.sendOk("由于未知的错误，操作失败。");
-            }
-            cm.dispose();
-            break;
-        case 3:
             if (mode == 1) {
-                var squd = cm.getSquad("ChaosZak");
-                if (squd != null && !squd.getAllNextPlayer().contains(cm.getPlayer().getName())) {
-                    squd.setNextPlayer(cm.getPlayer().getName());
-                    cm.sendOk("You have reserved the spot.");
+                var eim = cm.getPlayer().getEventInstance();
+                if (eim != null) {
+                    eim.registerPlayer(cm.getPlayer());
+                    cm.sendOk("你已重新加入远征战斗。");
+                } else {
+                    cm.sendOk("由于未知的错误，操作失败。");
                 }
             }
             cm.dispose();
             break;
         case 5:
+            if (mode != 1) {
+                cm.dispose();
+                break;
+            }
+            var exped5 = cm.getExpedition(ExpeditionType.CHAOS_ZAKUM);
+            if (exped5 == null) {
+                cm.sendOk("已经结束了申请。");
+                cm.safeDispose();
+                break;
+            }
             if (selection == 0) {
-                if (!cm.getSquadList("ChaosZak", 0)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                    cm.safeDispose();
-                } else {
-                    cm.dispose();
-                }
-            } else if (selection == 1) { // join
-                var ba = cm.addMember("ChaosZak", true);
-                if (ba == 2) {
-                    cm.sendOk("远征队员已经达到30名，请稍后再试。");
-                    cm.safeDispose();
-                } else if (ba == 1) {
+                showMembers(exped5);
+                cm.dispose();
+            } else if (selection == 1) {
+                var joinResult = exped5.addMemberInt(cm.getPlayer());
+                if (joinResult == 0) {
                     cm.sendOk("申请加入远征队成功，请等候队长指示。");
-                    cm.safeDispose();
+                } else if (joinResult == 2) {
+                    cm.sendOk("在远征队的制裁名单。");
+                } else if (joinResult == 3) {
+                    cm.sendOk("远征队员已经达到30名，请稍后再试。");
                 } else {
                     cm.sendOk("你已经参加了远征队，请等候队长指示。");
-                    cm.safeDispose();
                 }
-            } else { // withdraw
-                var baa = cm.addMember("ChaosZak", false);
-                if (baa == 1) {
+            } else {
+                if (exped5.removeMember(cm.getPlayer())) {
                     cm.sendOk("制裁指定的成员成功。");
-                    cm.safeDispose();
                 } else {
                     cm.sendOk("你没有参加远征队。");
-                    cm.safeDispose();
                 }
             }
+            cm.safeDispose();
             break;
         case 10:
+            if (mode != 1) {
+                cm.dispose();
+                break;
+            }
+            var exped10 = cm.getExpedition(ExpeditionType.CHAOS_ZAKUM);
+            if (exped10 == null) {
+                cm.sendOk("已经结束了申请。");
+                cm.dispose();
+                break;
+            }
             if (selection == 0) {
-                if (!cm.getSquadList("ChaosZak", 0)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                }
+                showMembers(exped10);
                 cm.safeDispose();
             } else if (selection == 1) {
-                status = 11;
-                if (!cm.getSquadList("ChaosZak", 1)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
+                var memberList = exped10.getMemberList();
+                if (memberList.size() <= 1) {
+                    cm.sendOk("没有可管理的队员。");
                     cm.safeDispose();
-                }
-
-            } else if (selection == 2) {
-                status = 12;
-                if (!cm.getSquadList("ChaosZak", 2)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                    cm.safeDispose();
-                }
-
-            } else if (selection == 3) { // get insode
-                if (cm.getSquad("ChaosZak") != null) {
-                    var dd = cm.getEventManager("ChaosZakum");
-                    dd.startInstance(cm.getSquad("ChaosZak"), cm.getMap(), 160102);
-                    cm.dispose();
                 } else {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                    cm.safeDispose();
+                    status = 11;
+                    var list = "选择要制裁的队员:\r\n";
+                    for (var i = 1; i < memberList.size(); i++) {
+                        list += "#L" + (i - 1) + "#" + memberList.get(i).getValue() + "#l\r\n";
+                    }
+                    cm.sendSimple(list);
                 }
+            } else if (selection == 2) {
+                var bannedList = exped10.getBanned();
+                if (bannedList.isEmpty()) {
+                    cm.sendOk("限制列表为空。");
+                    cm.safeDispose();
+                } else {
+                    status = 12;
+                    var banListStr = "选择要解除限制的队员:\r\n";
+                    for (var i = 0; i < bannedList.size(); i++) {
+                        var chr = cm.getPlayer().getMap().getWorldServer().getPlayerStorage().getCharacterById(bannedList.get(i));
+                        var name = chr != null ? chr.getName() : "ID:" + bannedList.get(i);
+                        banListStr += "#L" + i + "#" + name + "#l\r\n";
+                    }
+                    cm.sendSimple(banListStr);
+                }
+            } else if (selection == 3) {
+                var dd = cm.getEventManager("ChaosZakum");
+                dd.startInstance(exped10, cm.getMap(), 160102);
+                cm.dispose();
             }
             break;
         case 11:
-            cm.banMember("ChaosZak", selection);
+            if (mode == 1 && selection >= 0) {
+                var exped11 = cm.getExpedition(ExpeditionType.CHAOS_ZAKUM);
+                if (exped11 != null) {
+                    var mList = exped11.getMemberList();
+                    if (selection + 1 < mList.size()) {
+                        exped11.ban(mList.get(selection + 1));
+                    }
+                }
+            }
             cm.dispose();
             break;
         case 12:
-            if (selection != -1) {
-                cm.acceptMember("ChaosZak", selection);
+            if (mode == 1 && selection >= 0) {
+                var exped12 = cm.getExpedition(ExpeditionType.CHAOS_ZAKUM);
+                if (exped12 != null) {
+                    var bannedList = exped12.getBanned();
+                    if (selection < bannedList.size()) {
+                        exped12.unban(bannedList.get(selection));
+                    }
+                }
             }
             cm.dispose();
             break;
@@ -234,23 +225,18 @@ function action(mode, type, selection) {
     } else {
         switch (status) {
         case 0:
-            if (cm.getPlayer().getLevel() < 120) { //风云扎昆
+            if (cm.getPlayer().getLevel() < 120) {
                 cm.sendOk("你的等级小于 120 级，无法挑战扎昆。");
                 cm.dispose();
                 return;
             }
-            // if (cm.getPlayer().getfenquChannel() != 2 && cm.getPlayer().getfenquChannel() != 1) {
-                // cm.sendOk("扎昆大怪只能在1~2频道召唤。");
-                // cm.dispose();
-                // return;
-            // }
-			
-            if (cm.getMap(280030000).getCharactersSize() > 0 ){
-			cm.sendOk("里面有人正在挑战中...请稍后...");
-            cm.dispose();
-            return;
-			}			
-			
+
+            if (cm.getMap(280030000).getCharactersSize() > 0) {
+                cm.sendOk("里面有人正在挑战中...请稍后...");
+                cm.dispose();
+                return;
+            }
+
             var em = cm.getEventManager("ZakumBattle");
             if (em == null) {
                 cm.sendOk("配置清单为空，请联系管理员。");
@@ -266,99 +252,35 @@ function action(mode, type, selection) {
             }
             var time = parseInt(data);
             if (prop == null || prop.equals("0")) {
-                var squadAvailability = cm.getSquadAvailability("ZAK");
-
-                if (squadAvailability == -1) {
+                var exped = cm.getExpedition(ExpeditionType.ZAKUM);
+                if (exped == null) {
                     status = 1;
-					/*
-                    if (time + (1 * 3600000) >= cm.getCurrentTime()  && !cm.getPlayer().isGM() ) {
-                        cm.sendOk("在过去的1个小时里你已经去了扎库姆。剩下的时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (1 * 3600000)));
+                    if (cm.getBossLog("挑战扎昆") >= 3) {
+                        cm.sendOk("对不起，扎昆每日每人只进3次哦！参与挑战也计算次数哦！");
                         cm.dispose();
                         return;
-                    }*/
-					if (cm.getBossLog("挑战扎昆") >= 3 ){
-					cm.sendOk("对不起，扎昆每日每人只进3次哦！参与挑战也计算次数哦！");
-                    cm.dispose();
-                    return;
-				    }
-					
-					
-					
-					
-                    cm.sendYesNo("现在可以申请远征队，你想成为远征队队长吗？\r\n今日挑战：[#r"+cm.getBossLog("挑战扎昆")+"#k/#b3#k]");//风云服有效的开始代码
-                } else if (squadAvailability == 1) {
-                    /*
-					if (time + (1 * 3600000) >= cm.getCurrentTime() ) {
-                        cm.sendOk("在过去的1个小时里你已经去了扎库姆。剩下的时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (1 * 3600000)));
-                        cm.dispose();
-                        return;
-                    }*/
-                    // -1 = Cancelled, 0 = not, 1 = true
-                    var type = cm.isSquadLeader("ZAK");
-                    if (type == -1) {
-                        cm.sendOk("已经结束了申请。");
-                        cm.safeDispose();
-                    } else if (type == 0) {
-                        var memberType = cm.isSquadMember("ZAK");
-                        if (memberType == 2) {
-                            cm.sendOk("在远征队的制裁名单。");
-                            cm.safeDispose();
-                        } else if (memberType == 1) {
-                            status = 5;
-                            cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
-                        } else if (memberType == -1) {
-                            cm.sendOk("远征队员已经达到30名，请稍后再试。");
-                            cm.safeDispose();
-                        } else {
-                            status = 5;
-                            cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
-                        }
-                    } else { // Is leader
-                        status = 10;
-                        cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#管理远征队成员。#l \r\n#b#L2#编辑限制列表。#l \r\n#r#L3#进入地图。#l");
-                        // TODO viewing!
                     }
+                    cm.sendYesNo("现在可以申请远征队，你想成为远征队队长吗？\r\n今日挑战：[#r" + cm.getBossLog("挑战扎昆") + "#k/#b3#k]");
+                } else if (cm.isLeaderExpedition(ExpeditionType.ZAKUM)) {
+                    status = 10;
+                    cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#管理远征队成员。#l \r\n#b#L2#编辑限制列表。#l \r\n#r#L3#进入地图。#l");
                 } else {
-                    var eim = cm.getDisconnected("ZakumBattle");
-                    if (eim == null) {
-                        var squd = cm.getSquad("ZAK");
-                        
-						if (squd != null) {
-							
-							/*
-                            if (time + (1 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
-                                cm.sendOk("在过去的1个小时里你已经去了扎库姆。剩下的时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (1 * 3600000)));
-                                cm.dispose();
-                                return;
-                            } */
-                            cm.sendYesNo("小队与扎昆的战斗已经开始了.\r\n" + squd.getNextPlayer());
-                            status = 3;
-                        } else {
-                            cm.sendOk("小队与扎昆的战斗已经开始了.");
-                            cm.safeDispose();
-                        }
+                    if (exped.getBanned().contains(cm.getPlayer().getId())) {
+                        cm.sendOk("在远征队的制裁名单。");
+                        cm.safeDispose();
+                    } else if (exped.getMembers().containsKey(cm.getPlayer().getId())) {
+                        status = 5;
+                        cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
                     } else {
-                        cm.sendYesNo("啊，你回来了。你想再加入你的队伍吗？");
-                        status = 1;
+                        status = 5;
+                        cm.sendSimple("你现在想做什么？\r\n#b#L0#查看远征队成员。#l \r\n#b#L1#加入远征队。#l \r\n#b#L2#退出远征队。#l");
                     }
                 }
             } else {
-                var eim = cm.getDisconnected("ZakumBattle");
+                var eim = cm.getPlayer().getEventInstance();
                 if (eim == null) {
-                    var squd = cm.getSquad("ZAK");
-                    if (squd != null) {
-						/*
-                        if (time + (1 * 3600000) >= cm.getCurrentTime() && !cm.getPlayer().isGM()) {
-                            cm.sendOk("在过去的1个小时里你已经去了扎库姆。剩下的时间: " + cm.getReadableMillis(cm.getCurrentTime(), time + (1 * 360000)));
-                            cm.dispose();
-                            return;
-                        }*/
-                        cm.sendYesNo("小队与扎昆的战斗已经开始了.\r\n" + squd.getNextPlayer());
-                        status = 3;
-                    } else {
-                        cm.sendOk("小队与扎昆的战斗已经开始了。");
-                        cm.safeDispose();
-                    }
+                    cm.sendOk("小队与扎昆的战斗已经开始了。");
+                    cm.safeDispose();
                 } else {
                     cm.sendYesNo("啊，你回来了。你想再加入你的队伍吗？");
                     status = 1;
@@ -367,9 +289,17 @@ function action(mode, type, selection) {
             break;
         case 1:
             if (mode == 1) {
-                if (cm.registerSquad("ZAK", 5, " 已经成为了远征队队长。如果你想加入远征队，请重新打开对话申请加入远征队。")) {
+                if (cm.getBossLog("挑战扎昆") >= 3) {
+                    cm.sendOk("对不起，扎昆每日每人只进3次哦！参与挑战也计算次数哦！");
+                    cm.dispose();
+                    return;
+                }
+                var result = cm.createExpedition(ExpeditionType.ZAKUM);
+                if (result == 0) {
                     cm.sendOk("你已经成为了远征队队长。接下来的5分钟，请等待队员们的申请。");
-					cm.setBossLog("挑战扎昆");
+                    cm.setBossLog("挑战扎昆", cm.getBossLog("挑战扎昆") + 1);
+                } else if (result == 1) {
+                    cm.sendOk("你今天已经达到远征次数上限。");
                 } else {
                     cm.sendOk("添加队时出错..");
                 }
@@ -379,96 +309,126 @@ function action(mode, type, selection) {
             cm.safeDispose();
             break;
         case 2:
-            if (!cm.reAdd("ZakumBattle", "ZAK")) {
-                cm.sendOk("由于未知的错误，操作失败。");
+            if (mode == 1) {
+                var eim = cm.getPlayer().getEventInstance();
+                if (eim != null) {
+                    eim.registerPlayer(cm.getPlayer());
+                    cm.sendOk("你已重新加入远征战斗。");
+                } else {
+                    cm.sendOk("由于未知的错误，操作失败。");
+                }
             }
             cm.safeDispose();
             break;
-        case 3:
-            if (mode == 1) {
-                var squd = cm.getSquad("ZAK");
-                if (squd != null && !squd.getAllNextPlayer().contains(cm.getPlayer().getName())) {
-                    squd.setNextPlayer(cm.getPlayer().getName());
-                    cm.sendOk("你预订了这个地方.");
-                }
-            }
-            cm.dispose();
-            break;
         case 5:
+            if (mode != 1) {
+                cm.dispose();
+                break;
+            }
+            var exped5 = cm.getExpedition(ExpeditionType.ZAKUM);
+            if (exped5 == null) {
+                cm.sendOk("已经结束了申请。");
+                cm.safeDispose();
+                break;
+            }
             if (selection == 0) {
-                if (!cm.getSquadList("ZAK", 0)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                    cm.safeDispose();
-                } else {
-                    cm.dispose();
-                }
-            } else if (selection == 1) { // join
-			if (cm.getBossLog("挑战扎昆") >= 3 ){
-					cm.sendOk("对不起，扎昆每日每人只可挑战3次哦！参与挑战也计算次数哦！");
+                showMembers(exped5);
+                cm.dispose();
+            } else if (selection == 1) {
+                if (cm.getBossLog("挑战扎昆") >= 3) {
+                    cm.sendOk("对不起，扎昆每日每人只可挑战3次哦！参与挑战也计算次数哦！");
                     cm.dispose();
                     return;
-				    }
-                var ba = cm.addMember("ZAK", true);
-                if (ba == 2) {
-                    cm.sendOk("远征队员已经达到30名，请稍后再试。");
-                    cm.safeDispose();
-                } else if (ba == 1) {//申请加入的地方
-					
+                }
+                var joinResult = exped5.addMemberInt(cm.getPlayer());
+                if (joinResult == 0) {
                     cm.sendOk("申请加入远征队成功，请等候队长指示。");
-					cm.setBossLog("挑战扎昆");
-                    cm.safeDispose();
+                    cm.setBossLog("挑战扎昆", cm.getBossLog("挑战扎昆") + 1);
+                } else if (joinResult == 2) {
+                    cm.sendOk("在远征队的制裁名单。");
+                } else if (joinResult == 3) {
+                    cm.sendOk("远征队员已经达到30名，请稍后再试。");
                 } else {
                     cm.sendOk("你已经参加了远征队，请等候队长指示。");
-                    cm.safeDispose();
                 }
-            } else { // withdraw
-                var baa = cm.addMember("ZAK", false);
-                if (baa == 1) {
+            } else {
+                if (exped5.removeMember(cm.getPlayer())) {
                     cm.sendOk("制裁指定的成员成功。");
-                    cm.safeDispose();
                 } else {
                     cm.sendOk("你没有参加远征队。");
-                    cm.safeDispose();
                 }
             }
+            cm.safeDispose();
             break;
         case 10:
+            if (mode != 1) {
+                cm.dispose();
+                break;
+            }
+            var exped10 = cm.getExpedition(ExpeditionType.ZAKUM);
+            if (exped10 == null) {
+                cm.sendOk("已经结束了申请。");
+                cm.dispose();
+                break;
+            }
             if (selection == 0) {
-                if (!cm.getSquadList("ZAK", 0)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                }
+                showMembers(exped10);
                 cm.safeDispose();
             } else if (selection == 1) {
-                status = 11;
-                if (!cm.getSquadList("ZAK", 1)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
+                var memberList = exped10.getMemberList();
+                if (memberList.size() <= 1) {
+                    cm.sendOk("没有可管理的队员。");
                     cm.safeDispose();
+                } else {
+                    status = 11;
+                    var list = "选择要制裁的队员:\r\n";
+                    for (var i = 1; i < memberList.size(); i++) {
+                        list += "#L" + (i - 1) + "#" + memberList.get(i).getValue() + "#l\r\n";
+                    }
+                    cm.sendSimple(list);
                 }
             } else if (selection == 2) {
-                status = 12;
-                if (!cm.getSquadList("ZAK", 2)) {
-                    cm.sendOk("由于未知的错误，操作失败。");
+                var bannedList = exped10.getBanned();
+                if (bannedList.isEmpty()) {
+                    cm.sendOk("限制列表为空。");
                     cm.safeDispose();
-                }
-            } else if (selection == 3) { // get insode
-                if (cm.getSquad("ZAK") != null) {//进入地图
-					
-                    var dd = cm.getEventManager("ZakumBattle");
-                    dd.startInstance(cm.getSquad("ZAK"), cm.getMap(), 160101);
-                    cm.dispose();
                 } else {
-                    cm.sendOk("由于未知的错误，操作失败。");
-                    cm.safeDispose();
+                    status = 12;
+                    var banListStr = "选择要解除限制的队员:\r\n";
+                    for (var i = 0; i < bannedList.size(); i++) {
+                        var chr = cm.getPlayer().getMap().getWorldServer().getPlayerStorage().getCharacterById(bannedList.get(i));
+                        var name = chr != null ? chr.getName() : "ID:" + bannedList.get(i);
+                        banListStr += "#L" + i + "#" + name + "#l\r\n";
+                    }
+                    cm.sendSimple(banListStr);
                 }
+            } else if (selection == 3) {
+                var dd = cm.getEventManager("ZakumBattle");
+                dd.startInstance(exped10, cm.getMap(), 160101);
+                cm.dispose();
             }
             break;
         case 11:
-            cm.banMember("ZAK", selection);
+            if (mode == 1 && selection >= 0) {
+                var exped11 = cm.getExpedition(ExpeditionType.ZAKUM);
+                if (exped11 != null) {
+                    var mList = exped11.getMemberList();
+                    if (selection + 1 < mList.size()) {
+                        exped11.ban(mList.get(selection + 1));
+                    }
+                }
+            }
             cm.dispose();
             break;
         case 12:
-            if (selection != -1) {
-                cm.acceptMember("ZAK", selection);
+            if (mode == 1 && selection >= 0) {
+                var exped12 = cm.getExpedition(ExpeditionType.ZAKUM);
+                if (exped12 != null) {
+                    var bannedList = exped12.getBanned();
+                    if (selection < bannedList.size()) {
+                        exped12.unban(bannedList.get(selection));
+                    }
+                }
             }
             cm.dispose();
             break;
@@ -476,4 +436,13 @@ function action(mode, type, selection) {
     }
 }
 
-
+function showMembers(exped) {
+    var memberList = exped.getMemberList();
+    var str = "#b远征队成员:#k\r\n";
+    for (var i = 0; i < memberList.size(); i++) {
+        var entry = memberList.get(i);
+        var leaderMark = (i == 0) ? " (队长)" : "";
+        str += "#b" + entry.getValue() + "#k" + leaderMark + "\r\n";
+    }
+    cm.sendOk(str);
+}

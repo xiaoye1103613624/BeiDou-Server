@@ -20,7 +20,7 @@
  */
 
 function enter(pi) { // Not tested T_____T
-	pi.playPortalSE();
+	pi.playPortalSound();
 	if (pi.getPlayer().getMapId() == 240050105)
 	pi.warp(240050100, "st00");
 	else

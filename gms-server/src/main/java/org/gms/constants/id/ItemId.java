@@ -59,12 +59,11 @@ public class ItemId {
 
     // Chair
     public static final int RELAXER = 3010000;
-    private static final int CHAIR_MIN = RELAXER;
-    private static final int CHAIR_MAX = FISHING_CHAIR;
 
     public static boolean isChair(int itemId) {
-        return itemId >= CHAIR_MIN && itemId <= CHAIR_MAX;
-        // alt: return itemId / 10000 == 301;
+        // 原逻辑仅识别3010000~3011000区间，新增/客户端自带椅子超出此范围会导致坐下后卡死
+        // 椅子分类码统一为301，按物品ID前3位判断更准确
+        return itemId / 10000 == 301;
     }
 
     // Throwing star

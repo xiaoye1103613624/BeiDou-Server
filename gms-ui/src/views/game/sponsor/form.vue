@@ -14,7 +14,11 @@
         :label="$t('sponsor.column.name')"
         :rules="[{ required: true, message: '请输入配置名称' }]"
       >
-        <a-input v-model="formData.name" placeholder="例如：初级赞助、高级赞助" style="width: 100%" />
+        <a-input
+          v-model="formData.name"
+          placeholder="例如：初级赞助、高级赞助"
+          style="width: 100%"
+        />
       </a-form-item>
 
       <!-- 赞助金额 -->
@@ -33,7 +37,11 @@
 
       <!-- 启用 -->
       <a-form-item :label="$t('sponsor.column.enabled')">
-        <a-switch v-model="formData.enabled" :checked-value="1" :unchecked-value="0" />
+        <a-switch
+          v-model="formData.enabled"
+          :checked-value="1"
+          :unchecked-value="0"
+        />
       </a-form-item>
 
       <!-- 备注 -->
@@ -43,15 +51,32 @@
 
       <!-- 奖励列表 -->
       <a-divider />
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+        "
+      >
         <span style="font-weight: 600">{{ $t('sponsor.title.rewards') }}</span>
-        <a-button type="primary" size="mini" @click="addReward">+ 添加奖励</a-button>
+        <a-button type="primary" size="mini" @click="addReward"
+          >+ 添加奖励</a-button
+        >
       </div>
 
-      <div v-for="(item, index) in formData.rewards" :key="index" style="margin-bottom: 8px">
+      <div
+        v-for="(item, index) in formData.rewards"
+        :key="index"
+        style="margin-bottom: 8px"
+      >
         <a-row :gutter="8" align="center">
           <a-col :span="6">
-            <a-select v-model="item.type" style="width: 100%" placeholder="类型">
+            <a-select
+              v-model="item.type"
+              style="width: 100%"
+              placeholder="类型"
+            >
               <a-option value="item">道具</a-option>
               <a-option value="nx">点券</a-option>
               <a-option value="meso">金币</a-option>
@@ -68,14 +93,28 @@
             <span v-else style="line-height: 28px; color: #999">—</span>
           </a-col>
           <a-col :span="6">
-            <a-input-number v-model="item.qty" :min="1" placeholder="数量" style="width: 100%" />
+            <a-input-number
+              v-model="item.qty"
+              :min="1"
+              placeholder="数量"
+              style="width: 100%"
+            />
           </a-col>
           <a-col :span="6">
-            <a-button type="text" size="mini" status="danger" @click="removeReward(index)">✕ 删除</a-button>
+            <a-button
+              type="text"
+              size="mini"
+              status="danger"
+              @click="removeReward(index)"
+              >✕ 删除</a-button
+            >
           </a-col>
         </a-row>
       </div>
-      <div v-if="!formData.rewards || formData.rewards.length === 0" style="color: #999; font-size: 12px">
+      <div
+        v-if="!formData.rewards || formData.rewards.length === 0"
+        style="color: #999; font-size: 12px"
+      >
         暂无奖励，点击上方按钮添加
       </div>
     </a-form>
@@ -85,7 +124,11 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { Message } from '@arco-design/web-vue';
-  import { saveSponsorConfig, type SponsorConfigForm, type SponsorRewardItem } from '@/api/sponsor';
+  import {
+    saveSponsorConfig,
+    type SponsorConfigForm,
+    type SponsorRewardItem,
+  } from '@/api/sponsor';
 
   const emit = defineEmits(['loadData']);
 
@@ -118,7 +161,13 @@
     } else {
       editing.value = false;
       editingId.value = undefined;
-      formData.value = { name: '', amount: undefined, rewards: [], enabled: 1, comment: '' };
+      formData.value = {
+        name: '',
+        amount: undefined,
+        rewards: [],
+        enabled: 1,
+        comment: '',
+      };
     }
     visible.value = true;
   };
@@ -138,7 +187,8 @@
       // 清理空奖励
       if (formData.value.rewards) {
         formData.value.rewards = formData.value.rewards.filter(
-          (r: SponsorRewardItem) => r.qty && r.qty > 0 && (r.type !== 'item' || (r.id && r.id > 0))
+          (r: SponsorRewardItem) =>
+            r.qty && r.qty > 0 && (r.type !== 'item' || (r.id && r.id > 0))
         );
       }
       await saveSponsorConfig(formData.value);
@@ -153,7 +203,9 @@
     }
   };
 
-  const handleCancel = () => { visible.value = false; };
+  const handleCancel = () => {
+    visible.value = false;
+  };
 
   defineExpose({ initForm });
 </script>

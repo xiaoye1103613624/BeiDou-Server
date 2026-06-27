@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.mentor')">
+    <a-card class="general-card" :title="$t('menu.growth.mentor')">
       <a-tabs v-model:active-key="activeTab">
         <!-- Tab 1: 系统配置 -->
         <a-tab-pane key="config" :title="$t('mentor.tab.config')">
@@ -419,7 +419,9 @@
 
   const configEnabledBool = computed({
     get: () => configForm.value.enabled === 1,
-    set: (v) => { configForm.value.enabled = v ? 1 : 0; },
+    set: (v) => {
+      configForm.value.enabled = v ? 1 : 0;
+    },
   });
 
   const configModalTitle = computed(() =>
@@ -506,7 +508,9 @@
 
   const rewardEnabledBool = computed({
     get: () => rewardForm.value.enabled === 1,
-    set: (v) => { rewardForm.value.enabled = v ? 1 : 0; },
+    set: (v) => {
+      rewardForm.value.enabled = v ? 1 : 0;
+    },
   });
 
   const rewardModalTitle = computed(() =>

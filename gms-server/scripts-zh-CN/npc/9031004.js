@@ -57,7 +57,7 @@ function levelSynthesisMenu() {
         var have = cm.getPlayer().getItemQuantity(cur.getItemId(), false);
         var meso = cur.getSynthesisMesoCost();
         var idx = synthesisCache.length;
-        text += "#L" + idx + "##t" + cur.getItemId() + "##k x2 → #t" + next.getItemId() + "##k x1";
+        text += "#L" + idx + "##i" + cur.getItemId() + "##t" + cur.getItemId() + "##k x2 → #i" + next.getItemId() + "##t" + next.getItemId() + "##k x1";
         if (meso > 0) text += "（金币:" + meso + "）";
         text += "　当前持有:" + have + "#l\r\n";
         synthesisCache.push({ from: cur, to: next });
@@ -79,8 +79,8 @@ function levelHandleSynthesis(selection) {
     var from = pendingSynthesis.from;
     var to = pendingSynthesis.to;
 
-    var text = "是否消耗 #b#t" + from.getItemId() + "##k x2 + 金币" + from.getSynthesisMesoCost()
-        + " 合成 #b#t" + to.getItemId() + "##k x1？";
+    var text = "是否消耗 #b#i" + from.getItemId() + "##t" + from.getItemId() + "##k x2 + 金币" + from.getSynthesisMesoCost()
+        + " 合成 #b#i" + to.getItemId() + "##t" + to.getItemId() + "##k x1？";
     cm.sendYesNoLevel("SynthesisMenu", "DoSynthesis", text);
 }
 
@@ -113,7 +113,7 @@ function levelDoSynthesis() {
     }
     cm.gainItem(to.getItemId(), 1);
 
-    cm.sendOkLevel("Main", "合成成功！获得 #t" + to.getItemId() + "# x1");
+    cm.sendOkLevel("Main", "合成成功！获得 #i" + to.getItemId() + "##t" + to.getItemId() + "# x1");
 }
 
 // ==================== 宝石镶嵌 ====================
@@ -162,7 +162,7 @@ function levelSocketGemMenu() {
         if (socketCfg == null) continue; // 该等级宝石未配置镶嵌效果
 
         var have = cm.getPlayer().getItemQuantity(lv.getItemId(), false);
-        text += "#L" + idx + "##t" + lv.getItemId() + "##k（持有:" + have + "）#l\r\n";
+        text += "#L" + idx + "##i" + lv.getItemId() + "##t" + lv.getItemId() + "##k（持有:" + have + "）#l\r\n";
         cache.push({ gemLevel: lv, socketCfg: socketCfg });
         idx++;
     }
@@ -189,8 +189,8 @@ function levelHandleSocketGem(selection) {
 function levelConfirmSocket() {
     var cfg = pendingSocket.socketCfg;
     var text = "本次镶嵌将消耗：\r\n"
-        + "#t" + pendingSocket.gemLevelCfg.getItemId() + "# x1\r\n"
-        + "#t" + cfg.getCrystalItemId() + "# x" + cfg.getCrystalCount() + "\r\n"
+        + "#i" + pendingSocket.gemLevelCfg.getItemId() + "##t" + pendingSocket.gemLevelCfg.getItemId() + "# x1\r\n"
+        + "#i" + cfg.getCrystalItemId() + "##t" + cfg.getCrystalItemId() + "# x" + cfg.getCrystalCount() + "\r\n"
         + "金币 x" + cfg.getMesoCost() + "\r\n\r\n"
         + "本次提升的属性：\r\n";
 

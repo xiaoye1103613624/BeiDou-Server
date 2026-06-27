@@ -1,4 +1,4 @@
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(pi.getPlayer().getMapId() + 10,"right01");
 }

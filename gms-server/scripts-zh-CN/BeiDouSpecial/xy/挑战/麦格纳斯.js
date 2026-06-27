@@ -180,7 +180,7 @@ function AAA() { //给队伍的bosslog 给远征军bosslog
         var cPlayer = it.next();
         var teamID = cPlayer.getId();
         var curChar = cm.getMap().getCharacterById(teamID);
-        if (curChar != null && cPlayer.getMapid() == mapId) {
+        if (curChar != null && cPlayer.getMapId() == mapId) {
             curChar.cm.giveParty每日记录("皇帝BOSS");
             //inMap += (cPlayer.getJobId() == 900 ? 3 : 1);
         }

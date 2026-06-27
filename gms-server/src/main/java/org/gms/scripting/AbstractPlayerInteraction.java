@@ -429,6 +429,16 @@ public class AbstractPlayerInteraction {
     }
 
     /**
+     * 设置玩家bosslog计数（单参便捷版，默认count=1）
+     * 兼容脚本中cm.setBossLog('xxx')的单参数调用
+     *
+     * @param bossid 业务自定义记录标识
+     */
+    public void setBossLog(String bossid) {
+        getPlayer().setBossLog(bossid, 1);
+    }
+
+    /**
      * 获取角色的永久一次性记录计数（不会跨天重置）
      * 供脚本cm.getOneTimeLog(key)使用，用于一次性奖励/成就标记等永久记录
      *

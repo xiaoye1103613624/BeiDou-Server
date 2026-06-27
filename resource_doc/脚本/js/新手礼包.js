@@ -1,4 +1,4 @@
-var 萌新系统 = "#fEffect/CharacterEff1.img/QQ1408745/0/9#";
+﻿var 萌新系统 = "#fEffect/CharacterEff1.img/QQ1408745/0/9#";
 var dd = " ";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/0#";
 var 群粉心 = ""+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+"\r\n";
@@ -108,8 +108,8 @@ function action(mode, type, selection) {
 			cm.gainItem(1472055,0,0,10,10,10,10,100,100,10,10,10,10,0,0,0,0);//T5弓
 			cm.gainItem(1432040,0,0,10,10,10,10,100,100,10,10,10,10,0,0,0,0);//T5弓
 
-            cm.给抵用券(30000);//抵用券
-            cm.给点券(30000);//点券
+            cm.getPlayer().modifyCSPoints(2, 30000);//抵用券
+            cm.gainNX(30000);//点券
             cm.gainMeso(30000000);//金币
 			//cm.gainItem(2370007,10);//2000经验
             cm.gainItem(2000019,100);//超级药水
@@ -128,9 +128,9 @@ function action(mode, type, selection) {
             //cm.gainItem(1142686,0,0,5,5,5,5,0,0,5,5,5,5,0,0,0,0);//内测勋章
             //cm.gainItem(1142688,0,0,5,5,5,5,5,5,5,5,5,5,5,5,30,50);//VIP勋章
             cm.sendOk("新手礼包领取成功！");
-			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到开心冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
-			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到开心冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
-			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到开心冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
+			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到萧曳冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
+			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到萧曳冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
+			cm.worldMessage(5,"萌新公告：玩家["+cm.getName()+"]来到萧曳冒险岛！大佬们快去收徒了!好好爱他/她！");//1师给弹窗
             cm.dispose();
                 } else {
                     cm.sendOk("#g你已经领取过一次了，不可以重复领取哦！\r\n");

@@ -125,7 +125,7 @@ function action(mode, type, selection) {
         text += `${generalSelect(170, "金币兑换")}\t${generalSelect(170, "道具抽奖")}\t${generalSelect(171, "枫叶兑换")}\t${generalSelect(172, "答题")}\t${changeLine.repeat(2)}`;
         text += `${generalSelect(174, "皇家发型")}\t${generalSelect(173, "精美点装")}\t${generalSelect(175, "物品兑换")}\t${generalSelect(176, "益智答题")}\t${changeLine.repeat(2)}`;
         text += `${generalSelect(177, "发色选择")}\t${generalSelect(509, "时装升星")}\t${generalSelect(511, "口令礼包")}\t${generalSelect(178, "现金商店")}${changeLine.repeat(2)}`;
-        text += `${generalSelect(510, "一键回收")}\t${generalSelect(179, "银行系统")}${changeLine.repeat(2)}`;
+        text += `${generalSelect(510, "一键回收")}\t${generalSelect(179, "银行系统")}\t${generalSelect(180, "小游戏中心")}\t${generalSelect(181, "椅子抽奖")}${changeLine.repeat(2)}`;
 
 
         // text += "#L999#测试脚本>>>未上线#l\t\r\n";
@@ -311,6 +311,12 @@ function doSelect(selection) {
             break;
         case 179:
             openNpc("xy/other/银行系统");
+            break;
+        case 180:
+            openNpc("xy/games/小游戏中心");
+            break;
+        case 181:
+            openNpc("xy/other/椅子抽奖");
             break;
         case 200:
             openNpc("xy/day/每日探索");

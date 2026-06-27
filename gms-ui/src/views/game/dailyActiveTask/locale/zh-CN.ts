@@ -1,0 +1,20 @@
+export default {
+  'dailyActiveTask.column.id': 'ID',
+  'dailyActiveTask.column.taskKey': '任务标识(Key)',
+  'dailyActiveTask.column.taskName': '任务名称',
+  'dailyActiveTask.column.targetCount': '目标次数',
+  'dailyActiveTask.column.rewardMeso': '奖励金币',
+  'dailyActiveTask.column.rewardItemId': '奖励物品ID',
+  'dailyActiveTask.column.rewardItemCount': '奖励物品数量',
+  'dailyActiveTask.column.extraConfig': '扩展配置',
+  'dailyActiveTask.column.sortOrder': '排序',
+  'dailyActiveTask.column.enabled': '启用',
+  'dailyActiveTask.column.operation': '操作',
+  'dailyActiveTask.button.edit': '编辑',
+  'dailyActiveTask.save.success': '每日活跃任务保存成功',
+  'dailyActiveTask.delete.success': '每日活跃任务已删除',
+  'dailyActiveTask.delete.confirm':
+    '确定要删除该每日活跃任务吗？此操作不可撤销。',
+  'dailyActiveTask.title.basic': '基础配置',
+  'dailyActiveTask.title.reward': '奖励配置',
+};

@@ -1,5 +1,5 @@
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     if (pi.getQuestStatus(21001) == 0) {
 	pi.warp(914000220, 2);
     } else {

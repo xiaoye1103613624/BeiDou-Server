@@ -54,7 +54,7 @@ function checkLevelsAndMap(lowestlevel, highestlevel) {
         if (!(cPlayer.getLevel() >= lowestlevel && cPlayer.getLevel() <= highestlevel) && cPlayer.getJobId() != 900) {
             valid = 1;
         }
-        if (cPlayer.getMapid() != mapId) {
+        if (cPlayer.getMapId() != mapId) {
             valid = 2;
         }
     }

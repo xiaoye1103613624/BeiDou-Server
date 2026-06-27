@@ -20,7 +20,7 @@
  */
 
 function enter(pi) {
-	pi.playPortalSE();
+	pi.playPortalSound();
 	pi.warp(240050300, "sp");
 	return true;
 }

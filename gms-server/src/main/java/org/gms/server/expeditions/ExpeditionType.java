@@ -54,7 +54,27 @@ public enum ExpeditionType {
     /** 品客缤 */
     PINKBEAN(6, 30, 120, 255, 5),
     /** 绯红要塞 */
-    CWKPQ(6, 30, 90, 255, 5);
+    CWKPQ(6, 30, 90, 255, 5),
+    /** 熊狮王 */
+    SCARTAR(6, 30, 90, 255, 5),
+    /** 核心烈焰 */
+    CORE_BLAZE(6, 30, 100, 255, 5),
+    /** 杜纳斯2 */
+    DUNAS2(6, 30, 100, 255, 5),
+    /** 奥夫海本 */
+    AUFHEBEN(6, 30, 100, 255, 5),
+    /**  Vergamot */
+    VERGAMOT(6, 30, 100, 255, 5),
+    /** 尼伯根 */
+    NIBERGEN(6, 30, 100, 255, 5),
+    /** 杜纳斯 */
+    DUNAS(6, 30, 100, 255, 5),
+    /** 无名魔法怪物 */
+    NAMELESS(6, 30, 100, 255, 5),
+    /** 凡雷恩 */
+    VONLEON(6, 30, 120, 255, 5),
+    /** Boss Balrog */
+    BOSS_BALROG(6, 30, 50, 255, 5);
 
     /** 最小人数 */
     private final int minSize;

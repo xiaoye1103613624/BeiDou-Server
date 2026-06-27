@@ -4,7 +4,7 @@
 
 function enter(pi) {
     pi.cancelItem(2210016);
-    pi.playPortalSE();
+    pi.playPortalSound();
     pi.warp(270000100, "out00");
     return true;
 }
