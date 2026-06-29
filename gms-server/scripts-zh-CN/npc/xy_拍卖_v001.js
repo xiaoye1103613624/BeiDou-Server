@@ -72,6 +72,7 @@ var MENU_SECTIONS = [
         icon: 分割线3,
         items: [
             { id: 41, label: "每日福利",  action: { type: "npc", script: "新人福利" } },
+            { id: 44, label: "银行系统",  action: { type: "npc", script: "xy/other/银行系统" } },
             { id: 42, label: "赞助福利",  action: { type: "npc", script: "xy/vip/赞助中心" } },
             { id: 43, label: "CDKEY兑换", action: { type: "npc", script: "xy/vip/CDK_兑换" } }
         ]
@@ -123,6 +124,15 @@ function buildMenuText() {
     return text;
 }
 
+// 数字格式化工具（Intl可能在某些GraalJS版本不可用）
+function fmtNum(n) {
+    try {
+        return new Intl.NumberFormat().format(n);
+    } catch (e) {
+        return String(n);
+    }
+}
+
 function buildHeaderInfo() {
     var cashShop = cm.getPlayer().getCashShop();
     var onlineMs = cm.getOnlineTime();
@@ -135,9 +145,9 @@ function buildHeaderInfo() {
         timeStr = "在线时间：#e#r" + hour + "#k#n 小时 #e#r" + min + "#k#n 分钟";
     }
     var info = "";
-    info += "\t" + 正方箭头 + " 点券：" + new Intl.NumberFormat().format(cashShop.getCash(1)) + "\t\t\t\t" + timeStr + changeLine;
-    info += "\t" + 正方箭头 + " 抵用：" + new Intl.NumberFormat().format(cashShop.getCash(2)) + "\t\t\t\t" + 正方箭头 + " 信用：" + new Intl.NumberFormat().format(cashShop.getCash(4)) + changeLine;
-    info += "\t" + 正方箭头 + " 金币：" + new Intl.NumberFormat().format(cm.getPlayer().getMeso()) + changeLine;
+    info += "\t" + 正方箭头 + " 点券：" + fmtNum(cashShop.getCash(1)) + "\t\t\t\t" + timeStr + changeLine;
+    info += "\t" + 正方箭头 + " 抵用：" + fmtNum(cashShop.getCash(2)) + "\t\t\t\t" + 正方箭头 + " 信用：" + fmtNum(cashShop.getCash(4)) + changeLine;
+    info += "\t" + 正方箭头 + " 金币：" + fmtNum(cm.getPlayer().getMeso()) + changeLine;
     return info;
 }
 
@@ -244,4 +254,4 @@ var 分割线1 = "#fUI/UIWindow/AdminClaim/default/2#";
 var 分割线2 = "__________________________________________________";
 var 分割线4 = "#fUI/UIWindow/AdminClaim/default/4#";
 var 金枫叶 = "#fMap/MapHelper/weather/maple/2#";
-var 草莓5 = "#fUI/GuildMark/Mark/Plant/00003000/8#";
+var 草莓5 = "#fUI/GuildMark/Mark/Plant/00003000/8#";

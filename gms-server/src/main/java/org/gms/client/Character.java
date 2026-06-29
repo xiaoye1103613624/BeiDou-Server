@@ -2894,6 +2894,40 @@ public class Character extends AbstractCharacterObject {
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
         }
+        // 装备伤害加成：换装/卸装后自动弹出当前所有加成汇总HINT（含穿和脱两种情况）
+        EquipDamageBonusManager.Bonus equipBonus = getEquipDamageBonus();
+        SetDamageBonusManager.Bonus setBonus = getSetDamageBonus();
+        boolean hasBonus = equipBonus != EquipDamageBonusManager.Bonus.EMPTY
+                        || setBonus != SetDamageBonusManager.Bonus.EMPTY;
+        if (!hasBonus) {
+            return; // 无加成不提示
+        }
+        var sb = new StringBuilder("#k[装备伤害加成]\\r\\n");
+        for (EquipDamageBonusManager.ItemBonus ib : equipBonus.items()) {
+            sb.append(ib.itemName()).append(": ");
+            if (ib.damagePct() != 0) {
+                sb.append("伤害+").append(ib.damagePct()).append("% ");
+            }
+            if (ib.bossDamagePct() != 0) {
+                sb.append("Boss伤害+").append(ib.bossDamagePct()).append("% ");
+            }
+            if (ib.extraSegments() != 0L) {
+                sb.append("额外段数+").append(ib.extraSegments()).append("段 ");
+            }
+            sb.append("\\r\\n");
+        }
+        for (SetDamageBonusManager.SetBonus sb2 : setBonus.items()) {
+            sb.append(sb2.setName()).append("(").append(sb2.tierCount()).append("件): ");
+            if (sb2.damagePct() != 0) {
+                sb.append("伤害+").append(sb2.damagePct()).append("% ");
+            }
+            if (sb2.bossDamagePct() != 0) {
+                sb.append("Boss伤害+").append(sb2.bossDamagePct()).append("% ");
+            }
+            sb.append("\\r\\n");
+        }
+        sb.setLength(sb.length() - 4);
+        sendPacket(PacketCreator.sendHint(sb.toString(), 0, Math.max(16 * (equipBonus.items().size() + setBonus.items().size()), 16)));
     }
 
     public void cancelDiseaseExpireTask() {
