@@ -21,39 +21,144 @@
 */
 
 /**
- * @description 拍卖行中心脚本
+ * @description 拍卖行中心脚本（分页版）
+ * 主菜单拆分为分类页+子页，避免 sendSimple 文本过长导致客户端闪退
  */
-var chr = null;
-var say = "";
-var sel = null;
-var 皇冠白 = "#fUI/GuildMark/Mark/Etc/00009004/15#";
-var 完成 = "#fUI/UIWindow/Quest/Tab/enabled/2#";
-var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
-var 粉心 = "#fEffect/CharacterEff/1112903/0/1#";
-var 红心 = "#fEffect/CharacterEff/1082229/0/0#";
+var status = -1;
+var selectedCategory = -1; // 玩家在状态0选择的分类编号
+var changeLine = "\r\n";
+
+// ======================== UI 图标常量 ========================
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
 var 皇冠 = "#fUI/UIWindow/UserInfo/bossPetCrown#";
-var 火箭 = "#fUI/GuildMark/Mark/Etc/00009022/12#";
-var 奖励 = "#fUI/CashShop/CSDiscount/bonus#";
-var line = "#fUI/CashShop/CSDiscount/Line#";
+var 粉心 = "#fEffect/CharacterEff/1112903/0/1#";
 var 翅膀左 = "#fUI/ChatBalloon/118/nw#";
 var 翅膀中间 = "#fUI/ChatBalloon/118/n#";
 var 翅膀右 = "#fUI/ChatBalloon/118/ne#";
 
-// ======================== 数字图标
-var zero = "#fUI/Basic/LevelNo/0#";
-var one = "#fUI/Basic/LevelNo/1#";
-var nine = "#fUI/Basic/LevelNo/9#";
+// ======================== 分类菜单配置 ========================
+// 主分类页（状态0）：{ id, label, icon }
+var CATEGORIES = [
+    { id: 1,  label: "常用功能", icon: 皇冠 },
+    { id: 2,  label: "牛马每日", icon: 粉心 },
+    { id: 3,  label: "收集功能", icon: 皇冠 },
+    { id: 4,  label: "战力提升", icon: 粉心 },
+    { id: 5,  label: "师徒家族", icon: 粉心 },
+    { id: 6,  label: "会员中心", icon: 粉心 },
+    { id: 7,  label: "其他功能", icon: 粉心 },
+    { id: 99, label: "GM 功能", icon: 皇冠, gmOnly: true }
+];
 
-let changeLine = "\r\n"
+// 子分类页（状态1）：按主分类id索引，每项 { id, label, red }
+var SUB_MENUS = {};
 
-var OldTitle = `${翅膀左}${翅膀中间.repeat(2)}\t\t#e欢迎来到  #r萧曳  #k冒险岛#n\t\t${翅膀中间.repeat(2)}${翅膀右}\t${changeLine.repeat(1)}`;
-var status = -1;
-var i = 0;
+// ---- 常用功能 ----
+SUB_MENUS[1] = [
+    { id: 3,  label: "[传送自由]", red: true },
+    { id: 71, label: "[专车接送]", red: true },
+    { id: 11, label: "[匠人街]",   red: true },
+    { id: 0,  label: "新人福利",   red: false },
+    { id: 73, label: "新人问问",   red: false },
+    { id: 113,label: "新手礼包",   red: false },
+    { id: 112,label: "等级奖励",   red: false },
+    { id: 69, label: "快速转职",   red: false },
+    { id: 62, label: "快捷商店",   red: true },
+    { id: 165,label: "卷轴中心",   red: false },
+    { id: 4,  label: "爆率一览",   red: false },
+    { id: 302,label: "学习技能",   red: false }
+];
+
+// ---- 牛马每日 ----
+SUB_MENUS[2] = [
+    { id: 1,   label: "每日签到", red: true },
+    { id: 2,   label: "在线奖励", red: true },
+    { id: 200, label: "每日探索", red: false },
+    { id: 201, label: "每日副本", red: true },
+    { id: 202, label: "每日跑环", red: true },
+    { id: 203, label: "跑环仓库", red: false },
+    { id: 205, label: "每日BOSS", red: false },
+    { id: 206, label: "双倍领取", red: false },
+    { id: 220, label: "高级BOSS", red: true },
+    { id: 221, label: "远征BOSS", red: true }
+];
+
+// ---- 收集功能 ----
+SUB_MENUS[3] = [
+    { id: 311, label: "卡片收集", red: false },
+    { id: 301, label: "玩具收集", red: false }
+];
+
+// ---- 战力提升 ----
+SUB_MENUS[4] = [
+    { id: 507, label: "武器中心", red: true },
+    { id: 508, label: "套服进阶", red: true },
+    { id: 111, label: "戒指中心", red: true },
+    { id: 504, label: "时装洗练", red: true },
+    { id: 65,  label: "删除物品", red: true }
+];
+
+// ---- 师徒家族 ----
+SUB_MENUS[5] = [
+    { id: 400, label: "师徒系统", red: true },
+    { id: 401, label: "家族系统", red: true }
+];
+
+// ---- 会员中心 ----
+SUB_MENUS[6] = [
+    { id: 600, label: "会员中心", red: true },
+    { id: 603, label: "赞助中心", red: true },
+    { id: 604, label: "全服双倍", red: false },
+    { id: 605, label: "全服双爆", red: false },
+    { id: 602, label: "会员商店", red: true },
+    { id: 607, label: "一键出售", red: true },
+    { id: 606, label: "时装洗练", red: true },
+    { id: 608, label: "CDK兑换", red: false }
+];
+
+// ---- 其他功能 ----
+SUB_MENUS[7] = [
+    { id: 166, label: "仓库管理", red: true },
+    { id: 167, label: "物品兑换", red: false },
+    { id: 168, label: "金币赌博", red: false },
+    { id: 169, label: "金币抽奖", red: false },
+    { id: 170, label: "道具抽奖", red: false },
+    { id: 171, label: "枫叶兑换", red: false },
+    { id: 172, label: "答题",     red: false },
+    { id: 173, label: "精美点装", red: false },
+    { id: 174, label: "皇家发型", red: false },
+    { id: 176, label: "益智答题", red: false },
+    { id: 177, label: "发色选择", red: false },
+    { id: 509, label: "时装升星", red: false },
+    { id: 511, label: "口令礼包", red: false },
+    { id: 178, label: "现金商店", red: false },
+    { id: 510, label: "一键回收", red: false },
+    { id: 179, label: "银行系统", red: false },
+    { id: 180, label: "小游戏中心", red: false },
+    { id: 181, label: "椅子抽奖", red: false }
+];
+
+// ---- GM 功能 ----
+SUB_MENUS[99] = [
+    { id: 990, label: "GM商店",      red: false },
+    { id: 66,  label: "一键刷道具",  red: false },
+    { id: 904, label: "在线玩家",    red: false },
+    { id: 64,  label: "UI查询",      red: false },
+    { id: 900, label: "发送公告",    red: false },
+    { id: 901, label: "巡查面板",    red: false },
+    { id: 902, label: "召唤BOSS",    red: false },
+    { id: 903, label: "封禁",        red: false },
+    { id: 905, label: "物品查询",    red: false },
+    { id: 906, label: "虚空索物",    red: false },
+    { id: 907, label: "任意门",      red: false },
+    { id: 500, label: "装备制作",    red: false }
+];
+
+// ======================== 脚本入口 ========================
 
 function start() {
-    action(1, 0, 0)
+    status = -1;
+    selectedCategory = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
@@ -67,387 +172,212 @@ function action(mode, type, selection) {
     }
 
     if (status === 0) {
-        let text = OldTitle;
-        // ========================================展示信息============================================
-        if (cm.getOnlineTime() < 3600) {
-            time = `在线时间：#e#r${Math.floor(cm.getOnlineTime() / 60)}#k#n 分钟${changeLine}`;
-        } else {
-            let hour = Math.floor(cm.getOnlineTime() / 3600);
-            let min = Math.floor((cm.getOnlineTime() - hour * 3600) / 60);
-            time = `在线时间：#e#r${hour}#k#n 小时 #e#r${min}#k#n 分钟${changeLine}`;
-        }
-        let cashShop = cm.getPlayer().getCashShop();
-        text += `\t${正方箭头} 点券：${new Intl.NumberFormat().format(cashShop.getCash(1))}\t\t\t\t${time}`;
-        text += `\t${正方箭头} 抵用：${new Intl.NumberFormat().format(cashShop.getCash(2))}\t\t\t\t${正方箭头} 信用：${new Intl.NumberFormat().format(cashShop.getCash(4))}${changeLine}`;
-        text += `\t${正方箭头} 金币：${new Intl.NumberFormat().format(cm.getPlayer().getMeso())}${changeLine}`;
-        //text += changeLine;
-        // ========================================常用功能============================================1
-        // 将字符串复制8次
-        text += `\t${皇冠.repeat(6)}\t 常用功能 \t${皇冠.repeat(6)}${changeLine}`;
-        text += `\t\t\t${redSelect(3, "[传送自由]")}\t${redSelect(71, "[专车接送]")}\t${redSelect(11, "[匠人街]")}\t${changeLine.repeat(2)}`;
-        text += `${generalSelect(0, "新人福利")}\t${generalSelect(73, "新人问问")}\t${generalSelect(113, "新手礼包")}\t${generalSelect(112, "等级奖励")}\t${generalSelect(69, "快速转职")}\t${changeLine.repeat(2)}`;
-        text += `${redSelect(62, "快捷商店")}\t${generalSelect(165, "卷轴中心")}\t${generalSelect(4, "爆率一览")}\t${generalSelect(302, "学习技能")}\t${changeLine.repeat(2)}`;
-
-        text += changeLine.repeat(1);
-        // =======================================每日牛马============================================2
-        text += `\t${粉心.repeat(7)}\t 牛马每日 \t${粉心.repeat(7)}${changeLine}`;
-        text += `${redSelect(1, "每日签到")}\t${redSelect(2, "在线奖励")}\t${generalSelect(200, "每日探索")}\t${redSelect(201, "每日副本")}${changeLine.repeat(2)}`;
-        text += `${redSelect(202, "每日跑环")}\t${generalSelect(203, "跑环仓库")}\t${generalSelect(204, "每日副本")}\t${generalSelect(205, "每日BOSS")}${changeLine.repeat(2)}`;
-        text += `${redSelect(220, "高级BOSS")}\t${redSelect(221, "远征BOSS")}\t${generalSelect(206, "双倍领取")}${changeLine.repeat(2)}`;
-
-        text += changeLine.repeat(1);
-        // =======================================收集功能============================================3
-        text += `\t${皇冠.repeat(6)}\t 收集功能 \t${皇冠.repeat(6)}${changeLine}`;
-        text += `${generalSelect(311, "卡片收集")}\t${generalSelect(301, "玩具收集")}${changeLine.repeat(2)}`;
-
-        text += changeLine.repeat(1);
-        // =======================================战力提升============================================4
-        text += `\t${粉心.repeat(7)}\t 战力提升 \t${粉心.repeat(7)}${changeLine}`;
-        text += `${redSelect(507, "武器中心")}\t${redSelect(508, "套服进阶")}\t${redSelect(111, "戒指中心")}${changeLine.repeat(2)}`;
-        text += `${redSelect(504, "时装洗练")}\t${redSelect(65, "删除物品")}${changeLine.repeat(2)}`;
-
-        text += changeLine.repeat(1);
-        // =======================================师徒家族============================================5
-        text += `\t${粉心.repeat(7)}\t 师徒家族 \t${粉心.repeat(7)}${changeLine}`;
-        text += `${redSelect(400, "师徒系统")}\t${redSelect(401, "家族系统")}${changeLine.repeat(2)}`;
-
-
-        text += changeLine.repeat(1);
-        // =======================================会员中心============================================6
-        text += `\t${粉心.repeat(7)}\t 会员中心 \t${粉心.repeat(7)}${changeLine}`;
-        text += `${redSelect(600, "会员中心")}\t${redSelect(603, "赞助中心")}\t${generalSelect(604, "全服双倍")}\t${generalSelect(605, "全服双爆")}${changeLine.repeat(2)}`;
-        text += `${redSelect(602, "会员商店")}\t${redSelect(607, "一键出售")}\t${redSelect(606, "时装洗练")}\t${generalSelect(608, "CDK兑换")}${changeLine.repeat(2)}`;
-
-        text += changeLine.repeat(1);
-        // =======================================其他============================================6
-        text += `\t${粉心.repeat(7)}\t  其他 \t${粉心.repeat(7)}${changeLine}`;
-        text += `${redSelect(166, "仓库管理")}\t${generalSelect(167, "物品兑换")}\t${generalSelect(168, "金币赌博")}\t${generalSelect(169, "金币抽奖")}${changeLine.repeat(2)}`;
-        text += `${generalSelect(170, "金币兑换")}\t${generalSelect(170, "道具抽奖")}\t${generalSelect(171, "枫叶兑换")}\t${generalSelect(172, "答题")}\t${changeLine.repeat(2)}`;
-        text += `${generalSelect(174, "皇家发型")}\t${generalSelect(173, "精美点装")}\t${generalSelect(175, "物品兑换")}\t${generalSelect(176, "益智答题")}\t${changeLine.repeat(2)}`;
-        text += `${generalSelect(177, "发色选择")}\t${generalSelect(509, "时装升星")}\t${generalSelect(511, "口令礼包")}\t${generalSelect(178, "现金商店")}${changeLine.repeat(2)}`;
-        text += `${generalSelect(510, "一键回收")}\t${generalSelect(179, "银行系统")}\t${generalSelect(180, "小游戏中心")}\t${generalSelect(181, "椅子抽奖")}${changeLine.repeat(2)}`;
-
-
-        // text += "#L999#测试脚本>>>未上线#l\t\r\n";
-        if (cm.getPlayer().isGM()) {
-            text += changeLine.repeat(1);
-            // =======================================GM功能============================================9
-            text += `\t${皇冠.repeat(5)}\t GM功能 \t${皇冠.repeat(5)}${changeLine}`;
-            text += `${generalSelect(990, "GM商店")}\t${generalSelect(66, "一键刷道具")}\t${generalSelect(904, "在线玩家")}\t${generalSelect(64, "UI查询")}${changeLine}`;
-            text += `${generalSelect(900, "发送公告")}\t${generalSelect(901, "巡查面板")}\t${generalSelect(902, "召唤BOSS")}\t${generalSelect(903, "封禁")}${changeLine}`;
-            text += `${generalSelect(905, "物品查询")}\t${generalSelect(906, "虚空索物")}\t${generalSelect(907, "任意门")}\t${generalSelect(500, "装备制作")}${changeLine}`;
-            text += `${generalSelect(67, "有状态脚本示例")}\t${generalSelect(68, "NextLevel脚本示例")}${changeLine}`;
-        }
-        cm.sendSimple(text);
+        // ===== 主分类页 =====
+        cm.sendSimple(buildMainPage());
     } else if (status === 1) {
+        // ===== 用户选择了主分类 → 显示子分类页 =====
+        if (mode === 1) {
+            selectedCategory = selection; // 仅在前进时更新分类选择（后退时保留原值）
+        }
+        if (selectedCategory === -1 || !SUB_MENUS[selectedCategory]) {
+            cm.dispose();
+            return;
+        }
+        cm.sendSimple(buildSubPage(selectedCategory));
+    } else if (status === 2) {
+        // ===== 用户选择了子分类中的项目 → 执行 =====
+        if (selection === 9999) {
+            // "返回主菜单"选项（用9999避免与真实选项ID冲突）
+            status = -1;
+            selectedCategory = -1;
+            action(1, 0, 0);
+            return;
+        }
         doSelect(selection);
     } else {
         cm.dispose();
     }
 }
 
+// ======================== 页面构建函数 ========================
+
 /**
- * 红色选项
- * @param idNum
- * @param text
- * @returns {string}
+ * 构建主分类页（状态0）
+ * 显示玩家信息 + 8个分类入口
  */
-function redSelect(idNum, text) {
-    return `#L${idNum}##r${text}#k#n#l`;
+function buildMainPage() {
+    var text = "";
+    // 标题
+    text += 翅膀左 + 翅膀中间 + 翅膀中间 + "\t\t#e欢迎来到  #r萧曳  #k冒险岛#n\t\t" + 翅膀中间 + 翅膀中间 + 翅膀右 + "\t" + changeLine;
+    // 玩家信息
+    text += buildHeaderInfo();
+    text += changeLine;
+    // 分类入口
+    var i, cat;
+    for (i = 0; i < CATEGORIES.length; i++) {
+        cat = CATEGORIES[i];
+        if (cat.gmOnly && !cm.getPlayer().isGM()) {
+            continue;
+        }
+        text += "#L" + cat.id + "#  " + (cat.icon || "") + " " + cat.label + " #l" + changeLine;
+    }
+    return text;
 }
 
 /**
- * 一般选项
- * @param idNum
- * @param text
- * @returns {string}
+ * 构建子分类页（状态1）
+ * @param catId 主分类ID
  */
-function generalSelect(idNum, text) {
-    return `#L${idNum}#${text}#l`;
+function buildSubPage(catId) {
+    var items = SUB_MENUS[catId];
+    if (!items) {
+        return "该分类暂无内容。";
+    }
+    var text = "#L9999#<< 返回主菜单#l" + changeLine + changeLine;
+    var i, it;
+    for (i = 0; i < items.length; i++) {
+        it = items[i];
+        if (it.red) {
+            text += "#L" + it.id + "##r" + it.label + "#k#l";
+        } else {
+            text += "#L" + it.id + "#" + it.label + "#l";
+        }
+        // 每行放2个
+        if (i % 2 === 1 && i < items.length - 1) {
+            text += changeLine;
+        } else if (i < items.length - 1) {
+            text += "\t";
+        }
+    }
+    return text;
 }
+
+/**
+ * 构建顶部玩家信息栏
+ */
+function buildHeaderInfo() {
+    var cashShop = cm.getPlayer().getCashShop();
+    var onlineMs = cm.getOnlineTime();
+    var timeStr;
+    if (onlineMs < 3600) {
+        timeStr = "在线时间：#e#r" + Math.floor(onlineMs / 60) + "#k#n 分钟";
+    } else {
+        var hour = Math.floor(onlineMs / 3600);
+        var min = Math.floor((onlineMs % 3600) / 60);
+        timeStr = "在线时间：#e#r" + hour + "#k#n 小时 #e#r" + min + "#k#n 分钟";
+    }
+    var info = "";
+    info += "\t" + 正方箭头 + " 点券：" + fmtNum(cashShop.getCash(1)) + "\t\t\t\t" + timeStr + changeLine;
+    info += "\t" + 正方箭头 + " 抵用：" + fmtNum(cashShop.getCash(2)) + "\t\t\t\t" + 正方箭头 + " 信用：" + fmtNum(cashShop.getCash(4)) + changeLine;
+    info += "\t" + 正方箭头 + " 金币：" + fmtNum(cm.getPlayer().getMeso()) + changeLine;
+    return info;
+}
+
+/**
+ * 数字格式化（兼容GraalJS，Intl可能不可用）
+ */
+function fmtNum(n) {
+    try {
+        return new Intl.NumberFormat().format(n);
+    } catch (e) {
+        return String(n);
+    }
+}
+
+// ======================== 选择执行 ========================
 
 function doSelect(selection) {
     switch (selection) {
-        // 非GM功能
-        case 999:
-            openNpc("测试脚本");
-            break;
-        case 69:
-            openNpc("快速转职");
-            break;
-        case 70:
-            openNpc("技能学习");
-            break;
-        case 71:
-            openNpc("万能传送");
-            break;
-        case 72:
-            openNpc("转世重生");
-            break;
-        case 0:
-            openNpc("新人福利");
-            break;
-        case 73:
-            openNpc("新人问问");
-            break;
-        case 1:
-            openNpc("每日签到");
-            break;
-        case 2:
-            openNpc("在线奖励_nextlevel");
-            break;
-        case 3:
-            cm.getPlayer().saveLocation("FREE_MARKET");
-            cm.warp(910000000, "out00");
-            break;
-        case 11:
-            // 传送到匠人街
-            cm.getPlayer().saveLocationOnWarp();
-            cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 匠人街");
-            cm.warp(910001000);
-            cm.dispose();
-
-            break;
-        case 4:
-            openNpc("当前地图掉落");
-            break;
-        case 62:
-            cm.dispose();
-            cm.openShopNPC(9900001);
-            cm.dispose();
-            break;
-        // cm.openShopNPC(9201099); //便利商店
-        // cm.dispose();
-        // break;
-        case 63:
-            openNpc("Salon");
-            break;
-        case 64:
-            openNpc("UI查询");
-            break;
-        case 65:
-            openNpc("一键删除道具");
-            break;
-        case 66:
-            openNpc("一键刷道具");
-            break;
-        case 67:
-            openNpc("Example1")
-            break;
-        case 68:
-            openNpc("Example2")
-            break;
-        case 104:
-            openNpc("装备强化");
-            break;
-        case 111:
-            openNpc("xy/装备系统/v002/戒指中心");
-            break;
-        case 112:
-            openNpc("等级奖励");
-            break;
-        case 113:
-            openNpc("新手礼包");
-            break;
-        case 150:
-            openNpc("xy/副本/副本传送");
-            break;
-        case 160:
-            openNpc("快捷商店");
-            break;
-        case 165:
-            openNpc("xy/other/卷轴中心");
-            break;
-        case 166:
-            openNpc("xy/仓库");
-            break;
-        case 167:
-            openNpc("xy/other/物品兑换");
-            break;
-        case 168:
-            openNpc("xy/other/金币赌博");
-            break;
-        case 169:
-            openNpc("xy/other/金币抽奖");
-            break;
-        case 170:
-            openNpc("xy/other/道具抽奖");
-            break;
-        case 171:
-            openNpc("xy/other/枫叶兑换");
-            break;
-        case 172:
-            openNpc("xy/other/答题");
-            break;
-        case 173:
-            openNpc("xy/other/精美时装");
-            break;
-        case 174:
-            openNpc("xy/other/皇家发型");
-            break;
-        case 175:
-            openNpc("xy/gm/物品兑换");
-            break;
-        case 176:
-            openNpc("xy/other/益智答题");
-            break;
-        case 177:
-            openNpc("xy/other/发色选择");
-            break;
-        case 508:
-            openNpc("xy/装备系统/v002/套服进阶");
-            break;
-        case 509:
-            openNpc("xy/other/时装升星");
-            break;
-        case 510:
-            openNpc("xy/other/一键回收");
-            break;
-        case 511:
-            openNpc("xy/other/口令礼包");
-            break;
-        case 178:
-            openNpc("xy/other/现金商店");
-            break;
-        case 179:
-            openNpc("xy/other/银行系统");
-            break;
-        case 180:
-            openNpc("xy/games/小游戏中心");
-            break;
-        case 181:
-            openNpc("xy/other/椅子抽奖");
-            break;
-        case 200:
-            openNpc("xy/day/每日探索");
-            break;
-        case 201:
-            openNpc("xy/day/每日副本");
-            break;
-        case 202:
-            openNpc("xy/day/每日跑环");
-            break;
-        case 203:
-            openNpc("xy/day/跑环仓库");
-            break;
-        case 204:
-            openNpc("xy/day/每日副本");
-            break;
-        case 205:
-            openNpc("xy/day/每日Boss");
-            break;
-        case 206:
-            openNpc("xy/day/每日双倍领取");
-            break;
-        case 300:
-            openNpc("xy/mentor/师徒系统");
-            break;
-        case 310:
-            openNpc("xy/collect/卡片收集");
-            break;
-        case 311:
-            openNpc("xy/卡片收集");
-            break;
-        case 301:
-            openNpc("xy/collect/玩具收集");
-            break;
-        case 302:
-            openNpc("xy/技能学习");
-            break;
-        case 303:
-            openNpc("xy/强化戒指");
-            break;
-        case 304:
-            openNpc("xy/钓鱼中心");
-            break;
-        case 305:
-            openNpc("xy/小鱼戒指");
-            break;
-        case 306:
-            openNpc("xy/家族系统");
-            break;
-        case 220:
-            openNpc("xy/boss/高级BOSS");
-            break;
-        case 221:
-            openNpc("xy/挑战/9031000_远征");
-            break;
-        case 500:
-            openNpc("xy/装备系统/v000/套装制作升级");
-            break;
-        case 502:
-            openNpc("xy/天赋学习");
-            break;
-        case 503:
-            openNpc("xy/经验戒指");
-            break;
-        case 504:
-            openNpc("xy/时装洗练");
-            break;
-        case 505:
-            openNpc("xy/翅膀称号");
-            break;
-        case 506:
-            openNpc("xy/血衣合成");
-            break;
-        case 507:
-            openNpc("xy/装备系统/v002/武器中心");
-            break;
-        case 600:
-            openNpc("xy/vip/会员中心");
-            break;
-        case 602:
-            openNpc("xy/vip/会员商店");
-            break;
-        case 603:
-            openNpc("xy/vip/赞助中心");
-            break;
-        case 604:
-            openNpc("xy/all/全服双倍");
-            break;
-        case 605:
-            openNpc("xy/all/全服双爆");
-            break;
-        case 606:
-            openNpc("xy/other/时装洗练");
-            break;
-        case 607:
-            openNpc("xy/一键出售");
-            break;
-        case 607:
-            openNpc("xy/other/CDK_兑换");
-            break;
-        case 608:
-            openNpc("xy/vip/CDK_兑换");
-            break;
-        case 900:
-            openNpc("xy/gm/发送公告");
-            break;
-        case 901:
-            openNpc("xy/gm/巡查面板");
-            break;
-        case 902:
-            openNpc("xy/gm/召唤野外BOSS");
-            break;
-        case 903:
-            openNpc("xy/gm/封禁");
-            break;
-        case 904:
-            openNpc("xy/gm/在线玩家");
-            break;
-        case 905:
-            openNpc("xy/gm/物品查询");
-            break;
-        case 906:
-            openNpc("xy/gm/虚空索物");
-            break;
-        case 907:
-            openNpc("xy/gm/任意门");
-            break;
-        case 990:
-            cm.openShopNPC(9900001);
-            cm.dispose();
-            break;
+        case 999: openNpc("测试脚本"); break;
+        case 69:  openNpc("快速转职"); break;
+        case 70:  openNpc("技能学习"); break;
+        case 71:  openNpc("万能传送"); break;
+        case 72:  openNpc("转世重生"); break;
+        case 0:   openNpc("新人福利"); break;
+        case 73:  openNpc("新人问问"); break;
+        case 1:   openNpc("每日签到"); break;
+        case 2:   openNpc("在线奖励_nextlevel"); break;
+        case 3:   cm.getPlayer().saveLocation("FREE_MARKET"); cm.warp(910000000, "out00"); break;
+        case 11:  cm.getPlayer().saveLocationOnWarp(); cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 匠人街"); cm.warp(910001000); cm.dispose(); break;
+        case 4:   openNpc("当前地图掉落"); break;
+        case 62:  cm.dispose(); cm.openShopNPC(9900001); break;
+        case 63:  openNpc("Salon"); break;
+        case 64:  openNpc("UI查询"); break;
+        case 65:  openNpc("一键删除道具"); break;
+        case 66:  openNpc("一键刷道具"); break;
+        case 67:  openNpc("Example1"); break;
+        case 68:  openNpc("Example2"); break;
+        case 104: openNpc("装备强化"); break;
+        case 111: openNpc("xy/装备系统/v002/戒指中心"); break;
+        case 112: openNpc("等级奖励"); break;
+        case 113: openNpc("新手礼包"); break;
+        case 150: openNpc("xy/副本/副本传送"); break;
+        case 160: openNpc("快捷商店"); break;
+        case 165: openNpc("xy/other/卷轴中心"); break;
+        case 166: openNpc("xy/仓库"); break;
+        case 167: openNpc("xy/other/物品兑换"); break;
+        case 168: openNpc("xy/other/金币赌博"); break;
+        case 169: openNpc("xy/other/金币抽奖"); break;
+        case 170: openNpc("xy/other/道具抽奖"); break;
+        case 171: openNpc("xy/other/枫叶兑换"); break;
+        case 172: openNpc("xy/other/答题"); break;
+        case 173: openNpc("xy/other/精美时装"); break;
+        case 174: openNpc("xy/other/皇家发型"); break;
+        case 175: openNpc("xy/gm/物品兑换"); break;
+        case 176: openNpc("xy/other/益智答题"); break;
+        case 177: openNpc("xy/other/发色选择"); break;
+        case 178: openNpc("xy/other/现金商店"); break;
+        case 179: openNpc("xy/other/银行系统"); break;
+        case 180: openNpc("xy/games/小游戏中心"); break;
+        case 181: openNpc("xy/other/椅子抽奖"); break;
+        case 200: openNpc("xy/day/每日探索"); break;
+        case 201: openNpc("xy/day/每日副本"); break;
+        case 202: openNpc("xy/day/每日跑环"); break;
+        case 203: openNpc("xy/day/跑环仓库"); break;
+        case 204: openNpc("xy/day/每日副本"); break;
+        case 205: openNpc("xy/day/每日Boss"); break;
+        case 206: openNpc("xy/day/每日双倍领取"); break;
+        case 220: openNpc("xy/boss/高级BOSS"); break;
+        case 221: openNpc("xy/挑战/9031000_远征"); break;
+        case 300: openNpc("xy/mentor/师徒系统"); break;
+        case 301: openNpc("xy/collect/玩具收集"); break;
+        case 302: openNpc("xy/技能学习"); break;
+        case 303: openNpc("xy/强化戒指"); break;
+        case 304: openNpc("xy/钓鱼中心"); break;
+        case 305: openNpc("xy/小鱼戒指"); break;
+        case 306: openNpc("xy/家族系统"); break;
+        case 310: openNpc("xy/collect/卡片收集"); break;
+        case 311: openNpc("xy/卡片收集"); break;
+        case 400: openNpc("xy/mentor/师徒系统"); break;
+        case 401: openNpc("xy/家族系统"); break;
+        case 500: openNpc("xy/装备系统/v000/套装制作升级"); break;
+        case 502: openNpc("xy/天赋学习"); break;
+        case 503: openNpc("xy/经验戒指"); break;
+        case 504: openNpc("xy/时装洗练"); break;
+        case 505: openNpc("xy/翅膀称号"); break;
+        case 506: openNpc("xy/血衣合成"); break;
+        case 507: openNpc("xy/装备系统/v002/武器中心"); break;
+        case 508: openNpc("xy/装备系统/v002/套服进阶"); break;
+        case 509: openNpc("xy/other/时装升星"); break;
+        case 510: openNpc("xy/other/一键回收"); break;
+        case 511: openNpc("xy/other/口令礼包"); break;
+        case 600: openNpc("xy/vip/会员中心"); break;
+        case 602: openNpc("xy/vip/会员商店"); break;
+        case 603: openNpc("xy/vip/赞助中心"); break;
+        case 604: openNpc("xy/all/全服双倍"); break;
+        case 605: openNpc("xy/all/全服双爆"); break;
+        case 606: openNpc("xy/other/时装洗练"); break;
+        case 607: openNpc("xy/一键出售"); break;
+        case 608: openNpc("xy/vip/CDK_兑换"); break;
+        case 900: openNpc("xy/gm/发送公告"); break;
+        case 901: openNpc("xy/gm/巡查面板"); break;
+        case 902: openNpc("xy/gm/召唤野外BOSS"); break;
+        case 903: openNpc("xy/gm/封禁"); break;
+        case 904: openNpc("xy/gm/在线玩家"); break;
+        case 905: openNpc("xy/gm/物品查询"); break;
+        case 906: openNpc("xy/gm/虚空索物"); break;
+        case 907: openNpc("xy/gm/任意门"); break;
+        case 990: cm.dispose(); cm.openShopNPC(9900001); break;
         default:
             cm.sendOk("该功能暂不支持，敬请期待！");
             cm.dispose();
