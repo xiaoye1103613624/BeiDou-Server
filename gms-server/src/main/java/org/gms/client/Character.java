@@ -92,6 +92,7 @@ import org.gms.util.*;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.alibaba.fastjson2.JSONObject;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -1885,13 +1886,18 @@ public class Character extends AbstractCharacterObject {
         if (getMap(to.getId(), true) == null) return; //判断地图不存在则直接返回并发送提示消息。
 
         this.mapTransitioning.set(true);
-        // 显式清空“传送距离校验上下文”，避免跨图后旧上下文残留
+        // 显式清空”传送距离校验上下文”，避免跨图后旧上下文残留
         clearTeleportDistanceContext();
 
         this.unregisterChairBuff();
         this.clearBanishPlayerData();
         Trade.cancelTrade(this, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         this.closePlayerInteractions();
+
+        // 当玩家离开地图时，如果启用了吸怪则关闭
+        if (this.mobVacuumTask != null) {
+            this.stopMobVacuum();
+        }
 
         Party e = null;
         if (this.getParty() != null && this.getParty().getEnemy() != null) {
@@ -5280,7 +5286,10 @@ public class Character extends AbstractCharacterObject {
     public void resyncDisplayDamageCap() {
         byte hpAlert = GameConfig.getServerBoolean("use_server_auto_pot") ? hpMpAlertService.getHpAlert(getId()) : 0;
         byte mpAlert = GameConfig.getServerBoolean("use_server_auto_pot") ? hpMpAlertService.getMpAlert(getId()) : 0;
-        sendPacket(PacketCreator.updateClientSettings(hpAlert, mpAlert, getDisplayDamageCap()));
+        long cap = getDisplayDamageCap();
+        log.info("[破功同步] 玩家={}, extraDamageCap={}, displayDamageCap={}, hpAlert={}, mpAlert={}",
+                getName(), extraDamageCap.get(), cap, hpAlert, mpAlert);
+        sendPacket(PacketCreator.updateClientSettings(hpAlert, mpAlert, cap));
     }
 
     /** 汇总当前穿戴装备的伤害加成配置(不缓存，配置量小，按需计算) */
@@ -6747,7 +6756,9 @@ public class Character extends AbstractCharacterObject {
         chr.setRemainingSp(remainingSps);
         chr.setMeso(charactersDO.getMeso());
         chr.setMoney(charactersDO.getMoney() != null ? charactersDO.getMoney() : 0);
-        chr.setExtraDamageCap(charactersDO.getExtraDamageCap() != null ? charactersDO.getExtraDamageCap() : 0L);
+        Long dbExtraCap = charactersDO.getExtraDamageCap();
+        chr.setExtraDamageCap(dbExtraCap != null ? dbExtraCap : 0L);
+        log.info("[破功加载] 玩家={}, DB值={}, 实际加载={}", charactersDO.getName(), dbExtraCap, chr.getExtraDamageCap());
         chr.setMerchantMeso(charactersDO.getMerchantmesos());
         chr.setGMLevel(charactersDO.getGm());
         chr.setSkinColor(SkinColor.getById(charactersDO.getSkincolor()));
@@ -9843,6 +9854,94 @@ public class Character extends AbstractCharacterObject {
             pendantOfSpirit = null;
         }
         pendantExp = 0;
+    }
+
+    /**
+     * 获取装备在指定位置的自定义属性值
+     *
+     * @param position 背包位置
+     * @param key 属性键名
+     * @return 属性值，不存在返回null
+     */
+    public Object getEquipCustomAttr(short position, String key) {
+        Inventory inv = getInventory(InventoryType.EQUIP);
+        Item item = inv.getItem(position);
+        if (item instanceof Equip equip) {
+            String customProps = equip.getCustomProperties();
+            if (customProps != null && !customProps.isEmpty()) {
+                try {
+                    JSONObject json = JSONObject.parseObject(customProps);
+                    return json.get(key);
+                } catch (Exception e) {
+                    // JSON解析失败，返回null
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 设置装备在指定位置的自定义属性值
+     *
+     * @param position 背包位置
+     * @param key 属性键名
+     * @param value 属性值
+     */
+    public void setEquipCustomAttr(short position, String key, Object value) {
+        Inventory inv = getInventory(InventoryType.EQUIP);
+        Item item = inv.getItem(position);
+        if (item instanceof Equip equip) {
+            try {
+                JSONObject json;
+                String customProps = equip.getCustomProperties();
+                if (customProps != null && !customProps.isEmpty()) {
+                    json = JSONObject.parseObject(customProps);
+                } else {
+                    json = new JSONObject();
+                }
+                json.put(key, value);
+                equip.setCustomProperties(json.toJSONString());
+            } catch (Exception e) {
+                // JSON操作失败，记录日志
+                LoggerFactory.getLogger(Character.class).error("设置装备自定义属性失败", e);
+            }
+        }
+    }
+
+    /**
+     * 删除装备在指定位置的自定义属性
+     *
+     * @param position 背包位置
+     * @param key 属性键名
+     */
+    public void removeEquipCustomAttr(short position, String key) {
+        Inventory inv = getInventory(InventoryType.EQUIP);
+        Item item = inv.getItem(position);
+        if (item instanceof Equip equip) {
+            String customProps = equip.getCustomProperties();
+            if (customProps != null && !customProps.isEmpty()) {
+                try {
+                    JSONObject json = JSONObject.parseObject(customProps);
+                    json.remove(key);
+                    equip.setCustomProperties(json.toJSONString());
+                } catch (Exception e) {
+                    // JSON操作失败，记录日志
+                }
+            }
+        }
+    }
+
+    /**
+     * 清空装备在指定位置的所有自定义属性
+     *
+     * @param position 背包位置
+     */
+    public void clearEquipCustomAttr(short position) {
+        Inventory inv = getInventory(InventoryType.EQUIP);
+        Item item = inv.getItem(position);
+        if (item instanceof Equip equip) {
+            equip.setCustomProperties(null);
+        }
     }
 
     private Collection<Item> getUpgradeableEquipList() {
