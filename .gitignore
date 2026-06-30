@@ -33,6 +33,19 @@ database/docker-pg-db-data
 main/resources/static/
 src/main/resources/static/
 .claude/settings.local.json
+
+# Temp & backup files
+*.bak
+*.pyc
+__pycache__/
+.agents/
+
+# Log files（排除日志，但保留logback配置）
+*.log
+!/gms-server/src/main/resources/logback-spring.xml
+
+# Server runtime logs
+/gms-server/server.log
 /gms-ui/package-lock.json
 /proxy/deepseek_proxy.py
 /odinms_decompiled/net/sf/odinms/client/anticheat/CheatingOffense.java
