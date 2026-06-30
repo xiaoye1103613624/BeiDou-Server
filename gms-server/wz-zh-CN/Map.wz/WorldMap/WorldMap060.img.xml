@@ -2,6 +2,7 @@
 <imgdir name="WorldMap060.img" indent="2" media="NONE">
   <imgdir name="info">
     <string name="parentMap" value="WorldMap"/>
+    <string name="WorldMap" value="WorldMap060"/>
   </imgdir>
   <imgdir name="BaseImg">
     <canvas name="0" format="1" scale="0">
@@ -163,11 +164,12 @@
     </imgdir>
     <imgdir name="21">
       <vector name="spot" x="-177" y="171"/>
-      <string name="title" value="Red-Nose Pirate Den 2"/>
-      <string name="desc" value="A mini dungeon where you can hunt alone or with your party members. There is a portal that leads to the #cPillage of Treasure Island#."/>
       <int name="type" value="1"/>
+      <string name="title" value="红鼻子海盗团老巢2"/>
+      <string name="desc" value="存在着可以尽情打猎的迷你地图, 通往#c宝岛掠夺#的传送门，在特定活动期间就会开放。"/>
       <imgdir name="mapNo">
         <int name="0" value="251010402"/>
+        <int name="1" value="251010410"/>
       </imgdir>
       <canvas name="path" format="1" scale="0">
         <vector name="origin" x="180" y="-138"/>
@@ -243,6 +245,56 @@
       <imgdir name="mapNo">
         <int name="0" value="250010304"/>
       </imgdir>
+    </imgdir>
+    <imgdir name="32">
+      <vector name="spot" x="161" y="-101"/>
+      <int name="type" value="4"/>
+      <imgdir name="mapNo">
+        <int name="0" value="250000100"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="33">
+      <vector name="spot" x="212" y="87"/>
+      <int name="type" value="4"/>
+      <imgdir name="mapNo">
+        <int name="0" value="251000100"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="34">
+      <vector name="spot" x="-13" y="57"/>
+      <int name="type" value="1"/>
+      <imgdir name="mapNo">
+        <int name="0" value="252000000"/>
+        <int name="1" value="252010000"/>
+        <int name="2" value="252010100"/>
+        <int name="3" value="252010200"/>
+        <int name="4" value="252010300"/>
+        <int name="5" value="252020000"/>
+        <int name="6" value="252020100"/>
+        <int name="7" value="252020200"/>
+        <int name="8" value="252020300"/>
+        <int name="9" value="252020400"/>
+        <int name="10" value="252020500"/>
+        <int name="11" value="252020600"/>
+        <int name="12" value="252020700"/>
+        <int name="13" value="252030000"/>
+        <int name="14" value="252030001"/>
+        <int name="15" value="252030100"/>
+        <int name="16" value="925120000"/>
+        <int name="17" value="925120100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="MapLink">
+    <imgdir name="0">
+      <imgdir name="link">
+        <string name="linkMap" value="WorldMap061"/>
+        <canvas name="linkImg" format="1" scale="0">
+          <vector name="origin" x="58" y="-8"/>
+          <int name="z" value="1"/>
+        </canvas>
+      </imgdir>
+      <string name="toolTip" value="黄金寺院"/>
     </imgdir>
   </imgdir>
 </imgdir>

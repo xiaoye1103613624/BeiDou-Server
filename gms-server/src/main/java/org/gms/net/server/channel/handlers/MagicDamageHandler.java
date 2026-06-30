@@ -70,6 +70,8 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
 
         int charge = (attack.skill == Evan.FIRE_BREATH || attack.skill == Evan.ICE_BREATH || attack.skill == FPArchMage.BIG_BANG || attack.skill == ILArchMage.BIG_BANG || attack.skill == Bishop.BIG_BANG) ? attack.charge : -1;
+        // 装备/套装伤害加成预应用到attack.allDamage，广播攻击包时其他玩家就能看到加成后的伤害
+        applyEquipDamageBonusToAttack(attack, chr);
         Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
 
         chr.getMap().broadcastMessage(chr, packet, false, true);

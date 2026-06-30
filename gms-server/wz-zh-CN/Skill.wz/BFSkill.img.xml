@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="BFSkill.img" indent="2" media="NONE">
   <imgdir name="0">
-    <string name="name" value="Cry"/>
-    <string name="desc" value="You cry at the Wolf, and it slows down as if it&apos;s in shock. "/>
+    <string name="name" value="비명"/>
+    <string name="desc" value="늑대에게 비명을 질렀다. 충격을 받은듯 이동속도가 느려졌다."/>
     <int name="mobSkillID" value="126"/>
     <int name="level" value="9"/>
     <int name="userCount" value="5"/>
@@ -10,8 +10,8 @@
     <string name="effect" value="Effect/BasicEff/ItemSkill/Success"/>
   </imgdir>
   <imgdir name="1">
-    <string name="name" value="Surprise Attack"/>
-    <string name="desc" value="You attack the Wolf. He should be momentarily stunned. "/>
+    <string name="name" value="반격"/>
+    <string name="desc" value="늑대를 습격했다. 잠시동안 정신을 차리지 못할것 같다."/>
     <int name="mobSkillID" value="123"/>
     <int name="level" value="14"/>
     <int name="userCount" value="2"/>
@@ -19,8 +19,8 @@
     <string name="effect" value="Effect/BasicEff/ItemSkill/Success"/>
   </imgdir>
   <imgdir name="2">
-    <string name="name" value="Great Confusion"/>
-    <string name="desc" value="The Sheep are in a state of confusion."/>
+    <string name="name" value="대혼란"/>
+    <string name="desc" value="양들이 혼란상태에 빠졌다."/>
     <int name="mobSkillID" value="132"/>
     <int name="level" value="4"/>
     <int name="userCount" value="6"/>
@@ -28,24 +28,24 @@
     <string name="effect" value="Effect/BasicEff/ItemSkill/Success"/>
   </imgdir>
   <imgdir name="3">
-    <string name="name" value="Sheep&apos;s Bell"/>
-    <string name="desc" value="The Wolves have slowed down."/>
+    <string name="name" value="양의 종"/>
+    <string name="desc" value="늑대의 속도가 느려졌다."/>
     <int name="mobSkillID" value="126"/>
     <int name="level" value="10"/>
     <int name="allMap" value="1"/>
     <int name="owner" value="0"/>
   </imgdir>
   <imgdir name="4">
-    <string name="name" value="Wolf&apos;s Bell"/>
-    <string name="desc" value="The Sheep are momentarily stunned."/>
+    <string name="name" value="늑대의 종"/>
+    <string name="desc" value="양들이 잠시동안 움직일 수 없게 되었다."/>
     <int name="mobSkillID" value="123"/>
     <int name="level" value="15"/>
     <int name="allMap" value="1"/>
     <int name="owner" value="1"/>
   </imgdir>
   <imgdir name="5">
-    <string name="name" value="Wolf&apos;s Threat"/>
-    <string name="desc" value="The Sheep have momentarily weakened."/>
+    <string name="name" value="늑대의 위협"/>
+    <string name="desc" value="양들이 잠시동안 허약상태에 빠진다."/>
     <int name="mobSkillID" value="122"/>
     <int name="level" value="12"/>
     <int name="allMap" value="1"/>

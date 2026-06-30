@@ -93,7 +93,7 @@ function action(mode, type, selection) {
         text += `\t${粉心.repeat(7)}\t 牛马每日 \t${粉心.repeat(7)}${changeLine}`;
         text += `${redSelect(1, "每日签到")}\t${redSelect(2, "在线奖励")}\t${generalSelect(200, "每日探索")}\t${redSelect(201, "每日副本")}${changeLine.repeat(2)}`;
         text += `${redSelect(202, "每日跑环")}\t${generalSelect(203, "跑环仓库")}\t${generalSelect(204, "每日副本")}\t${generalSelect(205, "每日BOSS")}${changeLine.repeat(2)}`;
-        text += `${redSelect(220, "高级BOSS")}\t${generalSelect(206, "双倍领取")}${changeLine.repeat(2)}`;
+        text += `${redSelect(220, "高级BOSS")}\t${redSelect(221, "远征BOSS")}\t${generalSelect(206, "双倍领取")}${changeLine.repeat(2)}`;
 
         text += changeLine.repeat(1);
         // =======================================收集功能============================================3
@@ -368,6 +368,9 @@ function doSelect(selection) {
             break;
         case 220:
             openNpc("xy/boss/高级BOSS");
+            break;
+        case 221:
+            openNpc("xy/挑战/9031000_远征");
             break;
         case 500:
             openNpc("xy/装备系统/v000/套装制作升级");

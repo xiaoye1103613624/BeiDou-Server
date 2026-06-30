@@ -8,8 +8,8 @@ function setup(eim, leaderid) {
     em.setProperty("leader", "true");
     var eim = em.newInstance("ChaosZakum");
     eim.setProperty("zakSummoned", "0");
-    //eim.createInstanceMap(280030001).resetFully();
-    eim.setInstanceMap(280030001).resetFully();
+    //eim.getInstanceMap(280030001).resetFully();
+    eim.getInstanceMap(280030001).resetFully();
     eim.startEventTimer(7200000); //1 hr 15 min
 //    eim.schedule("checkStart", 1200000); // 20 min
 

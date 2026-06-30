@@ -4,7 +4,7 @@
     <int name="boss" value="1"/>
     <int name="bodyAttack" value="1"/>
     <int name="level" value="56"/>
-    <int name="maxHP" value="30000"/>
+    <int name="maxHP" value="4800"/>
     <int name="maxMP" value="200"/>
     <int name="speed" value="0"/>
     <int name="PADamage" value="165"/>
@@ -12,8 +12,8 @@
     <int name="MADamage" value="180"/>
     <int name="MDDamage" value="180"/>
     <int name="acc" value="130"/>
-    <int name="eva" value="42"/>
-    <int name="exp" value="5600"/>
+    <int name="eva" value="999"/>
+    <int name="exp" value="180"/>
     <int name="undead" value="1"/>
     <int name="pushed" value="400"/>
     <float name="fs" value="10.0"/>
@@ -28,7 +28,7 @@
       </imgdir>
     </imgdir>
     <imgdir name="ban">
-      <string name="banMsg" value="As the Pentacle swayed in the shadows, you were brought to the Subway Ticketing Booth."/>
+      <string name="banMsg" value="影子中出现了魔法阵，一眨眼的功夫，就发现自己站在了地铁的卖票口。"/>
       <imgdir name="banMap">
         <imgdir name="0">
           <int name="field" value="103000100"/>
@@ -36,9 +36,6 @@
         </imgdir>
       </imgdir>
     </imgdir>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">

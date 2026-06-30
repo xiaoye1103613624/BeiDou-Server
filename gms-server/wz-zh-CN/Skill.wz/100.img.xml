@@ -80,6 +80,10 @@
           <string name="hs" value="h15"/>
           <int name="hp" value="45"/>
         </imgdir>
+        <imgdir name="17">
+          <string name="hs" value="h17"/>
+          <int name="hp" value="100"/>
+        </imgdir>
         <imgdir name="16">
           <string name="hs" value="h16"/>
           <int name="hp" value="50"/>
@@ -196,6 +200,10 @@
         <imgdir name="7">
           <string name="hs" value="h7"/>
           <int name="time" value="13"/>
+        </imgdir>
+        <imgdir name="9">
+          <string name="hs" value="h9"/>
+          <int name="time" value="2"/>
         </imgdir>
         <imgdir name="8">
           <string name="hs" value="h8"/>
@@ -337,6 +345,12 @@
           <int name="mpCon" value="15"/>
           <int name="pdd" value="38"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="time" value="600"/>
+          <int name="mpCon" value="15"/>
+          <int name="pdd" value="60"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="time" value="300"/>
@@ -362,6 +376,13 @@
         <int name="z" value="0"/>
       </canvas>
       <imgdir name="level">
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="12"/>
+          <int name="damage" value="380"/>
+          <int name="attackCount" value="2"/>
+          <int name="range" value="200"/>
+        </imgdir>
         <imgdir name="1">
           <string name="hs" value="h1"/>
           <int name="mpCon" value="4"/>
@@ -839,6 +860,14 @@
         <int name="z" value="0"/>
       </canvas>
       <imgdir name="level">
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="14"/>
+          <int name="damage" value="200"/>
+          <int name="range" value="200"/>
+          <int name="mobCount" value="6"/>
+          <int name="attackCount" value="2"/>
+        </imgdir>
         <imgdir name="1">
           <string name="hs" value="h1"/>
           <int name="hpCon" value="8"/>

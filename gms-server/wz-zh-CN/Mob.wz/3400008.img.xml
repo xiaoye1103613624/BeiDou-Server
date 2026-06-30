@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="3400008.img" indent="2" media="NONE">
   <imgdir name="info">
-    <int name="bodyAttack" value="1"/>
-    <int name="level" value="39"/>
-    <int name="maxHP" value="1800"/>
-    <int name="maxMP" value="100"/>
-    <int name="speed" value="-15"/>
-    <int name="PADamage" value="130"/>
-    <int name="PDDamage" value="125"/>
-    <int name="MADamage" value="135"/>
-    <int name="MDDamage" value="115"/>
-    <int name="acc" value="115"/>
-    <int name="eva" value="19"/>
-    <int name="exp" value="110"/>
-    <int name="undead" value="0"/>
-    <int name="pushed" value="250"/>
-    <float name="fs" value="10.0"/>
-    <int name="summonType" value="1"/>
     <int name="firstAttack" value="1"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="magic" value="1"/>
+      </imgdir>
+    </imgdir>
+    <int name="level" value="41"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="maxHP" value="2000"/>
+    <int name="maxMP" value="450"/>
+    <int name="speed" value="-15"/>
+    <int name="PADamage" value="209"/>
+    <int name="PDDamage" value="125"/>
+    <int name="PDRate" value="5"/>
+    <int name="MADamage" value="238"/>
+    <int name="MDDamage" value="115"/>
+    <int name="MDRate" value="5"/>
+    <int name="acc" value="63"/>
+    <int name="eva" value="13"/>
+    <int name="pushed" value="300"/>
+    <float name="fs" value="10.0"/>
+    <int name="exp" value="118"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="8"/>
+    <string name="mobType" value="4H"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">
@@ -126,9 +137,7 @@
           <string name="delay" value="120"/>
         </canvas>
       </imgdir>
-      <int name="type" value="0"/>
       <int name="attackAfter" value="900"/>
-      <int name="magic" value="1"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="51" y="88"/>

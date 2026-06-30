@@ -557,9 +557,8 @@ public class Monster extends AbstractLoadedLife {
         setMp(mp2Heal);
 
         if (hp > 0) {
-            int curHpForPacket = (int) Math.min(getHp(), Integer.MAX_VALUE);
-            int maxHpForPacket = (int) Math.min(getMaxHp(), Integer.MAX_VALUE);
-            getMap().broadcastMessage(PacketCreator.healMonster(getObjectId(), hp, curHpForPacket, maxHpForPacket));
+            // HP已改为long类型，直接传入healMonster，由PacketCreator内部做int范围缩放
+            getMap().broadcastMessage(PacketCreator.healMonster(getObjectId(), hp, (int) Math.min(getHp(), Integer.MAX_VALUE), (int) Math.min(getMaxHp(), Integer.MAX_VALUE)));
         }
 
         maxHpPlusHeal.addAndGet(hpHealed);
@@ -1869,7 +1868,7 @@ public class Monster extends AbstractLoadedLife {
 
     public final int getMobMaxHp() {
         if (ostats != null) {
-            return ostats.hp;
+            return (int) Math.min(ostats.hp, Integer.MAX_VALUE);
         }
         return (int) Math.min(stats.getHp(), Integer.MAX_VALUE);
     }

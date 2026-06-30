@@ -18,6 +18,7 @@
     <int name="life" value="90"/>
     <int name="chatBalloon" value="24"/>
     <int name="nameTag" value="26"/>
+    <int name="consumeHP" value="1"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -504,8 +505,8 @@
       <string name="command" value="c21"/>
       <int name="inc" value="2"/>
       <int name="prob" value="45"/>
-      <int name="l0" value="10"/>
-      <int name="l1" value="19"/>
+      <int name="l0" value="1"/>
+      <int name="l1" value="9"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="chat"/>
@@ -515,7 +516,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="arrogance"/>
+          <string name="act" value="chat"/>
           <string name="0" value="c21_f1"/>
           <string name="1" value="c21_f2"/>
         </imgdir>
@@ -525,8 +526,8 @@
       <string name="command" value="c22"/>
       <int name="inc" value="2"/>
       <int name="prob" value="55"/>
-      <int name="l0" value="20"/>
-      <int name="l1" value="29"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="chat"/>
@@ -538,7 +539,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="arrogance"/>
+          <string name="act" value="chat"/>
           <string name="0" value="c22_f1"/>
           <string name="1" value="c22_f2"/>
           <string name="2" value="c22_f3"/>
@@ -550,8 +551,8 @@
       <string name="command" value="c23"/>
       <int name="inc" value="2"/>
       <int name="prob" value="65"/>
-      <int name="l0" value="30"/>
-      <int name="l1" value="30"/>
+      <int name="l0" value="20"/>
+      <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="chat"/>
@@ -563,7 +564,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="arrogance"/>
+          <string name="act" value="chat"/>
           <string name="0" value="c23_f1"/>
           <string name="1" value="c23_f2"/>
           <string name="2" value="c23_f3"/>
@@ -575,8 +576,8 @@
       <string name="command" value="c24"/>
       <int name="inc" value="2"/>
       <int name="prob" value="75"/>
-      <int name="l0" value="10"/>
-      <int name="l1" value="19"/>
+      <int name="l0" value="30"/>
+      <int name="l1" value="30"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="nap"/>
@@ -598,8 +599,8 @@
       <string name="command" value="c25"/>
       <int name="inc" value="3"/>
       <int name="prob" value="40"/>
-      <int name="l0" value="20"/>
-      <int name="l1" value="29"/>
+      <int name="l0" value="1"/>
+      <int name="l1" value="9"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="nap"/>
@@ -621,8 +622,8 @@
       <string name="command" value="c26"/>
       <int name="inc" value="3"/>
       <int name="prob" value="55"/>
-      <int name="l0" value="30"/>
-      <int name="l1" value="30"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="nap"/>

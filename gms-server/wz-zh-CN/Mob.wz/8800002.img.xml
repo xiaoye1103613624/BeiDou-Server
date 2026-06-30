@@ -4,7 +4,7 @@
     <int name="bodyAttack" value="1"/>
     <int name="level" value="140"/>
     <int name="maxHP" value="110000000"/>
-    <int name="maxMP" value="40000"/>
+    <int name="maxMP" value="4000000"/>
     <int name="speed" value="0"/>
     <int name="PADamage" value="1080"/>
     <int name="PDDamage" value="1200"/>
@@ -66,8 +66,8 @@
         <int name="effectAfter" value="0"/>
       </imgdir>
     </imgdir>
-    <string name="defaultHP" value="Unknown"/>
-    <string name="defaultMP" value="Unknown"/>
+    <string name="defaultHP" value="無法查閱"/>
+    <string name="defaultMP" value="無法查閱"/>
     <imgdir name="default">
       <canvas name="0" format="1" scale="0">
         <vector name="origin" x="102" y="73"/>
@@ -851,6 +851,7 @@
       <int name="magic" value="1"/>
       <int name="deadlyAttack" value="1"/>
       <int name="doFirst" value="1"/>
+      <int name="interval" value="10000"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="192" y="410"/>

@@ -2,11 +2,12 @@
 <imgdir name="WorldMap050.img" indent="2" media="NONE">
   <imgdir name="info">
     <string name="parentMap" value="WorldMap"/>
+    <string name="WorldMap" value="WorldMap050"/>
   </imgdir>
   <imgdir name="BaseImg">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="320" y="235"/>
-      <int name="z" value="-1"/>
+      <int name="z" value="0"/>
     </canvas>
   </imgdir>
   <imgdir name="MapList">
@@ -21,9 +22,6 @@
         <int name="4" value="240000004"/>
         <int name="5" value="240000005"/>
         <int name="6" value="240000006"/>
-        <int name="7" value="240000100"/>
-        <int name="8" value="240000110"/>
-        <int name="9" value="240000111"/>
       </imgdir>
     </imgdir>
     <imgdir name="1">
@@ -157,8 +155,11 @@
     <imgdir name="19">
       <vector name="spot" x="134" y="-80"/>
       <int name="type" value="1"/>
+      <string name="title" value="冰火战场"/>
+      <string name="desc" value="存在着可以尽情打猎的迷你地图, 通往#c半人马的隐身处#的传送门，在特定活动期间就会开放。"/>
       <imgdir name="mapNo">
         <int name="0" value="240020500"/>
+        <int name="1" value="240020501"/>
       </imgdir>
       <canvas name="path" format="1" scale="0">
         <vector name="origin" x="-136" y="128"/>
@@ -261,8 +262,11 @@
     <imgdir name="33">
       <vector name="spot" x="-148" y="-68"/>
       <int name="type" value="1"/>
+      <string name="title" value="被遗忘的龙之巢穴"/>
+      <string name="desc" value="存在着可以尽情打猎的迷你地图, 通往#c复活的记忆#的传送门，在特定活动期间就会开放。"/>
       <imgdir name="mapNo">
         <int name="0" value="240040511"/>
+        <int name="1" value="240040800"/>
       </imgdir>
       <canvas name="path" format="1" scale="0">
         <vector name="origin" x="146" y="108"/>
@@ -272,8 +276,11 @@
     <imgdir name="34">
       <vector name="spot" x="-183" y="49"/>
       <int name="type" value="1"/>
+      <string name="title" value="遭破坏的龙之巢穴"/>
+      <string name="desc" value="存在着可以尽情打猎的迷你地图, 通往#c小蜥蜴保护区域#的传送门，在特定活动期间就会开放。"/>
       <imgdir name="mapNo">
         <int name="0" value="240040520"/>
+        <int name="1" value="240040900"/>
       </imgdir>
       <canvas name="path" format="1" scale="0">
         <vector name="origin" x="180" y="-6"/>
@@ -303,7 +310,9 @@
     </imgdir>
     <imgdir name="38">
       <vector name="spot" x="-53" y="-69"/>
+      <string name="title" value="生命之穴內部"/>
       <int name="type" value="2"/>
+      <int name="linkQuestID" value="1309"/>
       <imgdir name="mapNo">
         <int name="0" value="240050000"/>
         <int name="1" value="240050100"/>
@@ -321,9 +330,15 @@
         <int name="13" value="240060100"/>
         <int name="14" value="240060200"/>
       </imgdir>
+      <int name="noToolTip" value="1"/>
+      <canvas name="path" format="1" scale="0">
+        <vector name="origin" x="54" y="103"/>
+        <int name="z" value="2"/>
+      </canvas>
     </imgdir>
     <imgdir name="39">
       <vector name="spot" x="275" y="-141"/>
+      <string name="title" value="塔拉森林(未来之城)"/>
       <int name="type" value="2"/>
       <imgdir name="mapNo">
         <int name="0" value="240070000"/>
@@ -357,6 +372,62 @@
         <int name="28" value="240070602"/>
         <int name="29" value="240070603"/>
       </imgdir>
+      <int name="noToolTip" value="1"/>
+    </imgdir>
+    <imgdir name="40">
+      <vector name="spot" x="180" y="-171"/>
+      <int name="type" value="3"/>
+      <imgdir name="mapNo">
+        <int name="0" value="240000100"/>
+        <int name="1" value="240000110"/>
+        <int name="2" value="240000111"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="41">
+      <vector name="spot" x="180" y="-171"/>
+      <int name="type" value="4"/>
+      <imgdir name="mapNo">
+        <int name="0" value="240000100"/>
+        <int name="1" value="240000110"/>
+        <int name="2" value="240000111"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="42">
+      <vector name="spot" x="36" y="148"/>
+      <string name="title" value="克鲁瑟斯"/>
+      <int name="type" value="2"/>
+      <imgdir name="mapNo">
+        <int name="0" value="240090000"/>
+        <int name="1" value="240090100"/>
+        <int name="2" value="240090200"/>
+        <int name="3" value="240090300"/>
+        <int name="4" value="240090400"/>
+        <int name="5" value="240090500"/>
+        <int name="6" value="240090600"/>
+        <int name="7" value="240090700"/>
+        <int name="8" value="240090800"/>
+        <int name="9" value="240090801"/>
+        <int name="10" value="240091000"/>
+        <int name="11" value="240091100"/>
+        <int name="12" value="240091200"/>
+        <int name="13" value="240091300"/>
+        <int name="14" value="240091400"/>
+        <int name="15" value="240091500"/>
+        <int name="16" value="240091600"/>
+        <int name="17" value="240091601"/>
+        <int name="18" value="240092000"/>
+        <int name="19" value="240092100"/>
+        <int name="20" value="240092101"/>
+        <int name="21" value="240092200"/>
+        <int name="22" value="240092300"/>
+        <int name="23" value="240092400"/>
+        <int name="24" value="240093000"/>
+        <int name="25" value="240093100"/>
+        <int name="26" value="240093200"/>
+        <int name="27" value="240093300"/>
+        <int name="28" value="240093310"/>
+      </imgdir>
+      <int name="noToolTip" value="1"/>
     </imgdir>
   </imgdir>
   <imgdir name="MapLink">
@@ -368,7 +439,17 @@
           <int name="z" value="1"/>
         </canvas>
       </imgdir>
-      <string name="toolTip" value="Neo City"/>
+      <string name="toolTip" value="未来之城-行星城"/>
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="link">
+        <string name="linkMap" value="WorldMap052"/>
+        <canvas name="linkImg" format="1" scale="0">
+          <vector name="origin" x="30" y="-128"/>
+          <int name="z" value="1"/>
+        </canvas>
+      </imgdir>
+      <string name="toolTip" value="克鲁瑟斯"/>
     </imgdir>
   </imgdir>
 </imgdir>

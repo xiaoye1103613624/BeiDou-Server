@@ -13,6 +13,7 @@
       </imgdir>
       <string name="z" value="hairOverHead"/>
       <string name="_hash" value="6189b7a125eccf4080f1a13ba9c2a9caea5a4728e44c6f9dca931cfef508e702"/>
+      <string name="_outlink" value="Character/Hair/00034066.img/default/hairOverHead"/>
     </canvas>
     <canvas name="hair" format="2" scale="0">
       <vector name="origin" x="17" y="11"/>
@@ -21,6 +22,7 @@
       </imgdir>
       <string name="z" value="hair"/>
       <string name="_hash" value="ba50d2ad2e55f99f8f10330ba831dcf74bf03b45044b5a0ab8c5c2d9c03970e8"/>
+      <string name="_outlink" value="Character/Hair/00034066.img/default/hair"/>
     </canvas>
     <canvas name="hairBelowBody" format="2" scale="0">
       <vector name="origin" x="15" y="11"/>
@@ -29,6 +31,7 @@
       </imgdir>
       <string name="z" value="hairBelowBody"/>
       <string name="_hash" value="110c6af0ddf582765883b7c8b4376adc830f212cbf853ff16284bb293c903ef1"/>
+      <string name="_outlink" value="Character/Hair/00034066.img/default/hairBelowBody"/>
     </canvas>
   </imgdir>
   <imgdir name="backDefault">
@@ -39,6 +42,7 @@
       </imgdir>
       <string name="z" value="backHair"/>
       <string name="_hash" value="7ce280db47ed33711a877d8d3787ccf9d0ee8da9a337832a2269b321f6835c1f"/>
+      <string name="_outlink" value="Character/Hair/00034066.img/backDefault/backHair"/>
     </canvas>
     <canvas name="backHairBelowCap" format="2" scale="0">
       <vector name="origin" x="10" y="11"/>
@@ -47,6 +51,7 @@
       </imgdir>
       <string name="z" value="backHairBelowCap"/>
       <string name="_hash" value="b155be9e4e1c997c372d457f11cb4f664bea4618a7300906d186b1ceedc3c7d1"/>
+      <string name="_outlink" value="Character/Hair/00034066.img/backDefault/backHairBelowCap"/>
     </canvas>
   </imgdir>
   <imgdir name="walk1">
@@ -511,6 +516,7 @@
         </imgdir>
         <string name="z" value="hairOverHead"/>
         <string name="_hash" value="dbb76af430d5789ce8c1fa67534e6da25a5121ff28ec42bb126498a1e8eb247c"/>
+        <string name="_outlink" value="Character/Hair/00034066.img/proneStab/0/hairOverHead"/>
       </canvas>
       <canvas name="hair" format="2" scale="0">
         <vector name="origin" x="15" y="11"/>
@@ -518,7 +524,7 @@
           <vector name="brow" x="-1" y="1"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_inlink" value="default/hair"/>
+        <string name="_outlink" value="Character/Hair/00034066.img/default/hair"/>
       </canvas>
       <canvas name="hairBelowbody" format="2" scale="0">
         <vector name="origin" x="15" y="11"/>
@@ -526,7 +532,7 @@
           <vector name="brow" x="-1" y="1"/>
         </imgdir>
         <string name="z" value="hairBelowBody"/>
-        <string name="_inlink" value="default/hair"/>
+        <string name="_outlink" value="Character/Hair/00034066.img/default/hair"/>
       </canvas>
     </imgdir>
     <imgdir name="1">

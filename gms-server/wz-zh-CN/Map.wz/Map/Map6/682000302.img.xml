@@ -8,7 +8,7 @@
     <string name="bgm" value="BgmGL/HauntedHouse"/>
     <int name="returnMap" value="682000000"/>
     <string name="mapDesc" value=""/>
-    <int name="forcedReturn" value="999999999"/>
+    <int name="forcedReturn" value="682000000"/>
     <int name="hideMinimap" value="0"/>
     <int name="moveLimit" value="0"/>
     <string name="mapMark" value="Halloween"/>
@@ -97,6 +97,19 @@
       <int name="cy" value="279"/>
       <int name="rx0" value="-461"/>
       <int name="rx1" value="557"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="type" value="n"/>
+      <string name="id" value="9201076"/>
+      <int name="x" value="236"/>
+      <int name="y" value="266"/>
+      <int name="mobTime" value="0"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="4"/>
+      <int name="cy" value="279"/>
+      <int name="rx0" value="186"/>
+      <int name="rx1" value="286"/>
     </imgdir>
   </imgdir>
   <imgdir name="0">
@@ -635,6 +648,17 @@
       <int name="y" value="275"/>
       <int name="tm" value="682000300"/>
       <string name="tn" value="mr00"/>
+      <string name="script" value=""/>
+      <int name="hideTooltip" value="0"/>
+      <int name="delay" value="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="pn" value="cm00"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="211"/>
+      <int name="y" value="150"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
       <string name="script" value=""/>
       <int name="hideTooltip" value="0"/>
       <int name="delay" value="0"/>

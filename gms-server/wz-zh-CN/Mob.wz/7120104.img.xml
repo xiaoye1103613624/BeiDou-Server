@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="7120104.img" indent="2" media="NONE">
   <imgdir name="info">
+    <int name="level" value="120"/>
     <int name="bodyAttack" value="1"/>
-    <int name="level" value="71"/>
-    <int name="maxHP" value="15100"/>
-    <int name="maxMP" value="100"/>
-    <int name="speed" value="0"/>
-    <int name="PADamage" value="260"/>
+    <int name="maxHP" value="105000"/>
+    <int name="maxMP" value="3000"/>
+    <int name="PADamage" value="500"/>
     <int name="PDDamage" value="260"/>
-    <int name="MADamage" value="320"/>
+    <int name="PDRate" value="10"/>
+    <int name="MADamage" value="500"/>
     <int name="MDDamage" value="263"/>
-    <int name="acc" value="170"/>
-    <int name="eva" value="30"/>
-    <int name="exp" value="346"/>
-    <int name="undead" value="0"/>
-    <int name="pushed" value="1500"/>
+    <int name="MDRate" value="10"/>
+    <int name="acc" value="360"/>
+    <int name="eva" value="97"/>
+    <int name="pushed" value="600"/>
     <float name="fs" value="10.0"/>
+    <int name="exp" value="1940"/>
     <int name="summonType" value="1"/>
+    <int name="category" value="8"/>
+    <string name="mobType" value="1H"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">
@@ -118,6 +120,7 @@
       <int name="z" value="0"/>
       <vector name="head" x="-4" y="-46"/>
       <int name="delay" value="150"/>
+      <string name="source" value="Mob/7120104.img/hit1/0"/>
     </canvas>
     <canvas name="1" format="1" scale="0">
       <vector name="origin" x="25" y="60"/>

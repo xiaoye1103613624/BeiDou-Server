@@ -12,12 +12,12 @@
     <int name="VRBottom" value="530"/>
     <int name="VRRight" value="440"/>
     <string name="mapDesc" value=""/>
+    <int name="forcedReturn" value="999999999"/>
     <int name="hideMinimap" value="0"/>
     <int name="moveLimit" value="0"/>
     <string name="mapMark" value="PcZone"/>
+    <int name="fieldLimit" value="8192"/>
     <int name="swim" value="0"/>
-    <int name="fieldLimit" value="270972"/>
-    <int name="forcedReturn" value="193000000"/>
   </imgdir>
   <imgdir name="back">
     <imgdir name="0">
@@ -4803,14 +4803,6 @@
           <int name="prev" value="50"/>
           <int name="next" value="44"/>
         </imgdir>
-        <imgdir name="64">
-          <int name="x1" value="-220"/>
-          <int name="y1" value="600"/>
-          <int name="x2" value="-220"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="65"/>
-          <int name="next" value="68"/>
-        </imgdir>
         <imgdir name="65">
           <int name="x1" value="-220"/>
           <int name="y1" value="540"/>
@@ -4834,62 +4826,6 @@
           <int name="y2" value="540"/>
           <int name="prev" value="66"/>
           <int name="next" value="48"/>
-        </imgdir>
-        <imgdir name="68">
-          <int name="x1" value="-220"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="-180"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="64"/>
-          <int name="next" value="70"/>
-        </imgdir>
-        <imgdir name="69">
-          <int name="x1" value="-90"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="0"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="70"/>
-          <int name="next" value="71"/>
-        </imgdir>
-        <imgdir name="70">
-          <int name="x1" value="-180"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="-90"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="68"/>
-          <int name="next" value="69"/>
-        </imgdir>
-        <imgdir name="71">
-          <int name="x1" value="0"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="90"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="69"/>
-          <int name="next" value="72"/>
-        </imgdir>
-        <imgdir name="72">
-          <int name="x1" value="90"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="180"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="71"/>
-          <int name="next" value="73"/>
-        </imgdir>
-        <imgdir name="73">
-          <int name="x1" value="180"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="270"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="72"/>
-          <int name="next" value="74"/>
-        </imgdir>
-        <imgdir name="74">
-          <int name="x1" value="270"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="310"/>
-          <int name="y2" value="632"/>
-          <int name="prev" value="73"/>
-          <int name="next" value="80"/>
         </imgdir>
         <imgdir name="75">
           <int name="x1" value="310"/>
@@ -4930,14 +4866,6 @@
           <int name="y2" value="60"/>
           <int name="prev" value="86"/>
           <int name="next" value="91"/>
-        </imgdir>
-        <imgdir name="80">
-          <int name="x1" value="310"/>
-          <int name="y1" value="632"/>
-          <int name="x2" value="310"/>
-          <int name="y2" value="600"/>
-          <int name="prev" value="74"/>
-          <int name="next" value="94"/>
         </imgdir>
         <imgdir name="81">
           <int name="x1" value="310"/>

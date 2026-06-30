@@ -14,14 +14,6 @@
       <string name="z" value="hairOverHead"/>
       <string name="_hash" value="14225de0aad21a572d30a97efab7caf5cfc379438c680ac1cb091c11674acd83"/>
     </canvas>
-    <canvas name="hair" format="2" scale="0">
-      <vector name="origin" x="15" y="12"/>
-      <imgdir name="map">
-        <vector name="brow" x="0" y="0"/>
-      </imgdir>
-      <string name="z" value="hair"/>
-      <string name="_hash" value="da041f53f5eff0a384cc3137aa9239edd5ac9377b2129150bbd553ab99bf308c"/>
-    </canvas>
     <canvas name="hairBelowBody" format="2" scale="0">
       <vector name="origin" x="15" y="12"/>
       <imgdir name="map">
@@ -39,7 +31,7 @@
         <string name="z" value="hairShade"/>
         <string name="group" value="skin"/>
         <string name="_hash" value="4939dc771b4fadad0ec1158360182b1e9e7d68047e6f99f8cb2f4e4687974afe"/>
-        <string name="_outlink" value="Character/Hair/00043612.img/default/hairShade/0"/>
+        <string name="_outlink" value="Character/Hair/00041940.img/default/hairShade/0"/>
       </canvas>
       <uol name="1" value="0"/>
       <uol name="2" value="0"/>
@@ -49,6 +41,14 @@
       <uol name="10" value="0"/>
       <uol name="11" value="0"/>
     </imgdir>
+    <canvas name="hair" format="2" scale="0">
+      <vector name="origin" x="14" y="12"/>
+      <string name="z" value="hair"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="_hash" value="ff67f3b7f2d54724e336a514f6e5f8ae2fa95a596ebcf7e0dc8d91396fe5245b"/>
+    </canvas>
   </imgdir>
   <imgdir name="backDefault">
     <canvas name="backHair" format="2" scale="0">
@@ -616,7 +616,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_inlink" value="default/hair"/>
+        <string name="_hash" value="da041f53f5eff0a384cc3137aa9239edd5ac9377b2129150bbd553ab99bf308c"/>
       </canvas>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>

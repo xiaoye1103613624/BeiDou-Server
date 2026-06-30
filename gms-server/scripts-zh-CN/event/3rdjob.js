@@ -45,7 +45,7 @@ function playerEntry(eim, player) {
     var mapId = info[0];
     var returnMapId = info[1];
     var monsterId = info[2];
-    var map = eim.createInstanceMap(mapid);
+    var map = eim.getInstanceMap(mapid);
     map.toggleDrops();
 
     player.changeMap(map, map.getPortal(0));

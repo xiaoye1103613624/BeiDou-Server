@@ -3284,7 +3284,7 @@
     <int name="forcedReturn" value="211000001"/>
     <float name="mobRate" value="0.6999999"/>
     <string name="bgm" value="Bgm04/WarmRegard"/>
-    <string name="mapMark" value="Quest"/>
+    <string name="mapMark" value="None"/>
     <int name="hideMinimap" value="0"/>
     <int name="decHP" value="10"/>
     <float name="fs" value="0.2"/>
@@ -3293,7 +3293,7 @@
     <int name="VRLeft" value="-1170"/>
     <int name="VRBottom" value="383"/>
     <int name="VRRight" value="450"/>
-    <int name="fieldLimit" value="271096"/>
+    <int name="fieldLimit" value="8952"/>
   </imgdir>
   <imgdir name="foothold">
     <imgdir name="3">
@@ -4237,12 +4237,15 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="2">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
+      <string name="pn" value="out00"/>
+      <int name="pt" value="2"/>
       <int name="x" value="-364"/>
       <int name="y" value="-508"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
+      <int name="tm" value="211000000"/>
+      <string name="tn" value="in01"/>
+      <string name="script" value=""/>
+      <int name="hideTooltip" value="0"/>
+      <int name="delay" value="0"/>
     </imgdir>
     <imgdir name="3">
       <string name="pn" value="out01"/>
@@ -4251,7 +4254,7 @@
       <int name="y" value="-207"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="script" value="s4common1_exit"/>
+      <string name="script" value="s4common1_clear"/>
       <int name="hideTooltip" value="0"/>
       <int name="delay" value="0"/>
     </imgdir>

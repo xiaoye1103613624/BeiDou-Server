@@ -30,6 +30,9 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.WeaponType;
 import org.gms.client.status.MonsterStatusEffect;
+import org.gms.config.EquipDamageBonusManager;
+import org.gms.config.ExtraDamageConfigManager;
+import org.gms.config.SetDamageBonusManager;
 import org.gms.constants.skills.Outlaw;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
@@ -50,7 +53,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
     public final class SummonAttackEntry {
 
         private final int monsterOid;
-        private final int damage;
+        private int damage;
 
         public SummonAttackEntry(int monsterOid, int damage) {
             this.monsterOid = monsterOid;
@@ -63,6 +66,10 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
 
         public int getDamage() {
             return damage;
+        }
+
+        public void setDamage(int damage) {
+            this.damage = damage;
         }
 
     }
@@ -96,6 +103,29 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             int damage = p.readInt();
             allDamage.add(new SummonAttackEntry(monsterOid, damage));
         }
+        // 装备/套装伤害加成：预应用到召唤兽伤害值，使得广播包中其他玩家看到加成后的伤害
+        EquipDamageBonusManager.Bonus equipBonus = player.getEquipDamageBonus();
+        SetDamageBonusManager.Bonus setBonus = player.getSetDamageBonus();
+        int equipPct = 0;
+        long extraSegs = 0L;
+        if (equipBonus != EquipDamageBonusManager.Bonus.EMPTY || setBonus != SetDamageBonusManager.Bonus.EMPTY) {
+            equipPct = equipBonus.damagePct() + setBonus.damagePct();
+            // 检查第一个目标是否为Boss
+            if (!allDamage.isEmpty()) {
+                Monster firstTarget = player.getMap().getMonsterByOid(allDamage.get(0).getMonsterOid());
+                if (firstTarget != null && firstTarget.isBoss()) {
+                    equipPct += equipBonus.bossDamagePct() + setBonus.bossDamagePct();
+                }
+            }
+            extraSegs = equipBonus.extraSegments();
+            if (equipPct != 0) {
+                for (SummonAttackEntry entry : allDamage) {
+                    int boosted = (int) ((long) entry.getDamage() + (long) entry.getDamage() * equipPct / 100);
+                    entry.setDamage(boosted);
+                }
+            }
+        }
+
         player.getMap().broadcastMessage(player, PacketCreator.summonAttack(player.getId(), summon.getObjectId(), direction, allDamage), summon.getPosition());
 
         if (player.getMap().isOwnershipRestricted(player)) {
@@ -122,6 +152,19 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
                     }
                 }
                 player.getMap().damageMonster(player, target, damage);
+
+                // 装备加成额外段数：每段独立造成伤害
+                if (extraSegs > 0 && target.isAlive()) {
+                    for (long i = 0; i < extraSegs; i++) {
+                        player.getMap().damageMonster(player, target, damage);
+                    }
+                }
+
+                // 额外伤害（可配置，基于角色属性）
+                long extraDamage = ExtraDamageConfigManager.calcExtraDamage(player, damage);
+                if (extraDamage > 0 && target.isAlive()) {
+                    player.getMap().damageMonster(player, target, extraDamage);
+                }
             }
         }
 

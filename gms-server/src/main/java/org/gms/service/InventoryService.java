@@ -260,6 +260,7 @@ public class InventoryService {
                     .itemExp(obj.getInt("itemexp"))
                     .ringId(obj.getInt("ringid"))
                     .enhanceLevel(obj.containsKey("enhance_level") ? obj.getShort("enhance_level") : null)
+                    .customProperties(obj.containsKey("custom_properties") ? obj.getString("custom_properties") : null)
                     .build());
         }
         return rtnDTO;
@@ -321,6 +322,7 @@ public class InventoryService {
                         .itemExp(equip.getItemExp())
                         .ringId(equip.getRingId())
                         .enhanceLevel(equip.getEnhanceLevel())
+                        .customProperties(equip.getCustomProperties())
                         .build());
             }
             return rtnDTO;
@@ -387,6 +389,7 @@ public class InventoryService {
             if (equipment.getJump() != null) equip.setJump(equipment.getJump());
             if (equipment.getVicious() != null) equip.setVicious(equipment.getVicious());
             if (equipment.getEnhanceLevel() != null) equip.setEnhanceLevel(equipment.getEnhanceLevel());
+            if (equipment.getCustomProperties() != null) equip.setCustomProperties(equipment.getCustomProperties());
         }
         // 发送背包更新包通知客户端
         character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
@@ -427,6 +430,7 @@ public class InventoryService {
                             .speed(Optional.ofNullable(equipment.getSpeed()).map(Short::intValue).orElse(null))
                             .jump(Optional.ofNullable(equipment.getJump()).map(Short::intValue).orElse(null))
                             .vicious(Optional.ofNullable(equipment.getVicious()).map(Short::intValue).orElse(null))
+                            .customproperties(equipment.getCustomProperties())
                             .build(),
                     QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryitemsDO.getInventoryitemid())));
         }

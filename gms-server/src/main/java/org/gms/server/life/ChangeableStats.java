@@ -68,7 +68,7 @@ public class ChangeableStats extends OverrideMonsterStats {
         final double mod = (double) newLevel / (double) stats.getLevel();
         final double hpRatio = (double) stats.getHp() / (double) stats.getExp();
         final double pqMod = (pqMob ? 1.5 : 1.0);
-        hp = Math.min((int) Math.round((!stats.isBoss() ? GameConstants.getMonsterHP(newLevel) : (stats.getHp() * mod)) * pqMod), Integer.MAX_VALUE);
+        hp = Math.round((!stats.isBoss() ? GameConstants.getMonsterHP(newLevel) : (stats.getHp() * mod)) * pqMod); // 支持超过21.47亿的HP值
         exp = Math.min((int) Math.round((!stats.isBoss() ? (GameConstants.getMonsterHP(newLevel) / hpRatio) : (stats.getExp())) * pqMod), Integer.MAX_VALUE);
         mp = Math.min((int) Math.round(stats.getMp() * mod * pqMod), Integer.MAX_VALUE);
         watk = Math.min((int) Math.round(stats.getPADamage() * mod), Integer.MAX_VALUE);

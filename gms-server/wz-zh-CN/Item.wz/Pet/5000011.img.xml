@@ -15,9 +15,10 @@
     </canvas>
     <int name="hungry" value="4"/>
     <int name="cash" value="1"/>
-    <int name="chatBalloon" value="4"/>
-    <int name="nameTag" value="6"/>
     <int name="life" value="90"/>
+    <int name="pickupItem" value="1"/>
+    <int name="nameTag" value="6"/>
+    <int name="chatBalloon" value="4"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -35,7 +36,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="sleep"/>
+          <string name="act" value="stand1"/>
           <string name="0" value="c1_f1"/>
           <string name="1" value="c1_f2"/>
         </imgdir>
@@ -58,7 +59,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="sleep"/>
+          <string name="act" value="stand1"/>
           <string name="0" value="c2_f1"/>
           <string name="1" value="c2_f2"/>
           <string name="2" value="c2_f3"/>
@@ -83,7 +84,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="sleep"/>
+          <string name="act" value="stand1"/>
           <string name="0" value="c3_f1"/>
           <string name="1" value="c3_f2"/>
           <string name="2" value="c3_f3"/>
@@ -108,7 +109,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="sleep"/>
+          <string name="act" value="rise"/>
           <string name="0" value="c4_f1"/>
           <string name="1" value="c4_f2"/>
           <string name="2" value="c4_f3"/>
@@ -227,7 +228,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="angry"/>
+          <string name="act" value="rest0"/>
           <string name="0" value="c9_f1"/>
           <string name="1" value="c9_f2"/>
         </imgdir>
@@ -250,7 +251,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="angry"/>
+          <string name="act" value="scratch"/>
           <string name="0" value="c10_f1"/>
           <string name="1" value="c10_f2"/>
           <string name="2" value="c10_f3"/>
@@ -804,7 +805,7 @@
       <int name="l1" value="30"/>
       <imgdir name="success">
         <imgdir name="0">
-          <string name="act" value="play"/>
+          <string name="act" value="melong"/>
           <string name="0" value="c33_s1"/>
           <string name="1" value="c33_s2"/>
           <string name="2" value="c33_s3"/>
@@ -813,7 +814,7 @@
       </imgdir>
       <imgdir name="fail">
         <imgdir name="0">
-          <string name="act" value="rest0"/>
+          <string name="act" value="sulk"/>
           <string name="0" value="c33_f1"/>
           <string name="1" value="c33_f2"/>
           <string name="2" value="c33_f3"/>
@@ -841,7 +842,7 @@
           <string name="act" value="sulk"/>
           <string name="0" value="c34_f1"/>
           <string name="1" value="c34_f2"/>
-          <string name="2" value="c34_f3"/>
+          <string name="2" value="c34_3"/>
           <string name="3" value="c34_f4"/>
         </imgdir>
       </imgdir>
@@ -866,7 +867,7 @@
           <string name="act" value="sulk"/>
           <string name="0" value="c35_f1"/>
           <string name="1" value="c35_f2"/>
-          <string name="2" value="c35_f3"/>
+          <string name="2" value="c35_3"/>
           <string name="3" value="c35_f4"/>
         </imgdir>
       </imgdir>

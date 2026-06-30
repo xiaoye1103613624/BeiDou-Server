@@ -390,8 +390,17 @@ public class MapleMap {
         return returnMapId;
     }
 
+    /**
+     * 获取强制返回地图，若地图不存在则返回当前地图作为兜底
+     *
+     * @return 强制返回地图实例
+     */
     public MapleMap getForcedReturnMap() {
-        return getChannelServer().getMapFactory().getMap(forcedReturnMap);
+        if (forcedReturnMap == org.gms.constants.id.MapId.NONE) {
+            return this;
+        }
+        MapleMap ret = getChannelServer().getMapFactory().getMap(forcedReturnMap);
+        return ret != null ? ret : this;
     }
 
     public int getForcedReturnId() {

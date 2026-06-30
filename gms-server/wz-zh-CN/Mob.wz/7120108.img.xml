@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="7120108.img" indent="2" media="NONE">
   <imgdir name="info">
-    <int name="bodyAttack" value="1"/>
-    <int name="level" value="77"/>
-    <int name="maxHP" value="19000"/>
-    <int name="maxMP" value="160"/>
-    <int name="speed" value="0"/>
-    <int name="PADamage" value="325"/>
-    <int name="PDDamage" value="318"/>
-    <int name="MADamage" value="375"/>
-    <int name="MDDamage" value="400"/>
-    <int name="acc" value="168"/>
-    <int name="eva" value="22"/>
-    <int name="exp" value="462"/>
-    <int name="undead" value="0"/>
-    <int name="pushed" value="1520"/>
-    <float name="fs" value="10.0"/>
-    <int name="summonType" value="1"/>
     <imgdir name="speak">
       <imgdir name="con">
         <imgdir name="0">
@@ -28,6 +12,30 @@
       </imgdir>
       <int name="chatBalloon" value="0"/>
     </imgdir>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="type" value="0"/>
+      </imgdir>
+    </imgdir>
+    <int name="level" value="130"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="maxHP" value="135000"/>
+    <int name="maxMP" value="4000"/>
+    <int name="PADamage" value="600"/>
+    <int name="PDDamage" value="318"/>
+    <int name="PDRate" value="10"/>
+    <int name="MADamage" value="600"/>
+    <int name="MDDamage" value="400"/>
+    <int name="MDRate" value="10"/>
+    <int name="acc" value="423"/>
+    <int name="eva" value="115"/>
+    <int name="pushed" value="600"/>
+    <float name="fs" value="10.0"/>
+    <int name="exp" value="2379"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="8"/>
+    <string name="mobType" value="1N"/>
   </imgdir>
   <imgdir name="stand">
     <canvas name="0" format="1" scale="0">
@@ -135,8 +143,6 @@
         </canvas>
         <int name="attach" value="1"/>
       </imgdir>
-      <int name="type" value="0"/>
-      <int name="PADamage" value="325"/>
       <int name="attackAfter" value="640"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">

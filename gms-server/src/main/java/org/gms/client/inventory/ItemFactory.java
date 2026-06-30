@@ -175,6 +175,7 @@ public enum ItemFactory {
         // 特殊系统
         equip.setRingId(rs.getInt("ringid"));
         equip.setEnhanceLevel((short) rs.getInt("enhance_level"));
+        equip.setCustomProperties(rs.getString("custom_properties"));
 
         return equip;
     }
@@ -320,7 +321,7 @@ public enum ItemFactory {
 
                         // 装备类型需要额外插入inventoryequipment表
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                                 try (ResultSet rs = psItem.getGeneratedKeys()) {
                                     if (!rs.next()) {
                                         throw new RuntimeException("Inserting item failed.");
@@ -353,6 +354,7 @@ public enum ItemFactory {
                                 psEquip.setInt(22, equip.getItemExp());
                                 psEquip.setInt(23, equip.getRingId());
                                 psEquip.setInt(24, equip.getEnhanceLevel());
+                                psEquip.setString(25, equip.getCustomProperties());
                                 psEquip.executeUpdate();
                             }
                         }
@@ -507,7 +509,7 @@ public enum ItemFactory {
 
                 // 装备类型额外写入inventoryequipment表
                 if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, genKey);
 
                         Equip equip = (Equip) item;
@@ -534,6 +536,7 @@ public enum ItemFactory {
                         ps.setInt(22, equip.getItemExp());
                         ps.setInt(23, equip.getRingId());
                         ps.setInt(24, equip.getEnhanceLevel());
+                        ps.setString(25, equip.getCustomProperties());
                         ps.executeUpdate();
                     }
                 }

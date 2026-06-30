@@ -39,7 +39,7 @@ function setup(partyid) {
 
     var eim = em.newInstance(instanceName);
     // If there are more than 1 map for this, you'll need to do mapid + instancename
-    var map = eim.createInstanceMap(mapid);
+    var map = eim.getInstanceMap(mapid);
     map.toggleDrops();
 
     eim.setProperty("points", 0);

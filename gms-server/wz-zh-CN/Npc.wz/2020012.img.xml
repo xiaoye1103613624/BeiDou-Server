@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="2020012.img" indent="2" media="NONE">
-  <imgdir name="info"/>
-  <imgdir name="stand">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="85" y="87"/>
-    </canvas>
-  </imgdir>
   <imgdir name="act3110">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="85" y="123"/>
@@ -104,5 +98,15 @@
       <int name="delay" value="150"/>
     </canvas>
     <int name="special" value="1"/>
+  </imgdir>
+  <imgdir name="info">
+    <imgdir name="speak">
+      <string name="0" value="n0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="85" y="87"/>
+    </canvas>
   </imgdir>
 </imgdir>

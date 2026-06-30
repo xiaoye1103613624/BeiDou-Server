@@ -210,20 +210,6 @@
       <int name="moveTo" value="120000000"/>
     </imgdir>
   </imgdir>
-  <imgdir name="02030100">
-    <imgdir name="info">
-      <canvas name="icon" format="2" scale="0">
-        <vector name="origin" x="0" y="29"/>
-      </canvas>
-      <canvas name="iconRaw" format="2" scale="0">
-        <vector name="origin" x="0" y="29"/>
-      </canvas>
-      <int name="price" value="225"/>
-    </imgdir>
-    <imgdir name="spec">
-      <int name="moveTo" value="999999999"/>
-    </imgdir>
-  </imgdir>
   <imgdir name="02031000">
     <imgdir name="info">
       <canvas name="icon" format="1" scale="0">
@@ -324,6 +310,22 @@
       <int name="ignoreContinent" value="1"/>
     </imgdir>
   </imgdir>
+  <imgdir name="02032000">
+    <imgdir name="info">
+      <canvas name="icon" format="1" scale="0">
+        <vector name="origin" x="-3" y="33"/>
+      </canvas>
+      <canvas name="iconRaw" format="1" scale="0">
+        <vector name="origin" x="-3" y="33"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="notSale" value="1"/>
+      <int name="pquest" value="1"/>
+    </imgdir>
+    <imgdir name="spec">
+      <int name="randomMoveInFieldSet" value="1"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="02031006">
     <imgdir name="info">
       <canvas name="icon" format="1" scale="0">
@@ -362,36 +364,6 @@
       <int name="moveTo" value="140000000"/>
       <int name="returnMapQR" value="1057"/>
       <int name="ignoreContinent" value="1"/>
-    </imgdir>
-  </imgdir>
-  <imgdir name="02032000">
-    <imgdir name="info">
-      <canvas name="icon" format="1" scale="0">
-        <vector name="origin" x="-3" y="33"/>
-      </canvas>
-      <canvas name="iconRaw" format="1" scale="0">
-        <vector name="origin" x="-3" y="33"/>
-      </canvas>
-      <int name="price" value="1"/>
-      <int name="notSale" value="1"/>
-      <int name="pquest" value="1"/>
-    </imgdir>
-    <imgdir name="spec">
-      <int name="randomMoveInFieldSet" value="1"/>
-    </imgdir>
-  </imgdir>
-  <imgdir name="02030020">
-    <imgdir name="info">
-      <canvas name="icon" format="2" scale="0">
-        <vector name="origin" x="0" y="29"/>
-      </canvas>
-      <canvas name="iconRaw" format="2" scale="0">
-        <vector name="origin" x="0" y="29"/>
-      </canvas>
-      <int name="price" value="250"/>
-    </imgdir>
-    <imgdir name="spec">
-      <int name="moveTo" value="600000000"/>
     </imgdir>
   </imgdir>
 </imgdir>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9000034.img" indent="2" media="NONE">
-  <imgdir name="info"/>
+  <imgdir name="info">
+    <imgdir name="speak">
+      <string name="0" value="n0"/>
+      <string name="1" value="n1"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="stand">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="44" y="103"/>
@@ -114,7 +119,7 @@
       <string name="1" value="n1"/>
     </imgdir>
   </imgdir>
-  <imgdir name="shot">
+  <imgdir name="act1">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="44" y="103"/>
       <int name="delay" value="120"/>
@@ -163,5 +168,6 @@
       <vector name="origin" x="91" y="103"/>
       <int name="delay" value="90"/>
     </canvas>
+    <int name="special" value="1"/>
   </imgdir>
 </imgdir>

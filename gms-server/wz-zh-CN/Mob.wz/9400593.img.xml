@@ -2,17 +2,19 @@
 <imgdir name="9400593.img" indent="2" media="NONE">
   <imgdir name="info">
     <int name="bodyAttack" value="1"/>
-    <int name="level" value="130"/>
-    <int name="maxHP" value="233000000"/>
+    <int name="level" value="120"/>
+    <int name="maxHP" value="230000000"/>
     <int name="maxMP" value="20000000"/>
-    <int name="speed" value="95"/>
+    <int name="speed" value="40"/>
     <int name="PADamage" value="610"/>
-    <int name="PDDamage" value="8000"/>
+    <int name="PDDamage" value="1999"/>
     <int name="MADamage" value="490"/>
     <int name="MDDamage" value="900"/>
     <int name="acc" value="230"/>
     <int name="eva" value="55"/>
-    <int name="exp" value="4510000"/>
+    <int name="hpRecovery" value="800"/>
+    <int name="mpRecovery" value="700"/>
+    <int name="exp" value="5500000"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="15000"/>
     <float name="fs" value="10.0"/>
@@ -27,6 +29,30 @@
         <int name="skill" value="156"/>
         <int name="action" value="1"/>
         <int name="level" value="1"/>
+        <int name="effectAfter" value="1600"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="skill" value="114"/>
+        <int name="action" value="1"/>
+        <int name="level" value="28"/>
+        <int name="effectAfter" value="1360"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="skill" value="102"/>
+        <int name="action" value="1"/>
+        <int name="level" value="5"/>
+        <int name="effectAfter" value="1800"/>
+      </imgdir>
+      <imgdir name="3">
+        <int name="skill" value="103"/>
+        <int name="action" value="1"/>
+        <int name="level" value="4"/>
+        <int name="effectAfter" value="1800"/>
+      </imgdir>
+      <imgdir name="4">
+        <int name="skill" value="200"/>
+        <int name="action" value="1"/>
+        <int name="level" value="174"/>
         <int name="effectAfter" value="1600"/>
       </imgdir>
     </imgdir>
@@ -205,8 +231,8 @@
       </imgdir>
       <int name="attachfacing" value="1"/>
       <int name="type" value="0"/>
+      <short name="attackAfter" value="540"/>
       <int name="PADamage" value="610"/>
-      <int name="attackAfter" value="540"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="34" y="98"/>
@@ -379,8 +405,8 @@
         <int name="attach" value="1"/>
       </imgdir>
       <int name="type" value="0"/>
+      <short name="attackAfter" value="2040"/>
       <int name="PADamage" value="610"/>
-      <int name="attackAfter" value="2040"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="34" y="97"/>
@@ -622,8 +648,8 @@
         <int name="attachfacing" value="1"/>
       </imgdir>
       <int name="type" value="0"/>
+      <short name="attackAfter" value="450"/>
       <int name="PADamage" value="610"/>
-      <int name="attackAfter" value="450"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="34" y="97"/>
@@ -770,8 +796,8 @@
         <int name="attach" value="1"/>
       </imgdir>
       <int name="type" value="0"/>
+      <short name="attackAfter" value="1500"/>
       <int name="PADamage" value="610"/>
-      <int name="attackAfter" value="1500"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="32" y="97"/>

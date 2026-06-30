@@ -24,8 +24,8 @@ package org.gms.server.life;
  */
 public class OverrideMonsterStats {
 
-    /** 生命值 */
-    public int hp;
+    /** 生命值（支持超过21.47亿的长整型） */
+    public long hp;
     /** 经验值 */
     public int exp;
     /** 魔法值 */
@@ -48,7 +48,7 @@ public class OverrideMonsterStats {
      * @param exp 经验值
      * @param change 是否应用变更系数（已废弃）
      */
-    public OverrideMonsterStats(int hp, int mp, int exp, boolean change) {
+    public OverrideMonsterStats(long hp, int mp, int exp, boolean change) {
         // 旧有倍率计算已废弃：change ? (hp * 3L / 2L) : hp
         this.hp = hp;
         this.mp = mp;
@@ -62,7 +62,7 @@ public class OverrideMonsterStats {
      * @param mp 魔法值
      * @param exp 经验值
      */
-    public OverrideMonsterStats(int hp, int mp, int exp) {
+    public OverrideMonsterStats(long hp, int mp, int exp) {
         this(hp, mp, exp, true);
     }
 
@@ -89,7 +89,7 @@ public class OverrideMonsterStats {
      *
      * @return 生命值
      */
-    public int getHp() {
+    public long getHp() {
         return hp;
     }
 
@@ -98,7 +98,7 @@ public class OverrideMonsterStats {
      *
      * @param hp 生命值
      */
-    public void setOHp(int hp) {
+    public void setOHp(long hp) {
         this.hp = hp;
     }
 

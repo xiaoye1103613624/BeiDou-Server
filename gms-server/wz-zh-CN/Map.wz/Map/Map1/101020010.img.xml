@@ -27,9 +27,6 @@
       <int name="cx" value="0"/>
       <int name="cy" value="0"/>
       <int name="a" value="255"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="0"/>
-      <int name="f" value="0"/>
     </imgdir>
     <imgdir name="1">
       <string name="bS" value="shineWood2"/>
@@ -42,9 +39,48 @@
       <int name="cx" value="0"/>
       <int name="cy" value="0"/>
       <int name="a" value="255"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="0"/>
-      <int name="f" value="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="portal">
+    <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="179"/>
+      <int name="y" value="244"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="50"/>
+      <int name="y" value="238"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="107"/>
+      <int name="y" value="238"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="-4"/>
+      <int name="y" value="237"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="pn" value="out00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="262"/>
+      <int name="y" value="269"/>
+      <int name="tm" value="101020000"/>
+      <string name="tn" value="in10"/>
     </imgdir>
   </imgdir>
   <imgdir name="life">
@@ -55,7 +91,7 @@
       <int name="y" value="229"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="213"/>
+      <int name="fh" value="214"/>
       <int name="cy" value="268"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -67,7 +103,7 @@
       <int name="y" value="-83"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="219"/>
+      <int name="fh" value="218"/>
       <int name="cy" value="-46"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -79,7 +115,7 @@
       <int name="y" value="-80"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="221"/>
+      <int name="fh" value="220"/>
       <int name="cy" value="-52"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -91,7 +127,7 @@
       <int name="y" value="-55"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="222"/>
+      <int name="fh" value="221"/>
       <int name="cy" value="-25"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -103,7 +139,7 @@
       <int name="y" value="-25"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="224"/>
+      <int name="fh" value="223"/>
       <int name="cy" value="16"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -115,7 +151,7 @@
       <int name="y" value="-283"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="234"/>
+      <int name="fh" value="231"/>
       <int name="cy" value="-239"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -127,7 +163,7 @@
       <int name="y" value="-318"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="232"/>
+      <int name="fh" value="229"/>
       <int name="cy" value="-291"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -139,7 +175,7 @@
       <int name="y" value="-355"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="230"/>
+      <int name="fh" value="227"/>
       <int name="cy" value="-329"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -151,7 +187,7 @@
       <int name="y" value="-666"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="238"/>
+      <int name="fh" value="233"/>
       <int name="cy" value="-637"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -163,7 +199,7 @@
       <int name="y" value="-657"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="239"/>
+      <int name="fh" value="234"/>
       <int name="cy" value="-630"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -175,7 +211,7 @@
       <int name="y" value="-624"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="241"/>
+      <int name="fh" value="236"/>
       <int name="cy" value="-588"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -187,7 +223,7 @@
       <int name="y" value="-599"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="243"/>
+      <int name="fh" value="238"/>
       <int name="cy" value="-546"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -199,7 +235,7 @@
       <int name="y" value="-868"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="251"/>
+      <int name="fh" value="244"/>
       <int name="cy" value="-830"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -211,7 +247,7 @@
       <int name="y" value="-901"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="250"/>
+      <int name="fh" value="243"/>
       <int name="cy" value="-869"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -223,7 +259,7 @@
       <int name="y" value="-934"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="248"/>
+      <int name="fh" value="241"/>
       <int name="cy" value="-908"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -235,7 +271,7 @@
       <int name="y" value="-950"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="247"/>
+      <int name="fh" value="240"/>
       <int name="cy" value="-914"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -247,7 +283,7 @@
       <int name="y" value="-1240"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="256"/>
+      <int name="fh" value="247"/>
       <int name="cy" value="-1226"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -259,7 +295,7 @@
       <int name="y" value="-1244"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="257"/>
+      <int name="fh" value="248"/>
       <int name="cy" value="-1221"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -271,7 +307,7 @@
       <int name="y" value="-1251"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="257"/>
+      <int name="fh" value="248"/>
       <int name="cy" value="-1223"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
@@ -283,14 +319,16 @@
       <int name="y" value="-1249"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="258"/>
+      <int name="fh" value="249"/>
       <int name="cy" value="-1221"/>
       <int name="rx0" value="-200"/>
       <int name="rx1" value="290"/>
     </imgdir>
   </imgdir>
   <imgdir name="0">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="obj"/>
     <imgdir name="tile"/>
   </imgdir>
@@ -3172,7 +3210,6 @@
         <int name="z" value="3"/>
         <int name="f" value="0"/>
         <int name="zM" value="1"/>
-        <int name="forbidFallDown" value="1"/>
       </imgdir>
       <imgdir name="1">
         <string name="oS" value="dungeon"/>
@@ -3199,7 +3236,9 @@
     </imgdir>
   </imgdir>
   <imgdir name="2">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="obj">
       <imgdir name="0">
         <string name="oS" value="connect"/>
@@ -3348,31 +3387,40 @@
     <imgdir name="tile"/>
   </imgdir>
   <imgdir name="3">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="4">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="5">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="6">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="7">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="brownBrick"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
-  <imgdir name="reactor"/>
   <imgdir name="foothold">
     <imgdir name="1">
       <imgdir name="0">
@@ -3382,14 +3430,14 @@
           <int name="x2" value="-220"/>
           <int name="y2" value="-1237"/>
           <int name="prev" value="9"/>
-          <int name="next" value="255"/>
+          <int name="next" value="246"/>
         </imgdir>
         <imgdir name="2">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1200"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1140"/>
-          <int name="prev" value="254"/>
+          <int name="prev" value="210"/>
           <int name="next" value="5"/>
         </imgdir>
         <imgdir name="3">
@@ -3422,7 +3470,7 @@
           <int name="x2" value="-220"/>
           <int name="y2" value="-903"/>
           <int name="prev" value="10"/>
-          <int name="next" value="246"/>
+          <int name="next" value="239"/>
         </imgdir>
         <imgdir name="7">
           <int name="x1" value="-500"/>
@@ -3493,7 +3541,7 @@
           <int name="y1" value="-900"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-840"/>
-          <int name="prev" value="245"/>
+          <int name="prev" value="208"/>
           <int name="next" value="8"/>
         </imgdir>
         <imgdir name="16">
@@ -3558,7 +3606,7 @@
           <int name="x2" value="-220"/>
           <int name="y2" value="-627"/>
           <int name="prev" value="20"/>
-          <int name="next" value="237"/>
+          <int name="next" value="232"/>
         </imgdir>
         <imgdir name="24">
           <int name="x1" value="-500"/>
@@ -3573,7 +3621,7 @@
           <int name="y1" value="-600"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-540"/>
-          <int name="prev" value="236"/>
+          <int name="prev" value="206"/>
           <int name="next" value="26"/>
         </imgdir>
         <imgdir name="26">
@@ -3598,7 +3646,7 @@
           <int name="x2" value="-220"/>
           <int name="y2" value="-316"/>
           <int name="prev" value="32"/>
-          <int name="next" value="228"/>
+          <int name="next" value="225"/>
         </imgdir>
         <imgdir name="29">
           <int name="x1" value="-500"/>
@@ -3637,7 +3685,7 @@
           <int name="y1" value="-300"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-240"/>
-          <int name="prev" value="227"/>
+          <int name="prev" value="204"/>
           <int name="next" value="30"/>
         </imgdir>
         <imgdir name="34">
@@ -3654,7 +3702,7 @@
           <int name="x2" value="-220"/>
           <int name="y2" value="-31"/>
           <int name="prev" value="37"/>
-          <int name="next" value="218"/>
+          <int name="next" value="217"/>
         </imgdir>
         <imgdir name="36">
           <int name="x1" value="-500"/>
@@ -3677,7 +3725,7 @@
           <int name="y1" value="0"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="60"/>
-          <int name="prev" value="217"/>
+          <int name="prev" value="202"/>
           <int name="next" value="39"/>
         </imgdir>
         <imgdir name="39">
@@ -3709,7 +3757,7 @@
           <int name="y1" value="300"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="360"/>
-          <int name="prev" value="210"/>
+          <int name="prev" value="200"/>
           <int name="next" value="45"/>
         </imgdir>
         <imgdir name="43">
@@ -3718,7 +3766,7 @@
           <int name="x2" value="-220"/>
           <int name="y2" value="253"/>
           <int name="prev" value="41"/>
-          <int name="next" value="211"/>
+          <int name="next" value="212"/>
         </imgdir>
         <imgdir name="44">
           <int name="x1" value="-500"/>
@@ -4021,7 +4069,7 @@
           <int name="y1" value="240"/>
           <int name="x2" value="310"/>
           <int name="y2" value="180"/>
-          <int name="prev" value="216"/>
+          <int name="prev" value="201"/>
           <int name="next" value="86"/>
         </imgdir>
         <imgdir name="82">
@@ -4038,7 +4086,7 @@
           <int name="x2" value="310"/>
           <int name="y2" value="281"/>
           <int name="prev" value="75"/>
-          <int name="next" value="216"/>
+          <int name="next" value="201"/>
         </imgdir>
         <imgdir name="84">
           <int name="x1" value="310"/>
@@ -4046,14 +4094,14 @@
           <int name="x2" value="310"/>
           <int name="y2" value="-208"/>
           <int name="prev" value="90"/>
-          <int name="next" value="235"/>
+          <int name="next" value="205"/>
         </imgdir>
         <imgdir name="85">
           <int name="x1" value="310"/>
           <int name="y1" value="-240"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-300"/>
-          <int name="prev" value="235"/>
+          <int name="prev" value="205"/>
           <int name="next" value="92"/>
         </imgdir>
         <imgdir name="86">
@@ -4085,7 +4133,7 @@
           <int name="y1" value="0"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-60"/>
-          <int name="prev" value="226"/>
+          <int name="prev" value="203"/>
           <int name="next" value="78"/>
         </imgdir>
         <imgdir name="90">
@@ -4102,7 +4150,7 @@
           <int name="x2" value="310"/>
           <int name="y2" value="50"/>
           <int name="prev" value="79"/>
-          <int name="next" value="226"/>
+          <int name="next" value="203"/>
         </imgdir>
         <imgdir name="92">
           <int name="x1" value="310"/>
@@ -4133,7 +4181,7 @@
           <int name="y1" value="-540"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-600"/>
-          <int name="prev" value="244"/>
+          <int name="prev" value="207"/>
           <int name="next" value="110"/>
         </imgdir>
         <imgdir name="96">
@@ -4142,7 +4190,7 @@
           <int name="x2" value="310"/>
           <int name="y2" value="-516"/>
           <int name="prev" value="93"/>
-          <int name="next" value="244"/>
+          <int name="next" value="207"/>
         </imgdir>
         <imgdir name="97">
           <int name="x1" value="590"/>
@@ -4229,7 +4277,7 @@
           <int name="y1" value="-840"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-900"/>
-          <int name="prev" value="253"/>
+          <int name="prev" value="209"/>
           <int name="next" value="109"/>
         </imgdir>
         <imgdir name="108">
@@ -4238,7 +4286,7 @@
           <int name="x2" value="310"/>
           <int name="y2" value="-797"/>
           <int name="prev" value="101"/>
-          <int name="next" value="253"/>
+          <int name="next" value="209"/>
         </imgdir>
         <imgdir name="109">
           <int name="x1" value="310"/>
@@ -4310,7 +4358,7 @@
           <int name="x2" value="310"/>
           <int name="y2" value="-1208"/>
           <int name="prev" value="106"/>
-          <int name="next" value="260"/>
+          <int name="next" value="211"/>
         </imgdir>
         <imgdir name="118">
           <int name="x1" value="590"/>
@@ -4565,7 +4613,7 @@
           <int name="y1" value="-1740"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1680"/>
-          <int name="prev" value="176"/>
+          <int name="prev" value="174"/>
           <int name="next" value="144"/>
         </imgdir>
         <imgdir name="150">
@@ -4622,7 +4670,7 @@
           <int name="x2" value="-500"/>
           <int name="y2" value="-1800"/>
           <int name="prev" value="157"/>
-          <int name="next" value="183"/>
+          <int name="next" value="181"/>
         </imgdir>
         <imgdir name="157">
           <int name="x1" value="-500"/>
@@ -4637,8 +4685,8 @@
           <int name="y1" value="-1980"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-2040"/>
-          <int name="prev" value="195"/>
-          <int name="next" value="188"/>
+          <int name="prev" value="188"/>
+          <int name="next" value="184"/>
         </imgdir>
         <imgdir name="159">
           <int name="x1" value="310"/>
@@ -4646,15 +4694,15 @@
           <int name="x2" value="310"/>
           <int name="y2" value="-1800"/>
           <int name="prev" value="161"/>
-          <int name="next" value="198"/>
+          <int name="next" value="191"/>
         </imgdir>
         <imgdir name="160">
           <int name="x1" value="310"/>
           <int name="y1" value="-2100"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-2160"/>
-          <int name="prev" value="197"/>
-          <int name="next" value="207"/>
+          <int name="prev" value="190"/>
+          <int name="next" value="199"/>
         </imgdir>
         <imgdir name="161">
           <int name="x1" value="310"/>
@@ -4685,7 +4733,7 @@
           <int name="y1" value="-1260"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-1320"/>
-          <int name="prev" value="260"/>
+          <int name="prev" value="211"/>
           <int name="next" value="168"/>
         </imgdir>
         <imgdir name="165">
@@ -4741,314 +4789,234 @@
           <int name="y1" value="-2040"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-1980"/>
-          <int name="prev" value="196"/>
-          <int name="next" value="202"/>
+          <int name="prev" value="189"/>
+          <int name="next" value="194"/>
         </imgdir>
         <imgdir name="172">
           <int name="x1" value="590"/>
           <int name="y1" value="-1740"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-1680"/>
-          <int name="prev" value="206"/>
+          <int name="prev" value="198"/>
           <int name="next" value="170"/>
         </imgdir>
         <imgdir name="173">
-          <int name="x1" value="490"/>
-          <int name="y1" value="-2160"/>
-          <int name="x2" value="490"/>
-          <int name="y2" value="-2175"/>
-          <int name="prev" value="0"/>
-          <int name="next" value="174"/>
-        </imgdir>
-        <imgdir name="174">
-          <int name="x1" value="490"/>
-          <int name="y1" value="-2175"/>
-          <int name="x2" value="590"/>
-          <int name="y2" value="-2175"/>
-          <int name="prev" value="173"/>
-          <int name="next" value="175"/>
-        </imgdir>
-        <imgdir name="175">
           <int name="x1" value="590"/>
           <int name="y1" value="-2175"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-2160"/>
-          <int name="prev" value="174"/>
-          <int name="next" value="189"/>
+          <int name="prev" value="0"/>
+          <int name="next" value="185"/>
         </imgdir>
-        <imgdir name="176">
+        <imgdir name="174">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1800"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1740"/>
-          <int name="prev" value="177"/>
+          <int name="prev" value="175"/>
           <int name="next" value="149"/>
         </imgdir>
-        <imgdir name="177">
+        <imgdir name="175">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1860"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1800"/>
-          <int name="prev" value="179"/>
-          <int name="next" value="176"/>
+          <int name="prev" value="177"/>
+          <int name="next" value="174"/>
         </imgdir>
-        <imgdir name="178">
+        <imgdir name="176">
           <int name="x1" value="-220"/>
           <int name="y1" value="-2160"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-2100"/>
-          <int name="prev" value="186"/>
-          <int name="next" value="181"/>
+          <int name="prev" value="182"/>
+          <int name="next" value="179"/>
         </imgdir>
-        <imgdir name="179">
+        <imgdir name="177">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1920"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1860"/>
-          <int name="prev" value="180"/>
-          <int name="next" value="177"/>
+          <int name="prev" value="178"/>
+          <int name="next" value="175"/>
         </imgdir>
-        <imgdir name="180">
+        <imgdir name="178">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1980"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1920"/>
-          <int name="prev" value="190"/>
-          <int name="next" value="179"/>
+          <int name="prev" value="186"/>
+          <int name="next" value="177"/>
         </imgdir>
-        <imgdir name="181">
+        <imgdir name="179">
           <int name="x1" value="-220"/>
           <int name="y1" value="-2100"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-2040"/>
-          <int name="prev" value="178"/>
-          <int name="next" value="190"/>
+          <int name="prev" value="176"/>
+          <int name="next" value="186"/>
         </imgdir>
-        <imgdir name="182">
+        <imgdir name="180">
           <int name="x1" value="-500"/>
           <int name="y1" value="-1860"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-1920"/>
-          <int name="prev" value="183"/>
-          <int name="next" value="195"/>
+          <int name="prev" value="181"/>
+          <int name="next" value="188"/>
         </imgdir>
-        <imgdir name="183">
+        <imgdir name="181">
           <int name="x1" value="-500"/>
           <int name="y1" value="-1800"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-1860"/>
           <int name="prev" value="156"/>
-          <int name="next" value="182"/>
+          <int name="next" value="180"/>
         </imgdir>
-        <imgdir name="184">
-          <int name="x1" value="-320"/>
-          <int name="y1" value="-2160"/>
-          <int name="x2" value="-320"/>
-          <int name="y2" value="-2175"/>
-          <int name="prev" value="0"/>
-          <int name="next" value="185"/>
-        </imgdir>
-        <imgdir name="185">
-          <int name="x1" value="-320"/>
-          <int name="y1" value="-2175"/>
-          <int name="x2" value="-220"/>
-          <int name="y2" value="-2175"/>
-          <int name="prev" value="184"/>
-          <int name="next" value="186"/>
-        </imgdir>
-        <imgdir name="186">
+        <imgdir name="182">
           <int name="x1" value="-220"/>
           <int name="y1" value="-2175"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-2160"/>
-          <int name="prev" value="185"/>
-          <int name="next" value="178"/>
+          <int name="prev" value="0"/>
+          <int name="next" value="176"/>
         </imgdir>
-        <imgdir name="187">
+        <imgdir name="183">
           <int name="x1" value="-500"/>
           <int name="y1" value="-2100"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-2160"/>
-          <int name="prev" value="188"/>
-          <int name="next" value="191"/>
+          <int name="prev" value="184"/>
+          <int name="next" value="187"/>
         </imgdir>
-        <imgdir name="188">
+        <imgdir name="184">
           <int name="x1" value="-500"/>
           <int name="y1" value="-2040"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-2100"/>
           <int name="prev" value="158"/>
-          <int name="next" value="187"/>
+          <int name="next" value="183"/>
         </imgdir>
-        <imgdir name="189">
+        <imgdir name="185">
           <int name="x1" value="590"/>
           <int name="y1" value="-2160"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-2100"/>
-          <int name="prev" value="175"/>
-          <int name="next" value="196"/>
+          <int name="prev" value="173"/>
+          <int name="next" value="189"/>
         </imgdir>
-        <imgdir name="190">
+        <imgdir name="186">
           <int name="x1" value="-220"/>
           <int name="y1" value="-2040"/>
           <int name="x2" value="-220"/>
           <int name="y2" value="-1980"/>
-          <int name="prev" value="181"/>
-          <int name="next" value="180"/>
+          <int name="prev" value="179"/>
+          <int name="next" value="178"/>
         </imgdir>
-        <imgdir name="191">
+        <imgdir name="187">
           <int name="x1" value="-500"/>
           <int name="y1" value="-2160"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-2175"/>
-          <int name="prev" value="187"/>
-          <int name="next" value="192"/>
-        </imgdir>
-        <imgdir name="192">
-          <int name="x1" value="-500"/>
-          <int name="y1" value="-2175"/>
-          <int name="x2" value="-400"/>
-          <int name="y2" value="-2175"/>
-          <int name="prev" value="191"/>
-          <int name="next" value="193"/>
-        </imgdir>
-        <imgdir name="193">
-          <int name="x1" value="-400"/>
-          <int name="y1" value="-2175"/>
-          <int name="x2" value="-400"/>
-          <int name="y2" value="-2160"/>
-          <int name="prev" value="192"/>
+          <int name="prev" value="183"/>
           <int name="next" value="0"/>
         </imgdir>
-        <imgdir name="194">
-          <int name="x1" value="-450"/>
-          <int name="y1" value="-2188"/>
-          <int name="x2" value="-360"/>
-          <int name="y2" value="-2188"/>
-          <int name="prev" value="0"/>
-          <int name="next" value="0"/>
-        </imgdir>
-        <imgdir name="195">
+        <imgdir name="188">
           <int name="x1" value="-500"/>
           <int name="y1" value="-1920"/>
           <int name="x2" value="-500"/>
           <int name="y2" value="-1980"/>
-          <int name="prev" value="182"/>
+          <int name="prev" value="180"/>
           <int name="next" value="158"/>
         </imgdir>
-        <imgdir name="196">
+        <imgdir name="189">
           <int name="x1" value="590"/>
           <int name="y1" value="-2100"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-2040"/>
-          <int name="prev" value="189"/>
+          <int name="prev" value="185"/>
           <int name="next" value="171"/>
         </imgdir>
-        <imgdir name="197">
+        <imgdir name="190">
           <int name="x1" value="310"/>
           <int name="y1" value="-2040"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-2100"/>
-          <int name="prev" value="199"/>
+          <int name="prev" value="192"/>
           <int name="next" value="160"/>
         </imgdir>
-        <imgdir name="198">
+        <imgdir name="191">
           <int name="x1" value="310"/>
           <int name="y1" value="-1800"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-1860"/>
           <int name="prev" value="159"/>
-          <int name="next" value="204"/>
+          <int name="next" value="196"/>
         </imgdir>
-        <imgdir name="199">
+        <imgdir name="192">
           <int name="x1" value="310"/>
           <int name="y1" value="-1980"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-2040"/>
-          <int name="prev" value="205"/>
-          <int name="next" value="197"/>
+          <int name="prev" value="197"/>
+          <int name="next" value="190"/>
         </imgdir>
-        <imgdir name="200">
-          <int name="x1" value="360"/>
-          <int name="y1" value="-2188"/>
-          <int name="x2" value="450"/>
-          <int name="y2" value="-2188"/>
-          <int name="prev" value="0"/>
-          <int name="next" value="0"/>
-        </imgdir>
-        <imgdir name="201">
+        <imgdir name="193">
           <int name="x1" value="590"/>
           <int name="y1" value="-1920"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-1860"/>
-          <int name="prev" value="202"/>
-          <int name="next" value="203"/>
+          <int name="prev" value="194"/>
+          <int name="next" value="195"/>
         </imgdir>
-        <imgdir name="202">
+        <imgdir name="194">
           <int name="x1" value="590"/>
           <int name="y1" value="-1980"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-1920"/>
           <int name="prev" value="171"/>
-          <int name="next" value="201"/>
+          <int name="next" value="193"/>
         </imgdir>
-        <imgdir name="203">
+        <imgdir name="195">
           <int name="x1" value="590"/>
           <int name="y1" value="-1860"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-1800"/>
-          <int name="prev" value="201"/>
-          <int name="next" value="206"/>
+          <int name="prev" value="193"/>
+          <int name="next" value="198"/>
         </imgdir>
-        <imgdir name="204">
+        <imgdir name="196">
           <int name="x1" value="310"/>
           <int name="y1" value="-1860"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-1920"/>
-          <int name="prev" value="198"/>
-          <int name="next" value="205"/>
+          <int name="prev" value="191"/>
+          <int name="next" value="197"/>
         </imgdir>
-        <imgdir name="205">
+        <imgdir name="197">
           <int name="x1" value="310"/>
           <int name="y1" value="-1920"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-1980"/>
-          <int name="prev" value="204"/>
-          <int name="next" value="199"/>
+          <int name="prev" value="196"/>
+          <int name="next" value="192"/>
         </imgdir>
-        <imgdir name="206">
+        <imgdir name="198">
           <int name="x1" value="590"/>
           <int name="y1" value="-1800"/>
           <int name="x2" value="590"/>
           <int name="y2" value="-1740"/>
-          <int name="prev" value="203"/>
+          <int name="prev" value="195"/>
           <int name="next" value="172"/>
         </imgdir>
-        <imgdir name="207">
+        <imgdir name="199">
           <int name="x1" value="310"/>
           <int name="y1" value="-2160"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-2175"/>
           <int name="prev" value="160"/>
-          <int name="next" value="208"/>
-        </imgdir>
-        <imgdir name="208">
-          <int name="x1" value="310"/>
-          <int name="y1" value="-2175"/>
-          <int name="x2" value="410"/>
-          <int name="y2" value="-2175"/>
-          <int name="prev" value="207"/>
-          <int name="next" value="209"/>
-        </imgdir>
-        <imgdir name="209">
-          <int name="x1" value="410"/>
-          <int name="y1" value="-2175"/>
-          <int name="x2" value="410"/>
-          <int name="y2" value="-2160"/>
-          <int name="prev" value="208"/>
           <int name="next" value="0"/>
         </imgdir>
-        <imgdir name="210">
+        <imgdir name="200">
           <int name="x1" value="-220"/>
           <int name="y1" value="253"/>
           <int name="x2" value="-220"/>
@@ -5056,15 +5024,15 @@
           <int name="prev" value="43"/>
           <int name="next" value="42"/>
         </imgdir>
-        <imgdir name="216">
+        <imgdir name="201">
           <int name="x1" value="310"/>
           <int name="y1" value="281"/>
           <int name="x2" value="310"/>
           <int name="y2" value="240"/>
-          <int name="prev" value="215"/>
+          <int name="prev" value="216"/>
           <int name="next" value="81"/>
         </imgdir>
-        <imgdir name="217">
+        <imgdir name="202">
           <int name="x1" value="-220"/>
           <int name="y1" value="-31"/>
           <int name="x2" value="-220"/>
@@ -5072,15 +5040,15 @@
           <int name="prev" value="35"/>
           <int name="next" value="38"/>
         </imgdir>
-        <imgdir name="226">
+        <imgdir name="203">
           <int name="x1" value="310"/>
           <int name="y1" value="50"/>
           <int name="x2" value="310"/>
           <int name="y2" value="0"/>
-          <int name="prev" value="225"/>
+          <int name="prev" value="224"/>
           <int name="next" value="89"/>
         </imgdir>
-        <imgdir name="227">
+        <imgdir name="204">
           <int name="x1" value="-220"/>
           <int name="y1" value="-316"/>
           <int name="x2" value="-220"/>
@@ -5088,15 +5056,15 @@
           <int name="prev" value="28"/>
           <int name="next" value="33"/>
         </imgdir>
-        <imgdir name="235">
+        <imgdir name="205">
           <int name="x1" value="310"/>
           <int name="y1" value="-208"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-240"/>
-          <int name="prev" value="234"/>
+          <int name="prev" value="231"/>
           <int name="next" value="85"/>
         </imgdir>
-        <imgdir name="236">
+        <imgdir name="206">
           <int name="x1" value="-220"/>
           <int name="y1" value="-627"/>
           <int name="x2" value="-220"/>
@@ -5104,15 +5072,15 @@
           <int name="prev" value="23"/>
           <int name="next" value="25"/>
         </imgdir>
-        <imgdir name="244">
+        <imgdir name="207">
           <int name="x1" value="310"/>
           <int name="y1" value="-516"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-540"/>
-          <int name="prev" value="243"/>
+          <int name="prev" value="238"/>
           <int name="next" value="95"/>
         </imgdir>
-        <imgdir name="245">
+        <imgdir name="208">
           <int name="x1" value="-220"/>
           <int name="y1" value="-903"/>
           <int name="x2" value="-220"/>
@@ -5120,15 +5088,15 @@
           <int name="prev" value="6"/>
           <int name="next" value="15"/>
         </imgdir>
-        <imgdir name="253">
+        <imgdir name="209">
           <int name="x1" value="310"/>
           <int name="y1" value="-797"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-840"/>
-          <int name="prev" value="252"/>
+          <int name="prev" value="245"/>
           <int name="next" value="107"/>
         </imgdir>
-        <imgdir name="254">
+        <imgdir name="210">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1237"/>
           <int name="x2" value="-220"/>
@@ -5136,332 +5104,327 @@
           <int name="prev" value="1"/>
           <int name="next" value="2"/>
         </imgdir>
-        <imgdir name="260">
+        <imgdir name="211">
           <int name="x1" value="310"/>
           <int name="y1" value="-1208"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-1260"/>
-          <int name="prev" value="259"/>
+          <int name="prev" value="250"/>
           <int name="next" value="164"/>
         </imgdir>
       </imgdir>
       <imgdir name="1">
-        <imgdir name="211">
+        <imgdir name="212">
           <int name="x1" value="-220"/>
           <int name="y1" value="253"/>
           <int name="x2" value="-190"/>
           <int name="y2" value="262"/>
           <int name="prev" value="43"/>
-          <int name="next" value="212"/>
-          <int name="forbidFallDown" value="1"/>
+          <int name="next" value="213"/>
         </imgdir>
-        <imgdir name="212">
+        <imgdir name="213">
           <int name="x1" value="-190"/>
           <int name="y1" value="262"/>
           <int name="x2" value="-54"/>
           <int name="y2" value="268"/>
-          <int name="prev" value="211"/>
-          <int name="next" value="213"/>
-          <int name="forbidFallDown" value="1"/>
+          <int name="prev" value="212"/>
+          <int name="next" value="214"/>
         </imgdir>
-        <imgdir name="213">
+        <imgdir name="214">
           <int name="x1" value="-54"/>
           <int name="y1" value="268"/>
           <int name="x2" value="114"/>
           <int name="y2" value="265"/>
-          <int name="prev" value="212"/>
-          <int name="next" value="214"/>
-          <int name="forbidFallDown" value="1"/>
+          <int name="prev" value="213"/>
+          <int name="next" value="215"/>
         </imgdir>
-        <imgdir name="214">
+        <imgdir name="215">
           <int name="x1" value="114"/>
           <int name="y1" value="265"/>
           <int name="x2" value="239"/>
           <int name="y2" value="269"/>
-          <int name="prev" value="213"/>
-          <int name="next" value="215"/>
-          <int name="forbidFallDown" value="1"/>
+          <int name="prev" value="214"/>
+          <int name="next" value="216"/>
         </imgdir>
-        <imgdir name="215">
+        <imgdir name="216">
           <int name="x1" value="239"/>
           <int name="y1" value="269"/>
           <int name="x2" value="310"/>
           <int name="y2" value="281"/>
-          <int name="prev" value="214"/>
-          <int name="next" value="216"/>
-          <int name="forbidFallDown" value="1"/>
+          <int name="prev" value="215"/>
+          <int name="next" value="201"/>
         </imgdir>
-        <imgdir name="218">
+        <imgdir name="217">
           <int name="x1" value="-220"/>
           <int name="y1" value="-31"/>
           <int name="x2" value="-209"/>
           <int name="y2" value="-37"/>
           <int name="prev" value="35"/>
-          <int name="next" value="219"/>
+          <int name="next" value="218"/>
         </imgdir>
-        <imgdir name="219">
+        <imgdir name="218">
           <int name="x1" value="-209"/>
           <int name="y1" value="-37"/>
           <int name="x2" value="-162"/>
           <int name="y2" value="-49"/>
-          <int name="prev" value="218"/>
-          <int name="next" value="220"/>
+          <int name="prev" value="217"/>
+          <int name="next" value="219"/>
         </imgdir>
-        <imgdir name="220">
+        <imgdir name="219">
           <int name="x1" value="-162"/>
           <int name="y1" value="-49"/>
           <int name="x2" value="-96"/>
           <int name="y2" value="-56"/>
-          <int name="prev" value="219"/>
-          <int name="next" value="221"/>
+          <int name="prev" value="218"/>
+          <int name="next" value="220"/>
         </imgdir>
-        <imgdir name="221">
+        <imgdir name="220">
           <int name="x1" value="-96"/>
           <int name="y1" value="-56"/>
           <int name="x2" value="18"/>
           <int name="y2" value="-45"/>
-          <int name="prev" value="220"/>
-          <int name="next" value="222"/>
+          <int name="prev" value="219"/>
+          <int name="next" value="221"/>
         </imgdir>
-        <imgdir name="222">
+        <imgdir name="221">
           <int name="x1" value="18"/>
           <int name="y1" value="-45"/>
           <int name="x2" value="117"/>
           <int name="y2" value="-22"/>
-          <int name="prev" value="221"/>
-          <int name="next" value="223"/>
+          <int name="prev" value="220"/>
+          <int name="next" value="222"/>
         </imgdir>
-        <imgdir name="223">
+        <imgdir name="222">
           <int name="x1" value="117"/>
           <int name="y1" value="-22"/>
           <int name="x2" value="187"/>
           <int name="y2" value="1"/>
-          <int name="prev" value="222"/>
-          <int name="next" value="224"/>
+          <int name="prev" value="221"/>
+          <int name="next" value="223"/>
         </imgdir>
-        <imgdir name="224">
+        <imgdir name="223">
           <int name="x1" value="187"/>
           <int name="y1" value="1"/>
           <int name="x2" value="265"/>
           <int name="y2" value="31"/>
-          <int name="prev" value="223"/>
-          <int name="next" value="225"/>
+          <int name="prev" value="222"/>
+          <int name="next" value="224"/>
         </imgdir>
-        <imgdir name="225">
+        <imgdir name="224">
           <int name="x1" value="265"/>
           <int name="y1" value="31"/>
           <int name="x2" value="310"/>
           <int name="y2" value="50"/>
-          <int name="prev" value="224"/>
-          <int name="next" value="226"/>
+          <int name="prev" value="223"/>
+          <int name="next" value="203"/>
         </imgdir>
-        <imgdir name="228">
+        <imgdir name="225">
           <int name="x1" value="-220"/>
           <int name="y1" value="-316"/>
           <int name="x2" value="-197"/>
           <int name="y2" value="-322"/>
           <int name="prev" value="28"/>
-          <int name="next" value="229"/>
+          <int name="next" value="226"/>
         </imgdir>
-        <imgdir name="229">
+        <imgdir name="226">
           <int name="x1" value="-197"/>
           <int name="y1" value="-322"/>
           <int name="x2" value="-131"/>
           <int name="y2" value="-329"/>
-          <int name="prev" value="228"/>
-          <int name="next" value="230"/>
+          <int name="prev" value="225"/>
+          <int name="next" value="227"/>
         </imgdir>
-        <imgdir name="230">
+        <imgdir name="227">
           <int name="x1" value="-131"/>
           <int name="y1" value="-329"/>
           <int name="x2" value="-17"/>
           <int name="y2" value="-318"/>
-          <int name="prev" value="229"/>
-          <int name="next" value="231"/>
+          <int name="prev" value="226"/>
+          <int name="next" value="228"/>
         </imgdir>
-        <imgdir name="231">
+        <imgdir name="228">
           <int name="x1" value="-17"/>
           <int name="y1" value="-318"/>
           <int name="x2" value="82"/>
           <int name="y2" value="-295"/>
-          <int name="prev" value="230"/>
-          <int name="next" value="232"/>
+          <int name="prev" value="227"/>
+          <int name="next" value="229"/>
         </imgdir>
-        <imgdir name="232">
+        <imgdir name="229">
           <int name="x1" value="82"/>
           <int name="y1" value="-295"/>
           <int name="x2" value="152"/>
           <int name="y2" value="-272"/>
-          <int name="prev" value="231"/>
-          <int name="next" value="233"/>
+          <int name="prev" value="228"/>
+          <int name="next" value="230"/>
         </imgdir>
-        <imgdir name="233">
+        <imgdir name="230">
           <int name="x1" value="152"/>
           <int name="y1" value="-272"/>
           <int name="x2" value="230"/>
           <int name="y2" value="-242"/>
-          <int name="prev" value="232"/>
-          <int name="next" value="234"/>
+          <int name="prev" value="229"/>
+          <int name="next" value="231"/>
         </imgdir>
-        <imgdir name="234">
+        <imgdir name="231">
           <int name="x1" value="230"/>
           <int name="y1" value="-242"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-208"/>
-          <int name="prev" value="233"/>
-          <int name="next" value="235"/>
+          <int name="prev" value="230"/>
+          <int name="next" value="205"/>
         </imgdir>
-        <imgdir name="237">
+        <imgdir name="232">
           <int name="x1" value="-220"/>
           <int name="y1" value="-627"/>
           <int name="x2" value="-203"/>
           <int name="y2" value="-632"/>
           <int name="prev" value="23"/>
-          <int name="next" value="238"/>
+          <int name="next" value="233"/>
         </imgdir>
-        <imgdir name="238">
+        <imgdir name="233">
           <int name="x1" value="-203"/>
           <int name="y1" value="-632"/>
           <int name="x2" value="-137"/>
           <int name="y2" value="-639"/>
-          <int name="prev" value="237"/>
-          <int name="next" value="239"/>
+          <int name="prev" value="232"/>
+          <int name="next" value="234"/>
         </imgdir>
-        <imgdir name="239">
+        <imgdir name="234">
           <int name="x1" value="-137"/>
           <int name="y1" value="-639"/>
           <int name="x2" value="-23"/>
           <int name="y2" value="-628"/>
-          <int name="prev" value="238"/>
-          <int name="next" value="240"/>
+          <int name="prev" value="233"/>
+          <int name="next" value="235"/>
         </imgdir>
-        <imgdir name="240">
+        <imgdir name="235">
           <int name="x1" value="-23"/>
           <int name="y1" value="-628"/>
           <int name="x2" value="76"/>
           <int name="y2" value="-605"/>
-          <int name="prev" value="239"/>
-          <int name="next" value="241"/>
+          <int name="prev" value="234"/>
+          <int name="next" value="236"/>
         </imgdir>
-        <imgdir name="241">
+        <imgdir name="236">
           <int name="x1" value="76"/>
           <int name="y1" value="-605"/>
           <int name="x2" value="146"/>
           <int name="y2" value="-582"/>
-          <int name="prev" value="240"/>
-          <int name="next" value="242"/>
+          <int name="prev" value="235"/>
+          <int name="next" value="237"/>
         </imgdir>
-        <imgdir name="242">
+        <imgdir name="237">
           <int name="x1" value="146"/>
           <int name="y1" value="-582"/>
           <int name="x2" value="224"/>
           <int name="y2" value="-552"/>
-          <int name="prev" value="241"/>
-          <int name="next" value="243"/>
+          <int name="prev" value="236"/>
+          <int name="next" value="238"/>
         </imgdir>
-        <imgdir name="243">
+        <imgdir name="238">
           <int name="x1" value="224"/>
           <int name="y1" value="-552"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-516"/>
-          <int name="prev" value="242"/>
-          <int name="next" value="244"/>
+          <int name="prev" value="237"/>
+          <int name="next" value="207"/>
         </imgdir>
-        <imgdir name="246">
+        <imgdir name="239">
           <int name="x1" value="-220"/>
           <int name="y1" value="-903"/>
           <int name="x2" value="-196"/>
           <int name="y2" value="-910"/>
           <int name="prev" value="6"/>
-          <int name="next" value="247"/>
+          <int name="next" value="240"/>
         </imgdir>
-        <imgdir name="247">
+        <imgdir name="240">
           <int name="x1" value="-196"/>
           <int name="y1" value="-910"/>
           <int name="x2" value="-130"/>
           <int name="y2" value="-917"/>
-          <int name="prev" value="246"/>
-          <int name="next" value="248"/>
+          <int name="prev" value="239"/>
+          <int name="next" value="241"/>
         </imgdir>
-        <imgdir name="248">
+        <imgdir name="241">
           <int name="x1" value="-130"/>
           <int name="y1" value="-917"/>
           <int name="x2" value="-16"/>
           <int name="y2" value="-906"/>
-          <int name="prev" value="247"/>
-          <int name="next" value="249"/>
+          <int name="prev" value="240"/>
+          <int name="next" value="242"/>
         </imgdir>
-        <imgdir name="249">
+        <imgdir name="242">
           <int name="x1" value="-16"/>
           <int name="y1" value="-906"/>
           <int name="x2" value="83"/>
           <int name="y2" value="-883"/>
-          <int name="prev" value="248"/>
-          <int name="next" value="250"/>
+          <int name="prev" value="241"/>
+          <int name="next" value="243"/>
         </imgdir>
-        <imgdir name="250">
+        <imgdir name="243">
           <int name="x1" value="83"/>
           <int name="y1" value="-883"/>
           <int name="x2" value="153"/>
           <int name="y2" value="-860"/>
-          <int name="prev" value="249"/>
-          <int name="next" value="251"/>
+          <int name="prev" value="242"/>
+          <int name="next" value="244"/>
         </imgdir>
-        <imgdir name="251">
+        <imgdir name="244">
           <int name="x1" value="153"/>
           <int name="y1" value="-860"/>
           <int name="x2" value="231"/>
           <int name="y2" value="-830"/>
-          <int name="prev" value="250"/>
-          <int name="next" value="252"/>
+          <int name="prev" value="243"/>
+          <int name="next" value="245"/>
         </imgdir>
-        <imgdir name="252">
+        <imgdir name="245">
           <int name="x1" value="231"/>
           <int name="y1" value="-830"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-797"/>
-          <int name="prev" value="251"/>
-          <int name="next" value="253"/>
+          <int name="prev" value="244"/>
+          <int name="next" value="209"/>
         </imgdir>
-        <imgdir name="255">
+        <imgdir name="246">
           <int name="x1" value="-220"/>
           <int name="y1" value="-1237"/>
           <int name="x2" value="-188"/>
           <int name="y2" value="-1227"/>
           <int name="prev" value="1"/>
-          <int name="next" value="256"/>
+          <int name="next" value="247"/>
         </imgdir>
-        <imgdir name="256">
+        <imgdir name="247">
           <int name="x1" value="-188"/>
           <int name="y1" value="-1227"/>
           <int name="x2" value="-52"/>
           <int name="y2" value="-1221"/>
-          <int name="prev" value="255"/>
-          <int name="next" value="257"/>
+          <int name="prev" value="246"/>
+          <int name="next" value="248"/>
         </imgdir>
-        <imgdir name="257">
+        <imgdir name="248">
           <int name="x1" value="-52"/>
           <int name="y1" value="-1221"/>
           <int name="x2" value="116"/>
           <int name="y2" value="-1224"/>
-          <int name="prev" value="256"/>
-          <int name="next" value="258"/>
+          <int name="prev" value="247"/>
+          <int name="next" value="249"/>
         </imgdir>
-        <imgdir name="258">
+        <imgdir name="249">
           <int name="x1" value="116"/>
           <int name="y1" value="-1224"/>
           <int name="x2" value="241"/>
           <int name="y2" value="-1220"/>
-          <int name="prev" value="257"/>
-          <int name="next" value="259"/>
+          <int name="prev" value="248"/>
+          <int name="next" value="250"/>
         </imgdir>
-        <imgdir name="259">
+        <imgdir name="250">
           <int name="x1" value="241"/>
           <int name="y1" value="-1220"/>
           <int name="x2" value="310"/>
           <int name="y2" value="-1208"/>
-          <int name="prev" value="258"/>
-          <int name="next" value="260"/>
+          <int name="prev" value="249"/>
+          <int name="next" value="211"/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -5478,8 +5441,8 @@
     <imgdir name="2">
       <int name="l" value="0"/>
       <int name="uf" value="1"/>
-      <int name="x" value="90"/>
-      <int name="y1" value="-26"/>
+      <int name="x" value="92"/>
+      <int name="y1" value="-25"/>
       <int name="y2" value="166"/>
       <int name="page" value="2"/>
     </imgdir>
@@ -5502,7 +5465,7 @@
     <imgdir name="5">
       <int name="l" value="0"/>
       <int name="uf" value="1"/>
-      <int name="x" value="35"/>
+      <int name="x" value="33"/>
       <int name="y1" value="-612"/>
       <int name="y2" value="-346"/>
       <int name="page" value="2"/>
@@ -5518,15 +5481,15 @@
     <imgdir name="7">
       <int name="l" value="0"/>
       <int name="uf" value="1"/>
-      <int name="x" value="146"/>
-      <int name="y1" value="-860"/>
+      <int name="x" value="148"/>
+      <int name="y1" value="-859"/>
       <int name="y2" value="-666"/>
       <int name="page" value="2"/>
     </imgdir>
     <imgdir name="8">
       <int name="l" value="0"/>
       <int name="uf" value="1"/>
-      <int name="x" value="23"/>
+      <int name="x" value="21"/>
       <int name="y1" value="-1220"/>
       <int name="y2" value="-952"/>
       <int name="page" value="2"/>
@@ -5579,47 +5542,5 @@
     <int name="centerX" value="544"/>
     <int name="centerY" value="2339"/>
     <int name="mag" value="4"/>
-  </imgdir>
-  <imgdir name="portal">
-    <imgdir name="0">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="179"/>
-      <int name="y" value="244"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="1">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="107"/>
-      <int name="y" value="238"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="2">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="50"/>
-      <int name="y" value="238"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="3">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="-4"/>
-      <int name="y" value="237"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="4">
-      <string name="pn" value="out00"/>
-      <int name="pt" value="2"/>
-      <int name="x" value="262"/>
-      <int name="y" value="269"/>
-      <int name="tm" value="101020000"/>
-      <string name="tn" value="in10"/>
-    </imgdir>
   </imgdir>
 </imgdir>

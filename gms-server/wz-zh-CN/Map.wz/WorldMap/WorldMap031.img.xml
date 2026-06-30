@@ -2,6 +2,7 @@
 <imgdir name="WorldMap031.img" indent="2" media="NONE">
   <imgdir name="info">
     <string name="parentMap" value="WorldMap030"/>
+    <string name="WorldMap" value="WorldMap031"/>
   </imgdir>
   <imgdir name="BaseImg">
     <canvas name="0" format="1" scale="0">
@@ -58,6 +59,10 @@
       <imgdir name="mapNo">
         <int name="0" value="220070000"/>
       </imgdir>
+      <canvas name="path" format="1" scale="0">
+        <vector name="origin" x="-224" y="202"/>
+        <int name="z" value="2"/>
+      </canvas>
     </imgdir>
     <imgdir name="7">
       <vector name="spot" x="223" y="-53"/>
@@ -97,6 +102,11 @@
     <imgdir name="12">
       <vector name="spot" x="-2" y="36"/>
       <int name="type" value="1"/>
+      <int name="linkQuestID" value="1308"/>
+      <canvas name="path" format="1" scale="0">
+        <vector name="origin" x="1" y="0"/>
+        <int name="z" value="2"/>
+      </canvas>
       <imgdir name="mapNo">
         <int name="0" value="220080001"/>
       </imgdir>

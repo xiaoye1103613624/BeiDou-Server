@@ -62,15 +62,28 @@
     <imgdir name="2">
       <string name="type" value="n"/>
       <string name="id" value="9201057"/>
-      <int name="x" value="-311"/>
-      <int name="y" value="182"/>
+      <int name="x" value="30"/>
+      <int name="y" value="-19"/>
       <int name="mobTime" value="0"/>
-      <int name="f" value="1"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="7"/>
+      <int name="cy" value="-13"/>
+      <int name="rx0" value="-20"/>
+      <int name="rx1" value="80"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="type" value="n"/>
+      <string name="id" value="9201068"/>
+      <int name="x" value="138"/>
+      <int name="y" value="185"/>
+      <int name="mobTime" value="0"/>
+      <int name="f" value="0"/>
       <int name="hide" value="0"/>
       <int name="fh" value="16"/>
       <int name="cy" value="187"/>
-      <int name="rx0" value="-361"/>
-      <int name="rx1" value="-261"/>
+      <int name="rx0" value="88"/>
+      <int name="rx1" value="188"/>
     </imgdir>
   </imgdir>
   <imgdir name="0">
@@ -127,6 +140,17 @@
         <int name="f" value="0"/>
         <int name="zM" value="0"/>
       </imgdir>
+      <imgdir name="3">
+        <string name="oS" value="shop2"/>
+        <string name="l0" value="shop"/>
+        <string name="l1" value="subwayMC"/>
+        <string name="l2" value="7"/>
+        <int name="x" value="29"/>
+        <int name="y" value="-113"/>
+        <int name="z" value="5"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="0"/>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="2">
@@ -143,18 +167,6 @@
         <int name="z" value="3"/>
         <int name="f" value="0"/>
         <int name="zM" value="3"/>
-      </imgdir>
-      <imgdir name="1">
-        <string name="oS" value="insideGL"/>
-        <string name="l0" value="inside1"/>
-        <string name="l1" value="front"/>
-        <string name="l2" value="8"/>
-        <int name="x" value="361"/>
-        <int name="y" value="-75"/>
-        <int name="z" value="9"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="0"/>
-        <int name="r" value="0"/>
       </imgdir>
     </imgdir>
   </imgdir>
@@ -366,16 +378,11 @@
     </imgdir>
     <imgdir name="2">
       <string name="pn" value="in00"/>
-      <int name="pt" value="7"/>
-      <int name="x" value="200"/>
-      <int name="y" value="187"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-      <int name="horizontalImpact" value="0"/>
-      <string name="script" value="subway_in2"/>
-      <int name="hideTooltip" value="0"/>
-      <int name="onlyOnce" value="0"/>
-      <int name="delay" value="0"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="197"/>
+      <int name="y" value="186"/>
+      <int name="tm" value="103000101"/>
+      <string name="tn" value="out00"/>
     </imgdir>
   </imgdir>
 </imgdir>

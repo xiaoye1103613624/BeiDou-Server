@@ -18,6 +18,7 @@
     <string name="elemAttr" value="I2F2L2H2S2"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
+    <int name="boss" value="1"/>
     <string name="link" value="9300012"/>
     <int name="ignoreFieldOut" value="1"/>
     <imgdir name="skill">
@@ -52,9 +53,11 @@
         <int name="effectAfter" value="0"/>
       </imgdir>
     </imgdir>
-    <int name="hpTagColor" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="boss" value="1"/>
+    <imgdir name="default">
+      <canvas name="0" format="1" scale="0">
+        <vector name="origin" x="98" y="105"/>
+        <int name="z" value="0"/>
+      </canvas>
+    </imgdir>
   </imgdir>
 </imgdir>

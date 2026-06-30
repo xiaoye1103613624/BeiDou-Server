@@ -6,7 +6,7 @@ function setup(eim, leaderid) {
 em.setProperty("state", "1");
     var eim = em.newInstance("Ravana_EASY" + leaderid);
 
-    var map = eim.createInstanceMap(950101010);
+    var map = eim.getInstanceMap(950101010);
 
     var mob = em.getMonster(9500390);
     eim.registerMonster(mob);

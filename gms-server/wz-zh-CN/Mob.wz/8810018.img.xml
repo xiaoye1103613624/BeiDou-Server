@@ -3,15 +3,15 @@
   <imgdir name="info">
     <int name="bodyAttack" value="0"/>
     <int name="level" value="160"/>
-    <int name="maxHP" value="2090000000"/>
-    <int name="maxMP" value="0"/>
+    <int name="maxHP" value="2100000000"/>
+    <int name="maxMP" value="2000000"/>
     <int name="speed" value="0"/>
-    <int name="PADamage" value="0"/>
-    <int name="PDDamage" value="0"/>
-    <int name="MADamage" value="0"/>
-    <int name="MDDamage" value="0"/>
-    <int name="acc" value="0"/>
-    <int name="eva" value="0"/>
+    <int name="PADamage" value="1500"/>
+    <int name="PDDamage" value="2000"/>
+    <int name="MADamage" value="1500"/>
+    <int name="MDDamage" value="2000"/>
+    <int name="acc" value="500"/>
+    <int name="eva" value="300"/>
     <int name="exp" value="0"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="1"/>
@@ -22,8 +22,8 @@
     <int name="publicReward" value="1"/>
     <int name="explosiveReward" value="1"/>
     <string name="buff" value="2022108"/>
-    <string name="defaultHP" value="Unknown"/>
-    <string name="defaultMP" value="Unknown"/>
+    <string name="defaultHP" value="无法确定"/>
+    <string name="defaultMP" value="无法确定"/>
     <int name="rareItemDropLevel" value="3"/>
     <imgdir name="default">
       <canvas name="0" format="1" scale="0">
@@ -31,7 +31,6 @@
         <int name="z" value="0"/>
       </canvas>
     </imgdir>
-    <int name="boss" value="1"/>
   </imgdir>
   <imgdir name="stand">
     <canvas name="0" format="1" scale="0">

@@ -14,10 +14,14 @@
       <vector name="origin" x="-1" y="34"/>
     </canvas>
     <int name="hungry" value="4"/>
+    <int name="cash" value="1"/>
+    <int name="life" value="10"/>
     <int name="nameTag" value="6"/>
     <int name="chatBalloon" value="4"/>
-    <int name="cash" value="1"/>
-    <int name="life" value="90"/>
+    <int name="pickupAll" value="1"/>
+    <int name="longRange" value="1"/>
+    <int name="sweepForDrop" value="1"/>
+    <int name="pickupItem" value="1"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -791,7 +795,7 @@
           <string name="act" value="sulk"/>
           <string name="0" value="c32_f1"/>
           <string name="1" value="c32_f2"/>
-          <string name="2" value="c32_f3"/>
+          <string name="2" value="c32_3"/>
           <string name="3" value="c32_f4"/>
         </imgdir>
       </imgdir>
@@ -841,7 +845,7 @@
           <string name="act" value="sulk"/>
           <string name="0" value="c34_f1"/>
           <string name="1" value="c34_f2"/>
-          <string name="2" value="c34_f3"/>
+          <string name="2" value="c34_3"/>
           <string name="3" value="c34_f4"/>
         </imgdir>
       </imgdir>
@@ -866,7 +870,7 @@
           <string name="act" value="sulk"/>
           <string name="0" value="c35_f1"/>
           <string name="1" value="c35_f2"/>
-          <string name="2" value="c35_f3"/>
+          <string name="2" value="c35_3"/>
           <string name="3" value="c35_f4"/>
         </imgdir>
       </imgdir>

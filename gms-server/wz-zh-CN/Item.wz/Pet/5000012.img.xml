@@ -14,10 +14,12 @@
       <vector name="origin" x="-3" y="32"/>
     </canvas>
     <int name="hungry" value="2"/>
-    <int name="nameTag" value="7"/>
-    <int name="chatBalloon" value="5"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="nameTag" value="7"/>
+    <int name="chatBalloon" value="5"/>
+    <int name="consumeHP" value="1"/>
+    <int name="pickupItem" value="1"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -600,6 +602,31 @@
         </imgdir>
       </imgdir>
     </imgdir>
+    <imgdir name="24">
+      <string name="command" value="c25"/>
+      <int name="inc" value="3"/>
+      <int name="prob" value="35"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
+      <imgdir name="success">
+        <imgdir name="0">
+          <string name="act" value="chat"/>
+          <string name="0" value="c25_s1"/>
+          <string name="1" value="c25_s2"/>
+          <string name="2" value="c25_s3"/>
+          <string name="3" value="c25_s4"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="fail">
+        <imgdir name="0">
+          <string name="act" value="no"/>
+          <string name="0" value="c25_f1"/>
+          <string name="1" value="c25_f2"/>
+          <string name="2" value="c25_f3"/>
+          <string name="3" value="c25_f4"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
     <imgdir name="25">
       <string name="command" value="c26"/>
       <int name="inc" value="3"/>
@@ -745,7 +772,7 @@
           <string name="act" value="no"/>
           <string name="0" value="c31_f1"/>
           <string name="1" value="c31_f2"/>
-          <string name="2" value="c31_f3"/>
+          <string name="2" value="c31_3"/>
           <string name="3" value="c31_f4"/>
         </imgdir>
       </imgdir>
@@ -772,31 +799,6 @@
           <string name="1" value="c32_f2"/>
           <string name="2" value="c32_f3"/>
           <string name="3" value="c32_f4"/>
-        </imgdir>
-      </imgdir>
-    </imgdir>
-    <imgdir name="24">
-      <string name="command" value="c25"/>
-      <int name="inc" value="3"/>
-      <int name="prob" value="35"/>
-      <int name="l0" value="10"/>
-      <int name="l1" value="19"/>
-      <imgdir name="success">
-        <imgdir name="0">
-          <string name="act" value="chat"/>
-          <string name="0" value="c25_s1"/>
-          <string name="1" value="c25_s2"/>
-          <string name="2" value="c25_s3"/>
-          <string name="3" value="c25_s4"/>
-        </imgdir>
-      </imgdir>
-      <imgdir name="fail">
-        <imgdir name="0">
-          <string name="act" value="no"/>
-          <string name="0" value="c25_f1"/>
-          <string name="1" value="c25_f2"/>
-          <string name="2" value="c25_f3"/>
-          <string name="3" value="c25_f4"/>
         </imgdir>
       </imgdir>
     </imgdir>

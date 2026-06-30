@@ -2,7 +2,7 @@
 <imgdir name="8880305.img" indent="2" media="NONE">
   <imgdir name="info">
     <int name="level" value="200"/>
-    <int name="maxHP" value="500000000"/>
+    <int name="maxHP" value="2000000000"/>
     <int name="maxMP" value="45000"/>
     <int name="speed" value="-70"/>
     <int name="PADamage" value="1500"/>
@@ -11,7 +11,7 @@
     <int name="MDRate" value="50"/>
     <int name="acc" value="9999"/>
     <int name="eva" value="75"/>
-    <int name="pushed" value="199999"/>
+    <int name="pushed" value="999999999"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
     <int name="boss" value="1"/>
@@ -118,7 +118,7 @@
       <string name="_hash" value="32f6065ef6cb5aee750ba4bd5b7802f741b27d520cf5548963501082a1e965ea"/>
     </canvas>
   </imgdir>
-  <imgdir name="stand">
+  <imgdir name="fly">
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="204" y="220"/>
       <int name="z" value="0"/>
@@ -522,7 +522,7 @@
       <int name="type" value="4"/>
       <int name="conMP" value="1"/>
       <int name="attackAfter" value="3500"/>
-      <int name="PADamage" value="1550"/>
+      <int name="PADamage" value="9999"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="204" y="220"/>
@@ -810,9 +810,9 @@
       <int name="type" value="4"/>
       <int name="conMP" value="1"/>
       <int name="attackAfter" value="2040"/>
-      <int name="PADamage" value="9999"/>
       <int name="disease" value="128"/>
       <int name="level" value="1"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="204" y="220"/>

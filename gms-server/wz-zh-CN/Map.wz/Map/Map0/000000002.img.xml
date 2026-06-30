@@ -65,15 +65,15 @@
     <imgdir name="6">
       <string name="type" value="n"/>
       <string name="id" value="0002000"/>
-      <int name="x" value="-2869"/>
-      <int name="y" value="168"/>
+      <int name="x" value="-2774"/>
+      <int name="y" value="170"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
       <int name="hide" value="0"/>
       <int name="fh" value="111"/>
       <int name="cy" value="180"/>
-      <int name="rx0" value="-2919"/>
-      <int name="rx1" value="-2819"/>
+      <int name="rx0" value="-2824"/>
+      <int name="rx1" value="-2770"/>
     </imgdir>
     <imgdir name="7">
       <string name="type" value="n"/>
@@ -2826,7 +2826,7 @@
     </imgdir>
   </imgdir>
   <imgdir name="miniMap">
-    <canvas name="canvas" format="1" scale="0"/>
+    <canvas name="canvas" format="2" scale="0"/>
     <int name="width" value="5401"/>
     <int name="height" value="1312"/>
     <int name="centerX" value="3300"/>
@@ -2837,19 +2837,41 @@
     <imgdir name="0">
       <string name="pn" value="sp"/>
       <int name="pt" value="0"/>
-      <int name="x" value="-3088"/>
-      <int name="y" value="145"/>
+      <int name="x" value="-3091"/>
+      <int name="y" value="166"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="1">
       <string name="pn" value="front00"/>
       <int name="pt" value="2"/>
-      <int name="x" value="-2985"/>
-      <int name="y" value="175"/>
+      <int name="x" value="-3005"/>
+      <int name="y" value="178"/>
       <int name="tm" value="1"/>
       <string name="tn" value="next00"/>
       <string name="script" value=""/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="pn" value="tutorial5"/>
+      <int name="pt" value="9"/>
+      <int name="x" value="-1078"/>
+      <int name="y" value="139"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="delay" value="1000"/>
+      <string name="script" value="advice05"/>
+      <int name="onlyOnce" value="1"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="pn" value="tutorial6"/>
+      <int name="pt" value="9"/>
+      <int name="x" value="-2900"/>
+      <int name="y" value="145"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="delay" value="1000"/>
+      <string name="script" value="advice06"/>
+      <int name="onlyOnce" value="1"/>
     </imgdir>
   </imgdir>
 </imgdir>

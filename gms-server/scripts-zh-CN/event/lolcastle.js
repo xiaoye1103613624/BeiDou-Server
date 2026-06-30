@@ -35,7 +35,7 @@ function setup() {
     var x;
     for (x = 0; x < createInstances.length; x++) {
 	var eim = em.newInstance(createInstances[x]);
-	var map = eim.createInstanceMap(mapId);
+	var map = eim.getInstanceMap(mapId);
 	map.toggleDrops();
     }
     for (x = 0; x < 5; x++) {

@@ -7,18 +7,18 @@
     <int name="swim" value="0"/>
     <int name="returnMap" value="925020002"/>
     <int name="forcedReturn" value="925020002"/>
-    <float name="mobRate" value="10.0"/>
+    <float name="mobRate" value="1.0"/>
     <string name="bgm" value="Bgm17/MureungSchool1"/>
     <string name="mapMark" value="MuruengRaid"/>
     <int name="fly" value="0"/>
-    <int name="hideMinimap" value="1"/>
+    <int name="hideMinimap" value="0"/>
     <int name="fieldLimit" value="927480"/>
     <int name="VRTop" value="-686"/>
     <int name="VRLeft" value="-495"/>
     <int name="VRBottom" value="120"/>
     <int name="VRRight" value="495"/>
-    <string name="onFirstUserEnter" value="dojang_1st"/>
-    <string name="onUserEnter" value="dojang_Eff"/>
+    <string name="onFirstUserEnter" value="dojang_Eff"/>
+    <string name="onUserEnter" value="dojang_1st"/>
     <int name="fieldType" value="14"/>
   </imgdir>
   <imgdir name="back">
@@ -743,7 +743,7 @@
   </imgdir>
   <imgdir name="ladderRope"/>
   <imgdir name="miniMap">
-    <canvas name="canvas" format="2" scale="0"/>
+    <canvas name="canvas" format="1" scale="0"/>
     <int name="width" value="1135"/>
     <int name="height" value="1006"/>
     <int name="centerX" value="569"/>

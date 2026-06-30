@@ -705,10 +705,6 @@ public class AbstractPlayerInteraction {
      * @param script 脚本文件名
      */
     public void openNpc(int npcid, String script) {
-        if (c.getCM() != null) {
-            return;
-        }
-
         c.removeClickedNPC();
         NPCScriptManager.getInstance().dispose(c);
         NPCScriptManager.getInstance().start(c, npcid, script, null);

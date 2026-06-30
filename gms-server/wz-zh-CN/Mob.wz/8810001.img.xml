@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="8810001.img" indent="2" media="NONE">
   <imgdir name="info">
-    <int name="bodyAttack" value="1"/>
     <int name="level" value="160"/>
-    <int name="maxHP" value="330000000"/>
-    <int name="maxMP" value="43000"/>
+    <int name="maxMP" value="4300000"/>
     <int name="speed" value="0"/>
     <int name="PADamage" value="1350"/>
     <int name="PDDamage" value="1760"/>
@@ -13,7 +11,6 @@
     <int name="acc" value="250"/>
     <int name="eva" value="18"/>
     <int name="exp" value="9732030"/>
-    <int name="undead" value="0"/>
     <int name="pushed" value="50000"/>
     <int name="hpRecovery" value="5000"/>
     <int name="mpRecovery" value="100"/>
@@ -22,10 +19,9 @@
     <int name="noFlip" value="1"/>
     <int name="boss" value="1"/>
     <int name="firstAttack" value="1"/>
-    <int name="hpTagColor" value="3"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="publicReward" value="1"/>
+    <int name="bodyAttack" value="1"/>
     <int name="explosiveReward" value="1"/>
+    <int name="publicReward" value="1"/>
     <imgdir name="skill">
       <imgdir name="0">
         <int name="skill" value="140"/>
@@ -76,6 +72,10 @@
         <int name="effectAfter" value="0"/>
       </imgdir>
     </imgdir>
+    <int name="maxHP" value="330000000"/>
+    <int name="undead" value="0"/>
+    <int name="hpTagColor" value="3"/>
+    <int name="hpTagBgcolor" value="5"/>
     <int name="mobType" value="1"/>
     <int name="mbookID" value="8810018"/>
   </imgdir>
@@ -802,6 +802,7 @@
       <int name="magic" value="1"/>
       <string name="elemAttr" value="L"/>
       <int name="deadlyAttack" value="1"/>
+      <int name="interval" value="10000"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="170" y="467"/>

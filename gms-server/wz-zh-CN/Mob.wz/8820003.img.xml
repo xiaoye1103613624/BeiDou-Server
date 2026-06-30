@@ -23,12 +23,9 @@
     <int name="noFlip" value="1"/>
     <int name="boss" value="1"/>
     <imgdir name="revive">
-      <int name="0" value="8820020"/>
+      <int name="0" value="8820024"/>
     </imgdir>
     <int name="mobType" value="1"/>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
   </imgdir>
   <imgdir name="stand">
     <canvas name="0" format="1" scale="0">
@@ -83,6 +80,7 @@
       <int name="attackAfter" value="1320"/>
       <int name="knockback" value="1"/>
       <int name="deadlyAttack" value="1"/>
+      <int name="interval" value="10000"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="774" y="495"/>

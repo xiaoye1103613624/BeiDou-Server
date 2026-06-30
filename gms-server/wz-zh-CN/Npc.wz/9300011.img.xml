@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9300011.img" indent="2" media="NONE">
   <imgdir name="info">
-    <string name="quest" value="xinnian"/>
     <imgdir name="speak">
       <string name="0" value="n0"/>
       <string name="1" value="n1"/>
+    </imgdir>
+    <imgdir name="script">
+      <imgdir name="0">
+        <string name="script" value="necklace"/>
+        <int name="start" value="20090114"/>
+        <int name="end" value="20090217"/>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="stand">

@@ -70,7 +70,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         p.readInt();
         byte damagefrom = p.readByte();
         p.readByte(); //Element
-        long damage = p.readLong();
+        long damage = p.readInt(); // 客户端以32位int发送伤害值，服务端用long存储
         int oid = 0, monsteridfrom = 0, pgmr = 0, direction = 0;
         int pos_x = 0, pos_y = 0, fake = 0;
         boolean is_pgmr = false, is_pg = true, is_deadly = false;

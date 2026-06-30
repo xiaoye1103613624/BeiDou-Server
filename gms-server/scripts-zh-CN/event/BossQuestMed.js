@@ -24,7 +24,7 @@ function setup(partyid) {
 
     var eim = em.newInstance(instanceName);
     // If there are more than 1 map for this, you'll need to do mapid + instancename
-    var map = eim.createInstanceMapS(eventmapid);
+    var map = eim.getInstanceMap(eventmapid);
     map.toggleDrops();
     map.spawnNpc(9209101, new java.awt.Point(854, -24));
 

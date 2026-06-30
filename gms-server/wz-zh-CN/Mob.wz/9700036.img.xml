@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9700036.img" indent="2" media="NONE">
   <imgdir name="info">
-    <int name="bodyAttack" value="0"/>
-    <int name="level" value="1"/>
-    <int name="maxHP" value="1"/>
-    <int name="maxMP" value="0"/>
-    <int name="speed" value="0"/>
-    <int name="PADamage" value="12"/>
-    <int name="PDDamage" value="0"/>
-    <int name="MADamage" value="0"/>
-    <int name="MDDamage" value="0"/>
-    <int name="acc" value="0"/>
-    <int name="eva" value="0"/>
-    <int name="exp" value="0"/>
-    <int name="undead" value="0"/>
-    <int name="pushed" value="999999"/>
-    <float name="fs" value="10.0"/>
-    <int name="summonType" value="1"/>
-    <int name="mobType" value="0"/>
-    <int name="boss" value="1"/>
     <imgdir name="revive">
       <int name="0" value="9700031"/>
     </imgdir>
     <int name="ignoreFieldOut" value="1"/>
+    <int name="level" value="1"/>
+    <int name="maxHP" value="1"/>
+    <int name="PADamage" value="3"/>
+    <int name="PDRate" value="25"/>
+    <int name="MADamage" value="1"/>
+    <int name="MDRate" value="25"/>
+    <int name="acc" value="4"/>
+    <int name="pushed" value="999999"/>
+    <float name="fs" value="10.0"/>
+    <int name="boss" value="1"/>
+    <int name="summonType" value="1"/>
+    <string name="mobType" value="7N"/>
+    <int name="changeableMob" value="1"/>
   </imgdir>
   <imgdir name="stand">
     <canvas name="0" format="1" scale="0">
@@ -50,6 +45,7 @@
       <int name="z" value="0"/>
       <int name="delay" value="200"/>
       <vector name="head" x="0" y="-33"/>
+      <string name="source" value="Mob/9700036.img/hit1/0"/>
     </canvas>
     <canvas name="1" format="1" scale="0">
       <vector name="origin" x="31" y="47"/>

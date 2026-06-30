@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9000039.img" indent="2" media="NONE">
   <imgdir name="info">
+    <imgdir name="speak">
+      <string name="0" value="n0"/>
+      <string name="1" value="n1"/>
+    </imgdir>
     <imgdir name="script">
       <imgdir name="0">
         <string name="script" value="watermelon_out"/>
@@ -109,7 +113,7 @@
       <string name="1" value="n1"/>
     </imgdir>
   </imgdir>
-  <imgdir name="show">
+  <imgdir name="act1">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="32" y="79"/>
       <int name="delay" value="120"/>
@@ -150,5 +154,6 @@
       <vector name="origin" x="32" y="79"/>
       <int name="delay" value="60"/>
     </canvas>
+    <int name="special" value="1"/>
   </imgdir>
 </imgdir>

@@ -34,6 +34,8 @@ import org.gms.server.partyquest.GuardianSpawnPoint;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.NumberTool;
 import org.gms.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -52,6 +54,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * 支持从WZ文件和数据库双源加载，数据库中的数据优先于WZ文件
  */
 public class MapFactory {
+    private static final Logger log = LoggerFactory.getLogger(MapFactory.class);
     /** 地图名称数据（来自String.wz） */
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
     /** 地图数据源（来自Map.wz） */
@@ -179,6 +182,10 @@ public class MapFactory {
         String mapName = getMapName(mapid);
         // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
         Data mapData = mapSource.getData(mapName);
+        if (mapData == null) {
+            log.warn("地图数据加载失败：地图 {} (ID: {}) 在WZ中不存在，跳过加载", mapName, mapid);
+            return null;
+        }
         Data infoData = mapData.getChildByPath("info");
 
         String link = DataTool.getString(infoData.getChildByPath("link"), "");

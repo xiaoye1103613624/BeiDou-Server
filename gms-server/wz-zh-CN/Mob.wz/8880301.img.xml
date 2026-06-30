@@ -3,7 +3,7 @@
   <imgdir name="attack1">
     <imgdir name="info">
       <imgdir name="range">
-        <vector name="lt" x="-275" y="-175"/>
+        <vector name="lt" x="-300" y="-160"/>
         <vector name="rb" x="0" y="0"/>
       </imgdir>
       <int name="attackAfter" value="1560"/>
@@ -39,6 +39,7 @@
           <string name="_hash" value="352965643798fac5a2dae5da8b2b9ba7f4bcae7ae21a87a6267862b560f40e53"/>
         </canvas>
       </imgdir>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="99" y="170"/>
@@ -504,7 +505,7 @@
   <imgdir name="attack2">
     <imgdir name="info">
       <imgdir name="range">
-        <vector name="lt" x="-390" y="-180"/>
+        <vector name="lt" x="-300" y="-160"/>
         <vector name="rb" x="0" y="0"/>
       </imgdir>
       <imgdir name="hit">
@@ -541,6 +542,8 @@
         </canvas>
       </imgdir>
       <int name="attackAfter" value="1560"/>
+      <int name="knockback" value="1"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="99" y="170"/>
@@ -707,7 +710,7 @@
     <imgdir name="info">
       <imgdir name="range">
         <vector name="lt" x="0" y="-160"/>
-        <vector name="rb" x="550" y="0"/>
+        <vector name="rb" x="300" y="0"/>
       </imgdir>
       <imgdir name="hit">
         <canvas name="0" format="2" scale="0">
@@ -736,6 +739,7 @@
         </canvas>
       </imgdir>
       <int name="attackAfter" value="1560"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="99" y="170"/>
@@ -901,7 +905,7 @@
   <imgdir name="attack4">
     <imgdir name="info">
       <imgdir name="range">
-        <vector name="lt" x="-500" y="-250"/>
+        <vector name="lt" x="-300" y="-160"/>
         <vector name="rb" x="0" y="0"/>
       </imgdir>
       <imgdir name="hit">
@@ -950,6 +954,7 @@
         <int name="attach" value="1"/>
       </imgdir>
       <int name="attackAfter" value="1320"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="99" y="170"/>
@@ -1042,13 +1047,8 @@
       <string name="_hash" value="9a51837d8f54ec5063bae0ccf4235596d82d68c4ca32370a983f0cbc7c20ef80"/>
     </canvas>
     <canvas name="10" format="2" scale="0">
-      <vector name="origin" x="77" y="-2"/>
-      <int name="z" value="0"/>
-      <int name="delay" value="90"/>
-      <vector name="head" x="-10" y="-160"/>
-      <vector name="lt" x="-85" y="-160"/>
-      <vector name="rb" x="45" y="-15"/>
-      <string name="_hash" value="4ff0ea588903793d6393cedeede8abe0f010020f7392c28df6eb1ae26400f6df"/>
+      <vector name="origin" x="77" y="500"/>
+      <int name="delay" value="3000"/>
     </canvas>
     <canvas name="11" format="2" scale="0">
       <vector name="origin" x="421" y="12"/>
@@ -1057,7 +1057,6 @@
       <vector name="head" x="-10" y="-160"/>
       <vector name="lt" x="-85" y="-160"/>
       <vector name="rb" x="45" y="-15"/>
-      <string name="_hash" value="b3b1f2ff7df6f5c9b910ef961f6a08901ab5d4f8f7fdc930869ebbef7d14e50c"/>
     </canvas>
     <canvas name="12" format="2" scale="0">
       <vector name="origin" x="423" y="18"/>
@@ -1232,14 +1231,14 @@
     </canvas>
   </imgdir>
   <imgdir name="info">
-    <int name="level" value="200"/>
+    <int name="level" value="190"/>
     <int name="maxMP" value="999999"/>
     <int name="PADamage" value="1500"/>
     <int name="MADamage" value="1650"/>
     <int name="PDRate" value="25"/>
-    <int name="acc" value="999"/>
-    <int name="eva" value="100"/>
-    <int name="pushed" value="999999"/>
+    <int name="acc" value="100000"/>
+    <int name="eva" value="260"/>
+    <int name="pushed" value="999999999"/>
     <float name="fs" value="10.0"/>
     <int name="exp" value="30000000"/>
     <int name="summonType" value="1"/>
@@ -1255,11 +1254,49 @@
     <int name="hpTagColor" value="1"/>
     <string name="maxHP" value="2100000000"/>
     <string name="elemAttr" value="P2"/>
+    <imgdir name="skill">
+      <imgdir name="0">
+        <int name="action" value="3"/>
+        <int name="effectAfter" value="0"/>
+        <int name="level" value="5"/>
+        <int name="skill" value="120"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="action" value="3"/>
+        <int name="effectAfter" value="0"/>
+        <int name="level" value="5"/>
+        <int name="skill" value="120"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="skill" value="127"/>
+        <int name="action" value="2"/>
+        <int name="level" value="2"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+      <imgdir name="3">
+        <int name="skill" value="140"/>
+        <int name="action" value="4"/>
+        <int name="level" value="5"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+      <imgdir name="4">
+        <int name="skill" value="141"/>
+        <int name="action" value="4"/>
+        <int name="level" value="4"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+      <imgdir name="5">
+        <int name="skill" value="120"/>
+        <int name="action" value="3"/>
+        <int name="level" value="5"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
   <imgdir name="attack5">
     <imgdir name="info">
       <imgdir name="range">
-        <vector name="lt" x="-500" y="-250"/>
+        <vector name="lt" x="-300" y="-160"/>
         <vector name="rb" x="0" y="0"/>
       </imgdir>
       <imgdir name="hit">
@@ -1301,6 +1338,7 @@
         <int name="attach" value="1"/>
       </imgdir>
       <int name="attackAfter" value="1560"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="99" y="170"/>
@@ -1610,8 +1648,8 @@
     </canvas>
     <imgdir name="info">
       <imgdir name="range">
-        <vector name="sp" x="-50" y="-100"/>
-        <int name="r" value="700"/>
+        <vector name="sp" x="-60" y="-60"/>
+        <int name="r" value="200"/>
       </imgdir>
       <imgdir name="ball">
         <canvas name="0" format="2" scale="0">
@@ -1656,7 +1694,8 @@
       <int name="attackAfter" value="1200"/>
       <int name="type" value="2"/>
       <int name="magic" value="1"/>
-      <int name="bulletSpeed" value="200"/>
+      <int name="bulletSpeed" value="100"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
   </imgdir>
   <imgdir name="attack7">
@@ -1929,6 +1968,7 @@
           <int name="delay" value="90"/>
           <vector name="origin" x="58" y="217"/>
         </canvas>
+        <int name="deadlyAttack" value="1"/>
       </imgdir>
       <imgdir name="hit">
         <canvas name="0" format="2" scale="0">
@@ -1944,7 +1984,7 @@
       <int name="type" value="4"/>
       <int name="conMP" value="1"/>
       <int name="attackAfter" value="2040"/>
-      <int name="PADamage" value="9999"/>
+      <int name="deadlyAttack" value="1"/>
     </imgdir>
   </imgdir>
   <imgdir name="stand">

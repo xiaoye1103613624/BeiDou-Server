@@ -4,7 +4,7 @@ function init() {
 function setup(leaderid) {
     var eim = em.newInstance("MesoMap" + leaderid);
 
-   var map = eim.createInstanceMap(260020700); //block portals too plz
+   var map = eim.getInstanceMap(260020700); //block portals too plz
 	map.resetAllSpawnPoint(9400202, 1); //per 1 sec
 	map.setReturnMapId(910000000); //fm
 	map.setForcedReturnMap(910000000);

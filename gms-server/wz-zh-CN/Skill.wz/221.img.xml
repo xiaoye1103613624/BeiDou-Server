@@ -261,6 +261,11 @@
           <int name="x" value="195"/>
           <int name="y" value="137"/>
         </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="x" value="190"/>
+          <int name="y" value="190"/>
+        </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>
           <int name="x" value="200"/>
@@ -576,6 +581,17 @@
           <vector name="lt" x="-200" y="-150"/>
           <vector name="rb" x="200" y="150"/>
         </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="50"/>
+          <int name="mad" value="160"/>
+          <int name="mastery" value="10"/>
+          <int name="mobCount" value="7"/>
+          <int name="time" value="2"/>
+          <vector name="lt" x="-300" y="-200"/>
+          <vector name="rb" x="200" y="150"/>
+          <int name="attackCount" value="2"/>
+        </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>
           <int name="mpCon" value="50"/>
@@ -583,7 +599,7 @@
           <int name="mastery" value="10"/>
           <int name="mobCount" value="6"/>
           <int name="time" value="2"/>
-          <vector name="lt" x="-200" y="-150"/>
+          <vector name="lt" x="-300" y="-200"/>
           <vector name="rb" x="200" y="150"/>
         </imgdir>
       </imgdir>
@@ -1366,11 +1382,18 @@
           <int name="time" value="190"/>
           <int name="x" value="-2"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h20"/>
+          <int name="hpCon" value="30"/>
+          <int name="mpCon" value="25"/>
+          <int name="time" value="1200"/>
+          <int name="x" value="-3"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="hpCon" value="30"/>
           <int name="mpCon" value="25"/>
-          <int name="time" value="200"/>
+          <int name="time" value="300"/>
           <int name="x" value="-2"/>
         </imgdir>
       </imgdir>
@@ -1703,6 +1726,14 @@
           <int name="mad" value="139"/>
           <int name="mastery" value="10"/>
           <int name="time" value="2"/>
+          <int name="x" value="1"/>
+        </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="22"/>
+          <int name="mad" value="400"/>
+          <int name="mastery" value="10"/>
+          <int name="time" value="4"/>
           <int name="x" value="1"/>
         </imgdir>
         <imgdir name="30">

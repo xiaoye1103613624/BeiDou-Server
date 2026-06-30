@@ -20,6 +20,26 @@
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
     <int name="firstAttack" value="1"/>
+    <imgdir name="skill">
+      <imgdir name="0">
+        <int name="skill" value="200"/>
+        <int name="action" value="1"/>
+        <int name="level" value="80"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="skill" value="101"/>
+        <int name="action" value="2"/>
+        <int name="level" value="1"/>
+        <int name="effectAfter" value="720"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="skill" value="111"/>
+        <int name="action" value="2"/>
+        <int name="level" value="2"/>
+        <int name="effectAfter" value="720"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">

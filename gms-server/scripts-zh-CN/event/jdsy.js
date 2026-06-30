@@ -43,7 +43,7 @@ function allMonstersDead(eim) {
 	var iter = eim.getPlayers().iterator();
 	//如果达到了最大波数领取奖励
 	if ((count + 1) == maxCount) {
-		eim.broadcastPlayerMsg(5, "通关成功,领取奖励!");
+		eim.broadcastPlayerMsg(5, "通关成功,领取奖励!2");
 		while (iter.hasNext()) {
 			var chr = iter.next();
 			var rand = Math.floor(Math.random() * itemSet.length);

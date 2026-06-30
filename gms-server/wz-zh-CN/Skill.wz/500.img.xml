@@ -115,6 +115,11 @@
           <int name="x" value="19"/>
           <int name="y" value="19"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="x" value="50"/>
+          <int name="y" value="50"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="x" value="20"/>
@@ -123,18 +128,6 @@
       </imgdir>
     </imgdir>
     <imgdir name="5001001">
-      <canvas name="icon" format="1" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-      </canvas>
-      <canvas name="iconMouseOver" format="1" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-      </canvas>
-      <canvas name="iconDisabled" format="1" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-      </canvas>
       <imgdir name="level">
         <imgdir name="1">
           <string name="hs" value="h1"/>
@@ -288,11 +281,20 @@
           <vector name="rb" x="-20" y="10"/>
           <int name="mobCount" value="1"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="14"/>
+          <int name="damage" value="480"/>
+          <vector name="lt" x="-90" y="-36"/>
+          <vector name="rb" x="-20" y="10"/>
+          <int name="mobCount" value="1"/>
+          <int name="attackCount" value="2"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="mpCon" value="14"/>
           <int name="damage" value="270"/>
-          <vector name="lt" x="-74" y="-30"/>
+          <vector name="lt" x="-90" y="-36"/>
           <vector name="rb" x="-20" y="10"/>
           <int name="mobCount" value="1"/>
         </imgdir>
@@ -516,8 +518,6 @@
           </imgdir>
         </imgdir>
       </imgdir>
-    </imgdir>
-    <imgdir name="5001002">
       <canvas name="icon" format="1" scale="0">
         <vector name="origin" x="0" y="32"/>
         <int name="z" value="0"/>
@@ -530,6 +530,8 @@
         <vector name="origin" x="0" y="32"/>
         <int name="z" value="0"/>
       </canvas>
+    </imgdir>
+    <imgdir name="5001002">
       <imgdir name="level">
         <imgdir name="1">
           <string name="hs" value="h1"/>
@@ -683,12 +685,20 @@
           <vector name="lt" x="-81" y="-71"/>
           <vector name="rb" x="-5" y="0"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mobCount" value="7"/>
+          <int name="mpCon" value="16"/>
+          <int name="damage" value="280"/>
+          <vector name="lt" x="-150" y="-100"/>
+          <vector name="rb" x="-5" y="0"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="mobCount" value="6"/>
           <int name="mpCon" value="16"/>
           <int name="damage" value="190"/>
-          <vector name="lt" x="-81" y="-71"/>
+          <vector name="lt" x="-100" y="-80"/>
           <vector name="rb" x="-5" y="0"/>
         </imgdir>
       </imgdir>
@@ -975,6 +985,18 @@
           </imgdir>
         </imgdir>
       </imgdir>
+      <canvas name="icon" format="1" scale="0">
+        <vector name="origin" x="0" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconMouseOver" format="1" scale="0">
+        <vector name="origin" x="0" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconDisabled" format="1" scale="0">
+        <vector name="origin" x="0" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
     </imgdir>
     <imgdir name="5001003">
       <canvas name="icon" format="1" scale="0">
@@ -1127,6 +1149,13 @@
           <string name="hs" value="h20"/>
           <int name="mpCon" value="7"/>
           <int name="damage" value="80"/>
+          <int name="bulletCount" value="2"/>
+          <int name="range" value="350"/>
+        </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="7"/>
+          <int name="damage" value="200"/>
           <int name="bulletCount" value="2"/>
           <int name="range" value="350"/>
         </imgdir>
@@ -1536,7 +1565,7 @@
           <int name="mpCon" value="5"/>
           <int name="x" value="30"/>
           <int name="y" value="10"/>
-          <int name="time" value="20"/>
+          <int name="time" value="60"/>
         </imgdir>
       </imgdir>
       <imgdir name="effect">

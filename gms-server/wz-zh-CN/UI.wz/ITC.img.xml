@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="ITC.img" indent="2" media="NONE">
+  <imgdir name="Base">
+    <canvas name="backgrnd" format="1" scale="0"/>
+    <imgdir name="Tab">
+      <imgdir name="Enable">
+        <canvas name="0" format="1" scale="0"/>
+        <canvas name="1" format="1" scale="0"/>
+        <canvas name="2" format="1" scale="0"/>
+      </imgdir>
+      <imgdir name="Disable">
+        <canvas name="0" format="1" scale="0"/>
+        <canvas name="1" format="1" scale="0"/>
+        <canvas name="2" format="1" scale="0"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="Tab2">
+      <imgdir name="Enable">
+        <canvas name="0" format="1" scale="0"/>
+        <canvas name="1" format="1" scale="0"/>
+        <canvas name="2" format="1" scale="0"/>
+        <canvas name="3" format="1" scale="0"/>
+      </imgdir>
+      <imgdir name="Disable">
+        <canvas name="0" format="1" scale="0"/>
+        <canvas name="1" format="1" scale="0"/>
+        <canvas name="2" format="1" scale="0"/>
+        <canvas name="3" format="1" scale="0"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="Preview">
+      <canvas name="0" format="1" scale="0"/>
+      <canvas name="1" format="1" scale="0"/>
+      <canvas name="2" format="1" scale="0"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="Tab">
     <canvas name="1" format="1" scale="0"/>
     <canvas name="2" format="1" scale="0"/>
@@ -182,10 +216,10 @@
       <imgdir name="pressed">
         <canvas name="0" format="1" scale="0"/>
       </imgdir>
-      <imgdir name="mouseOver">
+      <imgdir name="disabled">
         <canvas name="0" format="1" scale="0"/>
       </imgdir>
-      <imgdir name="disabled">
+      <imgdir name="mouseOver">
         <canvas name="0" format="1" scale="0"/>
       </imgdir>
     </imgdir>
@@ -234,7 +268,7 @@
       <canvas name="2" format="1" scale="0"/>
       <canvas name="3" format="1" scale="0"/>
     </imgdir>
-    <imgdir name="BtBuy">
+    <imgdir name="BtBuy1">
       <imgdir name="normal">
         <canvas name="0" format="1" scale="0"/>
       </imgdir>
@@ -276,7 +310,7 @@
         <canvas name="0" format="1" scale="0"/>
       </imgdir>
     </imgdir>
-    <imgdir name="BtBuy1">
+    <imgdir name="BtBuy">
       <imgdir name="normal">
         <canvas name="0" format="1" scale="0"/>
       </imgdir>
@@ -331,10 +365,10 @@
     <imgdir name="pressed">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
-    <imgdir name="mouseOver">
+    <imgdir name="disabled">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
-    <imgdir name="disabled">
+    <imgdir name="mouseOver">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
   </imgdir>
@@ -345,10 +379,10 @@
     <imgdir name="pressed">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
-    <imgdir name="mouseOver">
+    <imgdir name="disabled">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
-    <imgdir name="disabled">
+    <imgdir name="mouseOver">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
   </imgdir>
@@ -380,6 +414,30 @@
     <canvas name="asc" format="1" scale="0"/>
     <canvas name="desc" format="1" scale="0"/>
   </imgdir>
+  <imgdir name="Auction">
+    <canvas name="backgrnd" format="1" scale="0">
+      <vector name="origin" x="133" y="123"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="backgrnd1" format="1" scale="0">
+      <vector name="origin" x="142" y="92"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <imgdir name="BtBid">
+      <imgdir name="normal">
+        <canvas name="0" format="1" scale="0"/>
+      </imgdir>
+      <imgdir name="pressed">
+        <canvas name="0" format="1" scale="0"/>
+      </imgdir>
+      <imgdir name="mouseOver">
+        <canvas name="0" format="1" scale="0"/>
+      </imgdir>
+      <imgdir name="disabled">
+        <canvas name="0" format="1" scale="0"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
   <imgdir name="BtSell">
     <imgdir name="normal">
       <canvas name="0" format="1" scale="0"/>
@@ -407,63 +465,5 @@
     <imgdir name="disabled">
       <canvas name="0" format="1" scale="0"/>
     </imgdir>
-  </imgdir>
-  <imgdir name="Auction">
-    <canvas name="backgrnd" format="1" scale="0">
-      <vector name="origin" x="133" y="113"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="backgrnd1" format="1" scale="0">
-      <vector name="origin" x="145" y="92"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <imgdir name="BtBid">
-      <imgdir name="normal">
-        <canvas name="0" format="1" scale="0"/>
-      </imgdir>
-      <imgdir name="pressed">
-        <canvas name="0" format="1" scale="0"/>
-      </imgdir>
-      <imgdir name="mouseOver">
-        <canvas name="0" format="1" scale="0"/>
-      </imgdir>
-      <imgdir name="disabled">
-        <canvas name="0" format="1" scale="0"/>
-      </imgdir>
-    </imgdir>
-  </imgdir>
-  <imgdir name="Base">
-    <imgdir name="Tab">
-      <imgdir name="Enable">
-        <canvas name="0" format="1" scale="0"/>
-        <canvas name="1" format="1" scale="0"/>
-        <canvas name="2" format="1" scale="0"/>
-      </imgdir>
-      <imgdir name="Disable">
-        <canvas name="0" format="1" scale="0"/>
-        <canvas name="1" format="1" scale="0"/>
-        <canvas name="2" format="1" scale="0"/>
-      </imgdir>
-    </imgdir>
-    <imgdir name="Tab2">
-      <imgdir name="Enable">
-        <canvas name="0" format="1" scale="0"/>
-        <canvas name="1" format="1" scale="0"/>
-        <canvas name="2" format="1" scale="0"/>
-        <canvas name="3" format="1" scale="0"/>
-      </imgdir>
-      <imgdir name="Disable">
-        <canvas name="0" format="1" scale="0"/>
-        <canvas name="1" format="1" scale="0"/>
-        <canvas name="2" format="1" scale="0"/>
-        <canvas name="3" format="1" scale="0"/>
-      </imgdir>
-    </imgdir>
-    <imgdir name="Preview">
-      <canvas name="0" format="1" scale="0"/>
-      <canvas name="1" format="1" scale="0"/>
-      <canvas name="2" format="1" scale="0"/>
-    </imgdir>
-    <canvas name="backgrnd" format="2" scale="0"/>
   </imgdir>
 </imgdir>

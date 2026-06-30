@@ -423,7 +423,14 @@
           <int name="mpCon" value="35"/>
           <int name="damage" value="120"/>
           <int name="x" value="5"/>
-          <int name="time" value="200"/>
+          <int name="time" value="600"/>
+        </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="35"/>
+          <int name="damage" value="150"/>
+          <int name="x" value="5"/>
+          <int name="time" value="1200"/>
         </imgdir>
       </imgdir>
       <imgdir name="state">
@@ -4906,6 +4913,16 @@
           <vector name="rb" x="200" y="150"/>
           <int name="prop" value="94"/>
           <int name="mobCount" value="6"/>
+          <int name="time" value="10"/>
+        </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="50"/>
+          <int name="damage" value="150"/>
+          <vector name="lt" x="-300" y="-250"/>
+          <vector name="rb" x="300" y="250"/>
+          <int name="prop" value="100"/>
+          <int name="mobCount" value="8"/>
           <int name="time" value="10"/>
         </imgdir>
         <imgdir name="30">

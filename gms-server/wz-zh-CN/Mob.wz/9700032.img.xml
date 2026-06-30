@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9700032.img" indent="2" media="NONE">
   <imgdir name="info">
-    <int name="bodyAttack" value="1"/>
-    <int name="level" value="61"/>
-    <int name="maxHP" value="100000"/>
-    <int name="maxMP" value="10000"/>
-    <int name="speed" value="0"/>
-    <int name="PADamage" value="250"/>
-    <int name="PDDamage" value="400"/>
-    <int name="MADamage" value="300"/>
-    <int name="MDDamage" value="80"/>
-    <int name="acc" value="160"/>
-    <int name="eva" value="25"/>
-    <int name="pushed" value="2500"/>
-    <float name="fs" value="10.0"/>
-    <int name="summonType" value="1"/>
-    <int name="mobType" value="7"/>
-    <int name="undead" value="1"/>
-    <int name="hpRecovery" value="1200"/>
     <imgdir name="skill">
       <imgdir name="0">
         <int name="skill" value="123"/>
@@ -27,9 +10,35 @@
       </imgdir>
     </imgdir>
     <int name="point" value="30"/>
-    <int name="boss" value="1"/>
+    <int name="noDoom" value="1"/>
     <int name="ignoreFieldOut" value="1"/>
+    <int name="level" value="61"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="maxHP" value="11800"/>
+    <int name="maxMP" value="1200"/>
+    <int name="PADamage" value="324"/>
+    <int name="PDDamage" value="400"/>
+    <int name="PDRate" value="20"/>
+    <int name="MADamage" value="340"/>
+    <int name="MDDamage" value="80"/>
+    <int name="MDRate" value="20"/>
+    <int name="acc" value="49"/>
+    <int name="eva" value="36"/>
+    <int name="pushed" value="500"/>
+    <float name="fs" value="10.0"/>
+    <int name="summonType" value="1"/>
+    <int name="undead" value="1"/>
     <string name="elemAttr" value="H2"/>
+    <int name="hpRecovery" value="1200"/>
+    <string name="mobType" value="2N"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+      </imgdir>
+    </imgdir>
+    <int name="changeableMob" value="1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">
@@ -104,13 +113,6 @@
       <vector name="head" x="-1" y="-64"/>
       <int name="delay" value="180"/>
     </canvas>
-    <canvas name="3" format="1" scale="0">
-      <vector name="origin" x="31" y="84"/>
-      <vector name="lt" x="-28" y="-81"/>
-      <vector name="rb" x="36" y="0"/>
-      <vector name="head" x="-1" y="-64"/>
-      <int name="delay" value="180"/>
-    </canvas>
   </imgdir>
   <imgdir name="hit1">
     <canvas name="0" format="1" scale="0">
@@ -122,11 +124,6 @@
     </canvas>
   </imgdir>
   <imgdir name="die1">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="34" y="89"/>
-      <vector name="head" x="22" y="-63"/>
-      <int name="delay" value="120"/>
-    </canvas>
     <canvas name="1" format="1" scale="0">
       <vector name="origin" x="24" y="91"/>
       <vector name="head" x="13" y="-64"/>
@@ -168,32 +165,36 @@
         <canvas name="0" format="1" scale="0">
           <vector name="origin" x="32" y="34"/>
           <int name="delay" value="60"/>
+          <string name="source" value="Mob/9700030.img/attack1/info/hit/0"/>
         </canvas>
         <canvas name="1" format="1" scale="0">
           <vector name="origin" x="39" y="27"/>
           <int name="delay" value="60"/>
+          <string name="source" value="Mob/9700030.img/attack1/info/hit/1"/>
         </canvas>
         <canvas name="2" format="1" scale="0">
           <vector name="origin" x="33" y="19"/>
           <int name="delay" value="60"/>
+          <string name="source" value="Mob/9700030.img/attack1/info/hit/2"/>
         </canvas>
         <canvas name="3" format="1" scale="0">
           <vector name="origin" x="35" y="4"/>
           <int name="delay" value="60"/>
+          <string name="source" value="Mob/9700030.img/attack1/info/hit/3"/>
         </canvas>
         <canvas name="4" format="1" scale="0">
           <vector name="origin" x="26" y="-8"/>
           <int name="delay" value="60"/>
+          <string name="source" value="Mob/9700030.img/attack1/info/hit/4"/>
         </canvas>
         <canvas name="5" format="1" scale="0">
           <vector name="origin" x="13" y="-9"/>
           <int name="delay" value="60"/>
+          <string name="source" value="Mob/9700030.img/attack1/info/hit/5"/>
         </canvas>
         <int name="attach" value="1"/>
       </imgdir>
-      <int name="type" value="0"/>
       <int name="attackAfter" value="600"/>
-      <int name="PADamage" value="250"/>
       <int name="delay" value="120"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
@@ -260,13 +261,6 @@
       <vector name="head" x="7" y="-61"/>
     </canvas>
     <canvas name="9" format="1" scale="0">
-      <vector name="origin" x="64" y="82"/>
-      <vector name="lt" x="-25" y="-80"/>
-      <vector name="rb" x="40" y="0"/>
-      <vector name="head" x="7" y="-61"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="10" format="1" scale="0">
       <vector name="origin" x="64" y="82"/>
       <vector name="lt" x="-25" y="-80"/>
       <vector name="rb" x="40" y="0"/>

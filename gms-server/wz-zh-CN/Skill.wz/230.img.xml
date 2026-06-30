@@ -257,6 +257,11 @@
           <int name="mpCon" value="15"/>
           <int name="range" value="148"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="13"/>
+          <int name="range" value="220"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="mpCon" value="13"/>
@@ -513,11 +518,19 @@
           <vector name="rb" x="300" y="200"/>
           <int name="mobCount" value="6"/>
         </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="50"/>
+          <int name="hp" value="400"/>
+          <vector name="lt" x="-330" y="-220"/>
+          <vector name="rb" x="300" y="200"/>
+          <int name="mobCount" value="7"/>
+        </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>
           <int name="mpCon" value="24"/>
           <int name="hp" value="300"/>
-          <vector name="lt" x="-300" y="-200"/>
+          <vector name="lt" x="-330" y="-220"/>
           <vector name="rb" x="300" y="200"/>
           <int name="mobCount" value="6"/>
         </imgdir>
@@ -1048,10 +1061,23 @@
           <vector name="lt" x="-300" y="-200"/>
           <vector name="rb" x="300" y="200"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="50"/>
+          <int name="time" value="1200"/>
+          <int name="acc" value="120"/>
+          <int name="eva" value="120"/>
+          <int name="pdd" value="120"/>
+          <int name="mdd" value="120"/>
+          <vector name="lt" x="-300" y="-200"/>
+          <vector name="rb" x="300" y="200"/>
+          <int name="pad" value="10"/>
+          <int name="mad" value="10"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="mpCon" value="24"/>
-          <int name="time" value="200"/>
+          <int name="time" value="300"/>
           <int name="acc" value="20"/>
           <int name="eva" value="20"/>
           <int name="pdd" value="20"/>
@@ -1351,6 +1377,13 @@
           <int name="mpCon" value="24"/>
           <int name="mad" value="78"/>
           <int name="mastery" value="10"/>
+        </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="50"/>
+          <int name="mad" value="160"/>
+          <int name="mastery" value="10"/>
+          <int name="attackCount" value="3"/>
         </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>

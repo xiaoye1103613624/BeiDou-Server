@@ -137,21 +137,6 @@
       <int name="cy" value="0"/>
       <int name="a" value="255"/>
     </imgdir>
-    <imgdir name="8">
-      <string name="bS" value="Christmas"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="1"/>
-      <int name="no" value="2"/>
-      <int name="f" value="0"/>
-      <int name="x" value="-13"/>
-      <int name="y" value="-118"/>
-      <int name="rx" value="-40"/>
-      <int name="ry" value="-80"/>
-      <int name="type" value="4"/>
-      <int name="cx" value="5000"/>
-      <int name="cy" value="0"/>
-      <int name="a" value="255"/>
-    </imgdir>
   </imgdir>
   <imgdir name="life">
     <imgdir name="0">
@@ -166,19 +151,6 @@
       <int name="cy" value="-26"/>
       <int name="rx0" value="70"/>
       <int name="rx1" value="110"/>
-    </imgdir>
-    <imgdir name="1">
-      <string name="type" value="n"/>
-      <string name="id" value="9105005"/>
-      <int name="x" value="-423"/>
-      <int name="y" value="148"/>
-      <int name="mobTime" value="0"/>
-      <int name="f" value="0"/>
-      <int name="hide" value="0"/>
-      <int name="fh" value="10"/>
-      <int name="cy" value="154"/>
-      <int name="rx0" value="-473"/>
-      <int name="rx1" value="-373"/>
     </imgdir>
   </imgdir>
   <imgdir name="0">
@@ -195,7 +167,7 @@
         <string name="l0" value="HappyVillage"/>
         <string name="l1" value="acc"/>
         <string name="l2" value="2"/>
-        <int name="x" value="290"/>
+        <int name="x" value="335"/>
         <int name="y" value="74"/>
         <int name="z" value="9"/>
         <int name="f" value="0"/>
@@ -207,8 +179,8 @@
         <string name="l0" value="Field"/>
         <string name="l1" value="ani"/>
         <string name="l2" value="0"/>
-        <int name="x" value="-465"/>
-        <int name="y" value="26"/>
+        <int name="x" value="-481"/>
+        <int name="y" value="18"/>
         <int name="z" value="4"/>
         <int name="f" value="0"/>
         <int name="zM" value="1"/>
@@ -219,8 +191,8 @@
         <string name="l0" value="Field"/>
         <string name="l1" value="ani"/>
         <string name="l2" value="2"/>
-        <int name="x" value="178"/>
-        <int name="y" value="-10"/>
+        <int name="x" value="266"/>
+        <int name="y" value="-7"/>
         <int name="z" value="3"/>
         <int name="f" value="0"/>
         <int name="zM" value="2"/>
@@ -239,42 +211,6 @@
         <int name="r" value="0"/>
       </imgdir>
       <imgdir name="4">
-        <string name="oS" value="Christmas"/>
-        <string name="l0" value="HappyVillage"/>
-        <string name="l1" value="ani"/>
-        <string name="l2" value="18"/>
-        <int name="x" value="-510"/>
-        <int name="y" value="47"/>
-        <int name="z" value="9"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="11"/>
-        <int name="r" value="0"/>
-      </imgdir>
-      <imgdir name="6">
-        <string name="oS" value="Christmas"/>
-        <string name="l0" value="HappyVillage"/>
-        <string name="l1" value="ani"/>
-        <string name="l2" value="17"/>
-        <int name="x" value="227"/>
-        <int name="y" value="-25"/>
-        <int name="z" value="9"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="2"/>
-        <int name="r" value="0"/>
-      </imgdir>
-      <imgdir name="7">
-        <string name="oS" value="Christmas"/>
-        <string name="l0" value="HappyVillage"/>
-        <string name="l1" value="ani"/>
-        <string name="l2" value="18"/>
-        <int name="x" value="170"/>
-        <int name="y" value="10"/>
-        <int name="z" value="9"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="2"/>
-        <int name="r" value="0"/>
-      </imgdir>
-      <imgdir name="5">
         <string name="oS" value="acc3"/>
         <string name="l0" value="christmas"/>
         <string name="l1" value="acc"/>
@@ -1095,18 +1031,30 @@
     <imgdir name="0">
       <string name="pn" value="sp"/>
       <int name="pt" value="0"/>
-      <int name="x" value="-210"/>
-      <int name="y" value="1"/>
+      <int name="x" value="200"/>
+      <int name="y" value="40"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="1">
       <string name="pn" value="st00"/>
       <int name="pt" value="1"/>
-      <int name="x" value="-204"/>
-      <int name="y" value="148"/>
+      <int name="x" value="288"/>
+      <int name="y" value="149"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
+      <string name="script" value=""/>
+      <int name="hideTooltip" value="0"/>
+      <int name="onlyOnce" value="0"/>
+      <int name="delay" value="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="pn" value="out00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-499"/>
+      <int name="y" value="152"/>
+      <int name="tm" value="889100100"/>
+      <string name="tn" value="st00"/>
       <string name="script" value=""/>
       <int name="hideTooltip" value="0"/>
       <int name="onlyOnce" value="0"/>

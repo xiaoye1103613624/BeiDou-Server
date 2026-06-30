@@ -16,10 +16,16 @@
     <int name="hungry" value="2"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="pickupAll" value="1"/>
+    <int name="sweepForDrop" value="1"/>
+    <int name="longRange" value="1"/>
+    <int name="consumeHP" value="1"/>
+    <int name="consumeMP" value="1"/>
     <int name="chatBalloon" value="20"/>
     <int name="nameTag" value="22"/>
+    <int name="pickupItem" value="1"/>
     <int name="evol" value="1"/>
-    <int name="evol1" value="5000031"/>
+    <int name="evol1" value="5000035"/>
     <int name="evol2" value="5000032"/>
     <int name="evol3" value="5000030"/>
     <int name="evolProb1" value="35"/>
@@ -834,28 +840,28 @@
       <int name="delay" value="150"/>
     </canvas>
     <canvas name="6" format="1" scale="0">
-      <vector name="origin" x="31" y="81"/>
+      <vector name="origin" x="31" y="80"/>
       <vector name="lt" x="-31" y="-77"/>
       <vector name="rb" x="28" y="0"/>
       <int name="delay" value="150"/>
     </canvas>
     <canvas name="7" format="1" scale="0">
-      <vector name="origin" x="32" y="77"/>
-      <vector name="lt" x="-32" y="-74"/>
-      <vector name="rb" x="27" y="0"/>
+      <vector name="origin" x="31" y="75"/>
+      <vector name="lt" x="-32" y="-73"/>
+      <vector name="rb" x="25" y="0"/>
       <int name="delay" value="150"/>
     </canvas>
     <canvas name="8" format="1" scale="0">
-      <vector name="origin" x="33" y="77"/>
-      <int name="z" value="0"/>
-      <vector name="lt" x="-33" y="-74"/>
-      <vector name="rb" x="24" y="0"/>
-    </canvas>
-    <canvas name="9" format="1" scale="0">
-      <vector name="origin" x="32" y="75"/>
+      <vector name="origin" x="32" y="77"/>
       <int name="z" value="0"/>
       <vector name="lt" x="-32" y="-73"/>
-      <vector name="rb" x="26" y="0"/>
+      <vector name="rb" x="25" y="0"/>
+    </canvas>
+    <canvas name="9" format="1" scale="0">
+      <vector name="origin" x="31" y="75"/>
+      <int name="z" value="0"/>
+      <vector name="lt" x="-32" y="-73"/>
+      <vector name="rb" x="25" y="0"/>
     </canvas>
   </imgdir>
   <imgdir name="hungry">
@@ -1139,16 +1145,6 @@
       <vector name="lt" x="-32" y="-73"/>
       <vector name="rb" x="25" y="0"/>
     </canvas>
-    <uol name="5" value="0"/>
-    <uol name="6" value="1"/>
-    <uol name="7" value="2"/>
-    <uol name="8" value="3"/>
-    <uol name="9" value="4"/>
-    <uol name="10" value="0"/>
-    <uol name="11" value="1"/>
-    <uol name="12" value="2"/>
-    <uol name="13" value="3"/>
-    <uol name="14" value="4"/>
   </imgdir>
   <imgdir name="cry">
     <canvas name="0" format="1" scale="0">

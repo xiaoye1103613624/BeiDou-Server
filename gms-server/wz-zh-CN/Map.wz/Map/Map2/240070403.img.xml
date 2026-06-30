@@ -14,10 +14,13 @@
     <int name="noMapCmd" value="0"/>
     <int name="hideMinimap" value="0"/>
     <int name="fieldLimit" value="271100"/>
-    <int name="lvLimit" value="81"/>
+    <int name="lvLimit" value="70"/>
     <string name="onFirstUserEnter" value=""/>
     <string name="onUserEnter" value="TD_neo_BossEnter"/>
-    <int name="partyOnly" value="1"/>
+    <int name="VRTop" value="40"/>
+    <int name="VRLeft" value="-4102"/>
+    <int name="VRBottom" value="810"/>
+    <int name="VRRight" value="-1961"/>
   </imgdir>
   <imgdir name="back">
     <imgdir name="0">
@@ -991,6 +994,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="5"/>
           <int name="next" value="0"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="1">
@@ -1001,6 +1005,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="3"/>
           <int name="next" value="6"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="2">
@@ -1011,6 +1016,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="4"/>
           <int name="next" value="2"/>
+          <int name="piece" value="0"/>
         </imgdir>
         <imgdir name="4">
           <int name="x1" value="-3572"/>
@@ -1019,6 +1025,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="8"/>
           <int name="next" value="3"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="3">
@@ -1029,6 +1036,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="6"/>
           <int name="next" value="1"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="4">
@@ -1039,6 +1047,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="2"/>
           <int name="next" value="5"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="5">
@@ -1049,6 +1058,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="0"/>
           <int name="next" value="8"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="6">
@@ -1059,6 +1069,7 @@
           <int name="y2" value="662"/>
           <int name="prev" value="7"/>
           <int name="next" value="4"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
       <imgdir name="17">
@@ -1069,6 +1080,7 @@
           <int name="y2" value="400"/>
           <int name="prev" value="0"/>
           <int name="next" value="0"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
     </imgdir>

@@ -6,12 +6,12 @@
     <int name="town" value="0"/>
     <int name="swim" value="0"/>
     <int name="returnMap" value="682000000"/>
-    <int name="forcedReturn" value="999999999"/>
+    <int name="forcedReturn" value="682000000"/>
     <float name="mobRate" value="1.0"/>
     <string name="bgm" value="BgmGL/HauntedHouse"/>
     <string name="mapMark" value="Halloween"/>
     <int name="hideMinimap" value="0"/>
-    <int name="fieldLimit" value="131164"/>
+    <int name="fieldLimit" value="92"/>
   </imgdir>
   <imgdir name="back">
     <imgdir name="0">
@@ -241,6 +241,32 @@
     </imgdir>
   </imgdir>
   <imgdir name="life">
+    <imgdir name="0">
+      <string name="type" value="m"/>
+      <string name="id" value="9500169"/>
+      <int name="x" value="780"/>
+      <int name="y" value="-415"/>
+      <int name="mobTime" value="3600"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="617"/>
+      <int name="cy" value="-371"/>
+      <int name="rx0" value="306"/>
+      <int name="rx1" value="1044"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="type" value="m"/>
+      <string name="id" value="9500169"/>
+      <int name="x" value="-633"/>
+      <int name="y" value="-465"/>
+      <int name="mobTime" value="3600"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="549"/>
+      <int name="cy" value="-431"/>
+      <int name="rx0" value="-954"/>
+      <int name="rx1" value="-216"/>
+    </imgdir>
     <imgdir name="2">
       <string name="type" value="m"/>
       <string name="id" value="9400564"/>
@@ -280,20 +306,7 @@
       <int name="rx0" value="-356"/>
       <int name="rx1" value="806"/>
     </imgdir>
-    <imgdir name="1">
-      <string name="type" value="m"/>
-      <string name="id" value="9400564"/>
-      <int name="x" value="-1178"/>
-      <int name="y" value="126"/>
-      <int name="mobTime" value="0"/>
-      <int name="f" value="0"/>
-      <int name="hide" value="0"/>
-      <int name="fh" value="215"/>
-      <int name="cy" value="139"/>
-      <int name="rx0" value="-1301"/>
-      <int name="rx1" value="-1039"/>
-    </imgdir>
-    <imgdir name="0">
+    <imgdir name="5">
       <string name="type" value="m"/>
       <string name="id" value="9400564"/>
       <int name="x" value="-462"/>
@@ -305,6 +318,19 @@
       <int name="cy" value="1039"/>
       <int name="rx0" value="-581"/>
       <int name="rx1" value="-319"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="type" value="m"/>
+      <string name="id" value="9400564"/>
+      <int name="x" value="-1178"/>
+      <int name="y" value="126"/>
+      <int name="mobTime" value="0"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="215"/>
+      <int name="cy" value="139"/>
+      <int name="rx0" value="-1301"/>
+      <int name="rx1" value="-1039"/>
     </imgdir>
   </imgdir>
   <imgdir name="reactor">

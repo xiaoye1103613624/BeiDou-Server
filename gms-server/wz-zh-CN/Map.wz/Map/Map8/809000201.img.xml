@@ -8,15 +8,15 @@
     <int name="forcedReturn" value="999999999"/>
     <float name="mobRate" value="1.0"/>
     <string name="bgm" value="BgmJp/Bathroom"/>
-    <string name="mapMark" value="None"/>
+    <string name="mapMark" value="shouwa"/>
     <int name="hideMinimap" value="1"/>
-    <int name="fieldLimit" value="4"/>
+    <int name="fieldLimit" value="588"/>
     <int name="VRTop" value="-300"/>
     <int name="VRLeft" value="-400"/>
     <int name="VRBottom" value="300"/>
     <int name="VRRight" value="400"/>
     <float name="fs" value="0.2"/>
-    <int name="fieldType" value="1001"/>
+    <int name="fieldType" value="81"/>
     <float name="recovery" value="2.0"/>
     <int name="swim" value="0"/>
   </imgdir>
@@ -38,18 +38,31 @@
     </imgdir>
   </imgdir>
   <imgdir name="life">
-    <imgdir name="0">
+    <imgdir name="1">
       <string name="type" value="n"/>
-      <string name="id" value="9100107"/>
-      <int name="x" value="-348"/>
-      <int name="y" value="202"/>
+      <string name="id" value="9310092"/>
+      <int name="x" value="-345"/>
+      <int name="y" value="187"/>
       <int name="mobTime" value="0"/>
-      <int name="f" value="1"/>
+      <int name="f" value="0"/>
       <int name="hide" value="0"/>
       <int name="fh" value="8"/>
       <int name="cy" value="212"/>
       <int name="rx0" value="-391"/>
-      <int name="rx1" value="-298"/>
+      <int name="rx1" value="-295"/>
+    </imgdir>
+    <imgdir name="0">
+      <string name="type" value="n"/>
+      <string name="id" value="9310100"/>
+      <int name="x" value="-78"/>
+      <int name="y" value="193"/>
+      <int name="mobTime" value="0"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="8"/>
+      <int name="cy" value="212"/>
+      <int name="rx0" value="-128"/>
+      <int name="rx1" value="-28"/>
     </imgdir>
   </imgdir>
   <imgdir name="0">

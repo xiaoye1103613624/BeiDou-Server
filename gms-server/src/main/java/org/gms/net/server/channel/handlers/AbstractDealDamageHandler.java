@@ -90,6 +90,14 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         public boolean ranged, magic;
         public int speed = 4;
         public Point position = new Point();
+        /** 装备/套装伤害加成百分比是否已在allDamage中应用（非0表示已应用，避免applyAttack中重复计算） */
+        public int equipBonusPctApplied = 0;
+        /** 装备额外攻击段数（已从EquipDamageBonusManager汇总） */
+        public long equipExtraSegments = 0;
+        /** 装备伤害加成汇总（用于applyAttack中显示HINT等） */
+        public EquipDamageBonusManager.Bonus equipBonus = null;
+        /** 套装伤害加成汇总（用于applyAttack中显示HINT等） */
+        public SetDamageBonusManager.Bonus setBonus = null;
 
         /**
          * 获取本次攻击对应的技能效果
@@ -595,60 +603,88 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             damageMonsterWithSkill(player, map, monster, (int) (Math.floor(Math.random() * (TmpDmg / 5) + TmpDmg * .8)), attack.skill, 0);
                         }
                     } else {
-                        // 装备伤害加成：按穿戴装备单独配置的百分比/Boss百分比/固定段伤叠加到本次普通伤害上
+                        // 装备/套装伤害加成：如果在handler中已预应用百分比到attack.allDamage（attack.equipBonusPctApplied != 0），
+                        // 则totDamageToOneMonster已经是加成后的值，直接使用；否则按原逻辑在此处计算。
                         long boostedDamage = totDamageToOneMonster;
-                        EquipDamageBonusManager.Bonus equipBonus = player.getEquipDamageBonus();
-                        // 套装伤害加成：按穿戴套装达到的件数档位配置的百分比/Boss百分比叠加到本次普通伤害上
-                        SetDamageBonusManager.Bonus setBonus = player.getSetDamageBonus();
-                        if (equipBonus != EquipDamageBonusManager.Bonus.EMPTY || setBonus != SetDamageBonusManager.Bonus.EMPTY) {
-                            int pct = equipBonus.damagePct() + setBonus.damagePct();
-                            if (monster.isBoss()) {
-                                pct += equipBonus.bossDamagePct() + setBonus.bossDamagePct();
-                            }
-                            if (pct != 0) {
-                                boostedDamage += boostedDamage * pct / 100;
-                            }
-                            boostedDamage += equipBonus.fixedDamage();
-                            boostedDamage = Math.max(boostedDamage, 0L);
+                        long extraSegDamage = 0L;
+                        boolean bonusPreApplied = attack.equipBonusPctApplied != 0;
+                        EquipDamageBonusManager.Bonus equipBonus;
+                        SetDamageBonusManager.Bonus setBonus;
+                        int pct;
+                        long extraSegs;
 
-                            // 逐件装备/逐套装档位列出加成明细，每条配置项单独一行HINT展示；同一角色2秒内最多弹一次，避免刷屏；可在game_config中关闭
-                            boolean hasDetail = !equipBonus.items().isEmpty() || !setBonus.items().isEmpty();
-                            if (hasDetail && GameConfig.getServerBoolean("equip_damage_bonus_hint_enabled")
-                                    && player.tryEquipBonusHintCooldown(2000L)) {
-                                StringBuilder equipHint = new StringBuilder();
-                                for (EquipDamageBonusManager.ItemBonus ib : equipBonus.items()) {
-                                    if (ib.damagePct() != 0) {
-                                        long contrib = (long) totDamageToOneMonster * ib.damagePct() / 100;
-                                        equipHint.append(ib.itemName()).append(": 伤害+")
-                                                .append(EquipDamageBonusManager.formatNumber(contrib)).append("\n");
-                                    }
-                                    if (monster.isBoss() && ib.bossDamagePct() != 0) {
-                                        long bossContrib = (long) totDamageToOneMonster * ib.bossDamagePct() / 100;
-                                        equipHint.append(ib.itemName()).append(": Boss加成伤害+")
-                                                .append(EquipDamageBonusManager.formatNumber(bossContrib)).append("\n");
-                                    }
-                                    if (ib.fixedDamage() != 0L) {
-                                        equipHint.append(ib.itemName()).append(": 固定伤害+")
-                                                .append(EquipDamageBonusManager.formatNumber(ib.fixedDamage())).append("\n");
-                                    }
+                        if (bonusPreApplied) {
+                            // 百分比已预应用到attack.allDamage → totDamageToOneMonster已含加成
+                            equipBonus = attack.equipBonus != null ? attack.equipBonus : EquipDamageBonusManager.Bonus.EMPTY;
+                            setBonus = attack.setBonus != null ? attack.setBonus : SetDamageBonusManager.Bonus.EMPTY;
+                            pct = attack.equipBonusPctApplied;
+                            extraSegs = attack.equipExtraSegments;
+                        } else {
+                            // 未预应用（如TouchMonsterDamageHandler直接调用applyAttack的场景），在此计算
+                            equipBonus = player.getEquipDamageBonus();
+                            setBonus = player.getSetDamageBonus();
+                            if (equipBonus != EquipDamageBonusManager.Bonus.EMPTY || setBonus != SetDamageBonusManager.Bonus.EMPTY) {
+                                pct = equipBonus.damagePct() + setBonus.damagePct();
+                                if (monster.isBoss()) {
+                                    pct += equipBonus.bossDamagePct() + setBonus.bossDamagePct();
                                 }
-                                for (SetDamageBonusManager.SetBonus sb : setBonus.items()) {
-                                    if (sb.damagePct() != 0) {
-                                        long contrib = (long) totDamageToOneMonster * sb.damagePct() / 100;
-                                        equipHint.append(sb.setName()).append("(").append(sb.tierCount()).append("件): 伤害+")
-                                                .append(EquipDamageBonusManager.formatNumber(contrib)).append("\n");
-                                    }
-                                    if (monster.isBoss() && sb.bossDamagePct() != 0) {
-                                        long bossContrib = (long) totDamageToOneMonster * sb.bossDamagePct() / 100;
-                                        equipHint.append(sb.setName()).append("(").append(sb.tierCount()).append("件): Boss加成伤害+")
-                                                .append(EquipDamageBonusManager.formatNumber(bossContrib)).append("\n");
-                                    }
+                                if (pct != 0) {
+                                    boostedDamage += boostedDamage * pct / 100;
                                 }
-                                if (equipHint.length() > 0) {
-                                    equipHint.setLength(equipHint.length() - 1);
-                                    int lineCount = equipHint.toString().split("\n").length;
-                                    player.sendPacket(PacketCreator.sendHint("#r" + equipHint + "#k", 0, Math.max(14 * lineCount, 14)));
+                                extraSegs = equipBonus.extraSegments();
+                            } else {
+                                pct = 0;
+                                extraSegs = 0;
+                            }
+                        }
+                        boostedDamage = Math.max(boostedDamage, 0L);
+
+                        // 额外攻击段数：按每段独立伤害叠加（而非累加固定值），每段伤害 = 百分比加成后的单段伤害
+                        if (extraSegs > 0) {
+                            extraSegDamage = totDamageToOneMonster;  // 单段基础伤害（预应用场景下已含加成）
+                            if (!bonusPreApplied && pct != 0) {
+                                extraSegDamage += extraSegDamage * pct / 100;  // 未预应用则补充加成
+                            }
+                        }
+
+                        // 逐件装备/逐套装档位列出加成明细，每条配置项单独一行HINT展示；同一角色2秒内最多弹一次，避免刷屏；可在game_config中关闭
+                        boolean hasDetail = !equipBonus.items().isEmpty() || !setBonus.items().isEmpty();
+                        if (hasDetail && GameConfig.getServerBoolean("equip_damage_bonus_hint_enabled")
+                                && player.tryEquipBonusHintCooldown(2000L)) {
+                            StringBuilder equipHint = new StringBuilder();
+                            for (EquipDamageBonusManager.ItemBonus ib : equipBonus.items()) {
+                                if (ib.damagePct() != 0) {
+                                    long contrib = (long) totDamageToOneMonster * ib.damagePct() / 100;
+                                    equipHint.append(ib.itemName()).append(": 伤害+")
+                                            .append(EquipDamageBonusManager.formatNumber(contrib)).append("\r\n");
                                 }
+                                if (monster.isBoss() && ib.bossDamagePct() != 0) {
+                                    long bossContrib = (long) totDamageToOneMonster * ib.bossDamagePct() / 100;
+                                    equipHint.append(ib.itemName()).append(": Boss加成伤害+")
+                                            .append(EquipDamageBonusManager.formatNumber(bossContrib)).append("\r\n");
+                                }
+                                if (ib.extraSegments() != 0L) {
+                                    equipHint.append(ib.itemName()).append(": 额外段数+")
+                                            .append(ib.extraSegments()).append(" 段\r\n");
+                                }
+                            }
+                            for (SetDamageBonusManager.SetBonus sb : setBonus.items()) {
+                                if (sb.damagePct() != 0) {
+                                    long contrib = (long) totDamageToOneMonster * sb.damagePct() / 100;
+                                    equipHint.append(sb.setName()).append("(").append(sb.tierCount()).append("件): 伤害+")
+                                            .append(EquipDamageBonusManager.formatNumber(contrib)).append("\r\n");
+                                }
+                                if (monster.isBoss() && sb.bossDamagePct() != 0) {
+                                    long bossContrib = (long) totDamageToOneMonster * sb.bossDamagePct() / 100;
+                                    equipHint.append(sb.setName()).append("(").append(sb.tierCount()).append("件): Boss加成伤害+")
+                                            .append(EquipDamageBonusManager.formatNumber(bossContrib)).append("\r\n");
+                                }
+                            }
+                            if (equipHint.length() > 0) {
+                                // 去掉末尾的 \r\n
+                                equipHint.setLength(equipHint.length() - 2);
+                                int lineCount = equipHint.toString().split("\r\n").length;
+                                player.sendPacket(PacketCreator.sendHint("#k" + equipHint + "#k", 0, Math.max(16 * lineCount, 16)));
                             }
                         }
 
@@ -658,10 +694,31 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                         map.damageMonster(player, monster, boostedDamage);
 
+                        // 装备/套装伤害加成：发送DAMAGE_MONSTER包显示加成差额，
+                        // 让攻击者看到客户端本地渲染伤害之外的加成部分
+                        // （其他玩家通过攻击广播包已经能看到加成后的值）
+                        if (!bonusPreApplied) {
+                            long bonusDelta = boostedDamage - totDamageToOneMonster;
+                            if (bonusDelta > 0) {
+                                map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), bonusDelta));
+                            }
+                        }
+
+                        // 装备加成额外攻击段数：每段独立造成一次伤害
+                        if (extraSegDamage > 0L && monster.isAlive()) {
+                            for (long i = 0; i < extraSegs; i++) {
+                                map.damageMonster(player, monster, extraSegDamage);
+                                // 额外段数也广播DAMAGE_MONSTER包显示在怪物头上
+                                map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), extraSegDamage));
+                            }
+                        }
+
                         // 额外伤害：按角色总属性×可配置比例系数计算，叠加到本次普通伤害之上单独结算
                         long extraDamage = ExtraDamageConfigManager.calcExtraDamage(player, boostedDamage);
                         if (extraDamage > 0 && monster.isAlive()) {
                             map.damageMonster(player, monster, extraDamage);
+                            // 额外伤害也广播DAMAGE_MONSTER包显示在怪物头上
+                            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), extraDamage));
                             if (ExtraDamageConfigManager.isShowHint()) {
                                 player.sendPacket(PacketCreator.sendHint("#r额外伤害 → " + extraDamage + "#k", 0, 10));
                             }
@@ -672,9 +729,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                         // 队伍伤害统计：把本次最终伤害(含装备加成+额外伤害)广播给同地图所有人，供客户端ImGui排行榜汇总；
                         // 注：HEAVENS_HAMMER/COMBO_TEMPEST 走 damageMonsterWithSkill 单独路径，未覆盖在本次广播范围内。
-                        if (boostedDamage > 0 || extraDamage > 0) {
-                            map.broadcastMessage(PacketCreator.updateTeamDamage(player.getId(), player.getName(), boostedDamage + extraDamage, monster.getId()));
-                        }
+                        // 临时关闭(2026-06-29)：自定义opcode(0x1001)在客户端旧版ProcessPacket_Hook里会被转发给原版分发表导致越界崩溃，
+                        // 已在HpMpAlert.cpp修复(自定义opcode不再转发给原版)，确认新DLL编译部署后再放开这段。
+                        // if (boostedDamage > 0 || extraDamage > 0) {
+                        //     map.broadcastMessage(PacketCreator.updateTeamDamage(player.getId(), player.getName(), boostedDamage + extraDamage,
+                        //             monster.getId(), monster.getName(), monster.getHp(), monster.getMaxHp()));
+                        // }
                     }
                     if (monster.isBuffed(MonsterStatus.WEAPON_REFLECT) && !attack.magic) {
                         for (MobSkillId msId : monster.getSkills()) {
@@ -1466,6 +1526,71 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             Corsair.RAPID_FIRE
     );
 
+
+    /**
+     * 在广播攻击包之前，将装备/套装伤害加成百分比应用到attack.allDamage中。
+     * 调用此方法后，attack.equipBonusPctApplied会设为非零值，
+     * applyAttack将自动识别并跳过重复的百分比加成计算。
+     *
+     * @param attack 攻击信息（会被原地修改allDamage中的伤害值）
+     * @param chr    攻击者
+     */
+    protected static void applyEquipDamageBonusToAttack(AttackInfo attack, Character chr) {
+        EquipDamageBonusManager.Bonus equipBonus = chr.getEquipDamageBonus();
+        SetDamageBonusManager.Bonus setBonus = chr.getSetDamageBonus();
+        if (equipBonus == EquipDamageBonusManager.Bonus.EMPTY && setBonus == SetDamageBonusManager.Bonus.EMPTY) {
+            return;
+        }
+
+        // 判断第一个怪物是否为Boss（用于决定是否加Boss百分比）
+        // 注：一次攻击可能命中多只怪，这里取攻击包中第一个怪物做Boss判定，
+        // 若同一次攻击命中Boss和普通怪，Boss加成会统一按Boss百分比计算
+        boolean hasBoss = false;
+        if (attack.allDamage != null && !attack.allDamage.isEmpty()) {
+            Integer firstOid = attack.allDamage.keySet().iterator().next();
+            MapleMap map = chr.getMap();
+            if (map != null) {
+                Monster firstMonster = map.getMonsterByOid(firstOid);
+                if (firstMonster != null && firstMonster.isBoss()) {
+                    hasBoss = true;
+                }
+            }
+        }
+
+        int pct = equipBonus.damagePct() + setBonus.damagePct();
+        if (hasBoss) {
+            pct += equipBonus.bossDamagePct() + setBonus.bossDamagePct();
+        }
+        long extraSegs = equipBonus.extraSegments();
+
+        if (pct != 0 && attack.allDamage != null) {
+            // 把每个伤害值乘以 (1 + pct/100)，结果四舍五入
+            for (List<Integer> damageList : attack.allDamage.values()) {
+                for (int i = 0; i < damageList.size(); i++) {
+                    int original = damageList.get(i);
+                    // 注意原始伤害值可能为负数（暴击编码），需要先解码再编码
+                    boolean isCrit = original < 0;
+                    long absDmg = isCrit ? (original + Integer.MAX_VALUE) : original;
+                    long boosted = absDmg + absDmg * pct / 100;
+                    // 确保不超过int范围
+                    if (boosted > Integer.MAX_VALUE) {
+                        boosted = Integer.MAX_VALUE;
+                    }
+                    int newVal = (int) boosted;
+                    if (isCrit) {
+                        newVal = -Integer.MAX_VALUE + (int) boosted - 1;
+                    }
+                    damageList.set(i, newVal);
+                }
+            }
+        }
+
+        // 在AttackInfo上标记已应用的加成信息，供applyAttack使用
+        attack.equipBonusPctApplied = pct;
+        attack.equipExtraSegments = extraSegs;
+        attack.equipBonus = equipBonus;
+        attack.setBonus = setBonus;
+    }
 
     private static int rand(int l, int u) {
         return (int) ((Math.random() * (u - l + 1)) + l);

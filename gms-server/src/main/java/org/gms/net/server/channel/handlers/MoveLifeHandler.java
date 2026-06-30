@@ -42,6 +42,7 @@ import org.gms.exception.EmptyMovementException;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 怪物移动处理器
@@ -102,16 +103,27 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             useSkillLevel = skillLv;
 
             if (monster.hasSkill(useSkillId, useSkillLevel)) {
-                MobSkillType mobSkillType = MobSkillType.from(useSkillId).orElseThrow();
-                MobSkill toUse = MobSkillFactory.getMobSkillOrThrow(mobSkillType, useSkillLevel);
-
-                if (monster.canUseSkill(toUse, true)) {
-                    int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
-                    if (animationTime > 0 && toUse.getType() != MobSkillType.BANISH) {
-                        toUse.applyDelayedEffect(player, monster, true, animationTime);
+                // 防御性获取技能数据，WZ可能缺少某些等级，用getMobSkill避免抛异常
+                Optional<MobSkillType> mobSkillType = MobSkillType.from(useSkillId);
+                if (mobSkillType.isEmpty()) {
+                    log.warn("未知怪物技能类型 skillId={}", useSkillId);
+                    isSkill = false;
+                } else {
+                    Optional<MobSkill> optToUse = MobSkillFactory.getMobSkill(mobSkillType.get(), useSkillLevel);
+                    if (optToUse.isEmpty()) {
+                        log.warn("怪物技能数据缺失 type={} level={}", mobSkillType.get(), useSkillLevel);
+                        isSkill = false;
                     } else {
-                        banishPlayers = new LinkedList<>();
-                        toUse.applyEffect(player, monster, true, banishPlayers);
+                        MobSkill toUse = optToUse.get();
+                        if (monster.canUseSkill(toUse, true)) {
+                            int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
+                            if (animationTime > 0 && toUse.getType() != MobSkillType.BANISH) {
+                                toUse.applyDelayedEffect(player, monster, true, animationTime);
+                            } else {
+                                banishPlayers = new LinkedList<>();
+                                toUse.applyEffect(player, monster, true, banishPlayers);
+                            }
+                        }
                     }
                 }
             }
@@ -133,11 +145,17 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             MobSkillId skillToUse = monster.getRandomSkill();
             nextSkillId = skillToUse.type().getId();
             nextSkillLevel = skillToUse.level();
-            nextUse = MobSkillFactory.getMobSkillOrThrow(skillToUse.type(), skillToUse.level());
-
-            if (!(nextUse != null && monster.canUseSkill(nextUse, false) && nextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && mobMp >= nextUse.getMpCon())) {
-                // thanks OishiiKawaiiDesu for noticing mobs trying to cast skills they are not supposed to be able
-
+            Optional<MobSkill> optNextUse = MobSkillFactory.getMobSkill(skillToUse.type(), skillToUse.level());
+            // 防御性处理：技能数据可能在WZ中缺失
+            if (optNextUse.isPresent()) {
+                MobSkill tempNextUse = optNextUse.get();
+                if (monster.canUseSkill(tempNextUse, false)
+                        && tempNextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100)
+                        && mobMp >= tempNextUse.getMpCon()) {
+                    nextUse = tempNextUse;
+                }
+            } else {
+                // 技能数据缺失，不设置nextUse，让怪物跳过此技能
                 nextSkillId = 0;
                 nextSkillLevel = 0;
                 nextUse = null;

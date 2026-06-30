@@ -261,6 +261,11 @@
           <int name="x" value="195"/>
           <int name="y" value="137"/>
         </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="x" value="190"/>
+          <int name="y" value="190"/>
+        </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>
           <int name="x" value="200"/>
@@ -547,12 +552,22 @@
           <vector name="rb" x="200" y="150"/>
           <int name="mobCount" value="6"/>
         </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="50"/>
+          <int name="mad" value="160"/>
+          <int name="mastery" value="10"/>
+          <vector name="lt" x="-300" y="-200"/>
+          <vector name="rb" x="200" y="150"/>
+          <int name="mobCount" value="7"/>
+          <int name="attackCount" value="2"/>
+        </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>
           <int name="mpCon" value="50"/>
           <int name="mad" value="120"/>
           <int name="mastery" value="10"/>
-          <vector name="lt" x="-200" y="-150"/>
+          <vector name="lt" x="-300" y="-200"/>
           <vector name="rb" x="200" y="150"/>
           <int name="mobCount" value="6"/>
         </imgdir>
@@ -1711,11 +1726,18 @@
           <int name="time" value="190"/>
           <int name="x" value="-2"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="hpCon" value="30"/>
+          <int name="mpCon" value="25"/>
+          <int name="time" value="1200"/>
+          <int name="x" value="-3"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="hpCon" value="30"/>
           <int name="mpCon" value="25"/>
-          <int name="time" value="200"/>
+          <int name="time" value="300"/>
           <int name="x" value="-2"/>
         </imgdir>
       </imgdir>
@@ -2049,6 +2071,14 @@
           <int name="mastery" value="10"/>
           <int name="time" value="40"/>
           <int name="prop" value="69"/>
+        </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="22"/>
+          <int name="mad" value="400"/>
+          <int name="mastery" value="10"/>
+          <int name="time" value="60"/>
+          <int name="prop" value="90"/>
         </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>

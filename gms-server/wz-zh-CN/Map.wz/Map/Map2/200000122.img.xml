@@ -10,12 +10,11 @@
     <string name="bgm" value="Bgm04/Shinin&apos;Harbor"/>
     <string name="mapMark" value="Orbis"/>
     <int name="hideMinimap" value="0"/>
-    <int name="fieldLimit" value="262270"/>
+    <int name="fieldLimit" value="126"/>
     <int name="VRTop" value="-1000"/>
     <int name="VRLeft" value="220"/>
     <int name="VRBottom" value="90"/>
     <int name="VRRight" value="1960"/>
-    <int name="swim" value="0"/>
   </imgdir>
   <imgdir name="back">
     <imgdir name="0">
@@ -349,12 +348,18 @@
     </imgdir>
   </imgdir>
   <imgdir name="0">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="1">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="pastelBrick"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="0">
@@ -366,7 +371,7 @@
         <int name="y" value="-326"/>
         <int name="z" value="3"/>
         <int name="f" value="0"/>
-        <int name="zM" value="4"/>
+        <int name="zM" value="3"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="2">
@@ -378,7 +383,7 @@
         <int name="y" value="-43"/>
         <int name="z" value="3"/>
         <int name="f" value="0"/>
-        <int name="zM" value="2"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="1">
@@ -390,7 +395,7 @@
         <int name="y" value="-16"/>
         <int name="z" value="1"/>
         <int name="f" value="0"/>
-        <int name="zM" value="2"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="3">
@@ -402,7 +407,7 @@
         <int name="y" value="-348"/>
         <int name="z" value="3"/>
         <int name="f" value="0"/>
-        <int name="zM" value="4"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="4">
@@ -414,18 +419,24 @@
         <int name="y" value="-303"/>
         <int name="z" value="3"/>
         <int name="f" value="0"/>
-        <int name="zM" value="4"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="2">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="3">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="dryRock2"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="2">
@@ -473,18 +484,24 @@
         <int name="y" value="-106"/>
         <int name="z" value="0"/>
         <int name="f" value="0"/>
-        <int name="zM" value="3"/>
+        <int name="zM" value="2"/>
         <int name="reactor" value="0"/>
       </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="4">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="5">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="pastelBrick"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="0">
@@ -508,7 +525,7 @@
         <int name="y" value="-78"/>
         <int name="z" value="4"/>
         <int name="f" value="0"/>
-        <int name="zM" value="1"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="3">
@@ -520,7 +537,7 @@
         <int name="y" value="-58"/>
         <int name="z" value="4"/>
         <int name="f" value="0"/>
-        <int name="zM" value="1"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="1">
@@ -532,7 +549,7 @@
         <int name="y" value="-70"/>
         <int name="z" value="6"/>
         <int name="f" value="0"/>
-        <int name="zM" value="1"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
       <imgdir name="4">
@@ -544,18 +561,24 @@
         <int name="y" value="-476"/>
         <int name="z" value="5"/>
         <int name="f" value="0"/>
-        <int name="zM" value="5"/>
+        <int name="zM" value="0"/>
         <int name="reactor" value="0"/>
       </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="6">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="7">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
@@ -568,7 +591,7 @@
   <imgdir name="reactor"/>
   <imgdir name="foothold">
     <imgdir name="1">
-      <imgdir name="4">
+      <imgdir name="3">
         <imgdir name="1">
           <int name="x1" value="655"/>
           <int name="y1" value="-657"/>

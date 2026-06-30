@@ -149,8 +149,8 @@ function action(mode, type, selection) {
 			var mapId = 列表[sele1].地图;
 			var player = cm.getChar();
 			var party = player.getParty();
-			var map = cm.getMapFactory().getMap(mapId);
-			var playersInMap = map.getCharactersThreadsafe();
+			var map = cm.getMap(mapId);
+			var playersInMap = map.getAllPlayers();
 
 			if (party == null) {
 				cm.sendOk("请组队再来找我....");

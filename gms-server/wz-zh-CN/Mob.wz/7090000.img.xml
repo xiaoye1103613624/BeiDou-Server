@@ -4,7 +4,7 @@
     <int name="boss" value="1"/>
     <int name="bodyAttack" value="1"/>
     <int name="level" value="75"/>
-    <int name="maxHP" value="150000"/>
+    <int name="maxHP" value="16000"/>
     <int name="maxMP" value="500"/>
     <int name="speed" value="-30"/>
     <int name="PADamage" value="300"/>
@@ -12,7 +12,7 @@
     <int name="MADamage" value="380"/>
     <int name="MDDamage" value="290"/>
     <int name="acc" value="130"/>
-    <int name="eva" value="110"/>
+    <int name="eva" value="999"/>
     <int name="exp" value="350"/>
     <int name="undead" value="1"/>
     <int name="pushed" value="1500"/>
@@ -28,7 +28,7 @@
       </imgdir>
     </imgdir>
     <imgdir name="ban">
-      <string name="banMsg" value="You have been kicked out of the Alcadno Lab by the Automated Security System."/>
+      <string name="banMsg" value="被自动警备系统从卡帕莱特研究所赶了出来。"/>
       <imgdir name="banMap">
         <imgdir name="0">
           <int name="field" value="261000000"/>
@@ -36,9 +36,6 @@
         </imgdir>
       </imgdir>
     </imgdir>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">

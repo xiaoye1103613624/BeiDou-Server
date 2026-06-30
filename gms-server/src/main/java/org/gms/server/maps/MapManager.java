@@ -96,6 +96,11 @@ public class MapManager {
 
         map = MapFactory.loadMapFromWz(mapid, world, channel, event);
 
+        // 地图数据不存在时跳过缓存，避免缓存null值
+        if (map == null) {
+            return null;
+        }
+
         if (cache) {
             mapsWLock.lock();
             try {

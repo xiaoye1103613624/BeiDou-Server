@@ -16,6 +16,12 @@
     <int name="hungry" value="3"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="pickupAll" value="1"/>
+    <int name="pickupItem" value="1"/>
+    <int name="sweepForDrop" value="1"/>
+    <int name="longRange" value="1"/>
+    <int name="consumeHP" value="1"/>
+    <int name="consumeMP" value="1"/>
     <int name="chatBalloon" value="40"/>
     <int name="nameTag" value="42"/>
   </imgdir>
@@ -23,7 +29,7 @@
     <imgdir name="0">
       <string name="command" value="c1"/>
       <int name="inc" value="1"/>
-      <int name="prob" value="30"/>
+      <int name="prob" value="70"/>
       <int name="l0" value="1"/>
       <int name="l1" value="9"/>
       <imgdir name="success">
@@ -46,7 +52,7 @@
     <imgdir name="1">
       <string name="command" value="c2"/>
       <int name="inc" value="1"/>
-      <int name="prob" value="45"/>
+      <int name="prob" value="70"/>
       <int name="l0" value="10"/>
       <int name="l1" value="19"/>
       <imgdir name="success">

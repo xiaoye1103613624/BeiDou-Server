@@ -14,10 +14,15 @@
       <vector name="origin" x="0" y="30"/>
     </canvas>
     <int name="hungry" value="3"/>
-    <int name="chatBalloon" value="12"/>
-    <int name="nameTag" value="14"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="chatBalloon" value="12"/>
+    <int name="nameTag" value="14"/>
+    <int name="pickupAll" value="1"/>
+    <int name="pickupItem" value="1"/>
+    <int name="sweepForDrop" value="1"/>
+    <int name="longRange" value="1"/>
+    <int name="consumeHP" value="1"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -425,6 +430,56 @@
         </imgdir>
       </imgdir>
     </imgdir>
+    <imgdir name="17">
+      <string name="command" value="c18"/>
+      <int name="inc" value="2"/>
+      <int name="prob" value="50"/>
+      <int name="l0" value="15"/>
+      <int name="l1" value="19"/>
+      <imgdir name="success">
+        <imgdir name="0">
+          <string name="act" value="chat"/>
+          <string name="0" value="c18_s1"/>
+          <string name="1" value="c18_s2"/>
+          <string name="2" value="c18_s3"/>
+          <string name="3" value="c18_s4"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="fail">
+        <imgdir name="0">
+          <string name="act" value="rest0"/>
+          <string name="0" value="c18_f1"/>
+          <string name="1" value="c18_f2"/>
+          <string name="2" value="c18_f3"/>
+          <string name="3" value="c18_f4"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="18">
+      <string name="command" value="c19"/>
+      <int name="inc" value="2"/>
+      <int name="prob" value="70"/>
+      <int name="l0" value="20"/>
+      <int name="l1" value="29"/>
+      <imgdir name="success">
+        <imgdir name="0">
+          <string name="act" value="chat"/>
+          <string name="0" value="c19_s1"/>
+          <string name="1" value="c19_s2"/>
+          <string name="2" value="c19_s3"/>
+          <string name="3" value="c19_s4"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="fail">
+        <imgdir name="0">
+          <string name="act" value="rise"/>
+          <string name="0" value="c19_f1"/>
+          <string name="1" value="c19_f2"/>
+          <string name="2" value="c19_f3"/>
+          <string name="3" value="c19_f4"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
     <imgdir name="19">
       <string name="command" value="c20"/>
       <int name="inc" value="2"/>
@@ -712,56 +767,6 @@
           <string name="0" value="c31_f1"/>
           <string name="1" value="c31_f2"/>
           <string name="2" value="c31_f3"/>
-        </imgdir>
-      </imgdir>
-    </imgdir>
-    <imgdir name="17">
-      <string name="command" value="c18"/>
-      <int name="inc" value="2"/>
-      <int name="prob" value="50"/>
-      <int name="l0" value="15"/>
-      <int name="l1" value="19"/>
-      <imgdir name="success">
-        <imgdir name="0">
-          <string name="act" value="chat"/>
-          <string name="0" value="c18_s1"/>
-          <string name="1" value="c18_s2"/>
-          <string name="2" value="c18_s3"/>
-          <string name="3" value="c18_s4"/>
-        </imgdir>
-      </imgdir>
-      <imgdir name="fail">
-        <imgdir name="0">
-          <string name="act" value="rest0"/>
-          <string name="0" value="c18_f1"/>
-          <string name="1" value="c18_f2"/>
-          <string name="2" value="c18_f3"/>
-          <string name="3" value="c18_f4"/>
-        </imgdir>
-      </imgdir>
-    </imgdir>
-    <imgdir name="18">
-      <string name="command" value="c19"/>
-      <int name="inc" value="2"/>
-      <int name="prob" value="70"/>
-      <int name="l0" value="20"/>
-      <int name="l1" value="29"/>
-      <imgdir name="success">
-        <imgdir name="0">
-          <string name="act" value="chat"/>
-          <string name="0" value="c19_s1"/>
-          <string name="1" value="c19_s2"/>
-          <string name="2" value="c19_s3"/>
-          <string name="3" value="c19_s4"/>
-        </imgdir>
-      </imgdir>
-      <imgdir name="fail">
-        <imgdir name="0">
-          <string name="act" value="rise"/>
-          <string name="0" value="c19_f1"/>
-          <string name="1" value="c19_f2"/>
-          <string name="2" value="c19_f3"/>
-          <string name="3" value="c19_f4"/>
         </imgdir>
       </imgdir>
     </imgdir>

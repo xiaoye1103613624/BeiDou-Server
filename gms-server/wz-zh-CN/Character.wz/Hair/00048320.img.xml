@@ -39,7 +39,6 @@
         <string name="z" value="hairShade"/>
         <string name="group" value="skin"/>
         <string name="_hash" value="ef184efd8b136d5631424e49bb392260fb8733f173b2901925120f0c5a2785a0"/>
-        <string name="_outlink" value="Character/Hair/00048322.img/default/hairShade/0"/>
       </canvas>
       <uol name="1" value="0"/>
       <uol name="2" value="0"/>
@@ -608,7 +607,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hairOverHead"/>
-        <string name="_hash" value="0e84efa1c3fb9b5577c5952ab500830bd7673a542e9c4b3e35b47e789bdd7d74"/>
+        <string name="_hash" value="06727d965c892e5bc0e29daf606292ffe3bed21d55c17e45cde0cc5aea921ec9"/>
       </canvas>
       <canvas name="hair" format="2" scale="0">
         <vector name="origin" x="15" y="12"/>
@@ -616,13 +615,22 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_hash" value="41e3d23042c055162d03fec339b6848b2462233bd6fad978219f8d53e85831e5"/>
+        <string name="_hash" value="5603599372323deb848bc6245b179f4e8e760c6d38e41a349a886fc30d6b6609"/>
+      </canvas>
+      <canvas name="hairBelowBody" format="2" scale="0">
+        <vector name="origin" x="15" y="12"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="hairBelowBody"/>
+        <string name="_hash" value="af6995d92f25b756d76e33671fcc9705043330807f2b5571c5db6bb5f36a3609"/>
       </canvas>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>
     <imgdir name="1">
       <uol name="hairOverHead" value="../0/hairOverHead"/>
       <uol name="hair" value="../0/hair"/>
+      <uol name="hairBelowBody" value="../0/hairBelowBody"/>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>
   </imgdir>
@@ -630,6 +638,7 @@
     <imgdir name="0">
       <uol name="hairOverHead" value="../../proneStab/0/hairOverHead"/>
       <uol name="hair" value="../../proneStab/0/hair"/>
+      <uol name="hairBelowBody" value="../../proneStab/0/hairBelowBody"/>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>
   </imgdir>

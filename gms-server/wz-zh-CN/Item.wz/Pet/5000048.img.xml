@@ -17,8 +17,14 @@
     <int name="autoReact" value="1"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="pickupAll" value="1"/>
+    <int name="sweepForDrop" value="1"/>
+    <int name="longRange" value="1"/>
+    <int name="consumeHP" value="1"/>
+    <int name="consumeMP" value="1"/>
     <int name="chatBalloon" value="28"/>
     <int name="nameTag" value="30"/>
+    <int name="pickupItem" value="1"/>
     <int name="evol" value="1"/>
     <int name="evol1" value="5000049"/>
     <int name="evol2" value="5000050"/>
@@ -1092,6 +1098,44 @@
       <int name="delay" value="125"/>
     </canvas>
   </imgdir>
+  <imgdir name="angry_short">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="28" y="32"/>
+      <vector name="lt" x="-28" y="-32"/>
+      <vector name="rb" x="17" y="1"/>
+      <int name="delay" value="125"/>
+    </canvas>
+    <canvas name="1" format="1" scale="0">
+      <vector name="origin" x="33" y="42"/>
+      <vector name="lt" x="-33" y="-42"/>
+      <vector name="rb" x="24" y="3"/>
+      <int name="delay" value="125"/>
+    </canvas>
+    <canvas name="2" format="1" scale="0">
+      <vector name="origin" x="26" y="47"/>
+      <vector name="lt" x="-26" y="-47"/>
+      <vector name="rb" x="23" y="1"/>
+      <int name="delay" value="125"/>
+    </canvas>
+    <canvas name="3" format="1" scale="0">
+      <vector name="origin" x="28" y="42"/>
+      <vector name="lt" x="-28" y="-42"/>
+      <vector name="rb" x="22" y="1"/>
+      <int name="delay" value="125"/>
+    </canvas>
+    <canvas name="4" format="1" scale="0">
+      <vector name="origin" x="32" y="46"/>
+      <vector name="lt" x="-32" y="-46"/>
+      <vector name="rb" x="23" y="2"/>
+      <int name="delay" value="125"/>
+    </canvas>
+    <canvas name="5" format="1" scale="0">
+      <vector name="origin" x="21" y="42"/>
+      <vector name="lt" x="-21" y="-42"/>
+      <vector name="rb" x="26" y="3"/>
+      <int name="delay" value="125"/>
+    </canvas>
+  </imgdir>
   <imgdir name="chat">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="40" y="36"/>
@@ -1544,38 +1588,38 @@
       <vector name="rb" x="38" y="-4"/>
     </canvas>
   </imgdir>
-  <imgdir name="angry_short">
-    <canvas name="0" format="1" scale="0">
+  <imgdir name="attack">
+    <canvas name="0_2" format="1" scale="0">
       <vector name="origin" x="28" y="32"/>
       <vector name="lt" x="-28" y="-32"/>
       <vector name="rb" x="17" y="1"/>
       <int name="delay" value="125"/>
     </canvas>
-    <canvas name="1" format="1" scale="0">
+    <canvas name="1_3" format="1" scale="0">
       <vector name="origin" x="33" y="42"/>
       <vector name="lt" x="-33" y="-42"/>
       <vector name="rb" x="24" y="3"/>
       <int name="delay" value="125"/>
     </canvas>
-    <canvas name="2" format="1" scale="0">
+    <canvas name="2_4" format="1" scale="0">
       <vector name="origin" x="26" y="47"/>
       <vector name="lt" x="-26" y="-47"/>
       <vector name="rb" x="23" y="1"/>
       <int name="delay" value="125"/>
     </canvas>
-    <canvas name="3" format="1" scale="0">
+    <canvas name="3_5" format="1" scale="0">
       <vector name="origin" x="28" y="42"/>
       <vector name="lt" x="-28" y="-42"/>
       <vector name="rb" x="22" y="1"/>
       <int name="delay" value="125"/>
     </canvas>
-    <canvas name="4" format="1" scale="0">
+    <canvas name="4_16" format="1" scale="0">
       <vector name="origin" x="32" y="46"/>
       <vector name="lt" x="-32" y="-46"/>
       <vector name="rb" x="23" y="2"/>
       <int name="delay" value="125"/>
     </canvas>
-    <canvas name="5" format="1" scale="0">
+    <canvas name="5_17" format="1" scale="0">
       <vector name="origin" x="21" y="42"/>
       <vector name="lt" x="-21" y="-42"/>
       <vector name="rb" x="26" y="3"/>

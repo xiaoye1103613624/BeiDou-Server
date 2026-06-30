@@ -2,17 +2,19 @@
 <imgdir name="9400591.img" indent="2" media="NONE">
   <imgdir name="info">
     <int name="bodyAttack" value="1"/>
-    <int name="level" value="130"/>
-    <int name="maxHP" value="255000000"/>
+    <int name="level" value="120"/>
+    <int name="maxHP" value="210000000"/>
     <int name="maxMP" value="10000000"/>
     <int name="speed" value="-20"/>
-    <int name="PADamage" value="630"/>
+    <int name="PADamage" value="1350"/>
     <int name="PDDamage" value="1000"/>
-    <int name="MADamage" value="480"/>
+    <int name="MADamage" value="1300"/>
     <int name="MDDamage" value="850"/>
     <int name="acc" value="260"/>
     <int name="eva" value="39"/>
     <int name="exp" value="4550000"/>
+    <int name="hpRecovery" value="800"/>
+    <int name="mpRecovery" value="700"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="80000"/>
     <float name="fs" value="10.0"/>
@@ -27,43 +29,27 @@
       <imgdir name="0">
         <int name="skill" value="200"/>
         <int name="action" value="1"/>
-        <int name="level" value="140"/>
+        <int name="level" value="175"/>
         <int name="effectAfter" value="900"/>
       </imgdir>
       <imgdir name="1">
-        <int name="skill" value="200"/>
-        <int name="action" value="1"/>
-        <int name="level" value="141"/>
-        <int name="effectAfter" value="900"/>
-      </imgdir>
-      <imgdir name="2">
-        <int name="skill" value="200"/>
-        <int name="action" value="1"/>
-        <int name="level" value="142"/>
-        <int name="effectAfter" value="900"/>
-      </imgdir>
-      <imgdir name="3">
-        <int name="skill" value="200"/>
-        <int name="action" value="1"/>
-        <int name="level" value="143"/>
-        <int name="effectAfter" value="900"/>
-      </imgdir>
-      <imgdir name="4">
-        <int name="skill" value="200"/>
-        <int name="action" value="1"/>
-        <int name="level" value="144"/>
-        <int name="effectAfter" value="900"/>
-      </imgdir>
-      <imgdir name="5">
         <int name="skill" value="110"/>
         <int name="action" value="2"/>
         <int name="level" value="8"/>
         <int name="effectAfter" value="900"/>
       </imgdir>
-    </imgdir>
-    <imgdir name="revive">
-      <int name="0" value="9400596"/>
-      <int name="1" value="9400597"/>
+      <imgdir name="2">
+        <int name="skill" value="102"/>
+        <int name="action" value="2"/>
+        <int name="level" value="5"/>
+        <int name="effectAfter" value="1800"/>
+      </imgdir>
+      <imgdir name="3">
+        <int name="skill" value="103"/>
+        <int name="action" value="2"/>
+        <int name="level" value="4"/>
+        <int name="effectAfter" value="1800"/>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="stand">

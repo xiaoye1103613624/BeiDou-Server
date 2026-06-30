@@ -6,7 +6,7 @@
     <int name="cash" value="1"/>
   </imgdir>
   <imgdir name="default">
-    <canvas name="hairOverHead" format="2" scale="0">
+    <canvas name="hairOverHead" format="1" scale="0">
       <vector name="origin" x="17" y="19"/>
       <string name="z" value="hairOverHead"/>
       <imgdir name="map">
@@ -14,7 +14,7 @@
       </imgdir>
       <string name="_hash" value="ab79166d7de8c9a37b319c6d757f5f649dee764da771cc25cc3926ee7eedf86d"/>
     </canvas>
-    <canvas name="hair" format="2" scale="0">
+    <canvas name="hair" format="1" scale="0">
       <vector name="origin" x="16" y="12"/>
       <string name="z" value="hair"/>
       <imgdir name="map">
@@ -22,7 +22,7 @@
       </imgdir>
       <string name="_hash" value="4de047bef0413a4c347d6099525fe09f5cc0e9ad2570548912200d40b00c5ab9"/>
     </canvas>
-    <canvas name="hairBelowBody" format="2" scale="0">
+    <canvas name="hairBelowBody" format="1" scale="0">
       <vector name="origin" x="36" y="12"/>
       <string name="z" value="hairBelowBody"/>
       <imgdir name="map">
@@ -31,7 +31,7 @@
       <string name="_hash" value="2bb5e4da4e2ae41f5b84ab630bdcc1e019026c3736881a700db9ab8d32f5a100"/>
     </canvas>
     <imgdir name="hairShade">
-      <canvas name="0" format="2" scale="0">
+      <canvas name="0" format="1" scale="0">
         <vector name="origin" x="13" y="11"/>
         <imgdir name="map">
           <vector name="brow" x="0" y="0"/>
@@ -55,7 +55,7 @@
     </imgdir>
   </imgdir>
   <imgdir name="backDefault">
-    <canvas name="backHair" format="2" scale="0">
+    <canvas name="backHair" format="1" scale="0">
       <vector name="origin" x="35" y="19"/>
       <string name="z" value="backHair"/>
       <imgdir name="map">
@@ -63,7 +63,7 @@
       </imgdir>
       <string name="_hash" value="e3482d1171e9fb29092a73bf6f6461df580ce978c40ef36b619fb02f180c2cd0"/>
     </canvas>
-    <canvas name="backHairBelowCap" format="2" scale="0">
+    <canvas name="backHairBelowCap" format="1" scale="0">
       <vector name="origin" x="35" y="12"/>
       <string name="z" value="backHairBelowCap"/>
       <imgdir name="map">
@@ -74,7 +74,7 @@
   </imgdir>
   <imgdir name="prone">
     <imgdir name="0">
-      <canvas name="hairOverHead" format="2" scale="0">
+      <canvas name="hairOverHead" format="1" scale="0">
         <vector name="origin" x="17" y="19"/>
         <string name="z" value="hairOverHead"/>
         <imgdir name="map">
@@ -82,7 +82,7 @@
         </imgdir>
         <string name="_inlink" value="default/hairOverHead"/>
       </canvas>
-      <canvas name="hair" format="2" scale="0">
+      <canvas name="hair" format="1" scale="0">
         <vector name="origin" x="16" y="12"/>
         <string name="z" value="hair"/>
         <imgdir name="map">
@@ -90,7 +90,7 @@
         </imgdir>
         <string name="_inlink" value="default/hair"/>
       </canvas>
-      <canvas name="hairBelowBody" format="2" scale="0">
+      <canvas name="hairBelowBody" format="1" scale="0">
         <vector name="origin" x="36" y="12"/>
         <string name="z" value="hairBelowBody"/>
         <imgdir name="map">

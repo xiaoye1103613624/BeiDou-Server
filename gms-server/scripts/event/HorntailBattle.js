@@ -32,7 +32,6 @@ var recruitMap = 240050400;
 var clearMap = 240050600;
 
 var minMapId = 240060000;
-//传送要不要打2个头，2040060200是直接打龙，240060000是打左右头，改好要重载副本
 var maxMapId = 240060200;
 
 var eventTime = 120;     // 120 minutes

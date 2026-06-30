@@ -11,7 +11,7 @@
     <string name="bgm" value="Bgm00/FloralLife"/>
     <string name="mapMark" value="None"/>
     <int name="fly" value="0"/>
-    <int name="hideMinimap" value="0"/>
+    <int name="hideMinimap" value="1"/>
     <int name="fieldLimit" value="271096"/>
     <int name="VRTop" value="-300"/>
     <int name="VRLeft" value="-400"/>
@@ -19,10 +19,11 @@
     <int name="VRRight" value="400"/>
     <string name="onFirstUserEnter" value=""/>
     <string name="onUserEnter" value=""/>
+    <int name="noMapCmd" value="0"/>
   </imgdir>
   <imgdir name="back">
     <imgdir name="0">
-      <string name="bS" value="grassySoil"/>
+      <string name="bS" value=""/>
       <int name="front" value="0"/>
       <int name="ani" value="0"/>
       <int name="no" value="0"/>
@@ -32,66 +33,6 @@
       <int name="rx" value="0"/>
       <int name="ry" value="0"/>
       <int name="type" value="3"/>
-      <int name="cx" value="0"/>
-      <int name="cy" value="0"/>
-      <int name="a" value="255"/>
-    </imgdir>
-    <imgdir name="1">
-      <string name="bS" value="grassySoil"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="0"/>
-      <int name="no" value="1"/>
-      <int name="f" value="0"/>
-      <int name="x" value="52"/>
-      <int name="y" value="-39"/>
-      <int name="rx" value="1"/>
-      <int name="ry" value="-40"/>
-      <int name="type" value="4"/>
-      <int name="cx" value="0"/>
-      <int name="cy" value="0"/>
-      <int name="a" value="255"/>
-    </imgdir>
-    <imgdir name="2">
-      <string name="bS" value="grassySoil"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="0"/>
-      <int name="no" value="2"/>
-      <int name="f" value="0"/>
-      <int name="x" value="29"/>
-      <int name="y" value="81"/>
-      <int name="rx" value="-30"/>
-      <int name="ry" value="-60"/>
-      <int name="type" value="0"/>
-      <int name="cx" value="0"/>
-      <int name="cy" value="0"/>
-      <int name="a" value="255"/>
-    </imgdir>
-    <imgdir name="3">
-      <string name="bS" value="grassySoil"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="0"/>
-      <int name="no" value="3"/>
-      <int name="f" value="0"/>
-      <int name="x" value="-92"/>
-      <int name="y" value="-223"/>
-      <int name="rx" value="-30"/>
-      <int name="ry" value="-60"/>
-      <int name="type" value="0"/>
-      <int name="cx" value="0"/>
-      <int name="cy" value="0"/>
-      <int name="a" value="255"/>
-    </imgdir>
-    <imgdir name="4">
-      <string name="bS" value="grassySoil"/>
-      <int name="front" value="0"/>
-      <int name="ani" value="0"/>
-      <int name="no" value="4"/>
-      <int name="f" value="0"/>
-      <int name="x" value="-141"/>
-      <int name="y" value="157"/>
-      <int name="rx" value="-50"/>
-      <int name="ry" value="-75"/>
-      <int name="type" value="1"/>
       <int name="cx" value="0"/>
       <int name="cy" value="0"/>
       <int name="a" value="255"/>
@@ -110,6 +51,20 @@
       <int name="cy" value="182"/>
       <int name="rx0" value="213"/>
       <int name="rx1" value="313"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="type" value="n"/>
+      <string name="id" value="9105002"/>
+      <int name="x" value="-38"/>
+      <int name="y" value="175"/>
+      <int name="mobTime" value="0"/>
+      <int name="f" value="0"/>
+      <int name="hide" value="0"/>
+      <int name="fh" value="1"/>
+      <int name="cy" value="182"/>
+      <int name="rx0" value="-88"/>
+      <int name="rx1" value="12"/>
+      <string name="limitedname" value="PMD_FirstTime"/>
     </imgdir>
   </imgdir>
   <imgdir name="reactor"/>
@@ -238,6 +193,7 @@
           <int name="y2" value="182"/>
           <int name="prev" value="0"/>
           <int name="next" value="0"/>
+          <int name="piece" value="0"/>
         </imgdir>
         <imgdir name="2">
           <int name="x1" value="-401"/>
@@ -246,6 +202,7 @@
           <int name="y2" value="-22"/>
           <int name="prev" value="0"/>
           <int name="next" value="0"/>
+          <int name="piece" value="0"/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -316,6 +273,16 @@
       <int name="y" value="-48"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="pn" value="out00"/>
+      <int name="pt" value="7"/>
+      <int name="x" value="-297"/>
+      <int name="y" value="184"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="world_trip_Out"/>
     </imgdir>
   </imgdir>
 </imgdir>

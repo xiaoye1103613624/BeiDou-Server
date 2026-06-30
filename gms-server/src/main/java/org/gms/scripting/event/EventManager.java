@@ -41,6 +41,7 @@ import org.gms.server.ThreadManager;
 import org.gms.server.expeditions.Expedition;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
+import org.gms.server.life.OverrideMonsterStats;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MapManager;
 import org.gms.server.quest.Quest;
@@ -1154,6 +1155,14 @@ public class EventManager {
     }
 
     /**
+     * 创建怪物属性覆盖对象，用于在事件脚本中动态修改怪物属性
+     * @return 新的怪物属性覆盖对象
+     */
+    public OverrideMonsterStats newMonsterStats() {
+        return new OverrideMonsterStats();
+    }
+
+    /**
      * 通知公会准备就绪
      * @param guildId 公会ID
      */
@@ -1410,6 +1419,21 @@ public class EventManager {
         MapleMap fromMap = cserv.getMapFactory().getMap(fromMapId);
         if (fromMap != null) {
             fromMap.warpEveryone(toMapId);
+        }
+    }
+
+    /**
+     * 广播船只状态变化（兼容zh-CN交通脚本中的em.broadcastShip(mapId, state)调用）
+     * state: 1=靠岸(docked/true), 2=离港(departing/false)
+     * @param mapId 地图ID（如200000151=Orbis码头, 260000100=Ariant码头）
+     * @param state 船只状态：1=到港靠岸，2=离港出发
+     */
+    public void broadcastShip(int mapId, int state) {
+        MapleMap map = cserv.getMapFactory().getMap(mapId);
+        if (map != null) {
+            map.broadcastShip(state == 1);
+        } else {
+            log.warn("船只状态广播失败：地图 {} 不存在，无法广播 state={}（事件：{}）", mapId, state, name);
         }
     }
 

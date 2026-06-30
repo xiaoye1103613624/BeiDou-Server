@@ -28,6 +28,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 进入商城处理器
@@ -40,10 +42,13 @@ import org.gms.util.PacketCreator;
  * 处理玩家进入现金商城的操作
  */
 public final class EnterCashShopHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(EnterCashShopHandler.class);
+
     @Override
     public void handlePacket(InPacket p, Client c) {
         try {
             Character mc = c.getPlayer();
+            log.info("商城进入流程开始: 玩家={}, 地图={}", mc.getName(), mc.getMapId());
 
             if (mc.cannotEnterCashShop()) {
                 c.sendPacket(PacketCreator.enableActions());
@@ -92,17 +97,26 @@ public final class EnterCashShopHandler extends AbstractPacketHandler {
             mc.forfeitExpirableQuests();
             mc.cancelQuestExpirationTask();
 
+            // 诊断日志：逐个发送封包，定位闪退位置
+            log.info("[商城诊断1/5] 发送 openCashShop...");
             c.sendPacket(PacketCreator.openCashShop(c, false));
+            log.info("[商城诊断2/5] 发送 showCashInventory (库存{}件)...", mc.getCashShop().getInventorySize());
             c.sendPacket(PacketCreator.showCashInventory(c));
+            log.info("[商城诊断3/5] 发送 showGifts...");
             c.sendPacket(PacketCreator.showGifts(mc.getCashShop().loadGifts()));
+            log.info("[商城诊断4/5] 发送 showWishList...");
             c.sendPacket(PacketCreator.showWishList(mc, false));
+            log.info("[商城诊断5/5] 发送 showCash (NX={}, MP={}, NXPre={})...",
+                    mc.getCashShop().getCash(1), mc.getCashShop().getCash(2), mc.getCashShop().getCash(4));
             c.sendPacket(PacketCreator.showCash(mc));
 
+            log.info("商城进入完成: 玩家={}", mc.getName());
             c.getChannelServer().removePlayer(mc);
             mc.getMap().removePlayer(mc);
             mc.getCashShop().open(true);
             mc.saveCharToDB();
         } catch (Exception e) {
+            log.error("商城进入流程异常", e);
             e.printStackTrace();
         }
     }

@@ -22,7 +22,7 @@ function setup(mapid) { //mapid = ((level, 0-3) (type, 0-3) (mapid)) in one stri
 	eim.setProperty("blue", "0");
 	eim.setProperty("redflag", "0");
 	eim.setProperty("blueflag", "0");
-    eim.createInstanceMap(map).resetFully();
+    eim.getInstanceMap(map).resetFully();
     return eim;
 }
 

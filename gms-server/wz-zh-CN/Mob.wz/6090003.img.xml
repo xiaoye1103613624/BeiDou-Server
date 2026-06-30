@@ -13,7 +13,7 @@
     <int name="MDDamage" value="130"/>
     <int name="acc" value="80"/>
     <int name="eva" value="999"/>
-    <int name="exp" value="3984"/>
+    <int name="exp" value="240"/>
     <int name="undead" value="1"/>
     <int name="pushed" value="700"/>
     <float name="fs" value="10.0"/>
@@ -28,7 +28,7 @@
       </imgdir>
     </imgdir>
     <imgdir name="ban">
-      <string name="banMsg" value="You have been relocated by the vengeful spirit of the Scholar Ghost."/>
+      <string name="banMsg" value="由于蘑菇神社的怨灵，移动到了其他地方。"/>
       <imgdir name="banMap">
         <imgdir name="0">
           <int name="field" value="222000000"/>
@@ -37,9 +37,6 @@
       </imgdir>
     </imgdir>
     <int name="mobType" value="7"/>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">

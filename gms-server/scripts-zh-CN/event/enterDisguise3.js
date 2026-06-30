@@ -16,7 +16,7 @@ function setup() {
     returnmap = em.getChannelServer().getMapFactory().getMap(130010100);
     var instanceName = "enterDisguise3" + instanceId;
     var eim = em.newInstance(instanceName);
-    eim.createInstanceMap(108010620);
+    eim.getInstanceMap(108010620);
 
     instanceId++;
 

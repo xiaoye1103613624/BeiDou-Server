@@ -10,7 +10,7 @@
     <string name="bgm" value="Bgm05/WolfWood"/>
     <string name="mapMark" value="ElNathDungeon"/>
     <int name="hideMinimap" value="0"/>
-    <int name="fieldLimit" value="44"/>
+    <int name="fieldLimit" value="36"/>
     <int name="decHP" value="10"/>
     <int name="VRTop" value="-1940"/>
     <int name="VRLeft" value="-402"/>
@@ -18,7 +18,6 @@
     <int name="VRRight" value="580"/>
     <float name="fs" value="0.2"/>
     <int name="protectItem" value="1102109"/>
-    <int name="swim" value="0"/>
   </imgdir>
   <imgdir name="back">
     <imgdir name="0">
@@ -247,6 +246,40 @@
       <int name="f" value="0"/>
     </imgdir>
   </imgdir>
+  <imgdir name="portal">
+    <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="344"/>
+      <int name="y" value="149"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="236"/>
+      <int name="y" value="-319"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="-286"/>
+      <int name="y" value="-1025"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="pn" value="out00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-344"/>
+      <int name="y" value="-982"/>
+      <int name="tm" value="211040400"/>
+      <string name="tn" value="in00"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="life">
     <imgdir name="0">
       <string name="type" value="n"/>
@@ -262,12 +295,18 @@
     </imgdir>
   </imgdir>
   <imgdir name="0">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="1">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="snowyLightrock"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="0">
@@ -438,12 +477,18 @@
     </imgdir>
   </imgdir>
   <imgdir name="2">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="3">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="8">
@@ -669,7 +714,10 @@
     </imgdir>
   </imgdir>
   <imgdir name="4">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="10">
@@ -1519,7 +1567,10 @@
     </imgdir>
   </imgdir>
   <imgdir name="6">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="0">
@@ -1701,11 +1752,13 @@
     </imgdir>
   </imgdir>
   <imgdir name="7">
-    <imgdir name="info"/>
+    <imgdir name="info">
+      <string name="tS" value="blueCave"/>
+      <int name="tSMag" value="1"/>
+    </imgdir>
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
-  <imgdir name="reactor"/>
   <imgdir name="foothold">
     <imgdir name="5">
       <imgdir name="0">
@@ -2441,39 +2494,5 @@
     <int name="centerX" value="475"/>
     <int name="centerY" value="1297"/>
     <int name="mag" value="4"/>
-  </imgdir>
-  <imgdir name="portal">
-    <imgdir name="0">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="344"/>
-      <int name="y" value="149"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="1">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="236"/>
-      <int name="y" value="-319"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="2">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="-286"/>
-      <int name="y" value="-1025"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="3">
-      <string name="pn" value="out00"/>
-      <int name="pt" value="2"/>
-      <int name="x" value="-344"/>
-      <int name="y" value="-982"/>
-      <int name="tm" value="211040400"/>
-      <string name="tn" value="in00"/>
-    </imgdir>
   </imgdir>
 </imgdir>

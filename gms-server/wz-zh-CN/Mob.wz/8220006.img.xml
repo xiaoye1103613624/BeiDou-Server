@@ -54,10 +54,16 @@
             <int name="state" value="2"/>
           </imgdir>
         </imgdir>
+        <imgdir name="1">
+          <imgdir name="quest">
+            <int name="questID" value="3530"/>
+            <int name="state" value="2"/>
+          </imgdir>
+        </imgdir>
       </imgdir>
       <imgdir name="0">
         <int name="hp" value="7000000"/>
-        <string name="0" value="Return to oblivion!"/>
+        <string name="0" value="回到忘却的那一边吧！"/>
       </imgdir>
       <int name="chatBalloon" value="0"/>
     </imgdir>
@@ -871,7 +877,7 @@
     </canvas>
     <imgdir name="speak">
       <int name="prob" value="100"/>
-      <string name="0" value="You who walk the path of oblivion...you will have to take responsibility for your decisions."/>
+      <string name="0" value="徘徊在忘却之路的人...徘徊的结果只留下后悔…"/>
     </imgdir>
   </imgdir>
 </imgdir>

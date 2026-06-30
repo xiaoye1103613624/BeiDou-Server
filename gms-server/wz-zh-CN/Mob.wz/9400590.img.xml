@@ -3,17 +3,19 @@
   <imgdir name="info">
     <int name="bodyAttack" value="1"/>
     <string name="elemAttr" value="H1L2F2I2F2"/>
-    <int name="level" value="130"/>
+    <int name="level" value="120"/>
     <int name="maxHP" value="200000000"/>
     <int name="maxMP" value="50000000"/>
     <int name="speed" value="-30"/>
-    <int name="PADamage" value="620"/>
-    <int name="PDDamage" value="800"/>
-    <int name="MADamage" value="500"/>
+    <int name="PADamage" value="1350"/>
+    <int name="PDDamage" value="1200"/>
+    <int name="MADamage" value="1300"/>
     <int name="MDDamage" value="1000"/>
     <int name="acc" value="280"/>
     <int name="eva" value="42"/>
     <int name="exp" value="4300000"/>
+    <int name="hpRecovery" value="800"/>
+    <int name="mpRecovery" value="700"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="20000"/>
     <float name="fs" value="10.0"/>
@@ -21,6 +23,8 @@
     <int name="boss" value="1"/>
     <int name="hpTagColor" value="1"/>
     <int name="hpTagBgcolor" value="5"/>
+    <int name="publicReward" value="1"/>
+    <int name="explosiveReward" value="1"/>
     <int name="firstAttack" value="1"/>
     <imgdir name="skill">
       <imgdir name="0">
@@ -50,7 +54,7 @@
       <imgdir name="4">
         <int name="skill" value="200"/>
         <int name="action" value="3"/>
-        <int name="level" value="146"/>
+        <int name="level" value="175"/>
         <int name="effectAfter" value="1600"/>
       </imgdir>
     </imgdir>
@@ -289,10 +293,10 @@
         <int name="attachfacing" value="1"/>
       </imgdir>
       <int name="type" value="0"/>
+      <short name="attackAfter" value="2860"/>
       <int name="PADamage" value="620"/>
       <int name="disease" value="125"/>
       <int name="level" value="3"/>
-      <int name="attackAfter" value="2860"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="45" y="126"/>

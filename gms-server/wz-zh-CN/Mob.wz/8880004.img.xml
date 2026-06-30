@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="8880004.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <int name="level" value="128"/>
+    <int name="maxHP" value="28000000"/>
+    <int name="maxMP" value="15000"/>
+    <int name="mpRecovery" value="10000"/>
+    <int name="speed" value="25"/>
+    <int name="PADamage" value="2700"/>
+    <int name="PDDamage" value="1000"/>
+    <int name="MADamage" value="2550"/>
+    <int name="MDDamage" value="950"/>
+    <int name="acc" value="420"/>
+    <int name="eva" value="110"/>
+    <float name="fs" value="10.0"/>
+    <int name="pushed" value="99999999"/>
+    <int name="firstAttack" value="1"/>
+    <int name="boss" value="1"/>
+    <int name="exp" value="99900"/>
+    <int name="category" value="5"/>
+    <string name="mobType" value="7N"/>
+    <imgdir name="revive">
+      <int name="0" value="8880005"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="move">
     <canvas name="0" format="2" scale="0">
       <vector name="origin" x="71" y="127"/>
@@ -398,12 +421,12 @@
       <vector name="rb" x="65" y="-3"/>
       <vector name="head" x="-10" y="-120"/>
     </canvas>
-    <uol name="18" value="../stand/0"/>
-    <uol name="19" value="../stand/1"/>
-    <uol name="20" value="../stand/2"/>
-    <uol name="21" value="../stand/3"/>
-    <uol name="22" value="../stand/4"/>
-    <uol name="23" value="../stand/5"/>
+    <uol name="../stand/0" value="../stand/0"/>
+    <uol name="../stand/1" value="../stand/1"/>
+    <uol name="../stand/2" value="../stand/2"/>
+    <uol name="../stand/3" value="../stand/3"/>
+    <uol name="../stand/4" value="../stand/4"/>
+    <uol name="../stand/5" value="../stand/5"/>
   </imgdir>
   <imgdir name="attack2">
     <imgdir name="info">
@@ -614,12 +637,12 @@
       <vector name="rb" x="54" y="-5"/>
       <vector name="head" x="3" y="-118"/>
     </canvas>
-    <uol name="21" value="../stand/0"/>
-    <uol name="22" value="../stand/1"/>
-    <uol name="23" value="../stand/2"/>
-    <uol name="24" value="../stand/3"/>
-    <uol name="25" value="../stand/4"/>
-    <uol name="26" value="../stand/5"/>
+    <uol name="../stand/0" value="../stand/0"/>
+    <uol name="../stand/1" value="../stand/1"/>
+    <uol name="../stand/2" value="../stand/2"/>
+    <uol name="../stand/3" value="../stand/3"/>
+    <uol name="../stand/4" value="../stand/4"/>
+    <uol name="../stand/5" value="../stand/5"/>
   </imgdir>
   <imgdir name="attack3">
     <imgdir name="info">
@@ -878,33 +901,11 @@
       <vector name="head" x="3" y="-118"/>
       <int name="delay" value="90"/>
     </canvas>
-    <uol name="27" value="../stand/0"/>
-    <uol name="28" value="../stand/1"/>
-    <uol name="29" value="../stand/2"/>
-    <uol name="30" value="../stand/3"/>
-    <uol name="31" value="../stand/4"/>
-    <uol name="32" value="../stand/5"/>
-  </imgdir>
-  <imgdir name="info">
-    <int name="level" value="150"/>
-    <int name="maxHP" value="250000000"/>
-    <int name="maxMP" value="100000"/>
-    <int name="mpRecovery" value="10000"/>
-    <int name="speed" value="10"/>
-    <int name="PADamage" value="1200"/>
-    <int name="MADamage" value="1200"/>
-    <int name="PDRate" value="50"/>
-    <int name="MDRate" value="50"/>
-    <int name="acc" value="9999"/>
-    <int name="eva" value="80"/>
-    <int name="pushed" value="999999"/>
-    <float name="fs" value="10.0"/>
-    <int name="exp" value="1000000"/>
-    <int name="summonType" value="1"/>
-    <int name="firstAttack" value="1"/>
-    <int name="boss" value="1"/>
-    <int name="bodyAttack" value="0"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
+    <uol name="../stand/0" value="../stand/0"/>
+    <uol name="../stand/1" value="../stand/1"/>
+    <uol name="../stand/2" value="../stand/2"/>
+    <uol name="../stand/3" value="../stand/3"/>
+    <uol name="../stand/4" value="../stand/4"/>
+    <uol name="../stand/5" value="../stand/5"/>
   </imgdir>
 </imgdir>

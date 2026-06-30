@@ -13,7 +13,7 @@
     <int name="fly" value="0"/>
     <int name="noMapCmd" value="0"/>
     <int name="hideMinimap" value="0"/>
-    <int name="fieldLimit" value="8420"/>
+    <int name="fieldLimit" value="8356"/>
     <int name="VRTop" value="-300"/>
     <int name="VRLeft" value="-400"/>
     <int name="VRBottom" value="300"/>
@@ -48,7 +48,7 @@
       <int name="f" value="0"/>
       <int name="hide" value="0"/>
       <int name="fh" value="22"/>
-      <int name="cy" value="186"/>
+      <int name="cy" value="183"/>
       <int name="rx0" value="1"/>
       <int name="rx1" value="101"/>
     </imgdir>
@@ -447,21 +447,21 @@
           <int name="x1" value="-397"/>
           <int name="y1" value="-299"/>
           <int name="x2" value="-397"/>
-          <int name="y2" value="186"/>
+          <int name="y2" value="183"/>
           <int name="prev" value="0"/>
           <int name="next" value="22"/>
         </imgdir>
         <imgdir name="22">
           <int name="x1" value="-397"/>
-          <int name="y1" value="186"/>
+          <int name="y1" value="183"/>
           <int name="x2" value="391"/>
-          <int name="y2" value="186"/>
+          <int name="y2" value="183"/>
           <int name="prev" value="21"/>
           <int name="next" value="23"/>
         </imgdir>
         <imgdir name="23">
           <int name="x1" value="391"/>
-          <int name="y1" value="186"/>
+          <int name="y1" value="183"/>
           <int name="x2" value="391"/>
           <int name="y2" value="-300"/>
           <int name="prev" value="22"/>
@@ -501,28 +501,14 @@
     </imgdir>
     <imgdir name="2">
       <string name="pn" value="out00"/>
-      <int name="pt" value="7"/>
+      <int name="pt" value="2"/>
       <int name="x" value="-209"/>
       <int name="y" value="-167"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
+      <int name="tm" value="102040000"/>
+      <string name="tn" value="subway00"/>
       <int name="horizontalImpact" value="0"/>
-      <string name="script" value="met_out"/>
     </imgdir>
     <imgdir name="3">
-      <string name="pn" value="chat00"/>
-      <int name="pt" value="9"/>
-      <int name="x" value="-171"/>
-      <int name="y" value="145"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-      <int name="horizontalImpact" value="0"/>
-      <string name="script" value="metro_Chat00"/>
-      <int name="hideTooltip" value="0"/>
-      <int name="onlyOnce" value="1"/>
-      <int name="delay" value="0"/>
-    </imgdir>
-    <imgdir name="4">
       <string name="pn" value="metro00"/>
       <int name="pt" value="7"/>
       <int name="x" value="147"/>
@@ -533,6 +519,19 @@
       <string name="script" value="metro_in00"/>
       <int name="hideTooltip" value="0"/>
       <int name="onlyOnce" value="0"/>
+      <int name="delay" value="0"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="pn" value="chat00"/>
+      <int name="pt" value="9"/>
+      <int name="x" value="-171"/>
+      <int name="y" value="145"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="metro_Chat00"/>
+      <int name="hideTooltip" value="0"/>
+      <int name="onlyOnce" value="1"/>
       <int name="delay" value="0"/>
     </imgdir>
   </imgdir>

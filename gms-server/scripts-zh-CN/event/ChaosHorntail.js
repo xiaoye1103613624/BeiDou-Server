@@ -9,10 +9,10 @@ function setup(eim, leaderid) {
     em.setProperty("leader", "true");
     em.setProperty("preheadCheck", "0");
     var eim = em.newInstance("ChaosHorntail");
-    // eim.setInstanceMap(240060001).resetFully();
-    // eim.setInstanceMap(240060101).resetFully();
-    eim.setInstanceMap(240060201).resetFully();
-    //eim.createInstanceMap(240060201).resetFully();
+    // eim.getInstanceMap(240060001).resetFully();
+    // eim.getInstanceMap(240060101).resetFully();
+    eim.getInstanceMap(240060201).resetFully();
+    //eim.getInstanceMap(240060201).resetFully();
     eim.startEventTimer(7200000); //2 hr
     eim.schedule("CheckHorntailHead", 3000);
     return eim;

@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 装备伤害加成配置的静态缓存管理器。
  * <p>
- * 每件装备可单独配置：普通伤害百分比加成、Boss伤害百分比加成、固定段伤。
+ * 每件装备可单独配置：普通伤害百分比加成、Boss伤害百分比加成、额外攻击段数。
  * 角色换装/登录时调用 {@link #aggregate(Character)} 汇总当前穿戴装备的加成，
  * 结果应缓存到角色身上（参考套装伤害加成的做法），攻击时直接读缓存，避免每次攻击都遍历背包。
  * </p>
@@ -69,7 +69,7 @@ public class EquipDamageBonusManager {
      * 汇总角色当前穿戴装备(EQUIPPED库存)的伤害加成。
      *
      * @param chr 角色
-     * @return 汇总结果（百分比之和、Boss百分比之和、固定段伤之和）
+     * @return 汇总结果（百分比之和、Boss百分比之和、额外段数之和）
      */
     public static Bonus aggregate(Character chr) {
         if (configMap.isEmpty()) {
@@ -78,7 +78,7 @@ public class EquipDamageBonusManager {
 
         int damagePct = 0;
         int bossDamagePct = 0;
-        long fixedDamage = 0L;
+        long extraSegments = 0L;
         List<ItemBonus> items = new ArrayList<>();
 
         Inventory equipped = chr.getInventory(InventoryType.EQUIPPED);
@@ -92,21 +92,30 @@ public class EquipDamageBonusManager {
             }
             int itemDamagePct = cfg.getDamagePct() != null ? cfg.getDamagePct() : 0;
             int itemBossDamagePct = cfg.getBossDamagePct() != null ? cfg.getBossDamagePct() : 0;
-            long itemFixedDamage = cfg.getFixedDamage() != null ? cfg.getFixedDamage() : 0L;
+            long itemExtraSegs = cfg.getFixedDamage() != null ? cfg.getFixedDamage() : 0L;
 
             damagePct += itemDamagePct;
             bossDamagePct += itemBossDamagePct;
-            fixedDamage += itemFixedDamage;
+            extraSegments += itemExtraSegs;
 
-            if (itemDamagePct != 0 || itemBossDamagePct != 0 || itemFixedDamage != 0L) {
-                items.add(new ItemBonus(cfg.getItemName(), itemDamagePct, itemBossDamagePct, itemFixedDamage));
+            if (itemDamagePct != 0 || itemBossDamagePct != 0 || itemExtraSegs != 0L) {
+                String name = cfg.getItemName();
+                if (name == null || name.isBlank()) {
+                    // 回退：从WZ数据获取物品名称
+                    var ii = org.gms.server.ItemInformationProvider.getInstance();
+                    name = ii.getName(cfg.getItemId());
+                    if (name == null || name.isBlank()) {
+                        name = "物品#" + cfg.getItemId();
+                    }
+                }
+                items.add(new ItemBonus(name, itemDamagePct, itemBossDamagePct, itemExtraSegs));
             }
         }
 
-        if (damagePct == 0 && bossDamagePct == 0 && fixedDamage == 0L) {
+        if (damagePct == 0 && bossDamagePct == 0 && extraSegments == 0L) {
             return Bonus.EMPTY;
         }
-        return new Bonus(damagePct, bossDamagePct, fixedDamage, items);
+        return new Bonus(damagePct, bossDamagePct, extraSegments, items);
     }
 
     /**
@@ -122,12 +131,18 @@ public class EquipDamageBonusManager {
         return String.format("%.1f亿", n / 100000000.0);
     }
 
-    /** 单件装备贡献的伤害加成明细 */
-    public record ItemBonus(String itemName, int damagePct, int bossDamagePct, long fixedDamage) {
+    /**
+     * 单件装备贡献的伤害加成明细
+     * @param itemName     装备名称
+     * @param damagePct    普通伤害加成百分比
+     * @param bossDamagePct Boss伤害加成百分比
+     * @param extraSegments 额外攻击段数
+     */
+    public record ItemBonus(String itemName, int damagePct, int bossDamagePct, long extraSegments) {
     }
 
-    /** 装备伤害加成汇总结果 */
-    public record Bonus(int damagePct, int bossDamagePct, long fixedDamage, List<ItemBonus> items) {
+    /** 装备伤害加成汇总结果（百分比的伤害加成已在 AbstractDealDamageHandler 中按总伤害比例折算，extraSegments 作为额外攻击段数叠加） */
+    public record Bonus(int damagePct, int bossDamagePct, long extraSegments, List<ItemBonus> items) {
         public static final Bonus EMPTY = new Bonus(0, 0, 0L, List.of());
     }
 }

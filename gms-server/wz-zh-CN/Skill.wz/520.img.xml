@@ -298,7 +298,14 @@
           <string name="hs" value="h20"/>
           <int name="hpCon" value="10"/>
           <int name="mpCon" value="10"/>
-          <int name="time" value="200"/>
+          <int name="time" value="600"/>
+          <int name="x" value="-2"/>
+        </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="hpCon" value="10"/>
+          <int name="mpCon" value="10"/>
+          <int name="time" value="1200"/>
           <int name="x" value="-2"/>
         </imgdir>
       </imgdir>
@@ -526,6 +533,15 @@
           <int name="mpCon" value="25"/>
           <int name="damage" value="165"/>
           <int name="mobCount" value="3"/>
+          <int name="bulletConsume" value="1"/>
+          <vector name="lt" x="-250" y="-80"/>
+          <vector name="rb" x="-10" y="40"/>
+        </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="mpCon" value="25"/>
+          <int name="damage" value="300"/>
+          <int name="mobCount" value="6"/>
           <int name="bulletConsume" value="1"/>
           <vector name="lt" x="-250" y="-80"/>
           <vector name="rb" x="-10" y="40"/>

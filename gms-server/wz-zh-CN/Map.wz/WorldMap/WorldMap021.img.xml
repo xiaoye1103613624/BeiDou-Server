@@ -2,10 +2,11 @@
 <imgdir name="WorldMap021.img" indent="2" media="NONE">
   <imgdir name="info">
     <string name="parentMap" value="WorldMap020"/>
+    <string name="WorldMap" value="WorldMap021"/>
   </imgdir>
   <imgdir name="BaseImg">
     <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="320" y="235"/>
+      <vector name="origin" x="317" y="232"/>
       <int name="z" value="0"/>
     </canvas>
   </imgdir>
@@ -32,7 +33,7 @@
       </imgdir>
     </imgdir>
     <imgdir name="3">
-      <vector name="spot" x="-138" y="-61"/>
+      <vector name="spot" x="-132" y="-56"/>
       <int name="type" value="1"/>
       <imgdir name="mapNo">
         <int name="0" value="211040600"/>
@@ -167,10 +168,67 @@
     <imgdir name="22">
       <vector name="spot" x="187" y="-109"/>
       <int name="type" value="1"/>
-      <string name="desc" value="A powerful organism bestowed in darkness is waiting for you."/>
+      <int name="linkQuestID" value="1306"/>
+      <canvas name="path" format="1" scale="0">
+        <vector name="origin" x="-186" y="142"/>
+        <int name="z" value="2"/>
+      </canvas>
       <imgdir name="mapNo">
-        <int name="0" value="280030000"/>
+        <int name="0" value="280030100"/>
       </imgdir>
+    </imgdir>
+    <imgdir name="23">
+      <vector name="spot" x="-91" y="-110"/>
+      <int name="type" value="1"/>
+      <imgdir name="mapNo">
+        <int name="0" value="211060000"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="24">
+      <vector name="spot" x="-44" y="-146"/>
+      <int name="type" value="2"/>
+      <string name="title" value="狮子王城堡"/>
+      <imgdir name="mapNo">
+        <int name="0" value="211060010"/>
+        <int name="1" value="211060100"/>
+        <int name="2" value="211060200"/>
+        <int name="3" value="211060201"/>
+        <int name="4" value="211060300"/>
+        <int name="5" value="211060400"/>
+        <int name="6" value="211060401"/>
+        <int name="7" value="211060410"/>
+        <int name="8" value="211060500"/>
+        <int name="9" value="211060600"/>
+        <int name="10" value="211060601"/>
+        <int name="11" value="211060610"/>
+        <int name="12" value="211060620"/>
+        <int name="13" value="211060700"/>
+        <int name="14" value="211060800"/>
+        <int name="15" value="211060801"/>
+        <int name="16" value="211060810"/>
+        <int name="17" value="211060820"/>
+        <int name="18" value="211060830"/>
+        <int name="19" value="211060900"/>
+        <int name="20" value="211061000"/>
+        <int name="21" value="211061001"/>
+        <int name="22" value="211070000"/>
+        <int name="23" value="211070100"/>
+        <int name="24" value="211070101"/>
+        <int name="25" value="211070110"/>
+      </imgdir>
+      <int name="noToolTip" value="1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="MapLink">
+    <imgdir name="0">
+      <imgdir name="link">
+        <string name="linkMap" value="WorldMap022"/>
+        <canvas name="linkImg" format="1" scale="0">
+          <vector name="origin" x="89" y="240"/>
+          <int name="z" value="1"/>
+        </canvas>
+      </imgdir>
+      <string name="toolTip" value="狮子王之城"/>
     </imgdir>
   </imgdir>
 </imgdir>

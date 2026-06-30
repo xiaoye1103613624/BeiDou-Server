@@ -14,48 +14,6 @@
     <int name="fieldLimit" value="108"/>
     <int name="swim" value="0"/>
   </imgdir>
-  <imgdir name="4">
-    <imgdir name="info"/>
-    <imgdir name="tile"/>
-    <imgdir name="obj"/>
-  </imgdir>
-  <imgdir name="6">
-    <imgdir name="info"/>
-    <imgdir name="tile"/>
-    <imgdir name="obj"/>
-  </imgdir>
-  <imgdir name="7">
-    <imgdir name="info"/>
-    <imgdir name="tile"/>
-    <imgdir name="obj"/>
-  </imgdir>
-  <imgdir name="reactor"/>
-  <imgdir name="portal">
-    <imgdir name="0">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="173"/>
-      <int name="y" value="118"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-    <imgdir name="1">
-      <string name="pn" value="h001_1"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="-408"/>
-      <int name="y" value="-89"/>
-      <int name="tm" value="209000004"/>
-      <string name="tn" value="h001"/>
-    </imgdir>
-    <imgdir name="2">
-      <string name="pn" value="h001"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="210"/>
-      <int name="y" value="-269"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-    </imgdir>
-  </imgdir>
   <imgdir name="back">
     <imgdir name="0">
       <string name="bS" value="snowyDarkrock"/>
@@ -765,6 +723,11 @@
     <imgdir name="tile"/>
     <imgdir name="obj"/>
   </imgdir>
+  <imgdir name="4">
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
+  </imgdir>
   <imgdir name="5">
     <imgdir name="info">
       <string name="tS" value="snowyDarkrock"/>
@@ -1166,6 +1129,17 @@
     </imgdir>
     <imgdir name="obj"/>
   </imgdir>
+  <imgdir name="6">
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
+  </imgdir>
+  <imgdir name="7">
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
+  </imgdir>
+  <imgdir name="reactor"/>
   <imgdir name="foothold">
     <imgdir name="1">
       <imgdir name="6">
@@ -2286,5 +2260,31 @@
     <int name="centerX" value="760"/>
     <int name="centerY" value="548"/>
     <int name="mag" value="4"/>
+  </imgdir>
+  <imgdir name="portal">
+    <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="173"/>
+      <int name="y" value="118"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="pn" value="h001_1"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="-408"/>
+      <int name="y" value="-89"/>
+      <int name="tm" value="209000004"/>
+      <string name="tn" value="h001"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="pn" value="h001"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="210"/>
+      <int name="y" value="-269"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
   </imgdir>
 </imgdir>

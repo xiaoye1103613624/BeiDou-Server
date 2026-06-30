@@ -78,4 +78,7 @@ public class InventoryequipmentDO implements Serializable  {
 
     private Integer ringid;
 
+    @Column("custom_properties")
+    private String customproperties;
+
 }

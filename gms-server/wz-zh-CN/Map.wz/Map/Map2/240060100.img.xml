@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="240060100.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <int name="version" value="10"/>
+    <int name="cloud" value="0"/>
+    <int name="town" value="0"/>
+    <int name="swim" value="0"/>
+    <int name="returnMap" value="240000000"/>
+    <int name="forcedReturn" value="240000000"/>
+    <float name="mobRate" value="1.0"/>
+    <string name="bgm" value="Bgm14/CaveOfHontale"/>
+    <string name="mapMark" value="Leafre"/>
+    <int name="hideMinimap" value="0"/>
+    <int name="fieldLimit" value="73848"/>
+    <int name="VRTop" value="-355"/>
+    <int name="VRLeft" value="-450"/>
+    <int name="VRBottom" value="380"/>
+    <int name="VRRight" value="450"/>
+  </imgdir>
   <imgdir name="back">
     <imgdir name="0">
       <string name="bS" value="woodCave"/>
@@ -1551,23 +1568,5 @@
       <string name="script" value="hontale_boss2"/>
       <int name="hideTooltip" value="0"/>
     </imgdir>
-  </imgdir>
-  <imgdir name="info">
-    <int name="version" value="10"/>
-    <int name="cloud" value="0"/>
-    <int name="town" value="0"/>
-    <int name="swim" value="0"/>
-    <int name="returnMap" value="240000000"/>
-    <int name="forcedReturn" value="240000000"/>
-    <float name="mobRate" value="1.0"/>
-    <string name="bgm" value="Bgm14/CaveOfHontale"/>
-    <string name="mapMark" value="Leafre"/>
-    <int name="hideMinimap" value="0"/>
-    <int name="fieldLimit" value="335992"/>
-    <int name="VRTop" value="-355"/>
-    <int name="VRLeft" value="-450"/>
-    <int name="VRBottom" value="380"/>
-    <int name="VRRight" value="450"/>
-    <int name="fieldType" value="1013"/>
   </imgdir>
 </imgdir>

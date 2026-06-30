@@ -11,7 +11,7 @@
     <string name="bgm" value="Bgm13/Leafre"/>
     <string name="mapMark" value="Leafre"/>
     <int name="hideMinimap" value="0"/>
-    <int name="fieldLimit" value="1048612"/>
+    <int name="fieldLimit" value="1179684"/>
     <int name="fieldType" value="2"/>
     <int name="fly" value="0"/>
     <string name="onFirstUserEnter" value=""/>
@@ -2710,11 +2710,19 @@
       <string name="pn" value="po00"/>
       <int name="pt" value="1"/>
       <int name="x" value="946"/>
-      <int name="y" value="-1171"/>
+      <int name="y" value="-1203"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value="po00"/>
     </imgdir>
     <imgdir name="3">
+      <string name="pn" value="st00"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="1124"/>
+      <int name="y" value="-322"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+    </imgdir>
+    <imgdir name="4">
       <string name="pn" value="arrival03"/>
       <int name="pt" value="9"/>
       <int name="x" value="170"/>
@@ -2724,7 +2732,7 @@
       <int name="delay" value="200"/>
       <string name="script" value="reundodraco"/>
     </imgdir>
-    <imgdir name="4">
+    <imgdir name="5">
       <string name="pn" value="west00"/>
       <int name="pt" value="7"/>
       <int name="x" value="-365"/>
@@ -2736,7 +2744,7 @@
       <int name="onlyOnce" value="0"/>
       <int name="delay" value="0"/>
     </imgdir>
-    <imgdir name="5">
+    <imgdir name="6">
       <string name="pn" value="arrival00"/>
       <int name="pt" value="9"/>
       <int name="x" value="-196"/>
@@ -2746,7 +2754,7 @@
       <int name="delay" value="200"/>
       <string name="script" value="reundodraco"/>
     </imgdir>
-    <imgdir name="6">
+    <imgdir name="7">
       <string name="pn" value="arrival01"/>
       <int name="pt" value="9"/>
       <int name="x" value="-63"/>
@@ -2756,7 +2764,7 @@
       <int name="delay" value="200"/>
       <string name="script" value="reundodraco"/>
     </imgdir>
-    <imgdir name="7">
+    <imgdir name="8">
       <string name="pn" value="arrival02"/>
       <int name="pt" value="9"/>
       <int name="x" value="37"/>
@@ -2765,6 +2773,46 @@
       <string name="tn" value=""/>
       <int name="delay" value="200"/>
       <string name="script" value="reundodraco"/>
+    </imgdir>
+    <imgdir name="9">
+      <string name="pn" value="trap00"/>
+      <int name="pt" value="3"/>
+      <int name="x" value="766"/>
+      <int name="y" value="-925"/>
+      <int name="tm" value="240000110"/>
+      <string name="tn" value="st00"/>
+    </imgdir>
+    <imgdir name="10">
+      <string name="pn" value="trap01"/>
+      <int name="pt" value="3"/>
+      <int name="x" value="684"/>
+      <int name="y" value="-925"/>
+      <int name="tm" value="240000110"/>
+      <string name="tn" value="st00"/>
+    </imgdir>
+    <imgdir name="11">
+      <string name="pn" value="trap02"/>
+      <int name="pt" value="3"/>
+      <int name="x" value="595"/>
+      <int name="y" value="-924"/>
+      <int name="tm" value="240000110"/>
+      <string name="tn" value="st00"/>
+    </imgdir>
+    <imgdir name="12">
+      <string name="pn" value="trap03"/>
+      <int name="pt" value="3"/>
+      <int name="x" value="1058"/>
+      <int name="y" value="-924"/>
+      <int name="tm" value="240000110"/>
+      <string name="tn" value="st00"/>
+    </imgdir>
+    <imgdir name="13">
+      <string name="pn" value="trap04"/>
+      <int name="pt" value="3"/>
+      <int name="x" value="1146"/>
+      <int name="y" value="-925"/>
+      <int name="tm" value="240000110"/>
+      <string name="tn" value="st00"/>
     </imgdir>
   </imgdir>
 </imgdir>

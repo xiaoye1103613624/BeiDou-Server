@@ -12,8 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 账号级体力服务。体力账号通用（同账号下所有角色共享），每日首次领取自动发放100点，
- * 上限1000点（药水恢复同样受此上限约束）。
+ * 账号级体力服务。体力账号通用（同账号下所有角色共享），每日首次领取直接重置为1000点。
  */
 @Slf4j
 @Service
@@ -59,7 +58,7 @@ public class StaminaService {
         }
         String lastRefill = stamina.getLastRefillDate() != null ? DATE_FORMAT.format(stamina.getLastRefillDate()) : null;
         if (!today.equals(lastRefill)) {
-            int newStamina = Math.min(MAX_STAMINA, stamina.getStamina() + DAILY_REFILL);
+            int newStamina = MAX_STAMINA;
             stamina.setStamina(newStamina);
             stamina.setLastRefillDate(now);
             stamina.setUpdateTime(now);

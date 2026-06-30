@@ -16,6 +16,14 @@
     <int name="hungry" value="5"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="pickupAll" value="1"/>
+    <int name="pickupItem" value="1"/>
+    <int name="sweepForDrop" value="1"/>
+    <int name="longRange" value="1"/>
+    <int name="consumeHP" value="1"/>
+    <int name="consumeMP" value="1"/>
+    <int name="chatBalloon" value="13"/>
+    <int name="nameTag" value="15"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -23,7 +31,7 @@
       <int name="inc" value="1"/>
       <int name="prob" value="40"/>
       <int name="l0" value="1"/>
-      <int name="l1" value="10"/>
+      <int name="l1" value="9"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="rest0"/>
@@ -43,8 +51,8 @@
       <string name="command" value="c2"/>
       <int name="inc" value="1"/>
       <int name="prob" value="60"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="rest0"/>
@@ -68,7 +76,7 @@
       <string name="command" value="c3"/>
       <int name="inc" value="1"/>
       <int name="prob" value="70"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -119,7 +127,7 @@
       <int name="inc" value="1"/>
       <int name="prob" value="40"/>
       <int name="l0" value="1"/>
-      <int name="l1" value="10"/>
+      <int name="l1" value="9"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="cry"/>
@@ -139,8 +147,8 @@
       <string name="command" value="c6"/>
       <int name="inc" value="1"/>
       <int name="prob" value="55"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="cry"/>
@@ -164,7 +172,7 @@
       <string name="command" value="c7"/>
       <int name="inc" value="1"/>
       <int name="prob" value="70"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -215,7 +223,7 @@
       <int name="inc" value="1"/>
       <int name="prob" value="40"/>
       <int name="l0" value="1"/>
-      <int name="l1" value="10"/>
+      <int name="l1" value="9"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="dung"/>
@@ -235,8 +243,8 @@
       <string name="command" value="c10"/>
       <int name="inc" value="1"/>
       <int name="prob" value="55"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="dung"/>
@@ -260,7 +268,7 @@
       <string name="command" value="c11"/>
       <int name="inc" value="1"/>
       <int name="prob" value="60"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -310,8 +318,8 @@
       <string name="command" value="c13"/>
       <int name="inc" value="1"/>
       <int name="prob" value="30"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="chat"/>
@@ -335,7 +343,7 @@
       <string name="command" value="c14"/>
       <int name="inc" value="1"/>
       <int name="prob" value="50"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -385,8 +393,8 @@
       <string name="command" value="c16"/>
       <int name="inc" value="2"/>
       <int name="prob" value="40"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="hug"/>
@@ -410,7 +418,7 @@
       <string name="command" value="c17"/>
       <int name="inc" value="2"/>
       <int name="prob" value="55"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -511,7 +519,7 @@
       <int name="inc" value="3"/>
       <int name="prob" value="35"/>
       <int name="l0" value="1"/>
-      <int name="l1" value="10"/>
+      <int name="l1" value="9"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="love"/>
@@ -531,8 +539,8 @@
       <string name="command" value="c22"/>
       <int name="inc" value="3"/>
       <int name="prob" value="45"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="love"/>
@@ -556,7 +564,7 @@
       <string name="command" value="c23"/>
       <int name="inc" value="3"/>
       <int name="prob" value="60"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -606,15 +614,14 @@
       <string name="command" value="c25"/>
       <int name="inc" value="1"/>
       <int name="prob" value="40"/>
-      <int name="l0" value="11"/>
-      <int name="l1" value="20"/>
+      <int name="l0" value="10"/>
+      <int name="l1" value="19"/>
       <imgdir name="success">
         <imgdir name="0">
           <string name="act" value="ignore"/>
           <string name="0" value="c25_s1"/>
           <string name="1" value="c25_s2"/>
           <string name="2" value="c25_s3"/>
-          <string name="3" value="c25_s4"/>
         </imgdir>
       </imgdir>
       <imgdir name="fail">
@@ -623,7 +630,6 @@
           <string name="0" value="c25_f1"/>
           <string name="1" value="c25_f2"/>
           <string name="2" value="c25_f3"/>
-          <string name="3" value="c25_f4"/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -631,7 +637,7 @@
       <string name="command" value="c26"/>
       <int name="inc" value="1"/>
       <int name="prob" value="55"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -639,7 +645,6 @@
           <string name="0" value="c26_s1"/>
           <string name="1" value="c26_s2"/>
           <string name="2" value="c26_s3"/>
-          <string name="3" value="c26_s4"/>
         </imgdir>
       </imgdir>
       <imgdir name="fail">
@@ -648,7 +653,6 @@
           <string name="0" value="c26_f1"/>
           <string name="1" value="c26_f2"/>
           <string name="2" value="c26_f3"/>
-          <string name="3" value="c26_f4"/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -679,7 +683,7 @@
       <string name="command" value="c28"/>
       <int name="inc" value="1"/>
       <int name="prob" value="60"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -727,7 +731,7 @@
       <string name="command" value="c30"/>
       <int name="inc" value="2"/>
       <int name="prob" value="45"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -777,7 +781,7 @@
       <string name="command" value="c32"/>
       <int name="inc" value="1"/>
       <int name="prob" value="65"/>
-      <int name="l0" value="21"/>
+      <int name="l0" value="20"/>
       <int name="l1" value="29"/>
       <imgdir name="success">
         <imgdir name="0">
@@ -888,32 +892,6 @@
           <string name="0" value="f4_f"/>
         </imgdir>
       </imgdir>
-    </imgdir>
-  </imgdir>
-  <imgdir name="slang">
-    <imgdir name="0">
-      <int name="l0" value="1"/>
-      <int name="l1" value="9"/>
-      <string name="act" value="rest0"/>
-      <string name="0" value="s1"/>
-    </imgdir>
-    <imgdir name="1">
-      <int name="l0" value="10"/>
-      <int name="l1" value="19"/>
-      <string name="act" value="rest0"/>
-      <string name="0" value="s2"/>
-    </imgdir>
-    <imgdir name="2">
-      <int name="l0" value="20"/>
-      <int name="l1" value="29"/>
-      <string name="act" value="rest0"/>
-      <string name="0" value="s3"/>
-    </imgdir>
-    <imgdir name="3">
-      <int name="l0" value="30"/>
-      <int name="l1" value="30"/>
-      <string name="act" value="rest0"/>
-      <string name="0" value="s4"/>
     </imgdir>
   </imgdir>
   <imgdir name="stand0">

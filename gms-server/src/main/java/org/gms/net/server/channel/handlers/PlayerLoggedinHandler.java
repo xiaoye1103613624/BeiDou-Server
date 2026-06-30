@@ -227,7 +227,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             // HP/MP警报仅在开启自动吃药时同步，伤害上限字段(突破石累加值)与该开关无关，每次登录都下发；
             // 仅同步给本人：该包属于客户端本地设置且不含角色标识，广播给他人可能污染其本地配置。
-            player.resyncDisplayDamageCap();
+            // 临时关闭(2026-06-29)：该包是自定义opcode(0x1000)，必须配合客户端BeiDou-ijl15.dll补丁解析，
+            // 否则未打补丁/补丁版本不匹配的客户端选完角色就可能直接崩(EOF错误)。确认好DLL版本匹配后再放开。
+            // player.resyncDisplayDamageCap();
             cserv.addPlayer(player);
             wserv.addPlayer(player);
             player.setEnteredChannelWorld();

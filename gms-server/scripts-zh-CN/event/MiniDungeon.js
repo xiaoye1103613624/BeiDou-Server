@@ -4,7 +4,7 @@ function init() {
 function setup(leaderid) {
     var eim = em.newInstance("MiniDungeon" + leaderid);
 
-   var map = eim.createInstanceMap(749040100);
+   var map = eim.getInstanceMap(749040100);
 	//it is possible to make THREE minidungeons just like this
 	//maps 749040101 and 749040102; harder monsters than this map but not by much
 	map.setHPDec(25);

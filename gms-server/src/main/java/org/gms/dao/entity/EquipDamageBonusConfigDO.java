@@ -40,7 +40,7 @@ public class EquipDamageBonusConfigDO implements Serializable {
     /** Boss伤害加成百分比（仅对Boss类怪物生效） */
     private Integer bossDamagePct;
 
-    /** 固定段伤（加法叠加的固定伤害值） */
+    /** 额外攻击段数（每段独立造成一次百分比加成后的单段伤害） */
     private Long fixedDamage;
 
     /** 是否启用（0=禁用 1=启用） */

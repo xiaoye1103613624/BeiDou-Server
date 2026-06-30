@@ -82,6 +82,9 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
+        // 装备/套装伤害加成预应用到attack.allDamage，广播攻击包时其他玩家就能看到加成后的伤害
+        applyEquipDamageBonusToAttack(attack, chr);
+
         if (attack.skill == Buccaneer.ENERGY_ORB || attack.skill == ThunderBreaker.SPARK || attack.skill == Shadower.TAUNT || attack.skill == NightLord.TAUNT) {
             chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             applyAttack(attack, chr, 1);

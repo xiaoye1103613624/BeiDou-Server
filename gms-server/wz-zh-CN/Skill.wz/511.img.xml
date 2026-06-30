@@ -1561,6 +1561,18 @@
           <int name="jump" value="20"/>
           <int name="cooltime" value="370"/>
         </imgdir>
+        <imgdir name="21">
+          <string name="hs" value="h21"/>
+          <int name="morph" value="1000"/>
+          <int name="mpCon" value="60"/>
+          <int name="time" value="1200"/>
+          <int name="str" value="20"/>
+          <int name="pdd" value="75"/>
+          <int name="mdd" value="75"/>
+          <int name="speed" value="40"/>
+          <int name="jump" value="20"/>
+          <int name="cooltime" value="0"/>
+        </imgdir>
         <imgdir name="20">
           <string name="hs" value="h20"/>
           <int name="morph" value="1000"/>
@@ -1571,7 +1583,7 @@
           <int name="mdd" value="40"/>
           <int name="speed" value="40"/>
           <int name="jump" value="20"/>
-          <int name="cooltime" value="360"/>
+          <int name="cooltime" value="10"/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -1820,6 +1832,14 @@
           <int name="mobCount" value="6"/>
           <vector name="lt" x="-330" y="-140"/>
           <vector name="rb" x="0" y="20"/>
+        </imgdir>
+        <imgdir name="31">
+          <string name="hs" value="h31"/>
+          <int name="mpCon" value="38"/>
+          <int name="damage" value="900"/>
+          <int name="mobCount" value="8"/>
+          <vector name="lt" x="-430" y="-240"/>
+          <vector name="rb" x="0" y="60"/>
         </imgdir>
         <imgdir name="30">
           <string name="hs" value="h30"/>

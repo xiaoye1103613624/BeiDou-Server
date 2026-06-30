@@ -19,23 +19,22 @@
     <int name="summonType" value="1"/>
     <int name="hpTagColor" value="3"/>
     <int name="hpTagBgcolor" value="5"/>
-    <string name="defaultHP" value="측정불가"/>
+    <string name="defaultHP" value="无法确定"/>
     <int name="noFlip" value="1"/>
-    <string name="defaultMP" value="측정불가"/>
+    <string name="defaultMP" value="无法确定"/>
     <int name="firstAttack" value="1"/>
     <int name="disable" value="1"/>
     <imgdir name="skill">
       <imgdir name="0">
         <int name="skill" value="200"/>
         <int name="action" value="1"/>
-        <int name="level" value="161"/>
         <int name="effectAfter" value="0"/>
+        <int name="level" value="161"/>
       </imgdir>
     </imgdir>
     <imgdir name="speak">
       <int name="chatBalloon" value="1"/>
     </imgdir>
-    <int name="boss" value="1"/>
   </imgdir>
   <imgdir name="stand">
     <canvas name="0" format="1" scale="0">
@@ -280,8 +279,8 @@
     </canvas>
     <imgdir name="speak">
       <int name="prob" value="100"/>
-      <string name="0" value="Nothing can stop me...The Darkness has already started..."/>
-      <string name="1" value="Fools! You can&apos;t win alone."/>
+      <string name="0" value="谁都无法阻挡我……黑暗已经开始了……"/>
+      <string name="1" value="愚蠢的家伙……你们是不可能获胜的。"/>
     </imgdir>
   </imgdir>
   <imgdir name="hit1">
@@ -300,7 +299,7 @@
     </canvas>
     <imgdir name="speak">
       <int name="prob" value="100"/>
-      <string name="0" value="Uggh...stronger than I thought! Don&apos;t think that you&apos;ve defeated me. The power that is sealed up...when that power returns, I will once again rule the world. "/>
+      <string name="0" value="呃……比想象的要强！不过别想就这样打败我。这是被封印的力量……如果有一天我真正恢复了力量，一定会重新支配这个世界。"/>
     </imgdir>
   </imgdir>
 </imgdir>

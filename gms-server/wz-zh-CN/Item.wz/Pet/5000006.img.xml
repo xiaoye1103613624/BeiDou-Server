@@ -16,6 +16,7 @@
     <int name="hungry" value="2"/>
     <int name="cash" value="1"/>
     <int name="life" value="90"/>
+    <int name="pickupItem" value="1"/>
   </imgdir>
   <imgdir name="interact">
     <imgdir name="0">
@@ -1151,14 +1152,6 @@
       <vector name="lt" x="-20" y="-37"/>
       <vector name="rb" x="21" y="0"/>
       <int name="delay" value="3000"/>
-    </canvas>
-  </imgdir>
-  <imgdir name="eat">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="20" y="37"/>
-      <vector name="lt" x="-20" y="-37"/>
-      <vector name="rb" x="24" y="0"/>
-      <int name="delay" value="2000"/>
     </canvas>
   </imgdir>
   <imgdir name="fly">

@@ -637,56 +637,7 @@
   <imgdir name="0">
     <imgdir name="info"/>
     <imgdir name="tile"/>
-    <imgdir name="obj">
-      <imgdir name="0">
-        <string name="oS" value="guide"/>
-        <string name="l0" value="milepost"/>
-        <string name="l1" value="common"/>
-        <string name="l2" value="1"/>
-        <int name="x" value="536"/>
-        <int name="y" value="-502"/>
-        <int name="z" value="7"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="0"/>
-        <int name="r" value="0"/>
-      </imgdir>
-      <imgdir name="1">
-        <string name="oS" value="guide"/>
-        <string name="l0" value="milepost"/>
-        <string name="l1" value="common"/>
-        <string name="l2" value="1"/>
-        <int name="x" value="536"/>
-        <int name="y" value="-555"/>
-        <int name="z" value="7"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="0"/>
-        <int name="r" value="0"/>
-      </imgdir>
-      <imgdir name="2">
-        <string name="oS" value="guide"/>
-        <string name="l0" value="milepost"/>
-        <string name="l1" value="backcho"/>
-        <string name="l2" value="5"/>
-        <int name="x" value="542"/>
-        <int name="y" value="-572"/>
-        <int name="z" value="9"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="0"/>
-        <int name="r" value="0"/>
-      </imgdir>
-      <imgdir name="3">
-        <string name="oS" value="guide"/>
-        <string name="l0" value="milepost"/>
-        <string name="l1" value="backcho"/>
-        <string name="l2" value="2"/>
-        <int name="x" value="531"/>
-        <int name="y" value="-520"/>
-        <int name="z" value="9"/>
-        <int name="f" value="0"/>
-        <int name="zM" value="0"/>
-        <int name="r" value="0"/>
-      </imgdir>
-    </imgdir>
+    <imgdir name="obj"/>
   </imgdir>
   <imgdir name="1">
     <imgdir name="info"/>
@@ -4063,32 +4014,6 @@
     <imgdir name="obj"/>
   </imgdir>
   <imgdir name="reactor"/>
-  <imgdir name="ToolTip">
-    <imgdir name="0">
-      <int name="x1" value="529"/>
-      <int name="y1" value="-576"/>
-      <int name="x2" value="537"/>
-      <int name="y2" value="-567"/>
-    </imgdir>
-    <imgdir name="0char">
-      <int name="x1" value="380"/>
-      <int name="y1" value="-645"/>
-      <int name="x2" value="714"/>
-      <int name="y2" value="-444"/>
-    </imgdir>
-    <imgdir name="1">
-      <int name="x1" value="531"/>
-      <int name="y1" value="-525"/>
-      <int name="x2" value="541"/>
-      <int name="y2" value="-516"/>
-    </imgdir>
-    <imgdir name="1char">
-      <int name="x1" value="377"/>
-      <int name="y1" value="-647"/>
-      <int name="x2" value="716"/>
-      <int name="y2" value="-442"/>
-    </imgdir>
-  </imgdir>
   <imgdir name="foothold">
     <imgdir name="2">
       <imgdir name="0">
@@ -6438,7 +6363,7 @@
     </imgdir>
     <imgdir name="12">
       <string name="pn" value="in00"/>
-      <int name="pt" value="10"/>
+      <int name="pt" value="1"/>
       <int name="x" value="1095"/>
       <int name="y" value="199"/>
       <int name="tm" value="100040104"/>
@@ -6446,17 +6371,17 @@
     </imgdir>
     <imgdir name="13">
       <string name="pn" value="in01"/>
-      <int name="pt" value="10"/>
+      <int name="pt" value="1"/>
       <int name="x" value="1027"/>
-      <int name="y" value="-193"/>
+      <int name="y" value="-195"/>
       <int name="tm" value="100040104"/>
       <string name="tn" value="out01"/>
     </imgdir>
     <imgdir name="14">
       <string name="pn" value="in02"/>
-      <int name="pt" value="10"/>
+      <int name="pt" value="1"/>
       <int name="x" value="1089"/>
-      <int name="y" value="-1001"/>
+      <int name="y" value="-997"/>
       <int name="tm" value="100040104"/>
       <string name="tn" value="out02"/>
     </imgdir>

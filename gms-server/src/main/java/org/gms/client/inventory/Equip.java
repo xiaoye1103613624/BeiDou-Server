@@ -176,6 +176,8 @@ public class Equip extends Item {
     private boolean isUpgradeable;
     /** 是否为元素装备（timeless/reverse 等，具备预设的属性升级路径） */
     private boolean isElemental = false;
+    /** 自定义扩展属性（JSON字符串，用于存储非标准的额外属性） */
+    private String customProperties;
     /** 物品信息提供者单例 */
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
@@ -235,6 +237,7 @@ public class Equip extends Item {
         ret.itemLevel = itemLevel;
         ret.itemExp = itemExp;
         ret.level = level;
+        ret.customProperties = customProperties;
         ret.itemLog = new LinkedList<>(itemLog);
         ret.setOwner(getOwner());
         ret.setQuantity(getQuantity());
@@ -268,6 +271,24 @@ public class Equip extends Item {
      *
      * @return 剩余可升级次数
      */
+    /**
+     * 获取自定义扩展属性（JSON字符串）
+     *
+     * @return 自定义属性JSON字符串，可能为null
+     */
+    public String getCustomProperties() {
+        return customProperties;
+    }
+
+    /**
+     * 设置自定义扩展属性（JSON字符串）
+     *
+     * @param customProperties 自定义属性JSON字符串
+     */
+    public void setCustomProperties(String customProperties) {
+        this.customProperties = customProperties;
+    }
+
     public byte getUpgradeSlots() {
         return upgradeSlots;
     }

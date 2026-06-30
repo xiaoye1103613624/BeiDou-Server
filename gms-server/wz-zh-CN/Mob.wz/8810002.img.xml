@@ -3,8 +3,7 @@
   <imgdir name="info">
     <int name="bodyAttack" value="1"/>
     <int name="level" value="160"/>
-    <int name="maxHP" value="330000000"/>
-    <int name="maxMP" value="43000"/>
+    <int name="maxMP" value="4300000"/>
     <int name="speed" value="0"/>
     <int name="PADamage" value="1350"/>
     <int name="PDDamage" value="1760"/>
@@ -13,7 +12,6 @@
     <int name="acc" value="250"/>
     <int name="eva" value="43"/>
     <int name="exp" value="13902900"/>
-    <int name="undead" value="0"/>
     <int name="pushed" value="50000"/>
     <int name="hpRecovery" value="100000"/>
     <int name="mpRecovery" value="1000"/>
@@ -57,6 +55,8 @@
     <imgdir name="revive">
       <int name="0" value="8810010"/>
     </imgdir>
+    <int name="maxHP" value="330000000"/>
+    <int name="undead" value="0"/>
     <int name="mobType" value="1"/>
     <int name="mbookID" value="8810018"/>
   </imgdir>
@@ -484,6 +484,7 @@
       <int name="attackAfter" value="2660"/>
       <string name="elemAttr" value="I"/>
       <int name="deadlyAttack" value="1"/>
+      <int name="interval" value="10000"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="243" y="505"/>

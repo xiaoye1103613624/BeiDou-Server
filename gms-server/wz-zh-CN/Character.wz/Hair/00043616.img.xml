@@ -15,15 +15,6 @@
       <string name="_hash" value="d5ea550aab7bffbc425ff4bcd1a9ee1612d6c2d2f9e0fb8ea66d876277794ff4"/>
       <string name="_outlink" value="Character/Hair/00041946.img/default/hairOverHead"/>
     </canvas>
-    <canvas name="hair" format="2" scale="0">
-      <vector name="origin" x="15" y="12"/>
-      <imgdir name="map">
-        <vector name="brow" x="0" y="0"/>
-      </imgdir>
-      <string name="z" value="hair"/>
-      <string name="_hash" value="c4f8e844abc964ff7ef9cd816fbee4de40d3e1725774ce91fd7dba93211731ba"/>
-      <string name="_outlink" value="Character/Hair/00041946.img/default/hair"/>
-    </canvas>
     <canvas name="hairBelowBody" format="2" scale="0">
       <vector name="origin" x="15" y="12"/>
       <imgdir name="map">
@@ -42,7 +33,7 @@
         <string name="z" value="hairShade"/>
         <string name="group" value="skin"/>
         <string name="_hash" value="4939dc771b4fadad0ec1158360182b1e9e7d68047e6f99f8cb2f4e4687974afe"/>
-        <string name="_outlink" value="Character/Hair/00043612.img/default/hairShade/0"/>
+        <string name="_outlink" value="Character/Hair/00041940.img/default/hairShade/0"/>
       </canvas>
       <uol name="1" value="0"/>
       <uol name="2" value="0"/>
@@ -52,6 +43,15 @@
       <uol name="10" value="0"/>
       <uol name="11" value="0"/>
     </imgdir>
+    <canvas name="hair" format="2" scale="0">
+      <vector name="origin" x="14" y="12"/>
+      <string name="z" value="hair"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="_hash" value="93c42bd7096bb29ab3f57f6be3a220e699f7d0f4dd7d186e3c9f9ae9be5c319d"/>
+      <string name="_outlink" value="Character/Hair/00041946.img/default/hair"/>
+    </canvas>
   </imgdir>
   <imgdir name="backDefault">
     <canvas name="backHair" format="2" scale="0">
@@ -622,7 +622,8 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_outlink" value="Character/Hair/00041946.img/default/hair"/>
+        <string name="_hash" value="c4f8e844abc964ff7ef9cd816fbee4de40d3e1725774ce91fd7dba93211731ba"/>
+        <string name="_outlink" value="Character/Hair/00041946.img/proneStab/0/hair"/>
       </canvas>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>

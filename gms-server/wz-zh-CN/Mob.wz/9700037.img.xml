@@ -1,76 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9700037.img" indent="2" media="NONE">
-  <imgdir name="info">
-    <int name="bodyAttack" value="1"/>
-    <int name="level" value="62"/>
-    <int name="maxHP" value="4000000"/>
-    <int name="maxMP" value="10000"/>
-    <int name="speed" value="0"/>
-    <int name="PADamage" value="350"/>
-    <int name="PDDamage" value="480"/>
-    <int name="MADamage" value="330"/>
-    <int name="MDDamage" value="500"/>
-    <int name="acc" value="160"/>
-    <int name="eva" value="27"/>
-    <int name="pushed" value="99999999"/>
-    <float name="fs" value="10.0"/>
-    <int name="summonType" value="1"/>
-    <int name="mobType" value="7"/>
-    <int name="undead" value="1"/>
-    <int name="boss" value="1"/>
-    <int name="point" value="1000"/>
-    <imgdir name="skill">
-      <imgdir name="0">
-        <int name="skill" value="200"/>
-        <int name="action" value="1"/>
-        <string name="level" value="166"/>
-        <int name="effectAfter" value="0"/>
-      </imgdir>
-      <imgdir name="1">
-        <int name="skill" value="134"/>
-        <int name="action" value="2"/>
-        <string name="level" value="1"/>
-        <int name="effectAfter" value="0"/>
-      </imgdir>
-      <imgdir name="2">
-        <int name="skill" value="135"/>
-        <int name="action" value="2"/>
-        <string name="level" value="1"/>
-        <int name="effectAfter" value="0"/>
-      </imgdir>
-    </imgdir>
-    <imgdir name="revive">
-      <int name="0" value="9700038"/>
-    </imgdir>
-    <int name="ignoreFieldOut" value="1"/>
-    <string name="elemAttr" value="H2"/>
-    <imgdir name="speak">
-      <imgdir name="con">
-        <imgdir name="0">
-          <imgdir name="quest">
-            <int name="questID" value="3845"/>
-            <int name="state" value="2"/>
-          </imgdir>
-        </imgdir>
-      </imgdir>
-      <int name="chataBalloon" value="0"/>
-      <imgdir name="0">
-        <int name="hp" value="3900000"/>
-        <int name="prob" value="100"/>
-        <string name="0" value="겁도 없이 잘도 기어 들어왔구나! 모두 죽어라!!"/>
-      </imgdir>
-      <imgdir name="1">
-        <int name="hp" value="2000000"/>
-        <int name="prob" value="100"/>
-        <string name="0" value="해군의 명예를 걸고 무찔러 주마."/>
-      </imgdir>
-      <imgdir name="2">
-        <int name="hp" value="800000"/>
-        <int name="prob" value="100"/>
-        <string name="0" value="이정도론 어림없다. 이녀석들."/>
-      </imgdir>
-    </imgdir>
-  </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="151" y="194"/>
@@ -196,122 +125,6 @@
       <int name="delay" value="600"/>
     </canvas>
   </imgdir>
-  <imgdir name="die1">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="151" y="193"/>
-      <vector name="head" x="-15" y="-141"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="1" format="1" scale="0">
-      <vector name="origin" x="150" y="196"/>
-      <vector name="head" x="-15" y="-141"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="2" format="1" scale="0">
-      <vector name="origin" x="149" y="197"/>
-      <vector name="head" x="-15" y="-144"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="3" format="1" scale="0">
-      <vector name="origin" x="148" y="199"/>
-      <vector name="head" x="-14" y="-145"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="4" format="1" scale="0">
-      <vector name="origin" x="147" y="197"/>
-      <vector name="head" x="-14" y="-145"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="5" format="1" scale="0">
-      <vector name="origin" x="148" y="196"/>
-      <vector name="head" x="-14" y="-144"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="6" format="1" scale="0">
-      <vector name="origin" x="149" y="195"/>
-      <vector name="head" x="-14" y="-144"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="7" format="1" scale="0">
-      <vector name="origin" x="150" y="195"/>
-      <vector name="head" x="-14" y="-144"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="8" format="1" scale="0">
-      <vector name="origin" x="51" y="185"/>
-      <vector name="head" x="76" y="-134"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="9" format="1" scale="0">
-      <vector name="origin" x="-17" y="182"/>
-      <vector name="head" x="76" y="-133"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="10" format="1" scale="0">
-      <vector name="origin" x="21" y="154"/>
-      <vector name="head" x="76" y="-133"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="11" format="1" scale="0">
-      <vector name="origin" x="23" y="182"/>
-      <vector name="head" x="77" y="-155"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="12" format="1" scale="0">
-      <vector name="origin" x="25" y="203"/>
-      <vector name="head" x="80" y="-178"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="13" format="1" scale="0">
-      <vector name="origin" x="28" y="231"/>
-      <vector name="head" x="79" y="-206"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="14" format="1" scale="0">
-      <vector name="origin" x="31" y="252"/>
-      <vector name="head" x="80" y="-223"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="15" format="1" scale="0">
-      <vector name="origin" x="32" y="260"/>
-      <vector name="head" x="79" y="-233"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="16" format="1" scale="0">
-      <vector name="origin" x="-12" y="273"/>
-      <vector name="head" x="78" y="-246"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="17" format="1" scale="0">
-      <vector name="origin" x="-27" y="282"/>
-      <vector name="head" x="78" y="-248"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="18" format="1" scale="0">
-      <vector name="origin" x="-32" y="358"/>
-      <vector name="head" x="78" y="-285"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="19" format="1" scale="0">
-      <vector name="origin" x="-49" y="382"/>
-      <vector name="head" x="79" y="-303"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="20" format="1" scale="0">
-      <vector name="origin" x="-59" y="384"/>
-      <vector name="head" x="79" y="-327"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <canvas name="21" format="1" scale="0">
-      <vector name="origin" x="-65" y="368"/>
-      <vector name="head" x="80" y="-335"/>
-      <int name="delay" value="120"/>
-    </canvas>
-    <imgdir name="speak">
-      <int name="prob" value="100"/>
-      <string name="0" value="이런 애송들에게 내가 당하다니.. 으윽.."/>
-    </imgdir>
-  </imgdir>
   <imgdir name="attack1">
     <imgdir name="info">
       <imgdir name="range">
@@ -336,10 +149,7 @@
           <int name="delay" value="90"/>
         </canvas>
       </imgdir>
-      <int name="type" value="0"/>
-      <int name="conMP" value="1"/>
       <int name="attackAfter" value="1080"/>
-      <int name="PADamage" value="430"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="151" y="194"/>
@@ -459,6 +269,7 @@
       <vector name="rb" x="88" y="0"/>
       <vector name="head" x="-13" y="-142"/>
       <int name="delay" value="120"/>
+      <string name="source" value="Mob/9700037.img/stand/0"/>
     </canvas>
     <canvas name="17" format="1" scale="0">
       <vector name="origin" x="150" y="196"/>
@@ -466,6 +277,7 @@
       <vector name="rb" x="89" y="0"/>
       <vector name="head" x="-13" y="-142"/>
       <int name="delay" value="120"/>
+      <string name="source" value="Mob/9700037.img/stand/1"/>
     </canvas>
     <canvas name="18" format="1" scale="0">
       <vector name="origin" x="149" y="197"/>
@@ -473,6 +285,7 @@
       <vector name="rb" x="88" y="1"/>
       <vector name="head" x="-14" y="-143"/>
       <int name="delay" value="120"/>
+      <string name="source" value="Mob/9700037.img/stand/2"/>
     </canvas>
     <canvas name="19" format="1" scale="0">
       <vector name="origin" x="148" y="199"/>
@@ -480,6 +293,7 @@
       <vector name="rb" x="86" y="0"/>
       <vector name="head" x="-13" y="-144"/>
       <int name="delay" value="120"/>
+      <string name="source" value="Mob/9700037.img/stand/3"/>
     </canvas>
   </imgdir>
   <imgdir name="attack2">
@@ -504,6 +318,7 @@
         <canvas name="3" format="1" scale="0">
           <vector name="origin" x="35" y="70"/>
           <int name="delay" value="90"/>
+          <string name="source" value="Mob/9700037.img/attack2/info/hit/1"/>
         </canvas>
         <canvas name="4" format="1" scale="0">
           <vector name="origin" x="25" y="83"/>
@@ -519,6 +334,7 @@
         <canvas name="0" format="1" scale="0">
           <vector name="origin" x="0" y="0"/>
           <int name="delay" value="1080"/>
+          <string name="source" value="Mob/2230104.img/regen/0"/>
         </canvas>
         <canvas name="1" format="1" scale="0">
           <vector name="origin" x="379" y="158"/>
@@ -553,11 +369,8 @@
           <int name="delay" value="90"/>
         </canvas>
       </imgdir>
-      <int name="type" value="0"/>
-      <int name="conMP" value="15"/>
       <int name="attackAfter" value="1080"/>
       <int name="effectAfter" value="0"/>
-      <int name="magic" value="1"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="151" y="194"/>
@@ -735,6 +548,7 @@
           <vector name="origin" x="0" y="0"/>
           <int name="delay" value="360"/>
           <int name="z" value="0"/>
+          <string name="source" value="Mob/2230104.img/regen/0"/>
         </canvas>
         <canvas name="1" format="1" scale="0">
           <vector name="origin" x="21" y="9"/>
@@ -835,35 +649,37 @@
           <vector name="origin" x="80" y="103"/>
           <int name="z" value="0"/>
           <int name="delay" value="120"/>
+          <string name="source" value="Mob/8300007.img/attack2/info/areaWarning/21"/>
         </canvas>
       </imgdir>
       <imgdir name="hit">
         <canvas name="0" format="1" scale="0">
           <vector name="origin" x="61" y="60"/>
           <int name="delay" value="100"/>
+          <string name="source" value="Mob/8300006.img/attack1/info/hit/0"/>
         </canvas>
         <canvas name="1" format="1" scale="0">
           <vector name="origin" x="46" y="53"/>
           <int name="delay" value="100"/>
+          <string name="source" value="Mob/8300006.img/attack1/info/hit/1"/>
         </canvas>
         <canvas name="2" format="1" scale="0">
           <vector name="origin" x="47" y="49"/>
           <int name="delay" value="100"/>
+          <string name="source" value="Mob/8300006.img/attack1/info/hit/2"/>
         </canvas>
         <canvas name="3" format="1" scale="0">
           <vector name="origin" x="57" y="43"/>
           <int name="delay" value="100"/>
+          <string name="source" value="Mob/8300006.img/attack1/info/hit/3"/>
         </canvas>
         <canvas name="4" format="1" scale="0">
           <vector name="origin" x="59" y="47"/>
           <int name="delay" value="100"/>
+          <string name="source" value="Mob/8300006.img/attack1/info/hit/4"/>
         </canvas>
       </imgdir>
-      <int name="type" value="3"/>
       <int name="attackAfter" value="1800"/>
-      <int name="conMP" value="10"/>
-      <int name="deadlyAttack" value="1"/>
-      <int name="magic" value="1"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="151" y="194"/>
@@ -1142,7 +958,7 @@
     </canvas>
     <imgdir name="speak">
       <int name="prob" value="100"/>
-      <string name="0" value="나의 충성스런 부하들이여. 침입자들을 해치워라!"/>
+      <string name="0" value="我们忠诚的下属们。灭掉入侵者！"/>
     </imgdir>
   </imgdir>
   <imgdir name="skill2">
@@ -1281,7 +1097,164 @@
     </canvas>
     <imgdir name="speak">
       <int name="prob" value="50"/>
-      <string name="0" value="해군의 명예를 위하여!!"/>
+      <string name="0" value="为了海军的荣誉！！"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="info">
+    <imgdir name="skill">
+      <imgdir name="1">
+        <int name="skill" value="133"/>
+        <int name="action" value="2"/>
+        <int name="level" value="1"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+      <imgdir name="0">
+        <int name="skill" value="200"/>
+        <int name="action" value="1"/>
+        <int name="level" value="79"/>
+        <int name="effectAfter" value="0"/>
+      </imgdir>
+    </imgdir>
+    <int name="noDoom" value="1"/>
+    <int name="level" value="61"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="maxHP" value="100000000"/>
+    <int name="maxMP" value="1200"/>
+    <int name="PADamage" value="1000"/>
+    <int name="PDDamage" value="400"/>
+    <int name="MADamage" value="1000"/>
+    <int name="MDDamage" value="80"/>
+    <int name="acc" value="1000"/>
+    <int name="eva" value="100"/>
+    <int name="pushed" value="100000"/>
+    <float name="fs" value="10.0"/>
+    <int name="summonType" value="1"/>
+    <int name="undead" value="1"/>
+    <int name="hpRecovery" value="1200"/>
+    <string name="mobType" value="2N"/>
+    <int name="boss" value="1"/>
+    <imgdir name="speak">
+      <int name="chatBalloon" value="0"/>
+      <imgdir name="0">
+        <int name="hp" value="6500"/>
+        <string name="0" value="讓你後悔！"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="die1">
+    <canvas name="0" format="2" scale="0">
+      <vector name="origin" x="151" y="193"/>
+      <vector name="head" x="-15" y="-141"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="1" format="2" scale="0">
+      <vector name="origin" x="150" y="196"/>
+      <vector name="head" x="-15" y="-141"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="2" format="2" scale="0">
+      <vector name="origin" x="149" y="197"/>
+      <vector name="head" x="-15" y="-144"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="3" format="2" scale="0">
+      <vector name="origin" x="148" y="199"/>
+      <vector name="head" x="-14" y="-145"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="4" format="2" scale="0">
+      <vector name="origin" x="147" y="197"/>
+      <vector name="head" x="-14" y="-145"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="5" format="2" scale="0">
+      <vector name="origin" x="148" y="196"/>
+      <vector name="head" x="-14" y="-144"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="6" format="2" scale="0">
+      <vector name="origin" x="149" y="195"/>
+      <vector name="head" x="-14" y="-144"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="7" format="2" scale="0">
+      <vector name="origin" x="150" y="195"/>
+      <vector name="head" x="-14" y="-144"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="8" format="2" scale="0">
+      <vector name="origin" x="51" y="185"/>
+      <vector name="head" x="76" y="-134"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="9" format="2" scale="0">
+      <vector name="origin" x="-17" y="182"/>
+      <vector name="head" x="76" y="-133"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="10" format="2" scale="0">
+      <vector name="origin" x="21" y="154"/>
+      <vector name="head" x="76" y="-133"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="11" format="2" scale="0">
+      <vector name="origin" x="23" y="182"/>
+      <vector name="head" x="77" y="-155"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="12" format="2" scale="0">
+      <vector name="origin" x="25" y="203"/>
+      <vector name="head" x="80" y="-178"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="13" format="2" scale="0">
+      <vector name="origin" x="28" y="231"/>
+      <vector name="head" x="79" y="-206"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="14" format="2" scale="0">
+      <vector name="origin" x="31" y="252"/>
+      <vector name="head" x="80" y="-223"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="15" format="2" scale="0">
+      <vector name="origin" x="32" y="260"/>
+      <vector name="head" x="79" y="-233"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="16" format="2" scale="0">
+      <vector name="origin" x="-12" y="273"/>
+      <vector name="head" x="78" y="-246"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="17" format="2" scale="0">
+      <vector name="origin" x="-27" y="282"/>
+      <vector name="head" x="78" y="-248"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="18" format="2" scale="0">
+      <vector name="origin" x="-32" y="358"/>
+      <vector name="head" x="78" y="-285"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="19" format="2" scale="0">
+      <vector name="origin" x="-49" y="382"/>
+      <vector name="head" x="79" y="-303"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="20" format="2" scale="0">
+      <vector name="origin" x="-59" y="384"/>
+      <vector name="head" x="79" y="-327"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="21" format="2" scale="0">
+      <vector name="origin" x="-65" y="368"/>
+      <vector name="head" x="80" y="-335"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <imgdir name="speak">
+      <int name="prob" value="100"/>
+      <string name="0" value="居然栽在這些兔崽子手中.. 呃啊.."/>
     </imgdir>
   </imgdir>
 </imgdir>

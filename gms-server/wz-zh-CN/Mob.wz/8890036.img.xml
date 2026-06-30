@@ -12,7 +12,7 @@
     <int name="PDRate" value="100"/>
     <int name="MDRate" value="100"/>
     <int name="acc" value="270"/>
-    <int name="eva" value="47"/>
+    <int name="eva" value="1"/>
     <int name="pushed" value="1000000000"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
@@ -20,13 +20,13 @@
     <int name="firstAttack" value="1"/>
     <string name="mobType" value="1N"/>
     <int name="boss" value="1"/>
-    <int name="explosiveReward" value="1"/>
+    <int name="explosiveReward" value="0"/>
     <int name="hpTagColor" value="1"/>
     <int name="hpTagBgcolor" value="5"/>
-    <int name="ignoreMoveImpact" value="1"/>
-    <int name="ignoreMovable" value="1"/>
-    <int name="ignoreFieldOut" value="1"/>
-    <int name="isRemoteRange" value="1"/>
+    <int name="ignoreMoveImpact" value="0"/>
+    <int name="ignoreMovable" value="0"/>
+    <int name="ignoreFieldOut" value="0"/>
+    <int name="isRemoteRange" value="0"/>
     <imgdir name="attack">
       <imgdir name="0">
         <int name="action" value="1"/>
@@ -92,61 +92,7 @@
         <int name="deadlyAttack" value="1"/>
       </imgdir>
     </imgdir>
-    <imgdir name="skill">
-      <imgdir name="7">
-        <int name="skill" value="145"/>
-        <int name="action" value="6"/>
-        <int name="level" value="1"/>
-        <int name="effectAfter" value="0"/>
-      </imgdir>
-      <imgdir name="0">
-        <int name="skill" value="128"/>
-        <int name="action" value="3"/>
-        <int name="level" value="8"/>
-        <int name="skillAfter" value="1760"/>
-      </imgdir>
-      <imgdir name="1">
-        <int name="skill" value="128"/>
-        <int name="action" value="1"/>
-        <int name="level" value="13"/>
-        <int name="skillAfter" value="990"/>
-      </imgdir>
-      <imgdir name="2">
-        <int name="skill" value="200"/>
-        <int name="action" value="2"/>
-        <int name="level" value="223"/>
-        <int name="skillAfter" value="1440"/>
-      </imgdir>
-      <imgdir name="3">
-        <int name="skill" value="128"/>
-        <int name="action" value="4"/>
-        <int name="level" value="1"/>
-        <int name="skillAfter" value="1260"/>
-        <int name="effectAfter" value="1260"/>
-      </imgdir>
-      <imgdir name="4">
-        <int name="skill" value="145"/>
-        <int name="action" value="6"/>
-        <int name="level" value="4"/>
-        <int name="effectAfter" value="0"/>
-      </imgdir>
-      <imgdir name="5">
-        <int name="skill" value="200"/>
-        <int name="action" value="5"/>
-        <int name="level" value="222"/>
-        <int name="skillAfter" value="1440"/>
-        <int name="preSkillIndex" value="7"/>
-        <int name="preSkillCount" value="5"/>
-      </imgdir>
-      <imgdir name="6">
-        <int name="skill" value="128"/>
-        <int name="action" value="7"/>
-        <int name="level" value="1"/>
-        <int name="effectAfter" value="630"/>
-        <int name="skillAfter" value="630"/>
-      </imgdir>
-    </imgdir>
-    <int name="bodyAttack" value="1"/>
+    <int name="bodyAttack" value="0"/>
     <int name="exp" value="0"/>
   </imgdir>
   <imgdir name="stand">

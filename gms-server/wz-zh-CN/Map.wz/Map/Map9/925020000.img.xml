@@ -5,7 +5,6 @@
     <int name="cloud" value="0"/>
     <int name="town" value="1"/>
     <int name="swim" value="0"/>
-    <int name="returnMap" value="925020000"/>
     <int name="forcedReturn" value="999999999"/>
     <float name="mobRate" value="1.0"/>
     <string name="bgm" value="Bgm15/MureungHill"/>
@@ -19,6 +18,7 @@
     <int name="fly" value="0"/>
     <string name="onFirstUserEnter" value=""/>
     <string name="onUserEnter" value="dojang_Msg"/>
+    <int name="returnMap" value="925020000"/>
     <int name="noMapCmd" value="0"/>
   </imgdir>
   <imgdir name="back">
@@ -4635,8 +4635,8 @@
       <int name="y" value="51"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <int name="horizontalImpact" value="0"/>
       <string name="script" value="enterBackStreet"/>
+      <int name="horizontalImpact" value="0"/>
     </imgdir>
   </imgdir>
 </imgdir>

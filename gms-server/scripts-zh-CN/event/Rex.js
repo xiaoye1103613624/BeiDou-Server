@@ -7,13 +7,13 @@ function init() {
 function setup(eim, leaderid) {
     var eim = em.newInstance("Rex" + leaderid + em.getProperty("instanceId"));
 	em.setProperty("instanceId", parseInt(em.getProperty("instanceId")) + 1);
-        eim.createInstanceMap(921120005).resetFully();
-        eim.createInstanceMap(921120100).resetFully();
-        eim.createInstanceMap(921120200).resetFully();
-        eim.createInstanceMap(921120300).resetFully();
-        eim.createInstanceMap(921120400).resetFully();
-        eim.createInstanceMap(921120500).resetFully();
-        eim.createInstanceMap(921120600).resetFully();
+        eim.getInstanceMap(921120005).resetFully();
+        eim.getInstanceMap(921120100).resetFully();
+        eim.getInstanceMap(921120200).resetFully();
+        eim.getInstanceMap(921120300).resetFully();
+        eim.getInstanceMap(921120400).resetFully();
+        eim.getInstanceMap(921120500).resetFully();
+        eim.getInstanceMap(921120600).resetFully();
 	eim.setProperty("HP", "50000");
 
     eim.schedule("talkMob", 5000);

@@ -110,4 +110,8 @@ public class InventoryEquipRtnDTO {
      * 装备强化等级（0=未强化，每件装备属性隔离），对应enhance_level
      */
     private Short enhanceLevel;
+    /**
+     * 自定义属性JSON字符串，对应custom_properties
+     */
+    private String customProperties;
 }

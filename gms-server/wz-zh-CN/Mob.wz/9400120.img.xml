@@ -21,6 +21,8 @@
     <int name="summonType" value="1"/>
     <int name="boss" value="1"/>
     <string name="elemAttr" value="F3L3"/>
+    <int name="hpTagColor" value="1"/>
+    <int name="hpTagBgcolor" value="5"/>
     <imgdir name="skill">
       <imgdir name="0">
         <int name="skill" value="200"/>
@@ -137,9 +139,6 @@
         <int name="effectAfter" value="0"/>
       </imgdir>
     </imgdir>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
   </imgdir>
   <imgdir name="regen">
     <canvas name="0" format="1" scale="0">

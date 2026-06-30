@@ -13,7 +13,7 @@
     <int name="MDDamage" value="230"/>
     <int name="acc" value="140"/>
     <int name="eva" value="999"/>
-    <int name="exp" value="10320"/>
+    <int name="exp" value="250"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="800"/>
     <float name="fs" value="10.0"/>
@@ -28,7 +28,7 @@
       </imgdir>
     </imgdir>
     <imgdir name="ban">
-      <string name="banMsg" value="You have been relocated due to the curse of the Witch."/>
+      <string name="banMsg" value="由于魔女的诅咒，移动到了其他地方。"/>
       <imgdir name="banMap">
         <imgdir name="0">
           <int name="field" value="211000000"/>
@@ -36,9 +36,6 @@
         </imgdir>
       </imgdir>
     </imgdir>
-    <int name="HPgaugeHide" value="1"/>
-    <int name="hpTagBgcolor" value="5"/>
-    <int name="hpTagColor" value="1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">

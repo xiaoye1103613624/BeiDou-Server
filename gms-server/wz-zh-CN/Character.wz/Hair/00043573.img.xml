@@ -13,7 +13,6 @@
       </imgdir>
       <string name="z" value="hairOverHead"/>
       <string name="_hash" value="d5271978ac7a2ef085286afc8d66bd056efa8400ad20ad09a464ac7253020e95"/>
-      <string name="_outlink" value="Character/Hair/00044783.img/default/hairOverHead"/>
     </canvas>
     <canvas name="hair" format="2" scale="0">
       <vector name="origin" x="16" y="12"/>
@@ -22,7 +21,6 @@
       </imgdir>
       <string name="z" value="hair"/>
       <string name="_hash" value="30ec95c59153a60b6d29a24f1de412d1f3636e9a79e43d443aebaa217ec8259e"/>
-      <string name="_outlink" value="Character/Hair/00044783.img/default/hair"/>
     </canvas>
     <canvas name="hairBelowBody" format="2" scale="0">
       <vector name="origin" x="15" y="12"/>
@@ -31,7 +29,6 @@
       </imgdir>
       <string name="z" value="hairBelowBody"/>
       <string name="_hash" value="a1c847ca012c8d6911be8c28ae883ff78cd19b83faa6a6612ec611f09c821359"/>
-      <string name="_outlink" value="Character/Hair/00044783.img/default/hairBelowBody"/>
     </canvas>
     <imgdir name="hairShade">
       <canvas name="0" format="2" scale="0">
@@ -61,7 +58,6 @@
       </imgdir>
       <string name="z" value="backHair"/>
       <string name="_hash" value="c771cab4b2e0e3e9e689b92fcf7d1d20e577799eba6d3319ab79560f3f4f844c"/>
-      <string name="_outlink" value="Character/Hair/00044783.img/backDefault/backHair"/>
     </canvas>
     <canvas name="backHairBelowCap" format="2" scale="0">
       <vector name="origin" x="16" y="12"/>
@@ -70,7 +66,6 @@
       </imgdir>
       <string name="z" value="backHairBelowCap"/>
       <string name="_hash" value="8b98a732771c69cef9e382f8c341f47bb27a3c3414fd1ec0228f3b418bc284dc"/>
-      <string name="_outlink" value="Character/Hair/00044783.img/backDefault/backHairBelowCap"/>
     </canvas>
   </imgdir>
   <imgdir name="walk1">
@@ -613,7 +608,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hairOverHead"/>
-        <string name="_outlink" value="Character/Hair/00044783.img/default/hairOverHead"/>
+        <string name="_inlink" value="default/hairOverHead"/>
       </canvas>
       <canvas name="hair" format="2" scale="0">
         <vector name="origin" x="16" y="11"/>
@@ -621,7 +616,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_outlink" value="Character/Hair/00044783.img/default/hair"/>
+        <string name="_inlink" value="default/hair"/>
       </canvas>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>
@@ -632,7 +627,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hairOverHead"/>
-        <string name="_outlink" value="Character/Hair/00044783.img/default/hairOverHead"/>
+        <string name="_inlink" value="default/hairOverHead"/>
       </canvas>
       <canvas name="hair" format="2" scale="0">
         <vector name="origin" x="16" y="11"/>
@@ -640,7 +635,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_outlink" value="Character/Hair/00044783.img/default/hair"/>
+        <string name="_inlink" value="default/hair"/>
       </canvas>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>
@@ -653,7 +648,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hairOverHead"/>
-        <string name="_outlink" value="Character/Hair/00044783.img/default/hairOverHead"/>
+        <string name="_inlink" value="default/hairOverHead"/>
       </canvas>
       <canvas name="hair" format="2" scale="0">
         <vector name="origin" x="16" y="11"/>
@@ -661,7 +656,7 @@
           <vector name="brow" x="0" y="0"/>
         </imgdir>
         <string name="z" value="hair"/>
-        <string name="_outlink" value="Character/Hair/00044783.img/default/hair"/>
+        <string name="_inlink" value="default/hair"/>
       </canvas>
       <uol name="hairShade" value="../../default/hairShade"/>
     </imgdir>

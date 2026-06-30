@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="9700031.img" indent="2" media="NONE">
   <imgdir name="info">
-    <int name="bodyAttack" value="1"/>
-    <int name="level" value="61"/>
-    <int name="maxHP" value="80000"/>
-    <int name="maxMP" value="10000"/>
-    <int name="speed" value="0"/>
-    <int name="PADamage" value="225"/>
-    <int name="PDDamage" value="400"/>
-    <int name="MADamage" value="300"/>
-    <int name="MDDamage" value="80"/>
-    <int name="acc" value="160"/>
-    <int name="eva" value="25"/>
-    <int name="pushed" value="20000"/>
-    <float name="fs" value="10.0"/>
-    <int name="summonType" value="1"/>
-    <int name="mobType" value="7"/>
-    <int name="undead" value="1"/>
-    <int name="hpRecovery" value="1000"/>
     <imgdir name="skill">
       <imgdir name="0">
         <int name="skill" value="134"/>
@@ -27,9 +10,35 @@
       </imgdir>
     </imgdir>
     <int name="point" value="20"/>
-    <int name="boss" value="1"/>
+    <int name="noDoom" value="1"/>
     <int name="ignoreFieldOut" value="1"/>
+    <int name="level" value="61"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="maxHP" value="11800"/>
+    <int name="maxMP" value="1200"/>
+    <int name="PADamage" value="350"/>
+    <int name="PDDamage" value="400"/>
+    <int name="PDRate" value="20"/>
+    <int name="MADamage" value="319"/>
+    <int name="MDDamage" value="80"/>
+    <int name="MDRate" value="20"/>
+    <int name="acc" value="49"/>
+    <int name="eva" value="36"/>
+    <int name="pushed" value="500"/>
+    <float name="fs" value="10.0"/>
+    <int name="summonType" value="1"/>
+    <int name="undead" value="1"/>
     <string name="elemAttr" value="H2"/>
+    <int name="hpRecovery" value="1000"/>
+    <string name="mobType" value="2N"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+      </imgdir>
+    </imgdir>
+    <int name="changeableMob" value="1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" format="1" scale="0">
@@ -143,11 +152,6 @@
     </canvas>
   </imgdir>
   <imgdir name="die1">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="32" y="80"/>
-      <vector name="head" x="-2" y="-51"/>
-      <int name="delay" value="120"/>
-    </canvas>
     <canvas name="1" format="1" scale="0">
       <vector name="origin" x="30" y="82"/>
       <vector name="head" x="-2" y="-51"/>
@@ -325,9 +329,7 @@
         </canvas>
         <int name="attach" value="1"/>
       </imgdir>
-      <int name="type" value="0"/>
       <int name="attackAfter" value="360"/>
-      <int name="PADamage" value="225"/>
     </imgdir>
     <canvas name="0" format="1" scale="0">
       <vector name="origin" x="27" y="93"/>
