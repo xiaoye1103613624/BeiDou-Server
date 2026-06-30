@@ -8276,4 +8276,18 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 装备自定义属性同步包
+     * 将装备的自定义属性JSON字符串同步给客户端插件展示
+     *
+     * @param position         装备位置
+     * @param customProperties 自定义属性JSON字符串
+     */
+    public static Packet updateEquipCustomAttr(short position, String customProperties) {
+        OutPacket p = OutPacket.create(SendOpcode.EQUIP_CUSTOM_ATTR);
+        p.writeShort(position);
+        p.writeString(customProperties);
+        return p;
+    }
+
 }
