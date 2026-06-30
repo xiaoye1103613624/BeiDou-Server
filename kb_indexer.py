@@ -42,14 +42,16 @@ SOURCE_SPECS = [
     ("E:/教程", "doc/tutorial",
      {".md", ".txt", ".pdf", ".docx", ".js", ".java", ".py", ".sql", ".html"}),
     ("E:/资料/xiaoye/mxd学习", "doc/maplestory",
-     {".md", ".txt", ".js", ".java", ".py", ".sql"}),
+     {".md", ".txt", ".js", ".java", ".py", ".sql", ".php", ".html",
+      ".properties", ".ini", ".conf", ".bat", ".h", ".css", ".log", ".policy"}),
     # 中源
     ("D:/software", "reference/software",
      {".md", ".txt", ".cfg", ".ini", ".conf", ".xml", ".json", ".yml", ".properties"}),
     ("D:/game", "reference/game",
      {".md", ".txt", ".cfg", ".ini", ".xml", ".json"}),
     ("E:/mxd_soft", "reference/maplestory-tools",
-     {".md", ".txt", ".js", ".java", ".sql", ".cfg", ".ini", ".xml", ".properties"}),
+     {".md", ".txt", ".js", ".java", ".py", ".sql", ".cfg", ".ini", ".properties",
+      ".php", ".html", ".bat", ".h", ".css", ".log", ".policy"}),
     # 大源 (E:/pro 已有 maplestory_kb，这里只索引之前没覆盖的)
     ("E:/pro/resource_doc", "doc/reference", {".md", ".txt"}),
     # 超大源 (限制深度和文件数)

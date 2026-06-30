@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.customGameplay.dailyActiveTask')">
+    <a-card
+      class="general-card"
+      :title="$t('menu.customGameplay.dailyActiveTask')"
+    >
       <!-- 操作栏 -->
       <a-row>
         <a-col>

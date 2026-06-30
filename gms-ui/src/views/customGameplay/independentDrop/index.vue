@@ -51,12 +51,8 @@
             align="center"
           >
             <template #cell="{ record }">
-              <a-tag v-if="record.enabled === 1" color="green">{{
-                $t('independentDrop.yes')
-              }}</a-tag>
-              <a-tag v-else color="gray">{{
-                $t('independentDrop.no')
-              }}</a-tag>
+              <a-tag v-if="record.enabled === 1" color="green">{{$t('independentDrop.yes')}}</a-tag>
+              <a-tag v-else color="gray">{{ $t('independentDrop.no') }}</a-tag>
             </template>
           </a-table-column>
           <a-table-column
