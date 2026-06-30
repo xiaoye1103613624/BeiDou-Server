@@ -1,80 +1,66 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <imgdir name="connectGL.img" indent="2" media="NONE">
-  <imgdir name="rope">
-    <imgdir name="0">
+  <imgdir name="connectGL.img">
+    <imgdir name="rope">
       <imgdir name="0">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="17" y="33"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-19"/>
-          </extended>
-        </canvas>
+        <imgdir name="0">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="17" y="33" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
+        <imgdir name="1">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="4" y="7" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
+        <imgdir name="2">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="4" y="45" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
+        <imgdir name="3">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="4" y="3" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
       </imgdir>
       <imgdir name="1">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="4" y="7"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-12"/>
-          </extended>
-        </canvas>
-      </imgdir>
-      <imgdir name="2">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="4" y="45"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-49"/>
-          </extended>
-        </canvas>
-      </imgdir>
-      <imgdir name="3">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="4" y="3"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-6"/>
-          </extended>
-        </canvas>
-      </imgdir>
-    </imgdir>
-    <imgdir name="1">
-      <imgdir name="0">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="27" y="15"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-5"/>
-          </extended>
-        </canvas>
-      </imgdir>
-      <imgdir name="1">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="21" y="15"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-4"/>
-          </extended>
-        </canvas>
-      </imgdir>
-      <imgdir name="2">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="6" y="29"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-34"/>
-          </extended>
-        </canvas>
-      </imgdir>
-      <imgdir name="3">
-        <canvas name="0" format="1" scale="0">
-          <vector name="origin" x="6" y="3"/>
-          <int name="z" value="0"/>
-          <extended name="rope">
-            <vector name="rope" x="0" y="-7"/>
-          </extended>
-        </canvas>
+        <imgdir name="0">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="27" y="15" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
+        <imgdir name="1">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="21" y="15" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
+        <imgdir name="2">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="6" y="29" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
+        <imgdir name="3">
+          <canvas name="0" format="ARGB4444">
+            <vector name="origin" x="6" y="3" />
+            <int name="z" value="0" />
+            <convex name="rope" />
+          </canvas>
+        </imgdir>
       </imgdir>
     </imgdir>
   </imgdir>

@@ -47,9 +47,20 @@ public enum WZFiles {
         if (Files.exists(wzPath)) {
             return wzPath;
         }
-        // 两个路径都不存在时，记录详细错误，帮助诊断工作目录问题
-        log.error("WZ目录不存在！语言路径：{}，默认路径：{}，当前工作目录：{}。请确认服务器从 gms-server/ 目录启动。",
-                langPath.toAbsolutePath(), wzPath.toAbsolutePath(), System.getProperty("user.dir"));
+
+        // 兼容从项目根目录启动（如IDEA默认配置）：尝试 gms-server/ 子目录
+        Path gmsWzPath = Path.of("gms-server", DIRECTORY, fileName);
+        Path gmsLangPath = Path.of("gms-server", DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
+        if (Files.exists(gmsLangPath)) {
+            return gmsLangPath;
+        }
+        if (Files.exists(gmsWzPath)) {
+            return gmsWzPath;
+        }
+
+        // 所有路径都不存在时，记录详细错误，帮助诊断工作目录问题
+        log.error("WZ目录不存在！语言路径：{}，默认路径：{}，gms-server子目录路径：{}，当前工作目录：{}。请确认服务器从 gms-server/ 目录启动。",
+                langPath.toAbsolutePath(), wzPath.toAbsolutePath(), gmsWzPath.toAbsolutePath(), System.getProperty("user.dir"));
         return wzPath;
     }
 

@@ -1,30 +1,31 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imgdir name="2159327.img" indent="2" media="NONE">
-  <imgdir name="info">
-    <imgdir name="script">
-      <imgdir name="0">
-        <string name="script" value="pransisDiary"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<imgdir name="2159327.img">
+    <imgdir name="info">
+      <imgdir name="script">
+        <imgdir name="0">
+          <string name="script" value="pransisDiary" />
+        </imgdir>
       </imgdir>
+      <int name="hideName" value="1" />
     </imgdir>
-    <int name="hideName" value="1"/>
-  </imgdir>
-  <imgdir name="stand">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="58" y="142"/>
-      <int name="z" value="0"/>
-      <int name="delay" value="150"/>
-    </canvas>
-    <canvas name="1" format="1" scale="0">
-      <vector name="origin" x="58" y="141"/>
-      <int name="z" value="0"/>
-      <int name="delay" value="150"/>
-    </canvas>
-    <canvas name="2" format="1" scale="0">
-      <vector name="origin" x="58" y="140"/>
-      <int name="z" value="0"/>
-      <int name="delay" value="150"/>
-    </canvas>
-    <uol name="3" value="1"/>
-    <uol name="4" value="0"/>
-  </imgdir>
+    <imgdir name="stand">
+      <canvas name="0" format="ARGB4444">
+        <vector name="origin" x="58" y="142" />
+        <int name="z" value="0" />
+        <int name="delay" value="150" />
+      </canvas>
+      <canvas name="1" format="ARGB4444">
+        <vector name="origin" x="58" y="141" />
+        <int name="z" value="0" />
+        <int name="delay" value="150" />
+      </canvas>
+      <canvas name="2" format="ARGB4444">
+        <vector name="origin" x="58" y="140" />
+        <int name="z" value="0" />
+        <int name="delay" value="150" />
+      </canvas>
+      <uol name="3" value="1" />
+      <uol name="4" value="0" />
+    </imgdir>
 </imgdir>

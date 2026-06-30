@@ -1,17 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <imgdir name="tutorial_jp.img" indent="2" media="NONE">
-  <imgdir name="back">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="47" y="1060"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="159" y="211"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="2" format="2" scale="0">
-      <vector name="origin" x="117" y="803"/>
-      <int name="z" value="0"/>
-    </canvas>
+  <imgdir name="tutorial_jp.img">
+    <imgdir name="back">
+      <canvas name="0" format="ARGB8888">
+        <vector name="origin" x="47" y="1060" />
+        <int name="z" value="0" />
+      </canvas>
+      <canvas name="1" format="ARGB8888">
+        <vector name="origin" x="159" y="211" />
+        <int name="z" value="0" />
+      </canvas>
+      <canvas name="2" format="ARGB8888">
+        <vector name="origin" x="117" y="803" />
+        <int name="z" value="0" />
+      </canvas>
+    </imgdir>
   </imgdir>
 </imgdir>

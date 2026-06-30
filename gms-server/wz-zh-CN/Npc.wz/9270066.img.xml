@@ -1,16 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imgdir name="9270066.img" indent="2" media="NONE">
-  <imgdir name="info">
-    <int name="MapleTV" value="1"/>
-    <short name="MapleTVmsgX" value="-123"/>
-    <int name="MapleTVmsgY" value="-380"/>
-    <int name="MapleTVadX" value="-122"/>
-    <int name="MapleTVadY" value="-262"/>
-  </imgdir>
-  <imgdir name="stand">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="180" y="565"/>
-      <int name="z" value="0"/>
-    </canvas>
-  </imgdir>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<imgdir name="9270066.img">
+    <imgdir name="info">
+      <int name="MapleTV" value="1" />
+      <short name="MapleTVmsgX" value="-123" />
+      <int name="MapleTVmsgY" value="-380" />
+      <int name="MapleTVadX" value="-122" />
+      <int name="MapleTVadY" value="-262" />
+    </imgdir>
+    <imgdir name="stand">
+      <canvas name="0" format="ARGB4444">
+        <vector name="origin" x="180" y="565" />
+        <int name="z" value="0" />
+      </canvas>
+    </imgdir>
 </imgdir>

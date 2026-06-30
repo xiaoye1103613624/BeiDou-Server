@@ -3128,6 +3128,10 @@ public class Character extends AbstractCharacterObject {
         mods.add(new ModifyInventory(3, item));
         mods.add(new ModifyInventory(0, item));
         sendPacket(PacketCreator.modifyInventory(true, mods));
+        // 同步装备自定义属性到客户端插件（有自定义属性时发送数据，无自定义属性时发送空串以清除缓存）
+        if (item instanceof Equip equip) {
+            sendPacket(PacketCreator.updateEquipCustomAttr(item.getPosition(), equip.getCustomProperties()));
+        }
     }
 
     public void gainGachaExp() {
@@ -5770,6 +5774,11 @@ public class Character extends AbstractCharacterObject {
 
     public void clearSavedLocation(SavedLocationType type) {
         savedLocations[type.ordinal()] = null;
+    }
+
+    // GraalJS兼容：JS字符串无法自动转换为Java枚举，提供String重载
+    public void clearSavedLocation(String type) {
+        clearSavedLocation(SavedLocationType.fromString(type));
     }
 
     public int peekSavedLocation(String type) {
@@ -9975,6 +9984,24 @@ public class Character extends AbstractCharacterObject {
         Item item = inv.getItem(position);
         if (item instanceof Equip equip) {
             equip.setCustomProperties(null);
+        }
+    }
+
+    /**
+     * 全量同步所有装备（已穿戴 + 背包）的自定义属性到客户端插件。
+     * 在角色登录进游戏时调用，确保客户端缓存与数据库一致。
+     * 已在 forceUpdateItem 中实时同步单件装备，此处仅用于初次全量同步。
+     */
+    public void syncAllEquipCustomAttr() {
+        // 遍历已穿戴装备（EQUIPPED）和装备背包（EQUIP）
+        for (InventoryType invType : new InventoryType[]{InventoryType.EQUIPPED, InventoryType.EQUIP}) {
+            Inventory inv = getInventory(invType);
+            if (inv == null) continue;
+            for (Item item : inv.list()) {
+                if (item instanceof Equip equip) {
+                    sendPacket(PacketCreator.updateEquipCustomAttr(item.getPosition(), equip.getCustomProperties()));
+                }
+            }
         }
     }
 
