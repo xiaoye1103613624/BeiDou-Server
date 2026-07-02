@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class ServiceProperty {
     /** 语言设置 */
     private String language;
+    /** 数据目录（WZ/脚本等资源根目录），为空时自动检测 */
+    private String dataHome;
     /** 接口限流配置 */
     private RateLimitProperty rateLimit;
     /** 外网地址 */

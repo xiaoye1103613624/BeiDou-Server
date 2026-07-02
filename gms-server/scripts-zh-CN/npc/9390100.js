@@ -4,9 +4,9 @@ function start() {
 }
 /*var 星星 = "#fEffect/CharacterEff/1112903/0/0#";
 var 爱心 = "#fEffect/CharacterEff/1032063/0/0#";
-var 红色箭头 = "#fUI/UIWindow/Quest/icon6/7#";
-var 正方形 = "#fUI/UIWindow/Quest/icon3/6#";
-var 蓝色箭头 = "#fUI/UIWindow/Quest/icon2/7#";
+var 红色箭头 = "#fEffect/UIWindow/Quest/icon6/7#";
+var 正方形 = "#fEffect/UIWindow/Quest/icon3/6#";
+var 蓝色箭头 = "#fEffect/UIWindow/Quest/icon2/7#";
 var ttt ="#fUI/UIWindow.img/Quest/icon9/0#";
 var xxx ="#fUI/UIWindow.img/Quest/icon8/0#";
 var sss ="#fUI/UIWindow.img/QuestIcon/3/0#";

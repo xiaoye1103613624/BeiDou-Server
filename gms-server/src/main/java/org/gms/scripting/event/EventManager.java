@@ -1385,6 +1385,14 @@ public class EventManager {
      * @param msg 消息内容
      * @param gmOnly true=仅GM可见（频道内），false=全服可见
      */
+    /**
+     * 广播消息（便捷重载，默认全服可见type=5，非GM专属）
+     * GraalJS严格参数匹配，与Nashorn不同，需为重载提供完整签名
+     */
+    public void broadcastServerMsg(String msg) {
+        broadcastServerMsg(5, msg, false);
+    }
+
     public void broadcastServerMsg(int type, String msg, boolean gmOnly) {
         Packet packet;
         if (type >= 1000000) {

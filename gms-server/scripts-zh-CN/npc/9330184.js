@@ -3,10 +3,10 @@ importPackage(Packages.client);
 importPackage(Packages.client.inventory);
 importPackage(Packages.server);
 importPackage(Packages.tools);
-var 黄左括号 ="#fUI/UIWindow/createCygnus/BtLeft/mouseOver/0#" 
-var 黑左括号 ="#fUI/UIWindow/createCygnus/BtLeft/disabled/0#" 
-var 黄右括号 ="#fUI/UIWindow/createCygnus/BtRight/mouseOver/0#"
-var 黑右括号 ="#fUI/UIWindow/createCygnus/BtRight/disabled/0#"
+var 黄左括号 ="#fEffect/UIWindow/createCygnus/BtLeft/mouseOver/0#" 
+var 黑左括号 ="#fEffect/UIWindow/createCygnus/BtLeft/disabled/0#" 
+var 黄右括号 ="#fEffect/UIWindow/createCygnus/BtRight/mouseOver/0#"
+var 黑右括号 ="#fEffect/UIWindow/createCygnus/BtRight/disabled/0#"
 var status = 0;
 function start() {
     status = -1;

@@ -26,7 +26,7 @@ var 路西德 = "#fUI/UIWindow.img/MobGage/Mob/8880141#";
 var 黑水灵王 = "#fUI/UIWindow.img/MobGage/Mob/8220104#";
 var 阿勒玛 = "#fUI/UIWindow.img/MobGage/Mob/8641011#";
 
-var 感叹 = "#fUI/UIWindow/Quest/icon0#";
+var 感叹 = "#fEffect/UIWindow/Quest/icon0#";
 var 开 = "#fUI/Basic/CheckBox/0#";
 var 关 = "#fUI/Basic/CheckBox/1#";
 var xx = "#fItem/Etc/0427/04270001/Icon9/0#";

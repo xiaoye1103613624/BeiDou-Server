@@ -3128,8 +3128,10 @@ public class Character extends AbstractCharacterObject {
         mods.add(new ModifyInventory(3, item));
         mods.add(new ModifyInventory(0, item));
         sendPacket(PacketCreator.modifyInventory(true, mods));
-        // 同步装备自定义属性到客户端插件（有自定义属性时发送数据，无自定义属性时发送空串以清除缓存）
-        if (item instanceof Equip equip) {
+        // 同步装备自定义属性到客户端插件
+        // 注意：EQUIP_CUSTOM_ATTR是自定义opcode(0x1002)，需客户端BeiDou-ijl15.dll补丁支持；
+        // 仅在有实际自定义属性时才发送，避免无意义包导致客户端异常
+        if (item instanceof Equip equip && equip.getCustomProperties() != null) {
             sendPacket(PacketCreator.updateEquipCustomAttr(item.getPosition(), equip.getCustomProperties()));
         }
     }
@@ -9992,6 +9994,10 @@ public class Character extends AbstractCharacterObject {
      * 在角色登录进游戏时调用，确保客户端缓存与数据库一致。
      * 已在 forceUpdateItem 中实时同步单件装备，此处仅用于初次全量同步。
      */
+    /**
+     * 同步所有装备的自定义属性到客户端插件
+     * 仅同步已设置customProperties的装备，跳过null值避免NPE
+     */
     public void syncAllEquipCustomAttr() {
         // 遍历已穿戴装备（EQUIPPED）和装备背包（EQUIP）
         for (InventoryType invType : new InventoryType[]{InventoryType.EQUIPPED, InventoryType.EQUIP}) {
@@ -9999,6 +10005,8 @@ public class Character extends AbstractCharacterObject {
             if (inv == null) continue;
             for (Item item : inv.list()) {
                 if (item instanceof Equip equip) {
+                    // 跳过未设置自定义属性的装备，避免writeString收到null导致NPE
+                    if (equip.getCustomProperties() == null) continue;
                     sendPacket(PacketCreator.updateEquipCustomAttr(item.getPosition(), equip.getCustomProperties()));
                 }
             }

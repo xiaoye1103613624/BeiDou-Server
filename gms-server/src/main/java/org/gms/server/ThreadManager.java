@@ -61,8 +61,12 @@ public class ThreadManager {
 
     /**
      * 优雅关闭线程池，最多等待5分钟
+     * 若start()未被调用过，executorService为null，直接返回避免NPE
      */
     public void stop() {
+        if (executorService == null) {
+            return;
+        }
         executorService.shutdown();
         try {
             boolean ignore = executorService.awaitTermination(5, MINUTES);

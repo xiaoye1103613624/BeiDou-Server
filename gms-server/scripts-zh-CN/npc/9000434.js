@@ -4,7 +4,7 @@ var x2;
 var x3;
 var x4;
 var 爱心 = "#fEffect/CharacterEff/1022223/4/0#";
-var 蓝色小兔子 = "#fUI/UIWindow/Quest/icon6/7#";
+var 蓝色小兔子 = "#fEffect/UIWindow/Quest/icon6/7#";
 var 蓝色小兔子 = "#fUI/UIWindow.img/PvP/Scroll/enabled/next2#";
 var 礼包物品 = "#v1302000#";
 var x1 = "1302000,+1";// 物品ID,数量
@@ -16,9 +16,9 @@ var aaa = "#fUI/UIWindow.img/Quest/icon9/0#";//红色右箭头
 var zzz = "#fUI/UIWindow.img/Quest/icon8/0#";//蓝色右箭头
 var sss = "#fUI/UIWindow.img/QuestIcon/3/0#";//选择道具
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
-var 美化new = "#fUI/UIWindow/Quest/icon5/1#";
-var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
+var 美化new = "#fEffect/UIWindow/Quest/icon5/1#";
+var 圆形 = "#fEffect/UIWindow/Quest/icon3/6#";
 var 挑战中心 = "#fEffect/CharacterEff1.img/QQ1408745/0/10#";
 var dd = " ";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/0#";

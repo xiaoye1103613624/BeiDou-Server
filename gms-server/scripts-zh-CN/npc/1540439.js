@@ -1047,16 +1047,16 @@ function 字体美化(length, content, boolean) {
 
 function 数目美化(num, length) {//数字美化
 	var ul_nums = [
-		"#fUI/UIWindow/KeyConfig/key/11#",
-		"#fUI/UIWindow/KeyConfig/key/2#",
-		"#fUI/UIWindow/KeyConfig/key/3#",
-		"#fUI/UIWindow/KeyConfig/key/4#",
-		"#fUI/UIWindow/KeyConfig/key/5#",
-		"#fUI/UIWindow/KeyConfig/key/6#",
-		"#fUI/UIWindow/KeyConfig/key/7#",
-		"#fUI/UIWindow/KeyConfig/key/8#",
-		"#fUI/UIWindow/KeyConfig/key/9#",
-		"#fUI/UIWindow/KeyConfig/key/10#",
+		"#fEffect/UIWindow/KeyConfig/key/11#",
+		"#fEffect/UIWindow/KeyConfig/key/2#",
+		"#fEffect/UIWindow/KeyConfig/key/3#",
+		"#fEffect/UIWindow/KeyConfig/key/4#",
+		"#fEffect/UIWindow/KeyConfig/key/5#",
+		"#fEffect/UIWindow/KeyConfig/key/6#",
+		"#fEffect/UIWindow/KeyConfig/key/7#",
+		"#fEffect/UIWindow/KeyConfig/key/8#",
+		"#fEffect/UIWindow/KeyConfig/key/9#",
+		"#fEffect/UIWindow/KeyConfig/key/10#",
 	];
 	var showTxt = "";
 	var tempNums = num.toString().split("");

@@ -30,81 +30,60 @@ import org.gms.server.maps.Portal;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 传送门脚本管理器（单例）
- * 管理传送门脚本的加载、缓存和执行
+ * 负责加载、缓存和执行传送门JS脚本
  */
 public class PortalScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(PortalScriptManager.class);
     private static final PortalScriptManager instance = new PortalScriptManager();
 
-    /** 脚本路径到PortalScript实例的缓存映射 */
-    private final Map<String, PortalScript> scripts = new HashMap<>();
+    /** 脚本引擎缓存：避免每次传送都创建新GraalJS引擎 */
+    private final Map<String, Invocable> scripts = new HashMap<>();
 
     public static PortalScriptManager getInstance() {
         return instance;
     }
 
     /**
-     * 加载并获取传送门脚本实例（带缓存）
-     * 通过JS引擎加载脚本文件，获取PortalScript接口实现，并缓存结果
-     *
-     * @param scriptName 脚本名称（不含路径和扩展名）
-     * @return 传送门脚本实例
-     * @throws ScriptException 脚本未实现PortalScript接口时抛出
-     */
-    private PortalScript getPortalScript(String scriptName) throws ScriptException {
-        String scriptPath = "portal/" + scriptName + ".js";
-        PortalScript script = scripts.get(scriptPath);
-        if (script != null) {
-            return script;
-        }
-
-        ScriptEngine engine = getInvocableScriptEngine(scriptPath);
-        if (!(engine instanceof Invocable iv)) {
-            return null;
-        }
-
-        script = iv.getInterface(PortalScript.class);
-        if (script == null) {
-            throw new ScriptException(String.format("Portal script \"%s\" fails to implement the PortalScript interface", scriptName));
-        }
-
-        scripts.put(scriptPath, script);
-        return script;
-    }
-
-    /**
      * 执行传送门入口脚本
-     *
-     * @param portal 传送门
-     * @param c      客户端
-     * @return 脚本是否成功执行，成功后玩家才能进入目标地图
+     * 使用invokeFunction直接调用JS函数，避免getInterface严格类型转换导致的undefined→boolean NPE
      */
     public boolean executePortalScript(Portal portal, Client c) {
         try {
-            String strPortalName = portal.getScriptName();
-            if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM() )
-            {
-                c.getPlayer().dropMessage("您已建立与传送门脚本: " + strPortalName + ".js 的关联。");
+            String scriptName = portal.getScriptName();
+            if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM()) {
+                c.getPlayer().dropMessage("您已建立与传送门脚本: " + scriptName + ".js 的关联。");
             }
-            PortalScript script = getPortalScript(strPortalName);
-            if (script != null) {
-                return script.enter(new PortalPlayerInteraction(c, portal));
-            }
-        } catch (Exception e) {
 
+            String scriptPath = "portal/" + scriptName + ".js";
+            Invocable iv = scripts.get(scriptPath);
+            if (iv == null) {
+                ScriptEngine engine = getInvocableScriptEngine(scriptPath);
+                if (engine instanceof Invocable inv) {
+                    iv = inv;
+                    scripts.put(scriptPath, iv);
+                } else {
+                    return false;
+                }
+            }
+
+            Object result = iv.invokeFunction("enter", new PortalPlayerInteraction(c, portal));
+            if (result instanceof Boolean b) {
+                return b;
+            }
+            return true;
+        } catch (Exception e) {
             log.warn("Portal script error in: {}", portal.getScriptName(), e);
         }
         return false;
     }
 
     /**
-     * 清除所有已缓存的传送门脚本，触发重新加载
+     * 清除脚本缓存
      */
     public void reloadPortalScripts() {
         scripts.clear();

@@ -149,6 +149,9 @@ public class DataTool {
 
     public static int getIntConvert(String path, Data data) {
         Data d = data.getChildByPath(path);
+        if (d == null) {
+            return 0;
+        }
         if (d.getType() == DataType.STRING) {
             return Integer.parseInt(getString(d));
         } else {

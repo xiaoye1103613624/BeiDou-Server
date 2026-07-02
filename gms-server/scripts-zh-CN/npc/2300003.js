@@ -1,6 +1,6 @@
 var status = -1;
 var keys = Array(8, 9, 10, 11, 12, 13);
-var keynames = Array("#fUI/UIWindow/KeyConfig/key/8#", "#fUI/UIWindow/KeyConfig/key/9#", "#fUI/UIWindow/KeyConfig/key/10#", "#fUI/UIWindow/KeyConfig/key/11#", "#fUI/UIWindow/KeyConfig/key/12#", "#fUI/UIWindow/KeyConfig/key/13#"); //just as reference
+var keynames = Array("#fEffect/UIWindow/KeyConfig/key/8#", "#fEffect/UIWindow/KeyConfig/key/9#", "#fEffect/UIWindow/KeyConfig/key/10#", "#fEffect/UIWindow/KeyConfig/key/11#", "#fEffect/UIWindow/KeyConfig/key/12#", "#fEffect/UIWindow/KeyConfig/key/13#"); //just as reference
 
 var skill = [
 //技能代码，名字，所需元宝

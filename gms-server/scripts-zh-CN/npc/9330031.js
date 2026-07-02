@@ -44,10 +44,10 @@ function action(mode, type, selection) {
 		} 
 		if (status == 0) {
 			score = cm.getMeso();
-			text += "#fUI/UIWindow/Quest/icon3/6# ";
+			text += "#fEffect/UIWindow/Quest/icon3/6# ";
 			text += "我这里可以玩21点,";
 			text += "您当前剩余冒险币为 #r" + score + "#k";
-			text += " #fUI/UIWindow/Quest/icon3/6#\r\n";
+			text += " #fEffect/UIWindow/Quest/icon3/6#\r\n";
 			text += "#L0# 开始游戏 #l\r\n";
 			text += "#L1# 游戏说明 #l\r\n";
 			cm.sendSimple(text);
@@ -59,9 +59,9 @@ function action(mode, type, selection) {
 				cm.sendGetNumber("赌友你要下注多少？\r\n", 1, 100000,20000000);
 				
 			}else if(selection == 1){
-				text1 += "#fUI/UIWindow/Quest/icon3/6# ";
+				text1 += "#fEffect/UIWindow/Quest/icon3/6# ";
 				text1 += "玩法说明：";
-				text1 += " #fUI/UIWindow/Quest/icon3/6#\r\n";
+				text1 += " #fEffect/UIWindow/Quest/icon3/6#\r\n";
 				text1 += "    庄家的点数会在15点-22点之间（庄家也有可能爆掉），你有4次要牌的机会，如果您的点数大于庄家的点数即赢得你下注的金额，如果大于21点或者小于等于庄家的点数，即输掉你所下注的金额，10、J、Q、K都算十点，小赌怡情，大赌伤人，请慎重。";
 				cm.sendOk(text1);
 				cm.dispose();
@@ -112,7 +112,7 @@ function action(mode, type, selection) {
 					cm.gainMeso(-selectionMeso);
 					cm.dispose();
 				}else{
-					cm.sendOk("#fUI/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
+					cm.sendOk("#fEffect/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
 					cm.gainMeso(selectionMeso);
 					cm.dispose();	
 				}
@@ -144,7 +144,7 @@ function action(mode, type, selection) {
 					cm.gainMeso(-selectionMeso);
 					cm.dispose();
 				}else{
-					cm.sendOk("#fUI/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
+					cm.sendOk("#fEffect/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
 					cm.gainMeso(selectionMeso);
 					cm.dispose();	
 				}
@@ -168,7 +168,7 @@ function action(mode, type, selection) {
 						cm.gainMeso(-selectionMeso);
 						cm.dispose();
 					}else{
-						cm.sendOk("#fUI/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
+						cm.sendOk("#fEffect/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
 						cm.gainMeso(selectionMeso);
 						cm.dispose();	
 					}
@@ -181,7 +181,7 @@ function action(mode, type, selection) {
 					cm.gainMeso(-selectionMeso);
 					cm.dispose();
 				}else{
-					cm.sendOk("#fUI/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
+					cm.sendOk("#fEffect/UIWindow/Quest/reward#\r\n  庄家的点数为 #r#e"+zhuangScore+"#n#k,您的点数为 #r#e"+xianScore+"#n#k,您赢了。");
 					cm.gainMeso(selectionMeso);
 					cm.dispose();	
 				}

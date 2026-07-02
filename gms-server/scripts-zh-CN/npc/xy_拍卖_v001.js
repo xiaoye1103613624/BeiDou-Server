@@ -9,11 +9,11 @@
 var changeLine = "\r\n";
 
 // 标题横幅
-var 翅膀左 = "#fUI/ChatBalloon/118/nw#";
-var 翅膀中间 = "#fUI/ChatBalloon/118/n#";
-var 翅膀右 = "#fUI/ChatBalloon/118/ne#";
-var Logo = "#fUI/UIWindow/AdminClaim/default/1#";
-var 禁止脚本 = "#fUI/UIWindow/AdminClaim/BtClaim/disabled/0#";
+var 翅膀左 = "★";
+var 翅膀中间 = "━";
+var 翅膀右 = "★";
+var Logo = "#fEffect/UIWindow/AdminClaim/default/1#";
+var 禁止脚本 = "#fEffect/UIWindow/AdminClaim/BtClaim/disabled/0#";
 
 // 资产图标
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
@@ -21,8 +21,8 @@ var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
 // 装饰图标
 var 左修饰 = "#fItem/Etc/0427/04270001/Icon9/0#";
 var 右修饰 = "#fItem/Etc/0427/04270001/Icon9/0#";
-var 皇冠 = "#fUI/UIWindow/UserInfo/bossPetCrown#";
-var 分割线3 = "#fUI/UIWindow/AdminClaim/default/3#";
+var 皇冠 = "#fEffect/UIWindow/UserInfo/bossPetCrown#";
+var 分割线3 = "#fEffect/UIWindow/AdminClaim/default/3#";
 
 // 标题文本（依赖上述变量）
 var OldTitle = "\t\t\t\t   " + Logo + "\r\n" +
@@ -242,16 +242,16 @@ function generalSelect(idNum, text) {
 
 // ======================== 保留变量（供后续扩展） ========================
 var 皇冠白 = "#fUI/GuildMark/Mark/Etc/00009004/15#";
-var 完成 = "#fUI/UIWindow/Quest/Tab/enabled/2#";
-var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
+var 完成 = "#fEffect/UIWindow/Quest/Tab/enabled/2#";
+var 圆形 = "#fEffect/UIWindow/Quest/icon3/6#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/1#";
 var 红心 = "#fEffect/CharacterEff/1082229/0/0#";
 var 火箭 = "#fUI/GuildMark/Mark/Etc/00009022/12#";
 var 奖励 = "#fUI/CashShop/CSDiscount/bonus#";
 var line = "#fUI/CashShop/CSDiscount/Line#";
-var 分割线1 = "#fUI/UIWindow/AdminClaim/default/2#";
+var 分割线1 = "#fEffect/UIWindow/AdminClaim/default/2#";
 var 分割线2 = "__________________________________________________";
-var 分割线4 = "#fUI/UIWindow/AdminClaim/default/4#";
+var 分割线4 = "#fEffect/UIWindow/AdminClaim/default/4#";
 var 金枫叶 = "#fMap/MapHelper/weather/maple/2#";
 var 草莓5 = "#fUI/GuildMark/Mark/Plant/00003000/8#";

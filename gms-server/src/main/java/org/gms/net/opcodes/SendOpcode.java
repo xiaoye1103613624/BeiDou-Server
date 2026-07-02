@@ -358,6 +358,7 @@ public enum SendOpcode implements Opcode {
 
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
     TEAM_DAMAGE_UPDATE(0x1001), // 队伍伤害统计：广播单次造成的伤害数据给同地图玩家(供客户端ImGui排行榜使用)
+    EQUIP_CUSTOM_ATTR(0x1002), // 装备自定义属性：将custom_properties JSON同步给客户端插件展示
     ;
     private int code = -2;
 

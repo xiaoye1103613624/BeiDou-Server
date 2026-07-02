@@ -9,14 +9,14 @@ var status = 0;
 var 开 = "#fUI/Basic/CheckBox/0#";   //有框框 无√
 var 关 = "#fUI/Basic/CheckBox/1#";   //有框框 有√
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
-var 元宝图标 = "#fUI/UIWindow/QuestIcon/7/0#";
-var 章鱼 = "#fUI/UIWindow/Minigame/Omok/stone/3/white/0#";
-var 蘑菇 = "#fUI/UIWindow/Minigame/Omok/stone/0/black/0#";
-var 绿水 = "#fUI/UIWindow/Minigame/Omok/stone/1/white/0#";
-var 猪猪 = "#fUI/UIWindow/Minigame/Omok/stone/2/black/0#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
+var 元宝图标 = "#fEffect/UIWindow/QuestIcon/7/0#";
+var 章鱼 = "#fEffect/UIWindow/Minigame/Omok/stone/3/white/0#";
+var 蘑菇 = "#fEffect/UIWindow/Minigame/Omok/stone/0/black/0#";
+var 绿水 = "#fEffect/UIWindow/Minigame/Omok/stone/1/white/0#";
+var 猪猪 = "#fEffect/UIWindow/Minigame/Omok/stone/2/black/0#";
 var 可以 = 1000;
-var 装备 = "#fUI/UIWindow/MaplepointShop/Tab/enabled/0#";
+var 装备 = "#fEffect/UIWindow/MaplepointShop/Tab/enabled/0#";
 
 var 配套物品 = [
 //强化物品，材料物品1，数量，材料物品2，数量，

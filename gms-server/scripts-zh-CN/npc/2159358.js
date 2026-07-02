@@ -6,8 +6,8 @@
 	制作时间：2022年/7月/1日
 */
 
-var 感叹号0 = "#fUI/UIWindow/Quest/icon0#";
-var 感叹号1 = "#fUI/UIWindow/Quest/icon1#";
+var 感叹号0 = "#fEffect/UIWindow/Quest/icon0#";
+var 感叹号1 = "#fEffect/UIWindow/Quest/icon1#";
 var 开 = "#fUI/Basic/CheckBox/0#";   //有框框 无√
 var 关 = "#fUI/Basic/CheckBox/1#";   //有框框 有√
 var xx = "#fItem/Etc/0427/04270001/Icon9/0#";  //小黄星

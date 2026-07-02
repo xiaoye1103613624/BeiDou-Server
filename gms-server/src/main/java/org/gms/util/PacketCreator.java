@@ -8286,7 +8286,8 @@ public class PacketCreator {
     public static Packet updateEquipCustomAttr(short position, String customProperties) {
         OutPacket p = OutPacket.create(SendOpcode.EQUIP_CUSTOM_ATTR);
         p.writeShort(position);
-        p.writeString(customProperties);
+        // 防御性空值处理：若customProperties为null则写入空字符串，避免NPE
+        p.writeString(customProperties != null ? customProperties : "");
         return p;
     }
 

@@ -1,8 +1,8 @@
 var 星星 = "#fEffect/CharacterEff/1114000/2/0#";
 var 爱心 = "#fEffect/CharacterEff/1022223/4/0#";
-var 红色箭头 = "#fUI/UIWindow/Quest/icon6/7#";
-var 正方形 = "#fUI/UIWindow/Quest/icon3/6#";
-var 蓝色箭头 = "#fUI/UIWindow/Quest/icon2/7#";
+var 红色箭头 = "#fEffect/UIWindow/Quest/icon6/7#";
+var 正方形 = "#fEffect/UIWindow/Quest/icon3/6#";
+var 蓝色箭头 = "#fEffect/UIWindow/Quest/icon2/7#";
 function start() {
     status = -1;
 

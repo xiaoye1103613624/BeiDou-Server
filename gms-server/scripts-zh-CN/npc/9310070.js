@@ -24,13 +24,13 @@ var 群粉心 = ""+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉心+粉�
 var 萧曳冒险岛 = "#fEffect/CharacterEff1.img/QQ1408745/1/12#";
 
 var 心 = "#fUI/GuildMark.img/Mark/Etc/00009001/14#";
-var shx1 ="#fUI/ChatBalloon/dead/n#";
-var ygw1 ="#fUI/ChatBalloon/dead/ne#";
-var zgw1 ="#fUI/ChatBalloon/dead/nw#";
+var shx1 ="▎";
+var ygw1 ="▎";
+var zgw1 ="▎";
 
-var xhx2 ="#fUI/ChatBalloon/dead/s#";
-var ygw2 ="#fUI/ChatBalloon/dead/se#";
-var zgw2 ="#fUI/ChatBalloon/dead/sw#";
+var xhx2 ="▎";
+var ygw2 ="▎";
+var zgw2 ="▎";
 var 空格 = "#fUI/Basic/CheckBox/0#";
 
 function start() {

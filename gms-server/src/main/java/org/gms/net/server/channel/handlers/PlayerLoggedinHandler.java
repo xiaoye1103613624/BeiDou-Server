@@ -246,6 +246,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
+            // 全量同步所有装备的自定义属性到客户端插件（登录时初次同步）
+            // 对应客户端 BeiDou-ijl15.dll opcode 0x1002，已确认DLL有完整支持
+            player.syncAllEquipCustomAttr();
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);

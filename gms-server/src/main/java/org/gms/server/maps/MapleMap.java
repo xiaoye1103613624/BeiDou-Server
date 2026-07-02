@@ -3437,6 +3437,9 @@ public class MapleMap {
                 return port;
             }
         }
+        log.warn("地图 {} 中找不到传送门: '{}'，可用传送门: {}",
+                mapid, portalname,
+                portals.values().stream().map(Portal::getName).toList());
         return null;
     }
 

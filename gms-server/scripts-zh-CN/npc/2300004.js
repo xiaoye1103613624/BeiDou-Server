@@ -6,12 +6,12 @@
 	制作时间：2022年/7月/1日
 */
 
-var 感叹 = "#fUI/UIWindow/Quest/icon0#";
+var 感叹 = "#fEffect/UIWindow/Quest/icon0#";
 var 开 = "#fUI/Basic/CheckBox/0#";   //有框框 无√
 var 关 = "#fUI/Basic/CheckBox/1#";   //有框框 有√
 var xx = "#fItem/Etc/0427/04270001/Icon9/0#";  //小黄星
 var 广播 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
-var 箭头 = "#fUI/UIWindow/Quest/icon6/7#";
+var 箭头 = "#fEffect/UIWindow/Quest/icon6/7#";
 
 var 是 = 2147000012;
 var 否 = 2147000013;
@@ -511,10 +511,10 @@ function 更改呈现奖励(类型, 数量) {
 }
 
 function 呈现奖励货币(类型, 数量) {
-	var 章鱼 = "#fUI/UIWindow/Minigame/Omok/stone/3/white/0#";
-	var 蘑菇 = "#fUI/UIWindow/Minigame/Omok/stone/0/black/0#";
-	var 绿水 = "#fUI/UIWindow/Minigame/Omok/stone/1/white/0#";
-	var 猪猪 = "#fUI/UIWindow/Minigame/Omok/stone/2/black/0#";
+	var 章鱼 = "#fEffect/UIWindow/Minigame/Omok/stone/3/white/0#";
+	var 蘑菇 = "#fEffect/UIWindow/Minigame/Omok/stone/0/black/0#";
+	var 绿水 = "#fEffect/UIWindow/Minigame/Omok/stone/1/white/0#";
+	var 猪猪 = "#fEffect/UIWindow/Minigame/Omok/stone/2/black/0#";
 	var text = "";
 	switch (类型) {
 		case "点券":

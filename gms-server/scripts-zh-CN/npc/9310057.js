@@ -4,7 +4,7 @@
 var JT = "#fUI/Basic/BtHide3/mouseOver/0#";
 var 心 = "#fUI/GuildMark.img/Mark/Etc/00009001/14#";
 var 小烟花 ="#fMap/MapHelper/weather/squib/squib4/1#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
 var juanzs =Array(
 Array(100,200000),
 Array(105,200000),

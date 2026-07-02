@@ -1,6 +1,6 @@
-﻿var 奖励 = "#fUI/UIWindow/Quest/reward#";
-var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
+var 奖励 = "#fEffect/UIWindow/Quest/reward#";
+var 圆形 = "#fEffect/UIWindow/Quest/icon3/6#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
 var warp = -1
     var status = 0;
 function start() {

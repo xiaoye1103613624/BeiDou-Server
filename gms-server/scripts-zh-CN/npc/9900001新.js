@@ -27,19 +27,19 @@ var chr = null;
 var say = "";
 var sel = null;
 var 皇冠白 = "#fUI/GuildMark/Mark/Etc/00009004/15#";
-var 完成 = "#fUI/UIWindow/Quest/Tab/enabled/2#";
-var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
+var 完成 = "#fEffect/UIWindow/Quest/Tab/enabled/2#";
+var 圆形 = "#fEffect/UIWindow/Quest/icon3/6#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
 var 粉心 = "#fEffect/CharacterEff/1112903/0/1#";
 var 红心 = "#fEffect/CharacterEff/1082229/0/0#";
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
-var 皇冠 = "#fUI/UIWindow/UserInfo/bossPetCrown#";
+var 皇冠 = "#fEffect/UIWindow/UserInfo/bossPetCrown#";
 var 火箭 = "#fUI/GuildMark/Mark/Etc/00009022/12#";
 var 奖励 = "#fUI/CashShop/CSDiscount/bonus#";
 var line = "#fUI/CashShop/CSDiscount/Line#";
-var 翅膀左 = "#fUI/ChatBalloon/118/nw#";
-var 翅膀中间 = "#fUI/ChatBalloon/118/n#";
-var 翅膀右 = "#fUI/ChatBalloon/118/ne#";
+var 翅膀左 = "▎";
+var 翅膀中间 = "▎";
+var 翅膀右 = "▎";
 
 // ======================== 数字图标
 var zero = "#fUI/Basic/LevelNo/0#";

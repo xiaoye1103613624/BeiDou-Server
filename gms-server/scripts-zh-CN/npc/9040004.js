@@ -3,7 +3,7 @@ importPackage(Packages.client);
 importPackage(Packages.client.inventory);
 importPackage(Packages.server);
 importPackage(Packages.tools);
-var 蓝色箭头 = "#fUI/UIWindow/Quest/icon2/7#";
+var 蓝色箭头 = "#fEffect/UIWindow/Quest/icon2/7#";
 var 红色箭头 = "#fUI/UIWindow.img/PvP/Scroll/enabled/next2#";
 function start() {
 

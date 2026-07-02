@@ -68,7 +68,11 @@ public class MapFactory {
      * @param mapData WZ地图数据
      */
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
-        for (Data life : mapData.getChildByPath("life")) {
+        Data lifeData = mapData.getChildByPath("life");
+        if (lifeData == null) {
+            return;
+        }
+        for (Data life : lifeData) {
             life.getName();
             String id = DataTool.getString(life.getChildByPath("id"));
             String type = DataTool.getString(life.getChildByPath("type"));
@@ -187,6 +191,10 @@ public class MapFactory {
             return null;
         }
         Data infoData = mapData.getChildByPath("info");
+        if (infoData == null) {
+            log.warn("地图 {} (ID: {}) 缺少info节点，跳过加载", mapName, mapid);
+            return null;
+        }
 
         String link = DataTool.getString(infoData.getChildByPath("link"), "");
         if (!link.equals("")) { //nexon made hundreds of dojo maps so to reduce the size they added links.
@@ -210,8 +218,11 @@ public class MapFactory {
         map.setFieldLimit(DataTool.getInt(infoData.getChildByPath("fieldLimit"), 0));
         map.setMobInterval((short) DataTool.getInt(infoData.getChildByPath("createMobInterval"), 5000));
         PortalFactory portalFactory = new PortalFactory();
-        for (Data portal : mapData.getChildByPath("portal")) {
-            map.addPortal(portalFactory.makePortal(DataTool.getInt(portal.getChildByPath("pt")), portal));
+        Data portalData = mapData.getChildByPath("portal");
+        if (portalData != null) {
+            for (Data portal : portalData) {
+                map.addPortal(portalFactory.makePortal(DataTool.getInt(portal.getChildByPath("pt")), portal));
+            }
         }
         Data timeMob = infoData.getChildByPath("timeMob");
         if (timeMob != null) {
@@ -245,7 +256,9 @@ public class MapFactory {
         List<Foothold> allFootholds = new LinkedList<>();
         Point lBound = new Point();
         Point uBound = new Point();
-        for (Data footRoot : mapData.getChildByPath("foothold")) {
+        Data fhData = mapData.getChildByPath("foothold");
+        if (fhData != null) {
+            for (Data footRoot : fhData) {
             for (Data footCat : footRoot) {
                 for (Data footHold : footCat) {
                     int x1 = DataTool.getInt(footHold.getChildByPath("x1"));
@@ -271,6 +284,7 @@ public class MapFactory {
                 }
             }
         }
+        } // end if (fhData != null)
         FootholdTree fTree = new FootholdTree(lBound, uBound);
         for (Foothold fh : allFootholds) {
             fTree.insert(fh);

@@ -720,7 +720,23 @@ public final class Channel {
 
         Path scriptPath = Path.of(scriptName, eventPath);
         Path scriptLangPath = Path.of(scriptLangName, eventPath);
-        Path actualPath = Files.exists(scriptLangPath) ? scriptLangPath : scriptPath;
+
+        // 兼容从项目根目录启动（如IDEA默认配置）：尝试 gms-server/ 子目录
+        Path gmsScriptPath = Path.of("gms-server", scriptName, eventPath);
+        Path gmsScriptLangPath = Path.of("gms-server", scriptLangName, eventPath);
+
+        Path actualPath;
+        if (Files.exists(scriptLangPath)) {
+            actualPath = scriptLangPath;
+        } else if (Files.exists(scriptPath)) {
+            actualPath = scriptPath;
+        } else if (Files.exists(gmsScriptLangPath)) {
+            actualPath = gmsScriptLangPath;
+        } else if (Files.exists(gmsScriptPath)) {
+            actualPath = gmsScriptPath;
+        } else {
+            actualPath = scriptLangPath; // 兜底：让后续代码抛出明确的异常
+        }
 
         List<String> events = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(actualPath)) {

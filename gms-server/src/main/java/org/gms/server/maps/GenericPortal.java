@@ -201,6 +201,7 @@ public class GenericPortal implements Portal {
                     // fallback for missing portals - no real life case anymore - interesting for not implemented areas
                     pto = to.getPortal(0);
                 }
+                chr.dropMessage(5, "[DEBUG] 传送: 目标地图=" + getTargetMapId() + " 目标门=" + getTarget() + " -> 实际门=" + (pto != null ? pto.getName() : "null") + " 位置=(" + pto.getPosition().x + "," + pto.getPosition().y + ")");
                 // late resolving makes this harder but prevents us from loading the whole world at once
                 chr.changeMap(to, pto);
                 changed = true;

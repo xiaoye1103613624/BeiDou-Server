@@ -108,4 +108,16 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
     public void playPortalSound() {
         c.sendPacket(PacketCreator.playPortalSound());
     }
+
+    /**
+     * 进入自由市场（market01~market22传送门共用）
+     * 保存当前位置为FREE_MARKET，播放音效后传送到自由市场入口
+     */
+    public void inFreeMarket() {
+        if (getPlayer().getMapId() != 910000000) {
+            getPlayer().saveLocation("FREE_MARKET");
+            playPortalSound();
+            warp(910000000, "out00");
+        }
+    }
 }

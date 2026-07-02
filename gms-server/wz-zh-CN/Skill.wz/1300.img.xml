@@ -1,945 +1,959 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imgdir name="1300.img" indent="2" media="NONE">
-  <imgdir name="info">
-    <canvas name="icon" format="1" scale="0">
-      <vector name="origin" x="-4" y="30"/>
-    </canvas>
-  </imgdir>
-  <imgdir name="skill">
-    <imgdir name="13001003">
-      <imgdir name="hit">
-        <imgdir name="0">
-          <canvas name="0" format="2" scale="0">
-            <vector name="origin" x="106" y="157"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="1655c65d1ed420a691134b3f12c8a37ce31a43cb8abeffc50cd4828578467f50"/>
-          </canvas>
-          <canvas name="1" format="2" scale="0">
-            <vector name="origin" x="162" y="78"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="d5b1ba1915cdc2a131d9abceee2456f8a1394bf079f573d6bf84c7360ad9d87b"/>
-          </canvas>
-          <canvas name="2" format="2" scale="0">
-            <vector name="origin" x="166" y="76"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="78b0f37c6925c982f4e40563fd669fce8f74be6af8522f0829b977ce10394e8d"/>
-          </canvas>
-        </imgdir>
-      </imgdir>
-      <canvas name="icon" format="2" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-        <string name="_hash" value="9720d0ba2f2830a6792ba0617382b0a5a9f9d32e8253978c8a5c7c42a29ecce4"/>
-      </canvas>
-      <canvas name="iconDisabled" format="2" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-        <string name="_hash" value="da70e1ec66b5b144d3735ed0179b92f782f3c625ae44f8527f60e6a94bee20dd"/>
-      </canvas>
-      <canvas name="iconMouseOver" format="2" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-        <string name="_hash" value="2c39e55875385288f529806cda1516a9f5bf6f1fa4085ce1218336b1db14d534"/>
-      </canvas>
-      <imgdir name="keydown">
-        <canvas name="0" format="2" scale="0">
-          <vector name="origin" x="362" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="10"/>
-          <string name="_hash" value="aaf72cbe9306e1ef3be4c1fdf729981de10279e739f38afa0493ee3dd1681a96"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="1300.img">
+    <imgdir name="info">
+        <canvas name="icon" width="26" height="30">
+            <vector name="origin" x="-4" y="30" />
         </canvas>
-        <canvas name="1" format="2" scale="0">
-          <vector name="origin" x="276" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="736d6ae49e4f6f2e894354a45fdb2bfa3f6524307275d9d0306efe108772af18"/>
-        </canvas>
-        <canvas name="2" format="2" scale="0">
-          <vector name="origin" x="452" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="670f42705bb3fd00300c2ebd94a3c19e0a4e1e6fde22adaaef89b782dfafaa1d"/>
-        </canvas>
-        <canvas name="3" format="2" scale="0">
-          <vector name="origin" x="419" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="c9138897e7d3e4d2ad356fe00ecf19d94f93e99e719640053efbdb5f8552724f"/>
-        </canvas>
-        <canvas name="4" format="2" scale="0">
-          <vector name="origin" x="350" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="d729bc1c10f9ab4b5689a0c2c19966f703d751594c44893ee386292a24dc6e67"/>
-        </canvas>
-        <canvas name="5" format="2" scale="0">
-          <vector name="origin" x="418" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="149cbc9afa3af85b42b6969bc618aeab3edd40f2e36257b882e751a468100e83"/>
-        </canvas>
-        <canvas name="6" format="2" scale="0">
-          <vector name="origin" x="397" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="1d34f335429d2949d44483db3d3284867ab5fe94ebfd9f2be0116fbdc96dd0cf"/>
-        </canvas>
-        <canvas name="7" format="2" scale="0">
-          <vector name="origin" x="363" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="738099122d0edb9a466bee56e17372318fc67a9b050958567eb399be470a4a73"/>
-        </canvas>
-      </imgdir>
-      <imgdir name="keydownend">
-        <canvas name="0" format="2" scale="0">
-          <vector name="origin" x="263" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="7ae2670a8f91da51f7da06cb3ccf7cfea68a6a6febc753f3e62b87da60719ef1"/>
-        </canvas>
-        <canvas name="1" format="2" scale="0">
-          <vector name="origin" x="263" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="c1444be9ef7fd9b04cc322f452c407c4b661a6a36862be0c2cfb2bdbf0ea4819"/>
-        </canvas>
-        <canvas name="2" format="2" scale="0">
-          <vector name="origin" x="259" y="239"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="2ff779e7ec21886df4576d1f62fa973f42937646bdce76ab0ecb65b2e9aef854"/>
-        </canvas>
-        <canvas name="3" format="2" scale="0">
-          <vector name="origin" x="209" y="227"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="7858912af64b3e763e528afbcf21a9968318cd12a42ff09a421d925b3a85827e"/>
-        </canvas>
-        <canvas name="4" format="2" scale="0">
-          <vector name="origin" x="168" y="212"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="457a7f39f7083bc70341215b03067dc927de3fecc04df79e4c883bd0533e794c"/>
-        </canvas>
-      </imgdir>
-      <imgdir name="level">
-        <imgdir name="2">
-          <string name="hs" value="h2"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="3">
-          <string name="hs" value="h3"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="4">
-          <string name="hs" value="h4"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="5">
-          <string name="hs" value="h5"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="6">
-          <string name="hs" value="h6"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="7">
-          <string name="hs" value="h7"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="8">
-          <string name="hs" value="h8"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="9">
-          <string name="hs" value="h9"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="250"/>
-        </imgdir>
-        <imgdir name="10">
-          <string name="hs" value="h10"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="11">
-          <string name="hs" value="h11"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="12">
-          <string name="hs" value="h12"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="13">
-          <string name="hs" value="h13"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="14">
-          <string name="hs" value="h14"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="15">
-          <string name="hs" value="h15"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="16">
-          <string name="hs" value="h16"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="17">
-          <string name="hs" value="h17"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="18">
-          <string name="hs" value="h18"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="400"/>
-        </imgdir>
-        <imgdir name="19">
-          <string name="hs" value="h19"/>
-          <int name="mpCon" value="8"/>
-          <int name="damage" value="400"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-        </imgdir>
-        <imgdir name="20">
-          <string name="hs" value="h20"/>
-          <int name="mpCon" value="8"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="21">
-          <string name="hs" value="h21"/>
-          <int name="mpCon" value="10"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="22">
-          <string name="hs" value="h22"/>
-          <int name="mpCon" value="10"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="23">
-          <string name="hs" value="h23"/>
-          <int name="mpCon" value="10"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="24">
-          <string name="hs" value="h24"/>
-          <int name="mpCon" value="10"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="25">
-          <string name="hs" value="h25"/>
-          <int name="mpCon" value="10"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="26">
-          <string name="hs" value="h26"/>
-          <int name="mpCon" value="9"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="27">
-          <string name="hs" value="h27"/>
-          <int name="mpCon" value="9"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="28">
-          <string name="hs" value="h28"/>
-          <int name="mpCon" value="9"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-          <int name="damage" value="500"/>
-        </imgdir>
-        <imgdir name="29">
-          <string name="hs" value="h29"/>
-          <int name="mpCon" value="9"/>
-          <int name="damage" value="500"/>
-          <int name="bulletCount" value="1"/>
-          <int name="attackCount" value="4"/>
-        </imgdir>
-        <imgdir name="30">
-          <string name="hs" value="h30"/>
-          <int name="mpCon" value="9"/>
-          <int name="attackCount" value="3"/>
-          <int name="damage" value="350"/>
-        </imgdir>
-        <imgdir name="1">
-          <int name="damage" value="500"/>
-          <string name="hs" value="h1"/>
-          <int name="mpCon" value="6"/>
-          <int name="bulletCount" value="6"/>
-          <int name="range" value="980"/>
-          <int name="mobCount" value="8"/>
-        </imgdir>
-      </imgdir>
-      <imgdir name="prepare">
-        <canvas name="0" format="2" scale="0">
-          <vector name="origin" x="209" y="227"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="18102ff6c7b501ef8266b8357d6bbeb75ee19bcdf9301172eb513c0144ba4b93"/>
-        </canvas>
-        <canvas name="1" format="2" scale="0">
-          <vector name="origin" x="259" y="239"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="5dad0c8f9eeac8edb27bd5930222e2f12d97e01d214be4b2e6cfa7515f5e4af9"/>
-        </canvas>
-        <canvas name="2" format="2" scale="0">
-          <vector name="origin" x="263" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="361251cde2ab619583de851761e8872b174203a6f41fdbcb6ae2420f603180e0"/>
-        </canvas>
-        <canvas name="3" format="2" scale="0">
-          <vector name="origin" x="263" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="36841023446cc264add4ff6917bb7772ce9f4ec973598cf341ac7e8713495ec0"/>
-        </canvas>
-        <canvas name="4" format="2" scale="0">
-          <vector name="origin" x="263" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="90"/>
-          <string name="_hash" value="93f12d31536b0238c7b1f09abd376401d00fb8873f8fc633bc722ab86e63f3f0"/>
-        </canvas>
-        <canvas name="5" format="2" scale="0">
-          <vector name="origin" x="263" y="281"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="10"/>
-          <string name="_hash" value="399261323b5e90089159e6c2c4d59ae330c32004ceca33ccab62d0b481f2372e"/>
-        </canvas>
-        <string name="action" value="shoot1"/>
-        <int name="time" value="960"/>
-      </imgdir>
-      <imgdir name="ball">
-        <canvas name="0" format="2" scale="0">
-          <vector name="origin" x="174" y="49"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="2506a3617698991860db3eee09b60cf866ec0c241b685b702e082c383dfc8214"/>
-        </canvas>
-        <canvas name="1" format="2" scale="0">
-          <vector name="origin" x="184" y="59"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="0417069cb50b63b1368c324aee4f60eb364c9602468c2b88ea00ed68c9d1ede5"/>
-        </canvas>
-        <canvas name="2" format="2" scale="0">
-          <vector name="origin" x="174" y="59"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="cc36d51183ddefbcd11d9fac3120d9a3371add2b15afe7b11d3a7d17c749c6a8"/>
-        </canvas>
-        <canvas name="3" format="2" scale="0">
-          <vector name="origin" x="174" y="55"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="cf93bfc0e647401e116bb30a498c6b91231bbdca0eb24ad9f77866f150570da4"/>
-        </canvas>
-        <canvas name="4" format="2" scale="0">
-          <vector name="origin" x="184" y="59"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="6d272e0681e0182326023c7ea03545ec729a2012fc04858a01607bfc9f1e5a55"/>
-        </canvas>
-        <canvas name="5" format="2" scale="0">
-          <vector name="origin" x="174" y="59"/>
-          <int name="z" value="0"/>
-          <int name="delay" value="60"/>
-          <string name="_hash" value="dde593dcae3f41ea37a29406d410ef4a08b717f5f380aa216c0f701bfb006213"/>
-        </canvas>
-      </imgdir>
     </imgdir>
-    <imgdir name="13001004">
-      <imgdir name="action">
-        <string name="0" value="alert2"/>
-      </imgdir>
-      <imgdir name="level">
-        <imgdir name="1">
-          <string name="hs" value="h1"/>
-          <int name="mpCon" value="1"/>
-          <int name="time" value="3600"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="500"/>
-          <int name="pdd" value="500"/>
-          <int name="mdd" value="500"/>
-        </imgdir>
-        <imgdir name="2">
-          <string name="hs" value="h2"/>
-          <int name="mpCon" value="11"/>
-          <int name="time" value="110"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="22"/>
-          <int name="pdd" value="10"/>
-          <int name="mdd" value="10"/>
-        </imgdir>
-        <imgdir name="3">
-          <string name="hs" value="h3"/>
-          <int name="mpCon" value="12"/>
-          <int name="time" value="115"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="23"/>
-          <int name="pdd" value="10"/>
-          <int name="mdd" value="10"/>
-        </imgdir>
-        <imgdir name="4">
-          <string name="hs" value="h4"/>
-          <int name="mpCon" value="12"/>
-          <int name="time" value="120"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="24"/>
-          <int name="pdd" value="10"/>
-          <int name="mdd" value="10"/>
-        </imgdir>
-        <imgdir name="5">
-          <string name="hs" value="h5"/>
-          <int name="mpCon" value="13"/>
-          <int name="time" value="125"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="25"/>
-          <int name="pdd" value="10"/>
-          <int name="mdd" value="10"/>
-        </imgdir>
-        <imgdir name="6">
-          <string name="hs" value="h6"/>
-          <int name="mpCon" value="13"/>
-          <int name="time" value="130"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="26"/>
-          <int name="pdd" value="15"/>
-          <int name="mdd" value="15"/>
-        </imgdir>
-        <imgdir name="7">
-          <string name="hs" value="h7"/>
-          <int name="mpCon" value="14"/>
-          <int name="time" value="135"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="27"/>
-          <int name="pdd" value="15"/>
-          <int name="mdd" value="15"/>
-        </imgdir>
-        <imgdir name="8">
-          <string name="hs" value="h8"/>
-          <int name="mpCon" value="14"/>
-          <int name="time" value="140"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="28"/>
-          <int name="pdd" value="15"/>
-          <int name="mdd" value="15"/>
-        </imgdir>
-        <imgdir name="9">
-          <string name="hs" value="h9"/>
-          <int name="mpCon" value="15"/>
-          <int name="time" value="145"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="29"/>
-          <int name="pdd" value="15"/>
-          <int name="mdd" value="15"/>
-        </imgdir>
-        <imgdir name="10">
-          <string name="hs" value="h10"/>
-          <int name="mpCon" value="15"/>
-          <int name="time" value="150"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="30"/>
-          <int name="pdd" value="15"/>
-          <int name="mdd" value="15"/>
-        </imgdir>
-        <imgdir name="11">
-          <string name="hs" value="h11"/>
-          <int name="mpCon" value="16"/>
-          <int name="time" value="155"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="31"/>
-          <int name="pdd" value="20"/>
-          <int name="mdd" value="20"/>
-        </imgdir>
-        <imgdir name="12">
-          <string name="hs" value="h12"/>
-          <int name="mpCon" value="16"/>
-          <int name="time" value="160"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="32"/>
-          <int name="pdd" value="20"/>
-          <int name="mdd" value="20"/>
-        </imgdir>
-        <imgdir name="13">
-          <string name="hs" value="h13"/>
-          <int name="mpCon" value="17"/>
-          <int name="time" value="165"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="33"/>
-          <int name="pdd" value="20"/>
-          <int name="mdd" value="20"/>
-        </imgdir>
-        <imgdir name="14">
-          <string name="hs" value="h14"/>
-          <int name="mpCon" value="17"/>
-          <int name="time" value="170"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="34"/>
-          <int name="pdd" value="20"/>
-          <int name="mdd" value="20"/>
-        </imgdir>
-        <imgdir name="15">
-          <string name="hs" value="h15"/>
-          <int name="mpCon" value="18"/>
-          <int name="time" value="175"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="35"/>
-          <int name="pdd" value="20"/>
-          <int name="mdd" value="20"/>
-        </imgdir>
-        <imgdir name="16">
-          <string name="hs" value="h16"/>
-          <int name="mpCon" value="18"/>
-          <int name="time" value="180"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="36"/>
-          <int name="pdd" value="25"/>
-          <int name="mdd" value="25"/>
-        </imgdir>
-        <imgdir name="17">
-          <string name="hs" value="h17"/>
-          <int name="mpCon" value="19"/>
-          <int name="time" value="185"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="37"/>
-          <int name="pdd" value="25"/>
-          <int name="mdd" value="25"/>
-        </imgdir>
-        <imgdir name="18">
-          <string name="hs" value="h18"/>
-          <int name="mpCon" value="19"/>
-          <int name="time" value="190"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="38"/>
-          <int name="pdd" value="25"/>
-          <int name="mdd" value="25"/>
-        </imgdir>
-        <imgdir name="19">
-          <string name="hs" value="h19"/>
-          <int name="mpCon" value="20"/>
-          <int name="time" value="195"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="39"/>
-          <int name="pdd" value="25"/>
-          <int name="mdd" value="25"/>
-        </imgdir>
-        <imgdir name="20">
-          <string name="hs" value="h20"/>
-          <int name="mpCon" value="20"/>
-          <int name="time" value="6000"/>
-          <int name="x" value="1"/>
-          <int name="pad" value="5000"/>
-          <int name="pdd" value="5000"/>
-          <int name="mdd" value="5000"/>
-        </imgdir>
-      </imgdir>
-      <imgdir name="summon">
-        <imgdir name="summoned">
-          <canvas name="1" format="2" scale="0">
-            <vector name="origin" x="-85" y="253"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="de232958d749a660110ab2c6d935e4341b3d5a0eda17c3ed69812cc82cf23769"/>
-          </canvas>
-          <canvas name="2" format="2" scale="0">
-            <vector name="origin" x="-32" y="248"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="3b3a471a957d9dc5b52ada317457ba338d7cbb9b6046fd69104064b4a73218da"/>
-          </canvas>
-          <canvas name="3" format="2" scale="0">
-            <vector name="origin" x="-30" y="242"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="b8d448a9881ba018b618fc4bcb7d7c1def6a8a117e4d1d855f6fe29f3f6f73df"/>
-          </canvas>
-          <canvas name="4" format="2" scale="0">
-            <vector name="origin" x="-28" y="292"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="0380f88cb6cc7bfd70b57a3e2ac15ffaab86a5f0d64391165ae0bf89d8393d48"/>
-          </canvas>
-          <canvas name="5" format="2" scale="0">
-            <vector name="origin" x="-22" y="275"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="7f138b78bc165ae270353cb4bef877121192d403ec82174f460167fdb65fe8cb"/>
-          </canvas>
-          <canvas name="6" format="2" scale="0">
-            <vector name="origin" x="-22" y="285"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="2ef4c0ba99158bc899f21f271821dfb9edce0a3f9a48a9df6f4f057f8bd914df"/>
-          </canvas>
-          <canvas name="7" format="2" scale="0">
-            <vector name="origin" x="18" y="320"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="c9233935e4f99c914be3ca1758a56d1d6cc2ffa220b03261bb71eb6a065c91c5"/>
-          </canvas>
-          <canvas name="8" format="2" scale="0">
-            <vector name="origin" x="31" y="324"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="42df96c347951e00f7d662a97b0c79b67994491589408a31820a1180a2ab8ff3"/>
-          </canvas>
-        </imgdir>
-        <imgdir name="move">
-          <uol name="0" value="../stand/0"/>
-          <uol name="1" value="../stand/1"/>
-          <uol name="2" value="../stand/2"/>
-          <uol name="3" value="../stand/3"/>
-          <uol name="4" value="../stand/4"/>
-          <uol name="5" value="../stand/5"/>
-          <uol name="6" value="../stand/6"/>
-          <uol name="7" value="../stand/7"/>
-        </imgdir>
-        <imgdir name="stand">
-          <canvas name="7" format="2" scale="0">
-            <vector name="origin" x="-7" y="283"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="8f1d5e91fdabb7c2cf443eae5cbdd7cefc53ec1c9e72a3cb6bb3d0fed6090187"/>
-          </canvas>
-          <canvas name="0" format="2" scale="0">
-            <vector name="origin" x="-9" y="284"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="2299a829523f2d45737815949cc79a5c45f328c8adc9700972a43a0fe7ec83de"/>
-          </canvas>
-          <canvas name="1" format="2" scale="0">
-            <vector name="origin" x="-11" y="285"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="c9aebefe3e4ef08d4f18f983eaa8a92fb0dd3c109e7b0a1bf0c0c97427fb4075"/>
-          </canvas>
-          <canvas name="2" format="2" scale="0">
-            <vector name="origin" x="-8" y="286"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="3bb27f8c853e92654dd4d9ba0370e4fa06b2671297f4ed1f0262fd2471eac67d"/>
-          </canvas>
-          <canvas name="3" format="2" scale="0">
-            <vector name="origin" x="-17" y="287"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="8a92e3a83a0c50fb27fc9d5b7bcf7305c7ec7ede747235b635052aac7789c09e"/>
-          </canvas>
-          <canvas name="4" format="2" scale="0">
-            <vector name="origin" x="-16" y="286"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="21f5b000fad73bb4536d67c4ca6d3c6b9f1481c8aac151e76b6d2c82c6c533b4"/>
-          </canvas>
-          <canvas name="5" format="2" scale="0">
-            <vector name="origin" x="-14" y="285"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="00c8a8b451373e02b949771a7ecfdaeafe34114d59225f31f2ca8c7eabf0454c"/>
-          </canvas>
-          <canvas name="6" format="2" scale="0">
-            <vector name="origin" x="-12" y="284"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="120"/>
-            <string name="_hash" value="24d65f8ea1ae0aca5234f53d6c8713cd5f28161d6162a4dbab569d9e168c37da"/>
-          </canvas>
-        </imgdir>
-        <imgdir name="attack1">
-          <imgdir name="info">
-            <imgdir name="range">
-              <vector name="lt" x="-500" y="-500"/>
-              <vector name="rb" x="500" y="500"/>
+    <imgdir name="skill">
+        <imgdir name="13000000">
+            <canvas name="icon" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconMouseOver" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconDisabled" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <imgdir name="level">
+                <imgdir name="1">
+                    <string name="hs" value="h1" />
+                    <int name="prop" value="12" />
+                    <int name="damage" value="105" />
+                </imgdir>
+                <imgdir name="2">
+                    <string name="hs" value="h2" />
+                    <int name="prop" value="14" />
+                    <int name="damage" value="110" />
+                </imgdir>
+                <imgdir name="3">
+                    <string name="hs" value="h3" />
+                    <int name="prop" value="16" />
+                    <int name="damage" value="115" />
+                </imgdir>
+                <imgdir name="4">
+                    <string name="hs" value="h4" />
+                    <int name="prop" value="18" />
+                    <int name="damage" value="120" />
+                </imgdir>
+                <imgdir name="5">
+                    <string name="hs" value="h5" />
+                    <int name="prop" value="20" />
+                    <int name="damage" value="125" />
+                </imgdir>
+                <imgdir name="6">
+                    <string name="hs" value="h6" />
+                    <int name="prop" value="22" />
+                    <int name="damage" value="130" />
+                </imgdir>
+                <imgdir name="7">
+                    <string name="hs" value="h7" />
+                    <int name="prop" value="24" />
+                    <int name="damage" value="135" />
+                </imgdir>
+                <imgdir name="8">
+                    <string name="hs" value="h8" />
+                    <int name="prop" value="26" />
+                    <int name="damage" value="140" />
+                </imgdir>
+                <imgdir name="9">
+                    <string name="hs" value="h9" />
+                    <int name="prop" value="28" />
+                    <int name="damage" value="145" />
+                </imgdir>
+                <imgdir name="10">
+                    <string name="hs" value="h10" />
+                    <int name="prop" value="30" />
+                    <int name="damage" value="150" />
+                </imgdir>
+                <imgdir name="11">
+                    <string name="hs" value="h11" />
+                    <int name="prop" value="31" />
+                    <int name="damage" value="155" />
+                </imgdir>
+                <imgdir name="12">
+                    <string name="hs" value="h12" />
+                    <int name="prop" value="32" />
+                    <int name="damage" value="160" />
+                </imgdir>
+                <imgdir name="13">
+                    <string name="hs" value="h13" />
+                    <int name="prop" value="33" />
+                    <int name="damage" value="165" />
+                </imgdir>
+                <imgdir name="14">
+                    <string name="hs" value="h14" />
+                    <int name="prop" value="34" />
+                    <int name="damage" value="170" />
+                </imgdir>
+                <imgdir name="15">
+                    <string name="hs" value="h15" />
+                    <int name="prop" value="35" />
+                    <int name="damage" value="175" />
+                </imgdir>
+                <imgdir name="16">
+                    <string name="hs" value="h16" />
+                    <int name="prop" value="36" />
+                    <int name="damage" value="180" />
+                </imgdir>
+                <imgdir name="17">
+                    <string name="hs" value="h17" />
+                    <int name="prop" value="37" />
+                    <int name="damage" value="185" />
+                </imgdir>
+                <imgdir name="18">
+                    <string name="hs" value="h18" />
+                    <int name="prop" value="38" />
+                    <int name="damage" value="190" />
+                </imgdir>
+                <imgdir name="19">
+                    <string name="hs" value="h19" />
+                    <int name="prop" value="39" />
+                    <int name="damage" value="195" />
+                </imgdir>
+                <imgdir name="20">
+                    <string name="hs" value="h20" />
+                    <int name="prop" value="40" />
+                    <int name="damage" value="200" />
+                </imgdir>
             </imgdir>
-            <int name="type" value="0"/>
-            <int name="attackAfter" value="500"/>
-            <int name="mobCount" value="8"/>
-          </imgdir>
-          <canvas name="0" format="2" scale="0">
-            <vector name="origin" x="-6" y="296"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="2cbea244582c00c8584494bda9e15a5ebc60a1ae5670f99d0ec107900f49cbfe"/>
-          </canvas>
-          <canvas name="1" format="2" scale="0">
-            <vector name="origin" x="-13" y="302"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="464623b9f39f1f16bb18de98bfe31c065a583edc81d33b7be5ed33a3c5053dc7"/>
-          </canvas>
-          <canvas name="10" format="2" scale="0">
-            <vector name="origin" x="557" y="282"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="53b2dbba13f6a6836c01fdb90b2bc00d4d39ad04a731cb86f18a3551873fd241"/>
-          </canvas>
-          <canvas name="11" format="2" scale="0">
-            <vector name="origin" x="564" y="293"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="60b7c117c671cc48fe71e9fc04eb081ba0d3552f56b8407be40ab7085afe0b3d"/>
-          </canvas>
-          <canvas name="12" format="2" scale="0">
-            <vector name="origin" x="566" y="300"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="103c895005d91dabf3af690e11ed4ed87f4181b29f4d195943ff8bc0206e503a"/>
-          </canvas>
-          <canvas name="13" format="2" scale="0">
-            <vector name="origin" x="570" y="305"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="abaedbb4af9922d53475d203c2b044d67daf0e48f693e80269f415ca9b9b19f9"/>
-          </canvas>
-          <canvas name="14" format="2" scale="0">
-            <vector name="origin" x="573" y="292"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="41808ae3388d6661e935414807c4fc12848eac655c3a0ab13cc53ac9ec77ae73"/>
-          </canvas>
-          <canvas name="15" format="2" scale="0">
-            <vector name="origin" x="554" y="295"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="fea9e7101d95afbe57b5fb9d8326aad83e3550520725b812e9e8cc34614debc3"/>
-          </canvas>
-          <canvas name="16" format="2" scale="0">
-            <vector name="origin" x="535" y="296"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="948e9e5e9e80b22b47086aba666d2d4eb8c2ed96893e1d695400a66fe5c7e8a2"/>
-          </canvas>
-          <canvas name="17" format="2" scale="0">
-            <vector name="origin" x="529" y="297"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="4e7fdcd4fcb141e452a437c34325184abd0c5d088740729376a0b385f1eb0b7e"/>
-          </canvas>
-          <canvas name="18" format="2" scale="0">
-            <vector name="origin" x="508" y="298"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="b06cd5d4977bad422848602225912c5465d50f5b34c0ff14ff744ba7c6f85d32"/>
-          </canvas>
-          <canvas name="19" format="2" scale="0">
-            <vector name="origin" x="504" y="299"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="b5bf575073f7cffadc9ed68890d519986718d31a21ea36524d2717752a6a9016"/>
-          </canvas>
-          <canvas name="2" format="2" scale="0">
-            <vector name="origin" x="-13" y="308"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="a964c9637009faf558a2e846608e12ae8aac7faa9c94a14c6fd6eb5607649acd"/>
-          </canvas>
-          <canvas name="20" format="2" scale="0">
-            <vector name="origin" x="496" y="298"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="5b34e97565ac220cf2241a3cb8e421f7aee5c4a9e901f2ce8694ede966a4d7e7"/>
-          </canvas>
-          <canvas name="3" format="2" scale="0">
-            <vector name="origin" x="104" y="311"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="4b0e843f640032f67f0d165d7c8bc2c2ddb73ab067a46e3a332ac3ba0f993ccf"/>
-          </canvas>
-          <canvas name="4" format="2" scale="0">
-            <vector name="origin" x="56" y="312"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="74904126205b494c374bbbc5f72ca18ab7a44a50148d5f9ea77352f48263c8a3"/>
-          </canvas>
-          <canvas name="5" format="2" scale="0">
-            <vector name="origin" x="18" y="315"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="3e441139eaa8f1b7671a1309bdedca0781af0da1506c023e69779d82af1859aa"/>
-          </canvas>
-          <canvas name="6" format="2" scale="0">
-            <vector name="origin" x="-8" y="318"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="9d8a3e989d16043652dfe85d1e95d2cc4f51108bbe4b0edd4132238032f3fa10"/>
-          </canvas>
-          <canvas name="7" format="2" scale="0">
-            <vector name="origin" x="-17" y="321"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="becf4ccb7a89c12fae495ceec7a19b50052bdf863203d0a6cc079781279b8666"/>
-          </canvas>
-          <canvas name="8" format="2" scale="0">
-            <vector name="origin" x="280" y="292"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="1010d00d74bafdaea979fcf173035e20469eb876363c508995386e03db9881e5"/>
-          </canvas>
-          <canvas name="9" format="2" scale="0">
-            <vector name="origin" x="336" y="283"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="60"/>
-            <string name="_hash" value="2ba94d56d1058b0fae60a5425295ce5816be82b21ee11ca9e9c1757068b6710c"/>
-          </canvas>
         </imgdir>
-        <imgdir name="die">
-          <canvas name="0" format="2" scale="0">
-            <vector name="origin" x="-9" y="284"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="7b87962326f08ce642ed328c63d6692c93c901665ec42cfbfdf918345f47908f"/>
-          </canvas>
-          <canvas name="1" format="2" scale="0">
-            <vector name="origin" x="-11" y="285"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="6c900a881ab9b272b56479efca4c915a73705959575615abeeafb9d68653a9b5"/>
-          </canvas>
-          <canvas name="2" format="2" scale="0">
-            <vector name="origin" x="-8" y="286"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="93d94700e090b97d58127996499bae96a0fafeac136a407c4cb460a74fe068a9"/>
-          </canvas>
-          <canvas name="3" format="2" scale="0">
-            <vector name="origin" x="-17" y="293"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="3980a299fd344f19014efc92902f11e88ea0b589e843424619d9ce46c004f264"/>
-          </canvas>
-          <canvas name="4" format="2" scale="0">
-            <vector name="origin" x="-15" y="286"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="b7394b20180c619797708cb1279b792e40a1367d3d1f6d6a15424a484ce8ea45"/>
-          </canvas>
-          <canvas name="5" format="2" scale="0">
-            <vector name="origin" x="-14" y="286"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="e98fe40062a0850904af60b67ab059d3b5aff744aeb7db607bc97d537edf5277"/>
-          </canvas>
-          <canvas name="6" format="2" scale="0">
-            <vector name="origin" x="18" y="320"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="7d121d1c38a99cd0046d8620b68512c0c2b7cf6fa77bc1d2a056fce866826ef5"/>
-          </canvas>
+        <imgdir name="13000001">
+            <canvas name="icon" width="32" height="33">
+                <vector name="origin" x="0" y="33" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconMouseOver" width="32" height="33">
+                <vector name="origin" x="0" y="33" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconDisabled" width="32" height="33">
+                <vector name="origin" x="0" y="33" />
+                <int name="z" value="0" />
+            </canvas>
+            <imgdir name="level">
+                <imgdir name="1">
+                    <string name="hs" value="h1" />
+                    <int name="range" value="15" />
+                </imgdir>
+                <imgdir name="2">
+                    <string name="hs" value="h2" />
+                    <int name="range" value="30" />
+                </imgdir>
+                <imgdir name="3">
+                    <string name="hs" value="h3" />
+                    <int name="range" value="45" />
+                </imgdir>
+                <imgdir name="4">
+                    <string name="hs" value="h4" />
+                    <int name="range" value="60" />
+                </imgdir>
+                <imgdir name="5">
+                    <string name="hs" value="h5" />
+                    <int name="range" value="75" />
+                </imgdir>
+                <imgdir name="6">
+                    <string name="hs" value="h6" />
+                    <int name="range" value="90" />
+                </imgdir>
+                <imgdir name="7">
+                    <string name="hs" value="h7" />
+                    <int name="range" value="105" />
+                </imgdir>
+                <imgdir name="8">
+                    <string name="hs" value="h8" />
+                    <int name="range" value="120" />
+                </imgdir>
+            </imgdir>
         </imgdir>
-      </imgdir>
-      <imgdir name="hit">
-        <imgdir name="0">
-          <canvas name="0" format="2" scale="0">
-            <vector name="origin" x="114" y="116"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="10dfb5c040a593a6d5ab3e2bf55ee5e870b31b56eb2860f582f5bbe691c743e9"/>
-          </canvas>
-          <canvas name="1" format="2" scale="0">
-            <vector name="origin" x="120" y="128"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="390d8f65484e7ee8ee7d95eb8cd74e65548a46faa6056157432fb2dd7a306af1"/>
-          </canvas>
-          <canvas name="2" format="2" scale="0">
-            <vector name="origin" x="127" y="165"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="1e3d5efaa06c47693a96371208220661e8fd7b5ec61332cc89170ae3b02ff407"/>
-          </canvas>
-          <canvas name="3" format="2" scale="0">
-            <vector name="origin" x="132" y="188"/>
-            <int name="z" value="0"/>
-            <int name="delay" value="90"/>
-            <string name="_hash" value="e344109f58193ba61b81ee9638c88e5f64a94ce25e51374a569285d1e32847a9"/>
-          </canvas>
-          <int name="z" value="-2"/>
+        <imgdir name="13001002">
+            <canvas name="icon" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconMouseOver" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconDisabled" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <imgdir name="action">
+                <string name="0" value="alert2" />
+            </imgdir>
+            <imgdir name="level">
+                <imgdir name="1">
+                    <string name="hs" value="h1" />
+                    <int name="time" value="110" />
+                    <int name="mpCon" value="8" />
+                    <int name="acc" value="2" />
+                    <int name="eva" value="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <string name="hs" value="h2" />
+                    <int name="time" value="120" />
+                    <int name="mpCon" value="8" />
+                    <int name="acc" value="4" />
+                    <int name="eva" value="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <string name="hs" value="h3" />
+                    <int name="time" value="130" />
+                    <int name="mpCon" value="8" />
+                    <int name="acc" value="6" />
+                    <int name="eva" value="6" />
+                </imgdir>
+                <imgdir name="4">
+                    <string name="hs" value="h4" />
+                    <int name="time" value="140" />
+                    <int name="mpCon" value="8" />
+                    <int name="acc" value="8" />
+                    <int name="eva" value="8" />
+                </imgdir>
+                <imgdir name="5">
+                    <string name="hs" value="h5" />
+                    <int name="time" value="150" />
+                    <int name="mpCon" value="8" />
+                    <int name="acc" value="10" />
+                    <int name="eva" value="10" />
+                </imgdir>
+                <imgdir name="6">
+                    <string name="hs" value="h6" />
+                    <int name="time" value="160" />
+                    <int name="mpCon" value="12" />
+                    <int name="acc" value="12" />
+                    <int name="eva" value="12" />
+                </imgdir>
+                <imgdir name="7">
+                    <string name="hs" value="h7" />
+                    <int name="time" value="170" />
+                    <int name="mpCon" value="12" />
+                    <int name="acc" value="14" />
+                    <int name="eva" value="14" />
+                </imgdir>
+                <imgdir name="8">
+                    <string name="hs" value="h8" />
+                    <int name="time" value="180" />
+                    <int name="mpCon" value="12" />
+                    <int name="acc" value="16" />
+                    <int name="eva" value="16" />
+                </imgdir>
+                <imgdir name="9">
+                    <string name="hs" value="h9" />
+                    <int name="time" value="190" />
+                    <int name="mpCon" value="12" />
+                    <int name="acc" value="18" />
+                    <int name="eva" value="18" />
+                </imgdir>
+                <imgdir name="10">
+                    <string name="hs" value="h10" />
+                    <int name="time" value="200" />
+                    <int name="mpCon" value="12" />
+                    <string name="acc" value="20" />
+                    <int name="eva" value="20" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="effect">
+                <canvas name="0" width="44" height="38">
+                    <vector name="origin" x="51" y="109" />
+                    <int name="z" value="1" />
+                </canvas>
+                <canvas name="1" width="63" height="42">
+                    <vector name="origin" x="51" y="111" />
+                    <int name="z" value="0" />
+                </canvas>
+                <canvas name="2" width="94" height="51">
+                    <vector name="origin" x="51" y="116" />
+                    <int name="z" value="0" />
+                </canvas>
+                <canvas name="3" width="103" height="52">
+                    <vector name="origin" x="51" y="116" />
+                    <int name="z" value="0" />
+                </canvas>
+                <canvas name="4" width="103" height="52">
+                    <vector name="origin" x="51" y="116" />
+                    <int name="z" value="0" />
+                </canvas>
+                <canvas name="5" width="105" height="52">
+                    <vector name="origin" x="52" y="116" />
+                    <int name="z" value="0" />
+                    <int name="a0" value="255" />
+                    <int name="a1" value="0" />
+                </canvas>
+            </imgdir>
+            <imgdir name="req">
+                <int name="13000001" value="5" />
+            </imgdir>
         </imgdir>
-      </imgdir>
-      <canvas name="icon" format="2" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-        <string name="_hash" value="a7286d8561c887790fcd64c015310b3a58b1baeec5302441e30c776856d5f8b4"/>
-      </canvas>
-      <canvas name="iconDisabled" format="2" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-        <string name="_hash" value="7f3d46b61c7d5eca59908dca319b64d7921bb0df8828c69c667c69d0c471efa8"/>
-      </canvas>
-      <canvas name="iconMouseOver" format="2" scale="0">
-        <vector name="origin" x="0" y="32"/>
-        <int name="z" value="0"/>
-        <string name="_hash" value="a1f715d0808c3e523cc214e1b0ebe28ae4baaf20e16d41033669f939ad5018fc"/>
-      </canvas>
+        <imgdir name="13001003">
+            <canvas name="icon" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconMouseOver" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconDisabled" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <imgdir name="level">
+                <imgdir name="1">
+                    <string name="hs" value="h1" />
+                    <int name="mpCon" value="10" />
+                    <int name="damage" value="92" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <string name="hs" value="h2" />
+                    <int name="mpCon" value="10" />
+                    <int name="damage" value="94" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="3">
+                    <string name="hs" value="h3" />
+                    <int name="mpCon" value="10" />
+                    <int name="damage" value="96" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="4">
+                    <string name="hs" value="h4" />
+                    <int name="mpCon" value="10" />
+                    <int name="damage" value="98" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="5">
+                    <string name="hs" value="h5" />
+                    <int name="mpCon" value="11" />
+                    <int name="damage" value="100" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="6">
+                    <string name="hs" value="h6" />
+                    <int name="mpCon" value="11" />
+                    <int name="damage" value="102" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="7">
+                    <string name="hs" value="h7" />
+                    <int name="mpCon" value="11" />
+                    <int name="damage" value="104" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="8">
+                    <string name="hs" value="h8" />
+                    <int name="mpCon" value="12" />
+                    <int name="damage" value="106" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="9">
+                    <string name="hs" value="h9" />
+                    <int name="mpCon" value="12" />
+                    <int name="damage" value="108" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="10">
+                    <string name="hs" value="h10" />
+                    <int name="mpCon" value="12" />
+                    <int name="damage" value="110" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="11">
+                    <string name="hs" value="h11" />
+                    <int name="mpCon" value="13" />
+                    <int name="damage" value="112" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="12">
+                    <string name="hs" value="h12" />
+                    <int name="mpCon" value="13" />
+                    <int name="damage" value="114" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="13">
+                    <string name="hs" value="h13" />
+                    <int name="mpCon" value="13" />
+                    <int name="damage" value="116" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="14">
+                    <string name="hs" value="h14" />
+                    <int name="mpCon" value="14" />
+                    <int name="damage" value="118" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="15">
+                    <string name="hs" value="h15" />
+                    <int name="mpCon" value="14" />
+                    <int name="damage" value="120" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="16">
+                    <string name="hs" value="h16" />
+                    <int name="mpCon" value="14" />
+                    <int name="damage" value="122" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="17">
+                    <string name="hs" value="h17" />
+                    <int name="mpCon" value="15" />
+                    <int name="damage" value="124" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="18">
+                    <string name="hs" value="h18" />
+                    <int name="mpCon" value="15" />
+                    <int name="damage" value="126" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="19">
+                    <string name="hs" value="h19" />
+                    <int name="mpCon" value="15" />
+                    <int name="damage" value="128" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+                <imgdir name="20">
+                    <string name="hs" value="h20" />
+                    <int name="mpCon" value="16" />
+                    <int name="damage" value="130" />
+                    <int name="bulletCount" value="2" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="finalAttack">
+                <imgdir name="13101002">
+                    <int name="0" value="45" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="hit">
+                <imgdir name="0">
+                    <canvas name="0" width="64" height="42">
+                        <vector name="origin" x="43" y="22" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="1" width="94" height="86">
+                        <vector name="origin" x="47" y="41" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="2" width="95" height="92">
+                        <vector name="origin" x="45" y="45" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="3" width="89" height="98">
+                        <vector name="origin" x="34" y="46" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="4" width="72" height="71">
+                        <vector name="origin" x="32" y="36" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="5" width="63" height="59">
+                        <vector name="origin" x="30" y="32" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="6" width="63" height="62">
+                        <vector name="origin" x="30" y="34" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                </imgdir>
+                <imgdir name="1">
+                    <canvas name="0" width="42" height="39">
+                        <vector name="origin" x="20" y="23" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="1" width="66" height="67">
+                        <vector name="origin" x="32" y="35" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="2" width="70" height="72">
+                        <vector name="origin" x="34" y="37" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="3" width="61" height="68">
+                        <vector name="origin" x="28" y="36" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="4" width="59" height="64">
+                        <vector name="origin" x="29" y="34" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                    <canvas name="5" width="34" height="33">
+                        <vector name="origin" x="13" y="21" />
+                        <int name="delay" value="60" />
+                    </canvas>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="13001004">
+            <canvas name="icon" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconMouseOver" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <canvas name="iconDisabled" width="32" height="32">
+                <vector name="origin" x="0" y="32" />
+                <int name="z" value="0" />
+            </canvas>
+            <imgdir name="action">
+                <string name="0" value="alert2" />
+            </imgdir>
+            <imgdir name="level">
+                <imgdir name="1">
+                    <string name="hs" value="h1" />
+                    <int name="mpCon" value="11" />
+                    <int name="time" value="105" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="21" />
+                    <int name="pdd" value="10" />
+                    <int name="mdd" value="10" />
+                </imgdir>
+                <imgdir name="2">
+                    <string name="hs" value="h2" />
+                    <int name="mpCon" value="11" />
+                    <int name="time" value="110" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="22" />
+                    <int name="pdd" value="10" />
+                    <int name="mdd" value="10" />
+                </imgdir>
+                <imgdir name="3">
+                    <string name="hs" value="h3" />
+                    <int name="mpCon" value="12" />
+                    <int name="time" value="115" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="23" />
+                    <int name="pdd" value="10" />
+                    <int name="mdd" value="10" />
+                </imgdir>
+                <imgdir name="4">
+                    <string name="hs" value="h4" />
+                    <int name="mpCon" value="12" />
+                    <int name="time" value="120" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="24" />
+                    <int name="pdd" value="10" />
+                    <int name="mdd" value="10" />
+                </imgdir>
+                <imgdir name="5">
+                    <string name="hs" value="h5" />
+                    <int name="mpCon" value="13" />
+                    <int name="time" value="125" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="25" />
+                    <int name="pdd" value="10" />
+                    <int name="mdd" value="10" />
+                </imgdir>
+                <imgdir name="6">
+                    <string name="hs" value="h6" />
+                    <int name="mpCon" value="13" />
+                    <int name="time" value="130" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="26" />
+                    <int name="pdd" value="15" />
+                    <int name="mdd" value="15" />
+                </imgdir>
+                <imgdir name="7">
+                    <string name="hs" value="h7" />
+                    <int name="mpCon" value="14" />
+                    <int name="time" value="135" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="27" />
+                    <int name="pdd" value="15" />
+                    <int name="mdd" value="15" />
+                </imgdir>
+                <imgdir name="8">
+                    <string name="hs" value="h8" />
+                    <int name="mpCon" value="14" />
+                    <int name="time" value="140" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="28" />
+                    <int name="pdd" value="15" />
+                    <int name="mdd" value="15" />
+                </imgdir>
+                <imgdir name="9">
+                    <string name="hs" value="h9" />
+                    <int name="mpCon" value="15" />
+                    <int name="time" value="145" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="29" />
+                    <int name="pdd" value="15" />
+                    <int name="mdd" value="15" />
+                </imgdir>
+                <imgdir name="10">
+                    <string name="hs" value="h10" />
+                    <int name="mpCon" value="15" />
+                    <int name="time" value="150" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="30" />
+                    <int name="pdd" value="15" />
+                    <int name="mdd" value="15" />
+                </imgdir>
+                <imgdir name="11">
+                    <string name="hs" value="h11" />
+                    <int name="mpCon" value="16" />
+                    <int name="time" value="155" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="31" />
+                    <int name="pdd" value="20" />
+                    <int name="mdd" value="20" />
+                </imgdir>
+                <imgdir name="12">
+                    <string name="hs" value="h12" />
+                    <int name="mpCon" value="16" />
+                    <int name="time" value="160" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="32" />
+                    <int name="pdd" value="20" />
+                    <int name="mdd" value="20" />
+                </imgdir>
+                <imgdir name="13">
+                    <string name="hs" value="h13" />
+                    <int name="mpCon" value="17" />
+                    <int name="time" value="165" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="33" />
+                    <int name="pdd" value="20" />
+                    <int name="mdd" value="20" />
+                </imgdir>
+                <imgdir name="14">
+                    <string name="hs" value="h14" />
+                    <int name="mpCon" value="17" />
+                    <int name="time" value="170" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="34" />
+                    <int name="pdd" value="20" />
+                    <int name="mdd" value="20" />
+                </imgdir>
+                <imgdir name="15">
+                    <string name="hs" value="h15" />
+                    <int name="mpCon" value="18" />
+                    <int name="time" value="175" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="35" />
+                    <int name="pdd" value="20" />
+                    <int name="mdd" value="20" />
+                </imgdir>
+                <imgdir name="16">
+                    <string name="hs" value="h16" />
+                    <int name="mpCon" value="18" />
+                    <int name="time" value="180" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="36" />
+                    <int name="pdd" value="25" />
+                    <int name="mdd" value="25" />
+                </imgdir>
+                <imgdir name="17">
+                    <string name="hs" value="h17" />
+                    <int name="mpCon" value="19" />
+                    <int name="time" value="185" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="37" />
+                    <int name="pdd" value="25" />
+                    <int name="mdd" value="25" />
+                </imgdir>
+                <imgdir name="18">
+                    <string name="hs" value="h18" />
+                    <int name="mpCon" value="19" />
+                    <int name="time" value="190" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="38" />
+                    <int name="pdd" value="25" />
+                    <int name="mdd" value="25" />
+                </imgdir>
+                <imgdir name="19">
+                    <string name="hs" value="h19" />
+                    <int name="mpCon" value="20" />
+                    <int name="time" value="195" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="39" />
+                    <int name="pdd" value="25" />
+                    <int name="mdd" value="25" />
+                </imgdir>
+                <imgdir name="20">
+                    <string name="hs" value="h20" />
+                    <int name="mpCon" value="20" />
+                    <int name="time" value="200" />
+                    <int name="x" value="1" />
+                    <int name="pad" value="40" />
+                    <int name="pdd" value="25" />
+                    <int name="mdd" value="25" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="summon">
+                <imgdir name="summoned">
+                    <canvas name="0" width="104" height="102">
+                        <vector name="origin" x="49" y="109" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="1" width="126" height="125">
+                        <vector name="origin" x="59" y="120" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="2" width="126" height="126">
+                        <vector name="origin" x="59" y="121" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="3" width="100" height="102">
+                        <vector name="origin" x="46" y="110" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="4" width="72" height="72">
+                        <vector name="origin" x="32" y="94" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="5" width="94" height="97">
+                        <vector name="origin" x="43" y="102" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="6" width="169" height="168">
+                        <vector name="origin" x="83" y="137" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="7" width="143" height="142">
+                        <vector name="origin" x="71" y="125" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="8" width="148" height="141">
+                        <vector name="origin" x="73" y="124" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="9" width="153" height="134">
+                        <vector name="origin" x="74" y="121" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="10" width="157" height="128">
+                        <vector name="origin" x="75" y="115" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="11" width="117" height="111">
+                        <vector name="origin" x="58" y="109" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="12" width="112" height="107">
+                        <vector name="origin" x="55" y="107" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="13" width="52" height="52">
+                        <vector name="origin" x="24" y="88" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="14" width="52" height="52">
+                        <vector name="origin" x="24" y="88" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                </imgdir>
+                <imgdir name="move">
+                    <canvas name="0" width="52" height="52">
+                        <vector name="origin" x="24" y="88" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="1" width="71" height="60">
+                        <vector name="origin" x="32" y="90" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="2" width="75" height="58">
+                        <vector name="origin" x="36" y="89" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="3" width="74" height="56">
+                        <vector name="origin" x="36" y="90" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="4" width="67" height="56">
+                        <vector name="origin" x="36" y="90" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="5" width="59" height="60">
+                        <vector name="origin" x="29" y="91" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="6" width="72" height="63">
+                        <vector name="origin" x="36" y="93" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="7" width="66" height="60">
+                        <vector name="origin" x="27" y="93" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                </imgdir>
+                <imgdir name="stand">
+                    <canvas name="0" width="52" height="52">
+                        <vector name="origin" x="24" y="88" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="1" width="71" height="60">
+                        <vector name="origin" x="32" y="90" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="2" width="75" height="58">
+                        <vector name="origin" x="36" y="89" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="3" width="74" height="56">
+                        <vector name="origin" x="36" y="90" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="4" width="67" height="56">
+                        <vector name="origin" x="36" y="90" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="5" width="59" height="60">
+                        <vector name="origin" x="29" y="91" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="6" width="72" height="63">
+                        <vector name="origin" x="36" y="93" />
+                        <int name="delay" value="120" />
+                    </canvas>
+                    <canvas name="7" width="66" height="60">
+                        <vector name="origin" x="27" y="93" />
+                    </canvas>
+                </imgdir>
+                <imgdir name="attack1">
+                    <imgdir name="info">
+                        <imgdir name="range">
+                            <vector name="lt" x="-30" y="-40" />
+                            <vector name="rb" x="30" y="40" />
+                            <vector name="sp" x="-14" y="-29" />
+                            <int name="r" value="150" />
+                        </imgdir>
+                        <int name="type" value="1" />
+                        <int name="attackAfter" value="450" />
+                        <int name="mobCount" value="3" />
+                    </imgdir>
+                    <canvas name="0" width="52" height="59">
+                        <vector name="origin" x="24" y="94" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="1" width="63" height="57">
+                        <vector name="origin" x="35" y="90" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="2" width="71" height="61">
+                        <vector name="origin" x="37" y="91" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="3" width="74" height="69">
+                        <vector name="origin" x="37" y="97" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="4" width="73" height="71">
+                        <vector name="origin" x="32" y="102" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="5" width="74" height="64">
+                        <vector name="origin" x="33" y="96" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="6" width="76" height="62">
+                        <vector name="origin" x="36" y="94" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="7" width="71" height="68">
+                        <vector name="origin" x="39" y="99" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="8" width="67" height="68">
+                        <vector name="origin" x="38" y="98" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="9" width="71" height="65">
+                        <vector name="origin" x="32" y="95" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="10" width="75" height="64">
+                        <vector name="origin" x="36" y="95" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="11" width="74" height="62">
+                        <vector name="origin" x="36" y="96" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="12" width="67" height="56">
+                        <vector name="origin" x="36" y="90" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="13" width="59" height="60">
+                        <vector name="origin" x="29" y="91" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="14" width="72" height="63">
+                        <vector name="origin" x="36" y="93" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="15" width="66" height="60">
+                        <vector name="origin" x="27" y="93" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                </imgdir>
+                <imgdir name="die">
+                    <canvas name="0" width="52" height="52">
+                        <vector name="origin" x="24" y="88" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="1" width="71" height="60">
+                        <vector name="origin" x="32" y="90" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="2" width="75" height="57">
+                        <vector name="origin" x="36" y="88" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="3" width="32" height="122">
+                        <vector name="origin" x="14" y="119" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="4" width="14" height="95">
+                        <vector name="origin" x="5" y="106" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="5" width="1" height="44">
+                        <vector name="origin" x="-1" y="81" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                </imgdir>
+            </imgdir>
+            <imgdir name="hit">
+                <imgdir name="0">
+                    <canvas name="0" width="87" height="75">
+                        <vector name="origin" x="43" y="66" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="1" width="96" height="99">
+                        <vector name="origin" x="52" y="90" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="2" width="95" height="102">
+                        <vector name="origin" x="54" y="94" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="3" width="87" height="101">
+                        <vector name="origin" x="44" y="94" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="4" width="87" height="92">
+                        <vector name="origin" x="43" y="91" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="5" width="60" height="61">
+                        <vector name="origin" x="30" y="67" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <canvas name="6" width="23" height="49">
+                        <vector name="origin" x="-6" y="56" />
+                        <int name="delay" value="90" />
+                    </canvas>
+                    <int name="pos" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
     </imgdir>
-  </imgdir>
 </imgdir>

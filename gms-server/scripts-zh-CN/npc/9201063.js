@@ -11,15 +11,15 @@ function start() {
 	Orbis Random Hair/Hair Color Change.
 */
 /*
-var 中条蓝 ="#fUI/ChatBalloon/tutorial/w#";
-var 中条猫 ="#fUI/ChatBalloon/37/n#";
-var 猫右 =  "#fUI/ChatBalloon/37/ne#";
-var 猫左 =  "#fUI/ChatBalloon/37/nw#";
-var 右 =    "#fUI/ChatBalloon/37/e#";
-var 左 =    "#fUI/ChatBalloon/37/w#";
-var 下条猫 ="#fUI/ChatBalloon/37/s#";
-var 猫下右 ="#fUI/ChatBalloon/37/se#";
-var 猫下左 ="#fUI/ChatBalloon/37/sw#";
+var 中条蓝 ="▎";
+var 中条猫 ="▎";
+var 猫右 =  "▎";
+var 猫左 =  "▎";
+var 右 =    "▎";
+var 左 =    "▎";
+var 下条猫 ="▎";
+var 猫下右 ="▎";
+var 猫下左 ="▎";
 var 皇冠白 ="#fUI/GuildMark/Mark/Etc/00009004/16#";
 var status = -1;
 var beauty = 0;

@@ -290,6 +290,21 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
+     * 显示地图传送选择列表（次元之镜等NPC使用）
+     * 委托sendSimple显示选项，action函数处理具体传送逻辑
+     */
+    public void askMapSelection(String text) {
+        sendSimple(text);
+    }
+
+    /**
+     * 打开仓库存储界面
+     */
+    public void sendStorage() {
+        getPlayer().getStorage().sendStorage(getClient(), getNpc());
+    }
+
+    /**
      * 发送仅含"下一步"按钮的对话（指定说话者）
      *
      * @param text    对话文本

@@ -1,9 +1,9 @@
-var 感叹号 = "#fUI/UIWindow/Quest/icon0#";
-var 圆形 = "#fUI/UIWindow/Quest/icon3/6#";
+var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
+var 圆形 = "#fEffect/UIWindow/Quest/icon3/6#";
 var 广播 = "#fUI/CN_Chat/ChattingRoom/BtVolUp/0/normal/0#";
 var 皇冠白 = "#fUI/GuildMark/Mark/Etc/00009004/15#";
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
-var 奖励 = "#fUI/UIWindow/Quest/reward#";
+var 奖励 = "#fEffect/UIWindow/Quest/reward#";
 var 红蓝点 = "#fEffect/CharacterEff.img/1032054/0/0#";
 var 蓝星 = "#fEffect/CharacterEff.img/1052203/1/0#";
 var 红星 = "#fEffect/CharacterEff.img/1052203/2/0#";
@@ -29,16 +29,16 @@ var up = 255;
 var say = 0;
 
 var ul_nums = [
-    "#fUI/UIWindow/KeyConfig/key/11#",
-    "#fUI/UIWindow/KeyConfig/key/2#",
-    "#fUI/UIWindow/KeyConfig/key/3#",
-    "#fUI/UIWindow/KeyConfig/key/4#",
-    "#fUI/UIWindow/KeyConfig/key/5#",
-    "#fUI/UIWindow/KeyConfig/key/6#",
-    "#fUI/UIWindow/KeyConfig/key/7#",
-    "#fUI/UIWindow/KeyConfig/key/8#",
-    "#fUI/UIWindow/KeyConfig/key/9#",
-    "#fUI/UIWindow/KeyConfig/key/10#",
+    "#fEffect/UIWindow/KeyConfig/key/11#",
+    "#fEffect/UIWindow/KeyConfig/key/2#",
+    "#fEffect/UIWindow/KeyConfig/key/3#",
+    "#fEffect/UIWindow/KeyConfig/key/4#",
+    "#fEffect/UIWindow/KeyConfig/key/5#",
+    "#fEffect/UIWindow/KeyConfig/key/6#",
+    "#fEffect/UIWindow/KeyConfig/key/7#",
+    "#fEffect/UIWindow/KeyConfig/key/8#",
+    "#fEffect/UIWindow/KeyConfig/key/9#",
+    "#fEffect/UIWindow/KeyConfig/key/10#",
 ];
 
 // 检测玩家当前仙级

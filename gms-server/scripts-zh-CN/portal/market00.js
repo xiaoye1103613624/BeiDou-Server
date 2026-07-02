@@ -1,4 +1,4 @@
-﻿/*
+/*
 Return from Free Market Script
 */
 
@@ -23,4 +23,5 @@ function enter(pi) {
     if (pi.getMapId() != target) {
 	pi.getPlayer().changeMap(target, portal);
     }
+    return true;
 }

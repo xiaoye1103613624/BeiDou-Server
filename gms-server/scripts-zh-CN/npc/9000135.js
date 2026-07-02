@@ -4,8 +4,8 @@
 	制作时间：2022年/6月/28日
 */
 
-var 感叹号0 = "#fUI/UIWindow/Quest/icon0#";
-var 感叹号1 = "#fUI/UIWindow/Quest/icon1#";
+var 感叹号0 = "#fEffect/UIWindow/Quest/icon0#";
+var 感叹号1 = "#fEffect/UIWindow/Quest/icon1#";
 var 开 = "#fUI/Basic/CheckBox/0#";   //有框框 无√
 var 关 = "#fUI/Basic/CheckBox/1#";   //有框框 有√
 var xx = "#fItem/Etc/0427/04270001/Icon9/0#";  //小黄星
@@ -322,16 +322,16 @@ function 字体美化(length, content, boolean) {
 
 function 数目美化(num, length) {
 	var ul_nums = [
-		"#fUI/UIWindow/KeyConfig/key/11#",
-		"#fUI/UIWindow/KeyConfig/key/2#",
-		"#fUI/UIWindow/KeyConfig/key/3#",
-		"#fUI/UIWindow/KeyConfig/key/4#",
-		"#fUI/UIWindow/KeyConfig/key/5#",
-		"#fUI/UIWindow/KeyConfig/key/6#",
-		"#fUI/UIWindow/KeyConfig/key/7#",
-		"#fUI/UIWindow/KeyConfig/key/8#",
-		"#fUI/UIWindow/KeyConfig/key/9#",
-		"#fUI/UIWindow/KeyConfig/key/10#",
+		"#fEffect/UIWindow/KeyConfig/key/11#",
+		"#fEffect/UIWindow/KeyConfig/key/2#",
+		"#fEffect/UIWindow/KeyConfig/key/3#",
+		"#fEffect/UIWindow/KeyConfig/key/4#",
+		"#fEffect/UIWindow/KeyConfig/key/5#",
+		"#fEffect/UIWindow/KeyConfig/key/6#",
+		"#fEffect/UIWindow/KeyConfig/key/7#",
+		"#fEffect/UIWindow/KeyConfig/key/8#",
+		"#fEffect/UIWindow/KeyConfig/key/9#",
+		"#fEffect/UIWindow/KeyConfig/key/10#",
 	];
 	var showTxt = "";
 	var tempNums = num.toString().split("");
