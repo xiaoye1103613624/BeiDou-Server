@@ -23,7 +23,7 @@ function action(mode, type, selection) {
 function showMenu() {
     var player = cm.getPlayer();
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #r每日任务#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #r每日任务#k#n \t━━★\r\n";
     text += "\t" + 粉心.repeat(8) + "\r\n\r\n";
     text += "#b每日任务每天重置，完成可获得丰厚奖励！#k\r\n\r\n";
     text += "#L1##r签到打卡#k  #d每日登录必做#k#l\r\n";

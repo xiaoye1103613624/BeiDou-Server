@@ -30,7 +30,7 @@ function action(mode, type, selection) {
 function showMenu() {
     var player = cm.getPlayer();
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #rGM工具箱#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #rGM工具箱#k#n \t━━★\r\n";
     text += "\t" + 皇冠白.repeat(6) + "\r\n\r\n";
     text += "操作员：#r" + player.getName() + "#k  GM等级：#b" + player.getGMLevel() + "#k\r\n\r\n";
     text += "━━━ 公告与管理 ━━━\r\n";

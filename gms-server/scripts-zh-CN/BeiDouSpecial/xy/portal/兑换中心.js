@@ -23,7 +23,7 @@ function action(mode, type, selection) {
 function showMenu() {
     var meso = cm.getPlayer().getMeso();
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #r兑换中心#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #r兑换中心#k#n \t━━★\r\n";
     text += "\t" + 奖励.repeat(6) + "\r\n\r\n";
     text += "金币：#r" + new Intl.NumberFormat().format(meso) + "#k\r\n\r\n";
     text += "━━━ 道具兑换 ━━━\r\n";

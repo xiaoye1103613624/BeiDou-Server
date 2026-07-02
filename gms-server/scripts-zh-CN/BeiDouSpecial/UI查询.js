@@ -252,13 +252,13 @@ var UI = [
 ["U263","#fEffect/ItemEff/1112001/0/0#"],
 ["U264","#fEffect/ItemEff/1112002/0/0#"],
 ["U265","#fUI/Basic/dcMark/0#"],
-["U266","#fUI/ChatBalloon/miniroom/MemoryGame/0#"],
-["U267","#fUI/ChatBalloon/miniroom/MemoryGame/1#"],
-["U268","#fUI/ChatBalloon/miniroom/MemoryGame/2#"],
-["U269","#fUI/ChatBalloon/miniroom/Omok#"],
-["U270","#fUI/ChatBalloon/miniroom/PersonalShop#"],
-["U271","#fUI/ChatBalloon/miniroom/Progress#"],
-["U272","#fUI/ChatBalloon/pet/1/nw#"]
+["U266","0"],
+["U267","1"],
+["U268","2"],
+["U269","◈"],
+["U270","◈"],
+["U271","◉"],
+["U272","★"]
 ];
 var UI_Guild_Animal = [
 ["G0001","#fUI/GuildMark.img/Mark/Animal/00002000/1#"],

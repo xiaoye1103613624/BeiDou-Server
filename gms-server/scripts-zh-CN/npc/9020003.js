@@ -669,10 +669,10 @@ function gainmoneyb(accid, xiezhi) {
 	pstmt.executeUpdate();
 	pstmt.close();
 }
-var 美化1 = "#fUI/ChatBalloon.img/pet/120/nw#";//选择道具
-var 美化3 = "#fUI/ChatBalloon.img/pet/120/ne#";//选择道具
-var 美化2 = "#fUI/ChatBalloon.img/pet/120/n#";//选择道具
-var 美化4 = "#fUI/ChatBalloon.img/pet/120/sw#";//选择道具
-var 美化5 = "#fUI/ChatBalloon.img/pet/120/se#";//选择道具
-var 美化6 = "#fUI/ChatBalloon.img/pet/120/s#";//选择道具
-var 美化7 = "#fUI/ChatBalloon.img/156/arrow#";//选择道具
+var 美化1 = "★";//选择道具
+var 美化3 = "★";//选择道具
+var 美化2 = "━";//选择道具
+var 美化4 = "★";//选择道具
+var 美化5 = "★";//选择道具
+var 美化6 = "━";//选择道具
+var 美化7 = "➤";//选择道具

@@ -22,7 +22,7 @@ function action(mode, type, selection) {
 
 function showMenu() {
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #r便民工具#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #r便民工具#k#n \t━━★\r\n";
     text += "\t" + 圆形.repeat(8) + "\r\n\r\n";
     text += "━━━ 存储与整理 ━━━\r\n";
     text += "#L166##r仓库管理#k  #d存取装备与道具#k#l\r\n";

@@ -23,7 +23,7 @@ function action(mode, type, selection) {
 function showMenu() {
     var player = cm.getPlayer();
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #r成长系统#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #r成长系统#k#n \t━━★\r\n";
     text += "\t" + 火箭.repeat(6) + "\r\n\r\n";
     text += "等级：#r" + player.getLevel() + "#k  转生：#b" + player.getReborns() + "#k次\r\n";
     text += "AP：#r" + player.getRemainingAp() + "#k\r\n\r\n";

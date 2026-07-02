@@ -1,6 +1,6 @@
 ﻿var 小雪花 = "#fEffect/CharacterEff/1003393/0/0#";
-var  a1 = "#fUI/ChatBalloon.img/28/w#";//右上
-var  a2 = "#fUI/ChatBalloon.img/28/e#";//上中
+var  a1 = "▎";//右上
+var  a2 = "▎";//上中
 var 笑脸1 ="#fUI/GuildMark/Mark/Etc/00009025/1#";
 var 笑脸3 ="#fUI/GuildMark/Mark/Etc/00009025/3#";
 var 笑脸5 ="#fUI/GuildMark/Mark/Etc/00009025/5#";

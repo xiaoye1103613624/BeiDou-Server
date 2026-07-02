@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <imgdir name="0243.img">
     <imgdir name="02430000">
         <imgdir name="info">
@@ -437,7 +437,7 @@
             <int name="npc" value="9900001" />
         </imgdir>
     </imgdir>
-    <imgdir name="02432076">
+    <imgdir name="02431144">
         <imgdir name="info">
             <canvas name="icon" width="27" height="29">
                 <vector name="origin" x="-3" y="29" />
@@ -445,12 +445,33 @@
             <canvas name="iconRaw" width="27" height="27">
                 <vector name="origin" x="-3" y="29" />
             </canvas>
-            <int name="price" value="1" />
-            <int name="slotMax" value="1" />
+            <int name="price" value="0" />
+            <int name="slotMax" value="100" />
             <int name="tradeBlock" value="1" />
+            <int name="notSale" value="1" />
+            <int name="quest" value="1" />
         </imgdir>
         <imgdir name="spec">
-            <string name="script" value="02432076_sell" />
+            <string name="script" value="惊喜时装盲盒" />
+            <int name="npc" value="9900001" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="02432089">
+        <imgdir name="info">
+            <canvas name="icon" width="27" height="29">
+                <vector name="origin" x="-3" y="29" />
+            </canvas>
+            <canvas name="iconRaw" width="27" height="27">
+                <vector name="origin" x="-3" y="29" />
+            </canvas>
+            <int name="price" value="0" />
+            <int name="slotMax" value="100" />
+            <int name="tradeBlock" value="1" />
+            <int name="notSale" value="1" />
+            <int name="quest" value="1" />
+        </imgdir>
+        <imgdir name="spec">
+            <string name="script" value="吸怪管理" />
             <int name="npc" value="9900001" />
         </imgdir>
     </imgdir>
@@ -470,23 +491,6 @@
         </imgdir>
         <imgdir name="spec">
             <string name="script" value="openMenu9900001" />
-            <int name="npc" value="9900001" />
-        </imgdir>
-    </imgdir>
-    <imgdir name="02432074">
-        <imgdir name="info">
-            <canvas name="icon" width="27" height="29">
-                <vector name="origin" x="-3" y="29" />
-            </canvas>
-            <canvas name="iconRaw" width="27" height="27">
-                <vector name="origin" x="-3" y="29" />
-            </canvas>
-            <int name="price" value="1" />
-            <int name="slotMax" value="1" />
-            <int name="tradeBlock" value="1" />
-        </imgdir>
-        <imgdir name="spec">
-            <string name="script" value="02432074_sell_confirm" />
             <int name="npc" value="9900001" />
         </imgdir>
     </imgdir>

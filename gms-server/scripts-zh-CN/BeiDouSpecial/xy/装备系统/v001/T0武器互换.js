@@ -1,13 +1,13 @@
 /*
 SnailMS脚本生成器
 */
-var 美化1 = "#fUI/ChatBalloon.img/pet/120/nw#";//选择道具
-var 美化3 = "#fUI/ChatBalloon.img/pet/120/ne#";//选择道具
-var 美化2 = "#fUI/ChatBalloon.img/pet/120/n#";//选择道具
-var 美化4 = "#fUI/ChatBalloon.img/pet/120/sw#";//选择道具
-var 美化5 = "#fUI/ChatBalloon.img/pet/120/se#";//选择道具
-var 美化6 = "#fUI/ChatBalloon.img/pet/120/s#";//选择道具
-var 美化7 = "#fUI/ChatBalloon.img/156/arrow#";//选择道具
+var 美化1 = "★";//选择道具
+var 美化3 = "★";//选择道具
+var 美化2 = "━";//选择道具
+var 美化4 = "★";//选择道具
+var 美化5 = "★";//选择道具
+var 美化6 = "━";//选择道具
+var 美化7 = "➤";//选择道具
 var 箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
 var 道具栏位1 = "#fUI/UIWindow/Item/activeIcon#";
 var 道具栏位2 = "#fUI/UIWindow/Item/activeExpChairIcon#";

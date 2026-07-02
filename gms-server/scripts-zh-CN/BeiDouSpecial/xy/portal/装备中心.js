@@ -22,7 +22,7 @@ function action(mode, type, selection) {
 
 function showMenu() {
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #r装备中心#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #r装备中心#k#n \t━━★\r\n";
     text += "\t" + 皇冠.repeat(8) + "\r\n\r\n";
     text += "金币：#r" + new Intl.NumberFormat().format(cm.getPlayer().getMeso()) + "#k\r\n\r\n";
     text += "━━━ 制作与升级 ━━━\r\n";

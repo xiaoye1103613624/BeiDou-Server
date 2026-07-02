@@ -28,7 +28,7 @@ function showMenu() {
     var vipStr = isVip ? "#r[VIP有效]#k" : "#d[未开通VIP]#k";
 
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #rVIP会员#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #rVIP会员#k#n \t━━★\r\n";
     text += "\t" + 粉心.repeat(8) + "\r\n\r\n";
     text += "点券：#r" + new Intl.NumberFormat().format(nx) + "#k  │  VIP状态：" + vipStr + "\r\n\r\n";
     text += "━━━ 会员服务 ━━━\r\n";

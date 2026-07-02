@@ -22,7 +22,7 @@ function action(mode, type, selection) {
 
 function showMenu() {
     var text = "";
-    text += "\t#fUI/ChatBalloon/118/nw##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n#\t#e #r收集系统#k#n \t#fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/n##fUI/ChatBalloon/118/ne#\r\n";
+    text += "\t★━━\t#e #r收集系统#k#n \t━━★\r\n";
     text += "\t" + 奖励.repeat(6) + "\r\n\r\n";
     text += "#b收集怪物卡片、钓鱼或兑换专属戒指！#k\r\n\r\n";
     text += "━━━ 图鉴收集 ━━━\r\n";
