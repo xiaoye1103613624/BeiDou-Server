@@ -38,9 +38,15 @@ src/main/resources/static/
 *.bak
 *.bak2
 *.bak3
+*.tmp
+*~
 *.pyc
 __pycache__/
 .agents/
+
+# Script/image backup & temp artifacts
+*新.js
+/npc_*.png
 
 # Log files（排除日志，但保留logback配置）
 *.log
