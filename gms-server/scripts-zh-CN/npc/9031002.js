@@ -71,7 +71,7 @@ var exchangeDirs = Array(
 );
 
 var itemSets = [oreSet, null, forgeStoneSet, null];    //category==1/3走专用逻辑，不使用此数组对应位
-var categoryNames = ["矿石合成", "星月石合成", "锻造石合成", "勇者之石/圣者之石互换(1:1)"];
+var categoryNames = ["矿石合成", "星月石合成", "锻造石合成", "锻造材料互换"];
 // 各分类每个合成/互换单位收取的金币手续费(实际收取 = 该值 * 数量)
 var categoryFee = [100000, 500000, 500000, 50000];
 

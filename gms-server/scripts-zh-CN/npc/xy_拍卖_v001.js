@@ -1,130 +1,85 @@
 /**
- * 拍卖行中心 — 配置驱动版
- * NPC: 9900001
- * 加新菜单项只需往 MENU_SECTIONS 加一条配置
+ * @description 拍卖行中心 / 脚本中心
+ * @NPC: 9900001
+ * 写法沿用本服 9900001.js 标准模式：start → action → doSelect(switch) → openNpc
  */
 
-// ======================== UI 资源常量（最先定义） ========================
-
 var changeLine = "\r\n";
-
-// 标题横幅
 var 翅膀左 = "★";
 var 翅膀中间 = "━";
 var 翅膀右 = "★";
 var Logo = "#fEffect/UIWindow/AdminClaim/default/1#";
 var 禁止脚本 = "#fEffect/UIWindow/AdminClaim/BtClaim/disabled/0#";
-
-// 资产图标
 var 正方箭头 = "#fUI/Basic/BtHide3/mouseOver/0#";
-
-// 装饰图标
-var 左修饰 = "#fItem/Etc/0427/04270001/Icon9/0#";
-var 右修饰 = "#fItem/Etc/0427/04270001/Icon9/0#";
 var 皇冠 = "#fEffect/UIWindow/UserInfo/bossPetCrown#";
 var 分割线3 = "#fEffect/UIWindow/AdminClaim/default/3#";
+var 师徒系统 = "#fEffect/UIWindow/AdminClaim/default/6#";
+var 快捷传送 = "#fEffect/UIWindow/AdminClaim/BtCancel/normal/0#";
+var 快捷商店 = "#fEffect/UIWindow/AdminClaim/BtCancel/disabled/0#";
+var 通行证 = "#fEffect/UIWindow/AdminClaim/BtCancel/mouseOver/0#";
+var 每日福利 = "#fEffect/UIWindow/AdminClaim/BtCancel/pressed/0#";
+var 全服排行 = "#fEffect/UIWindow/AdminClaim/BtCClaim/disabled/0#";
+var 日常任务 = "#fEffect/UIWindow/AdminClaim/BtCClaim/mouseOver/0#";
+var 超级仓库 = "#fEffect/UIWindow/AdminClaim/BtCClaim/normal/0#";
+var 赞助福利 = "#fEffect/UIWindow/AdminClaim/BtCClaim/pressed/0#";
+var 每日福利 = "#fEffect/UIWindow/AdminClaim/BtCancel/pressed/0#";
+var 右箭头 = "#fEffect/UIWindow/UserList/Guild/MakeMark/BtRight/disabled/0#";
 
-// 标题文本（依赖上述变量）
-var OldTitle = "\t\t\t\t   " + Logo + "\r\n" +
-    翅膀左 + 翅膀中间.repeat(2) + "\t\t#e欢迎来到  #r萧曳  #k冒险岛#n\t\t" + 翅膀中间.repeat(2) + 翅膀右 + "\t" + changeLine + "\r\n" +
-    禁止脚本;
+var OldTitle = "\t\t\t\t\t\t\t\t   " + Logo + "\r\n" +
+    "\t\t\t\t" + 翅膀左 + 翅膀中间.repeat(2) + "\t\t#e欢迎来到  #r萧曳  #k冒险岛#n\t\t" + 翅膀中间.repeat(2) + 翅膀右 + "\t" + changeLine +
+    禁止脚本 + changeLine;
 
-// ======================== 菜单配置（唯一修改点） ========================
+var status = -1;
 
-/**
- * action 类型：
- *   { type: "npc", script: "脚本名" }        -> 打开子脚本
- *   { type: "shop", shopId: 9900001 }        -> 打开商店
- *   { type: "warp", map: 910000000, portal: "out00", saveLoc: "FREE_MARKET" }
- *   { type: "warp", map: 910001000, saveOnWarp: true }
- *   { type: "msg", msg: "消息" }             -> 提示并关闭
- */
-var MENU_SECTIONS = [
-    {
-        title: "常用功能",
-        icon: 分割线3,
-        items: [
-            { id: 11, label: "快捷传送", action: { type: "npc",  script: "万能传送" } },
-            { id: 12, label: "便捷商店", action: { type: "shop", shopId: 9900001 } },
-            { id: 13, label: "超级仓库", action: { type: "npc",  script: "xy/仓库" } }
-        ]
-    },
-    {
-        title: "日常收集",
-        icon: 分割线3,
-        items: [
-            { id: 21, label: "日常任务", action: { type: "npc", script: "每日签到" } },
-            { id: 22, label: "收集系统", action: { type: "npc", script: "xy/卡片收集" } },
-            { id: 23, label: "系统活动", action: { type: "msg", msg: "活动筹备中，敬请期待！" } }
-        ]
-    },
-    {
-        title: "社交兑换",
-        icon: 分割线3,
-        items: [
-            { id: 31, label: "师徒系统", action: { type: "npc", script: "xy/mentor/师徒系统" } },
-            { id: 32, label: "家族系统", action: { type: "npc", script: "xy/家族系统" } },
-            { id: 33, label: "兑换中心", action: { type: "npc", script: "xy/other/物品兑换" } }
-        ]
-    },
-    {
-        title: "福利",
-        icon: 分割线3,
-        items: [
-            { id: 41, label: "每日福利",  action: { type: "npc", script: "新人福利" } },
-            { id: 44, label: "银行系统",  action: { type: "npc", script: "xy/other/银行系统" } },
-            { id: 42, label: "赞助福利",  action: { type: "npc", script: "xy/vip/赞助中心" } },
-            { id: 43, label: "CDKEY兑换", action: { type: "npc", script: "xy/vip/CDK_兑换" } }
-        ]
-    },
-    {
-        title: "GM功能",
-        icon: 皇冠,
-        gmOnly: true,
-        items: [
-            { id: 900, label: "GM商店",       action: { type: "shop", shopId: 9900001 } },
-            { id: 901, label: "一键刷道具",   action: { type: "npc",  script: "一键刷道具" } },
-            { id: 902, label: "在线玩家",     action: { type: "npc",  script: "xy/gm/在线玩家" } },
-            { id: 903, label: "UI查询",       action: { type: "npc",  script: "UI查询" } },
-            { id: 904, label: "发送公告",     action: { type: "npc",  script: "xy/gm/发送公告" } },
-            { id: 905, label: "巡查面板",     action: { type: "npc",  script: "xy/gm/巡查面板" } },
-            { id: 906, label: "召唤BOSS",     action: { type: "npc",  script: "xy/gm/召唤野外BOSS" } },
-            { id: 907, label: "封禁",         action: { type: "npc",  script: "xy/gm/封禁" } },
-            { id: 908, label: "物品查询",     action: { type: "npc",  script: "xy/gm/物品查询" } },
-            { id: 909, label: "虚空索物",     action: { type: "npc",  script: "xy/gm/虚空索物" } },
-            { id: 910, label: "任意门",       action: { type: "npc",  script: "xy/gm/任意门" } },
-            { id: 911, label: "装备制作",     action: { type: "npc",  script: "xy/装备系统/v000/套装制作升级" } }
-        ]
+function start() {
+    status = -1;
+    action(1, 0, 0);
+}
+
+function action(mode, type, selection) {
+    if (mode === 1) {
+        status++;
+    } else if (mode === -1) {
+        status--;
+    } else {
+        cm.dispose();
+        return;
     }
-];
 
-// ======================== 引擎函数 ========================
+    if (status === 0) {
+        cm.sendSimple(buildMenuText());
+    } else if (status === 1) {
+        doSelect(selection);
+    } else {
+        cm.dispose();
+    }
+}
 
 function buildMenuText() {
     var text = OldTitle + buildHeaderInfo();
-    // 传送快捷入口
-    text += "\t\t" + 左修饰 + redSelect(1, "[自由市场]") + 右修饰 + "\t\t" + 左修饰 + redSelect(2, "[匠人街区]") + 右修饰 + changeLine.repeat(2);
+    text += "\t\t\t\t\t\t" + redSelect(1, "[自由市场]") + "\t\t" + redSelect(2, "[匠人街区]") + changeLine.repeat(3);
 
-    var i, j, section, items;
-    for (i = 0; i < MENU_SECTIONS.length; i++) {
-        section = MENU_SECTIONS[i];
-        if (section.gmOnly && !cm.getPlayer().isGM()) {
-            continue;
-        }
-        text += "   " + (section.icon || 分割线3) + "#n";
-        items = section.items;
-        for (j = 0; j < items.length; j++) {
-            text += generalSelect(items[j].id, items[j].label);
-            if (j < items.length - 1) {
-                text += "\t";
-            }
-        }
-        text += "\\t" + changeLine.repeat(2);
+    text += generalSelect(11, 快捷传送) + generalSelect(12, 快捷商店) + generalSelect(13, 超级仓库) + generalSelect(21, 日常任务);
+    text += changeLine.repeat(2);
+
+    text += generalSelect(41, 每日福利) + generalSelect(31, 师徒系统) + generalSelect(42, 赞助福利)+generalSelect(43, "CD_KEY");
+    text += changeLine.repeat(2);
+
+    text += generalSelect(22, " 收集系统")+ "\t" + generalSelect(32, "家族系统") + "\t" + generalSelect(44, "银行系统")+ "\t" + generalSelect(33, "兑换中心");
+    text += changeLine.repeat(2);
+
+    if (cm.getPlayer().isGM()) {
+        text += generalSelect(900, "GM商店") + "\t" + generalSelect(901, "一键刷道具") + "\t" + generalSelect(902, "在线玩家") + "\t" + generalSelect(903, "UI查询");
+        text += changeLine;
+        text += generalSelect(904, "发送公告") + "\t" + generalSelect(905, "巡查面板") + "\t" + generalSelect(906, "召唤BOSS") + "\t" + generalSelect(907, "封禁");
+        text += changeLine;
+        text += generalSelect(908, "物品查询") + "\t" + generalSelect(909, "虚空索物") + "\t" + generalSelect(910, "任意门") + "\t" + generalSelect(911, "装备制作");
+        text += changeLine.repeat(2);
     }
+
     return text;
 }
 
-// 数字格式化工具（Intl可能在某些GraalJS版本不可用）
 function fmtNum(n) {
     try {
         return new Intl.NumberFormat().format(n);
@@ -151,107 +106,119 @@ function buildHeaderInfo() {
     return info;
 }
 
-function doSelect(sel) {
-    // 传送快捷入口
-    if (sel === 1) {
-        cm.getPlayer().saveLocation("FREE_MARKET");
-        cm.warp(910000000, "out00");
-        return;
-    }
-    if (sel === 2) {
-        cm.getPlayer().saveLocationOnWarp();
-        cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 匠人街");
-        cm.warp(910001000);
-        cm.dispose();
-        return;
-    }
-
-    var i, j, section, items;
-    for (i = 0; i < MENU_SECTIONS.length; i++) {
-        section = MENU_SECTIONS[i];
-        items = section.items;
-        for (j = 0; j < items.length; j++) {
-            if (items[j].id === sel) {
-                execute(items[j].action);
-                return;
-            }
-        }
-    }
-    cm.sendOk("该功能暂不支持，敬请期待！");
-    cm.dispose();
-}
-
-function execute(a) {
-    if (a.type === "npc") {
-        cm.dispose();
-        cm.openNpc(9900001, a.script);
-    } else if (a.type === "shop") {
-        cm.dispose();
-        cm.openShopNPC(a.shopId);
-    } else if (a.type === "warp") {
-        if (a.saveLoc) {
-            cm.getPlayer().saveLocation(a.saveLoc);
-        }
-        if (a.saveOnWarp) {
+function doSelect(selection) {
+    switch (selection) {
+        case 1:
+            cm.getPlayer().saveLocation("FREE_MARKET");
+            cm.warp(910000000, "out00");
+            break;
+        case 2:
             cm.getPlayer().saveLocationOnWarp();
             cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 匠人街");
-        }
-        cm.warp(a.map, a.portal || "");
-    } else if (a.type === "msg") {
-        cm.sendOk(a.msg);
-        cm.dispose();
+            cm.warp(910001000);
+            cm.dispose();
+            break;
+        case 11:
+            openNpc("万能传送");
+            break;
+        case 12:
+            cm.dispose();
+            cm.openShopNPC(9900001);
+            break;
+        case 13:
+            openNpc("xy/仓库");
+            break;
+        case 21:
+            openNpc("每日签到");
+            break;
+        case 22:
+            openNpc("xy/卡片收集");
+            break;
+        case 31:
+            openNpc("xy/mentor/师徒系统");
+            break;
+        case 32:
+            openNpc("xy/家族系统");
+            break;
+        case 33:
+            openNpc("xy/other/物品兑换");
+            break;
+        case 41:
+            openNpc("新人福利");
+            break;
+        case 42:
+            openNpc("xy/vip/赞助中心");
+            break;
+        case 43:
+            openNpc("xy/vip/CDK_兑换");
+            break;
+        case 44:
+            openNpc("xy/other/银行系统");
+            break;
+        case 900:
+            cm.dispose();
+            cm.openShopNPC(9900001);
+            break;
+        case 901:
+            openNpc("一键刷道具");
+            break;
+        case 902:
+            openNpc("xy/gm/在线玩家");
+            break;
+        case 903:
+            openNpc("UI查询");
+            break;
+        case 904:
+            openNpc("xy/gm/发送公告");
+            break;
+        case 905:
+            openNpc("xy/gm/巡查面板");
+            break;
+        case 906:
+            openNpc("xy/gm/召唤野外BOSS");
+            break;
+        case 907:
+            openNpc("xy/gm/封禁");
+            break;
+        case 908:
+            openNpc("xy/gm/物品查询");
+            break;
+        case 909:
+            openNpc("xy/gm/虚空索物");
+            break;
+        case 910:
+            openNpc("xy/gm/任意门");
+            break;
+        case 911:
+            openNpc("xy/装备系统/v000/套装制作升级");
+            break;
+        default:
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
     }
 }
 
-// ======================== 脚本入口 ========================
-
-var status = -1;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
+function openNpc(scriptName) {
+    cm.dispose();
+    cm.openNpc(9900001, scriptName);
 }
 
-function action(mode, type, selection) {
-    if (mode === 1) {
-        status++;
-    } else if (mode === -1) {
-        status--;
-    } else {
-        cm.dispose();
-        return;
-    }
-    if (status === 0) {
-        cm.sendSimple(buildMenuText());
-    } else if (status === 1) {
-        doSelect(selection);
-    } else {
-        cm.dispose();
-    }
-}
-
-// ======================== UI 标记函数 ========================
-
+/**
+ * 红色选项
+ * @param idNum
+ * @param text
+ * @returns {string}
+ */
 function redSelect(idNum, text) {
-    return "#L" + idNum + "##r" + text + "#k#n#l";
+    return `#L${idNum}##r${text}#k#n#l`;
 }
 
+/**
+ * 一般选项
+ * @param idNum
+ * @param text
+ * @returns {string}
+ */
 function generalSelect(idNum, text) {
-    return "#L" + idNum + "#" + text + "#l";
+    return `#L${idNum}#${text}#l`;
 }
-
-// ======================== 保留变量（供后续扩展） ========================
-var 皇冠白 = "#fUI/GuildMark/Mark/Etc/00009004/15#";
-var 完成 = "#fEffect/UIWindow/Quest/Tab/enabled/2#";
-var 圆形 = "#fEffect/UIWindow/Quest/icon3/6#";
-var 感叹号 = "#fEffect/UIWindow/Quest/icon0#";
-var 粉心 = "#fEffect/CharacterEff/1112903/0/1#";
-var 红心 = "#fEffect/CharacterEff/1082229/0/0#";
-var 火箭 = "#fUI/GuildMark/Mark/Etc/00009022/12#";
-var 奖励 = "#fUI/CashShop/CSDiscount/bonus#";
-var line = "#fUI/CashShop/CSDiscount/Line#";
-var 分割线1 = "#fEffect/UIWindow/AdminClaim/default/2#";
-var 分割线2 = "__________________________________________________";
-var 分割线4 = "#fEffect/UIWindow/AdminClaim/default/4#";
-var 金枫叶 = "#fMap/MapHelper/weather/maple/2#";
-var 草莓5 = "#fUI/GuildMark/Mark/Plant/00003000/8#";

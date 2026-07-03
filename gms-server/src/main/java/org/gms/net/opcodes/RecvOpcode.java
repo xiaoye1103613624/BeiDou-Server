@@ -206,6 +206,7 @@ public enum RecvOpcode implements Opcode {
     USE_HAMMER(0x104), // 使用锤子
 
     SET_HPMPALERT(0x1000), // 设置HP/MP警报
+    PORTABLE_WAREHOUSE(0x1003), // 随身仓库窗口（客户端插件，依附物品栏）
     ;
 
     private int code = -2;

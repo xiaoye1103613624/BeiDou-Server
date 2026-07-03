@@ -2,10 +2,10 @@
  * ==================
  * 脚本类型: NPC
  * 脚本作者：北斗项目组
- * 功能说明：购买初始武器 — 按当前装备武器类型发放对应圣诞六翼天使初始武器
- *   1. 自动识别玩家当前装备的武器类型，发放对应款式的初始武器
+ * 功能说明：购买初始武器 — 不限职业，可任选武器类型购买圣诞六翼天使初始武器
+ *   1. 列出全部支持的武器类型供玩家自由选择
  *   2. 初始属性：四维+20 / 攻击力+1 / 魔力+1 / 攻速+6
- *   3. 固有道具不可交换，背包/已装备中有则不可重复购买
+ *   3. 固有道具不可交换
  * ==================
  */
 
@@ -28,14 +28,14 @@ var INIT_WEAPONS = {
     146: 1462056, 147: 1472077, 148: 1482029, 149: 1492030
 };
 
+var ALL_WEAPON_TYPES = [130, 131, 132, 133, 137, 138, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149];
+
 // ===== 购买费用（金币） =====
-var PURCHASE_PRICE = 1000000; // 500W金币
+var PURCHASE_PRICE = 1000000;
 
 var status = -1;
 var curWeaponType = -1;
 var 返回图标 = "#fUI/UIWindow.img/itemSearch/BtBack/normal/0#";
-
-// ===== 入口 =====
 
 function start() {
     status = -1;
@@ -52,23 +52,21 @@ function action(mode, type, selection) {
     }
 
     if (status == 0) {
-        // 显示购买菜单（sendSimple）
         showBuyMenu();
     } else if (status == 1) {
-        // 处理sendSimple选择
         if (selection == 99) {
-            // 返回武器中心
             cm.dispose();
             cm.openNpc(9900001, "xy/装备系统/v002/武器中心");
             return;
-        } else if (selection == 0) {
-            // 确认购买 → 弹出sendYesNo二次确认
-            showConfirmDialog();
-        } else {
-            cm.dispose();
         }
+        if (INIT_WEAPONS[selection] == null) {
+            cm.sendOk("无效的武器类型，请重新选择。");
+            cm.dispose();
+            return;
+        }
+        curWeaponType = selection;
+        showConfirmDialog();
     } else if (status == 2) {
-        // 处理sendYesNo确认（type表示是否为Yes）
         if (type == 1) {
             doPurchase();
         } else {
@@ -78,83 +76,41 @@ function action(mode, type, selection) {
     }
 }
 
-/**
- * 根据玩家当前装备的武器推断武器类型前缀
- */
-function detectEquippedWeaponType() {
-    var item = cm.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(-11);
-    if (item == null) {
-        return -1;
+function showBuyMenu() {
+    var text = "#e购买初始武器#n\r\n\r\n";
+    text += "请选择要购买的武器类型（#b不限职业#k）：\r\n\r\n";
+    for (var i = 0; i < ALL_WEAPON_TYPES.length; i++) {
+        var weaponType = ALL_WEAPON_TYPES[i];
+        var weaponItemId = INIT_WEAPONS[weaponType];
+        if (weaponItemId == null) {
+            continue;
+        }
+        text += "#L" + weaponType + "##i" + weaponItemId + "# #b" + WEAPON_TYPE_NAME[weaponType] + "#k#l\r\n";
     }
-    var weaponType = Math.floor(item.getItemId() / 10000);
-    if (WEAPON_TYPE_NAME[weaponType] == null) {
-        return -1;
-    }
-    return weaponType;
+    text += "\r\n购买价格：#r" + (PURCHASE_PRICE / 10000) + "W金币#k / 把\r\n";
+    text += "#d该武器为固有道具，不可交换。#k\r\n";
+    text += "#d后续可通过 武器进阶 逐级升级为更强武器。#k\r\n\r\n";
+    text += "#L99#" + 返回图标 + "#l\r\n";
+    cm.sendSimple(text);
 }
 
-function showBuyMenu() {
-    curWeaponType = detectEquippedWeaponType();
-
-    if (curWeaponType < 0) {
-        cm.sendOk("#r未能识别你的武器类型！#k\r\n请先装备任意一把武器后再来购买。");
-        cm.dispose();
-        return;
-    }
-
+function showConfirmDialog() {
     var weaponItemId = INIT_WEAPONS[curWeaponType];
-    if (weaponItemId == null) {
-        cm.sendOk("#r暂不支持你当前装备的武器类型（" + WEAPON_TYPE_NAME[curWeaponType] + "）！#k");
-        cm.dispose();
-        return;
-    }
-
-    // 检查是否已拥有
-    // if (cm.haveItem(weaponItemId)) {
-    //     cm.sendOk("你已经拥有 #i" + weaponItemId + "# #b圣诞六翼天使武器（" + WEAPON_TYPE_NAME[curWeaponType] + "）#k，不可重复购买！\r\n\r\n请前往 #b武器中心 → 武器进阶#k 进行进阶升级。");
-    //     cm.dispose();
-    //     return;
-    // }
-
-    // 检查背包空间
     if (!cm.canHold(weaponItemId, 1)) {
         cm.sendOk("#r背包空间不足，请清理背包后再来购买！#k");
         cm.dispose();
         return;
     }
 
-    var text = "#e购买初始武器#n\r\n\r\n";
-    text += "当前武器类型：#b" + WEAPON_TYPE_NAME[curWeaponType] + "#k\r\n\r\n";
-    text += "可购买武器：\r\n";
-    text += "#i" + weaponItemId + "# #b圣诞六翼天使武器（" + WEAPON_TYPE_NAME[curWeaponType] + "）#k\r\n\r\n";
-    text += "购买价格：#r" + (PURCHASE_PRICE / 10000) + "W金币#k\r\n\r\n";
-    text += "#d该武器为固有道具，不可交换。#k\r\n";
-    text += "#d后续可通过 武器进阶 逐级升级为更强武器。#k\r\n\r\n";
-    text += "#L0#确认购买#l\r\n\r\n";
-    text += "#L99#" + 返回图标 +"#l\r\n";
-    cm.sendSimple(text);
-}
-
-/**
- * 弹出sendYesNo二次确认对话框
- */
-function showConfirmDialog() {
-    var weaponItemId = INIT_WEAPONS[curWeaponType];
     var text = "确认购买以下武器？\r\n\r\n";
     text += "#i" + weaponItemId + "# #b圣诞六翼天使武器（" + WEAPON_TYPE_NAME[curWeaponType] + "）#k\r\n\r\n";
-    text += "\t\t初始属性：#r四维+20 / 攻击力+1 / 魔力+1#k\r\n";
+    text += "初始属性：#r四维+20 / 攻击力+1 / 魔力+1 / 攻速+6#k\r\n";
     text += "价格：#r" + (PURCHASE_PRICE / 10000) + "W金币#k\r\n\r\n";
     cm.sendYesNo(text);
 }
 
 function doPurchase() {
     var weaponItemId = INIT_WEAPONS[curWeaponType];
-
-/*    if (cm.haveItem(weaponItemId)) {
-        cm.sendOk("你已经拥有该武器，不可重复购买！");
-        cm.dispose();
-        return;
-    }*/
 
     if (cm.getMeso() < PURCHASE_PRICE) {
         cm.sendOk("#r金币不足！#k\r\n需要 #b" + (PURCHASE_PRICE / 10000) + "W#k 金币，当前只有 #r" + Math.floor(cm.getMeso() / 10000) + "W#k 金币。");
@@ -168,13 +124,9 @@ function doPurchase() {
         return;
     }
 
-    // 扣除金币
     cm.gainMeso(-PURCHASE_PRICE);
-
-    // 发放武器
     cm.gainItem(weaponItemId, 1);
 
-    // 设置初始属性（覆盖WZ自带属性）
     var equipInv = cm.getPlayer().getInventory(InventoryType.EQUIP);
     var initEquip = equipInv.findById(weaponItemId);
     if (initEquip != null) {
@@ -184,7 +136,7 @@ function doPurchase() {
         initEquip.setLuk(20);
         initEquip.setWatk(1);
         initEquip.setMatk(1);
-        // 强制推送装备属性更新到客户端，覆盖WZ自带属性
+        initEquip.setSpeed(6);
         cm.getPlayer().forceUpdateItem(initEquip);
     }
 

@@ -284,7 +284,6 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
      * @param c 客户端
      */
     private void openCenterScript(Client c) {
-        // 直接打开拍卖脚本，绕过 9900001.js 的 dispose+openNpc 跳板避免闪退
-        NPCScriptManager.getInstance().start(c, NpcId.BEI_DOU_NPC_BASE, "xy_拍卖_v001", null);
+        NPCScriptManager.getInstance().start(c, NpcId.BEI_DOU_NPC_BASE, null, null);
     }
 }

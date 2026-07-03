@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -115,9 +116,18 @@ public class ForgeRecipeService {
                 .sortOrder(dto.getSortOrder())
                 .enabled(dto.getEnabled() != null ? dto.getEnabled() : 1)
                 .build();
-        if (entity.getId() != null) {
+        if (entity.getId() != null && entity.getId() > 0) {
+            ForgeRecipeDO existing = recipeMapper.selectOneById(entity.getId());
+            if (existing != null) {
+                entity.setCreateTime(existing.getCreateTime());
+            }
+            entity.setUpdateTime(new Date());
             recipeMapper.update(entity);
         } else {
+            entity.setId(null);
+            Date now = new Date();
+            entity.setCreateTime(now);
+            entity.setUpdateTime(now);
             recipeMapper.insert(entity);
         }
         ForgeRecipeManager.reload();

@@ -101,6 +101,10 @@ public class GlobalExceptionHandler {
                 String key = m.group(2);
                 return formatDuplicateKeyMessage(value, key);
             }
+            // 非唯一键冲突（如 NOT NULL 约束）——透传原始信息，避免误报为“重复冲突: 未知”
+            if (msg.contains("cannot be null") || msg.contains("doesn't have a default value")) {
+                return msg;
+            }
         }
         return extractDuplicateKeyInfo(e.getCause());
     }

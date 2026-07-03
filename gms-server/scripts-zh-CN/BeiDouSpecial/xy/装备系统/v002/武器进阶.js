@@ -13,6 +13,8 @@
  *   6. 倍率变量(RATE)控制材料消耗，除上一级武器外所有材料乘以该倍率
  *   7. 链式配置(CHAIN_NODES)：按武器类型(itemId前3位)过滤出该类型专属进阶链，
  *      预留节点(items为空)会被所有类型自动跳过，便于后续随时插入新节点
+ *   8. 不校验角色职业：仅读取背包装备栏第1格武器ID，在进阶链中精确匹配；
+ *      匹配成功则继续进阶，匹配失败则提示前往武器中心购买初始武器
  * ==================
  */
 
@@ -87,6 +89,8 @@ function getAtkInfo(groupId) {
 
 // ===== 倍率配置（默认1，修改此处可整体调整材料消耗） =====
 var RATE = 1;
+// 装备不可交易标记（对应 ItemConstants.UNTRADEABLE = 0x08）
+var UNTRADEABLE_FLAG = 8;
 
 // ===== Java类型导入 =====
 var InventoryType = Java.type('org.gms.client.inventory.InventoryType');
@@ -362,89 +366,68 @@ function buildTypeChain(weaponType) {
     return chain;
 }
 
-/**
- * 在指定类型链中查找玩家当前拥有的最高级武器索引
- */
-function findCurrentChainIndex(typeChain) {
-    for (var i = typeChain.length - 1; i >= 0; i--) {
-        if (hasItemInEquip(typeChain[i].itemId)) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-/**
- * 扫描所有武器类型链，找到玩家当前拥有的链节点（用于自动识别玩家武器类型）
- * @returns {weaponType, chainIndex} 或 null
- */
 // 所有支持的武器类型前缀列表（显式声明，避免for...in的兼容问题）
 var ALL_WEAPON_TYPES = [130, 131, 132, 133, 137, 138, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149];
 
-function detectOwnedChain() {
+/**
+ * 读取背包装备栏第1格装备ID
+ * @returns 物品ID，空位时返回-1
+ */
+function getEquipSlot1ItemId() {
+    var equipInv = cm.getPlayer().getInventory(InventoryType.EQUIP);
+    var item = equipInv.getItem(1);
+    return item != null ? item.getItemId() : -1;
+}
+
+/**
+ * 在全部进阶链中按物品ID精确匹配（仅认背包装备栏第1格当前武器）
+ * @returns {weaponType, chainIndex, typeChain} 或 null
+ */
+function findChainByItemId(itemId) {
     for (var wi = 0; wi < ALL_WEAPON_TYPES.length; wi++) {
         var weaponType = ALL_WEAPON_TYPES[wi];
         var typeChain = buildTypeChain(weaponType);
-        var idx = findCurrentChainIndex(typeChain);
-        if (idx >= 0) {
-            return {weaponType: weaponType, chainIndex: idx};
+        for (var i = 0; i < typeChain.length; i++) {
+            if (typeChain[i].itemId == itemId) {
+                return { weaponType: weaponType, chainIndex: i, typeChain: typeChain };
+            }
         }
     }
     return null;
 }
 
-/**
- * 推断武器类型前缀：只取背包装备栏第一格
- * @returns 武器类型前缀，第一格非武器时返回-1
- */
-function detectEquippedWeaponType() {
-    var equipInv = cm.getPlayer().getInventory(InventoryType.EQUIP);
-    var equipItem = equipInv.getItem(1); // 只取第一格
-    if (equipItem == null) {
-        return -1;
-    }
-    var eqType = Math.floor(equipItem.getItemId() / 10000);
-    if (WEAPON_TYPE_NAME[eqType] != null) {
-        return eqType;
-    }
-    return -1;
-}
-
 // ===== 菜单显示 =====
 
 function showMainMenu() {
-    // 优先识别玩家已拥有的链武器（不论是否装备），否则识别当前装备的武器类型
-    var owned = detectOwnedChain();
-    if (owned != null) {
-        curWeaponType = owned.weaponType;
-        curChainIndex = owned.chainIndex;
-    } else {
-        curWeaponType = detectEquippedWeaponType();
-        curChainIndex = -1;
-    }
-
-    if (curWeaponType < 0) {
-        cm.sendOk("#r未能识别你的武器类型！#k\r\n请先装备任意一把武器后再来。");
+    var itemId = getEquipSlot1ItemId();
+    if (itemId < 0) {
+        cm.sendOk("#r背包装备栏第1格没有装备！#k\r\n请将要进阶的武器放入第1格后再来。");
         cm.dispose();
         return;
     }
 
-    var typeChain = buildTypeChain(curWeaponType);
-    var jobId = cm.getPlayer().getJob().getId();
-    var jobGroup = getJobGroup(jobId);
-    var jobName = getJobGroupName(jobGroup);
-    var typeName = WEAPON_TYPE_NAME[curWeaponType];
+    var found = findChainByItemId(itemId);
+    curWeaponType = found != null ? found.weaponType : -1;
+    curChainIndex = found != null ? found.chainIndex : -1;
 
     var text = "#e武器进阶#n\r\n\r\n";
-    text += "武器类型：#b" + typeName + "#k    职业：#b" + jobName + "#k\r\n";
+    text += "当前装备栏第1格：#i" + itemId + "# #z" + itemId + "#\r\n\r\n";
 
-    if (curChainIndex < 0) {
-        // 未拥有进阶武器 → 提示先购买初始武器
-        text += "#r你尚未拥有进阶武器！#k\r\n\r\n";
-        text += "请先通过 #b武器中心 → 购买初始武器#k 获取\r\n";
-        text += "#i" + typeChain[0].itemId + "# #b" + typeChain[0].name + "#k 后再来进阶。\r\n";
-        text += "\r\n#L0#返回武器中心#l\r\n";
-    } else if (curChainIndex >= typeChain.length - 1) {
+    if (found == null) {
+        text += "#r该武器不在进阶路线中，无法进阶！#k\r\n\r\n";
+        text += "请先 #b购买初始武器#k 获取可进阶的初始武器。\r\n";
+        text += "\r\n#L0#前往武器中心#l\r\n";
+        text += "\r\n#L99#" + 返回图标 + "#l\r\n";
+        cm.sendSimple(text);
+        return;
+    }
+
+    var typeChain = found.typeChain;
+    var typeName = WEAPON_TYPE_NAME[curWeaponType];
+
+    text += "武器类型：#b" + typeName + "#k\r\n";
+
+    if (curChainIndex >= typeChain.length - 1) {
         // 已达该类型当前最高节点
         var maxNode = typeChain[curChainIndex];
         text += "当前武器：#i" + maxNode.itemId + "# #b" + maxNode.name + "#k\r\n\r\n";
@@ -537,7 +520,8 @@ function handleUpgrade() {
 
     var confirmText = "确认进阶武器？\r\n\r\n";
     confirmText += "#i" + curNode.itemId + "# #b" + curNode.name + "#k\r\n";
-    confirmText += "  → #i" + nextNode.itemId + "# #b" + nextNode.name + "#k\r\n\r\n";
+    confirmText +="\t\t\t\t↓ ↓ ↓ ↓\r\n"
+    confirmText += "#i" + nextNode.itemId + "# #b" + nextNode.name + "#k\r\n\r\n";
     confirmText += "进阶费用：#r" + (goldCost / 10000) + "W金币#k\r\n";
     confirmText += "将消耗以下材料：\r\n";
     confirmText += "  #i" + curNode.itemId + "# #z" + curNode.itemId + "# x 1\r\n";
@@ -638,6 +622,8 @@ function doExchange() {
             newEquip.setWatk(1);
         }
         newEquip.setSpeed(6);
+        // 进阶后标记为不可交易
+        newEquip.setFlag(newEquip.getFlag() | UNTRADEABLE_FLAG);
         // 强制推送装备属性更新到客户端，覆盖WZ自带属性
         cm.getPlayer().forceUpdateItem(newEquip);
     }

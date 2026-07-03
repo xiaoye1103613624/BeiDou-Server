@@ -46,7 +46,7 @@ function doSelect(selection) {
     switch (selection) {
         case 500: openSub("xy/装备系统/v000/套装制作升级"); break;
         case 104: openSub("装备强化"); break;
-        case 111: openSub("装备进阶"); break;
+        case 111: openSub("xy/装备系统/v002/武器进阶"); break;
         case 506: openSub("xy/血衣合成"); break;
         case 508: openSub("xy/装备系统/v002/装备鉴定"); break;
         case 502: openSub("xy/天赋学习"); break;

@@ -8291,4 +8291,41 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * 随身仓库窗口快照（当前分类栏的 xy_warehouse 物品，虚拟格子序号供客户端展示/操作）。
+     *
+     * @param tabId 物品栏类型 1=装备 2=消耗 3=设置 4=其他 5=现金
+     * @param items 该栏仓库物品（调用方保证同一 tab）
+     */
+    public static Packet portableWarehouseSnapshot(int tabId, java.util.List<org.gms.model.dto.WarehouseItemDTO> items) {
+        OutPacket p = OutPacket.create(SendOpcode.PORTABLE_WAREHOUSE);
+        p.writeByte(0); // RESP_SNAPSHOT
+        p.writeByte(tabId);
+        p.writeByte(items.size());
+        short virtualPos = 1;
+        for (org.gms.model.dto.WarehouseItemDTO dto : items) {
+            p.writeShort(virtualPos);
+            Item item;
+            if (dto.getInventoryType() != null && dto.getInventoryType() == 1) {
+                item = new Equip(dto.getItemId(), virtualPos);
+            } else {
+                short qty = dto.getQuantity() != null ? dto.getQuantity().shortValue() : (short) 1;
+                item = new Item(dto.getItemId(), virtualPos, qty);
+            }
+            addItemInfo(p, item, true);
+            virtualPos++;
+        }
+        // 尾部简化块（固定 8 字节/条，footer 2 字节为条数，便于 ImGui 从包尾解析）
+        short tailPos = 1;
+        for (org.gms.model.dto.WarehouseItemDTO dto : items) {
+            p.writeShort(tailPos);
+            p.writeInt(dto.getItemId());
+            short qty = dto.getQuantity() != null ? dto.getQuantity().shortValue() : (short) 1;
+            p.writeShort(qty);
+            tailPos++;
+        }
+        p.writeShort(items.size());
+        return p;
+    }
+
 }
