@@ -104,6 +104,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
 
         boolean magic = summonEffect.getWatk() == 0;
         int maxDmg = calcMaxDamage(summonEffect, player, magic);    // thanks Darter (YungMoozi) for reporting unchecked max dmg
+        long dptSummonDamage = 0L;
         for (SummonAttackEntry attackEntry : allDamage) {
             int damage = attackEntry.getDamage();
             Monster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
@@ -116,6 +117,10 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
                     damage = maxDmg;
                 }
 
+                if (damage > 0) {
+                    dptSummonDamage += damage;
+                }
+
                 if (damage > 0 && summonEffect.getMonsterStati().size() > 0) {
                     if (summonEffect.makeChanceResult()) {
                         target.applyStatus(player, new MonsterStatusEffect(summonEffect.getMonsterStati(), summonSkill, null, false), summonEffect.isPoison(), 4000);
@@ -124,6 +129,8 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
                 player.getMap().damageMonster(player, target, damage);
             }
         }
+
+        player.dptOnDamage(summon.getSkill(), dptSummonDamage);
 
         if (summon.getSkill() == Outlaw.GAVIOTA) {  // thanks Periwinks for noticing Gaviota not cancelling after grenade toss
             player.cancelEffect(summonEffect, false, -1);

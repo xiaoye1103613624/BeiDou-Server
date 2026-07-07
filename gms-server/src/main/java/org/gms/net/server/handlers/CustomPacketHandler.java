@@ -21,15 +21,38 @@
 */
 package org.gms.net.server.handlers;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
 
 public class CustomPacketHandler implements PacketHandler {
+    private static final byte DAMAGE_RANK_OPEN = 1;
+    private static final byte DAMAGE_RANK_RESET = 2;
+    private static final byte DAMAGE_RANK_CLOSE = 3;
+
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (p.available() > 0 && c.getGMLevel() >= 4) {//w/e
+        final Character chr = c.getPlayer();
+        if (chr != null && p.available() > 0) {
+            final byte subType = p.readByte();
+            switch (subType) {
+                case DAMAGE_RANK_OPEN:
+                    chr.damageRankOpen();
+                    return;
+                case DAMAGE_RANK_RESET:
+                    chr.damageRankReset();
+                    return;
+                case DAMAGE_RANK_CLOSE:
+                    chr.damageRankClose();
+                    return;
+                default:
+                    break;
+            }
+        }
+
+        if (p.available() > 0 && c.getGMLevel() >= 4) {
             c.sendPacket(PacketCreator.customPacket(p.readBytes(p.available())));
         }
     }

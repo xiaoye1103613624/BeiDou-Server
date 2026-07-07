@@ -385,6 +385,10 @@ public class SkillFactory {
     }
 
     public static String getSkillName(int skillid) {
+        if (skillid == Character.DAMAGE_RANK_DOT_SKILL_ID) {
+            return "DoT Damage";
+        }
+
         Data data = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img");
         StringBuilder skill = new StringBuilder();
         skill.append(skillid);

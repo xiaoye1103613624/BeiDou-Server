@@ -196,6 +196,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             }*/
 
             int totDamage = 0;
+            long dptAttackDamage = 0L;
             Monster distanceHackWorstMonster = null;
             double distanceHackWorstDistance = Double.NEGATIVE_INFINITY;
             double distanceHackWorstThreshold = 0.0;
@@ -332,6 +333,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
 
                     for (Integer eachd : onedList) {
+                        if (eachd != null && eachd > 0) {
+                            dptAttackDamage += (long) eachd;
+                        }
+
                         if (eachd < 0) {
                             eachd += Integer.MAX_VALUE;
                         }
@@ -556,17 +561,33 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                     if (attack.skill == Paladin.HEAVENS_HAMMER) {
                         if (!monster.isBoss()) {
-                            damageMonsterWithSkill(player, map, monster, monster.getHp() - 1, attack.skill, 1777);
+                            int trackerDamage = monster.getHp() - 1;
+                            if (trackerDamage > 0) {
+                                dptAttackDamage += trackerDamage;
+                            }
+                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 1777);
                         } else {
                             int HHDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Paladin.HEAVENS_HAMMER).getEffect(player.getSkillLevel(SkillFactory.getSkill(Paladin.HEAVENS_HAMMER))).getDamage() / 100));
-                            damageMonsterWithSkill(player, map, monster, (int) (Math.floor(Math.random() * (HHDmg / 5) + HHDmg * .8)), attack.skill, 1777);
+                            int trackerDamage = (int) (Math.floor(Math.random() * (HHDmg / 5) + HHDmg * .8));
+                            if (trackerDamage > 0) {
+                                dptAttackDamage += trackerDamage;
+                            }
+                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 1777);
                         }
                     } else if (attack.skill == Aran.COMBO_TEMPEST) {
                         if (!monster.isBoss()) {
-                            damageMonsterWithSkill(player, map, monster, monster.getHp(), attack.skill, 0);
+                            int trackerDamage = monster.getHp();
+                            if (trackerDamage > 0) {
+                                dptAttackDamage += trackerDamage;
+                            }
+                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 0);
                         } else {
                             int TmpDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Aran.COMBO_TEMPEST).getEffect(player.getSkillLevel(SkillFactory.getSkill(Aran.COMBO_TEMPEST))).getDamage() / 100));
-                            damageMonsterWithSkill(player, map, monster, (int) (Math.floor(Math.random() * (TmpDmg / 5) + TmpDmg * .8)), attack.skill, 0);
+                            int trackerDamage = (int) (Math.floor(Math.random() * (TmpDmg / 5) + TmpDmg * .8));
+                            if (trackerDamage > 0) {
+                                dptAttackDamage += trackerDamage;
+                            }
+                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 0);
                         }
                     } else {
                         if (attack.skill == Aran.BODY_PRESSURE) {
@@ -631,6 +652,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         bboxInfo
                 );
             }
+            player.dptOnDamage(attack.skill, dptAttackDamage);
         } catch (Exception e) {
             e.printStackTrace();
         }

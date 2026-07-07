@@ -24,6 +24,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
+import org.gms.constants.skills.Corsair;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.net.AbstractPacketHandler;
@@ -101,7 +102,9 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
                 dmg = maxDmg;
             }
 
-            map.damageMonster(damageChr, damaged, dmg);
+            if (map.damageMonster(damageChr, damaged, dmg) && dmg > 0) {
+                damageChr.dptOnDamage(Corsair.HYPNOTIZE, dmg);
+            }
             map.broadcastMessage(damageChr, PacketCreator.damageMonster(to, dmg), false);
         }
     }

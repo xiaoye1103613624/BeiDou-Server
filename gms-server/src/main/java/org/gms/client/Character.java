@@ -110,6 +110,7 @@ import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
+    public static final int DAMAGE_RANK_DOT_SKILL_ID = -1;
 
     @Getter
     @Setter
@@ -482,6 +483,38 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private boolean chasing = false;
+
+    private static final class DptPlayerStat {
+        final int charId;
+        String name;
+        int jobId;
+        long totalDamage = 0L;
+
+        DptPlayerStat(int charId, String name, int jobId) {
+            this.charId = charId;
+            this.name = name;
+            this.jobId = jobId;
+        }
+    }
+
+    private static final class DptSkillStat {
+        final int skillId;
+        long totalDamage = 0L;
+        long maxDamage = 0L;
+        long minDamage = Long.MAX_VALUE;
+        int count = 0;
+
+        DptSkillStat(int skillId) {
+            this.skillId = skillId;
+        }
+    }
+
+    private long dptStartMs = 0L;
+    private long dptTotalDmg = 0L;
+    private boolean dptActive = false;
+    private final Map<Integer, DptPlayerStat> dptPlayerView = new LinkedHashMap<>();
+    private final Map<Integer, DptSkillStat> dptSkillStats = new LinkedHashMap<>();
+
     private float mobExpRate = -1;
 
     @Getter
@@ -5333,6 +5366,148 @@ public class Character extends AbstractCharacterObject {
             }
             return qs;
         }
+    }
+
+    private void dptClearRuntimeState(boolean sendResetPacket) {
+        this.dptTotalDmg = 0L;
+        this.dptPlayerView.clear();
+        this.dptSkillStats.clear();
+
+        if (sendResetPacket) {
+            this.sendPacket(PacketCreator.dptReset());
+        }
+    }
+
+    private void dptSendFullSnapshot() {
+        this.sendPacket(PacketCreator.dptReset());
+
+        for (DptPlayerStat stat : this.dptPlayerView.values()) {
+            this.sendPacket(PacketCreator.dptPlayerUpdate(
+                    stat.charId,
+                    stat.name,
+                    stat.jobId,
+                    stat.totalDamage
+            ));
+        }
+
+        for (DptSkillStat stat : this.dptSkillStats.values()) {
+            this.sendPacket(PacketCreator.dptSkillUpdate(
+                    stat.skillId,
+                    dptResolveSkillName(stat.skillId),
+                    0L,
+                    stat.totalDamage,
+                    stat.maxDamage,
+                    stat.minDamage == Long.MAX_VALUE ? 0L : stat.minDamage,
+                    stat.count
+            ));
+        }
+    }
+
+    public void damageRankOpen() {
+        if (this.dptStartMs > 0L && !this.dptActive) {
+            this.dptActive = true;
+            dptSendFullSnapshot();
+            return;
+        }
+
+        if (this.dptStartMs == 0L) {
+            this.dptStartMs = System.currentTimeMillis();
+            this.dptActive = true;
+            dptClearRuntimeState(true);
+            return;
+        }
+
+        dptSendFullSnapshot();
+    }
+
+    public void damageRankClose() {
+        if (!this.dptActive) {
+            return;
+        }
+        this.dptActive = false;
+    }
+
+    public void damageRankReset() {
+        this.dptActive = false;
+        this.dptStartMs = 0L;
+        dptClearRuntimeState(true);
+    }
+
+    private void dptRecordObservedPlayerDamage(Character attacker, long dmg) {
+        if (!this.dptActive) {
+            return;
+        }
+        if (dmg <= 0L) {
+            return;
+        }
+
+        DptPlayerStat stat = dptPlayerView.computeIfAbsent(
+                attacker.getId(),
+                id -> new DptPlayerStat(attacker.getId(), attacker.getName(), attacker.getJob().getId())
+        );
+
+        stat.name = attacker.getName();
+        stat.jobId = attacker.getJob().getId();
+        stat.totalDamage += dmg;
+        this.sendPacket(PacketCreator.dptPlayerUpdate(
+                stat.charId,
+                stat.name,
+                stat.jobId,
+                stat.totalDamage
+        ));
+    }
+
+    public void dptOnDamage(int skillId, long dmg) {
+        if (dmg <= 0L) {
+            return;
+        }
+
+        final MapleMap map = this.getMap();
+        if (map == null) {
+            return;
+        }
+
+        final int normalizedSkillId = skillId < 0 ? skillId : Math.max(0, skillId);
+
+        if (this.dptActive) {
+            this.dptTotalDmg += dmg;
+
+            DptSkillStat stat = dptSkillStats.computeIfAbsent(
+                    normalizedSkillId,
+                    DptSkillStat::new
+            );
+            stat.totalDamage += dmg;
+            stat.count += 1;
+            if (dmg > stat.maxDamage) {
+                stat.maxDamage = dmg;
+            }
+            if (dmg < stat.minDamage) {
+                stat.minDamage = dmg;
+            }
+            this.sendPacket(PacketCreator.dptSkillUpdate(
+                    normalizedSkillId,
+                    dptResolveSkillName(normalizedSkillId),
+                    dmg,
+                    stat.totalDamage,
+                    stat.maxDamage,
+                    stat.minDamage == Long.MAX_VALUE ? 0L : stat.minDamage,
+                    stat.count
+            ));
+        }
+
+        for (Character viewer : map.getAllPlayers()) {
+            if (viewer == null) {
+                continue;
+            }
+            viewer.dptRecordObservedPlayerDamage(this, dmg);
+        }
+    }
+
+    private static String dptResolveSkillName(int skillId) {
+        if (skillId == 0) {
+            return "Attack";
+        }
+        return SkillFactory.getSkillName(skillId);
     }
 
     public final QuestStatus getQuestNAdd(final Quest quest) {
