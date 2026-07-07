@@ -315,5 +315,6 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.USE_ITEMUI, new RaiseIncExpHandler());
         registerHandler(RecvOpcode.CHANGE_QUICKSLOT, new QuickslotKeyMappedModifiedHandler());
         registerHandler(RecvOpcode.SET_HPMPALERT, new SetHpMpAlertHandler());
+        registerHandler(RecvOpcode.WORLD_MAP_PLAYERS, new WorldMapPlayersHandler());
     }
 }
