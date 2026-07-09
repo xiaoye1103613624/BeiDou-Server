@@ -274,6 +274,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.USE_HAMMER, new UseHammerHandler());
         registerHandler(RecvOpcode.DAMAGE_SKIN_APPLY, new DamageSkinApplyHandler());
         registerHandler(RecvOpcode.DAMAGE_SKIN_PURCHASE, new DamageSkinPurchaseHandler());
+        registerHandler(RecvOpcode.BEAUTY_ACTION, new BeautyHandler());
         registerHandler(RecvOpcode.SCRIPTED_ITEM, new ScriptedItemHandler());
         registerHandler(RecvOpcode.TOUCHING_REACTOR, new TouchReactorHandler());
         registerHandler(RecvOpcode.BEHOLDER, new BeholderHandler());

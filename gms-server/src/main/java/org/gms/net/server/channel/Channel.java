@@ -25,6 +25,7 @@ import org.gms.client.Character;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.manager.ServerManager;
+import org.gms.provider.ContentRoot;
 import org.gms.net.netty.ChannelServer;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
@@ -462,8 +463,8 @@ public final class Channel {
         String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
 
         // 默认目录保留英文原版事件，语言目录只保留已本地化的事件。
-        Path scriptPath = Path.of(scriptName, eventPath);
-        Path scriptLangPath = Path.of(scriptLangName, eventPath);
+        Path scriptPath = ContentRoot.resolve(scriptName, eventPath);
+        Path scriptLangPath = ContentRoot.resolve(scriptLangName, eventPath);
 
         // 先枚举默认事件，保证未翻译事件不会因为语言目录存在而丢失。
         List<String> events = new ArrayList<>();

@@ -60,6 +60,9 @@ import org.gms.server.Shop;
 import org.gms.server.ShopFactory;
 import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
+import org.gms.server.beauty.BeautyData;
+import org.gms.server.beauty.BeautyPackets;
+import org.gms.server.beauty.BeautyStorage;
 import org.gms.server.maps.AbstractMapObject;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.Kite;
@@ -652,6 +655,17 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     player.getId(), itemId, position);
             c.sendPacket(PacketCreator.damageSkinCatalog());
             c.sendPacket(PacketCreator.damageSkinInventory(player));
+            c.enableActions();
+        } else if (itemType == 592) { // 美容院栏位解锁券（5920000）
+            int unlocked = BeautyStorage.getUnlockedSlots(player.getId());
+            if (unlocked < 6) {
+                remove(c, position, itemId);
+                BeautyStorage.setUnlockedSlots(player.getId(), unlocked + 1);
+                player.dropMessage(5, "美容院栏位已解锁 (" + (unlocked + 1) + "/6)");
+            }
+            c.sendPacket(BeautyPackets.beautyData(
+                    BeautyStorage.getUnlockedSlots(player.getId()),
+                    BeautyStorage.loadAll(player.getId())));
             c.enableActions();
         } else if (itemType == 561) { //VEGA'S SPELL
             if (p.readInt() != 1) {
