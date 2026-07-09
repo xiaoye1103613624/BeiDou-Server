@@ -22,6 +22,9 @@ package org.gms.server;
 import org.gms.client.Character;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.gms.manager.ServerManager;
+import org.gms.property.ServiceProperty;
+import org.gms.provider.ContentRoot;
 import org.gms.provider.Data;
 import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
@@ -187,31 +190,25 @@ public class SkillbookInformationProvider {
         return loadedSkillbooks;
     }
 
-    private static void listFiles(String directoryName, ArrayList<Path> files) {
-        Path directory = Path.of(directoryName);
-
-        // get all the files from a directory
+    private static void listFiles(Path directory, ArrayList<Path> files) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
             for (Path path : stream) {
-
                 if (Files.isRegularFile(path)) {
                     files.add(path);
                 } else if (Files.isDirectory(path)) {
-                    listFiles(path.toAbsolutePath().toString(), files);
+                    listFiles(path, files);
                 }
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.warn("Failed to list files in directory: {}", directory, e);
         }
     }
 
-	private static List<Path> listFilesFromDirectoryRecursively(String directory) {
-		ArrayList<Path> files = new ArrayList<>();
-		listFiles(directory, files);
-
-		return files;
-	}
+    private static List<Path> listFilesFromDirectoryRecursively(Path directory) {
+        ArrayList<Path> files = new ArrayList<>();
+        listFiles(directory, files);
+        return files;
+    }
 
     private static Set<Integer> findMatchingSkillbookIdsOnFile(String fileContent) {
         Set<Integer> skillbookIds = new HashSet<>(4);
@@ -259,13 +256,26 @@ public class SkillbookInformationProvider {
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
-        for (Path file : listFilesFromDirectoryRecursively("./scripts")) {
-            if (file.getFileName().endsWith(".js")) {
+        collectSkillbooksFromDirectory(ContentRoot.resolve("scripts"), scriptSkillbooks);
+
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        collectSkillbooksFromDirectory(
+                ContentRoot.resolve("scripts-" + serviceProperty.getLanguage()),
+                scriptSkillbooks);
+
+        return scriptSkillbooks;
+    }
+
+    private static void collectSkillbooksFromDirectory(Path directory, Map<Integer, SkillBookEntry> scriptSkillbooks) {
+        if (!Files.isDirectory(directory)) {
+            return;
+        }
+
+        for (Path file : listFilesFromDirectoryRecursively(directory)) {
+            if (file.getFileName().toString().endsWith(".js")) {
                 scriptSkillbooks.putAll(fileSearchMatchingData(file));
             }
         }
-
-        return scriptSkillbooks;
     }
 
     public static SkillBookEntry getSkillbookAvailability(int itemId) {

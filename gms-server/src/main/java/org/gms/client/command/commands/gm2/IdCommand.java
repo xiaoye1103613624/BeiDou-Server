@@ -5,6 +5,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.game.NpcChat;
 import org.gms.constants.id.NpcId;
+import org.gms.provider.ContentRoot;
 import org.gms.server.ThreadManager;
 import org.gms.exception.IdTypeNotSupportedException;
 import org.gms.util.I18nUtil;
@@ -138,7 +139,7 @@ public class IdCommand extends Command {
             return;
         }
 
-        final List<String> fileLines = Files.readAllLines(Path.of(filePath));
+        final List<String> fileLines = Files.readAllLines(ContentRoot.get().resolve(filePath));
         typeItems.put(type, new HandbookFileItems(fileLines));
     }
 }

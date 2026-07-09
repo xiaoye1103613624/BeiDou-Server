@@ -2,6 +2,7 @@ package org.gms.provider.wz;
 
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
+import org.gms.provider.ContentRoot;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,12 +38,12 @@ public enum WZFiles {
     }
 
     public Path getBaseFile() {
-        return Path.of(DIRECTORY, fileName);
+        return ContentRoot.resolve(DIRECTORY, fileName);
     }
 
     public Path getLanguageFile() {
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        return Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
+        return ContentRoot.resolve(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
     }
 
     public String getFilePath() {

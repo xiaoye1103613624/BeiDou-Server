@@ -2,6 +2,7 @@ package org.gms.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.gms.exception.BizException;
+import org.gms.provider.ContentRoot;
 import org.gms.model.dto.FileTreeNodeDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,8 +21,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Service
 public class FileTreeService {
 
-    private static final String FILE_TREE_BASE_DIR = System.getProperty("user.dir");
-    private static final Path FILE_TREE_BASE_DIR_PATH = Path.of(FILE_TREE_BASE_DIR);
+    private static final Path FILE_TREE_BASE_DIR_PATH = ContentRoot.get();
     private static final String FILE_TREE_KEY_DELIMITER = "-";
     private static final Set<String> FILE_TREE_LIMITED_PATTERNS = new HashSet<>();
 
@@ -68,7 +68,7 @@ public class FileTreeService {
     public List<FileTreeNodeDTO> tree(String currentKey) {
         // 入参为空表示在根目录
         boolean root = !StringUtils.hasText(currentKey);
-        File current = root ? new File(FILE_TREE_BASE_DIR) : resolveByTreeKey(currentKey);
+        File current = root ? FILE_TREE_BASE_DIR_PATH.toFile() : resolveByTreeKey(currentKey);
 
         if (!current.isDirectory()) throw new BizException("请输入文件夹");
 
