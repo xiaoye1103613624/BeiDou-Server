@@ -340,6 +340,17 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private int activeDamageSkin = 0;
+
+    @Getter
+    @Setter
+    private int checkinDay = 0;
+    @Getter
+    @Setter
+    private int checkinClaimed = 0;
+    @Getter
+    @Setter
+    private long checkinLastClaim = 0;
+    private static final long CHECKIN_PERIOD_MS = 86_400_000L;
     @Getter
     @Setter
     private CashShop cashShop;
@@ -6603,6 +6614,9 @@ public class Character extends AbstractCharacterObject {
         chr.setBookCover(charactersDO.getMonsterbookcover());
         chr.setMonsterBook(new MonsterBook(charactersDO.getId()));
         chr.setActiveDamageSkin(charactersDO.getActiveDamageSkin() != null ? charactersDO.getActiveDamageSkin() : 0);
+        chr.setCheckinDay(charactersDO.getCheckinDay() != null ? charactersDO.getCheckinDay() : 0);
+        chr.setCheckinClaimed(charactersDO.getCheckinClaimed() != null ? charactersDO.getCheckinClaimed() : 0);
+        chr.setCheckinLastClaim(charactersDO.getCheckinLastClaim() != null ? charactersDO.getCheckinLastClaim() : 0L);
         try {
             chr.getDamageSkinInventory().loadSkins(charactersDO.getId());
         } catch (Exception e) {
@@ -6813,6 +6827,9 @@ public class Character extends AbstractCharacterObject {
         cdo.setUseslots((int) chr.getSlots(1));
         cdo.setSetupslots((int) chr.getSlots(2));
         cdo.setEtcslots((int) chr.getSlots(3));
+        cdo.setCheckinDay(chr.getCheckinDay());
+        cdo.setCheckinClaimed(chr.getCheckinClaimed());
+        cdo.setCheckinLastClaim(chr.getCheckinLastClaim());
         // todo 未完成
         return cdo;
     }
@@ -7726,7 +7743,7 @@ public class Character extends AbstractCharacterObject {
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
             try {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ?, checkinDay = ?, checkinClaimed = ?, checkinLastClaim = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -7841,7 +7858,10 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
                     ps.setInt(56, activeDamageSkin);
-                    ps.setInt(57, id);
+                    ps.setInt(57, checkinDay);
+                    ps.setInt(58, checkinClaimed);
+                    ps.setLong(59, checkinLastClaim);
+                    ps.setInt(60, id);
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
@@ -8506,6 +8526,48 @@ public class Character extends AbstractCharacterObject {
         } finally {
             inventory[type].unlockInventory();
         }
+    }
+
+    /** 规范化签到 streak，返回当前可领天数(1..28)，0 表示冷却中。 */
+    public int refreshCheckin() {
+        final int cycle = org.gms.server.dailycheckin.DailyCheckinRewards.CYCLE_DAYS;
+        if (checkinLastClaim <= 0) {
+            checkinDay = 0;
+            checkinClaimed = 0;
+            return 1;
+        }
+        long elapsed = System.currentTimeMillis() - checkinLastClaim;
+        if (elapsed < CHECKIN_PERIOD_MS) {
+            return 0;
+        }
+        if (elapsed >= 2L * CHECKIN_PERIOD_MS) {
+            checkinDay = 0;
+            checkinClaimed = 0;
+            return 1;
+        }
+        if (checkinDay >= cycle) {
+            checkinDay = 0;
+            checkinClaimed = 0;
+            return 1;
+        }
+        return checkinDay + 1;
+    }
+
+    public void applyCheckinClaim(int d) {
+        if (d < 1 || d > org.gms.server.dailycheckin.DailyCheckinRewards.CYCLE_DAYS) {
+            return;
+        }
+        checkinDay = d;
+        checkinClaimed |= (1 << (d - 1));
+        checkinLastClaim = System.currentTimeMillis();
+    }
+
+    public long getCheckinCooldownSeconds() {
+        if (checkinLastClaim <= 0) {
+            return 0;
+        }
+        long remain = (checkinLastClaim + CHECKIN_PERIOD_MS) - System.currentTimeMillis();
+        return remain > 0 ? (remain + 999) / 1000 : 0;
     }
 
     public int sellAllItemsFromName(byte invTypeId, String name) {

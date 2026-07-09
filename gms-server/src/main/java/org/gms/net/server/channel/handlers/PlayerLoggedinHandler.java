@@ -381,6 +381,15 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.damageSkinCatalog());
             c.sendPacket(PacketCreator.damageSkinInventory(player));
 
+            // 每日签到：可领则自动弹窗
+            if (player.getLevel() >= org.gms.server.dailycheckin.DailyCheckinRewards.MIN_LEVEL) {
+                int checkinClaimable = player.refreshCheckin();
+                if (checkinClaimable >= 1) {
+                    c.sendPacket(PacketCreator.dailyCheckinSnapshot(
+                            checkinClaimable, player.getCheckinClaimed(), 0));
+                }
+            }
+
             player.changeSkillLevel(SkillFactory.getSkill(10000000 * player.getJobType() + 12), (byte) (player.getLinkedLevel() / 10), 20, -1);
             player.checkBerserk(player.isHidden());
 

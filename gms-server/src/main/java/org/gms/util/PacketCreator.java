@@ -83,6 +83,7 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
 import org.gms.server.*;
+import org.gms.server.dailycheckin.DailyCheckinRewards;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.events.gm.Snowball;
 import org.gms.server.life.MobSkill;
@@ -7612,6 +7613,24 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_BROADCAST);
         p.writeInt(charId);
         p.writeInt(skinId);
+        return p;
+    }
+
+    /** 每日签到窗口快照 (SendOpcode 0x17C) */
+    public static Packet dailyCheckinSnapshot(int currentDay, int claimedMask, int justClaimed) {
+        OutPacket p = OutPacket.create(SendOpcode.DAILY_CHECKIN);
+        p.writeByte(1);
+        p.writeByte(currentDay);
+        p.writeInt(claimedMask);
+        p.writeByte(justClaimed);
+        int n = DailyCheckinRewards.CYCLE_DAYS;
+        p.writeByte(n);
+        for (int d = 1; d <= n; d++) {
+            p.writeInt(DailyCheckinRewards.iconItemId(d));
+        }
+        for (int d = 1; d <= n; d++) {
+            p.writeString(DailyCheckinRewards.tooltip(d));
+        }
         return p;
     }
 

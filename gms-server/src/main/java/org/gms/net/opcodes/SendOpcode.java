@@ -360,6 +360,7 @@ public enum SendOpcode implements Opcode {
     DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果
     DAMAGE_SKIN_BROADCAST(0x173), // 伤害皮肤广播
     BEAUTY_RESULT(0x174), // 美容院结果
+    DAILY_CHECKIN(0x17C), // 每日签到快照
     DPT_TRACKER(0x3714), // 个人伤害统计
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复

@@ -203,6 +203,15 @@ public class CharactersDO implements Serializable {
     @Column("activeDamageSkin")
     private Integer activeDamageSkin;
 
+    @Column("checkinDay")
+    private Integer checkinDay;
+
+    @Column("checkinClaimed")
+    private Integer checkinClaimed;
+
+    @Column("checkinLastClaim")
+    private Long checkinLastClaim;
+
     private Long jailexpire;
 
 }
