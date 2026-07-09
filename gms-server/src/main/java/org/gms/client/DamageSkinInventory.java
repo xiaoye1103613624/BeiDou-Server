@@ -39,7 +39,7 @@ public final class DamageSkinInventory {
         try { if (!owned.add(skinId)) return false; } finally { lock.unlock(); }
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                 "INSERT IGNORE INTO damageskin_inventory (characterId, skinId) VALUES (?, ?)")) {
+                 "INSERT IGNORE INTO xy_damageskin_inventory (characterId, skinId) VALUES (?, ?)")) {
             ps.setInt(1, characterId);
             ps.setInt(2, skinId);
             ps.executeUpdate();
@@ -53,7 +53,7 @@ public final class DamageSkinInventory {
             owned.clear();
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement(
-                     "SELECT skinId FROM damageskin_inventory WHERE characterId = ?")) {
+                     "SELECT skinId FROM xy_damageskin_inventory WHERE characterId = ?")) {
                 ps.setInt(1, characterId);
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) owned.add(rs.getInt("skinId"));

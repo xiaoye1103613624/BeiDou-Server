@@ -21,7 +21,7 @@ public final class BeautyStorage {
         List<BeautyData> result = new ArrayList<>();
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                     "SELECT * FROM beautystorage WHERE characterid = ? ORDER BY slottype, slot")) {
+                     "SELECT * FROM xy_beautystorage WHERE characterid = ? ORDER BY slottype, slot")) {
             ps.setInt(1, characterId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -37,7 +37,7 @@ public final class BeautyStorage {
     public static void save(BeautyData data) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                     "INSERT INTO beautystorage (characterid, slot, slottype, gender, skin, hair, face, hat, top, bottom, shoes, weapon, cashweapon) "
+                     "INSERT INTO xy_beautystorage (characterid, slot, slottype, gender, skin, hair, face, hat, top, bottom, shoes, weapon, cashweapon) "
                              + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
                              + "ON DUPLICATE KEY UPDATE gender=VALUES(gender), skin=VALUES(skin), hair=VALUES(hair), face=VALUES(face), "
                              + "hat=VALUES(hat), top=VALUES(top), bottom=VALUES(bottom), shoes=VALUES(shoes), weapon=VALUES(weapon), cashweapon=VALUES(cashweapon)")) {
@@ -63,7 +63,7 @@ public final class BeautyStorage {
     public static void delete(int characterId, int slot, int type) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                     "DELETE FROM beautystorage WHERE characterid = ? AND slot = ? AND slottype = ?")) {
+                     "DELETE FROM xy_beautystorage WHERE characterid = ? AND slot = ? AND slottype = ?")) {
             ps.setInt(1, characterId);
             ps.setInt(2, slot);
             ps.setInt(3, type);
@@ -75,7 +75,7 @@ public final class BeautyStorage {
 
     public static int getUnlockedSlots(int characterId) {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT slots FROM beautyunlock WHERE characterid = ?")) {
+             PreparedStatement ps = con.prepareStatement("SELECT slots FROM xy_beautyunlock WHERE characterid = ?")) {
             ps.setInt(1, characterId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -91,7 +91,7 @@ public final class BeautyStorage {
     public static void setUnlockedSlots(int characterId, int slots) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                     "INSERT INTO beautyunlock (characterid, slots) VALUES (?, ?) "
+                     "INSERT INTO xy_beautyunlock (characterid, slots) VALUES (?, ?) "
                              + "ON DUPLICATE KEY UPDATE slots = VALUES(slots)")) {
             ps.setInt(1, characterId);
             ps.setInt(2, slots);

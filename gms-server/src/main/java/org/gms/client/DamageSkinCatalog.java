@@ -53,7 +53,7 @@ public final class DamageSkinCatalog {
         int inserted = 0;
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                 "INSERT IGNORE INTO damageskin_catalog (skinId, priceMesos) VALUES (?, ?)")) {
+                 "INSERT IGNORE INTO xy_damageskin_catalog (skinId, priceMesos) VALUES (?, ?)")) {
             for (Data skin : node.getChildren()) {
                 int id;
                 try { id = Integer.parseInt(skin.getName()); } catch (NumberFormatException nfe) { continue; }
@@ -75,7 +75,7 @@ public final class DamageSkinCatalog {
         prices.clear();
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                 "SELECT skinId, priceMesos FROM damageskin_catalog ORDER BY skinId");
+                 "SELECT skinId, priceMesos FROM xy_damageskin_catalog ORDER BY skinId");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt("skinId");
