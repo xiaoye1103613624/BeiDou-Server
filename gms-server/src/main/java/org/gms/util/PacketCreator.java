@@ -7634,4 +7634,22 @@ public class PacketCreator {
         return p;
     }
 
+    /** 收纳背包窗口快照 (SendOpcode 0x3725) */
+    public static Packet bagWindowSnapshot(int bagKind, OreStorage storage, boolean auto) {
+        OutPacket p = OutPacket.create(SendOpcode.BAG_WINDOW);
+        p.writeByte(1);
+        p.writeByte(bagKind);
+        List<Item> items = storage.getItems();
+        p.writeShort(items.size());
+        for (Item item : items) {
+            p.writeShort(item.getPosition());
+            addItemInfo(p, item, true);
+        }
+        for (Item item : items) {
+            p.writeShort(item.getQuantity());
+        }
+        p.writeByte(auto ? 1 : 0);
+        return p;
+    }
+
 }

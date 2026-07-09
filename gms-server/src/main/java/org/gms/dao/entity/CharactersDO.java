@@ -212,6 +212,18 @@ public class CharactersDO implements Serializable {
     @Column("checkinLastClaim")
     private Long checkinLastClaim;
 
+    @Column("autoOreStorage")
+    private Integer autoOreStorage;
+
+    @Column("autoScrollStorage")
+    private Integer autoScrollStorage;
+
+    @Column("autoChairStorage")
+    private Integer autoChairStorage;
+
+    @Column("autoMountStorage")
+    private Integer autoMountStorage;
+
     private Long jailexpire;
 
 }

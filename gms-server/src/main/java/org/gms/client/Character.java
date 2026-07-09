@@ -29,6 +29,7 @@ import org.gms.client.creator.CharacterFactoryRecipe;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.Equip.StatUpgrade;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.client.inventory.manipulator.KarmaManipulator;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
@@ -351,6 +352,21 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private long checkinLastClaim = 0;
     private static final long CHECKIN_PERIOD_MS = 86_400_000L;
+
+    // 收纳背包（矿石/卷轴/椅子/坐骑）
+    private OreStorage orestorage = null;
+    private OreStorage scrollstorage = null;
+    private OreStorage chairstorage = null;
+    private OreStorage mountstorage = null;
+    private volatile boolean usedOreStorage = false;
+    private volatile boolean usedScrollStorage = false;
+    private volatile boolean usedChairStorage = false;
+    private volatile boolean usedMountStorage = false;
+    private boolean autoOreStorage = false;
+    private boolean autoScrollStorage = false;
+    private boolean autoChairStorage = false;
+    private boolean autoMountStorage = false;
+
     @Getter
     @Setter
     private CashShop cashShop;
@@ -2071,6 +2087,13 @@ public class Character extends AbstractCharacterObject {
                 final Packet pickupPacket = PacketCreator.removeItemFromMap(mapitem.getObjectId(), (isPet) ? 5 : 2, this.getId(), isPet, petIndex);
 
                 Item mItem = mapitem.getItem();
+
+                if (mapitem.getMeso() <= 0 && !MapId.isSelfLootableOnly(this.getMapId()) && autoCollectToBag(mItem)) {
+                    this.getMap().pickItemDrop(pickupPacket, mapitem);
+                    enableActions();
+                    return;
+                }
+
                 boolean hasSpaceInventory = true;
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 if (ItemId.isNxCard(mapitem.getItemId()) || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
@@ -6617,6 +6640,10 @@ public class Character extends AbstractCharacterObject {
         chr.setCheckinDay(charactersDO.getCheckinDay() != null ? charactersDO.getCheckinDay() : 0);
         chr.setCheckinClaimed(charactersDO.getCheckinClaimed() != null ? charactersDO.getCheckinClaimed() : 0);
         chr.setCheckinLastClaim(charactersDO.getCheckinLastClaim() != null ? charactersDO.getCheckinLastClaim() : 0L);
+        chr.setAutoOreStorage(charactersDO.getAutoOreStorage() != null && charactersDO.getAutoOreStorage() != 0);
+        chr.setAutoScrollStorage(charactersDO.getAutoScrollStorage() != null && charactersDO.getAutoScrollStorage() != 0);
+        chr.setAutoChairStorage(charactersDO.getAutoChairStorage() != null && charactersDO.getAutoChairStorage() != 0);
+        chr.setAutoMountStorage(charactersDO.getAutoMountStorage() != null && charactersDO.getAutoMountStorage() != 0);
         try {
             chr.getDamageSkinInventory().loadSkins(charactersDO.getId());
         } catch (Exception e) {
@@ -6672,6 +6699,10 @@ public class Character extends AbstractCharacterObject {
         }
         chr.setPartnerId(charactersDO.getPartnerId());
         chr.setMarriageItemId(charactersDO.getMarriageItemId());
+        chr.orestorage = OreStorage.loadOreStorage(chr.getId());
+        chr.scrollstorage = OreStorage.loadScrollStorage(chr.getId());
+        chr.chairstorage = OreStorage.loadChairStorage(chr.getId());
+        chr.mountstorage = OreStorage.loadMountStorage(chr.getId());
         World world = Server.getInstance().getWorld(charactersDO.getWorld());
         if (charactersDO.getMarriageItemId() > 0 && charactersDO.getPartnerId() <= 0) {
             chr.setMarriageItemId(-1);
@@ -7743,7 +7774,7 @@ public class Character extends AbstractCharacterObject {
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
             try {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ?, checkinDay = ?, checkinClaimed = ?, checkinLastClaim = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ?, checkinDay = ?, checkinClaimed = ?, checkinLastClaim = ?, autoOreStorage = ?, autoScrollStorage = ?, autoChairStorage = ?, autoMountStorage = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -7861,7 +7892,11 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(57, checkinDay);
                     ps.setInt(58, checkinClaimed);
                     ps.setLong(59, checkinLastClaim);
-                    ps.setInt(60, id);
+                    ps.setInt(60, autoOreStorage ? 1 : 0);
+                    ps.setInt(61, autoScrollStorage ? 1 : 0);
+                    ps.setInt(62, autoChairStorage ? 1 : 0);
+                    ps.setInt(63, autoMountStorage ? 1 : 0);
+                    ps.setInt(64, id);
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
@@ -8104,6 +8139,23 @@ public class Character extends AbstractCharacterObject {
                 if (storage != null && usedStorage) {
                     storage.saveToDB(con);
                     usedStorage = false;
+                }
+
+                if (orestorage != null && usedOreStorage) {
+                    orestorage.saveToDB(con);
+                    usedOreStorage = false;
+                }
+                if (scrollstorage != null && usedScrollStorage) {
+                    scrollstorage.saveToDB(con);
+                    usedScrollStorage = false;
+                }
+                if (chairstorage != null && usedChairStorage) {
+                    chairstorage.saveToDB(con);
+                    usedChairStorage = false;
+                }
+                if (mountstorage != null && usedMountStorage) {
+                    mountstorage.saveToDB(con);
+                    usedMountStorage = false;
                 }
 
                 con.commit();
@@ -10239,5 +10291,116 @@ public class Character extends AbstractCharacterObject {
      */
     public void enableActions() {
         sendPacket(PacketCreator.enableActions());
+    }
+
+    // ===================== 收纳背包 =====================
+    public OreStorage getOreStorage() {
+        return orestorage;
+    }
+
+    public OreStorage getScrollStorage() {
+        return scrollstorage;
+    }
+
+    public OreStorage getChairStorage() {
+        return chairstorage;
+    }
+
+    public OreStorage getMountStorage() {
+        return mountstorage;
+    }
+
+    public void setUsedOreStorage() {
+        usedOreStorage = true;
+    }
+
+    public void setUsedScrollStorage() {
+        usedScrollStorage = true;
+    }
+
+    public void setUsedChairStorage() {
+        usedChairStorage = true;
+    }
+
+    public void setUsedMountStorage() {
+        usedMountStorage = true;
+    }
+
+    public boolean isAutoOreStorage() {
+        return autoOreStorage;
+    }
+
+    public void setAutoOreStorage(boolean on) {
+        this.autoOreStorage = on;
+    }
+
+    public boolean isAutoScrollStorage() {
+        return autoScrollStorage;
+    }
+
+    public void setAutoScrollStorage(boolean on) {
+        this.autoScrollStorage = on;
+    }
+
+    public boolean isAutoChairStorage() {
+        return autoChairStorage;
+    }
+
+    public void setAutoChairStorage(boolean on) {
+        this.autoChairStorage = on;
+    }
+
+    public boolean isAutoMountStorage() {
+        return autoMountStorage;
+    }
+
+    public void setAutoMountStorage(boolean on) {
+        this.autoMountStorage = on;
+    }
+
+    public static boolean bagAccepts(int kind, int itemId) {
+        return switch (kind) {
+            case 1 -> ItemConstants.isScrollBagAllowed(itemId);
+            case 2 -> ItemConstants.isChairBagAllowed(itemId);
+            case 3 -> ItemConstants.isMountBagAllowed(itemId);
+            default -> ItemConstants.isOreBagAllowed(itemId);
+        };
+    }
+
+    private boolean autoCollectToBag(Item mItem) {
+        if (mItem == null) {
+            return false;
+        }
+        int itemId = mItem.getItemId();
+        OreStorage bag;
+        int kind;
+        if (autoOreStorage && orestorage != null && ItemConstants.isOreBagAllowed(itemId)) {
+            bag = orestorage;
+            kind = 0;
+        } else if (autoScrollStorage && scrollstorage != null && ItemConstants.isScrollBagAllowed(itemId)) {
+            bag = scrollstorage;
+            kind = 1;
+        } else if (autoChairStorage && chairstorage != null && ItemConstants.isChairBagAllowed(itemId)) {
+            bag = chairstorage;
+            kind = 2;
+        } else if (autoMountStorage && mountstorage != null && ItemConstants.isMountBagAllowed(itemId)) {
+            bag = mountstorage;
+            kind = 3;
+        } else {
+            return false;
+        }
+        Item bagItem = mItem.copy();
+        KarmaManipulator.toggleKarmaFlagToUntradeable(bagItem);
+        if (bag.storeMerge(bagItem, client)) {
+            switch (kind) {
+                case 1 -> setUsedScrollStorage();
+                case 2 -> setUsedChairStorage();
+                case 3 -> setUsedMountStorage();
+                default -> setUsedOreStorage();
+            }
+            client.sendPacket(PacketCreator.bagWindowSnapshot(kind, bag, true));
+            return true;
+        }
+        return false;
     }
 }
