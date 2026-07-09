@@ -647,6 +647,12 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.enableActions(); // 发送启用操作的封包
             c.sendPacket(PacketCreator.sendHammerData(equip.getVicious())); // 发送锤子数据封包
             player.forceUpdateItem(equip); // 强制更新装备信息
+        } else if (itemType == 591) { // 伤害皮肤选择器（5910000，不消耗）
+            log.info("chr {} opened damage skin picker via item {} slot {}",
+                    player.getId(), itemId, position);
+            c.sendPacket(PacketCreator.damageSkinCatalog());
+            c.sendPacket(PacketCreator.damageSkinInventory(player));
+            c.enableActions();
         } else if (itemType == 561) { //VEGA'S SPELL
             if (p.readInt() != 1) {
                 return;

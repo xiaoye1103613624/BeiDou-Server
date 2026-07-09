@@ -355,6 +355,10 @@ public enum SendOpcode implements Opcode {
     MAPLELIFE_ERROR(0x15E), // MapleLife错误
     VICIOUS_HAMMER(0x162), // 恶毒锤子
     VEGA_SCROLL(0x166), // VEGA卷轴
+    DAMAGE_SKIN_CATALOG(0x170), // 伤害皮肤商店目录
+    DAMAGE_SKIN_INVENTORY(0x171), // 伤害皮肤背包
+    DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果
+    DAMAGE_SKIN_BROADCAST(0x173), // 伤害皮肤广播
     DPT_TRACKER(0x3714), // 个人伤害统计
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复

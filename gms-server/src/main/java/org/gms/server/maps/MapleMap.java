@@ -2618,6 +2618,20 @@ public class MapleMap {
 
         chr.receivePartyMemberHP();
         announcePlayerDiseases(chr.getClient());
+
+        // 伤害皮肤：同步地图上其他玩家的皮肤，并广播自己的皮肤
+        for (Character other : getAllPlayers()) {
+            if (other == chr) {
+                continue;
+            }
+            int sid = other.getActiveDamageSkin();
+            if (sid != 0) {
+                chr.sendPacket(PacketCreator.damageSkinBroadcast(other.getId(), sid));
+            }
+        }
+        if (chr.getActiveDamageSkin() != 0) {
+            broadcastMessage(chr, PacketCreator.damageSkinBroadcast(chr.getId(), chr.getActiveDamageSkin()), false);
+        }
     }
 
     private static void announcePlayerDiseases(final Client c) {

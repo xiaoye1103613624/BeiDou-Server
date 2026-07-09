@@ -25,6 +25,8 @@ import org.gms.client.BuddylistEntry;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.DamageSkinCatalog;
+import org.gms.client.DamageSkinInventory;
 import org.gms.client.Disease;
 import org.gms.client.FamilyEntitlement;
 import org.gms.client.FamilyEntry;
@@ -7557,6 +7559,59 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
         p.writeByte(hp);
         p.writeByte(mp);
+        return p;
+    }
+
+    // ------------------------------------------------------------------
+    // 伤害皮肤封包
+    // ------------------------------------------------------------------
+
+    public static Packet damageSkinCatalog() {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_CATALOG);
+        var all = DamageSkinCatalog.getAll();
+        p.writeShort(all.size());
+        for (var e : all.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeLong(e.getValue());
+        }
+        return p;
+    }
+
+    public static Packet damageSkinInventory(Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_INVENTORY);
+        p.writeInt(chr.getActiveDamageSkin());
+        DamageSkinInventory inv = chr.getDamageSkinInventory();
+        var owned = inv.getOwnedIds();
+        int count = 0;
+        for (int id : owned) {
+            if (id != DamageSkinInventory.DEFAULT_SKIN_ID) {
+                count++;
+            }
+        }
+        p.writeShort(count);
+        for (int id : owned) {
+            if (id == DamageSkinInventory.DEFAULT_SKIN_ID) {
+                continue;
+            }
+            p.writeInt(id);
+        }
+        return p;
+    }
+
+    /** op=1 装备, op=2 购买 */
+    public static Packet damageSkinResult(int op, boolean ok, int skinId, int newMesos) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_RESULT);
+        p.writeByte(op);
+        p.writeByte(ok ? 1 : 0);
+        p.writeInt(skinId);
+        p.writeInt(newMesos);
+        return p;
+    }
+
+    public static Packet damageSkinBroadcast(int charId, int skinId) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_BROADCAST);
+        p.writeInt(charId);
+        p.writeInt(skinId);
         return p;
     }
 

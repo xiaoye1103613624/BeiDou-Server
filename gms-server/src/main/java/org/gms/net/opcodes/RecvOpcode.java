@@ -204,6 +204,8 @@ public enum RecvOpcode implements Opcode {
     MTS_OPERATION(0xFD), // MTS操作
     USE_MAPLELIFE(0x100), // 使用MapleLife
     USE_HAMMER(0x104), // 使用锤子
+    DAMAGE_SKIN_APPLY(0x110), // 装备伤害皮肤
+    DAMAGE_SKIN_PURCHASE(0x111), // 购买伤害皮肤
 
     WORLD_MAP_PLAYERS(0x115), // 世界地图 tooltip 玩家列表请求
     SET_HPMPALERT(0x1000), // 设置HP/MP警报
