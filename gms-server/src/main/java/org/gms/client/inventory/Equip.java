@@ -77,6 +77,7 @@ public class Equip extends Item {
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
     private float itemExp;
     private int ringid = -1;
+    private int anvilItemId = 0;
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -123,6 +124,7 @@ public class Equip extends Item {
         ret.setQuantity(getQuantity());
         ret.setExpiration(getExpiration());
         ret.setGiftFrom(getGiftFrom());
+        ret.anvilItemId = anvilItemId;
         return ret;
     }
 
@@ -786,6 +788,14 @@ public class Equip extends Item {
 
     public void setRingId(int id) {
         this.ringid = id;
+    }
+
+    public int getAnvilItemId() {
+        return anvilItemId;
+    }
+
+    public void setAnvilItemId(int anvilItemId) {
+        this.anvilItemId = anvilItemId;
     }
 
     public boolean isWearing() {

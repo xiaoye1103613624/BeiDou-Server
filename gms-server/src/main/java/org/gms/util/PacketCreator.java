@@ -290,22 +290,26 @@ public class PacketCreator {
     }
 
     private static void addCharEquips(final OutPacket p, Character chr) {
-        Inventory equip = chr.getInventory(InventoryType.EQUIPPED);
-        Collection<Item> ii = ItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
+        Inventory equipInv = chr.getInventory(InventoryType.EQUIPPED);
+        Collection<Item> ii = ItemInformationProvider.getInstance().canWearEquipment(chr, equipInv.list());
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
             short pos = (short) (item.getPosition() * -1);  //修复其他角色无法看到现金勋章
+            int visualId = item.getItemId();
+            if (item instanceof Equip anvilEquip && anvilEquip.getAnvilItemId() != 0) {
+                visualId = anvilEquip.getAnvilItemId();
+            }
             if (pos < 100 && myEquip.get(pos) == null) {
-                myEquip.put(pos, item.getItemId());
+                myEquip.put(pos, visualId);
             } else if (pos > 100 && pos != 111) { // don't ask. o.o
                 pos -= 100;
                 if (myEquip.get(pos) != null) {
                     maskedEquip.put(pos, myEquip.get(pos));
                 }
-                myEquip.put(pos, item.getItemId());
+                myEquip.put(pos, visualId);
             } else if (myEquip.get(pos) != null) {
-                maskedEquip.put(pos, item.getItemId());
+                maskedEquip.put(pos, visualId);
             }
         }
         for (Entry<Short, Integer> entry : myEquip.entrySet()) {
@@ -318,7 +322,7 @@ public class PacketCreator {
             p.writeInt(entry.getValue());
         }
         p.writeByte(0xFF);
-        Item cWeapon = equip.getItem((short) -111);
+        Item cWeapon = equipInv.getItem((short) -111);
         p.writeInt(cWeapon != null ? cWeapon.getItemId() : 0);
         for (int i = 0; i < 3; i++) {
             if (chr.getPet(i) != null) {
@@ -509,6 +513,9 @@ public class PacketCreator {
         }
         p.writeLong(getTime(-2));
         p.writeInt(-1);
+        if (equip != null) {
+            p.writeInt(equip.getAnvilItemId());
+        }
 
     }
 
