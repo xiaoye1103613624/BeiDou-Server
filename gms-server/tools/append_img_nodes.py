@@ -5,10 +5,20 @@ Append missing WZ nodes from SOURCE client Data into TARGET client Data.
 Strategy A: TARGET missing entire .img -> shutil copy whole file.
 Strategy B: both have file -> orange-wz MCP paste_nodes with SKIP (append only).
 
+Parallelism (--workers N, default 1):
+  - Different rel paths merge concurrently via ThreadPoolExecutor.
+  - Same target .img path uses a per-file threading.Lock (one writer at a time).
+  - Each worker thread owns a dedicated MCP session (thread-local client).
+  - All MCP tool calls share a global semaphore (--mcp-concurrent, default 1)
+    because orange-wz may not handle concurrent requests safely.
+  - save_node completes before the per-file lock is released.
+  - Logging and progress counters are thread-safe; --skip-done remains idempotent.
+
 Usage:
   python append_img_nodes.py --phase string
   python append_img_nodes.py --phase item-cash --limit 10
   python append_img_nodes.py --rel String/Cash.img
+  python append_img_nodes.py --phase other-conflicts --workers 8 --skip-done
 """
 from __future__ import annotations
 
@@ -16,8 +26,11 @@ import argparse
 import json
 import shutil
 import sys
+import threading
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -44,28 +57,60 @@ ITEM_CASH_SKIP = {"0591.img", "0592.img"}
 
 
 class McpClient:
-    def __init__(self, url: str):
+    def __init__(self, url: str, mcp_gate: threading.Semaphore | None = None):
         self.url = url
         self.session = None
         self.rid = 0
+        self._mcp_gate = mcp_gate
+        self._rid_lock = threading.Lock()
 
     def call(self, method, params=None):
-        self.rid += 1
-        payload = {"jsonrpc": "2.0", "method": method, "params": params or {}, "id": self.rid}
+        with self._rid_lock:
+            self.rid += 1
+            rid = self.rid
+        payload = {"jsonrpc": "2.0", "method": method, "params": params or {}, "id": rid}
         headers = {"Content-Type": "application/json"}
         if self.session:
             headers["Mcp-Session-Id"] = self.session
         req = urllib.request.Request(
             self.url, data=json.dumps(payload).encode(), headers=headers, method="POST"
         )
-        with urllib.request.urlopen(req, timeout=600) as resp:
-            body = resp.read().decode()
-            if "Mcp-Session-Id" in resp.headers:
-                self.session = resp.headers["Mcp-Session-Id"]
-            return None if not body.strip() else json.loads(body)
+
+        def _do_call():
+            with urllib.request.urlopen(req, timeout=600) as resp:
+                body = resp.read().decode()
+                if "Mcp-Session-Id" in resp.headers:
+                    self.session = resp.headers["Mcp-Session-Id"]
+                return None if not body.strip() else json.loads(body)
+
+        if self._mcp_gate is not None:
+            with self._mcp_gate:
+                return _do_call()
+        return _do_call()
 
     def tool(self, name: str, arguments: dict):
         return self.call("tools/call", {"name": name, "arguments": arguments})
+
+
+class FileLockPool:
+    """One threading.Lock per target rel path."""
+
+    def __init__(self):
+        self._locks: dict[str, threading.Lock] = {}
+        self._meta = threading.Lock()
+
+    @contextmanager
+    def acquire(self, rel: str):
+        with self._meta:
+            lock = self._locks.setdefault(rel, threading.Lock())
+        lock.acquire()
+        try:
+            yield
+        finally:
+            lock.release()
+
+
+_tls = threading.local()
 
 
 def norm(p: Path) -> str:
@@ -125,19 +170,26 @@ class Runner:
     mcp_url: str
     dry_run: bool = False
     batch_size: int = 100
+    mcp_concurrent: int = 1
     log_lines: list[str] = field(default_factory=list)
+    _log_lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
+    _mcp_gate: threading.Semaphore = field(default_factory=lambda: threading.Semaphore(1), repr=False)
+
+    def __post_init__(self):
+        self._mcp_gate = threading.Semaphore(max(1, self.mcp_concurrent))
 
     def log(self, msg: str, flush_log: Path | None = None, append: bool = False):
         line = f"[{datetime.now():%Y-%m-%d %H:%M:%S}] {msg}"
-        print(line, flush=True)
-        self.log_lines.append(line)
-        if flush_log is not None:
-            flush_log.parent.mkdir(parents=True, exist_ok=True)
-            with open(flush_log, "a" if append else "w", encoding="utf-8") as f:
-                f.write(line + "\n")
+        with self._log_lock:
+            print(line, flush=True)
+            self.log_lines.append(line)
+            if flush_log is not None:
+                flush_log.parent.mkdir(parents=True, exist_ok=True)
+                with open(flush_log, "a" if append else "w", encoding="utf-8") as f:
+                    f.write(line + "\n")
 
     def mcp(self) -> McpClient:
-        c = McpClient(self.mcp_url)
+        c = McpClient(self.mcp_url, self._mcp_gate)
         c.call(
             "initialize",
             {
@@ -148,6 +200,13 @@ class Runner:
         )
         c.call("notifications/initialized", {})
         return c
+
+    def thread_mcp(self) -> McpClient:
+        client = getattr(_tls, "client", None)
+        if client is None:
+            client = self.mcp()
+            _tls.client = client
+        return client
 
     def backup_file(self, rel: str):
         src = self.target / rel
@@ -372,6 +431,85 @@ def other_conflicts(source: Path, target: Path, conflicts: list[str]) -> list[st
     return both_exist(source, target, work)
 
 
+def run_parallel(
+    runner: Runner,
+    work: list[str],
+    workers: int,
+    log_path: Path,
+    append_log: bool,
+) -> dict[str, int]:
+    file_locks = FileLockPool()
+    stats: dict[str, int] = {"copy": 0, "merge": 0, "skip": 0, "fail": 0, "nodes": 0}
+    stats_lock = threading.Lock()
+    progress = {"done": 0}
+    progress_lock = threading.Lock()
+    total = len(work)
+    log_append = append_log
+
+    def process_one(rel: str) -> tuple[str, MergeResult | None, str | None]:
+        try:
+            with file_locks.acquire(rel):
+                result = runner.process(rel, runner.thread_mcp())
+            return rel, result, None
+        except Exception as e:
+            return rel, None, str(e)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {pool.submit(process_one, rel): rel for rel in work}
+        for fut in as_completed(futures):
+            rel, result, err = fut.result()
+            with progress_lock:
+                progress["done"] += 1
+                idx = progress["done"]
+            if err is not None:
+                runner.log(f"[{idx}/{total}] {rel} | ERROR | {err}", log_path, append=log_append)
+                log_append = True
+                with stats_lock:
+                    stats["fail"] += 1
+                continue
+            assert result is not None
+            runner.log(
+                f"[{idx}/{total}] {rel} | {result.mode} | +{result.nodes_added} | {result.message}",
+                log_path,
+                append=log_append,
+            )
+            log_append = True
+            with stats_lock:
+                stats[result.mode] = stats.get(result.mode, 0) + 1
+                stats["nodes"] += result.nodes_added
+                if not result.ok:
+                    stats["fail"] += 1
+
+    return stats
+
+
+def run_sequential(
+    runner: Runner,
+    work: list[str],
+    log_path: Path,
+    append_log: bool,
+) -> tuple[dict[str, int], McpClient]:
+    c = runner.mcp()
+    stats: dict[str, int] = {"copy": 0, "merge": 0, "skip": 0, "fail": 0, "nodes": 0}
+    log_append = True
+
+    for i, rel in enumerate(work, 1):
+        try:
+            r = runner.process(rel, c)
+            runner.log(f"[{i}/{len(work)}] {rel} | {r.mode} | +{r.nodes_added} | {r.message}", log_path, append=log_append)
+            log_append = True
+            stats[r.mode] = stats.get(r.mode, 0) + 1
+            stats["nodes"] += r.nodes_added
+            if not r.ok:
+                stats["fail"] += 1
+        except Exception as e:
+            runner.log(f"[{i}/{len(work)}] {rel} | ERROR | {e}", log_path, append=True)
+            stats["fail"] += 1
+
+    c.tool("unload_all", {})
+    return stats, c
+
+
 def load_done_from_log(log_path: Path) -> set[str]:
     done: set[str] = set()
     if not log_path.exists():
@@ -416,7 +554,24 @@ def main():
     ap.add_argument("--skip-done", action="store_true", help="Skip rel paths already logged as merge/copy")
     ap.add_argument("--log", type=Path, default=DEFAULT_LOG)
     ap.add_argument("--append-log", action="store_true", help="Append to log file instead of overwrite")
+    ap.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Parallel worker threads (use 4-8 for character/other-conflicts; default 1 = sequential)",
+    )
+    ap.add_argument(
+        "--mcp-concurrent",
+        type=int,
+        default=1,
+        help="Max concurrent MCP requests across all workers (default 1; raise only if orange-wz is stable)",
+    )
     args = ap.parse_args()
+
+    if args.workers < 1:
+        ap.error("--workers must be >= 1")
+    if args.mcp_concurrent < 1:
+        ap.error("--mcp-concurrent must be >= 1")
 
     runner = Runner(
         source=args.source,
@@ -424,6 +579,7 @@ def main():
         backup_dir=args.backup,
         mcp_url=args.mcp,
         dry_run=args.dry_run,
+        mcp_concurrent=args.mcp_concurrent,
     )
 
     work: list[str] = []
@@ -461,27 +617,18 @@ def main():
     if args.limit > 0:
         work = work[: args.limit]
 
-    runner.log(f"开始处理 {len(work)} 个 img 文件 phase={args.phase} dry_run={args.dry_run}", args.log, append=args.append_log)
+    runner.log(
+        f"开始处理 {len(work)} 个 img 文件 phase={args.phase} dry_run={args.dry_run} "
+        f"workers={args.workers} mcp_concurrent={args.mcp_concurrent}",
+        args.log,
+        append=args.append_log,
+    )
 
-    c = runner.mcp()
-    stats = {"copy": 0, "merge": 0, "skip": 0, "fail": 0, "nodes": 0}
     t0 = time.time()
-    log_append = True  # first progress line appends after header
-
-    for i, rel in enumerate(work, 1):
-        try:
-            r = runner.process(rel, c)
-            runner.log(f"[{i}/{len(work)}] {rel} | {r.mode} | +{r.nodes_added} | {r.message}", args.log, append=log_append)
-            log_append = True
-            stats[r.mode] = stats.get(r.mode, 0) + 1
-            stats["nodes"] += r.nodes_added
-            if not r.ok:
-                stats["fail"] += 1
-        except Exception as e:
-            runner.log(f"[{i}/{len(work)}] {rel} | ERROR | {e}", args.log, append=True)
-            stats["fail"] += 1
-
-    c.tool("unload_all", {})
+    if args.workers <= 1:
+        stats, _c = run_sequential(runner, work, args.log, args.append_log)
+    else:
+        stats = run_parallel(runner, work, args.workers, args.log, args.append_log)
     elapsed = time.time() - t0
     summary = (
         f"完成: copy={stats.get('copy',0)} merge={stats.get('merge',0)} "
