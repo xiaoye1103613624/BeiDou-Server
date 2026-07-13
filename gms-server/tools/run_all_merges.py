@@ -12,8 +12,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 TOOLS = Path(__file__).resolve().parent
 LOG = TOOLS / "_run_all_merges.log"
-DEFAULT_WORKERS = 8
-DEFAULT_MCP_CONCURRENT = 1
+DEFAULT_SOURCE = Path(r"E:/mxd_soft/2.客户端/083/北斗GMS083_v1.11_ASM版/BeiDou-Client-V15_fix/Data")
+DEFAULT_CONFLICTS = Path(__file__).resolve().parents[2] / ".eval_append" / "conflicts.txt"
+DEFAULT_WORKERS = 16
+DEFAULT_MCP_CONCURRENT = 6
+DEFAULT_MCP_TIMEOUT = 300
 
 
 def run_step(name: str, cmd: list[str]) -> int:
@@ -42,26 +45,51 @@ def main():
         help=f"Max concurrent MCP calls (default {DEFAULT_MCP_CONCURRENT})",
     )
     ap.add_argument(
+        "--mcp-timeout",
+        type=float,
+        default=DEFAULT_MCP_TIMEOUT,
+        help=f"MCP HTTP read timeout in seconds (default {DEFAULT_MCP_TIMEOUT})",
+    )
+    ap.add_argument(
         "--skip-character",
         action="store_true",
         help="Skip character-conflicts phase (when already complete)",
     )
+    ap.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
+    ap.add_argument("--target", type=Path, default=None)
+    ap.add_argument("--conflicts-file", type=Path, default=DEFAULT_CONFLICTS)
+    ap.add_argument(
+        "--log-suffix",
+        default="",
+        help="Log filename suffix e.g. v16 -> _append_character_merge_v16.log",
+    )
+    ap.add_argument("--skip-export", action="store_true")
     args = ap.parse_args()
 
     py = sys.executable
     append = str(TOOLS / "append_img_nodes.py")
     export = str(TOOLS / "export_string_wz.py")
+    suffix = f"_{args.log_suffix}" if args.log_suffix else ""
+    source_flags = ["--source", str(args.source)]
+    if args.target is not None:
+        source_flags.extend(["--target", str(args.target)])
+    conflict_flags = ["--conflicts-file", str(args.conflicts_file)]
     parallel_flags = [
         "--workers", str(args.workers),
         "--mcp-concurrent", str(args.mcp_concurrent),
+        "--mcp-timeout", str(args.mcp_timeout),
         "--append-log",
     ]
 
     steps = [
-        ("character-conflicts", [py, "-u", append, "--phase", "character-conflicts", "--log", str(TOOLS / "_append_character_merge.log"), "--skip-done", *parallel_flags]),
-        ("other-conflicts", [py, "-u", append, "--phase", "other-conflicts", "--log", str(TOOLS / "_append_other_merge.log"), "--skip-done", *parallel_flags]),
-        ("export-string-wz", [py, "-u", export]),
+        ("character-conflicts", [py, "-u", append, "--phase", "character-conflicts", "--log", str(TOOLS / f"_append_character_merge{suffix}.log"), "--skip-done", *source_flags, *conflict_flags, *parallel_flags]),
+        ("other-conflicts", [py, "-u", append, "--phase", "other-conflicts", "--log", str(TOOLS / f"_append_other_merge{suffix}.log"), "--skip-done", *source_flags, *conflict_flags, *parallel_flags]),
     ]
+    if not args.skip_export:
+        export_cmd = [py, "-u", export]
+        if args.target is not None:
+            export_cmd.extend(["--target", str(args.target)])
+        steps.append(("export-string-wz", export_cmd))
 
     if args.skip_character:
         steps = [s for s in steps if s[0] != "character-conflicts"]

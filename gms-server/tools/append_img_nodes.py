@@ -23,6 +23,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import sys
@@ -57,12 +58,13 @@ ITEM_CASH_SKIP = {"0591.img", "0592.img"}
 
 
 class McpClient:
-    def __init__(self, url: str, mcp_gate: threading.Semaphore | None = None):
+    def __init__(self, url: str, mcp_gate: threading.Semaphore | None = None, timeout: float = 600):
         self.url = url
         self.session = None
         self.rid = 0
         self._mcp_gate = mcp_gate
         self._rid_lock = threading.Lock()
+        self.timeout = timeout
 
     def call(self, method, params=None):
         with self._rid_lock:
@@ -77,7 +79,7 @@ class McpClient:
         )
 
         def _do_call():
-            with urllib.request.urlopen(req, timeout=600) as resp:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 body = resp.read().decode()
                 if "Mcp-Session-Id" in resp.headers:
                     self.session = resp.headers["Mcp-Session-Id"]
@@ -111,10 +113,34 @@ class FileLockPool:
 
 
 _tls = threading.local()
+_init_lock = threading.Lock()
+_init_count = 0
 
 
 def norm(p: Path) -> str:
     return str(p.resolve()).replace("\\", "/")
+
+
+def file_hash(path: Path, chunk: int = 1 << 20) -> str:
+    h = hashlib.md5()
+    with open(path, "rb") as f:
+        while True:
+            b = f.read(chunk)
+            if not b:
+                break
+            h.update(b)
+    return h.hexdigest()
+
+
+def files_identical(a: Path, b: Path) -> bool:
+    """Fast path: same size then MD5; skip MCP when SOURCE and TARGET are byte-identical."""
+    try:
+        sa, sb = a.stat().st_size, b.stat().st_size
+    except OSError:
+        return False
+    if sa != sb:
+        return False
+    return file_hash(a) == file_hash(b)
 
 
 def tool_text(r) -> str:
@@ -171,6 +197,7 @@ class Runner:
     dry_run: bool = False
     batch_size: int = 100
     mcp_concurrent: int = 1
+    mcp_timeout: float = 600
     log_lines: list[str] = field(default_factory=list)
     _log_lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
     _mcp_gate: threading.Semaphore = field(default_factory=lambda: threading.Semaphore(1), repr=False)
@@ -189,7 +216,7 @@ class Runner:
                     f.write(line + "\n")
 
     def mcp(self) -> McpClient:
-        c = McpClient(self.mcp_url, self._mcp_gate)
+        c = McpClient(self.mcp_url, self._mcp_gate, self.mcp_timeout)
         c.call(
             "initialize",
             {
@@ -204,6 +231,12 @@ class Runner:
     def thread_mcp(self) -> McpClient:
         client = getattr(_tls, "client", None)
         if client is None:
+            global _init_count
+            with _init_lock:
+                slot = _init_count
+                _init_count += 1
+            if slot > 0:
+                time.sleep(min(0.25 * slot, 2.0))
             client = self.mcp()
             _tls.client = client
         return client
@@ -230,6 +263,37 @@ class Runner:
         shutil.copy2(s, t)
         return MergeResult(rel, "copy", nodes_added=1, message="整文件复制完成")
 
+
+    def _validate_save_or_rollback(self, tgt: str, rel: str, backup_snapshot: Path | None) -> tuple[bool, str]:
+        """After save_node, ensure file size >= 100; rollback from snapshot/backup on failure."""
+        tgt_path = Path(tgt)
+        try:
+            size = tgt_path.stat().st_size if tgt_path.exists() else 0
+        except OSError as e:
+            size = 0
+            self.log(f"  save size check error: {e}")
+        if size >= 100:
+            return True, f"save ok size={size}"
+        restored = False
+        candidates = []
+        if backup_snapshot is not None:
+            candidates.append(backup_snapshot)
+        candidates.append(self.backup_dir / Path(rel))
+        for cand in candidates:
+            if cand is None:
+                continue
+            try:
+                if cand.exists() and cand.stat().st_size >= 100:
+                    shutil.copy2(cand, tgt_path)
+                    restored = True
+                    break
+            except OSError as e:
+                self.log(f"  rollback copy failed from {cand}: {e}")
+        status = "ok" if restored else "FAILED"
+        msg = f"save corrupted size={size}; rollback={status}"
+        self.log(f"  {msg}")
+        return False, msg
+
     def _batch_copy_missing(self, c: McpClient, src: str, tgt: str, tgt_path: str, missing: list[str]) -> int:
         if not missing:
             return 0
@@ -247,9 +311,29 @@ class Runner:
             total += pasted_count(paste)
             if paste and paste.get("result", {}).get("isError"):
                 self.log(f"  paste error batch {i}: {tool_text(paste)[:200]}")
+        snap = None
+        tgt_path_obj = Path(tgt)
+        if tgt_path_obj.exists() and not self.dry_run:
+            snap = tgt_path_obj.with_suffix(tgt_path_obj.suffix + ".presave")
+            try:
+                shutil.copy2(tgt_path_obj, snap)
+            except OSError:
+                snap = None
         save = c.tool("save_node", {"rootPath": tgt, "autoParse": True})
         if save and save.get("result", {}).get("isError"):
             self.log(f"  save error: {tool_text(save)[:200]}")
+        try:
+            rel_guess = str(Path(tgt).resolve().relative_to(self.target.resolve())).replace(chr(92), "/")
+        except ValueError:
+            rel_guess = Path(tgt).name
+        ok, msg = self._validate_save_or_rollback(tgt, rel_guess, snap)
+        if snap is not None and snap.exists():
+            try:
+                snap.unlink()
+            except OSError:
+                pass
+        if not ok:
+            self.log(f"  save validation failed: {msg}")
         return total
 
     def _merge_subtree(self, c: McpClient, src: str, tgt: str, src_path: str, tgt_path: str) -> int:
@@ -313,10 +397,28 @@ class Runner:
                 {"rootPath": tgt, "nodePath": "", "strategy": "SKIP", "autoParse": True},
             )
             added = pasted_count(paste)
+            snap = Path(tgt).with_suffix(Path(tgt).suffix + ".presave")
+            try:
+                shutil.copy2(tgt, snap)
+            except OSError:
+                snap = None
             save = c.tool("save_node", {"rootPath": tgt, "autoParse": True})
             if save and save.get("result", {}).get("isError"):
+                if snap is not None and snap.exists():
+                    try:
+                        snap.unlink()
+                    except OSError:
+                        pass
                 return MergeResult(rel, "merge", nodes_added=added, message=tool_text(save), ok=False)
+            ok, msg = self._validate_save_or_rollback(tgt, rel, snap)
+            if snap is not None and snap.exists():
+                try:
+                    snap.unlink()
+                except OSError:
+                    pass
             c.tool("unload_all", {})
+            if not ok:
+                return MergeResult(rel, "merge", nodes_added=added, message=msg, ok=False)
             return MergeResult(rel, "merge", nodes_added=added, message=f"wrapper {inner} 追加 {added} 节点")
 
         sample = src_top[: min(5, len(src_top))]
@@ -331,10 +433,29 @@ class Runner:
             sp = cat
             tp = cat if cat in tgt_set else ""
             added += self._merge_subtree(c, src, tgt, sp, tp)
-        if not self.dry_run:
+        if not self.dry_run and added > 0:
+            snap = Path(tgt).with_suffix(Path(tgt).suffix + ".presave")
+            try:
+                shutil.copy2(tgt, snap)
+            except OSError:
+                snap = None
             save = c.tool("save_node", {"rootPath": tgt, "autoParse": True})
             if save and save.get("result", {}).get("isError"):
+                if snap is not None and snap.exists():
+                    try:
+                        snap.unlink()
+                    except OSError:
+                        pass
                 return MergeResult(rel, "merge", nodes_added=added, message=tool_text(save), ok=False)
+            ok, msg = self._validate_save_or_rollback(tgt, rel, snap)
+            if snap is not None and snap.exists():
+                try:
+                    snap.unlink()
+                except OSError:
+                    pass
+            if not ok:
+                c.tool("unload_all", {})
+                return MergeResult(rel, "merge", nodes_added=added, message=msg, ok=False)
         c.tool("unload_all", {})
         return MergeResult(rel, "merge", nodes_added=added, message=f"多分类追加 {added} 节点")
 
@@ -359,6 +480,9 @@ class Runner:
 
         if not t.exists():
             return self.copy_whole(rel)
+
+        if files_identical(s, t):
+            return MergeResult(rel, "skip", message="SOURCE/TARGET 字节一致，跳过 MCP")
 
         self.backup_file(rel)
         return self.merge_img_nodes(c, rel)
@@ -532,6 +656,12 @@ def main():
     ap = argparse.ArgumentParser(description="Append missing WZ img nodes SOURCE -> TARGET")
     ap.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     ap.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    ap.add_argument(
+        "--conflicts-file",
+        type=Path,
+        default=None,
+        help="Conflict list (default: .eval_append/conflicts.txt)",
+    )
     ap.add_argument("--backup", type=Path, default=DEFAULT_BACKUP)
     ap.add_argument("--mcp", default=DEFAULT_MCP)
     ap.add_argument(
@@ -566,6 +696,12 @@ def main():
         default=1,
         help="Max concurrent MCP requests across all workers (default 1; raise only if orange-wz is stable)",
     )
+    ap.add_argument(
+        "--mcp-timeout",
+        type=float,
+        default=600,
+        help="MCP HTTP read timeout in seconds (default 600)",
+    )
     args = ap.parse_args()
 
     if args.workers < 1:
@@ -580,10 +716,12 @@ def main():
         mcp_url=args.mcp,
         dry_run=args.dry_run,
         mcp_concurrent=args.mcp_concurrent,
+        mcp_timeout=args.mcp_timeout,
     )
 
     work: list[str] = []
     repo_root = Path(__file__).resolve().parents[2]
+    conflicts_path = args.conflicts_file or (repo_root / ".eval_append" / "conflicts.txt")
     if args.rel:
         work.extend(args.rel)
     elif args.list:
@@ -592,20 +730,20 @@ def main():
         work.append("String/Item.img")
         work.extend(string_conflicts())
     elif args.phase == "item-cash":
-        conflicts = load_lines(repo_root / ".eval_append" / "conflicts.txt")
+        conflicts = load_lines(conflicts_path)
         work = [r for r in conflicts if r.startswith("Item/Cash/") and r.endswith(".img")]
     elif args.phase == "character":
         candidates = load_lines(repo_root / ".eval_append" / "append_candidates.txt")
         work = [r for r in candidates if r.startswith("Character/")]
     elif args.phase == "character-conflicts":
-        conflicts = load_lines(repo_root / ".eval_append" / "conflicts.txt")
+        conflicts = load_lines(conflicts_path)
         work = character_conflicts(args.source, args.target, conflicts)
     elif args.phase == "other-conflicts":
-        conflicts = load_lines(repo_root / ".eval_append" / "conflicts.txt")
+        conflicts = load_lines(conflicts_path)
         work = other_conflicts(args.source, args.target, conflicts)
     elif args.phase == "all":
         candidates = load_lines(repo_root / ".eval_append" / "append_candidates.txt")
-        conflicts = load_lines(repo_root / ".eval_append" / "conflicts.txt")
+        conflicts = load_lines(conflicts_path)
         work = candidates + [c for c in conflicts if c not in candidates]
 
     if args.skip_done:
@@ -619,7 +757,7 @@ def main():
 
     runner.log(
         f"开始处理 {len(work)} 个 img 文件 phase={args.phase} dry_run={args.dry_run} "
-        f"workers={args.workers} mcp_concurrent={args.mcp_concurrent}",
+        f"workers={args.workers} mcp_concurrent={args.mcp_concurrent} mcp_timeout={args.mcp_timeout}",
         args.log,
         append=args.append_log,
     )
