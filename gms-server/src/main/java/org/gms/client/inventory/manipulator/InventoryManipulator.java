@@ -77,7 +77,11 @@ public class InventoryManipulator {
         Inventory inv = chr.getInventory(type);
         inv.lockInventory();
         try {
-            return addByIdInternal(c, chr, type, inv, itemId, quantity, owner, petid, flag, expiration);
+            boolean ok = addByIdInternal(c, chr, type, inv, itemId, quantity, owner, petid, flag, expiration);
+            if (ok) {
+                chr.onCarryCombatItemChanged(itemId);
+            }
+            return ok;
         } finally {
             inv.unlockInventory();
         }
@@ -186,7 +190,11 @@ public class InventoryManipulator {
         Inventory inv = chr.getInventory(type);
         inv.lockInventory();
         try {
-            return addFromDropInternal(c, chr, type, inv, item, show, petId);
+            boolean ok = addFromDropInternal(c, chr, type, inv, item, show, petId);
+            if (ok) {
+                chr.onCarryCombatItemChanged(item.getItemId());
+            }
+            return ok;
         } finally {
             inv.unlockInventory();
         }
@@ -411,6 +419,7 @@ public class InventoryManipulator {
         Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
         Item item = inv.getItem(slot);
+        int combatItemId = item != null ? item.getItemId() : 0;
         boolean allowZero = consume && ItemConstants.isRechargeable(item.getItemId());
 
         if (type == InventoryType.EQUIPPED) {
@@ -444,6 +453,9 @@ public class InventoryManipulator {
                     announceModifyInventory(c, item, fromDrop, allowZero);
                 }
             }
+        }
+        if (combatItemId > 0) {
+            chr.onCarryCombatItemChanged(combatItemId);
         }
     }
 

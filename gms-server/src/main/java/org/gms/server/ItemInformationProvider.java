@@ -1593,7 +1593,9 @@ public class ItemInformationProvider {
         if (scriptedItemCache.containsKey(itemId)) {
             return scriptedItemCache.get(itemId);
         }
-        if ((itemId / 10000) != 243) {
+        // 243/246 段均可绑定 item 脚本（246 用于惊喜盲盒等自定义消耗品）
+        final int itemType = itemId / 10000;
+        if (itemType != 243 && itemType != 246) {
             return null;
         }
         Data itemInfo = getItemData(itemId);
@@ -1849,6 +1851,13 @@ public class ItemInformationProvider {
         }
 
         String islot = getEquipmentSlot(id);
+        if (islot == null) {
+            equip.wear(false);
+            String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
+            chr.dropMessage(5, "无法装备 " + itemName + "：缺少装备数据。");
+            log.warn("Chr {} tried to equip {} with missing item WZ data", chr.getName(), itemName);
+            return false;
+        }
         if (!EquipSlot.getFromTextSlot(islot).isAllowed(dst, isCash(id))) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());

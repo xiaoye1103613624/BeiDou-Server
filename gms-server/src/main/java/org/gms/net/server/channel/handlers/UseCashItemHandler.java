@@ -710,6 +710,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
             InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, skinPos, (short) 1, false);
             remove(c, position, itemId);
+            player.saveCharToDB(true);
             c.enableActions();
         } else if (itemType == 561) { //VEGA'S SPELL
             if (p.readInt() != 1) {

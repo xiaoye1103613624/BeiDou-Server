@@ -159,6 +159,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         int attackCount = 1;
         if (attack.skill != 0) {
             attackCount = attack.getAttackEffect(chr, null).getAttackCount();
+            attackCount += org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill);
         }
         if (numFinisherOrbs == 0 && GameConstants.isFinisherSkill(attack.skill)) {
             return;

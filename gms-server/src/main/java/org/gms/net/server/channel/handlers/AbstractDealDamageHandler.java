@@ -334,6 +334,17 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                     for (Integer eachd : onedList) {
                         if (eachd != null && eachd > 0) {
+                            if (org.gms.config.GameConfig.getServerBoolean("use_server_damage_calc")) {
+                                eachd = (int) org.gms.combat.damage.DamageCalculator.applyServerDamage(
+                                        eachd, player.getCombatStatProfile(),
+                                        monster != null ? monster.getStats() : null,
+                                        attack.magic, true);
+                            } else {
+                                eachd = (int) org.gms.combat.damage.DamageCalculator.applyCombatProfile(
+                                        eachd, player.getCombatStatProfile(),
+                                        monster != null ? monster.getStats() : null,
+                                        attack.magic);
+                            }
                             dptAttackDamage += (long) eachd;
                         }
 
@@ -978,6 +989,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
 
+            // 套装 damR/fdR 等已在 applyAttack 中乘到实际伤害，反作弊上限需同步纳入
+            calcDmgMax = org.gms.combat.damage.DamageCalculator.applyCombatProfile(
+                    calcDmgMax, chr.getCombatStatProfile(), null, magic);
+
             for (int j = 0; j < ret.numDamage; j++) {
                 int damage = p.readInt();
                 long hitDmgMax = calcDmgMax;
@@ -1002,28 +1017,36 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 long maxWithCrit = hitDmgMax;
-                if (canCrit) // They can crit, so up the max.
-                {
-                    maxWithCrit *= 2;
+                var combatProfile = chr.getCombatStatProfile();
+                boolean profileCrit = combatProfile != null && combatProfile.critRate > 0;
+                if (canCrit || profileCrit) {
+                    maxWithCrit = (long) (hitDmgMax * org.gms.combat.damage.DamageCalculator.maxCritMultiplier(combatProfile));
                 }
 
                 // Warn if the damage is over 1.5x what we calculated above.
                 if (damage > maxWithCrit * 1.5) {
-                    AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit
+                            + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null")
+                            + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")"
+                            + " " + org.gms.combat.damage.DamageCalculator.profileSummary(combatProfile));
                 }
 
                 // Add a ab point if its over 5x what we calculated.
                 if (damage > maxWithCrit * 5) {
-                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit
+                            + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null")
+                            + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")"
+                            + " " + org.gms.combat.damage.DamageCalculator.profileSummary(combatProfile));
                 }
 
-                if (ret.skill == Marksman.SNIPE || (canCrit && damage > hitDmgMax)) {
+                if (ret.skill == Marksman.SNIPE || ((canCrit || profileCrit) && damage > hitDmgMax)) {
                     // If the skill is a crit, inverse the damage to make it show up on clients.
                     damage = -Integer.MAX_VALUE + damage - 1;
                 }
 
                 if (effect != null) {
                     int maxattack = Math.max(effect.getBulletCount(), effect.getAttackCount());
+                    maxattack += org.gms.combat.provider.SkillModProvider.addAttackCount(chr, ret.skill);
                     if (shadowPartner) {
                         maxattack = maxattack * 2;
                     }

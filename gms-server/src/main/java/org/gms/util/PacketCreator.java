@@ -1837,6 +1837,7 @@ public class PacketCreator {
         if (drop.getMeso() == 0) {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
+        p.writeByte(getDropItemGrade(drop));
         p.writeBool(!drop.isPlayerDrop());
         return p;
     }
@@ -1864,8 +1865,70 @@ public class PacketCreator {
         if (drop.getMeso() == 0) {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
+        p.writeByte(getDropItemGrade(drop));
         p.writeByte(drop.isPlayerDrop() ? 0 : 1); //pet EQP pickup
         return p;
+    }
+
+    private static byte getDropItemGrade(MapItem drop) {
+        if (drop.getMeso() > 0 || drop.getItem() == null || !(drop.getItem() instanceof Equip)) {
+            return 0;
+        }
+
+        Equip equip = (Equip) drop.getItem();
+        Item baseItem = ItemInformationProvider.getInstance().getEquipById(equip.getItemId());
+        if (!(baseItem instanceof Equip)) {
+            return 0;
+        }
+        Equip base = (Equip) baseItem;
+
+        int score = 0;
+        score += equip.getStr() - base.getStr();
+        score += equip.getDex() - base.getDex();
+        score += equip.getInt() - base.getInt();
+        score += equip.getLuk() - base.getLuk();
+        score += equip.getWatk() - base.getWatk();
+        score += equip.getMatk() - base.getMatk();
+        score += equip.getWdef() - base.getWdef();
+        score += equip.getMdef() - base.getMdef();
+        score += equip.getAcc() - base.getAcc();
+        score += equip.getAvoid() - base.getAvoid();
+        score += (equip.getHp() - base.getHp()) / 10;
+        score += (equip.getMp() - base.getMp()) / 10;
+
+        if (equip.getUpgradeSlots() > base.getUpgradeSlots() || equip.getLevel() > base.getLevel()) {
+            score += 3;
+        }
+        if (equip.getVicious() > 0 || equip.getItemLevel() > 0) {
+            score += 2;
+        }
+
+        int reqLevel = ItemInformationProvider.getInstance().getEquipLevelReq(equip.getItemId());
+        byte grade;
+        if (score < 1) {
+            if (reqLevel >= 100) {
+                grade = 2;
+            } else if (reqLevel >= 90) {
+                // 90+ plain drops: Epic so client aura cap culls Rare before these
+                grade = 2;
+            } else if (reqLevel >= 50) {
+                grade = 1;
+            } else {
+                grade = 0;
+            }
+        } else if (score < 8) {
+            grade = 1;
+        } else if (score < 18) {
+            grade = 2;
+        } else if (score < 30) {
+            grade = 3;
+        } else {
+            grade = 4;
+        }
+        if (reqLevel >= 90 && grade < 1) {
+            grade = 1;
+        }
+        return grade;
     }
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {
@@ -7623,6 +7686,47 @@ public class PacketCreator {
         return p;
     }
 
+    // ------------------------------------------------------------------
+    // 套装封包
+    // ------------------------------------------------------------------
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_FINAL_DAMAGE);
+        p.writeShort(finalDamagePercent);
+        p.writeInt(skinId);
+        return p;
+    }
+
+    public static Packet setItemSkillBonus(Map<Integer, String> entries) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_SKILL_BONUS);
+        p.writeShort(entries.size());
+        for (Map.Entry<Integer, String> e : entries.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeByte(1);
+            p.writeString(e.getValue() != null ? e.getValue() : "");
+        }
+        return p;
+    }
+
+    public static Packet setItemSkillBonusSingle(int setId, boolean enabled, String text) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_SKILL_BONUS);
+        p.writeShort(1);
+        p.writeInt(setId);
+        p.writeByte(enabled ? 1 : 0);
+        p.writeString(text != null ? text : "");
+        return p;
+    }
+
+    public static Packet sendSetSkillBonus(Map<Integer, Integer> skillBonuses) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_SKILL_BONUS);
+        p.writeShort(skillBonuses.size());
+        for (Map.Entry<Integer, Integer> e : skillBonuses.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeInt(e.getValue());
+        }
+        return p;
+    }
+
     /** 每日签到窗口快照 (SendOpcode 0x17C) */
     public static Packet dailyCheckinSnapshot(int currentDay, int claimedMask, int justClaimed) {
         OutPacket p = OutPacket.create(SendOpcode.DAILY_CHECKIN);
@@ -7656,6 +7760,32 @@ public class PacketCreator {
             p.writeShort(item.getQuantity());
         }
         p.writeByte(auto ? 1 : 0);
+        return p;
+    }
+
+    /** 他人装备详情 (SendOpcode 0x3727) — 供 CUIUserInfoDetail tooltip 使用 */
+    public static Packet userInfoExEquip(int charId, Equip equip) {
+        OutPacket p = OutPacket.create(SendOpcode.USER_INFO_EX);
+        p.writeByte(1);
+        p.writeInt(charId);
+        p.writeInt(equip.getItemId());
+        p.writeInt(equip.getAnvilItemId());
+        p.writeShort(equip.getStr());
+        p.writeShort(equip.getDex());
+        p.writeShort(equip.getInt());
+        p.writeShort(equip.getLuk());
+        p.writeShort(equip.getHp());
+        p.writeShort(equip.getMp());
+        p.writeShort(equip.getWatk());
+        p.writeShort(equip.getMatk());
+        p.writeShort(equip.getWdef());
+        p.writeShort(equip.getMdef());
+        p.writeShort(equip.getAcc());
+        p.writeShort(equip.getAvoid());
+        p.writeShort(equip.getHands());
+        p.writeShort(equip.getSpeed());
+        p.writeShort(equip.getJump());
+        p.writeByte(equip.getUpgradeSlots());
         return p;
     }
 

@@ -112,6 +112,36 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'setItem',
+      name: 'setItem',
+      component: () => import('@/views/game/setItem/index.vue'),
+      meta: {
+        locale: 'menu.game.setItem',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'enhanceRule',
+      name: 'enhanceRule',
+      component: () => import('@/views/game/enhanceRule/index.vue'),
+      meta: {
+        locale: 'menu.game.enhanceRule',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'carryItemStat',
+      name: 'carryItemStat',
+      component: () => import('@/views/game/carryItemStat/index.vue'),
+      meta: {
+        locale: 'menu.game.carryItemStat',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

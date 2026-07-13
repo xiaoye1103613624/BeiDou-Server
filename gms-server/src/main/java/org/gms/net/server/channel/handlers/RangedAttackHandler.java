@@ -118,6 +118,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             if (attack.skill != 0) {
                 effect = attack.getAttackEffect(chr, null);
                 bulletCount = effect.getBulletCount();
+                bulletCount += (short) org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill);
                 if (effect.getCooldown() > 0) {
                     c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
                 }

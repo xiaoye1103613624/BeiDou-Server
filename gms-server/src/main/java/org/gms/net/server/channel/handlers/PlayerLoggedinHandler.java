@@ -381,6 +381,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.damageSkinCatalog());
             c.sendPacket(PacketCreator.damageSkinInventory(player));
 
+            player.refreshSetBonus();
+
             // 每日签到：可领则自动弹窗
             if (player.getLevel() >= org.gms.server.dailycheckin.DailyCheckinRewards.MIN_LEVEL) {
                 int checkinClaimable = player.refreshCheckin();

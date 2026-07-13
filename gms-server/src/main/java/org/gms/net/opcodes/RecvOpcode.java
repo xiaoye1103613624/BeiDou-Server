@@ -207,8 +207,10 @@ public enum RecvOpcode implements Opcode {
     DAMAGE_SKIN_APPLY(0x110), // 装备伤害皮肤
     DAMAGE_SKIN_PURCHASE(0x111), // 购买伤害皮肤
     BEAUTY_ACTION(0x174), // 美容院操作
+    SET_ITEM_BONUS_REQUEST(0x177), // 套装展示按需拉取
     DAILY_CHECKIN(0x11A), // 每日签到
     BAG_WINDOW(0x3724), // 收纳背包窗口操作
+    USER_INFO_EX(0x3726), // 查看他人装备详情
 
     WORLD_MAP_PLAYERS(0x115), // 世界地图 tooltip 玩家列表请求
     SET_HPMPALERT(0x1000), // 设置HP/MP警报

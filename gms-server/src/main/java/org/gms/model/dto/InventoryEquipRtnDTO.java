@@ -106,4 +106,8 @@ public class InventoryEquipRtnDTO {
      * 戒指id，对应ringid
      */
     private Integer ringId;
+    /**
+     * 幻化外观源装备 id，对应 anvilItemId
+     */
+    private Integer anvilItemId;
 }

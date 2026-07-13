@@ -10,6 +10,9 @@ import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
 import inventory from '@/views/game/inventory/locale/zh-CN';
 import autoban from '@/views/game/autoban/locale/zh-CN';
+import setItem from '@/views/game/setItem/locale/zh-CN';
+import enhanceRule from '@/views/game/enhanceRule/locale/zh-CN';
+import carryItemStat from '@/views/game/carryItemStat/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -28,6 +31,9 @@ export default {
   'menu.game.command': 'GM指令',
   'menu.game.file': '文件管理',
   'menu.game.autoban': '自动封禁',
+  'menu.game.setItem': '套装管理',
+  'menu.game.enhanceRule': '强化规则',
+  'menu.game.carryItemStat': '携带物属性',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -35,6 +41,7 @@ export default {
   'menu.beiDou': '关于北斗',
   // 提示信息
   'message.success': '操作成功',
+  'message.error': '操作失败',
   'message.switch.success': '切换为中文',
   'message.login.success': '欢迎使用',
   'message.logout.success': '登出成功',
@@ -61,4 +68,7 @@ export default {
   ...inventory,
   ...config,
   ...autoban,
+  ...setItem,
+  ...enhanceRule,
+  ...carryItemStat,
 };

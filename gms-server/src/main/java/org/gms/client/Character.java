@@ -69,6 +69,8 @@ import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.scripting.item.ItemScriptManager;
 import org.gms.server.*;
+import org.gms.server.setitem.SetBonus;
+import org.gms.server.setitem.SetItemManager;
 import org.gms.server.ExpLogger.ExpLogRecord;
 import org.gms.server.ItemInformationProvider.ScriptedItem;
 import org.gms.server.events.Events;
@@ -253,7 +255,22 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private long jailExpiration = -1;
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
+    private transient int localwdef, localmdef, localacc, localeva, localspeed, localjump;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
+    private transient int setBonusStr, setBonusDex, setBonusLuk, setBonusInt_, setBonusPad, setBonusMad, setBonusMhp, setBonusMmp;
+    private transient int setBonusPdd, setBonusMdd, setBonusAcc, setBonusEva, setBonusSpeed, setBonusJump;
+    @Getter
+    private transient int setFinalDamage;
+    @Getter
+    private transient double setFinalDamageMultiplier = 1.0;
+    private transient org.gms.combat.stat.CombatStatProfile combatStatProfile = org.gms.combat.stat.CombatStatProfile.EMPTY;
+    /** 套装/强化/携带物变化后为 true，确保下次刷新或读 Profile 时重算。 */
+    private transient volatile boolean combatStatsDirty = true;
+    @Getter
+    private transient int setDamageSkin;
+    private transient boolean setSkillBonusSent;
+    private transient Map<Integer, Integer> setSkillBonusLevels = new HashMap<>();
+    private transient Map<Integer, Byte> setActiveSkillBackup = new HashMap<>();
     private int localchairrate;
     @Getter
     private boolean hidden;
@@ -2742,9 +2759,132 @@ public class Character extends AbstractCharacterObject {
     public void equipChanged() {
         getMap().broadcastUpdateCharLookMessage(this, this);
         equipchanged = true;
-        updateLocalStats();
+        markCombatStatsDirty();
+        refreshSetBonus();
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
+        }
+    }
+
+    public void resetSetSkillBonusCache() {
+        setSkillBonusSent = false;
+    }
+
+    /** 标记战斗属性需重算（换装、携带物进出、规则热重载等）。 */
+    public void markCombatStatsDirty() {
+        combatStatsDirty = true;
+    }
+
+    /** 脏则刷新；伤害热路径读 Profile 前调用。 */
+    public void ensureCombatStatsFresh() {
+        if (combatStatsDirty) {
+            refreshSetBonus(false);
+        }
+    }
+
+    public org.gms.combat.stat.CombatStatProfile getCombatStatProfile() {
+        ensureCombatStatsFresh();
+        return combatStatProfile;
+    }
+
+    public void refreshSetBonus() {
+        refreshSetBonus(true);
+    }
+
+    private void refreshSetBonus(boolean notifyClient) {
+        if (!combatStatsDirty) {
+            return;
+        }
+        combatStatsDirty = false;
+
+        SetBonus bonus = SetItemManager.getTotalSetBonus(this);
+        setBonusStr = bonus.str + percentOfBase(getStr(), bonus.strR);
+        setBonusDex = bonus.dex + percentOfBase(getDex(), bonus.dexR);
+        setBonusInt_ = bonus.int_ + percentOfBase(getInt(), bonus.intR);
+        setBonusLuk = bonus.luk + percentOfBase(getLuk(), bonus.lukR);
+        setBonusPad = bonus.pad;
+        setBonusMad = bonus.mad;
+        setBonusPdd = bonus.pdd;
+        setBonusMdd = bonus.mdd;
+        setBonusAcc = bonus.acc;
+        setBonusEva = bonus.eva;
+        setBonusSpeed = bonus.speed;
+        setBonusJump = bonus.jump;
+        setBonusMhp = bonus.mhp + percentOfBase(getMaxHp(), bonus.mhpR);
+        setBonusMmp = bonus.mmp + percentOfBase(getMaxMp(), bonus.mmpR);
+
+        // 复用已算好的套装结果，避免 resolve 内再次 getTotalSetBonus
+        combatStatProfile = org.gms.combat.provider.CombatProfileService.resolve(this, bonus);
+        setFinalDamageMultiplier = combatStatProfile.finalDamageMultiplier;
+        setFinalDamage = (int) Math.round((setFinalDamageMultiplier - 1.0) * 100.0);
+
+        setDamageSkin = bonus.damageSkinId;
+        setSkillBonusLevels = new HashMap<>(bonus.skillLevels);
+
+        applySetActiveSkills(bonus.activeSkills);
+        updateLocalStats();
+
+        if (notifyClient && client != null) {
+            List<Pair<Stat, Integer>> statup = new ArrayList<>(6);
+            statup.add(new Pair<>(Stat.STR, localstr));
+            statup.add(new Pair<>(Stat.DEX, localdex));
+            statup.add(new Pair<>(Stat.INT, localint_));
+            statup.add(new Pair<>(Stat.LUK, localluk));
+            statup.add(new Pair<>(Stat.MAXHP, localMaxHp));
+            statup.add(new Pair<>(Stat.MAXMP, localMaxMp));
+            sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
+            sendSetBonusPackets();
+        }
+    }
+
+    /** 携带物配置物品变化时标记脏（Profile 在下次读取时刷新）。 */
+    public void onCarryCombatItemChanged(int itemId) {
+        if (org.gms.server.combat.CombatSourceManager.isConfiguredCarry(itemId)) {
+            markCombatStatsDirty();
+        }
+    }
+
+    private void sendSetBonusPackets() {
+        sendPacket(PacketCreator.setItemFinalDamageBonus(setFinalDamage, setDamageSkin));
+        if (getMap() != null && getMap().getId() != 0 && !setSkillBonusSent) {
+            sendPacket(PacketCreator.setItemSkillBonus(SetItemManager.buildAllSetBonusTexts(this)));
+            setSkillBonusSent = true;
+        }
+        sendPacket(PacketCreator.sendSetSkillBonus(setSkillBonusLevels));
+    }
+
+    private static int percentOfBase(int base, int percent) {
+        if (percent == 0 || base == 0) {
+            return 0;
+        }
+        return (int) Math.floor(base * (percent / 100.0));
+    }
+
+    private void applySetActiveSkills(Map<Integer, Integer> activeSkills) {
+        Iterator<Map.Entry<Integer, Byte>> it = setActiveSkillBackup.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Integer, Byte> entry = it.next();
+            if (!activeSkills.containsKey(entry.getKey())) {
+                Skill skill = SkillFactory.getSkill(entry.getKey());
+                if (skill != null) {
+                    changeSkillLevel(skill, entry.getValue(), skill.getMaxLevel(), -1);
+                }
+                it.remove();
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : activeSkills.entrySet()) {
+            Skill skill = SkillFactory.getSkill(entry.getKey());
+            if (skill == null) {
+                continue;
+            }
+            int targetLevel = entry.getValue();
+            byte currentLevel = getSkillLevel(skill);
+            if (!setActiveSkillBackup.containsKey(entry.getKey())) {
+                setActiveSkillBackup.put(entry.getKey(), currentLevel);
+            }
+            if (currentLevel < targetLevel) {
+                changeSkillLevel(skill, (byte) targetLevel, skill.getMaxLevel(), -1);
+            }
         }
     }
 
@@ -4970,6 +5110,30 @@ public class Character extends AbstractCharacterObject {
         return localwatk;
     }
 
+    public int getTotalWdef() {
+        return localwdef;
+    }
+
+    public int getTotalMdef() {
+        return localmdef;
+    }
+
+    public int getTotalAcc() {
+        return localacc;
+    }
+
+    public int getTotalEva() {
+        return localeva;
+    }
+
+    public int getTotalSpeed() {
+        return localspeed;
+    }
+
+    public int getTotalJump() {
+        return localjump;
+    }
+
     public int getMaxClassLevel() {
         return isCygnus() ? 120 : 200;
     }
@@ -7168,9 +7332,30 @@ public class Character extends AbstractCharacterObject {
             localluk = getLuk();
             localmagic = localint_;
             localwatk = 0;
+            localwdef = 0;
+            localmdef = 0;
+            localacc = 0;
+            localeva = 0;
+            localspeed = 100;
+            localjump = 100;
             localchairrate = -1;
 
             recalcEquipStats();
+
+            localstr += setBonusStr;
+            localdex += setBonusDex;
+            localint_ += setBonusInt_;
+            localluk += setBonusLuk;
+            localwatk += setBonusPad;
+            localmagic += setBonusMad;
+            localwdef += setBonusPdd;
+            localmdef += setBonusMdd;
+            localacc += setBonusAcc;
+            localeva += setBonusEva;
+            localspeed += setBonusSpeed;
+            localjump += setBonusJump;
+            localMaxHp += setBonusMhp;
+            localMaxMp += setBonusMmp;
 
             localmagic = Math.min(localmagic, 2000);
 

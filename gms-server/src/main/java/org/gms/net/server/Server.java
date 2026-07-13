@@ -26,6 +26,7 @@ import lombok.Setter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.DamageSkinCatalog;
+import org.gms.server.setitem.SetItemManager;
 import org.gms.client.SkillFactory;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.client.inventory.Item;
@@ -672,6 +673,7 @@ public class Server {
             futures.add(initExecutor.submit(Quest::loadAllQuests));
             futures.add(initExecutor.submit(SkillbookInformationProvider::loadAllSkillbookInformation));
             futures.add(initExecutor.submit(DamageSkinCatalog::loadOrSeed));
+            futures.add(initExecutor.submit(SetItemManager::loadOrSeed));
             // Wait on all async tasks to complete
             for (Future<?> future : futures) {
                 future.get();

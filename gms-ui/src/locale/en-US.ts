@@ -10,6 +10,9 @@ import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
+import setItem from '@/views/game/setItem/locale/en-US';
+import enhanceRule from '@/views/game/enhanceRule/locale/en-US';
+import carryItemStat from '@/views/game/carryItemStat/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -27,12 +30,16 @@ export default {
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
   'menu.game.autoban': 'Autoban',
+  'menu.game.setItem': 'Set Item',
+  'menu.game.enhanceRule': 'Enhance Rule',
+  'menu.game.carryItemStat': 'Carry Item Stat',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
   'menu.arco': 'UI Doc',
   'menu.beiDou': 'About BeiDou',
   'message.success': 'Success',
+  'message.error': 'Operation failed',
   'message.switch.success': 'Switch to English',
   'message.login.success': 'Welcome',
   'message.logout.success': 'Logout success',
@@ -58,4 +65,7 @@ export default {
   ...inventory,
   ...config,
   ...autoban,
+  ...setItem,
+  ...enhanceRule,
+  ...carryItemStat,
 };
