@@ -62,6 +62,9 @@ public class Party {
 
     private final Map<Integer, Door> doors = new HashMap<>();
 
+    private final Map<Integer, Long> trackerExp = new HashMap<>();
+    private final Map<Integer, Long> trackerMeso = new HashMap<>();
+
     private final Lock lock = new ReentrantLock(true);
 
     public Party(int id, PartyCharacter chrfor) {
@@ -85,6 +88,8 @@ public class Party {
             nextEntry++;
 
             members.add(member);
+            trackerExp.putIfAbsent(member.getId(), 0L);
+            trackerMeso.putIfAbsent(member.getId(), 0L);
         } finally {
             lock.unlock();
         }
@@ -96,6 +101,8 @@ public class Party {
             histMembers.remove(member.getId());
 
             members.remove(member);
+            trackerExp.remove(member.getId());
+            trackerMeso.remove(member.getId());
         } finally {
             lock.unlock();
         }
@@ -127,6 +134,46 @@ public class Party {
                 }
             }
             return null;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public long addTrackerExp(int characterId, long amount) {
+        lock.lock();
+        try {
+            long updated = trackerExp.getOrDefault(characterId, 0L) + Math.max(0, amount);
+            trackerExp.put(characterId, updated);
+            return updated;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public long addTrackerMeso(int characterId, long amount) {
+        lock.lock();
+        try {
+            long updated = trackerMeso.getOrDefault(characterId, 0L) + Math.max(0, amount);
+            trackerMeso.put(characterId, updated);
+            return updated;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public long getTrackerExp(int characterId) {
+        lock.lock();
+        try {
+            return trackerExp.getOrDefault(characterId, 0L);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public long getTrackerMeso(int characterId) {
+        lock.lock();
+        try {
+            return trackerMeso.getOrDefault(characterId, 0L);
         } finally {
             lock.unlock();
         }

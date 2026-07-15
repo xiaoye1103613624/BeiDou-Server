@@ -983,6 +983,42 @@ public class World {
             default:
                 break;
         }
+
+        if (operation == PartyOperation.JOIN || operation == PartyOperation.LOG_ONOFF) {
+            syncPartyBuffSnapshots(partyMembers, target);
+        }
+    }
+
+    private void syncPartyBuffSnapshots(Collection<PartyCharacter> partyMembers, PartyCharacter target) {
+        List<Character> onlineMembers = new ArrayList<>();
+        for (PartyCharacter partychar : partyMembers) {
+            Character member = getPlayerStorage().getCharacterById(partychar.getId());
+            if (member != null && member.isLoggedInWorld()) {
+                onlineMembers.add(member);
+            }
+        }
+
+        for (Character recipient : onlineMembers) {
+            for (Character member : onlineMembers) {
+                recipient.sendPacket(PacketCreator.partyBuffSnapshot(member));
+                if (member.getId() != recipient.getId()) {
+                    byte[] countsPayload = member.getPartyBuffCountsPayload();
+                    if (countsPayload != null && countsPayload.length > 0) {
+                        recipient.sendPacket(PacketCreator.partyBuffCounts(
+                                member.getId(), member.getPartyBuffCountsCount(), countsPayload));
+                    }
+                }
+                if (recipient.isPartyTrackerVisible()) {
+                    recipient.sendPacket(PacketCreator.partyTrackerUpdate(member));
+                }
+            }
+        }
+
+        if (target != null && !target.isOnline()) {
+            for (Character recipient : onlineMembers) {
+                recipient.sendPacket(PacketCreator.emptyPartyBuffSnapshot(target.getId()));
+            }
+        }
     }
 
     public void updateParty(int partyid, PartyOperation operation, PartyCharacter target) {

@@ -366,6 +366,7 @@ public enum SendOpcode implements Opcode {
     DAILY_CHECKIN(0x17C), // 每日签到快照
     BAG_WINDOW(0x3725), // 收纳背包窗口快照
     USER_INFO_EX(0x3727), // 他人装备详情回复
+    CUSTOM_PACKET(0x3713), // 自定义封包（队伍Buff/Tracker等子命令）
     DPT_TRACKER(0x3714), // 个人伤害统计
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复
