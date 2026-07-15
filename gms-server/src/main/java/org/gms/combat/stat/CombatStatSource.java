@@ -8,5 +8,6 @@ public enum CombatStatSource {
     SKILL_BUFF,
     SKILL_PASSIVE,
     EVENT,
+    TALENT,
     GM
 }

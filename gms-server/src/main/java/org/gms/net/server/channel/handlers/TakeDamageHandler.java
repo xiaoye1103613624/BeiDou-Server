@@ -182,7 +182,12 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 }
             }
         }
-        if (damagefrom != -1 && damagefrom != -2 && attacker != null) {
+        boolean talentDodged = damage > 0 && attacker != null && org.gms.talent.TalentService.tryDodge(chr);
+        if (talentDodged) {
+            damage = 0;
+            mpattack = 0;
+        }
+        if (damagefrom != -1 && damagefrom != -2 && attacker != null && !talentDodged) {
             MobAttackInfo attackInfo = MobAttackInfoFactory.getMobAttackInfo(attacker, damagefrom);
             if (attackInfo != null) {
                 if (attackInfo.isDeadlyAttack()) {
@@ -235,6 +240,11 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         if (damage > 0 && !chr.isHidden()) {
+            damage = org.gms.talent.TalentService.reduceDamageTaken(chr, attacker, damage);
+            if (damage > 0 && !is_deadly && damage >= chr.getHp()
+                    && org.gms.talent.TalentService.tryCheatDeath(chr)) {
+                damage = Math.max(0, chr.getHp() - 1);
+            }
             if (attacker != null) {
                 if (damagefrom == -1) {
                     if (chr.getBuffedValue(BuffStat.POWERGUARD) != null) { // PG works on bosses, but only at half of the rate.
@@ -307,6 +317,10 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     chr.decreaseBattleshipHp(damage);
                 }
                 chr.addMPHP(-damage, -mpattack);
+            }
+            if (attacker != null) {
+                org.gms.talent.TalentService.applyThorns(chr, attacker, map, oid, damage);
+                org.gms.talent.TalentService.painTrainingExp(chr, damage);
             }
         }
         if (!chr.isHidden()) {

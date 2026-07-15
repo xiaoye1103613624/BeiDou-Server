@@ -1444,4 +1444,57 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         nextLevelContext.setLastLevel(noLevel);
         nextLevelContext.setNextLevel(yesLevel);
     }
+
+    // ——— 天赋系统桥接 ———
+
+    public int getTalentLevel(int talentId) {
+        return org.gms.talent.TalentService.getLevel(getPlayer(), talentId);
+    }
+
+    public String learnTalent(int talentId) {
+        return org.gms.talent.TalentService.learn(getPlayer(), talentId).message();
+    }
+
+    public boolean learnTalentSuccess(int talentId) {
+        return org.gms.talent.TalentService.learn(getPlayer(), talentId).success();
+    }
+
+    public String exchangeTalentBook(int talentItemId) {
+        org.gms.talent.TalentId tid = org.gms.talent.TalentId.fromItemId(talentItemId);
+        return org.gms.talent.TalentService.exchangeOneBook(getPlayer(), tid);
+    }
+
+    public String buyTalentBook(int talentItemId) {
+        org.gms.talent.TalentId tid = org.gms.talent.TalentId.fromItemId(talentItemId);
+        return org.gms.talent.TalentService.buyBook(getPlayer(), tid);
+    }
+
+    public String talentTierStatus() {
+        return org.gms.talent.TalentService.tierStatusText(getPlayer());
+    }
+
+    public boolean isTalentTierUnlocked(int tierOrder) {
+        org.gms.talent.TalentTier tier = switch (tierOrder) {
+            case 2 -> org.gms.talent.TalentTier.MID;
+            case 3 -> org.gms.talent.TalentTier.ADVANCED;
+            case 4 -> org.gms.talent.TalentTier.ULTIMATE;
+            default -> org.gms.talent.TalentTier.PRIMARY;
+        };
+        return org.gms.talent.TalentService.isTierUnlocked(getPlayer(), tier);
+    }
+
+    public int talentPointsSpent(int tierOrder) {
+        org.gms.talent.TalentTier tier = switch (tierOrder) {
+            case 2 -> org.gms.talent.TalentTier.MID;
+            case 3 -> org.gms.talent.TalentTier.ADVANCED;
+            case 4 -> org.gms.talent.TalentTier.ULTIMATE;
+            default -> org.gms.talent.TalentTier.PRIMARY;
+        };
+        return org.gms.talent.TalentService.pointsSpent(getPlayer(), tier);
+    }
+
+    public int ultimateLearnRate(int talentId) {
+        int cur = getTalentLevel(talentId);
+        return org.gms.talent.TalentConfig.ultimateSuccessRate(cur);
+    }
 }

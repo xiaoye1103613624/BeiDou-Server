@@ -1406,6 +1406,7 @@ public class StatEffect {
             //CancelEffectAction cancelAction = new CancelEffectAction(applyto, this, starttime);
             //ScheduledFuture<?> schedule = TimerManager.getInstance().schedule(cancelAction, localDuration);
             applyto.registerEffect(this, starttime, starttime + localDuration, false);
+            applyto.announcePartyBuffSnapshot();
             if (mbuff != null) {
                 applyto.getMap().broadcastMessage(applyto, mbuff, false);
             }
@@ -1441,7 +1442,8 @@ public class StatEffect {
         }
         if (primary) {
             if (hpCon != 0) {
-                hpchange -= hpCon;
+                int reducedHpCon = org.gms.talent.TalentService.reduceSkillHpCost(applyfrom, hpCon);
+                hpchange -= reducedHpCon;
             }
         }
         if (isChakra()) {
@@ -1487,6 +1489,11 @@ public class StatEffect {
                     mpchange = 0;
                 } else if (applyfrom.getBuffedValue(BuffStat.CONCENTRATE) != null) {
                     mpchange -= (int) (mpchange * (applyfrom.getBuffedValue(BuffStat.CONCENTRATE).doubleValue() / 100));
+                }
+                if (mpchange < 0) {
+                    int cost = -mpchange;
+                    int reduced = org.gms.talent.TalentService.reduceSkillMpCost(applyfrom, cost);
+                    mpchange = -reduced;
                 }
             }
         }

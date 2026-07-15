@@ -31,6 +31,7 @@ public final class CombatProfileService {
         }
         mods.addAll(EnhanceStatProvider.provide(chr));
         mods.addAll(CarryItemStatProvider.provide(chr));
+        mods.addAll(TalentStatProvider.provide(chr));
         return mods;
     }
 

@@ -353,6 +353,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                         totDamageToOneMonster += eachd;
                     }
+                    totDamageToOneMonster = org.gms.talent.TalentService.applyOutgoingDamageBonus(player, monster, totDamageToOneMonster, attack.magic);
                     totDamage += totDamageToOneMonster;
                     monster.aggroMonsterDamage(player, totDamageToOneMonster);
                     if (player.getBuffedValue(BuffStat.PICKPOCKET) != null && (attack.skill == 0 || attack.skill == Rogue.DOUBLE_STAB || attack.skill == Bandit.SAVAGE_BLOW || attack.skill == ChiefBandit.ASSAULTER || attack.skill == ChiefBandit.BAND_OF_THIEVES || attack.skill == Shadower.ASSASSINATE || attack.skill == Shadower.TAUNT || attack.skill == Shadower.BOOMERANG_STEP)) {
@@ -607,6 +608,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                         map.damageMonster(player, monster, totDamageToOneMonster);
                     }
+                    org.gms.talent.TalentService.onDealDamageToMonster(player, map, monster, totDamageToOneMonster);
                     if (monster.isBuffed(MonsterStatus.WEAPON_REFLECT) && !attack.magic) {
                         for (MobSkillId msId : monster.getSkills()) {
                             if (msId.type() == MobSkillType.PHYSICAL_AND_MAGIC_COUNTER) {

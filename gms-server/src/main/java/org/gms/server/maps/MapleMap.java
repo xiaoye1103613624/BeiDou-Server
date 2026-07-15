@@ -755,6 +755,8 @@ public class MapleMap {
             chRate = 1;
         }
 
+        chRate *= (1.0f + (float) org.gms.talent.TalentService.getDropBonus(chr, this, mob));
+
         final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
         final List<MonsterGlobalDropEntry> globalEntry = mi.getRelevantGlobalDrops(this.getId());
 
@@ -3715,6 +3717,10 @@ public class MapleMap {
         }
 
         int maxNumShouldSpawn = (int) Math.ceil(getCurrentSpawnRate(numPlayers) * monsterSpawn.size());
+        double talentMult = org.gms.talent.TalentService.getMapSpawnMultiplier(this);
+        if (talentMult > 1.0) {
+            maxNumShouldSpawn = (int) Math.ceil(maxNumShouldSpawn * talentMult);
+        }
         return maxNumShouldSpawn - spawnedMonstersOnMap.get();
     }
 
@@ -3744,10 +3750,35 @@ public class MapleMap {
                 if (spawnPoint.shouldSpawn()) {
                     spawnMonster(spawnPoint.getMonster());
                     spawned++;
-
                     if (spawned >= numShouldSpawn) {
                         break;
                     }
+                }
+            }
+            // 天赋额外波次：在普通怪刷怪点额外召唤不绑定 SpawnPoint 计数的克隆
+            double talentMult = org.gms.talent.TalentService.getMapSpawnMultiplier(this);
+            if (talentMult > 1.0) {
+                int extra = (int) Math.ceil((talentMult - 1.0) * getCurrentSpawnRate(numPlayers) * monsterSpawn.size());
+                int extrasSpawned = 0;
+                Collections.shuffle(randomSpawn);
+                for (SpawnPoint spawnPoint : randomSpawn) {
+                    if (extrasSpawned >= extra) {
+                        break;
+                    }
+                    int mid = spawnPoint.getMonsterId();
+                    if (org.gms.talent.TalentConfig.isFieldEliteId(mid)) {
+                        continue;
+                    }
+                    Monster template = org.gms.server.life.LifeFactory.getMonster(mid);
+                    if (template == null || template.isBoss()) {
+                        continue;
+                    }
+                    Monster extraMob = new Monster(template);
+                    extraMob.setPosition(new Point(spawnPoint.getPosition()));
+                    extraMob.setFh(spawnPoint.getFh());
+                    extraMob.setF(spawnPoint.getF());
+                    spawnMonster(extraMob);
+                    extrasSpawned++;
                 }
             }
         }
