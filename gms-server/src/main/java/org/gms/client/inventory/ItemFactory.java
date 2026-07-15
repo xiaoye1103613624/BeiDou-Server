@@ -131,6 +131,9 @@ public enum ItemFactory {
         equip.setGiftFrom(rs.getString("giftFrom"));
         equip.setRingId(rs.getInt("ringid"));
         equip.setAnvilItemId(rs.getInt("anvilItemId"));
+        equip.setEquipSkillId(rs.getInt("equipSkillId"));
+        equip.setEquipSkillLevel(rs.getInt("equipSkillLevel"));
+        equip.setEquipSkillExpire(rs.getLong("equipSkillExpire"));
 
         return equip;
     }
@@ -241,7 +244,7 @@ public enum ItemFactory {
                         psItem.executeUpdate();
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                                 try (ResultSet rs = psItem.getGeneratedKeys()) {
                                     if (!rs.next()) {
                                         throw new RuntimeException("Inserting item failed.");
@@ -274,6 +277,9 @@ public enum ItemFactory {
                                 psEquip.setInt(22, equip.getItemExp());
                                 psEquip.setInt(23, equip.getRingId());
                                 psEquip.setInt(24, equip.getAnvilItemId());
+                                psEquip.setInt(25, equip.getEquipSkillId());
+                                psEquip.setInt(26, equip.getEquipSkillLevel());
+                                psEquip.setLong(27, equip.getEquipSkillExpire());
                                 psEquip.executeUpdate();
                             }
                         }
@@ -402,7 +408,7 @@ public enum ItemFactory {
 
                 // Equipment
                 if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, genKey);
 
                         Equip equip = (Equip) item;
@@ -429,6 +435,9 @@ public enum ItemFactory {
                         ps.setInt(22, equip.getItemExp());
                         ps.setInt(23, equip.getRingId());
                         ps.setInt(24, equip.getAnvilItemId());
+                        ps.setInt(25, equip.getEquipSkillId());
+                        ps.setInt(26, equip.getEquipSkillLevel());
+                        ps.setLong(27, equip.getEquipSkillExpire());
                         ps.executeUpdate();
                     }
                 }

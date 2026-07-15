@@ -78,6 +78,12 @@ public class Equip extends Item {
     private float itemExp;
     private int ringid = -1;
     private int anvilItemId = 0;
+    /** 灵韵觉醒：附加技能 ID（0=无）。 */
+    private int equipSkillId = 0;
+    /** 灵韵觉醒：附加技能等级。 */
+    private int equipSkillLevel = 0;
+    /** 灵韵觉醒：过期时间，0=永久。 */
+    private long equipSkillExpire = 0L;
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -125,6 +131,9 @@ public class Equip extends Item {
         ret.setExpiration(getExpiration());
         ret.setGiftFrom(getGiftFrom());
         ret.anvilItemId = anvilItemId;
+        ret.equipSkillId = equipSkillId;
+        ret.equipSkillLevel = equipSkillLevel;
+        ret.equipSkillExpire = equipSkillExpire;
         return ret;
     }
 
@@ -796,6 +805,30 @@ public class Equip extends Item {
 
     public void setAnvilItemId(int anvilItemId) {
         this.anvilItemId = anvilItemId;
+    }
+
+    public int getEquipSkillId() {
+        return equipSkillId;
+    }
+
+    public void setEquipSkillId(int equipSkillId) {
+        this.equipSkillId = equipSkillId;
+    }
+
+    public int getEquipSkillLevel() {
+        return equipSkillLevel;
+    }
+
+    public void setEquipSkillLevel(int equipSkillLevel) {
+        this.equipSkillLevel = equipSkillLevel;
+    }
+
+    public long getEquipSkillExpire() {
+        return equipSkillExpire;
+    }
+
+    public void setEquipSkillExpire(long equipSkillExpire) {
+        this.equipSkillExpire = equipSkillExpire;
     }
 
     public boolean isWearing() {

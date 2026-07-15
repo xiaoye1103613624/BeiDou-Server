@@ -684,6 +684,10 @@ public class InventoryManipulator {
 
         mods.add(new ModifyInventory(2, source, src));
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        // 灵韵：穿上后强制整包刷新，确保客户端 tip 拿到 skill 字段（move 模式本身不重发 item body）
+        if (source.getEquipSkillId() > 0 && source.getEquipSkillLevel() > 0) {
+            chr.forceUpdateItem(source);
+        }
         chr.equipChanged();
     }
 

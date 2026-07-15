@@ -590,6 +590,24 @@ function doExchange() {
     // 扣除金币
     cm.gainMeso(-goldCost);
 
+    // 继承上一级武器灵韵（进阶不丢失）
+    var inheritSkillId = 0;
+    var inheritSkillLevel = 0;
+    var inheritSkillExpire = 0;
+    var prevEquipForSpirit = null;
+    for (var si = 1; si <= equipInv.getSlotLimit(); si++) {
+        var spit = equipInv.getItem(si);
+        if (spit != null && spit.getItemId() == prevItemId) {
+            prevEquipForSpirit = spit;
+            break;
+        }
+    }
+    if (prevEquipForSpirit != null) {
+        inheritSkillId = prevEquipForSpirit.getEquipSkillId();
+        inheritSkillLevel = prevEquipForSpirit.getEquipSkillLevel();
+        inheritSkillExpire = prevEquipForSpirit.getEquipSkillExpire();
+    }
+
     // 扣除上一级武器
     cm.gainItem(prevItemId, -1);
 
@@ -622,6 +640,12 @@ function doExchange() {
             newEquip.setWatk(1);
         }
         newEquip.setSpeed(6);
+        // 继承灵韵
+        if (inheritSkillId > 0 && inheritSkillLevel > 0) {
+            newEquip.setEquipSkillId(inheritSkillId);
+            newEquip.setEquipSkillLevel(inheritSkillLevel);
+            newEquip.setEquipSkillExpire(inheritSkillExpire);
+        }
         // 进阶后标记为不可交易
         newEquip.setFlag(newEquip.getFlag() | UNTRADEABLE_FLAG);
         // 强制推送装备属性更新到客户端，覆盖WZ自带属性

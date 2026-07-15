@@ -13760,8 +13760,8 @@
       <string name="desc" value="分解装备后获得的结晶。含有物品原始的力量。用于制作130级以上物品。"/>
     </imgdir>
     <imgdir name="4021017">
-      <string name="name" value="炼金术士之石"/>
-      <string name="desc" value="凝聚着炼金术士的特殊力量的石头。合成装备时必须用到。\n可以在&lt;匠人街&gt;的蒙斯那里购买。"/>
+      <string name="name" value="灵韵结晶"/>
+      <string name="desc" value="蕴含精纯灵韵的结晶。在匠人街「装备制作铁砧」处可为武器进行灵韵觉醒。\n消耗：每次觉醒需 2 个 + 500万金币。"/>
     </imgdir>
     <imgdir name="4021018">
       <string name="name" value="魔力结晶"/>
@@ -23948,140 +23948,148 @@
       <string name="desc" value="学者花蘑菇编写的研究怪物的秘密和根源的书。\n#c双击道具，可以把书打开。#"/>
     </imgdir>
     <imgdir name="4461001">
-      <string name="name" value="物理基础天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「物理基础」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="物理基础"/>
+      <string name="desc" value="初级天赋。对普通怪物造成的物理伤害增加1%/级。#c天赋书可在炼金术魔法书处学习或交换。#"/>
     </imgdir>
     <imgdir name="4461002">
-      <string name="name" value="狩猎之道天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「狩猎之道」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="狩猎之道"/>
+      <string name="desc" value="初级天赋。对普通怪物的掉宝率增加2%/级。#c天赋掉宝加成总上限+20%。#"/>
     </imgdir>
     <imgdir name="4461003">
-      <string name="name" value="怨念重生天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「怨念重生」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="怨念重生"/>
+      <string name="desc" value="初级天赋。地图普通怪物刷新数量增加10%/级，满级翻倍。#c不影响Boss与野外精英。#"/>
     </imgdir>
     <imgdir name="4461004">
-      <string name="name" value="魔法基础天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「魔法基础」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="魔法基础"/>
+      <string name="desc" value="初级天赋。对普通怪物造成的魔法伤害增加1%/级。"/>
     </imgdir>
     <imgdir name="4461005">
-      <string name="name" value="坚韧之力天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「坚韧之力」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="坚韧之力"/>
+      <string name="desc" value="初级天赋。受到的伤害减少1%/级。"/>
     </imgdir>
     <imgdir name="4461006">
-      <string name="name" value="灵狐之力天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「灵狐之力」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="灵狐之力"/>
+      <string name="desc" value="初级天赋。闪避怪物攻击的几率增加1%/级。"/>
     </imgdir>
     <imgdir name="4461007">
-      <string name="name" value="体能强化天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「体能强化」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="体能强化"/>
+      <string name="desc" value="初级天赋。最大HP增加100/级。"/>
     </imgdir>
     <imgdir name="4461008">
-      <string name="name" value="魔力强化天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「魔力强化」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="魔力强化"/>
+      <string name="desc" value="初级天赋。最大MP增加100/级。"/>
     </imgdir>
     <imgdir name="4461009">
-      <string name="name" value="痛苦训练天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「痛苦训练」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="痛苦训练"/>
+      <string name="desc" value="初级天赋。受到伤害时，将其1%/级转化为经验值（有频率限制）。"/>
     </imgdir>
     <imgdir name="4461010">
-      <string name="name" value="魔力抑制天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「魔力抑制」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="魔力抑制"/>
+      <string name="desc" value="初级天赋。使用技能消耗的MP减少2%/级。"/>
     </imgdir>
     <imgdir name="4461011">
-      <string name="name" value="流血抑制天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「流血抑制」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="流血抑制"/>
+      <string name="desc" value="初级天赋。使用技能消耗的HP减少2%/级。"/>
     </imgdir>
     <imgdir name="4461012">
-      <string name="name" value="昏迷抵抗天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「昏迷抵抗」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="昏迷抵抗"/>
+      <string name="desc" value="初级天赋。昏迷状态的持续时间减少3%/级。"/>
     </imgdir>
     <imgdir name="4461013">
-      <string name="name" value="虚弱抵抗天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「虚弱抵抗」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="虚弱抵抗"/>
+      <string name="desc" value="初级天赋。虚弱状态的持续时间减少3%/级。"/>
     </imgdir>
     <imgdir name="4461014">
-      <string name="name" value="封印抵抗天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「封印抵抗」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="封印抵抗"/>
+      <string name="desc" value="初级天赋。封印状态的持续时间减少3%/级。"/>
     </imgdir>
     <imgdir name="4461015">
-      <string name="name" value="黑暗抵抗天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「黑暗抵抗」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="黑暗抵抗"/>
+      <string name="desc" value="初级天赋。黑暗状态的持续时间减少3%/级。"/>
     </imgdir>
     <imgdir name="4462001">
-      <string name="name" value="物理强化天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「物理强化」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="物理强化"/>
+      <string name="desc" value="中级天赋。对野外精英怪物造成的物理伤害增加2%/级。#c需先解锁中级天赋。#"/>
     </imgdir>
     <imgdir name="4462002">
-      <string name="name" value="狩猎意志天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「狩猎意志」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="狩猎意志"/>
+      <string name="desc" value="中级天赋。掉宝率增加2%/级。#c计入天赋掉宝加成总上限+20%。#"/>
     </imgdir>
     <imgdir name="4462003">
-      <string name="name" value="魔法强化天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「魔法强化」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="魔法强化"/>
+      <string name="desc" value="中级天赋。对野外精英怪物造成的魔法伤害增加2%/级。"/>
     </imgdir>
     <imgdir name="4462004">
-      <string name="name" value="坚韧意志天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「坚韧意志」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="坚韧意志"/>
+      <string name="desc" value="中级天赋。受到的伤害额外减少1%/级。"/>
     </imgdir>
     <imgdir name="4462005">
-      <string name="name" value="灵狐意志天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「灵狐意志」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="灵狐意志"/>
+      <string name="desc" value="中级天赋。闪避怪物攻击的几率额外增加1%/级。"/>
     </imgdir>
     <imgdir name="4462006">
-      <string name="name" value="死而后生天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「死而后生」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="死而后生"/>
+      <string name="desc" value="中级天赋。受到致命伤害时，有1%/级几率免死并保留1点HP（冷却3分钟）。"/>
     </imgdir>
     <imgdir name="4462007">
-      <string name="name" value="体能锻炼天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「体能锻炼」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="体能锻炼"/>
+      <string name="desc" value="中级天赋。最大HP额外增加100/级。"/>
     </imgdir>
     <imgdir name="4462008">
-      <string name="name" value="魔力锻炼天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「魔力锻炼」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="魔力锻炼"/>
+      <string name="desc" value="中级天赋。最大MP额外增加100/级。"/>
     </imgdir>
     <imgdir name="4462009">
-      <string name="name" value="封印无效天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「封印无效」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="封印无效"/>
+      <string name="desc" value="中级天赋。有2%/级几率完全免疫封印状态。"/>
     </imgdir>
     <imgdir name="4462010">
-      <string name="name" value="黑暗无效天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「黑暗无效」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="黑暗无效"/>
+      <string name="desc" value="中级天赋。有2%/级几率完全免疫黑暗状态。"/>
     </imgdir>
     <imgdir name="4462011">
-      <string name="name" value="虚弱无效天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「虚弱无效」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="虚弱无效"/>
+      <string name="desc" value="中级天赋。有2%/级几率完全免疫虚弱状态。"/>
     </imgdir>
     <imgdir name="4462012">
-      <string name="name" value="昏迷无效天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「昏迷无效」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="昏迷无效"/>
+      <string name="desc" value="中级天赋。有2%/级几率完全免疫昏迷状态。"/>
     </imgdir>
     <imgdir name="4462013">
-      <string name="name" value="荆棘之甲天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「荆棘之甲」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="荆棘之甲"/>
+      <string name="desc" value="中级天赋。受到攻击时，反弹所受伤害的2%/级给攻击者。"/>
     </imgdir>
     <imgdir name="4462014">
-      <string name="name" value="魔力超导天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「魔力超导」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="魔力超导"/>
+      <string name="desc" value="中级天赋。使用技能消耗的MP额外减少2%/级。"/>
     </imgdir>
     <imgdir name="4462015">
-      <string name="name" value="凝血抗性天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「凝血抗性」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="凝血抗性"/>
+      <string name="desc" value="中级天赋。使用技能消耗的HP额外减少2%/级。"/>
     </imgdir>
     <imgdir name="4463001">
-      <string name="name" value="裂变天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「裂变」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="裂变"/>
+      <string name="desc" value="高级天赋。攻击命中怪物时，向周围怪物溅射该次伤害的1%/级（最高10%）。#c需先解锁高级天赋。#"/>
     </imgdir>
     <imgdir name="4463002">
-      <string name="name" value="大宗师天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「大宗师」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="大宗师"/>
+      <string name="desc" value="高级天赋。终极天赋触发时，有2%/级几率同时惠及同地图的组队成员。"/>
     </imgdir>
     <imgdir name="4463003">
-      <string name="name" value="精神焕发天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「精神焕发」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="精神焕发"/>
+      <string name="desc" value="高级天赋。所有异常状态的持续时间减少3%/级。"/>
     </imgdir>
     <imgdir name="4463004">
-      <string name="name" value="天煞孤星天赋书"/>
-      <string name="desc" value="在天赋中心使用，为「天煞孤星」增加1点天赋等级。#c可与其他玩家交换。#"/>
+      <string name="name" value="天煞孤星"/>
+      <string name="desc" value="高级天赋。独自一人在地图上时，掉宝率增加2%/级。#c计入天赋掉宝加成总上限。#"/>
+    </imgdir>
+    <imgdir name="4464001">
+      <string name="name" value="火眼晶晶"/>
+      <string name="desc" value="终极天赋。攻击时施加锐利之眼效果（暴击强化），持续约30秒并不断刷新。#c最高30级。#"/>
+    </imgdir>
+    <imgdir name="4464002">
+      <string name="name" value="稳如泰山"/>
+      <string name="desc" value="终极天赋。攻击时施加坚如泰山效果（防击退），持续约30秒并不断刷新。#c最高30级。#"/>
     </imgdir>
   </imgdir>
 </imgdir>

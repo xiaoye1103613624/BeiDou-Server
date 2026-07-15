@@ -125,6 +125,11 @@ public class Trade {
         meso = 0;
 
         for (Item item : exchangeItems) {
+            // 灵韵觉醒：交易到手清空灵韵，避免流通通胀
+            if (org.gms.spirit.SpiritAwakenConfig.CLEAR_SPIRIT_ON_TRADE
+                    && item instanceof org.gms.client.inventory.Equip equip) {
+                org.gms.spirit.SpiritAwakenService.clearSpirit(equip);
+            }
             KarmaManipulator.toggleKarmaFlagToUntradeable(item);
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }

@@ -81,4 +81,16 @@ public class InventoryequipmentDO implements Serializable  {
     @Column("anvilItemId")
     private Integer anvilitemid;
 
+    /** 灵韵技能 ID */
+    @Column("equipSkillId")
+    private Integer equipskillid;
+
+    /** 灵韵技能等级 */
+    @Column("equipSkillLevel")
+    private Integer equipskilllevel;
+
+    /** 灵韵过期时间，0=永久 */
+    @Column("equipSkillExpire")
+    private Long equipskillexpire;
+
 }

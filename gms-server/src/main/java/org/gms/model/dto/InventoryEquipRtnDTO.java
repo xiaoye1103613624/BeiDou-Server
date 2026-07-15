@@ -110,4 +110,16 @@ public class InventoryEquipRtnDTO {
      * 幻化外观源装备 id，对应 anvilItemId
      */
     private Integer anvilItemId;
+    /**
+     * 灵韵技能 ID
+     */
+    private Integer equipSkillId;
+    /**
+     * 灵韵技能等级
+     */
+    private Integer equipSkillLevel;
+    /**
+     * 灵韵过期时间，0=永久
+     */
+    private Long equipSkillExpire;
 }

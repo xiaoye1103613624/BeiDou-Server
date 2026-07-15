@@ -204,6 +204,9 @@ public class InventoryService {
                     .itemExp(obj.getInt("itemexp"))
                     .ringId(obj.getInt("ringid"))
                     .anvilItemId(obj.getInt("anvilItemId"))
+                    .equipSkillId(obj.getInt("equipSkillId"))
+                    .equipSkillLevel(obj.getInt("equipSkillLevel"))
+                    .equipSkillExpire(obj.getLong("equipSkillExpire"))
                     .build());
         }
         return rtnDTO;
@@ -258,6 +261,9 @@ public class InventoryService {
                         .itemExp(equip.getItemExp())
                         .ringId(equip.getRingId())
                         .anvilItemId(equip.getAnvilItemId())
+                        .equipSkillId(equip.getEquipSkillId())
+                        .equipSkillLevel(equip.getEquipSkillLevel())
+                        .equipSkillExpire(equip.getEquipSkillExpire())
                         .build());
             }
             return rtnDTO;
@@ -311,6 +317,9 @@ public class InventoryService {
             if (equipment.getJump() != null) equip.setJump(equipment.getJump());
             if (equipment.getVicious() != null) equip.setVicious(equipment.getVicious());
             if (equipment.getAnvilItemId() != null) equip.setAnvilItemId(equipment.getAnvilItemId());
+            if (equipment.getEquipSkillId() != null) equip.setEquipSkillId(equipment.getEquipSkillId());
+            if (equipment.getEquipSkillLevel() != null) equip.setEquipSkillLevel(equipment.getEquipSkillLevel());
+            if (equipment.getEquipSkillExpire() != null) equip.setEquipSkillExpire(equipment.getEquipSkillExpire());
         }
         character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
     }
@@ -345,6 +354,9 @@ public class InventoryService {
                             .jump(Optional.ofNullable(equipment.getJump()).map(Short::intValue).orElse(null))
                             .vicious(Optional.ofNullable(equipment.getVicious()).map(Short::intValue).orElse(null))
                             .anvilitemid(Optional.ofNullable(equipment.getAnvilItemId()).orElse(null))
+                            .equipskillid(Optional.ofNullable(equipment.getEquipSkillId()).orElse(null))
+                            .equipskilllevel(Optional.ofNullable(equipment.getEquipSkillLevel()).orElse(null))
+                            .equipskillexpire(Optional.ofNullable(equipment.getEquipSkillExpire()).orElse(null))
                             .build(),
                     QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryitemsDO.getInventoryitemid())));
         }
