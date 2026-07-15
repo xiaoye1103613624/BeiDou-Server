@@ -30,7 +30,7 @@ static void SaveImg(WzImage img, string path) {
 }
 
 if (args.Length < 1) {
-  Console.WriteLine("Commands: copy-file <src> <dst> | merge-child <srcImg> <dstImg> <child> | merge-sounds <srcUI.img> <dstUI.img> <names...>");
+  Console.WriteLine("Commands: copy-file | merge-child | merge-sounds | inspect <img> [path] | merge-deep <srcImg> <dstImg> <path...>");
   return 1;
 }
 
@@ -63,6 +63,68 @@ if (cmd == "merge-sounds") {
   }
   SaveImg(dst, args[2]);
   Console.WriteLine($"SOUNDS merged {n} -> {args[2]} size={new FileInfo(args[2]).Length}");
+  return 0;
+}
+if (cmd == "inspect") {
+  var img = LoadImg(args[1]);
+  WzObject cur = img;
+  if (args.Length > 2) {
+    foreach (var part in args[2].Split('/', StringSplitOptions.RemoveEmptyEntries)) {
+      if (cur is WzImage wi) cur = wi[part];
+      else if (cur is IPropertyContainer pc) cur = pc[part];
+      else { cur = null; break; }
+      if (cur == null) {
+        Console.WriteLine("MISSING " + args[2]);
+        return 2;
+      }
+    }
+  }
+  void Dump(WzObject o, string indent, int depth) {
+    if (depth < 0 || o == null) return;
+    string extra = o is WzCanvasProperty c ? $" canvas {c.PngProperty?.Width}x{c.PngProperty?.Height}" : "";
+    Console.WriteLine(indent + o.Name + " (" + o.GetType().Name + ")" + extra);
+    if (o is IPropertyContainer container) {
+      foreach (var p in container.WzProperties) Dump(p, indent + "  ", depth - 1);
+    }
+  }
+  Dump(cur, "", args.Length > 2 ? 4 : 1);
+  return 0;
+}
+if (cmd == "merge-deep") {
+  // merge-deep <srcImg> <dstImg> <path/to/node>  — copy nested node into dst at same path
+  var src = LoadImg(args[1]);
+  var dst = LoadImg(args[2]);
+  string[] parts = args[3].Split('/', StringSplitOptions.RemoveEmptyEntries);
+  WzObject srcCur = src;
+  for (int i = 0; i < parts.Length; i++) {
+    if (srcCur is WzImage wi) srcCur = wi[parts[i]];
+    else if (srcCur is IPropertyContainer pc) srcCur = pc[parts[i]];
+    else { srcCur = null; break; }
+  }
+  if (srcCur is not WzImageProperty srcProp) {
+    Console.Error.WriteLine("SRC missing " + args[3]);
+    return 2;
+  }
+  // Ensure parent path exists on dst; create empty subprops as needed not supported — parent must exist
+  IPropertyContainer parent = dst;
+  for (int i = 0; i < parts.Length - 1; i++) {
+    var next = parent[parts[i]];
+    if (next == null) {
+      var created = new WzSubProperty(parts[i]);
+      parent.AddProperty(created);
+      parent = created;
+    } else if (next is IPropertyContainer npc) {
+      parent = npc;
+    } else {
+      Console.Error.WriteLine("DST path not container: " + parts[i]);
+      return 2;
+    }
+  }
+  string leaf = parts[^1];
+  if (parent[leaf] != null) parent.RemoveProperty(leaf);
+  parent.AddProperty(srcProp.DeepClone());
+  SaveImg(dst, args[2]);
+  Console.WriteLine($"MERGED-DEEP {args[3]} -> {args[2]} size={new FileInfo(args[2]).Length}");
   return 0;
 }
 Console.Error.WriteLine("unknown cmd");

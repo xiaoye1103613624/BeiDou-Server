@@ -233,6 +233,7 @@ if (args.Length < 1)
     Console.WriteLine("  PatchStorageBg extend-auto <UIWindow.img> <pngOutDir>  (meso+160 => ~478px; art grid 122+40n, splice@282, tile@242)");
     Console.WriteLine("  PatchStorageBg dump-trunk <UIWindow.img>");
     Console.WriteLine("  PatchStorageBg shopcopy <UIWindow.img> <pngOutDir>  (legacy, not recommended)");
+    Console.WriteLine("  PatchStorageBg extend-shop <UIWindow.img> <pngOutDir> [targetHeight=499]  (+160 for HigherShopList 5→9)");
     return 1;
 }
 
@@ -326,5 +327,147 @@ if (cmd == "shopcopy")
     return 0;
 }
 
+if (cmd == "extend-shop")
+{
+    // HigherShopList: +4 rows * 40px = +160. Scroll Create Y=285 (IDA 0x7547A2).
+    if (args.Length < 3)
+    {
+        Console.WriteLine("usage: PatchStorageBg extend-shop <UIWindow.img> <pngOutDir> [targetHeight=499]");
+        return 1;
+    }
+    string imgPath = args[1];
+    string outDir = args[2];
+    int targetH = args.Length >= 4 ? int.Parse(args[3]) : 499; // 339+160
+    Directory.CreateDirectory(outDir);
+
+    var img = LoadImg(imgPath);
+    var shopNode = img["Shop"] as WzSubProperty
+        ?? throw new InvalidOperationException("missing Shop");
+    var shopBg = shopNode["backgrnd"] as WzCanvasProperty
+        ?? throw new InvalidOperationException("missing Shop/backgrnd");
+
+    int srcW = shopBg.PngProperty?.Width ?? 0;
+    int srcH = shopBg.PngProperty?.Height ?? 0;
+    if (srcW <= 0 || srcH <= 0) throw new InvalidOperationException("invalid Shop/backgrnd size");
+    if (srcH >= targetH)
+    {
+        Console.WriteLine($"SKIP already tall enough Shop/backgrnd={srcW}x{srcH} target={targetH}");
+        Inspect(imgPath);
+        return 0;
+    }
+
+    const int rowH = 40;
+    const int scrollY = 285; // CShopDlg scrollbar Create Y
+    int transitionStart = Math.Min(scrollY, srcH - rowH);
+    int bottomH = srcH - transitionStart;
+    int tileStart = Math.Max(0, transitionStart - rowH);
+
+    string srcPng = Path.Combine(outDir, "Shop_backgrnd_src.png");
+    string extPng = Path.Combine(outDir, $"Shop_backgrnd_{srcW}x{targetH}.png");
+    using (var srcBmp = shopBg.GetLinkedWzCanvasBitmap())
+    {
+        srcBmp.Save(srcPng, ImageFormat.Png);
+    }
+    using (var srcBmp = new Bitmap(srcPng))
+    using (var dstBmp = new Bitmap(srcW, targetH, PixelFormat.Format32bppArgb))
+    using (var g = Graphics.FromImage(dstBmp))
+    {
+        g.Clear(Color.FromArgb(0, 0, 0, 0));
+        int insertH = targetH - transitionStart - bottomH;
+        g.DrawImage(srcBmp, new Rectangle(0, 0, srcW, transitionStart),
+            0, 0, srcW, transitionStart, GraphicsUnit.Pixel);
+        for (int y = transitionStart; y < transitionStart + insertH; y += rowH)
+        {
+            int drawH = Math.Min(rowH, transitionStart + insertH - y);
+            g.DrawImage(srcBmp,
+                new Rectangle(0, y, srcW, drawH),
+                0, tileStart, srcW, drawH, GraphicsUnit.Pixel);
+        }
+        g.DrawImage(srcBmp,
+            new Rectangle(0, targetH - bottomH, srcW, bottomH),
+            0, transitionStart, srcW, bottomH, GraphicsUnit.Pixel);
+        dstBmp.Save(extPng, ImageFormat.Png);
+    }
+    Console.WriteLine($"EXPORT shop transition={transitionStart} tile={tileStart} bottomH={bottomH} -> {extPng}");
+
+    var newCanvas = new WzCanvasProperty("backgrnd");
+    newCanvas.PngProperty = new WzPngProperty();
+    using (var extBmp = new Bitmap(extPng))
+    {
+        newCanvas.PngProperty.PNG = new Bitmap(extBmp);
+    }
+    int originX = 0, originY = 0;
+    if (shopBg["origin"] is WzVectorProperty originProp)
+    {
+        originX = originProp.X?.Value ?? 0;
+        originY = originProp.Y?.Value ?? 0;
+    }
+    newCanvas.AddProperty(new WzVectorProperty("origin",
+        new WzIntProperty("X", originX),
+        new WzIntProperty("Y", originY)));
+
+    if (shopNode["backgrnd"] != null) shopNode.RemoveProperty("backgrnd");
+    shopNode.AddProperty(newCanvas);
+    SaveImg(img, imgPath);
+    Console.WriteLine($"PATCHED {imgPath} Shop/backgrnd={srcW}x{targetH} bytes={new FileInfo(imgPath).Length}");
+    Inspect(imgPath);
+    return 0;
+}
+
+if (cmd == "replace-canvas")
+{
+    // replace-canvas <UIWindow.img> <NodePath> <pngPath>
+    // NodePath eg PersonalShop/backgrnd or EntrustedShop/backgrnd
+    if (args.Length < 4)
+    {
+        Console.WriteLine("usage: PatchStorageBg replace-canvas <UIWindow.img> <Node/path> <pngPath>");
+        return 1;
+    }
+    string imgPath = args[1];
+    string nodePath = args[2];
+    string pngPath = args[3];
+    if (!File.Exists(pngPath)) throw new FileNotFoundException(pngPath);
+
+    var img = LoadImg(imgPath);
+    string[] parts = nodePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+    if (parts.Length < 2) throw new ArgumentException("Node path must be like PersonalShop/backgrnd");
+
+    WzObject cur = img;
+    for (int i = 0; i < parts.Length - 1; i++)
+    {
+        cur = cur[parts[i]] ?? throw new InvalidOperationException("missing " + parts[i]);
+    }
+    var parent = cur as WzSubProperty
+        ?? throw new InvalidOperationException("parent is not subproperty: " + parts[parts.Length - 2]);
+    string canvasName = parts[^1];
+    var old = parent[canvasName] as WzCanvasProperty;
+
+    int originX = 0, originY = 0;
+    if (old?["origin"] is WzVectorProperty originProp)
+    {
+        originX = originProp.X?.Value ?? 0;
+        originY = originProp.Y?.Value ?? 0;
+    }
+
+    var newCanvas = new WzCanvasProperty(canvasName);
+    newCanvas.PngProperty = new WzPngProperty();
+    using (var bmp = new Bitmap(pngPath))
+    {
+        newCanvas.PngProperty.PNG = new Bitmap(bmp);
+        Console.WriteLine($"REPLACE {nodePath} <- {pngPath} {bmp.Width}x{bmp.Height}");
+    }
+    newCanvas.AddProperty(new WzVectorProperty("origin",
+        new WzIntProperty("X", originX),
+        new WzIntProperty("Y", originY)));
+
+    if (parent[canvasName] != null) parent.RemoveProperty(canvasName);
+    parent.AddProperty(newCanvas);
+    SaveImg(img, imgPath);
+    Console.WriteLine($"PATCHED {imgPath} bytes={new FileInfo(imgPath).Length}");
+    Inspect(imgPath);
+    return 0;
+}
+
 Console.WriteLine($"unknown command: {cmd}");
+Console.WriteLine("usage:\n  PatchStorageBg inspect <UIWindow.img> [...]\n  PatchStorageBg restore-trunk <target.img> <source.img>\n  PatchStorageBg extend <UIWindow.img> <targetHeight> <pngOutDir>\n  PatchStorageBg extend-auto <UIWindow.img> <pngOutDir>\n  PatchStorageBg dump-trunk <UIWindow.img>\n  PatchStorageBg shopcopy <UIWindow.img> <pngOutDir>\n  PatchStorageBg extend-shop <UIWindow.img> <pngOutDir> [targetHeight=499]\n  PatchStorageBg replace-canvas <UIWindow.img> <Node/path> <pngPath>");
 return 1;
