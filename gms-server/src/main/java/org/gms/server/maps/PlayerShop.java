@@ -210,7 +210,7 @@ public class PlayerShop extends AbstractMapObject {
 
     public boolean addItem(PlayerShopItem item) {
         synchronized (items) {
-            if (items.size() >= 16) {
+            if (items.size() >= 32) {
                 return false;
             }
 

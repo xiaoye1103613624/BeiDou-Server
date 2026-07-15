@@ -284,7 +284,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         return;
                     }
                     if (!c.canGainCharacterSlot()) {
-                        chr.dropMessage(1, "You have already used up all 12 extra character slots.");
+                        // 默认 3 个 + 最多买 27 个额外槽 = 30
+                        chr.dropMessage(1, "您已经用完了所有27个额外角色槽。");
                         c.enableCSActions();
                         return;
                     }

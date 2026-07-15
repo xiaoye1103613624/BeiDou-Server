@@ -21,6 +21,9 @@
  */
 package org.gms.net.server.channel.handlers;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Inventory;
@@ -50,6 +53,11 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         byte invType = p.readByte();
         if (invType < 1 || invType > 5) {
             c.disconnect(false, false);
+            return;
+        }
+
+        if (p.available() > 0) {
+            handleSlotLockMerge(p, c, invType);
             return;
         }
 
@@ -97,6 +105,85 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
                     short itemSlot = -1;
                     for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i = (short) (i + 1)) {
                         if (inventory.getItem(i) != null) {
+                            itemSlot = i;
+                            break;
+                        }
+                    }
+                    if (itemSlot > 0) {
+                        InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                    } else {
+                        sorted = true;
+                    }
+                } else {
+                    sorted = true;
+                }
+            }
+        } finally {
+            inventory.unlockInventory();
+        }
+
+        c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
+        c.sendPacket(PacketCreator.enableActions());
+    }
+
+    private void handleSlotLockMerge(InPacket p, Client c, byte invType) {
+        Set<Integer> lockedSlots = new HashSet<>();
+        final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
+        for (int i = 0; i < lockSize; i++) {
+            lockedSlots.add(Short.toUnsignedInt(p.readUnsignedByte()));
+        }
+
+        InventoryType inventoryType = InventoryType.getByType(invType);
+        Inventory inventory = c.getPlayer().getInventory(inventoryType);
+        inventory.lockInventory();
+        try {
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
+            Item srcItem, dstItem;
+
+            for (short dst = 1; dst <= inventory.getSlotLimit(); dst++) {
+                if (lockedSlots.contains((int) dst)) {
+                    continue;
+                }
+                dstItem = inventory.getItem(dst);
+                if (dstItem == null) {
+                    continue;
+                }
+
+                for (short src = (short) (dst + 1); src <= inventory.getSlotLimit(); src++) {
+                    if (lockedSlots.contains((int) src)) {
+                        continue;
+                    }
+                    srcItem = inventory.getItem(src);
+                    if (srcItem == null) {
+                        continue;
+                    }
+                    if (dstItem.getItemId() != srcItem.getItemId()) {
+                        continue;
+                    }
+                    if (dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) {
+                        break;
+                    }
+
+                    InventoryManipulator.move(c, inventoryType, src, dst);
+                }
+            }
+
+            inventory = c.getPlayer().getInventory(inventoryType);
+            boolean sorted = false;
+
+            while (!sorted) {
+                short freeSlot = -1;
+                for (short i = 1; i <= inventory.getSlotLimit(); i++) {
+                    if (!lockedSlots.contains((int) i) && inventory.getItem(i) == null) {
+                        freeSlot = i;
+                        break;
+                    }
+                }
+
+                if (freeSlot != -1) {
+                    short itemSlot = -1;
+                    for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i++) {
+                        if (!lockedSlots.contains((int) i) && inventory.getItem(i) != null) {
                             itemSlot = i;
                             break;
                         }

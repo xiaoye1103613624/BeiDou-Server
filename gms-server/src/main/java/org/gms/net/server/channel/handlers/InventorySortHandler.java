@@ -306,6 +306,11 @@ public final class InventorySortHandler extends AbstractPacketHandler {
             return;
         }
 
+        if (p.available() > 0) {
+            handleSlotLockSort(p, c, chr, invType);
+            return;
+        }
+
         ArrayList<Item> itemarray = new ArrayList<>();
         List<ModifyInventory> mods = new ArrayList<>();
 
@@ -332,6 +337,65 @@ public final class InventorySortHandler extends AbstractPacketHandler {
                 inventory.addItem(item);
                 mods.add(new ModifyInventory(0, item.copy()));//to prevent crashes
             }
+            itemarray.clear();
+        } finally {
+            inventory.unlockInventory();
+        }
+
+        c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        c.sendPacket(PacketCreator.finishedSort2(invType));
+        c.sendPacket(PacketCreator.enableActions());
+    }
+
+    private void handleSlotLockSort(InPacket p, Client c, Character chr, byte invType) {
+        List<Integer> lockedSlots = new ArrayList<>();
+        final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
+        for (int i = 0; i < lockSize; i++) {
+            lockedSlots.add(Short.toUnsignedInt(p.readUnsignedByte()));
+        }
+
+        ArrayList<Item> itemarray = new ArrayList<>();
+        List<ModifyInventory> mods = new ArrayList<>();
+
+        Inventory inventory = chr.getInventory(InventoryType.getByType(invType));
+        inventory.lockInventory();
+        try {
+            for (short i = 1; i <= inventory.getSlotLimit(); i++) {
+                if (lockedSlots.contains((int) i)) {
+                    continue;
+                }
+                Item item = inventory.getItem(i);
+                if (item != null) {
+                    itemarray.add(item.copy());
+                }
+            }
+
+            for (Item item : itemarray) {
+                inventory.removeSlot(item.getPosition());
+                mods.add(new ModifyInventory(3, item));
+            }
+
+            int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
+            int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
+            new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
+
+            int slotCursor = 1;
+            for (Item item : itemarray) {
+                while (slotCursor <= inventory.getSlotLimit()
+                        && (lockedSlots.contains(slotCursor)
+                        || inventory.getItem((short) slotCursor) != null)) {
+                    slotCursor++;
+                }
+                if (slotCursor > inventory.getSlotLimit()) {
+                    break;
+                }
+
+                item.setPosition((short) slotCursor);
+                inventory.addItemFromDB(item);
+                mods.add(new ModifyInventory(0, item.copy()));
+                slotCursor++;
+            }
+
             itemarray.clear();
         } finally {
             inventory.unlockInventory();
