@@ -70,6 +70,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerCoolDownValueHolder;
+import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.channel.handlers.PlayerInteractionHandler;
@@ -121,7 +122,7 @@ import java.util.stream.Collectors;
  */
 public class PacketCreator {
 
-    public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
+    public static final List<Pair<Stat, Long>> EMPTY_STATUPDATE = Collections.emptyList();
     private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
@@ -190,23 +191,24 @@ public class PacketCreator {
             }
         }
 
-        p.writeByte(chr.getLevel()); // level
+        p.writeShort(chr.getLevel()); // level (ushort; matches ijl15 level300 Decode2)
         p.writeShort(chr.getJob().getId()); // job
         p.writeShort(chr.getStr()); // str
         p.writeShort(chr.getDex()); // dex
         p.writeShort(chr.getInt()); // int
         p.writeShort(chr.getLuk()); // luk
-        p.writeShort(chr.getHp()); // hp (?)
-        p.writeShort(chr.getClientMaxHp()); // maxhp
-        p.writeShort(chr.getMp()); // mp (?)
-        p.writeShort(chr.getClientMaxMp()); // maxmp
+        p.writeInt(chr.getHp()); // hp
+        p.writeInt(chr.getClientMaxHp()); // maxhp
+        p.writeInt(chr.getMp()); // mp
+        p.writeInt(chr.getClientMaxMp()); // maxmp
         p.writeShort(chr.getRemainingAp()); // remaining ap
         if (GameConstants.hasSPTable(chr.getJob())) {
             addRemainingSkillInfo(p, chr);
         } else {
             p.writeShort(chr.getRemainingSp()); // remaining sp
         }
-        p.writeInt(chr.getExp()); // current exp
+        // EXP writeLong (matches ijl15 level300 Decode8 caves)
+        p.writeLong(Math.max(0L, chr.getExp()));
         p.writeShort(chr.getFame()); // fame
         p.writeInt(chr.getGachaExp()); //Gacha Exp
         p.writeInt(chr.getMapId()); // current map id
@@ -368,6 +370,114 @@ public class PacketCreator {
         return p;
     }
 
+    public static Packet realHpMpWidget(Character chr) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA7);
+        p.writeInt(chr.getHp());
+        p.writeInt(chr.getCurrentMaxHp());
+        p.writeInt(chr.getMp());
+        p.writeInt(chr.getCurrentMaxMp());
+        return p;
+    }
+
+    public static Packet partyBuffSnapshot(Character chr) {
+        List<PlayerBuffValueHolder> buffs = chr.getAllBuffs();
+        buffs.sort((left, right) -> {
+            int leftPriority = getPartyItemAttackPriority(left);
+            int rightPriority = getPartyItemAttackPriority(right);
+            if (leftPriority != rightPriority) {
+                return Integer.compare(rightPriority, leftPriority);
+            }
+
+            int leftTotal = getPartyItemTotalAttack(left);
+            int rightTotal = getPartyItemTotalAttack(right);
+            return Integer.compare(rightTotal, leftTotal);
+        });
+
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA9);
+        p.writeInt(chr.getId());
+        p.writeByte(Math.min(255, buffs.size()));
+
+        int written = 0;
+        for (PlayerBuffValueHolder buff : buffs) {
+            if (written >= 255) {
+                break;
+            }
+
+            int sourceId = buff.effect.getBuffSourceId();
+            int remainingMs = chr.getBuffRemainingTime(sourceId);
+            int totalMs = remainingMs > 0
+                    ? (int) Math.min(Integer.MAX_VALUE, (long) remainingMs + Math.max(0, buff.usedTime))
+                    : Math.max(0, buff.effect.getBuffLocalDuration());
+
+            p.writeInt(sourceId);
+            p.writeInt(remainingMs);
+            p.writeInt(totalMs);
+            written++;
+        }
+        return p;
+    }
+
+    public static Packet emptyPartyBuffSnapshot(int characterId) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA9);
+        p.writeInt(characterId);
+        p.writeByte(0);
+        return p;
+    }
+
+    private static int getPartyItemAttackPriority(PlayerBuffValueHolder buff) {
+        if (buff.effect.isSkill()) {
+            return 0;
+        }
+        return Math.max(buff.effect.getWatk(), buff.effect.getMatk());
+    }
+
+    private static int getPartyItemTotalAttack(PlayerBuffValueHolder buff) {
+        if (buff.effect.isSkill()) {
+            return 0;
+        }
+        return buff.effect.getWatk() + buff.effect.getMatk();
+    }
+
+    public static Packet partyHpPercent(Character chr) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAA);
+        p.writeInt(chr.getId());
+        int maxHp = Math.max(1, chr.getCurrentMaxHp());
+        p.writeByte(Math.max(0, Math.min(100, chr.getHp() * 100 / maxHp)));
+        return p;
+    }
+
+    public static Packet partyTrackerVisibility(boolean visible) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAB);
+        p.writeByte(visible ? 1 : 0);
+        return p;
+    }
+
+    public static Packet partyTrackerUpdate(Character chr) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAB);
+        p.writeByte(2);
+        p.writeInt(chr.getId());
+        p.writeLong(chr.getPartyTrackerExp());
+        p.writeLong(chr.getPartyTrackerMeso());
+        return p;
+    }
+
+    public static Packet partyBuffCounts(int characterId, int count, byte[] payload) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAD);
+        p.writeInt(characterId);
+        p.writeByte(count);
+        if (payload != null && payload.length > 0) {
+            p.writeBytes(payload);
+        }
+        return p;
+    }
+
     private static void addCharEntry(OutPacket p, Character chr, boolean viewall) {
         addCharStats(p, chr);
         addCharLook(p, chr, false);
@@ -515,6 +625,11 @@ public class PacketCreator {
         p.writeInt(-1);
         if (equip != null) {
             p.writeInt(equip.getAnvilItemId());
+            // 灵韵觉醒：技能 ID / 等级 / 过期(FILETIME，0=永久)
+            p.writeInt(equip.getEquipSkillId());
+            p.writeInt(equip.getEquipSkillLevel());
+            long skillExpire = equip.getEquipSkillExpire();
+            p.writeLong(skillExpire > 0 ? getTime(skillExpire) : 0L);
         }
 
     }
@@ -1030,14 +1145,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
+    public static Packet updatePlayerStats(List<Pair<Stat, Long>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<Stat, Integer> statupdate : stats) {
+        for (Pair<Stat, Long> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<Stat, Integer>> mystats = stats;
+        List<Pair<Stat, Long>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -1046,26 +1161,38 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<Stat, Integer> statupdate : mystats) {
+        for (Pair<Stat, Long> statupdate : mystats) {
             if (statupdate.getLeft().getValue() >= 1) {
-                if (statupdate.getLeft().getValue() == 0x1) {
-                    p.writeByte(statupdate.getRight().byteValue());
-                } else if (statupdate.getLeft().getValue() <= 0x4) {
-                    p.writeInt(statupdate.getRight());
-                } else if (statupdate.getLeft().getValue() < 0x20) {
-                    p.writeByte(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x8000) {
+                int mask = statupdate.getLeft().getValue();
+                long value = statupdate.getRight();
+                if (mask == 0x1) {
+                    p.writeByte((byte) value);
+                } else if (mask <= 0x4) {
+                    p.writeInt((int) value);
+                } else if (mask == Stat.LEVEL.getValue()) {
+                    // ushort level (matches ijl15 level300 Decode2)
+                    p.writeShort((short) value);
+                } else if (mask < 0x20) {
+                    p.writeByte((byte) value);
+                } else if (mask == Stat.HP.getValue() || mask == Stat.MAXHP.getValue()
+                        || mask == Stat.MP.getValue() || mask == Stat.MAXMP.getValue()) {
+                    // 4-byte HP/MP (matches ijl15 maxhpmp Decode4)
+                    p.writeInt((int) value);
+                } else if (mask == 0x8000) {
                     if (GameConstants.hasSPTable(chr.getJob())) {
                         addRemainingSkillInfo(p, chr);
                     } else {
-                        p.writeShort(statupdate.getRight().shortValue());
+                        p.writeShort((short) value);
                     }
-                } else if (statupdate.getLeft().getValue() < 0xFFFF) {
-                    p.writeShort(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x20000) {
-                    p.writeShort(statupdate.getRight().shortValue());
+                } else if (mask == Stat.EXP.getValue()) {
+                    // 8-byte EXP (matches ijl15 level300 Decode8)
+                    p.writeLong(value);
+                } else if (mask < 0xFFFF) {
+                    p.writeShort((short) value);
+                } else if (mask == 0x20000) {
+                    p.writeShort((short) value);
                 } else {
-                    p.writeInt(statupdate.getRight());
+                    p.writeInt((int) value);
                 }
             }
         }
@@ -1087,7 +1214,7 @@ public class PacketCreator {
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
-        p.writeShort(chr.getHp());
+        p.writeInt(chr.getHp());
         p.writeBool(chr.isChasing());
         if (chr.isChasing()) {
             chr.setChasing(false);
@@ -1105,7 +1232,7 @@ public class PacketCreator {
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
-        p.writeShort(chr.getHp());
+        p.writeInt(chr.getHp());
         p.writeBool(true);
         p.writeInt(spawnPosition.x);    // spawn position placement thanks to Arnah (Vertisy)
         p.writeInt(spawnPosition.y);
@@ -3366,7 +3493,7 @@ public class PacketCreator {
         p.writeByte(0xFF);
         p.writeString(shop.getDescription());
         List<PlayerShopItem> items = shop.getItems();
-        p.writeByte(0x10);  //TODO SLOTS, which is 16 for most stores...slotMax
+        p.writeByte(0x20);  // slotMax (32)
         p.writeByte(items.size());
         for (PlayerShopItem item : items) {
             p.writeShort(item.getBundles());
@@ -5298,7 +5425,7 @@ public class PacketCreator {
             p.writeInt(chr.getMerchantMeso());//:D?
         }
         p.writeString(hm.getDescription());
-        p.writeByte(0x10); //TODO SLOTS, which is 16 for most stores...slotMax
+        p.writeByte(0x20); // slotMax (32)
         p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         if (hm.getItems().isEmpty()) {
@@ -7770,6 +7897,10 @@ public class PacketCreator {
         p.writeInt(charId);
         p.writeInt(equip.getItemId());
         p.writeInt(equip.getAnvilItemId());
+        p.writeInt(equip.getEquipSkillId());
+        p.writeInt(equip.getEquipSkillLevel());
+        long skillExpire = equip.getEquipSkillExpire();
+        p.writeLong(skillExpire > 0 ? getTime(skillExpire) : 0L);
         p.writeShort(equip.getStr());
         p.writeShort(equip.getDex());
         p.writeShort(equip.getInt());

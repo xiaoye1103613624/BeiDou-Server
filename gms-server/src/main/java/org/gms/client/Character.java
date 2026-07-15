@@ -266,11 +266,14 @@ public class Character extends AbstractCharacterObject {
     private transient org.gms.combat.stat.CombatStatProfile combatStatProfile = org.gms.combat.stat.CombatStatProfile.EMPTY;
     /** 套装/强化/携带物变化后为 true，确保下次刷新或读 Profile 时重算。 */
     private transient volatile boolean combatStatsDirty = true;
+    private transient org.gms.talent.TalentManager talentManager;
     @Getter
     private transient int setDamageSkin;
     private transient boolean setSkillBonusSent;
     private transient Map<Integer, Integer> setSkillBonusLevels = new HashMap<>();
     private transient Map<Integer, Byte> setActiveSkillBackup = new HashMap<>();
+    /** 灵韵穿戴前的本技等级备份（与套装 activeSkill 隔离）。 */
+    private transient Map<Integer, Byte> spiritSkillBackup = new HashMap<>();
     private int localchairrate;
     @Getter
     private boolean hidden;
@@ -300,7 +303,7 @@ public class Character extends AbstractCharacterObject {
     private String search = null;
     private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map //玩家客户端当前正在尝试更改地图或登录游戏地图
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
-    private final AtomicInteger exp = new AtomicInteger();
+    private final AtomicLong exp = new AtomicLong();
     private final AtomicInteger gachaExp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
@@ -561,6 +564,9 @@ public class Character extends AbstractCharacterObject {
     private long dptStartMs = 0L;
     private long dptTotalDmg = 0L;
     private boolean dptActive = false;
+    private boolean partyTrackerVisible = true;
+    private int partyBuffCountsCount = 0;
+    private byte[] partyBuffCountsPayload = null;
     private final Map<Integer, DptPlayerStat> dptPlayerView = new LinkedHashMap<>();
     private final Map<Integer, DptSkillStat> dptSkillStats = new LinkedHashMap<>();
 
@@ -1279,14 +1285,14 @@ public class Character extends AbstractCharacterObject {
             addMaxMPMaxHP(addhp, addmp, true);
             recalcLocalStats();
 
-            List<Pair<Stat, Integer>> statup = new ArrayList<>(7);
-            statup.add(new Pair<>(Stat.HP, hp));
-            statup.add(new Pair<>(Stat.MP, mp));
-            statup.add(new Pair<>(Stat.MAXHP, clientMaxHp));
-            statup.add(new Pair<>(Stat.MAXMP, clientMaxMp));
-            statup.add(new Pair<>(Stat.AVAILABLEAP, remainingAp));
-            statup.add(new Pair<>(Stat.AVAILABLESP, remainingSp[GameConstants.getSkillBook(job.getId())]));
-            statup.add(new Pair<>(Stat.JOB, job.getId()));
+            List<Pair<Stat, Long>> statup = new ArrayList<>(7);
+            statup.add(new Pair<>(Stat.HP, (long) (hp)));
+            statup.add(new Pair<>(Stat.MP, (long) (mp)));
+            statup.add(new Pair<>(Stat.MAXHP, (long) (clientMaxHp)));
+            statup.add(new Pair<>(Stat.MAXMP, (long) (clientMaxMp)));
+            statup.add(new Pair<>(Stat.AVAILABLEAP, (long) (remainingAp)));
+            statup.add(new Pair<>(Stat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job.getId())]));
+            statup.add(new Pair<>(Stat.JOB, (long) (job.getId())));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
         } finally {
             statWlock.unlock();
@@ -1890,6 +1896,10 @@ public class Character extends AbstractCharacterObject {
 
     public void changePage(int page) {
         this.currentPage = page;
+    }
+
+    public Map<Integer, Byte> getSpiritSkillBackup() {
+        return spiritSkillBackup;
     }
 
     public void changeSkillLevel(Skill skill, byte newLevel, int newMasterlevel, long expiration) {
@@ -2623,17 +2633,22 @@ public class Character extends AbstractCharacterObject {
 
     public void giveDebuff(final Disease disease, MobSkill skill) {
         if (!hasDisease(disease) && getDiseasesSize() < 2) {
+            if (org.gms.talent.TalentEffects.tryImmunity(this, disease)) {
+                dropMessage(5, "天赋发动：免疫了异常状态！");
+                return;
+            }
             if (!(disease == Disease.SEDUCE || disease == Disease.STUN)) {
                 if (hasActiveBuff(Bishop.HOLY_SHIELD)) {
                     return;
                 }
             }
 
+            long adjustedDuration = org.gms.talent.TalentEffects.adjustDebuffDuration(this, disease, skill.getDuration());
             chrLock.lock();
             try {
                 long curTime = Server.getInstance().getCurrentTime();
-                diseaseExpires.put(disease, curTime + skill.getDuration());
-                diseases.put(disease, new Pair<>(new DiseaseValueHolder(curTime, skill.getDuration()), skill));
+                diseaseExpires.put(disease, curTime + adjustedDuration);
+                diseases.put(disease, new Pair<>(new DiseaseValueHolder(curTime, adjustedDuration), skill));
             } finally {
                 chrLock.unlock();
             }
@@ -2775,6 +2790,17 @@ public class Character extends AbstractCharacterObject {
         combatStatsDirty = true;
     }
 
+    public org.gms.talent.TalentManager getTalentManager() {
+        if (talentManager == null) {
+            talentManager = new org.gms.talent.TalentManager(this);
+        }
+        return talentManager;
+    }
+
+    public void loadTalents() {
+        getTalentManager().load();
+    }
+
     /** 脏则刷新；伤害热路径读 Profile 前调用。 */
     public void ensureCombatStatsFresh() {
         if (combatStatsDirty) {
@@ -2821,17 +2847,23 @@ public class Character extends AbstractCharacterObject {
         setDamageSkin = bonus.damageSkinId;
         setSkillBonusLevels = new HashMap<>(bonus.skillLevels);
 
-        applySetActiveSkills(bonus.activeSkills);
+        Map<Integer, Integer> activeSkills = new HashMap<>(bonus.activeSkills);
+        applySetActiveSkills(activeSkills);
+        // 灵韵：教会技 / 已学技走 (+N) 套装同款展示
+        Map<Integer, Integer> spiritBonus = org.gms.spirit.SpiritWearSkills.sync(this);
+        for (Map.Entry<Integer, Integer> e : spiritBonus.entrySet()) {
+            setSkillBonusLevels.merge(e.getKey(), e.getValue(), Integer::sum);
+        }
         updateLocalStats();
 
         if (notifyClient && client != null) {
-            List<Pair<Stat, Integer>> statup = new ArrayList<>(6);
-            statup.add(new Pair<>(Stat.STR, localstr));
-            statup.add(new Pair<>(Stat.DEX, localdex));
-            statup.add(new Pair<>(Stat.INT, localint_));
-            statup.add(new Pair<>(Stat.LUK, localluk));
-            statup.add(new Pair<>(Stat.MAXHP, localMaxHp));
-            statup.add(new Pair<>(Stat.MAXMP, localMaxMp));
+            List<Pair<Stat, Long>> statup = new ArrayList<>(6);
+            statup.add(new Pair<>(Stat.STR, (long) (localstr)));
+            statup.add(new Pair<>(Stat.DEX, (long) (localdex)));
+            statup.add(new Pair<>(Stat.INT, (long) (localint_)));
+            statup.add(new Pair<>(Stat.LUK, (long) (localluk)));
+            statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
+            statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
             sendSetBonusPackets();
         }
@@ -2867,7 +2899,13 @@ public class Character extends AbstractCharacterObject {
             if (!activeSkills.containsKey(entry.getKey())) {
                 Skill skill = SkillFactory.getSkill(entry.getKey());
                 if (skill != null) {
-                    changeSkillLevel(skill, entry.getValue(), skill.getMaxLevel(), -1);
+                    byte restore = entry.getValue();
+                    // 备份≤0：原本不会该技，卸下时移除（避免残留 0 级）
+                    if (restore <= 0) {
+                        changeSkillLevel(skill, (byte) -1, 0, -1);
+                    } else {
+                        changeSkillLevel(skill, restore, skill.getMaxLevel(), -1);
+                    }
                 }
                 it.remove();
             }
@@ -2877,13 +2915,19 @@ public class Character extends AbstractCharacterObject {
             if (skill == null) {
                 continue;
             }
-            int targetLevel = entry.getValue();
+            int maxLv = skill.getMaxLevel() > 0 ? skill.getMaxLevel() : entry.getValue();
+            int targetLevel = Math.min(entry.getValue(), maxLv);
+            if (targetLevel <= 0) {
+                continue;
+            }
             byte currentLevel = getSkillLevel(skill);
             if (!setActiveSkillBackup.containsKey(entry.getKey())) {
                 setActiveSkillBackup.put(entry.getKey(), currentLevel);
             }
-            if (currentLevel < targetLevel) {
-                changeSkillLevel(skill, (byte) targetLevel, skill.getMaxLevel(), -1);
+            // 与自身取高；穿上灵韵/套装主动技时强制发包，确保技能窗即时可见
+            byte applyLevel = (byte) Math.max(currentLevel, targetLevel);
+            if (applyLevel != currentLevel || !skills.containsKey(skill)) {
+                changeSkillLevel(skill, applyLevel, Math.max(maxLv, applyLevel), -1);
             }
         }
     }
@@ -3089,14 +3133,14 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void gainGachaExp() {
-        int expgain = 0;
+        long expgain = 0;
         long currentgexp = gachaExp.get();
 
-        int levelUpNeed = ExpTable.getExpNeededForLevel(level) - exp.get();
+        long levelUpNeed = ExpTable.getExpNeededForLevel(level) - exp.get();
         if (currentgexp >= levelUpNeed) {
             expgain += Math.max(0, levelUpNeed);
 
-            int nextneed = ExpTable.getExpNeededForLevel(level + 1);
+            long nextneed = ExpTable.getExpNeededForLevel(level + 1);
             if (currentgexp - expgain >= nextneed) {
                 expgain += nextneed;
             }
@@ -3113,73 +3157,83 @@ public class Character extends AbstractCharacterObject {
         updateSingleStat(Stat.GACHAEXP, gachaExp.addAndGet(gain));
     }
 
-    public void gainExp(int gain) {
+    public void gainExp(long gain) {
         gainExp(gain, true, true);
     }
 
-    public void gainExp(int gain, boolean show, boolean inChat) {
+    public void gainExp(long gain, boolean show, boolean inChat) {
         gainExp(gain, show, inChat, true);
     }
 
-    public void gainExp(int gain, boolean show, boolean inChat, boolean white) {
+    public void gainExp(long gain, boolean show, boolean inChat, boolean white) {
         gainExp(gain, 0, show, inChat, white);
     }
 
-    public void gainExp(int gain, int party, boolean show, boolean inChat, boolean white) {
+    public void gainExp(long gain, long party, boolean show, boolean inChat, boolean white) {
         if (hasDisease(Disease.CURSE)) {
-            gain *= 0.5;
-            party *= 0.5;
+            gain = (long) (gain * 0.5);
+            party = (long) (party * 0.5);
         }
 
+        // Overflow from int-era callers or unsigned wrap: negative means saturated max gain.
         if (gain < 0) {
-            gain = Integer.MAX_VALUE;   // integer overflow, heh.
+            gain = Long.MAX_VALUE;
         }
 
         if (party < 0) {
-            party = Integer.MAX_VALUE;  // integer overflow, heh.
+            party = Long.MAX_VALUE;
         }
 
-        int equip = (int) Math.min((long) (gain / 10) * pendantExp, Integer.MAX_VALUE);
+        long equip = Math.min((gain / 10) * pendantExp, Long.MAX_VALUE);
 
         gainExpInternal(gain, equip, party, show, inChat, white);
     }
 
-    public void loseExp(int loss, boolean show, boolean inChat) {
+    public void loseExp(long loss, boolean show, boolean inChat) {
         loseExp(loss, show, inChat, true);
     }
 
-    public void loseExp(int loss, boolean show, boolean inChat, boolean white) {
+    public void loseExp(long loss, boolean show, boolean inChat, boolean white) {
         gainExpInternal(-loss, 0, 0, show, inChat, white);
     }
 
-    private void announceExpGain(long gain, int equip, int party, boolean inChat, boolean white) {
+    private void announceExpGain(long gain, long equip, long party, boolean inChat, boolean white) {
+        // Packet still uses int (P4); saturate for display only.
         gain = Math.min(gain, Integer.MAX_VALUE);
+        long equipInt = Math.min(equip, Integer.MAX_VALUE);
+        long partyInt = Math.min(party, Integer.MAX_VALUE);
         if (gain == 0) {
-            if (party == 0) {
+            if (partyInt == 0) {
                 return;
             }
 
-            gain = party;
-            party = 0;
+            gain = partyInt;
+            partyInt = 0;
             white = false;
         }
 
-        sendPacket(PacketCreator.getShowExpGain((int) gain, equip, party, inChat, white));
+        sendPacket(PacketCreator.getShowExpGain((int) gain, (int) equipInt, (int) partyInt, inChat, white));
     }
 
-    private synchronized void gainExpInternal(long gain, int equip, int party, boolean show, boolean inChat, boolean white) {   // need of method synchonization here detected thanks to MedicOP
+    private synchronized void gainExpInternal(long gain, long equip, long party, boolean show, boolean inChat, boolean white) {   // need of method synchonization here detected thanks to MedicOP
         long total = Math.max(gain + equip + party, -exp.get());
 
         if (level < getMaxLevel() && (allowExpGain || this.getEventInstance() != null)) {
             long leftover = 0;
-            long nextExp = exp.get() + total;
+            long current = exp.get();
 
-            if (nextExp > (long) Integer.MAX_VALUE) {
-                total = Integer.MAX_VALUE - exp.get();
-                leftover = nextExp - Integer.MAX_VALUE;
+            // Saturate at Long.MAX_VALUE instead of the old Integer.MAX_VALUE truncations.
+            if (total > 0 && current > Long.MAX_VALUE - total) {
+                leftover = total - (Long.MAX_VALUE - current);
+                total = Long.MAX_VALUE - current;
             }
-            updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
+
+            long newExp = exp.addAndGet(total);
+            updateSingleStat(Stat.EXP, newExp);
             totalExpGained += total;
+            if (total > 0) {
+                addPartyTrackerExp(total);
+            }
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
             }
@@ -3226,6 +3280,7 @@ public class Character extends AbstractCharacterObject {
             }
         }
     }
+
 
     private Pair<Integer, Integer> applyFame(int delta) {
         petLock.lock();
@@ -3298,6 +3353,9 @@ public class Character extends AbstractCharacterObject {
 
         if (gain != 0) {
             updateSingleStat(Stat.MESO, (int) nextMeso, enableActions);
+            if (gain > 0) {
+                addPartyTrackerMeso(gain);
+            }
             if (show) {
                 sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
             }
@@ -3768,6 +3826,10 @@ public class Character extends AbstractCharacterObject {
                 effLock.unlock();
                 prtLock.unlock();
             }
+        }
+
+        if (ret) {
+            announcePartyBuffSnapshot();
         }
 
         return ret;
@@ -4795,7 +4857,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public int getExp() {
+    public long getExp() {
         return exp.get();
     }
 
@@ -5135,7 +5197,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getMaxClassLevel() {
-        return isCygnus() ? 120 : 200;
+        return ExpTable.MAX_LEVEL;
     }
 
     public int getMaxLevel() {
@@ -5636,6 +5698,107 @@ public class Character extends AbstractCharacterObject {
         dptClearRuntimeState(true);
     }
 
+    public int getBuffRemainingTime(int sourceId) {
+        effLock.lock();
+        chrLock.lock();
+        try {
+            Long expire = buffExpires.get(sourceId);
+            if (expire == null) {
+                return 0;
+            }
+            long remaining = expire - Server.getInstance().getCurrentTime();
+            if (remaining <= 0) {
+                return 0;
+            }
+            return (int) Math.min(Integer.MAX_VALUE, remaining);
+        } finally {
+            chrLock.unlock();
+            effLock.unlock();
+        }
+    }
+
+    public boolean isPartyTrackerVisible() {
+        return partyTrackerVisible;
+    }
+
+    public long getPartyTrackerExp() {
+        Party currentParty = getParty();
+        return currentParty != null ? currentParty.getTrackerExp(getId()) : 0;
+    }
+
+    public long getPartyTrackerMeso() {
+        Party currentParty = getParty();
+        return currentParty != null ? currentParty.getTrackerMeso(getId()) : 0;
+    }
+
+    public void setPartyTrackerVisible(boolean visible) {
+        partyTrackerVisible = visible;
+        sendPacket(PacketCreator.partyTrackerVisibility(visible));
+        if (visible) {
+            for (Character member : getPartyMembersOnline()) {
+                if (member.isLoggedInWorld()) {
+                    sendPacket(PacketCreator.partyTrackerUpdate(member));
+                }
+            }
+            if (getParty() == null) {
+                sendPacket(PacketCreator.partyTrackerUpdate(this));
+            }
+        }
+    }
+
+    private void addPartyTrackerExp(long amount) {
+        Party currentParty = getParty();
+        if (amount <= 0 || currentParty == null) {
+            return;
+        }
+        currentParty.addTrackerExp(getId(), amount);
+        announcePartyTrackerUpdate();
+    }
+
+    private void addPartyTrackerMeso(long amount) {
+        Party currentParty = getParty();
+        if (amount <= 0 || currentParty == null) {
+            return;
+        }
+        currentParty.addTrackerMeso(getId(), amount);
+        announcePartyTrackerUpdate();
+    }
+
+    public void announcePartyTrackerUpdate() {
+        for (Character recipient : getPartyMembersOnline()) {
+            if (recipient.isLoggedInWorld() && recipient.isPartyTrackerVisible()) {
+                recipient.sendPacket(PacketCreator.partyTrackerUpdate(this));
+            }
+        }
+    }
+
+    public void announcePartyBuffSnapshot() {
+        List<Character> recipients = getPartyMembersOnline();
+        if (recipients.isEmpty()) {
+            sendPacket(PacketCreator.partyBuffSnapshot(this));
+            return;
+        }
+
+        for (Character recipient : recipients) {
+            if (recipient.isLoggedInWorld()) {
+                recipient.sendPacket(PacketCreator.partyBuffSnapshot(this));
+            }
+        }
+    }
+
+    public byte[] getPartyBuffCountsPayload() {
+        return partyBuffCountsPayload;
+    }
+
+    public int getPartyBuffCountsCount() {
+        return partyBuffCountsCount;
+    }
+
+    public void setPartyBuffCounts(int count, byte[] payload) {
+        this.partyBuffCountsCount = count;
+        this.partyBuffCountsPayload = payload;
+    }
+
     private void dptRecordObservedPlayerDamage(Character attacker, long dmg) {
         if (!this.dptActive) {
             return;
@@ -5781,18 +5944,32 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getSkillLevel(int skill) {
-        SkillEntry ret = skills.get(SkillFactory.getSkill(skill));
-        if (ret == null) {
+        Skill sk = SkillFactory.getSkill(skill);
+        if (sk == null) {
             return 0;
         }
-        return ret.skillLevel;
+        return getSkillLevel(sk);
     }
 
-    public byte getSkillLevel(Skill skill) {
-        if (skills.get(skill) == null) {
+    /** 不含套装/灵韵加成的原始等级（穿戴备份用）。 */
+    public byte getSkillLevelRaw(Skill skill) {
+        if (skill == null || skills.get(skill) == null) {
             return 0;
         }
         return skills.get(skill).skillLevel;
+    }
+
+    public byte getSkillLevel(Skill skill) {
+        if (skill == null) {
+            return 0;
+        }
+        byte base = getSkillLevelRaw(skill);
+        int bonus = setSkillBonusLevels.getOrDefault(skill.getId(), 0);
+        if (bonus <= 0) {
+            return base;
+        }
+        int max = skill.getMaxLevel() > 0 ? skill.getMaxLevel() : base + bonus;
+        return (byte) Math.min(max, base + bonus);
     }
 
     public long getSkillExpiration(int skill) {
@@ -6289,17 +6466,17 @@ public class Character extends AbstractCharacterObject {
             recalcLocalStats();
             changeHpMp(localMaxHp, localMaxMp, true);
 
-            List<Pair<Stat, Integer>> statup = new ArrayList<>(10);
-            statup.add(new Pair<>(Stat.AVAILABLEAP, remainingAp));
-            statup.add(new Pair<>(Stat.AVAILABLESP, remainingSp[GameConstants.getSkillBook(job.getId())]));
-            statup.add(new Pair<>(Stat.HP, hp));
-            statup.add(new Pair<>(Stat.MP, mp));
-            statup.add(new Pair<>(Stat.EXP, exp.get()));
-            statup.add(new Pair<>(Stat.LEVEL, level));
-            statup.add(new Pair<>(Stat.MAXHP, clientMaxHp));
-            statup.add(new Pair<>(Stat.MAXMP, clientMaxMp));
-            statup.add(new Pair<>(Stat.STR, attrStr));
-            statup.add(new Pair<>(Stat.DEX, attrDex));
+            List<Pair<Stat, Long>> statup = new ArrayList<>(10);
+            statup.add(new Pair<>(Stat.AVAILABLEAP, (long) (remainingAp)));
+            statup.add(new Pair<>(Stat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job.getId())]));
+            statup.add(new Pair<>(Stat.HP, (long) (hp)));
+            statup.add(new Pair<>(Stat.MP, (long) (mp)));
+            statup.add(new Pair<>(Stat.EXP, (long) (exp.get())));
+            statup.add(new Pair<>(Stat.LEVEL, (long) (level)));
+            statup.add(new Pair<>(Stat.MAXHP, (long) (clientMaxHp)));
+            statup.add(new Pair<>(Stat.MAXMP, (long) (clientMaxMp)));
+            statup.add(new Pair<>(Stat.STR, (long) (attrStr)));
+            statup.add(new Pair<>(Stat.DEX, (long) (attrDex)));
 
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
         } finally {
@@ -6652,7 +6829,7 @@ public class Character extends AbstractCharacterObject {
             ret.setMaxMp(rs.getInt("maxmp"));
             ret.remainingAp = rs.getInt("ap");
             ret.loadCharSkillPoints(rs.getString("sp").split(","));
-            ret.exp.set(rs.getInt("exp"));
+            ret.exp.set(rs.getLong("exp"));
             ret.fame = rs.getInt("fame");
             ret.gachaExp.set(rs.getInt("gachaexp"));
             ret.mapId = rs.getInt("map");
@@ -7166,7 +7343,7 @@ public class Character extends AbstractCharacterObject {
             usedSafetyCharm = true;
         } else if (getJob() != Job.BEGINNER) { //Hmm...
             if (!FieldLimit.NO_EXP_DECREASE.check(getMap().getFieldLimit())) {  // thanks Conrad for noticing missing FieldLimit check
-                int XPdummy = ExpTable.getExpNeededForLevel(getLevel());
+                long XPdummy = ExpTable.getExpNeededForLevel(getLevel());
 
                 if (getMap().isTown()) {    // thanks MindLove, SIayerMonkey, HaItsNotOver for noting players only lose 1% on town maps
                     XPdummy /= 100;
@@ -7178,7 +7355,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
 
-                int curExp = getExp();
+                long curExp = getExp();
                 if (curExp > XPdummy) {
                     loseExp(XPdummy, false, false);
                 } else {
@@ -7356,6 +7533,8 @@ public class Character extends AbstractCharacterObject {
             localjump += setBonusJump;
             localMaxHp += setBonusMhp;
             localMaxMp += setBonusMmp;
+            localMaxHp += org.gms.talent.TalentEffects.bonusMaxHp(this);
+            localMaxMp += org.gms.talent.TalentEffects.bonusMaxMp(this);
 
             localmagic = Math.min(localmagic, 2000);
 
@@ -7368,8 +7547,8 @@ public class Character extends AbstractCharacterObject {
                 localMaxMp += (int) ((hbmp.doubleValue() / 100) * localMaxMp);
             }
 
-            localMaxHp = Math.min(30000, localMaxHp);
-            localMaxMp = Math.min(30000, localMaxMp);
+            localMaxHp = Math.min(MAX_CLIENT_HP_MP, localMaxHp);
+            localMaxMp = Math.min(MAX_CLIENT_HP_MP, localMaxMp);
 
             StatEffect combo = getBuffEffect(BuffStat.ARAN_COMBO);
             if (combo != null) {
@@ -7469,12 +7648,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public List<Pair<Stat, Integer>> recalcLocalStats() {
+    public List<Pair<Stat, Long>> recalcLocalStats() {
         effLock.lock();
         chrLock.lock();
         statWlock.lock();
         try {
-            List<Pair<Stat, Integer>> hpmpupdate = new ArrayList<>(2);
+            List<Pair<Stat, Long>> hpmpupdate = new ArrayList<>(2);
             int oldlocalmaxhp = localMaxHp;
             int oldlocalmaxmp = localMaxMp;
 
@@ -7482,7 +7661,7 @@ public class Character extends AbstractCharacterObject {
 
             if (GameConfig.getServerBoolean("use_fixed_ratio_hpmp_update")) {
                 if (localMaxHp != oldlocalmaxhp) {
-                    Pair<Stat, Integer> hpUpdate;
+                    Pair<Stat, Long> hpUpdate;
 
                     if (transientHp == Float.NEGATIVE_INFINITY) {
                         hpUpdate = calcHpRatioUpdate(localMaxHp, oldlocalmaxhp);
@@ -7494,7 +7673,7 @@ public class Character extends AbstractCharacterObject {
                 }
 
                 if (localMaxMp != oldlocalmaxmp) {
-                    Pair<Stat, Integer> mpUpdate;
+                    Pair<Stat, Long> mpUpdate;
 
                     if (transientMp == Float.NEGATIVE_INFINITY) {
                         mpUpdate = calcMpRatioUpdate(localMaxMp, oldlocalmaxmp);
@@ -7520,7 +7699,7 @@ public class Character extends AbstractCharacterObject {
         statWlock.lock();
         try {
             int oldmaxhp = localMaxHp;
-            List<Pair<Stat, Integer>> hpmpupdate = recalcLocalStats();
+            List<Pair<Stat, Long>> hpmpupdate = recalcLocalStats();
             enforceMaxHpMp();
 
             if (!hpmpupdate.isEmpty()) {
@@ -7970,7 +8149,7 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(4, attrDex);
                         ps.setInt(5, attrLuk);
                         ps.setInt(6, attrInt);
-                        ps.setInt(7, Math.abs(exp.get()));
+                        ps.setLong(7, Math.abs(exp.get()));
                         ps.setInt(8, Math.abs(gachaExp.get()));
                         ps.setInt(9, hp);
                         ps.setInt(10, mp);
@@ -8439,7 +8618,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setExp(int amount) {
+    public void setExp(long amount) {
         this.exp.set(amount);
     }
 
@@ -8528,18 +8707,18 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private Pair<Stat, Integer> calcHpRatioUpdate(int newHp, int oldHp) {
+    private Pair<Stat, Long> calcHpRatioUpdate(int newHp, int oldHp) {
         int delta = newHp - oldHp;
         this.hp = calcHpRatioUpdate(hp, oldHp, delta);
 
         hpChangeAction(Short.MIN_VALUE);
-        return new Pair<>(Stat.HP, hp);
+        return new Pair<>(Stat.HP, (long) (hp));
     }
 
-    private Pair<Stat, Integer> calcMpRatioUpdate(int newMp, int oldMp) {
+    private Pair<Stat, Long> calcMpRatioUpdate(int newMp, int oldMp) {
         int delta = newMp - oldMp;
         this.mp = calcMpRatioUpdate(mp, oldMp, delta);
-        return new Pair<>(Stat.MP, mp);
+        return new Pair<>(Stat.MP, (long) (mp));
     }
 
     private static int calcTransientRatio(float transientpoint) {
@@ -8547,20 +8726,20 @@ public class Character extends AbstractCharacterObject {
         return !(ret <= 0 && transientpoint > 0.0f) ? ret : 1;
     }
 
-    private Pair<Stat, Integer> calcHpRatioTransient() {
+    private Pair<Stat, Long> calcHpRatioTransient() {
         this.hp = calcTransientRatio(transientHp * localMaxHp);
 
         hpChangeAction(Short.MIN_VALUE);
-        return new Pair<>(Stat.HP, hp);
+        return new Pair<>(Stat.HP, (long) (hp));
     }
 
-    private Pair<Stat, Integer> calcMpRatioTransient() {
+    private Pair<Stat, Long> calcMpRatioTransient() {
         this.mp = calcTransientRatio(transientMp * localMaxMp);
-        return new Pair<>(Stat.MP, mp);
+        return new Pair<>(Stat.MP, (long) (mp));
     }
 
     private int calcHpRatioUpdate(int curpoint, int maxpoint, int diffpoint) {
-        int nextMax = Math.min(30000, maxpoint + diffpoint);
+        int nextMax = Math.min(MAX_CLIENT_HP_MP, maxpoint + diffpoint);
 
         float temp = curpoint * nextMax;
         int ret = (int) Math.ceil(temp / maxpoint);
@@ -8570,7 +8749,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private int calcMpRatioUpdate(int curpoint, int maxpoint, int diffpoint) {
-        int nextMax = Math.min(30000, maxpoint + diffpoint);
+        int nextMax = Math.min(MAX_CLIENT_HP_MP, maxpoint + diffpoint);
 
         float temp = curpoint * nextMax;
         int ret = (int) Math.ceil(temp / maxpoint);
@@ -9233,6 +9412,11 @@ public class Character extends AbstractCharacterObject {
             for (Character partychar : this.getPartyMembersOnSameMap()) {
                 partychar.sendPacket(PacketCreator.updatePartyMemberHP(getId(), curhp, curmaxhp));
             }
+            for (Character partychar : this.getPartyMembersOnline()) {
+                if (partychar.isLoggedInWorld()) {
+                    partychar.sendPacket(PacketCreator.partyHpPercent(this));
+                }
+            }
         }
     }
 
@@ -9444,11 +9628,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void updateSingleStat(Stat stat, int newval) {
+        updateSingleStat(stat, (long) newval, false);
+    }
+
+    public void updateSingleStat(Stat stat, long newval) {
         updateSingleStat(stat, newval, false);
     }
 
-    private void updateSingleStat(Stat stat, int newval, boolean itemReaction) {
-        sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Integer.valueOf(newval))), itemReaction, this));
+    private void updateSingleStat(Stat stat, long newval, boolean itemReaction) {
+        sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, newval)), itemReaction, this));
     }
 
     public void sendPacket(Packet packet) {
