@@ -20,9 +20,9 @@ public class CharacterListener implements AbstractCharacterListener {
 
     @Override
     public void onHpMpPoolUpdate() {
-        List<Pair<Stat, Integer>> hpmpupdate = character.recalcLocalStats();
-        for (Pair<Stat, Integer> p : hpmpupdate) {
-            character.statUpdates.put(p.getLeft(), p.getRight());
+        List<Pair<Stat, Long>> hpmpupdate = character.recalcLocalStats();
+        for (Pair<Stat, Long> p : hpmpupdate) {
+            character.statUpdates.put(p.getLeft(), p.getRight().intValue());
         }
 
         if (character.hp > character.localMaxHp) {
@@ -43,9 +43,9 @@ public class CharacterListener implements AbstractCharacterListener {
 
     @Override
     public void onAnnounceStatPoolUpdate() {
-        List<Pair<Stat, Integer>> statup = new ArrayList<>(8);
+        List<Pair<Stat, Long>> statup = new ArrayList<>(8);
         for (Map.Entry<Stat, Integer> s : character.statUpdates.entrySet()) {
-            statup.add(new Pair<>(s.getKey(), s.getValue()));
+            statup.add(new Pair<>(s.getKey(), s.getValue().longValue()));
         }
 
         character.sendPacket(PacketCreator.updatePlayerStats(statup, true, character));

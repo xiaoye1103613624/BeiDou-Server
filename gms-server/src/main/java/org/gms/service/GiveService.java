@@ -445,15 +445,15 @@ public class GiveService {
     }
 
     private void doGainExp(Character chr, int quantity) {
-        int exp = chr.getExp();
-        long sum = (long) exp + (long) quantity;
+        long exp = chr.getExp();
+        long sum = exp + (long) quantity;
         // 最低只能把经验清0
         if (sum < 0) {
             sum = -exp;
         } else {
             sum = quantity;
         }
-        chr.gainExp((int) sum);
+        chr.gainExp(sum);
     }
 
     private void doGainMeso(Character chr, int quantity) {

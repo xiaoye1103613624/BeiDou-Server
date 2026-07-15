@@ -1393,7 +1393,8 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean canGainCharacterSlot() {
-        return characterSlots < 15;
+        // 角色槽上限 15 → 30（需客户端 charslots 插件同步）
+        return characterSlots < 30;
     }
 
     public synchronized boolean gainCharacterSlot() {

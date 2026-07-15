@@ -23,6 +23,7 @@
 */
 package org.gms.client.command.commands.gm2;
 
+import org.gms.client.AbstractCharacterObject;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Stat;
@@ -39,7 +40,7 @@ public class MaxStatCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         player.loseExp(player.getExp(), false, false);
-        player.setLevel(255);
+        player.setLevel(300);
         player.resetPlayerRates();
         if (GameConfig.getServerBoolean("use_add_rates_by_level")) {
             player.setPlayerRates();
@@ -47,8 +48,8 @@ public class MaxStatCommand extends Command {
         player.setWorldRates();
         player.updateStrDexIntLuk(Short.MAX_VALUE);
         player.setFame(13337);
-        player.updateMaxHpMaxMp(30000, 30000);
-        player.updateSingleStat(Stat.LEVEL, 255);
+        player.updateMaxHpMaxMp(AbstractCharacterObject.MAX_CLIENT_HP_MP, AbstractCharacterObject.MAX_CLIENT_HP_MP);
+        player.updateSingleStat(Stat.LEVEL, 300);
         player.updateSingleStat(Stat.FAME, 13337);
         player.yellowMessage(I18nUtil.getMessage("MaxStatCommand.message2"));
     }

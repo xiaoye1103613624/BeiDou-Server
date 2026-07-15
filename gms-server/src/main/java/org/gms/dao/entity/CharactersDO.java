@@ -40,7 +40,7 @@ public class CharactersDO implements Serializable {
 
     private Integer level;
 
-    private Integer exp;
+    private Long exp;
 
     private Integer gachaexp;
 

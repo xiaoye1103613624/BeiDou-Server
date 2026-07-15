@@ -419,6 +419,7 @@ public class CharacterService {
             accountStorage = world.getAccountStorage(charactersDO.getAccountid());
         }
         chr.setStorage(accountStorage);
+        chr.loadTalents();
         chr.reapplyLocalStats();
         chr.changeHpMp(charactersDO.getHp(), charactersDO.getMp(), true);
         return chr;
