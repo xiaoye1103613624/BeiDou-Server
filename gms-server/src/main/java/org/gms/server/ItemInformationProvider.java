@@ -212,7 +212,7 @@ public class ItemInformationProvider {
             theData = cashStringData;
         } else if (itemId >= 2000000 && itemId < 3000000) {
             theData = consumeStringData;
-        } else if ((itemId >= 1010000 && itemId < 1040000) || (itemId >= 1122000 && itemId < 1123000) || (itemId >= 1132000 && itemId < 1133000) || (itemId >= 1142000 && itemId < 1143000)) {
+        } else if ((itemId >= 1010000 && itemId < 1040000) || (itemId >= 1122000 && itemId < 1123000) || (itemId >= 1132000 && itemId < 1133000) || (itemId >= 1142000 && itemId < 1143000) || (itemId >= 1152000 && itemId < 1153000)) {
             theData = eqpStringData;
             cat = "Eqp/Accessory";
         } else if (itemId >= 1000000 && itemId < 1010000) {
@@ -2387,9 +2387,28 @@ public class ItemInformationProvider {
 
     public static ArrayList<Pair<Integer, String>> getItemsIDsFromName(String search) {
         ArrayList<Pair<Integer, String>> retItems = new ArrayList<>();
+        if (search == null) {
+            return retItems;
+        }
+        String keyword = search.trim();
+        if (keyword.isEmpty()) {
+            return retItems;
+        }
+        // 纯数字：按物品ID精确/前缀匹配（规避客户端 NPC 输入框偶发无法打中文）
+        boolean numeric = keyword.chars().allMatch(c -> c >= '0' && c <= '9');
         List<Pair<Integer, String>> allItems = getInstance().getAllItems();
         for (Pair<Integer, String> itemPair : allItems) {
-            if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+            String name = itemPair.getRight();
+            if (name == null) {
+                continue;
+            }
+            if (numeric) {
+                String idStr = String.valueOf(itemPair.getLeft());
+                if (idStr.equals(keyword) || idStr.contains(keyword)) {
+                    retItems.add(itemPair);
+                }
+            } else if (name.toLowerCase(java.util.Locale.ROOT).contains(keyword.toLowerCase(java.util.Locale.ROOT))
+                    || name.contains(keyword)) {
                 retItems.add(itemPair);
             }
         }

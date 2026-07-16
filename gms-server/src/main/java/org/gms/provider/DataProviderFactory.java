@@ -39,7 +39,7 @@ public class DataProviderFactory {
         if (!Files.exists(languagePath) || languagePath.equals(basePath)) {
             return baseProvider;
         }
-        // 中文 WZ 只维护被本地化过的文件，缺失的文件继续回退到原始 WZ。
+        // 语言包优先；缺失文件回退原始 WZ。getRoot() 会合并两边目录，避免仅语言包有的资源枚举不到。
         return new LocalizedDataProvider(getWZ(languagePath), baseProvider);
     }
 }
