@@ -620,9 +620,9 @@ public class Character extends AbstractCharacterObject {
         savedLocations = new SavedLocation[SavedLocationType.values().length];
 
         for (InventoryType type : InventoryType.values()) {
-            byte b = 24;
+            short b = 24;
             if (type == InventoryType.CASH) {
-                b = 96;
+                b = 192; // ExpandItem: cash inventory 96 -> 192
             }
             inventory[type.ordinal()] = new Inventory(this, type, b);
         }
@@ -6999,10 +6999,11 @@ public class Character extends AbstractCharacterObject {
         chr.setBuddylist(new BuddyList(charactersDO.getBuddyCapacity()));
         chr.setLastExpGainTime(charactersDO.getLastExpGainTime().getTime());
         chr.setCanRecvPartySearchInvite(charactersDO.getPartySearch());
-        chr.getInventory(InventoryType.EQUIP).setSlotLimit(charactersDO.getEquipslots());
-        chr.getInventory(InventoryType.USE).setSlotLimit(charactersDO.getUseslots());
-        chr.getInventory(InventoryType.SETUP).setSlotLimit(charactersDO.getSetupslots());
-        chr.getInventory(InventoryType.ETC).setSlotLimit(charactersDO.getEtcslots());
+        chr.getInventory(InventoryType.EQUIP).setSlotLimit(Math.max(charactersDO.getEquipslots(), 192));
+        chr.getInventory(InventoryType.USE).setSlotLimit(Math.max(charactersDO.getUseslots(), 192));
+        chr.getInventory(InventoryType.SETUP).setSlotLimit(Math.max(charactersDO.getSetupslots(), 192));
+        chr.getInventory(InventoryType.ETC).setSlotLimit(Math.max(charactersDO.getEtcslots(), 192));
+        chr.getInventory(InventoryType.CASH).setSlotLimit(192); // ExpandItem client
         short sandboxCheck = 0x0;
         for (InventoryType inventoryType : InventoryType.values()) {
             List<InventorySearchRtnDTO> searchRtnDTOList = inventoryService.getInventoryList(InventorySearchReqDTO.builder()
@@ -8903,13 +8904,16 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public byte getSlots(int type) {
-        return type == InventoryType.CASH.getType() ? 96 : inventory[type].getSlotLimit();
+    public int getSlots(int type) {
+        if (type == InventoryType.CASH.getType()) {
+            return 192;
+        }
+        return inventory[type].getSlotLimit();
     }
 
     public boolean canGainSlots(int type, int slots) {
         slots += inventory[type].getSlotLimit();
-        return slots <= 96;
+        return slots <= 192; // ExpandItem UI supports 192 for all tabs
     }
 
     public boolean gainSlots(int type, int slots) {
