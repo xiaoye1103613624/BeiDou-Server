@@ -623,9 +623,10 @@ public class PacketCreator {
         }
         p.writeLong(getTime(-2));
         p.writeInt(-1);
-        if (equip != null) {
+        // ALIGNED with ijl15 FusionAnvil Decode (jul16 / hooks ON). Keep in sync.
+        final boolean writeAnvilSpiritTail = true;
+        if (equip != null && writeAnvilSpiritTail) {
             p.writeInt(equip.getAnvilItemId());
-            // 灵韵觉醒：技能 ID / 等级 / 过期(FILETIME，0=永久)
             p.writeInt(equip.getEquipSkillId());
             p.writeInt(equip.getEquipSkillLevel());
             long skillExpire = equip.getEquipSkillExpire();
@@ -644,7 +645,13 @@ public class PacketCreator {
         List<Item> equipped = new ArrayList<>(equippedC.size());
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
         for (Item item : equippedC) {
-            if (item.getPosition() <= -100) {
+            short eqPos = item.getPosition();
+            // Client equip table is [50]; BP52/53 (-52/-53) were half-patched and crash field enter.
+            // Skip until full client buffer expand. Same for cash mirrors -152/-153.
+            if (eqPos == -52 || eqPos == -53 || eqPos == -152 || eqPos == -153) {
+                continue;
+            }
+            if (eqPos <= -100) {
                 equippedCash.add(item);
             } else {
                 equipped.add(item);
@@ -1964,7 +1971,7 @@ public class PacketCreator {
         if (drop.getMeso() == 0) {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
-        p.writeByte(getDropItemGrade(drop));
+        // No drop-grade byte (DropItemAura removed).
         p.writeBool(!drop.isPlayerDrop());
         return p;
     }
@@ -1992,70 +1999,9 @@ public class PacketCreator {
         if (drop.getMeso() == 0) {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
-        p.writeByte(getDropItemGrade(drop));
-        p.writeByte(drop.isPlayerDrop() ? 0 : 1); //pet EQP pickup
+        // No drop-grade byte (DropItemAura removed). Only pet-pickup flag (vanilla).
+        p.writeByte(drop.isPlayerDrop() ? 0 : 1);
         return p;
-    }
-
-    private static byte getDropItemGrade(MapItem drop) {
-        if (drop.getMeso() > 0 || drop.getItem() == null || !(drop.getItem() instanceof Equip)) {
-            return 0;
-        }
-
-        Equip equip = (Equip) drop.getItem();
-        Item baseItem = ItemInformationProvider.getInstance().getEquipById(equip.getItemId());
-        if (!(baseItem instanceof Equip)) {
-            return 0;
-        }
-        Equip base = (Equip) baseItem;
-
-        int score = 0;
-        score += equip.getStr() - base.getStr();
-        score += equip.getDex() - base.getDex();
-        score += equip.getInt() - base.getInt();
-        score += equip.getLuk() - base.getLuk();
-        score += equip.getWatk() - base.getWatk();
-        score += equip.getMatk() - base.getMatk();
-        score += equip.getWdef() - base.getWdef();
-        score += equip.getMdef() - base.getMdef();
-        score += equip.getAcc() - base.getAcc();
-        score += equip.getAvoid() - base.getAvoid();
-        score += (equip.getHp() - base.getHp()) / 10;
-        score += (equip.getMp() - base.getMp()) / 10;
-
-        if (equip.getUpgradeSlots() > base.getUpgradeSlots() || equip.getLevel() > base.getLevel()) {
-            score += 3;
-        }
-        if (equip.getVicious() > 0 || equip.getItemLevel() > 0) {
-            score += 2;
-        }
-
-        int reqLevel = ItemInformationProvider.getInstance().getEquipLevelReq(equip.getItemId());
-        byte grade;
-        if (score < 1) {
-            if (reqLevel >= 100) {
-                grade = 2;
-            } else if (reqLevel >= 90) {
-                // 90+ plain drops: Epic so client aura cap culls Rare before these
-                grade = 2;
-            } else if (reqLevel >= 50) {
-                grade = 1;
-            } else {
-                grade = 0;
-            }
-        } else if (score < 8) {
-            grade = 1;
-        } else if (score < 18) {
-            grade = 2;
-        } else if (score < 30) {
-            grade = 3;
-        } else {
-            grade = 4;
-        }
-        if (reqLevel >= 90 && grade < 1) {
-            grade = 1;
-        }
-        return grade;
     }
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {
