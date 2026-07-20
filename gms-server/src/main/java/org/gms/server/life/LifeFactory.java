@@ -53,12 +53,26 @@ public class LifeFactory {
 
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
-
-        DataProvider uiDataWZ = DataProviderFactory.getDataProvider(WZFiles.UI);
-        for (Data bossData : uiDataWZ.getData("UIWindow.img").getChildByPath("MobGage/Mob").getChildren()) {
-            ret.add(Integer.valueOf(bossData.getName()));
+        try {
+            DataProvider uiDataWZ = DataProviderFactory.getDataProvider(WZFiles.UI);
+            Data uiWindow = uiDataWZ.getData("UIWindow.img");
+            if (uiWindow == null) {
+                log.warn("UIWindow.img missing; hp-bar boss set is empty");
+                return ret;
+            }
+            Data mobGage = uiWindow.getChildByPath("MobGage/Mob");
+            if (mobGage == null) {
+                log.warn("UIWindow.img MobGage/Mob missing; hp-bar boss set is empty");
+                return ret;
+            }
+            for (Data bossData : mobGage.getChildren()) {
+                ret.add(Integer.valueOf(bossData.getName()));
+            }
+        } catch (Exception e) {
+            // Must not throw: ExceptionInInitializerError here permanently breaks LifeFactory
+            // (subsequent NoClassDefFoundError on every map/event load until JVM restart).
+            log.error("Failed to load MobGage bosses from UIWindow.img; continuing with empty set", e);
         }
-
         return ret;
     }
 

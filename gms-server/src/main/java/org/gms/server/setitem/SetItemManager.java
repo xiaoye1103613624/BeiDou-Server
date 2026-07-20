@@ -15,6 +15,7 @@ import org.gms.provider.Data;
 import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
+import org.gms.provider.wz.DataType;
 import org.gms.provider.wz.WZFiles;
 import org.gms.util.DatabaseConnection;
 
@@ -113,13 +114,23 @@ public final class SetItemManager {
         }
     }
 
+    /**
+     * Recursively collect item IDs under ItemID.
+     * High-version "parts" sets nest OR-groups with string metadata
+     * ({@code representName}/{@code typeName}); those must be skipped —
+     * {@link DataTool#getInt(Data)} hard-casts to Integer and throws CCE.
+     */
     private static void collectItemIds(Data node, Set<Integer> out) {
         if (node == null) {
             return;
         }
         for (Data child : node.getChildren()) {
             if (child.getData() != null) {
-                int itemId = DataTool.getInt(child);
+                DataType type = child.getType();
+                if (type != DataType.INT && type != DataType.SHORT) {
+                    continue;
+                }
+                int itemId = DataTool.getInt(child, 0);
                 if (itemId > 0) {
                     out.add(itemId);
                 }

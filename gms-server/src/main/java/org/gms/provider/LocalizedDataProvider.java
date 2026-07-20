@@ -2,6 +2,8 @@ package org.gms.provider;
 
 import org.gms.provider.wz.WZDirectoryEntry;
 import org.gms.provider.wz.WZFileEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -16,6 +18,8 @@ import java.util.Set;
  * {@link org.gms.server.ItemInformationProvider} 会误判为「缺少装备数据」。
  */
 public class LocalizedDataProvider implements DataProvider {
+    private static final Logger log = LoggerFactory.getLogger(LocalizedDataProvider.class);
+
     private final DataProvider localized;
     private final DataProvider fallback;
     private final DataDirectoryEntry mergedRoot;
@@ -28,9 +32,17 @@ public class LocalizedDataProvider implements DataProvider {
 
     @Override
     public Data getData(String path) {
-        Data data = localized.getData(path);
-        // 语言目录里没有该 XML 时，使用原始 WZ，避免为了少量翻译复制整包资源。
-        return data != null ? data : fallback.getData(path);
+        try {
+            Data data = localized.getData(path);
+            // 语言目录里没有该 XML 时，使用原始 WZ，避免为了少量翻译复制整包资源。
+            if (data != null) {
+                return data;
+            }
+        } catch (RuntimeException e) {
+            // Corrupt/truncated locale XML must not poison class static init — fall back to base wz.
+            log.warn("Localized WZ failed for '{}', falling back to base: {}", path, e.toString());
+        }
+        return fallback.getData(path);
     }
 
     @Override
