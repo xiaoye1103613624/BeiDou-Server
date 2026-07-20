@@ -1,6 +1,11 @@
 /*
  * 物品查询脚本（GM工具）
  * 功能：模糊搜索 → 多选加入购物车 → 批量获取
+ *
+ * 中文输入说明：
+ * GMS083 NPC 单行输入框偶发调不出输入法。本脚本支持：
+ * 1) 直接输入物品ID（数字，不依赖中文输入法）
+ * 2) 名称关键词（可输入法输入；若调不出可从记事本复制后 Ctrl+V 粘贴）
  */
 var PAGE_SIZE   = 20;   // 每页物品数（购物车占位后可见条目减少，保持20避免崩溃）
 var MAX_CART    = 8;    // 购物车最大数量
@@ -15,6 +20,7 @@ var inputName    = "";
 var searchResults = [];   // [[itemId, itemName], ...]
 var currentPage   = 0;
 var cartSet       = {};   // { arrayIndex: true }
+var searchMode    = 0;    // 0=名称 1=ID（仅提示不同，实际同一输入框均支持）
 
 function start() {
     status = -1;
@@ -34,6 +40,16 @@ function getCartKeys() {
     var result = [];
     for (var i = 0; i < ks.length; i++) result.push(parseInt(ks[i]));
     return result;
+}
+
+function promptSearchText() {
+    var tip = "请输入物品名称或物品ID：\r\n\r\n";
+    tip += "#b名称：#k支持模糊搜索（调不出中文输入法时，可从记事本复制后 #rCtrl+V#k 粘贴）\r\n";
+    tip += "#bID：#k直接输入数字，如 #r1302000#k\r\n";
+    if (searchMode == 1) {
+        tip += "\r\n#d当前倾向：按ID查询#k";
+    }
+    cm.sendGetText(tip);
 }
 
 // ── 搜索结果列表（含购物车状态）──
@@ -145,53 +161,70 @@ function doGainItems(qty) {
     cm.dispose();
 }
 
+function doSearch(raw) {
+    // GraalJS 下 Java String 统一转 JS 字符串，避免 length/.trim 异常
+    inputName = ("" + raw).replace(/^\s+|\s+$/g, "");
+    if (!inputName) {
+        cm.sendOk("物品名称/ID不能为空。");
+        cm.dispose();
+        return false;
+    }
+
+    var provider = Java.type('org.gms.server.ItemInformationProvider');
+    var resultList = provider.getItemsIDsFromName(inputName);
+
+    searchResults = [];
+    for (var i = 0; i < resultList.size(); i++) {
+        var pair = resultList.get(i);
+        searchResults.push([pair.getLeft(), "" + pair.getRight()]);
+    }
+    cartSet = {};
+
+    if (searchResults.length == 0) {
+        cm.sendOk("未找到包含 \"" + inputName + "\" 的物品。\r\n可改试：物品ID数字，或粘贴中文关键词。");
+        cm.dispose();
+        return false;
+    }
+
+    currentPage = 0;
+    showResultPage();
+    return true;
+}
+
 function action(mode, type, selection) {
     if (mode == -1 || mode == 0) { cm.dispose(); return; }
     status++;
 
-    // ── 0：输入搜索关键词 ──
+    // ── 0：选择查询方式 ──
     if (status == 0) {
-        cm.sendGetText("请输入物品名称进行模糊查询：\r\n\r\n#b提示：#k支持模糊搜索，输入部分名称即可。");
+        var menu = "\t\t#r#e< 物品查询 >#k#n\r\n\r\n";
+        menu += "请选择查询方式：\r\n";
+        menu += "#L0##b按名称查询#k（支持中文，可粘贴）#l\r\n";
+        menu += "#L1##b按物品ID查询#k（纯数字，不依赖输入法）#l\r\n";
+        menu += "#L2#关闭#l\r\n";
+        cm.sendSimple(menu);
 
-    // ── 1：执行搜索，展示第一页 ──
+    // ── 1：弹出输入框 ──
     } else if (status == 1) {
-        inputName = cm.getText();
-        if (!inputName || inputName.length == 0) {
-            cm.sendOk("物品名称不能为空。");
-            cm.dispose();
-            return;
-        }
+        if (selection == 2) { cm.dispose(); return; }
+        searchMode = (selection == 1) ? 1 : 0;
+        promptSearchText();
 
-        var provider = Java.type('org.gms.server.ItemInformationProvider');
-        var resultList = provider.getItemsIDsFromName(inputName);
-
-        searchResults = [];
-        for (var i = 0; i < resultList.size(); i++) {
-            var pair = resultList.get(i);
-            searchResults.push([pair.getLeft(), pair.getRight()]);
-        }
-        cartSet = {};
-
-        if (searchResults.length == 0) {
-            cm.sendOk("未找到包含 \"" + inputName + "\" 的物品，请尝试其他关键词。");
-            cm.dispose();
-            return;
-        }
-
-        currentPage = 0;
-        showResultPage();
-
-    // ── 2：列表交互（切换购物车 / 翻页 / 确认）──
+    // ── 2：执行搜索，展示第一页 ──
     } else if (status == 2) {
-        if (selection == SEL_NEXT)   { currentPage++; status = 1; showResultPage(); return; }
-        if (selection == SEL_PREV)   { currentPage--; status = 1; showResultPage(); return; }
+        doSearch(cm.getText());
+
+    // ── 3：列表交互（切换购物车 / 翻页 / 确认）──
+    } else if (status == 3) {
+        if (selection == SEL_NEXT)   { currentPage++; status = 2; showResultPage(); return; }
+        if (selection == SEL_PREV)   { currentPage--; status = 2; showResultPage(); return; }
         if (selection == SEL_SEARCH) {
-            status = 0; inputName = ""; searchResults = []; cartSet = {};
-            cm.sendGetText("请输入物品名称进行模糊查询：\r\n\r\n#b提示：#k支持模糊搜索，输入部分名称即可。");
+            status = -1; inputName = ""; searchResults = []; cartSet = {};
+            action(1, 0, 0);
             return;
         }
         if (selection == SEL_CONFIRM) {
-            showConfirmPage();   // status 保持 2，下次 action 进入 status 3
+            showConfirmPage();   // status 保持 3，下次 action 进入 status 4
             return;
         }
 
@@ -201,24 +234,24 @@ function action(mode, type, selection) {
         } else if (cartSize() < MAX_CART) {
             cartSet[selection] = true;
         }
-        status = 1;
+        status = 2;
         showResultPage();
         return;
 
-    // ── 3：确认页选择 ──
-    } else if (status == 3) {
-        if (selection == 0) { status = 1; showResultPage(); return; }  // 取消，返回列表
+    // ── 4：确认页选择 ──
+    } else if (status == 4) {
+        if (selection == 0) { status = 2; showResultPage(); return; }  // 取消，返回列表
         if (selection == 1) { doGainItems(1); return; }                 // 各 ×1
         if (selection == 2) {                                           // 自定义数量
             cm.sendGetNumber(
                 "请输入每种物品的获取数量：\r\n（装备类受背包格数限制，消耗品按堆叠上限分格）",
                 1, 1, 9999
             );
-            return;  // status 保持 3，下次 action 进入 status 4
+            return;  // status 保持 4，下次 action 进入 status 5
         }
 
-    // ── 4：自定义数量确认，发放 ──
-    } else if (status == 4) {
+    // ── 5：自定义数量确认，发放 ──
+    } else if (status == 5) {
         doGainItems(selection);  // selection = sendGetNumber 的返回值
     }
 }
