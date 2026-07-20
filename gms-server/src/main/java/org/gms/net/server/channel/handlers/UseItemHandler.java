@@ -55,6 +55,12 @@ public final class UseItemHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
+            // 怪物卡片：双击收入怪物图鉴（不挂 card drop/meso buff）
+            if (ItemId.isMonsterCard(itemId)) {
+                remove(c, slot);
+                chr.getMonsterBook().addCard(c, itemId);
+                return;
+            }
             if (itemId == ItemId.ALL_CURE_POTION) {
                 chr.dispelDebuffs();
                 remove(c, slot);
