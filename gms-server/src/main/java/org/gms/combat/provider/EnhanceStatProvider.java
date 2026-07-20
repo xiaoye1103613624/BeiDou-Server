@@ -65,7 +65,8 @@ public final class EnhanceStatProvider {
         }
         // 饰品粗分：戒指/吊坠/腰带等
         int prefix = itemId / 10000;
-        if (prefix == 111 || prefix == 112 || prefix == 113 || prefix == 114 || prefix == 103) {
+        // 115 肩饰等同饰品增强规则
+        if (prefix == 111 || prefix == 112 || prefix == 113 || prefix == 114 || prefix == 115 || prefix == 103) {
             return "ACCESSORY";
         }
         return "ARMOR";
