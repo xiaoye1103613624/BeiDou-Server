@@ -290,6 +290,11 @@ public class ItemInformationProvider {
         return blockMouse;
     }
 
+    /** True when Item.wz (not just String.wz) has a node for this id. */
+    public boolean itemExists(int itemId) {
+        return getItemData(itemId) != null;
+    }
+
     private Data getItemData(int itemId) {
         Data ret = null;
         String idStr = "0" + itemId;

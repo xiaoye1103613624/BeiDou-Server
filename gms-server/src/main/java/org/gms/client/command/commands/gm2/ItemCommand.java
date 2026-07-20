@@ -52,7 +52,7 @@ public class ItemCommand extends Command {
         int itemId = Integer.parseInt(params[0]);
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-        if (ii.getName(itemId) == null) {
+        if (ii.getName(itemId) == null || !ii.itemExists(itemId)) {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
