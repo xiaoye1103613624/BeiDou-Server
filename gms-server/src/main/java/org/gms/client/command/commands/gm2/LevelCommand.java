@@ -52,5 +52,7 @@ public class LevelCommand extends Command {
         player.setWorldRates();
 
         player.levelUp(false);
+        // 便于核对服务端真实等级（客户端 LV.44 = 300&0xFF 截断）
+        player.yellowMessage("Server level set to " + player.getLevel());
     }
 }
