@@ -4253,17 +4253,18 @@ public class PacketCreator {
         return damageMonster(oid, damage, 0, 0);
     }
 
-    public static Packet healMonster(int oid, int heal, int curhp, int maxhp) {
+    public static Packet healMonster(int oid, int heal, long curhp, long maxhp) {
         return damageMonster(oid, -heal, curhp, maxhp);
     }
 
-    private static Packet damageMonster(int oid, int damage, int curhp, int maxhp) {
+    private static Packet damageMonster(int oid, int damage, long curhp, long maxhp) {
+        Pair<Integer, Integer> normalized = normalizedCustomMaxHP(curhp, maxhp);
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(oid);
         p.writeByte(0);
         p.writeInt(damage);
-        p.writeInt(curhp);
-        p.writeInt(maxhp);
+        p.writeInt(normalized.getLeft());
+        p.writeInt(normalized.getRight());
         return p;
     }
 
@@ -6922,13 +6923,14 @@ public class PacketCreator {
         return builder.toString();
     }
 
-    public static Packet MobDamageMobFriendly(Monster mob, int damage, int remainingHp) {
+    public static Packet MobDamageMobFriendly(Monster mob, int damage, long remainingHp) {
+        Pair<Integer, Integer> normalized = normalizedCustomMaxHP(remainingHp, mob.getMaxHp());
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(mob.getObjectId());
         p.writeByte(1); // direction ?
         p.writeInt(damage);
-        p.writeInt(remainingHp);
-        p.writeInt(mob.getMaxHp());
+        p.writeInt(normalized.getLeft());
+        p.writeInt(normalized.getRight());
         return p;
     }
 

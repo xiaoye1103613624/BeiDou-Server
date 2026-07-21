@@ -40,7 +40,8 @@ import java.util.Set;
  */
 public class MonsterStats {
     public boolean changeable;
-    public int exp, hp, mp, level, PADamage, PDDamage, MADamage, MDDamage, dropPeriod, cp, buffToGive = -1, removeAfter, acc, eva;
+    public int exp, mp, level, PADamage, PDDamage, MADamage, MDDamage, dropPeriod, cp, buffToGive = -1, removeAfter, acc, eva;
+    public long hp;
     /** 物理/魔法防御率（%），对应 WZ PDRate / MDRate；无则 0。 */
     public int pdr, mdr;
     public boolean boss, undead, ffaLoot, isExplosiveReward, firstAttack, removeOnMiss;
@@ -81,11 +82,11 @@ public class MonsterStats {
         this.exp = exp;
     }
 
-    public int getHp() {
+    public long getHp() {
         return hp;
     }
 
-    public void setHp(int hp) {
+    public void setHp(long hp) {
         this.hp = hp;
     }
 

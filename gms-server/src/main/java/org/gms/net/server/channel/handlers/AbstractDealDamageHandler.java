@@ -322,7 +322,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                     if (MobId.isDojoBoss(monster.getId())) {
                         if (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009) {
-                            int dmgLimit = (int) Math.ceil(0.3 * monster.getMaxHp());
+                            int dmgLimit = (int) Math.min(Integer.MAX_VALUE, Math.ceil(0.3 * monster.getMaxHp()));
                             List<Integer> _onedList = new LinkedList<>();
                             for (Integer i : onedList) {
                                 _onedList.add(i < dmgLimit ? i : dmgLimit);
@@ -379,7 +379,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             }
                         }
                     } else if (attack.skill == Marauder.ENERGY_DRAIN || attack.skill == ThunderBreaker.ENERGY_DRAIN || attack.skill == NightWalker.VAMPIRE || attack.skill == Assassin.DRAIN) {
-                        player.addHP(Math.min(monster.getMaxHp(), Math.min((int) ((double) totDamage * (double) SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(SkillFactory.getSkill(attack.skill))).getX() / 100.0), player.getCurrentMaxHp() / 2)));
+                        player.addHP(Math.min((int) Math.min(monster.getMaxHp(), Integer.MAX_VALUE), Math.min((int) ((double) totDamage * (double) SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(SkillFactory.getSkill(attack.skill))).getX() / 100.0), player.getCurrentMaxHp() / 2)));
                     } else if (attack.skill == Bandit.STEAL) {
                         Skill steal = SkillFactory.getSkill(Bandit.STEAL);
                         if (monster.getStolen().size() < 1) { // One steal per mob <3
@@ -573,7 +573,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                     if (attack.skill == Paladin.HEAVENS_HAMMER) {
                         if (!monster.isBoss()) {
-                            int trackerDamage = monster.getHp() - 1;
+                            int trackerDamage = (int) Math.min(Integer.MAX_VALUE, Math.max(0, monster.getHp() - 1));
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
@@ -588,7 +588,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     } else if (attack.skill == Aran.COMBO_TEMPEST) {
                         if (!monster.isBoss()) {
-                            int trackerDamage = monster.getHp();
+                            int trackerDamage = (int) Math.min(Integer.MAX_VALUE, monster.getHp());
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
@@ -976,6 +976,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 } else if (ret.skill == Hermit.SHADOW_WEB) {
                     if (monster != null) {
                         calcDmgMax = monster.getHp() / (50 - chr.getSkillLevel(skill));
+                        if (calcDmgMax > Integer.MAX_VALUE) {
+                            calcDmgMax = Integer.MAX_VALUE;
+                        }
                     }
                 } else if (ret.skill == Hermit.SHADOW_MESO) {
                     if (monster != null) {
@@ -983,7 +986,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                 } else if (ret.skill == Aran.BODY_PRESSURE) {
                     if (monster != null) {
-                        int bodyPressureDmg = (int) Math.ceil(monster.getMaxHp() * SkillFactory.getSkill(Aran.BODY_PRESSURE).getEffect(ret.skilllevel).getDamage() / 100.0);
+                        int bodyPressureDmg = (int) Math.min(Integer.MAX_VALUE, Math.ceil(monster.getMaxHp() * SkillFactory.getSkill(Aran.BODY_PRESSURE).getEffect(ret.skilllevel).getDamage() / 100.0));
                         if (bodyPressureDmg > calcDmgMax) {
                             calcDmgMax = bodyPressureDmg;
                         }

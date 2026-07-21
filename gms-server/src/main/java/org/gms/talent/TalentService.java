@@ -100,7 +100,7 @@ public final class TalentService {
         if (thorn <= 0) {
             return;
         }
-        thorn = Math.min(thorn, Math.max(1, attacker.getMaxHp() / 5));
+        thorn = (int) Math.min(thorn, Math.max(1, Math.min(Integer.MAX_VALUE, attacker.getMaxHp() / 5)));
         map.damageMonster(chr, attacker, thorn);
         map.broadcastMessage(chr, PacketCreator.damageMonster(oid, thorn), false, true);
         attacker.aggroMonsterDamage(chr, thorn);
