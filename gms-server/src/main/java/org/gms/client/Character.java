@@ -2857,11 +2857,14 @@ public class Character extends AbstractCharacterObject {
         updateLocalStats();
 
         if (notifyClient && client != null) {
+            // STAT_CHANGED 的 STR/DEX/INT/LUK 是角色基础四维(AP)，客户端会再叠加已装备属性。
+            // 若下发 local*（已含装备），客户端会把装备 STR 算两次；套装加成需并入基础侧才能显示。
+            // 正确：attr + setBonus（不含 equip*）。战斗仍用 local* = attr + equip + setBonus。
             List<Pair<Stat, Long>> statup = new ArrayList<>(6);
-            statup.add(new Pair<>(Stat.STR, (long) (localstr)));
-            statup.add(new Pair<>(Stat.DEX, (long) (localdex)));
-            statup.add(new Pair<>(Stat.INT, (long) (localint_)));
-            statup.add(new Pair<>(Stat.LUK, (long) (localluk)));
+            statup.add(new Pair<>(Stat.STR, (long) (getStr() + setBonusStr)));
+            statup.add(new Pair<>(Stat.DEX, (long) (getDex() + setBonusDex)));
+            statup.add(new Pair<>(Stat.INT, (long) (getInt() + setBonusInt_)));
+            statup.add(new Pair<>(Stat.LUK, (long) (getLuk() + setBonusLuk)));
             statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
             statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
