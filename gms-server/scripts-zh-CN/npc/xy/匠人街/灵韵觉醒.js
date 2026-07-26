@@ -174,6 +174,6 @@ function buildHelpText() {
     t += "8. 交易获得的带灵韵武器会清空灵韵\r\n";
     t += "9. 清除灵韵消耗：#v4021017# ×" + SpiritAwakenConfig.RESET_COST_ITEM_QTY
         + " + " + (SpiritAwakenConfig.RESET_COST_MESO / 10000) + "万\r\n";
-    t += "10. 材料可在匠人街材料商人处购买（灵韵结晶 #v4021017#）";
+    t += "10. 灵韵结晶 #v4021017# 请通过活动/掉落等方式获取";
     return t;
 }

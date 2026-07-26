@@ -12,21 +12,19 @@
  *   品级校验与锻造师经验增加由 org.gms.service.ForgeRecipeService 完成；
  *   金币/材料的校验与扣除、产出装备的随机属性计算与发放均由本脚本完成(与炼金系统一致的约定)。
  *
- *   打造时可选投入两种加成材料(神铸石/混沌石可以同时叠加使用，但每种材料单次打造最多只能使用1个)：
- *     - 神铸石：使用1个让该配方所有相关属性的随机区间整体 +5
- *     - 混沌石：使用1个让区间上限额外随机 +1~5
- *   神铸石/混沌石的实际物品ID未在现有WZ/脚本中找到对应物品，暂留 TODO 占位
- *   (占位期间会跳过对应材料的询问步骤，直接按默认区间打造)。
+ *   打造时可选投入两种加成材料(神铸石/重铸石可以同时叠加使用，但每种材料单次打造最多只能使用1个)：
+ *     - 神铸石(4000729)：使用1个让该配方所有相关属性的随机区间整体 +5
+ *     - 重铸石(4001527)：使用1个让区间上限额外随机 +1~8
  */
 
 var ForgeManager = Java.type("org.gms.config.ForgeManager");
 var ForgeRecipeManager = Java.type("org.gms.config.ForgeRecipeManager");
 
-var neoCrystalId = 0;  // TODO: "神铸石"实际物品ID未确认
-var chaosCrystalId = 0; // TODO: "混沌石"实际物品ID未确认
+var neoCrystalId = 4000729;  // 神铸石
+var chaosCrystalId = 4001527; // 重铸石
 var neoCrystalFlatBonus = 5;     // 神铸石：使用1个让区间整体+5
-var chaosCrystalMinExtra = 1;    // 混沌石：使用1个让区间上限额外+1~5(随机下限)
-var chaosCrystalMaxExtra = 5;    // 混沌石：使用1个让区间上限额外+1~5(随机上限)
+var chaosCrystalMinExtra = 1;    // 重铸石：使用1个让区间上限额外+1~8(随机下限)
+var chaosCrystalMaxExtra = 8;    // 重铸石：使用1个让区间上限额外+1~8(随机上限)
 
 // 属性字段名(对应DB列前缀，intStat对应智力，避免与js关键字int冲突) -> 中文展示名
 var statFieldNames = ["str", "dex", "int", "luk", "watk", "matk"];
@@ -95,12 +93,12 @@ function levelHandleMain(selection) {
     询问神铸石();
 }
 
-// ==================== 加成材料询问：神铸石 -> 混沌石 ====================
+// ==================== 加成材料询问：神铸石 -> 重铸石 ====================
 
 function 询问神铸石() {
     if (neoCrystalId <= 0 || cm.itemQuantity(neoCrystalId) <= 0) {
         neoCrystalCount = 0;
-        询问混沌石();
+        询问重铸石();
         return;
     }
     cm.sendYesNoLevel("AskNeoNo", "AskNeoYes",
@@ -109,22 +107,22 @@ function 询问神铸石() {
 
 function levelAskNeoYes() {
     neoCrystalCount = 1;
-    询问混沌石();
+    询问重铸石();
 }
 
 function levelAskNeoNo() {
     neoCrystalCount = 0;
-    询问混沌石();
+    询问重铸石();
 }
 
-function 询问混沌石() {
+function 询问重铸石() {
     if (chaosCrystalId <= 0 || cm.itemQuantity(chaosCrystalId) <= 0) {
         chaosCrystalCount = 0;
         显示预览并确认();
         return;
     }
     cm.sendYesNoLevel("AskChaosNo", "AskChaosYes",
-        "是否使用1个#b混沌石#k来提升属性区间？(让区间上限额外随机+" + chaosCrystalMinExtra + "~" + chaosCrystalMaxExtra + "，最多使用1个，你拥有" + cm.itemQuantity(chaosCrystalId) + "个)");
+        "是否使用1个#b重铸石#k来提升属性区间？(让区间上限额外随机+" + chaosCrystalMinExtra + "~" + chaosCrystalMaxExtra + "，最多使用1个，你拥有" + cm.itemQuantity(chaosCrystalId) + "个)");
 }
 
 function levelAskChaosYes() {
@@ -189,7 +187,7 @@ function 显示预览并确认() {
     text += "#b预览属性(您打造出的装备可能在该属性区间中)#k\r\n\r\n";
 
     var flatBonus = neoCrystalCount * neoCrystalFlatBonus;
-    var maxChaosBonus = chaosCrystalCount * chaosCrystalMaxExtra; // 混沌石只提升上限随机性，预览展示理论最大值
+    var maxChaosBonus = chaosCrystalCount * chaosCrystalMaxExtra; // 重铸石只提升上限随机性，预览展示理论最大值
 
     for (var stat in ranges) {
         var range = ranges[stat];
@@ -228,7 +226,7 @@ function levelDoCraft() {
         return;
     }
     if (chaosCrystalCount > 0 && !cm.haveItem(chaosCrystalId, chaosCrystalCount)) {
-        cm.sendOkLevel("Main", "混沌石数量不足，无法打造。");
+        cm.sendOkLevel("Main", "重铸石数量不足，无法打造。");
         return;
     }
     if (cm.getMeso() < recipe.get("mesoCost")) {

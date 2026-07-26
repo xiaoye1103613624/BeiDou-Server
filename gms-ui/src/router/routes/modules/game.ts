@@ -142,6 +142,26 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'alchemyRecipe',
+      name: 'alchemyRecipe',
+      component: () => import('@/views/game/alchemyRecipe/index.vue'),
+      meta: {
+        locale: 'menu.game.alchemyRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'forgeRecipe',
+      name: 'forgeRecipe',
+      component: () => import('@/views/game/forgeRecipe/index.vue'),
+      meta: {
+        locale: 'menu.game.forgeRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 
