@@ -222,19 +222,119 @@ public final class SetTiersV2Parser {
         }
 
         bonus.finalDamagePercent = parseIncDamage(tierNode);
-        int damR = readStat(tierNode, "damR");
-        if (damR > 0) {
-            bonus.putCombatStat(CombatStatType.DAM_R.getKey(), damR);
+        putCombatIfPositive(bonus, CombatStatType.DAM_R, readStat(tierNode, "damR"));
+        putCombatIfPositive(bonus, CombatStatType.BOSS_DAM_R, readStat(tierNode, "bdR"));
+        // nbdR = 对普通怪伤害%，绝不可并入 bdR
+        putCombatIfPositive(bonus, CombatStatType.NORMAL_DAM_R, readStat(tierNode, "nbdR"));
+        putCombatIfPositive(bonus, CombatStatType.IGNORE_PDR, firstPositive(
+                readStat(tierNode, "ignoreMobpdpR"), readStat(tierNode, "ignoreTargetDEF")));
+        putCombatIfPositive(bonus, CombatStatType.IGNORE_MDR, readStat(tierNode, "ignoreMobmdR"));
+        int fdR = readStat(tierNode, "fdR");
+        if (fdR > 0) {
+            bonus.putCombatStat(CombatStatType.FINAL_DAM_R.getKey(), fdR);
         }
-        int bdR = readStat(tierNode, "bdR");
-        if (bdR == 0) {
-            bdR = readStat(tierNode, "nbdR");
-        }
-        if (bdR > 0) {
-            bonus.putCombatStat(CombatStatType.BOSS_DAM_R.getKey(), bdR);
-        }
+        putCombatIfPositive(bonus, CombatStatType.CRIT_RATE, firstPositive(
+                readStat(tierNode, "cr"), readStat(tierNode, "incCr")));
+        putCombatIfPositive(bonus, CombatStatType.CRIT_DAM, readStat(tierNode, "cd"));
         bonus.damageSkinId = readStat(tierNode, "damageSkin");
+
+        applyEffectOptions(bonus, tierNode);
         return bonus;
+    }
+
+    /** Effect/Option/{n}: level + option → ItemOption 属性；高版本缺失时用已知回退。 */
+    private static void applyEffectOptions(SetBonus bonus, Data tierNode) {
+        Data optionRoot = tierNode.getChildByPath("Option");
+        if (optionRoot == null) {
+            return;
+        }
+        for (Data entry : optionRoot.getChildren()) {
+            int optionId = DataTool.getInt("option", entry, 0);
+            int level = DataTool.getInt("level", entry, 0);
+            if (optionId <= 0) {
+                continue;
+            }
+            Map<String, Integer> stats = org.gms.potential.ItemOptionProvider.getInstance()
+                    .getStats(optionId, level);
+            if (stats == null || stats.isEmpty()) {
+                applyKnownOptionFallback(bonus, optionId, level);
+                continue;
+            }
+            applyOptionStatMap(bonus, stats);
+        }
+    }
+
+    private static void applyOptionStatMap(SetBonus bonus, Map<String, Integer> stats) {
+        for (Map.Entry<String, Integer> e : stats.entrySet()) {
+            int v = e.getValue() == null ? 0 : e.getValue();
+            if (v == 0) {
+                continue;
+            }
+            switch (e.getKey()) {
+                case "incSTR" -> bonus.str += v;
+                case "incDEX" -> bonus.dex += v;
+                case "incINT" -> bonus.int_ += v;
+                case "incLUK" -> bonus.luk += v;
+                case "incPAD" -> bonus.pad += v;
+                case "incMAD" -> bonus.mad += v;
+                case "incPDD" -> bonus.pdd += v;
+                case "incMDD" -> bonus.mdd += v;
+                case "incACC" -> bonus.acc += v;
+                case "incEVA" -> bonus.eva += v;
+                case "incMHP" -> bonus.mhp += v;
+                case "incMMP" -> bonus.mmp += v;
+                case "incSpeed" -> bonus.speed += v;
+                case "incJump" -> bonus.jump += v;
+                case "incSTRr" -> bonus.strR += v;
+                case "incDEXr" -> bonus.dexR += v;
+                case "incINTr" -> bonus.intR += v;
+                case "incLUKr" -> bonus.lukR += v;
+                case "incMHPr" -> bonus.mhpR += v;
+                case "incMMPr" -> bonus.mmpR += v;
+                case "incAllStat" -> {
+                    bonus.str += v;
+                    bonus.dex += v;
+                    bonus.int_ += v;
+                    bonus.luk += v;
+                }
+                case "bdR", "boss" -> putCombatIfPositive(bonus, CombatStatType.BOSS_DAM_R, v);
+                case "nbdR" -> putCombatIfPositive(bonus, CombatStatType.NORMAL_DAM_R, v);
+                case "damR", "incDAMr" -> putCombatIfPositive(bonus, CombatStatType.DAM_R, v);
+                case "fdR", "incDamage" -> bonus.putCombatStat(CombatStatType.FINAL_DAM_R.getKey(), v);
+                case "ignoreMobpdpR", "ignoreTargetDEF" ->
+                        putCombatIfPositive(bonus, CombatStatType.IGNORE_PDR, v);
+                case "ignoreMobmdR" -> putCombatIfPositive(bonus, CombatStatType.IGNORE_MDR, v);
+                case "cr", "incCr" -> putCombatIfPositive(bonus, CombatStatType.CRIT_RATE, v);
+                case "cd" -> putCombatIfPositive(bonus, CombatStatType.CRIT_DAM, v);
+                default -> {
+                    // 未知键若已是 CombatStatType key 则直接写入
+                    if (CombatStatType.fromKey(e.getKey()) != null) {
+                        bonus.putCombatStat(e.getKey(), v);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 083 ItemOption.img 无高版本套装 Option（如创世 60024）时的显示/战斗回退。
+     * 60024@任意档：攻击首领怪物时的伤害 +10%（无尽辉耀 2/3/4 件）。
+     */
+    private static void applyKnownOptionFallback(SetBonus bonus, int optionId, int level) {
+        if (optionId == 60024) {
+            putCombatIfPositive(bonus, CombatStatType.BOSS_DAM_R, 10);
+        }
+        // 60087：资料站 5 件档仅显示攻魔，暂无明确战斗键，缺 WZ 时不臆造
+    }
+
+    private static void putCombatIfPositive(SetBonus bonus, CombatStatType type, int value) {
+        if (value > 0) {
+            bonus.putCombatStat(type.getKey(), value);
+        }
+    }
+
+    private static int firstPositive(int a, int b) {
+        return a > 0 ? a : b;
     }
 
     private static int readStat(Data tierNode, String path) {

@@ -52,6 +52,10 @@ public final class PetLootHandler extends AbstractPacketHandler {
         int oid = p.readInt();
         MapObject ob = chr.getMap().getMapObject(oid);
         try {
+            if (ob == null) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
             MapItem mapitem = (MapItem) ob;
             if (mapitem.getMeso() > 0) {
                 if (!chr.isEquippedMesoMagnet(petIndex)) {

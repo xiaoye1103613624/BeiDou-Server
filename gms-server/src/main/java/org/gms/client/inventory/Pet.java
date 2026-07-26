@@ -53,7 +53,12 @@ public class Pet extends Item {
     private int stance;
     private boolean summoned;
     private int petAttribute = 0;
+    /** Client {@code PetSkill} short — equip/book pickup bits (ITEM_PICKUP, DROP_SWEEP, …). */
+    private int petSkills = 0;
 
+    /**
+     * Low short of the client pet flag dword (HeavenMS PetAttribute / OWNER_SPEED).
+     */
     public enum PetAttribute {
         OWNER_SPEED(0x01);
 
@@ -65,6 +70,36 @@ public class Pet extends Item {
 
         public int getValue() {
             return i;
+        }
+    }
+
+    /**
+     * High short of the client pet flag dword ({@code PetSkill}).
+     * Taught by 519xxxx books and mirrored from equipped 1812xxx skills.
+     */
+    public enum PetFlag {
+        ITEM_PICKUP(0x01),
+        LONG_RANGE(0x02),
+        DROP_SWEEP(0x04),
+        IGNORE_PICKUP(0x08),
+        PICKUP_OTHERS(0x10),
+        CONSUME_HP(0x20),
+        CONSUME_MP(0x40),
+        RECALL(0x80),
+        AUTO_SPEAK(0x100);
+
+        private final int value;
+
+        PetFlag(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public boolean check(int flag) {
+            return (flag & value) == value;
         }
     }
 
@@ -87,7 +122,10 @@ public class Pet extends Item {
                 ret.setLevel((byte) Math.min(rs.getByte("level"), 30));
                 ret.setFullness(Math.min(rs.getInt("fullness"), 100));
                 ret.setSummoned(rs.getInt("summoned") == 1);
-                ret.setPetAttribute(rs.getInt("flag"));
+                int flag = rs.getInt("flag");
+                // Legacy single flag int: OWNER_SPEED in low bit, remaining bits are PetSkill.
+                ret.setPetAttribute(flag & PetAttribute.OWNER_SPEED.getValue());
+                ret.setPetSkills(flag); // include all learned skill bits (ITEM_PICKUP etc.)
             }
             return ret;
         } catch (SQLException e) {
@@ -114,7 +152,7 @@ public class Pet extends Item {
             ps.setInt(3, getTameness());
             ps.setInt(4, getFullness());
             ps.setInt(5, isSummoned() ? 1 : 0);
-            ps.setInt(6, getPetAttribute());
+            ps.setInt(6, getPetFlag());
             ps.setInt(7, getUniqueId());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -284,8 +322,27 @@ public class Pet extends Item {
         return this.petAttribute;
     }
 
+    /** Alias: DB {@code pets.flag} historically held attribute/skills together. */
+    public int getPetFlag() {
+        return this.petAttribute | this.petSkills;
+    }
+
     private void setPetAttribute(int flag) {
         this.petAttribute = flag;
+    }
+
+    public void setPetFlag(int flag) {
+        // Books / legacy: treat full flag dword as skill bits (ITEM_PICKUP etc.).
+        this.petSkills = flag;
+        this.petAttribute = flag & PetAttribute.OWNER_SPEED.getValue();
+    }
+
+    public int getPetSkills() {
+        return this.petSkills;
+    }
+
+    public void setPetSkills(int skills) {
+        this.petSkills = skills;
     }
 
     public void addPetAttribute(Character owner, PetAttribute flag) {
@@ -298,8 +355,28 @@ public class Pet extends Item {
         }
     }
 
+    public void addPetFlag(Character owner, PetFlag flag) {
+        this.petSkills |= flag.getValue();
+        saveToDb();
+
+        Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
+        if (petz != null) {
+            owner.forceUpdateItem(petz);
+        }
+    }
+
     public void removePetAttribute(Character owner, PetAttribute flag) {
         this.petAttribute &= 0xFFFFFFFF ^ flag.getValue();
+        saveToDb();
+
+        Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
+        if (petz != null) {
+            owner.forceUpdateItem(petz);
+        }
+    }
+
+    public void removePetFlag(Character owner, PetFlag flag) {
+        this.petSkills &= ~flag.getValue();
         saveToDb();
 
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
