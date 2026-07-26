@@ -485,7 +485,7 @@ public class GameConstants {
                 return 120;   // 3rd job
 
             default:
-                return ExpTable.MAX_LEVEL;   // 4th job (Cygnus included): 300
+                return ExpTable.MAX_LEVEL;   // 4th job (Cygnus included): uses ExpTable.MAX_LEVEL (300)
         }
     }
 

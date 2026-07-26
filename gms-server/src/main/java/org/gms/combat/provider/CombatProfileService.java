@@ -30,8 +30,10 @@ public final class CombatProfileService {
             mods.addAll(SetBonusStatProvider.provide(chr));
         }
         mods.addAll(EnhanceStatProvider.provide(chr));
+        mods.addAll(PotentialStatProvider.provide(chr));
         mods.addAll(CarryItemStatProvider.provide(chr));
         mods.addAll(TalentStatProvider.provide(chr));
+        mods.addAll(org.gms.soul.SoulBuffStatProvider.provide(chr));
         return mods;
     }
 

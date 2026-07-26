@@ -385,6 +385,9 @@ public class ItemInformationProvider {
                 ret = inventoryType.canChangeSlotMax() && itemSlotMax > 0 ? itemSlotMax : (short) DataTool.getInt(smEntry);
             }
         }
+        if (ret <= 0) {
+            ret = 100; // never cache 0 — pickup loops treat slotMax as divisor/step
+        }
 
         slotMaxCache.put(itemId, ret);
         return (short) (ret + getExtraSlotMaxFromPlayer(c, itemId));
@@ -520,7 +523,7 @@ public class ItemInformationProvider {
         return ret;
     }
 
-    protected String getEquipmentSlot(int itemId) {
+    public String getEquipmentSlot(int itemId) {
         if (equipmentSlotCache.containsKey(itemId)) {
             return equipmentSlotCache.get(itemId);
         }
@@ -645,118 +648,133 @@ public class ItemInformationProvider {
     }
 
     private static short chscrollRandomizedStat(int range) {
+        return chscrollRandomizedStat(range, false);
+    }
+
+    private static short chscrollRandomizedStat(int range, boolean positiveOnly) {
+        if (positiveOnly) {
+            return (short) Randomizer.rand(0, range);
+        }
         return (short) Randomizer.rand(-range, range);
     }
 
     public void scrollOptionEquipWithChaos(Equip nEquip, int range, boolean option) {
+        scrollOptionEquipWithChaos(nEquip, range, option, false);
+    }
+
+    public void scrollOptionEquipWithChaos(Equip nEquip, int range, boolean option, boolean positiveOnly) {
         // option: watk, matk, wdef, mdef, spd, jump, hp, mp
         //   stat: dex, luk, str, int, avoid, acc
 
         if (!option) {
             if (nEquip.getStr() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range))));
+                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range))));
+                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getDex() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range))));
+                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range))));
+                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getInt() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range))));
+                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range))));
+                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getLuk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range))));
+                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range))));
+                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getAcc() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range))));
+                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range))));
+                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getAvoid() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range))));
+                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range))));
+                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
         } else {
             if (nEquip.getWatk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range))));
+                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range))));
+                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getWdef() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range))));
+                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range))));
+                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMatk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range))));
+                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range))));
+                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMdef() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range))));
+                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range))));
+                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
 
             if (nEquip.getSpeed() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range))));
+                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range))));
+                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getJump() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range))));
+                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range))));
+                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getHp() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range))));
+                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range))));
+                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMp() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range))));
+                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range))));
+                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
         }
     }
 
     private void scrollEquipWithChaos(Equip nEquip, int range) {
+        scrollEquipWithChaos(nEquip, range, false);
+    }
+
+    private void scrollEquipWithChaos(Equip nEquip, int range, boolean positiveOnly) {
         if (GameConfig.getServerInt("chaos_scroll_stat_rate") > 0) {
             int temp;
             short curStr, curDex, curInt, curLuk, curWatk, curWdef, curMatk, curMdef, curAcc, curAvoid, curSpeed, curJump, curHp, curMp;
@@ -796,9 +814,9 @@ public class ItemInformationProvider {
             for (int i = 0; i < GameConfig.getServerInt("chaos_scroll_stat_rate"); i++) {
                 if (nEquip.getStr() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curStr + chscrollRandomizedStat(range);
+                        temp = curStr + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getStr() + chscrollRandomizedStat(range);
+                        temp = nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curStr = getMaximumShortMaxIfOverflow(temp, curStr);
@@ -806,9 +824,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getDex() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curDex + chscrollRandomizedStat(range);
+                        temp = curDex + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getDex() + chscrollRandomizedStat(range);
+                        temp = nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curDex = getMaximumShortMaxIfOverflow(temp, curDex);
@@ -816,9 +834,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getInt() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curInt + chscrollRandomizedStat(range);
+                        temp = curInt + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getInt() + chscrollRandomizedStat(range);
+                        temp = nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curInt = getMaximumShortMaxIfOverflow(temp, curInt);
@@ -826,9 +844,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getLuk() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curLuk + chscrollRandomizedStat(range);
+                        temp = curLuk + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getLuk() + chscrollRandomizedStat(range);
+                        temp = nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curLuk = getMaximumShortMaxIfOverflow(temp, curLuk);
@@ -836,9 +854,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getWatk() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curWatk + chscrollRandomizedStat(range);
+                        temp = curWatk + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getWatk() + chscrollRandomizedStat(range);
+                        temp = nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curWatk = getMaximumShortMaxIfOverflow(temp, curWatk);
@@ -846,9 +864,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getWdef() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curWdef + chscrollRandomizedStat(range);
+                        temp = curWdef + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getWdef() + chscrollRandomizedStat(range);
+                        temp = nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curWdef = getMaximumShortMaxIfOverflow(temp, curWdef);
@@ -856,9 +874,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getMatk() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curMatk + chscrollRandomizedStat(range);
+                        temp = curMatk + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getMatk() + chscrollRandomizedStat(range);
+                        temp = nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curMatk = getMaximumShortMaxIfOverflow(temp, curMatk);
@@ -866,9 +884,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getMdef() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curMdef + chscrollRandomizedStat(range);
+                        temp = curMdef + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getMdef() + chscrollRandomizedStat(range);
+                        temp = nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curMdef = getMaximumShortMaxIfOverflow(temp, curMdef);
@@ -876,9 +894,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getAcc() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curAcc + chscrollRandomizedStat(range);
+                        temp = curAcc + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getAcc() + chscrollRandomizedStat(range);
+                        temp = nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curAcc = getMaximumShortMaxIfOverflow(temp, curAcc);
@@ -886,9 +904,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getAvoid() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curAvoid + chscrollRandomizedStat(range);
+                        temp = curAvoid + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getAvoid() + chscrollRandomizedStat(range);
+                        temp = nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curAvoid = getMaximumShortMaxIfOverflow(temp, curAvoid);
@@ -896,9 +914,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getSpeed() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curSpeed + chscrollRandomizedStat(range);
+                        temp = curSpeed + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getSpeed() + chscrollRandomizedStat(range);
+                        temp = nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curSpeed = getMaximumShortMaxIfOverflow(temp, curSpeed);
@@ -906,9 +924,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getJump() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curJump + chscrollRandomizedStat(range);
+                        temp = curJump + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getJump() + chscrollRandomizedStat(range);
+                        temp = nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curJump = getMaximumShortMaxIfOverflow(temp, curJump);
@@ -916,9 +934,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getHp() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curHp + chscrollRandomizedStat(range);
+                        temp = curHp + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getHp() + chscrollRandomizedStat(range);
+                        temp = nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curHp = getMaximumShortMaxIfOverflow(temp, curHp);
@@ -926,9 +944,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getMp() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curMp + chscrollRandomizedStat(range);
+                        temp = curMp + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getMp() + chscrollRandomizedStat(range);
+                        temp = nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curMp = getMaximumShortMaxIfOverflow(temp, curMp);
@@ -952,100 +970,100 @@ public class ItemInformationProvider {
         } else {
             if (nEquip.getStr() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range))));
+                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range))));
+                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getDex() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range))));
+                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range))));
+                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getInt() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range))));
+                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range))));
+                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getLuk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range))));
+                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range))));
+                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getWatk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range))));
+                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range))));
+                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getWdef() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range))));
+                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range))));
+                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMatk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range))));
+                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range))));
+                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMdef() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range))));
+                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range))));
+                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getAcc() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range))));
+                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range))));
+                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getAvoid() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range))));
+                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range))));
+                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getSpeed() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range))));
+                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range))));
+                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getJump() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range))));
+                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range))));
+                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getHp() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range))));
+                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range))));
+                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMp() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range))));
+                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range))));
+                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
         }
@@ -1122,7 +1140,16 @@ public class ItemInformationProvider {
                         case ItemId.CHAOS_SCROll_60:
                         case ItemId.LIAR_TREE_SAP:
                         case ItemId.MAPLE_SYRUP:
-                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range")); // 使用混沌卷轴增加随机属性
+                        case ItemId.AMAZING_CHAOS_SCROLL:
+                        case ItemId.POSITIVE_CHAOS_SCROLL:
+                        case ItemId.JUSTICE_CHAOS_SCROLL:
+                        case ItemId.AMAZING_JUSTICE_CHAOS_20:
+                        case 2049137:
+                        case 2049138:
+                            int chaosRange = ItemConstants.chaosStatRange(
+                                    scrollId, GameConfig.getServerInt("chaos_scroll_stat_range"));
+                            scrollEquipWithChaos(nEquip, chaosRange,
+                                    ItemConstants.isPositiveChaosScroll(scrollId));
                             break;
 
                         default:
@@ -1696,18 +1723,22 @@ public class ItemInformationProvider {
         }
         int totalprob = 0;
         List<RewardItem> rewards = new ArrayList<>();
-        for (Data child : getItemData(itemId).getChildByPath("reward").getChildren()) {
-            RewardItem reward = new RewardItem();
-            reward.itemid = DataTool.getInt("item", child, 0);
-            reward.prob = (byte) DataTool.getInt("prob", child, 0);
-            reward.quantity = (short) DataTool.getInt("count", child, 0);
-            reward.effect = DataTool.getString("Effect", child, "");
-            reward.worldmsg = DataTool.getString("worldMsg", child, null);
-            reward.period = DataTool.getInt("period", child, -1);
+        Data rewardRoot = getItemData(itemId).getChildByPath("reward");
+        if (rewardRoot != null) {
+            for (Data child : rewardRoot.getChildren()) {
+                RewardItem reward = new RewardItem();
+                reward.itemid = DataTool.getInt("item", child, 0);
+                // WZ probs can exceed 255 (e.g. 4500); casting via byte corrupts totalprob.
+                reward.prob = (short) DataTool.getInt("prob", child, 0);
+                reward.quantity = (short) DataTool.getInt("count", child, 0);
+                reward.effect = DataTool.getString("Effect", child, "");
+                reward.worldmsg = DataTool.getString("worldMsg", child, null);
+                reward.period = DataTool.getInt("period", child, -1);
 
-            totalprob += reward.prob;
+                totalprob += reward.prob;
 
-            rewards.add(reward);
+                rewards.add(reward);
+            }
         }
         Pair<Integer, List<RewardItem>> hmm = new Pair<>(totalprob, rewards);
         rewardCache.put(itemId, hmm);
@@ -1752,6 +1783,30 @@ public class ItemInformationProvider {
 
         Map<String, Integer> eqpStats = getEquipStats(itemId);
         return eqpStats != null && eqpStats.get("cash") == 1;
+    }
+
+    /** Pet skill WZ flag: info/pickupItem == 1 (e.g. 1812001). */
+    public boolean petCanPickupItem(int itemId) {
+        return petSkillFlagOn(itemId, "pickupItem");
+    }
+
+    /** Pet skill WZ flag: info/pickupMeso == 1 (e.g. 1812000). */
+    public boolean petCanPickupMeso(int itemId) {
+        return petSkillFlagOn(itemId, "pickupMeso");
+    }
+
+    /** Generic pet-equip / pet-skill WZ info flag (pickupItem, longRange, sweepForDrop, …). */
+    public boolean petSkillFlagOn(int itemId, String flag) {
+        Data item = getItemData(itemId);
+        if (item == null) {
+            return false;
+        }
+        Data info = item.getChildByPath("info");
+        if (info == null) {
+            return false;
+        }
+        // WZ often stores these as string "0"/"1".
+        return DataTool.getIntConvert(flag, info, 0) != 0;
     }
 
     public boolean isUpgradeable(int itemId) {

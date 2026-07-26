@@ -16,6 +16,7 @@ public final class DamageCalculator {
             return baseDamage;
         }
         double dmg = baseDamage;
+        dmg *= profile.attackPercentMultiplier(magicAttack);
         dmg *= profile.damagePercentMultiplier(mob);
         dmg *= profile.finalDamageMultiplier;
         if (magicAttack) {
@@ -42,6 +43,7 @@ public final class DamageCalculator {
             return baseDamage;
         }
         double dmg = baseDamage;
+        dmg *= profile.attackPercentMultiplier(magicAttack);
         dmg *= profile.damagePercentMultiplier(mob);
         if (mob != null) {
             if (magicAttack) {
@@ -87,6 +89,7 @@ public final class DamageCalculator {
             return "profile=empty";
         }
         return "damR=" + p.damR + ",bdR=" + p.bossDamR + ",nbdR=" + p.normalDamR
+                + ",padR=" + p.padR + ",madR=" + p.madR
                 + ",fdMul=" + String.format("%.3f", p.finalDamageMultiplier)
                 + ",ignPDR=" + p.ignorePDR + ",ignMDR=" + p.ignoreMDR
                 + ",cr=" + p.critRate + ",cd=" + p.critDam;

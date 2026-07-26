@@ -219,11 +219,19 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private int vanquisherKills;
     private float expRate = 1;
-    @Getter
+    /** 内部倍率字段；对外请用 {@link #getMesoRate()}/{@link #getDropRate()}（含潜能%） */
     private float mesoRate = 1;
-    @Getter
     private float dropRate = 1;
     private int expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
+    /** 潜能 incRewardProp / incMesoProp 合计（%） */
+    private int potDropProp = 0;
+    private int potMesoProp = 0;
+    /** 潜能 DAMreflect / prop、incAllskill、reduceCooltime、mpconReduce */
+    private int potDamReflect = 0;
+    private int potDamReflectProp = 0;
+    private int potAllSkill = 0;
+    private int potCooltimeReduce = 0;
+    private int potMpconReduce = 0;
     @Getter
     @Setter
     private int omokwins;
@@ -257,6 +265,8 @@ public class Character extends AbstractCharacterObject {
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
     private transient int localwdef, localmdef, localacc, localeva, localspeed, localjump;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
+    /** 潜能百分比合计（recalcEquipStats 缓存；095 percent_*） */
+    private transient int potStrR, potDexR, potIntR, potLukR, potHpR, potMpR, potPadR, potMadR;
     private transient int setBonusStr, setBonusDex, setBonusLuk, setBonusInt_, setBonusPad, setBonusMad, setBonusMhp, setBonusMmp;
     private transient int setBonusPdd, setBonusMdd, setBonusAcc, setBonusEva, setBonusSpeed, setBonusJump;
     @Getter
@@ -775,6 +785,27 @@ public class Character extends AbstractCharacterObject {
             chrLock.unlock();
             effLock.unlock();
         }
+    }
+
+    /** 潜能 reduceCooltime：技能冷却秒数减免（不低于 0） */
+    public int getEffectiveCooldownSeconds(int baseSeconds) {
+        if (baseSeconds <= 0 || potCooltimeReduce <= 0) {
+            return baseSeconds;
+        }
+        return Math.max(0, baseSeconds - potCooltimeReduce);
+    }
+
+    /** 潜能 mpconReduce：技能 MP 消耗减免%（与天赋减免可叠乘） */
+    public int getPotMpconReduce() {
+        return potMpconReduce;
+    }
+
+    public int reduceSkillMpCostByPotential(int mpCon) {
+        if (mpCon <= 0 || potMpconReduce <= 0) {
+            return mpCon;
+        }
+        int reduced = mpCon - (mpCon * potMpconReduce / 100);
+        return Math.max(0, reduced);
     }
 
     public Ring getRingById(int id) {
@@ -2091,7 +2122,9 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (ob instanceof MapItem mapitem) {
-            if (System.currentTimeMillis() - mapitem.getDropTime() < 400 || !mapitem.canBePickedBy(this)) {
+            // dropTime is set via Server.getCurrentTime() — must compare with the same clock
+            // (wall-clock vs server-tick mismatch can make every pickup look "too soon" forever).
+            if (Server.getInstance().getCurrentTime() - mapitem.getDropTime() < 400 || !mapitem.canBePickedBy(this)) {
                 enableActions();
                 return;
             }
@@ -2858,13 +2891,32 @@ public class Character extends AbstractCharacterObject {
 
         if (notifyClient && client != null) {
             // STAT_CHANGED 的 STR/DEX/INT/LUK 是角色基础四维(AP)，客户端会再叠加已装备属性。
-            // 若下发 local*（已含装备），客户端会把装备 STR 算两次；套装加成需并入基础侧才能显示。
-            // 正确：attr + setBonus（不含 equip*）。战斗仍用 local* = attr + equip + setBonus。
+            // Hyper/潜能平坦值写在 addItemInfo 封包里（computeBonus(equip,0)），勿再并入基础侧。
+            // 等级缩放(inc*lv)与百分比(inc*r)不在装备封包 → 补进 STAT，否则 tip 有、面板/客户端伤害无。
+            int lvStr = 0, lvDex = 0, lvInt = 0, lvLuk = 0;
+            for (Item item : getInventory(InventoryType.EQUIPPED)) {
+                if (!(item instanceof Equip eq)) {
+                    continue;
+                }
+                org.gms.potential.PotentialHyperService.StatBonus full =
+                        org.gms.potential.PotentialHyperService.computeBonus(eq, getLevel());
+                org.gms.potential.PotentialHyperService.StatBonus base =
+                        org.gms.potential.PotentialHyperService.computeBonus(eq, 0);
+                lvStr += full.str - base.str;
+                lvDex += full.dex - base.dex;
+                lvInt += full.inte - base.inte;
+                lvLuk += full.luk - base.luk;
+            }
+            // 与 recalcEquipStats 同序：先 (AP+装备平坦含lv) 再乘百分比
+            int pctStr = (getStr() + equipstr) * potStrR / 100;
+            int pctDex = (getDex() + equipdex) * potDexR / 100;
+            int pctInt = (getInt() + equipint_) * potIntR / 100;
+            int pctLuk = (getLuk() + equipluk) * potLukR / 100;
             List<Pair<Stat, Long>> statup = new ArrayList<>(6);
-            statup.add(new Pair<>(Stat.STR, (long) (getStr() + setBonusStr)));
-            statup.add(new Pair<>(Stat.DEX, (long) (getDex() + setBonusDex)));
-            statup.add(new Pair<>(Stat.INT, (long) (getInt() + setBonusInt_)));
-            statup.add(new Pair<>(Stat.LUK, (long) (getLuk() + setBonusLuk)));
+            statup.add(new Pair<>(Stat.STR, (long) (getStr() + setBonusStr + lvStr + pctStr)));
+            statup.add(new Pair<>(Stat.DEX, (long) (getDex() + setBonusDex + lvDex + pctDex)));
+            statup.add(new Pair<>(Stat.INT, (long) (getInt() + setBonusInt_ + lvInt + pctInt)));
+            statup.add(new Pair<>(Stat.LUK, (long) (getLuk() + setBonusLuk + lvLuk + pctLuk)));
             statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
             statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
@@ -4916,21 +4968,47 @@ public class Character extends AbstractCharacterObject {
         return dropCoupon;
     }
 
+    /** 含潜能掉落%（incRewardProp） */
+    public float getDropRate() {
+        float base = dropRate;
+        if (potDropProp > 0) {
+            base *= (1f + potDropProp / 100f);
+        }
+        return base;
+    }
+
     public float getRawDropRate() {
-        return dropRate / (dropCoupon * getWorldServer().getDropRate());
+        return getDropRate() / (dropCoupon * getWorldServer().getDropRate());
     }
 
     public float getBossDropRate() {
         World w = getWorldServer();
-        return (dropRate / w.getDropRate()) * w.getBossDropRate();
+        return (getDropRate() / w.getDropRate()) * w.getBossDropRate();
     }
 
     public int getCouponMesoRate() {
         return mesoCoupon;
     }
 
+    /** 含潜能金币%（incMesoProp） */
+    public float getMesoRate() {
+        float base = mesoRate;
+        if (potMesoProp > 0) {
+            base *= (1f + potMesoProp / 100f);
+        }
+        return base;
+    }
+
     public float getRawMesoRate() {
-        return mesoRate / (mesoCoupon * getWorldServer().getMesoRate());
+        return getMesoRate() / (mesoCoupon * getWorldServer().getMesoRate());
+    }
+
+    public int getPotDamReflect() {
+        return potDamReflect;
+    }
+
+    public int getPotDamReflectProp() {
+        return potDamReflectProp;
     }
 
     public float getQuestExpRate() {
@@ -5586,27 +5664,124 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean isEquippedMesoMagnet(byte petIndex) {
-        if (!ItemConstants.isValidPetIndex(petIndex)) {
-            return false;
-        }
-
-        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PET_EQUIP_SLOTS.get(petIndex).mesoMagnet()) != null;
+        return isEquippedPetSkillSlot(petIndex, true);
     }
 
     public boolean isEquippedItemPouch(byte petIndex) {
+        return isEquippedPetSkillSlot(petIndex, false);
+    }
+
+    /**
+     * Original Cosmic/HeavenMS gate: pouch/magnet slot occupied.
+     * Cash pet skills (1812000/1812001 cash=1) land on base slot or base-100 — both are vanilla.
+     */
+    private boolean isEquippedPetSkillSlot(byte petIndex, boolean mesoMagnet) {
         if (!ItemConstants.isValidPetIndex(petIndex)) {
             return false;
         }
+        Inventory eq = getInventory(InventoryType.EQUIPPED);
+        short base = mesoMagnet
+                ? ItemConstants.PET_EQUIP_SLOTS.get(petIndex).mesoMagnet()
+                : ItemConstants.PET_EQUIP_SLOTS.get(petIndex).itemPouch();
+        return eq.getItem(base) != null || eq.getItem((short) (base - 100)) != null;
+    }
 
-        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PET_EQUIP_SLOTS.get(petIndex).itemPouch()) != null;
+    /**
+     * Derive client PetSkill bits from currently equipped pet gear (1812xxx) for this pet index.
+     * Needed so the client receives non-zero PetSkill and sends PET_LOOT (original walk-to-loot).
+     */
+    public int computeEquipPetSkillFlags(byte petIndex) {
+        if (!ItemConstants.isValidPetIndex(petIndex)) {
+            return 0;
+        }
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        Inventory eq = getInventory(InventoryType.EQUIPPED);
+        int flags = 0;
+        var slots = ItemConstants.PET_EQUIP_SLOTS.get(petIndex);
+        short basePouch = slots.itemPouch();
+        // Standard slots + cash (-100) + common extended skill slots relative to pouch.
+        short[] checkSlots = {
+                slots.equip(), (short) (slots.equip() - 100),
+                slots.mesoMagnet(), (short) (slots.mesoMagnet() - 100),
+                slots.itemPouch(), (short) (slots.itemPouch() - 100),
+                slots.itemIgnore(), (short) (slots.itemIgnore() - 100),
+                slots.nameTag(), (short) (slots.nameTag() - 100),
+                slots.chatBalloon(), (short) (slots.chatBalloon() - 100),
+                // Auto HP/MP, winged boots, binoculars, pickup-others (see inventory -124..-128)
+                (short) (basePouch - 2), (short) (basePouch - 102),
+                (short) (basePouch - 3), (short) (basePouch - 103),
+                (short) (basePouch - 4), (short) (basePouch - 104),
+                (short) (basePouch - 5), (short) (basePouch - 105),
+                (short) (basePouch - 6), (short) (basePouch - 106)
+        };
+        for (short slot : checkSlots) {
+            Item it = eq.getItem(slot);
+            if (it == null) {
+                continue;
+            }
+            int id = it.getItemId();
+            if (id == ItemId.ITEM_POUCH || ii.petCanPickupItem(id)) {
+                flags |= Pet.PetFlag.ITEM_PICKUP.getValue();
+            }
+            if (id == ItemId.MESO_MAGNET || ii.petCanPickupMeso(id)) {
+                // Meso magnet is equip-gated server-side; some clients also expect ITEM_PICKUP for mixed loot.
+                flags |= Pet.PetFlag.ITEM_PICKUP.getValue();
+            }
+            if (ii.petSkillFlagOn(id, "longRange") || id == 1812005) {
+                flags |= Pet.PetFlag.LONG_RANGE.getValue();
+            }
+            if (ii.petSkillFlagOn(id, "sweepForDrop") || id == 1812004) {
+                flags |= Pet.PetFlag.DROP_SWEEP.getValue();
+            }
+            if (ii.petSkillFlagOn(id, "ignorePickup") || id == 1812007) {
+                flags |= Pet.PetFlag.IGNORE_PICKUP.getValue();
+            }
+            if (ii.petSkillFlagOn(id, "pickupOthers") || id == 1812006) {
+                flags |= Pet.PetFlag.PICKUP_OTHERS.getValue();
+            }
+            if (ii.petSkillFlagOn(id, "consumeHP") || id == 1812002) {
+                flags |= Pet.PetFlag.CONSUME_HP.getValue();
+            }
+            if (ii.petSkillFlagOn(id, "consumeMP") || id == 1812003) {
+                flags |= Pet.PetFlag.CONSUME_MP.getValue();
+            }
+        }
+        return flags;
+    }
+
+    /** Push equip-derived PetSkill bits onto the summoned pet and refresh the cash item packet. */
+    public void syncPetSkillsFromEquips(byte petIndex) {
+        syncPetSkillsFromEquips(petIndex, true);
+    }
+
+    /**
+     * @param notifyClient if false, only update memory/DB (use before getCharInfo so login packet already has bits)
+     */
+    public void syncPetSkillsFromEquips(byte petIndex, boolean notifyClient) {
+        Pet pet = getPet(petIndex);
+        if (pet == null) {
+            return;
+        }
+        int equipFlags = computeEquipPetSkillFlags(petIndex);
+        int merged = pet.getPetSkills() | equipFlags;
+        pet.setPetSkills(merged);
+        pet.saveToDb();
+        if (!notifyClient) {
+            return;
+        }
+        Item petz = getInventory(InventoryType.CASH).getItem(pet.getPosition());
+        if (petz != null) {
+            forceUpdateItem(petz);
+        }
     }
 
     public boolean isEquippedPetItemIgnore(byte petIndex) {
         if (!ItemConstants.isValidPetIndex(petIndex)) {
             return false;
         }
-
-        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PET_EQUIP_SLOTS.get(petIndex).itemIgnore()) != null;
+        Inventory eq = getInventory(InventoryType.EQUIPPED);
+        short base = ItemConstants.PET_EQUIP_SLOTS.get(petIndex).itemIgnore();
+        return eq.getItem(base) != null || eq.getItem((short) (base - 100)) != null;
     }
 
     public final byte getQuestStatus(final int quest) {
@@ -5968,6 +6143,10 @@ public class Character extends AbstractCharacterObject {
         }
         byte base = getSkillLevelRaw(skill);
         int bonus = setSkillBonusLevels.getOrDefault(skill.getId(), 0);
+        // incAllskill：仅对已学技能生效（base>0）
+        if (base > 0) {
+            bonus += Math.max(0, potAllSkill);
+        }
         if (bonus <= 0) {
             return base;
         }
@@ -7470,6 +7649,9 @@ public class Character extends AbstractCharacterObject {
             equipluk = 0;
             equipmagic = 0;
             equipwatk = 0;
+            potStrR = potDexR = potIntR = potLukR = potHpR = potMpR = potPadR = potMadR = 0;
+            potDropProp = potMesoProp = 0;
+            potDamReflect = potDamReflectProp = potAllSkill = potCooltimeReduce = potMpconReduce = 0;
             //equipspeed = 0;
             //equipjump = 0;
 
@@ -7483,8 +7665,33 @@ public class Character extends AbstractCharacterObject {
                 equipluk += equip.getLuk();
                 equipmagic += equip.getMatk() + equip.getInt();
                 equipwatk += equip.getWatk();
-                //equipspeed += equip.getSpeed();
-                //equipjump += equip.getJump();
+
+                // 潜能 + Hyper：服务端加算（含等级缩放；封包 tip 仍用 charLevel=0 避免缺等级上下文）
+                org.gms.potential.PotentialHyperService.StatBonus pot =
+                        org.gms.potential.PotentialHyperService.computeBonus(equip, getLevel());
+                equipstr += pot.str;
+                equipdex += pot.dex;
+                equipint_ += pot.inte;
+                equipluk += pot.luk;
+                equipmaxhp += pot.hp;
+                equipmaxmp += pot.mp;
+                equipwatk += pot.watk;
+                equipmagic += pot.matk;
+                potStrR += pot.strR;
+                potDexR += pot.dexR;
+                potIntR += pot.intR;
+                potLukR += pot.lukR;
+                potHpR += pot.hpR;
+                potMpR += pot.mpR;
+                potPadR += pot.padR;
+                potMadR += pot.madR;
+                potDropProp += pot.dropProp;
+                potMesoProp += pot.mesoProp;
+                potDamReflect += pot.damReflect;
+                potDamReflectProp += pot.damReflectProp;
+                potAllSkill += pot.allSkill;
+                potCooltimeReduce += pot.cooltimeReduce;
+                potMpconReduce += pot.mpconReduce;
             }
 
             equipchanged = false;
@@ -7498,6 +7705,32 @@ public class Character extends AbstractCharacterObject {
         localluk += equipluk;
         localmagic += equipmagic;
         localwatk += equipwatk;
+
+        // 潜能百分比（对齐 095 percent_*）：叠在已合计的面板上
+        if (potStrR > 0) {
+            localstr += localstr * potStrR / 100;
+        }
+        if (potDexR > 0) {
+            localdex += localdex * potDexR / 100;
+        }
+        if (potIntR > 0) {
+            localint_ += localint_ * potIntR / 100;
+        }
+        if (potLukR > 0) {
+            localluk += localluk * potLukR / 100;
+        }
+        if (potHpR > 0) {
+            localMaxHp += localMaxHp * potHpR / 100;
+        }
+        if (potMpR > 0) {
+            localMaxMp += localMaxMp * potMpR / 100;
+        }
+        if (potPadR > 0) {
+            localwatk += localwatk * potPadR / 100;
+        }
+        if (potMadR > 0) {
+            localmagic += localmagic * potMadR / 100;
+        }
     }
 
     public void reapplyLocalStats() {

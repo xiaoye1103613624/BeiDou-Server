@@ -130,6 +130,10 @@ public class Trade {
                     && item instanceof org.gms.client.inventory.Equip equip) {
                 org.gms.spirit.SpiritAwakenService.clearSpirit(equip);
             }
+            // 潜能/Hyper/附加/灵魂/星岩：CLEAR_ON_TRADE 时清空（官方体验：流通不清潜会通胀）
+            if (item instanceof org.gms.client.inventory.Equip potEquip) {
+                org.gms.potential.PotentialHyperService.clearOnTradeIfEnabled(potEquip);
+            }
             KarmaManipulator.toggleKarmaFlagToUntradeable(item);
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }

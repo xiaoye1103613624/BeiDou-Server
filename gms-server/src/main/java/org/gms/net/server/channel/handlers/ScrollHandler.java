@@ -72,10 +72,38 @@ public final class ScrollHandler extends AbstractPacketHandler {
                     toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(equipSlot);
                 }
 
-                byte oldLevel = toScroll.getLevel(); // 记录装备的原始等级
-                byte oldSlots = toScroll.getUpgradeSlots(); // 记录装备的原始升级插槽数量
                 Inventory useInventory = chr.getInventory(InventoryType.USE); // 获取玩家的使用栏库存
                 Item scroll = useInventory.getItem(scrollSlot); // 获取使用的卷轴
+                if (scroll == null) {
+                    announceCannotScroll(c, legendarySpirit);
+                    return;
+                }
+
+                // Phase1~4：潜能/Hyper/附加/魔方/品阶/灵魂/星岩卷（不走普通砸卷）
+                if (org.gms.potential.PotentialHyperConfig.isPotentialFamilyScroll(scroll.getItemId())) {
+                    if (toScroll == null && equipSlot >= 0) {
+                        Item invEq = chr.getInventory(InventoryType.EQUIP).getItem(equipSlot);
+                        if (invEq instanceof Equip eq) {
+                            toScroll = eq;
+                            legendarySpirit = true;
+                        }
+                    }
+                    if (toScroll == null) {
+                        chr.dropMessage(5, "请把卷拖到已穿戴装备上，或拖到装备栏中的装备。");
+                        announceCannotScroll(c, legendarySpirit);
+                        return;
+                    }
+                    handlePotentialOrHyper(c, chr, toScroll, scroll, equipSlot, legendarySpirit);
+                    return;
+                }
+
+                if (toScroll == null) {
+                    announceCannotScroll(c, legendarySpirit);
+                    return;
+                }
+
+                byte oldLevel = toScroll.getLevel(); // 记录装备的原始等级
+                byte oldSlots = toScroll.getUpgradeSlots(); // 记录装备的原始升级插槽数量
                 Item wscroll = null;
 
                 if (ItemConstants.isCleanSlate(scroll.getItemId()) && !ii.canUseCleanSlate(toScroll)) {
@@ -178,6 +206,162 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 c.releaseClient(); // 释放客户端资源
             }
         }
+    }
+
+    private static void handlePotentialOrHyper(Client c, Character chr, Equip equip, Item scroll,
+                                               short equipSlot, boolean legendarySpirit) {
+        org.gms.potential.PotentialHyperService.Result result;
+        final int scrollId = scroll.getItemId();
+        boolean isHyper = org.gms.potential.PotentialHyperConfig.isHyperScroll(scrollId);
+        boolean isBonus = org.gms.potential.PotentialHyperConfig.isBonusPotentialScroll(scrollId);
+        // Phase4 精确 ID 落在 20499xx，须先于 /100==20499 的附加潜能卷判断
+        boolean isPhase4 = org.gms.potential.PotentialHyperConfig.isCubeOrGradeOrSocketScroll(scrollId)
+                || org.gms.potential.PotentialHyperConfig.isSoulScroll(scrollId);
+        boolean isReset = org.gms.constants.inventory.ItemConstants.isResetScroll(scrollId);
+        if (isHyper) {
+            // 禁止 chr.isGM() 强制成功（否则 GM 永远必成）；强制设星用 !potential star
+            result = org.gms.potential.PotentialHyperService.applyHyperScroll(chr, equip, scrollId, false);
+        } else if (org.gms.potential.PotentialHyperConfig.isMagnifyingGlass(scrollId)) {
+            result = org.gms.potential.PotentialHyperService.applyMagnify(chr, equip, scrollId);
+        } else if (isReset) {
+            result = org.gms.potential.EquipResetService.applyResetScroll(chr, equip, scrollId, chr.isGM());
+        } else if (isPhase4) {
+            result = org.gms.potential.PotentialHyperService.applyPhase4Scroll(chr, equip, scrollId, chr.isGM());
+        } else if (isBonus) {
+            result = org.gms.potential.PotentialHyperService.applyBonusPotentialScroll(chr, equip, scrollId, chr.isGM());
+        } else {
+            result = org.gms.potential.PotentialHyperService.applyPotentialScroll(chr, equip, scrollId, chr.isGM());
+        }
+
+        if (result == org.gms.potential.PotentialHyperService.Result.INVALID) {
+            announceCannotScroll(c, legendarySpirit);
+            return;
+        }
+
+        InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
+
+        final List<ModifyInventory> mods = new ArrayList<>();
+        ScrollResult scrollSuccess;
+        if (result == org.gms.potential.PotentialHyperService.Result.CURSE) {
+            scrollSuccess = ScrollResult.CURSE;
+            mods.add(new ModifyInventory(3, equip));
+            if (equipSlot < 0) {
+                Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
+                inv.lockInventory();
+                try {
+                    chr.unequippedItem(equip);
+                    inv.removeItem(equip.getPosition());
+                } finally {
+                    inv.unlockInventory();
+                }
+            } else {
+                Inventory inv = chr.getInventory(InventoryType.EQUIP);
+                inv.lockInventory();
+                try {
+                    inv.removeItem(equip.getPosition());
+                } finally {
+                    inv.unlockInventory();
+                }
+            }
+        } else {
+            scrollSuccess = result == org.gms.potential.PotentialHyperService.Result.SUCCESS
+                    ? ScrollResult.SUCCESS : ScrollResult.FAIL;
+            mods.add(new ModifyInventory(3, equip));
+            mods.add(new ModifyInventory(0, equip));
+        }
+        c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, false));
+        if (equipSlot < 0) {
+            chr.equipChanged();
+        }
+        if (result == org.gms.potential.PotentialHyperService.Result.SUCCESS) {
+            String desc = org.gms.potential.PotentialHyperService.describe(equip);
+            if (isHyper) {
+                chr.dropMessage(5, "【Hyper】成功 → ★" + equip.getEnhance());
+            } else if (org.gms.potential.PotentialHyperConfig.isMagnifyingGlass(scrollId)) {
+                chr.dropMessage(5, "【放大镜】鉴定成功。 " + desc);
+            } else if (isBonus) {
+                chr.dropMessage(5, "【附加潜能】附加成功。 " + desc);
+            } else if (org.gms.potential.PotentialHyperConfig.isMainCube(scrollId)) {
+                // 仅本人聊天可见（dropMessage）；095：隐藏待放大镜
+                org.gms.potential.PotentialHyperService.notifyCubeResult(chr, "神奇魔方",
+                        cubeResultHint(desc));
+            } else if (org.gms.potential.PotentialHyperConfig.isPremiumCube(scrollId)) {
+                org.gms.potential.PotentialHyperService.notifyCubeResult(chr, "高级神奇魔方",
+                        cubeResultHint(desc));
+            } else if (org.gms.potential.PotentialHyperConfig.isSuperCube(scrollId)) {
+                org.gms.potential.PotentialHyperService.notifyCubeResult(chr, "超级神奇魔方",
+                        cubeResultHint(desc));
+            } else if (org.gms.potential.PotentialHyperConfig.isUltimateCube(scrollId)) {
+                org.gms.potential.PotentialHyperService.notifyCubeResult(chr, "终极神奇魔方",
+                        cubeResultHint(desc));
+            } else if (org.gms.potential.PotentialHyperConfig.isWeirdCube(scrollId)) {
+                org.gms.potential.PotentialHyperService.notifyCubeResult(chr, "怪异魔方",
+                        cubeResultHint(desc));
+            } else if (org.gms.potential.PotentialHyperConfig.isBonusCube(scrollId)) {
+                chr.dropMessage(5, "【魔方】附加潜能已重随。 " + desc);
+            } else if (isReset) {
+                chr.dropMessage(5, "【还原】已清除砸卷属性/Hyper/黄金锤（潜能与白金锤保留）。 " + desc);
+            } else if (org.gms.potential.PotentialHyperConfig.isGradeUpgradeScroll(scrollId)) {
+                chr.dropMessage(5, "【品阶】提升成功（未鉴定，请用放大镜）。 " + desc);
+            } else if (org.gms.potential.PotentialHyperConfig.isSoulClearScroll(scrollId)) {
+                chr.dropMessage(5, "【灵魂】已清除。");
+            } else if (org.gms.potential.PotentialHyperConfig.isSoulOrbItem(scrollId)) {
+                chr.dropMessage(5, "【灵魂】镶嵌成功。 " + desc + " 放技能: !soulskill");
+                PacketCreator.broadcastSoulWeaponEffect(chr);
+            } else if (org.gms.potential.PotentialHyperConfig.isSoulApplyScroll(scrollId)) {
+                chr.dropMessage(5, "【灵魂】开槽成功。可镶 2591000~2591009。 " + desc);
+                PacketCreator.broadcastSoulWeaponEffect(chr);
+            } else if (org.gms.potential.PotentialHyperConfig.isSocketScroll(scrollId)) {
+                chr.dropMessage(5, "【星岩】镶嵌成功。 " + desc);
+            } else if (org.gms.potential.PotentialHyperConfig.isPotentialScroll(scrollId)
+                    || org.gms.potential.PotentialHyperConfig.isClassicGradePotentialScroll(scrollId)) {
+                chr.dropMessage(5, "【潜能】已附加（未鉴定）。请用放大镜（2460000~2460003）鉴定。 " + desc);
+            } else {
+                chr.dropMessage(5, "【潜能】附加成功。 " + desc);
+            }
+            if (equipSlot >= 0) {
+                chr.dropMessage(5, "提示：强化的是背包中的装备，角色面板属性不会变化；请穿上后再强化，或穿上后重登/换装刷新。");
+            }
+        } else if (result == org.gms.potential.PotentialHyperService.Result.FAIL) {
+            if (isHyper) {
+                int rate = org.gms.potential.PotentialHyperConfig.getHyperSuccessRate(
+                        scroll.getItemId(), equip.getEnhance());
+                chr.dropMessage(5, "【Hyper】强化失败（当前★" + equip.getEnhance()
+                        + "，成功率" + rate + "%）。");
+            } else if (isBonus) {
+                chr.dropMessage(5, "【附加潜能】附加失败。");
+            } else if (isReset) {
+                chr.dropMessage(5, "【还原】失败。");
+            } else if (org.gms.potential.PotentialHyperConfig.isGradeUpgradeScroll(scrollId)) {
+                chr.dropMessage(5, "【品阶】提升失败。");
+            } else if (org.gms.potential.PotentialHyperConfig.isSoulScroll(scrollId)) {
+                chr.dropMessage(5, "【灵魂】失败。");
+            } else if (org.gms.potential.PotentialHyperConfig.isSocketScroll(scrollId)) {
+                chr.dropMessage(5, "【星岩】镶嵌失败。");
+            } else if (org.gms.potential.PotentialHyperConfig.isMagnifyingGlass(scrollId)) {
+                // applyMagnify 已 dropMessage 具体原因（档位不足等）
+            } else if (isPhase4) {
+                chr.dropMessage(5, "【魔方】失败。");
+            } else {
+                chr.dropMessage(5, "【潜能】附加失败。");
+            }
+        } else if (result == org.gms.potential.PotentialHyperService.Result.CURSE) {
+            if (isHyper) {
+                chr.dropMessage(5, "【Hyper】强化失败，装备被损毁！（GM 可用 !potential star 安全设星）");
+            } else {
+                chr.dropMessage(5, "强化失败，装备被损坏。");
+            }
+        } else {
+            chr.dropMessage(5, "强化失败，装备被损坏。");
+        }
+    }
+
+    private static String cubeResultHint(String desc) {
+        if (org.gms.potential.PotentialHyperConfig.CUBE_RESET_TO_HIDDEN) {
+            return "重随成功（未鉴定，请用放大镜 2460000~3）。 " + desc;
+        }
+        return desc;
     }
 
     private static void announceCannotScroll(Client c, boolean legendarySpirit) {

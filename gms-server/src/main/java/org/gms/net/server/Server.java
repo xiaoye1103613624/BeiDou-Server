@@ -674,6 +674,7 @@ public class Server {
             futures.add(initExecutor.submit(SkillbookInformationProvider::loadAllSkillbookInformation));
             futures.add(initExecutor.submit(DamageSkinCatalog::loadOrSeed));
             futures.add(initExecutor.submit(SetItemManager::loadOrSeed));
+            futures.add(initExecutor.submit(() -> org.gms.potential.ItemOptionProvider.getInstance().load()));
             // Wait on all async tasks to complete
             for (Future<?> future : futures) {
                 future.get();

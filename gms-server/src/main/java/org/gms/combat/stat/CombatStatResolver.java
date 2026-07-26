@@ -49,7 +49,9 @@ public final class CombatStatResolver {
                 ignoreMDR,
                 critRate,
                 additive.getOrDefault(CombatStatType.CRIT_DAM, 0),
-                finalMul
+                finalMul,
+                additive.getOrDefault(CombatStatType.PAD_R, 0),
+                additive.getOrDefault(CombatStatType.MAD_R, 0)
         );
     }
 

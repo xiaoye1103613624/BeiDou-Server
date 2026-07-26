@@ -67,6 +67,22 @@ public class ItemCommand extends Command {
             return;
         }
 
+        // Cash 魔方 slotMax 有限且 Special 栏格数有上限；!item 9999 会拆成大量堆叠导致视觉溢出
+        if (org.gms.potential.PotentialHyperConfig.isCashCube(itemId)) {
+            short slotMax = ii.getSlotMax(c, itemId);
+            if (slotMax <= 0) {
+                slotMax = 999;
+            }
+            // 单次最多一叠，避免刷爆 Cash/Special 栏
+            short cap = slotMax;
+            if (quantity > cap) {
+                player.yellowMessage("魔方单次最多发放 " + cap + " 个（当前 slotMax=" + slotMax
+                        + "，避免 Special 栏堆满溢出）。原请求 " + quantity + " 已截断。测试请用: !item "
+                        + itemId + " 10");
+                quantity = cap;
+            }
+        }
+
         if (ItemConstants.isPet(itemId)) {
             if (params.length >= 2) {   // thanks to istreety & TacoBell
                 quantity = 1;

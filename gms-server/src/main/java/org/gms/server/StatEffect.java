@@ -1493,6 +1493,7 @@ public class StatEffect {
                 if (mpchange < 0) {
                     int cost = -mpchange;
                     int reduced = org.gms.talent.TalentService.reduceSkillMpCost(applyfrom, cost);
+                    reduced = applyfrom.reduceSkillMpCostByPotential(reduced);
                     mpchange = -reduced;
                 }
             }

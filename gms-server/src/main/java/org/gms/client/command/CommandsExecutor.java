@@ -283,6 +283,7 @@ public class CommandsExecutor {
         addCommand("spawn", 3, SpawnCommand.class);
         addCommand("mutemap", 3, MuteMapCommand.class);
         addCommand("checkdmg", 3, CheckDmgCommand.class);
+        addCommand(new String[]{"potential", "潜能"}, 3, PotentialCommand.class);
         addCommand("inmap", 3, InMapCommand.class);
         addCommand("reloadevents", 3, ReloadEventsCommand.class);
         addCommand("reloaddrops", 3, ReloadDropsCommand.class);
