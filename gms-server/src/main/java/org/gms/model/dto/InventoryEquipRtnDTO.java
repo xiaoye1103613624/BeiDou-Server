@@ -122,4 +122,12 @@ public class InventoryEquipRtnDTO {
      * 灵韵过期时间，0=永久
      */
     private Long equipSkillExpire;
+    /** 潜能 1~3 */
+    private Integer potential1;
+    private Integer potential2;
+    private Integer potential3;
+    /** 潜能品阶 */
+    private Integer potentialGrade;
+    /** Hyper 星级 */
+    private Integer enhance;
 }

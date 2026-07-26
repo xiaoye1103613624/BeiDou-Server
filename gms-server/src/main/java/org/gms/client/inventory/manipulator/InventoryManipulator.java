@@ -33,6 +33,7 @@ import org.gms.client.inventory.Pet;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
+import org.gms.constants.inventory.EquipSlot;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
@@ -232,6 +233,10 @@ public class InventoryManipulator {
                         }
                     }
                 }
+                // Missing WZ / slotMax==0 would spin forever (qty never decreases) and soft-lock the player handler.
+                if (slotMax <= 0) {
+                    slotMax = 100;
+                }
                 while (quantity > 0) {
                     short newQ = (short) Math.min(quantity, slotMax);
                     quantity -= newQ;
@@ -326,7 +331,7 @@ public class InventoryManipulator {
                 {
                     for (Item eItem : existing) {
                         short oldQ = eItem.getQuantity();
-                        if (oldQ < slotMax && owner.equals(eItem.getOwner())) {
+                        if (oldQ < slotMax && owner != null && owner.equals(eItem.getOwner())) {
                             short newQ = (short) Math.min(oldQ + quantity, slotMax);
                             quantity -= (newQ - oldQ);
                         }
@@ -382,7 +387,7 @@ public class InventoryManipulator {
                 {
                     for (Item eItem : existing) {
                         short oldQ = eItem.getQuantity();
-                        if (oldQ < slotMax && owner.equals(eItem.getOwner())) {
+                        if (oldQ < slotMax && owner != null && owner.equals(eItem.getOwner())) {
                             short newQ = (short) Math.min(oldQ + quantity, slotMax);
                             quantity -= (newQ - oldQ);
                         }
@@ -519,7 +524,13 @@ public class InventoryManipulator {
         short slotMax = ii.getSlotMax(c, source.getItemId());
         inv.move(src, dst, slotMax);
         final List<ModifyInventory> mods = new ArrayList<>();
-        if (!(type.equals(InventoryType.EQUIP) || type.equals(InventoryType.CASH)) && initialTarget != null && initialTarget.getItemId() == source.getItemId() && !ItemConstants.isRechargeable(source.getItemId()) && isSameOwner(source, initialTarget)) {
+        // Cash stackables (cubes) need quantity-update packets too. Pets stay on the move/swap path.
+        final boolean cashPet = type.equals(InventoryType.CASH)
+                && (ItemConstants.isPet(source.getItemId()) || source.getPet() != null
+                || (initialTarget != null && initialTarget.getPet() != null));
+        if (!type.equals(InventoryType.EQUIP) && !cashPet
+                && initialTarget != null && initialTarget.getItemId() == source.getItemId()
+                && !ItemConstants.isRechargeable(source.getItemId()) && isSameOwner(source, initialTarget)) {
             if ((olddstQ + oldsrcQ) > slotMax) {
                 mods.add(new ModifyInventory(1, source));
                 mods.add(new ModifyInventory(1, initialTarget));
@@ -569,6 +580,35 @@ public class InventoryManipulator {
         } else if ((ItemId.isExplorerMount(source.getItemId()) && chr.isCygnus()) ||
                 ((ItemId.isCygnusMount(source.getItemId())) && !chr.isCygnus())) {// Adventurer taming equipment    //冒险家驯服设备
             return;
+        }
+        // 第二吊坠：v083 客户端无 BP51 UI（ijl15 hooks 仍 OFF）时，穿戴包 dst 几乎总是 −17/−117。
+        // 主槽已有 Pe 且 −51/−151 空 → 改路由到第二槽，避免只能替换黑龙/主坠。
+        // 不启用 ForceDrawLoop；属性靠服务端 recalcEquipStats 遍历 EQUIPPED（含 −51）。
+        // 路由只改 dst，下方仍是单次 removeSlot(src) + addItemFromDB(dst)，无重复删/漏加。
+        boolean routedSecondaryPendant = false;
+        if ((dst == -17 || dst == -117) && EquipSlot.PENDANT.getName().equals(ii.getEquipmentSlot(source.getItemId()))) {
+            short secondary = (short) (dst == -17 ? -51 : -151);
+            if (eqpdInv.getItem(dst) != null && eqpdInv.getItem(secondary) == null) {
+                dst = secondary;
+                routedSecondaryPendant = true;
+            }
+        }
+        // 六戒：客户端 v083 对戒指常把 empty-search 计数砸成 1 → 双击背包只打 −12/−112 做替换。
+        // 兜底：只要目标槽已占用（将替换），优先改到任意空槽；−52/−53（cash −152/−153）优先于经典 4。
+        // 仅当 6 槽全满时才保留原 dst 替换。显式拖到某槽也走同一规则（空扩展优先于替换）。
+        if (EquipSlot.RING.getName().equals(ii.getEquipmentSlot(source.getItemId()))) {
+            final boolean cashRing = dst <= -100;
+            final short[] preferEmpty = cashRing
+                    ? new short[]{-152, -153, -112, -113, -115, -116}
+                    : new short[]{-52, -53, -12, -13, -15, -16};
+            if (eqpdInv.getItem(dst) != null) {
+                for (short s : preferEmpty) {
+                    if (eqpdInv.getItem(s) == null) {
+                        dst = s;
+                        break;
+                    }
+                }
+            }
         }
         boolean itemChanged = false;
 
@@ -666,6 +706,16 @@ public class InventoryManipulator {
             eqpdInv.unlockInventory();
         }
 
+        // Pet skill equips (1812xxx / ribbons) — refresh PetSkill short so client sends PET_LOOT.
+        int equippedId = source.getItemId();
+        if (equippedId >= 1802000 && equippedId < 1842000) {
+            for (byte i = 0; i < 3; i++) {
+                if (chr.getPet(i) != null) {
+                    chr.syncPetSkillsFromEquips(i);
+                }
+            }
+        }
+
         if (target != null) {
             target.setPosition(src);
             eqpInv.addItemFromDB(target);
@@ -688,7 +738,12 @@ public class InventoryManipulator {
         if (source.getEquipSkillId() > 0 && source.getEquipSkillLevel() > 0) {
             chr.forceUpdateItem(source);
         }
+        if (routedSecondaryPendant) {
+            // 客户端无 BP51 格：背包格会空、装备栏看不见 → 易被当成「消失」；属性仍生效。
+            chr.dropMessage(5, "第二吊坠已装备（装备栏暂不显示属正常，属性已生效）。卸下请用 @第二坠");
+        }
         chr.equipChanged();
+        org.gms.reincarnation.ReincarnationSupport.onEquipped(chr, source.getItemId());
     }
 
     public static void unequip(Client c, short src, short dst) {
@@ -739,7 +794,17 @@ public class InventoryManipulator {
         }
         
         c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(2, source, src))));
+        // Pet skill unequip — refresh PetSkill (bits may still OR; server pouch gate is authoritative).
+        int unequippedId = source.getItemId();
+        if (unequippedId >= 1802000 && unequippedId < 1842000) {
+            for (byte i = 0; i < 3; i++) {
+                if (chr.getPet(i) != null) {
+                    chr.syncPetSkillsFromEquips(i);
+                }
+            }
+        }
         chr.equipChanged();
+        org.gms.reincarnation.ReincarnationSupport.onUnequipped(chr, source.getItemId());
     }
 
     private static boolean isDisappearingItemDrop(Item it) {

@@ -363,6 +363,8 @@ public enum SendOpcode implements Opcode {
     SET_ITEM_FINAL_DAMAGE(0x175), // 套装最终伤害% + 伤害皮肤
     SET_ITEM_SKILL_BONUS(0x176), // 套装技能展示文字
     SET_SKILL_BONUS(0x179), // 套装技能加成数值
+    /** Phase10：魔方结果窗（ijl15 MiracleCube / HyperMiracleCube）。勿占 0x17B 预留给扩展。 */
+    MIRACLE_CUBE_RESULT(0x17A),
     DAILY_CHECKIN(0x17C), // 每日签到快照
     BAG_WINDOW(0x3725), // 收纳背包窗口快照
     USER_INFO_EX(0x3727), // 他人装备详情回复

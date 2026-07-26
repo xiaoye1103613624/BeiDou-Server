@@ -72,6 +72,9 @@ public class InventoryequipmentDO implements Serializable  {
 
     private Integer vicious;
 
+    /** 白金锤已用次数（永久） */
+    private Integer platinum;
+
     private Integer itemlevel;
 
     private Integer itemexp;
@@ -92,5 +95,20 @@ public class InventoryequipmentDO implements Serializable  {
     /** 灵韵过期时间，0=永久 */
     @Column("equipSkillExpire")
     private Long equipskillexpire;
+
+    @Column("potential1")
+    private Integer potential1;
+
+    @Column("potential2")
+    private Integer potential2;
+
+    @Column("potential3")
+    private Integer potential3;
+
+    @Column("potentialGrade")
+    private Integer potentialgrade;
+
+    @Column("enhance")
+    private Integer enhance;
 
 }

@@ -188,6 +188,23 @@ public final class ItemConstants {
         return scrollId > 2048999 && scrollId < 2049004;
     }
 
+    /** 普通还原卷轴：2049600~2049619（保留潜能/白金锤）。 */
+    public static boolean isResetScroll(int scrollId) {
+        return scrollId >= 2049600 && scrollId <= 2049619;
+    }
+
+    /** 还原卷轴成功率（百分数）。 */
+    public static int resetScrollSuccess(int scrollId) {
+        return switch (scrollId) {
+            case ItemId.RESET_SCROLL_100 -> 100;
+            case ItemId.RESET_SCROLL_70 -> 70;
+            case ItemId.RESET_SCROLL_20, 2049602 -> 20;
+            case 2049603 -> 60;
+            case 2049605 -> 50;
+            default -> 50;
+        };
+    }
+
     public static boolean isModifierScroll(int scrollId) {
         return scrollId == ItemId.SPIKES_SCROLL || scrollId == ItemId.COLD_PROTECTION_SCROLl;
     }
@@ -200,7 +217,33 @@ public final class ItemConstants {
     }
 
     public static boolean isChaosScroll(int scrollId) {
-        return scrollId >= 2049100 && scrollId <= 2049103;
+        if (scrollId >= 2049100 && scrollId <= 2049103) {
+            return true;
+        }
+        return scrollId == ItemId.AMAZING_CHAOS_SCROLL
+                || scrollId == ItemId.POSITIVE_CHAOS_SCROLL
+                || scrollId == ItemId.JUSTICE_CHAOS_SCROLL
+                || scrollId == ItemId.AMAZING_JUSTICE_CHAOS_20
+                || scrollId == 2049137
+                || scrollId == 2049138;
+    }
+
+    /** 混沌随机幅度（绝对值）。默认取服务器 chaos_scroll_stat_range。 */
+    public static int chaosStatRange(int scrollId, int defaultRange) {
+        return switch (scrollId) {
+            case ItemId.AMAZING_CHAOS_SCROLL, ItemId.AMAZING_JUSTICE_CHAOS_20, 2049137, 2049138 -> 7;
+            case ItemId.POSITIVE_CHAOS_SCROLL, ItemId.JUSTICE_CHAOS_SCROLL -> 5;
+            default -> Math.max(1, defaultRange);
+        };
+    }
+
+    /** 正义/正向混沌：只加不减（0~+range）。 */
+    public static boolean isPositiveChaosScroll(int scrollId) {
+        return scrollId == ItemId.POSITIVE_CHAOS_SCROLL
+                || scrollId == ItemId.JUSTICE_CHAOS_SCROLL
+                || scrollId == ItemId.AMAZING_JUSTICE_CHAOS_20
+                || scrollId == 2049137
+                || scrollId == 2049138;
     }
 
     public static boolean isRateCoupon(int itemId) {

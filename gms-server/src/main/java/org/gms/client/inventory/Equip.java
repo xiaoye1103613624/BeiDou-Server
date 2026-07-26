@@ -84,6 +84,28 @@ public class Equip extends Item {
     private int equipSkillLevel = 0;
     /** 灵韵觉醒：过期时间，0=永久。 */
     private long equipSkillExpire = 0L;
+    /** 潜能选项 1~3（ItemOption id）。 */
+    private int potential1 = 0, potential2 = 0, potential3 = 0;
+    /** 潜能品阶：0无 1普通 2稀有 3史诗 4独特 5传说。 */
+    private byte potentialGrade = 0;
+    /** Hyper 强化星级。 */
+    private byte enhance = 0;
+    /** 附加潜能选项 1~3（ItemOption id）。 */
+    private int bonusPotential1 = 0, bonusPotential2 = 0, bonusPotential3 = 0;
+    /** 附加潜能品阶：0无 1普通 … 5传说。 */
+    private byte bonusPotentialGrade = 0;
+    /** 灵魂宝珠类型（卷/展示 ID）；勿与灵韵 equipSkill* 混淆。 */
+    private int soulId = 0;
+    /** 灵魂潜能选项（ItemOption id）。 */
+    private int soulOption = 0;
+    /** 星岩槽 1（ItemOption id）。 */
+    private int socket1 = 0;
+    /** 星岩槽 2（ItemOption id）。 */
+    private int socket2 = 0;
+    /** 星岩槽 3（ItemOption id；Phase10 封包 +4 → 0x140）。 */
+    private int socket3 = 0;
+    /** 白金锤已用次数（永久加槽，还原卷不清）。最多 {@link org.gms.constants.id.ItemId#PLATINUM_HAMMER} 逻辑 5 次。 */
+    private byte platinum = 0;
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -134,6 +156,21 @@ public class Equip extends Item {
         ret.equipSkillId = equipSkillId;
         ret.equipSkillLevel = equipSkillLevel;
         ret.equipSkillExpire = equipSkillExpire;
+        ret.potential1 = potential1;
+        ret.potential2 = potential2;
+        ret.potential3 = potential3;
+        ret.potentialGrade = potentialGrade;
+        ret.enhance = enhance;
+        ret.bonusPotential1 = bonusPotential1;
+        ret.bonusPotential2 = bonusPotential2;
+        ret.bonusPotential3 = bonusPotential3;
+        ret.bonusPotentialGrade = bonusPotentialGrade;
+        ret.soulId = soulId;
+        ret.soulOption = soulOption;
+        ret.socket1 = socket1;
+        ret.socket2 = socket2;
+        ret.socket3 = socket3;
+        ret.platinum = platinum;
         return ret;
     }
 
@@ -829,6 +866,130 @@ public class Equip extends Item {
 
     public void setEquipSkillExpire(long equipSkillExpire) {
         this.equipSkillExpire = equipSkillExpire;
+    }
+
+    public int getPotential1() {
+        return potential1;
+    }
+
+    public void setPotential1(int potential1) {
+        this.potential1 = potential1;
+    }
+
+    public int getPotential2() {
+        return potential2;
+    }
+
+    public void setPotential2(int potential2) {
+        this.potential2 = potential2;
+    }
+
+    public int getPotential3() {
+        return potential3;
+    }
+
+    public void setPotential3(int potential3) {
+        this.potential3 = potential3;
+    }
+
+    public byte getPotentialGrade() {
+        return potentialGrade;
+    }
+
+    public void setPotentialGrade(byte potentialGrade) {
+        this.potentialGrade = potentialGrade;
+    }
+
+    public byte getEnhance() {
+        return enhance;
+    }
+
+    public void setEnhance(byte enhance) {
+        this.enhance = enhance;
+    }
+
+    public int getBonusPotential1() {
+        return bonusPotential1;
+    }
+
+    public void setBonusPotential1(int bonusPotential1) {
+        this.bonusPotential1 = bonusPotential1;
+    }
+
+    public int getBonusPotential2() {
+        return bonusPotential2;
+    }
+
+    public void setBonusPotential2(int bonusPotential2) {
+        this.bonusPotential2 = bonusPotential2;
+    }
+
+    public int getBonusPotential3() {
+        return bonusPotential3;
+    }
+
+    public void setBonusPotential3(int bonusPotential3) {
+        this.bonusPotential3 = bonusPotential3;
+    }
+
+    public byte getBonusPotentialGrade() {
+        return bonusPotentialGrade;
+    }
+
+    public void setBonusPotentialGrade(byte bonusPotentialGrade) {
+        this.bonusPotentialGrade = bonusPotentialGrade;
+    }
+
+    public int getSoulId() {
+        return soulId;
+    }
+
+    public void setSoulId(int soulId) {
+        this.soulId = soulId;
+    }
+
+    public int getSoulOption() {
+        return soulOption;
+    }
+
+    public void setSoulOption(int soulOption) {
+        this.soulOption = soulOption;
+    }
+
+    public int getSocket1() {
+        return socket1;
+    }
+
+    public void setSocket1(int socket1) {
+        this.socket1 = socket1;
+    }
+
+    public int getSocket2() {
+        return socket2;
+    }
+
+    public void setSocket2(int socket2) {
+        this.socket2 = socket2;
+    }
+
+    public int getSocket3() {
+        return socket3;
+    }
+
+    public void setSocket3(int socket3) {
+        this.socket3 = socket3;
+    }
+
+    public byte getPlatinum() {
+        return platinum;
+    }
+
+    public void setPlatinum(byte platinum) {
+        this.platinum = platinum;
+    }
+
+    public void setPlatinum(int platinum) {
+        this.platinum = (byte) Math.max(0, Math.min(5, platinum));
     }
 
     public boolean isWearing() {

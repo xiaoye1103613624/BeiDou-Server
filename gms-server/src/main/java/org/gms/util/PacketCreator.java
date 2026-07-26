@@ -191,7 +191,8 @@ public class PacketCreator {
             }
         }
 
-        p.writeShort(chr.getLevel()); // level (ushort; matches ijl15 level300 Decode2)
+        // Level300: ushort level + long EXP (matches ijl15 Decode2 / Decode8 caves)
+        p.writeShort(Math.min(300, Math.max(1, chr.getLevel())));
         p.writeShort(chr.getJob().getId()); // job
         p.writeShort(chr.getStr()); // str
         p.writeShort(chr.getDex()); // dex
@@ -207,7 +208,6 @@ public class PacketCreator {
         } else {
             p.writeShort(chr.getRemainingSp()); // remaining sp
         }
-        // EXP writeLong (matches ijl15 level300 Decode8 caves)
         p.writeLong(Math.max(0L, chr.getExp()));
         p.writeShort(chr.getFame()); // fame
         p.writeInt(chr.getGachaExp()); //Gacha Exp
@@ -297,7 +297,15 @@ public class PacketCreator {
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
-            short pos = (short) (item.getPosition() * -1);  //修复其他角色无法看到现金勋章
+            short eqPos = item.getPosition();
+            // AvatarLook（选角/外观）：仍跳过第二坠与扩展戒，避免选角解析踩未画槽。
+            // 进图后的装备栏同步见 addInventoryInfo（−51/−52/−53 已放行）。
+            if (eqPos == -52 || eqPos == -53 || eqPos == -152 || eqPos == -153
+                    || eqPos == -51 || eqPos == -151
+                    || eqPos == -59 || eqPos == -159) {
+                continue;
+            }
+            short pos = (short) (eqPos * -1);  //修复其他角色无法看到现金勋章
             int visualId = item.getItemId();
             if (item instanceof Equip anvilEquip && anvilEquip.getAnvilItemId() != 0) {
                 visualId = anvilEquip.getAnvilItemId();
@@ -568,9 +576,11 @@ public class PacketCreator {
             p.writeShort(pet.getTameness());
             p.writeByte(pet.getFullness());
             addExpirationTime(p, item.getExpiration());
-            p.writeShort(pet.getPetAttribute()); // PetAttribute noticed by lrenex & Spoon
-            p.writeShort(0); // PetSkill
-            p.writeInt(18000); // RemainLife
+            // Client layout: short PetAttribute + short PetSkill (+ RemainLife encoded as 0x4650/"PF").
+            // Previously PetSkill was hard-coded 0, so the client never enabled loot from flag bits.
+            p.writeShort(pet.getPetAttribute());
+            p.writeShort(pet.getPetSkills() & 0xFFFF);
+            p.writeInt(18000); // RemainLife / "PF" magic (0x4650 LE)
             p.writeShort(0); // attribute
             return;
         }
@@ -587,21 +597,26 @@ public class PacketCreator {
         }
         p.writeByte(equip.getUpgradeSlots()); // upgrade slots
         p.writeByte(equip.getLevel()); // level
-        p.writeShort(equip.getStr()); // str
-        p.writeShort(equip.getDex()); // dex
-        p.writeShort(equip.getInt()); // int
-        p.writeShort(equip.getLuk()); // luk
-        p.writeShort(equip.getHp()); // hp
-        p.writeShort(equip.getMp()); // mp
-        p.writeShort(equip.getWatk()); // watk
-        p.writeShort(equip.getMatk()); // matk
-        p.writeShort(equip.getWdef()); // wdef
-        p.writeShort(equip.getMdef()); // mdef
-        p.writeShort(equip.getAcc()); // accuracy
-        p.writeShort(equip.getAvoid()); // avoid
+        // Hyper/潜能不改服务端装备本体字段（战斗由 recalcEquipStats.computeBonus 加算），
+        // 但角色面板括号加成只读客户端装备属性 → 封包侧叠入，穿戴强化后面板即时上涨。
+        // ijl15 tip 黄/紫分行需关闭同款加算，避免 tip 显示翻倍（见 tooltip HyperBonusForStat）。
+        org.gms.potential.PotentialHyperService.StatBonus pot =
+                org.gms.potential.PotentialHyperService.computeBonus(equip);
+        p.writeShort(clampEquipStat(equip.getStr() + pot.str));
+        p.writeShort(clampEquipStat(equip.getDex() + pot.dex));
+        p.writeShort(clampEquipStat(equip.getInt() + pot.inte));
+        p.writeShort(clampEquipStat(equip.getLuk() + pot.luk));
+        p.writeShort(clampEquipStat(equip.getHp() + pot.hp));
+        p.writeShort(clampEquipStat(equip.getMp() + pot.mp));
+        p.writeShort(clampEquipStat(equip.getWatk() + pot.watk));
+        p.writeShort(clampEquipStat(equip.getMatk() + pot.matk));
+        p.writeShort(clampEquipStat(equip.getWdef() + pot.wdef));
+        p.writeShort(clampEquipStat(equip.getMdef() + pot.mdef));
+        p.writeShort(clampEquipStat(equip.getAcc() + pot.acc));
+        p.writeShort(clampEquipStat(equip.getAvoid() + pot.avoid));
         p.writeShort(equip.getHands()); // hands
-        p.writeShort(equip.getSpeed()); // speed
-        p.writeShort(equip.getJump()); // jump
+        p.writeShort(clampEquipStat(equip.getSpeed() + pot.speed));
+        p.writeShort(clampEquipStat(equip.getJump() + pot.jump));
         p.writeString(equip.getOwner()); // owner name
         p.writeShort(equip.getFlag()); //Item Flags
 
@@ -624,6 +639,8 @@ public class PacketCreator {
         p.writeLong(getTime(-2));
         p.writeInt(-1);
         // ALIGNED with ijl15 FusionAnvil Decode (jul16 / hooks ON). Keep in sync.
+        // Tail order: anvil + spirit + Hyper/Potential (Phase2) + BonusPotential (Phase3)
+        //            + Soul/Socket (Phase4).
         final boolean writeAnvilSpiritTail = true;
         if (equip != null && writeAnvilSpiritTail) {
             p.writeInt(equip.getAnvilItemId());
@@ -631,6 +648,26 @@ public class PacketCreator {
             p.writeInt(equip.getEquipSkillLevel());
             long skillExpire = equip.getEquipSkillExpire();
             p.writeLong(skillExpire > 0 ? getTime(skillExpire) : 0L);
+            // Hyper ★ + potential (must match ijl15 GW_ItemSlotEquip @ 0x10D+)
+            p.writeByte(equip.getEnhance());
+            p.writeByte(equip.getPotentialGrade());
+            p.writeShort(0); // reserved
+            p.writeInt(equip.getPotential1());
+            p.writeInt(equip.getPotential2());
+            p.writeInt(equip.getPotential3());
+            // Phase3 附加潜能 (+16B → size 0x12C)
+            p.writeByte(equip.getBonusPotentialGrade());
+            p.writeByte(0); // pad
+            p.writeShort(0); // reserved
+            p.writeInt(equip.getBonusPotential1());
+            p.writeInt(equip.getBonusPotential2());
+            p.writeInt(equip.getBonusPotential3());
+            // Phase4 灵魂宝珠 + 星岩 (+16B → 0x13C) + Phase10 socket3 (+4 → 0x140)
+            p.writeInt(equip.getSoulId());
+            p.writeInt(equip.getSoulOption());
+            p.writeInt(equip.getSocket1());
+            p.writeInt(equip.getSocket2());
+            p.writeInt(equip.getSocket3());
         }
 
     }
@@ -646,9 +683,9 @@ public class PacketCreator {
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
         for (Item item : equippedC) {
             short eqPos = item.getPosition();
-            // Client equip table is [50]; BP52/53 (-52/-53) were half-patched and crash field enter.
-            // Skip until full client buffer expand. Same for cash mirrors -152/-153.
-            if (eqPos == -52 || eqPos == -53 || eqPos == -152 || eqPos == -153) {
+            // −59/−159：095 号，083 不用。−52/−53：SIX_RING_SAFE_20260726x 放行（BP52/53 UI+HitTest）。
+            // 第二坠 −51/−151：已放行。
+            if (eqPos == -59 || eqPos == -159) {
                 continue;
             }
             if (eqPos <= -100) {
@@ -1178,7 +1215,7 @@ public class PacketCreator {
                     p.writeInt((int) value);
                 } else if (mask == Stat.LEVEL.getValue()) {
                     // ushort level (matches ijl15 level300 Decode2)
-                    p.writeShort((short) value);
+                    p.writeShort((short) Math.min(300, Math.max(1, value)));
                 } else if (mask < 0x20) {
                     p.writeByte((byte) value);
                 } else if (mask == Stat.HP.getValue() || mask == Stat.MAXHP.getValue()
@@ -1193,7 +1230,7 @@ public class PacketCreator {
                     }
                 } else if (mask == Stat.EXP.getValue()) {
                     // 8-byte EXP (matches ijl15 level300 Decode8)
-                    p.writeLong(value);
+                    p.writeLong(Math.max(0L, value));
                 } else if (mask < 0xFFFF) {
                     p.writeShort((short) value);
                 } else if (mask == 0x20000) {
@@ -2102,7 +2139,8 @@ public class PacketCreator {
     public static Packet spawnPlayerMapObject(Client target, Character chr, boolean enteringField) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PLAYER);
         p.writeInt(chr.getId());
-        p.writeByte(chr.getLevel()); //v83
+        // v83 协议仍是 1 字节等级；>255 时写 255，避免 (byte)300→44 显示错乱
+        p.writeByte(Math.min(255, chr.getLevel()));
         p.writeString(chr.getName());
         if (chr.getGuildId() < 1) {
             p.writeString("");
@@ -2667,6 +2705,76 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * Phase10 魔方结果窗（ijl15 LP 0x17A）。
+     * <pre>
+     * byte success (1/0)
+     * int  cubeItemId
+     * byte uiKind   (0=MiracleCube, 1=HyperMiracleCube)
+     * byte grade    (1~5；0 时客户端按 optionId 推断)
+     * int  pot1, pot2, pot3
+     * int  equipItemId  (可选，用于 tip 数值档位；旧客户端忽略)
+     * </pre>
+     */
+    public static Packet miracleCubeResult(boolean success, int cubeItemId, byte uiKind,
+                                           byte grade, int pot1, int pot2, int pot3) {
+        return miracleCubeResult(success, cubeItemId, uiKind, grade, pot1, pot2, pot3, 0);
+    }
+
+    public static Packet miracleCubeResult(boolean success, int cubeItemId, byte uiKind,
+                                           byte grade, int pot1, int pot2, int pot3, int equipItemId) {
+        OutPacket p = OutPacket.create(SendOpcode.MIRACLE_CUBE_RESULT);
+        p.writeByte(success ? 1 : 0);
+        p.writeInt(cubeItemId);
+        p.writeByte(uiKind);
+        // Clamp: never send 0 when lines exist — client maps 1..5 to 普通..传说
+        byte g = grade;
+        if (g < 1 || g > 5) {
+            g = 0;
+            int[] opts = {pot1, pot2, pot3};
+            for (int id : opts) {
+                if (id <= 0) {
+                    continue;
+                }
+                int band = id / 10000;
+                byte inferred = (byte) (band >= 4 ? 5 : band == 3 ? 4 : band == 2 ? 3 : band == 1 ? 2 : 1);
+                if (inferred > g) {
+                    g = inferred;
+                }
+            }
+            if (g < 1) {
+                g = 1;
+            }
+        }
+        p.writeByte(g);
+        p.writeInt(pot1);
+        p.writeInt(pot2);
+        p.writeInt(pot3);
+        p.writeInt(Math.max(0, equipItemId));
+        return p;
+    }
+
+    /**
+     * 灵魂宝珠附加成功可见特效。
+     * Phase10 曾误用 FIELD_EFFECT(地图路径) + 向自己发 SHOW_FOREIGN_EFFECT（客户端忽略），几乎不可见。
+     * 对齐升级/装备升级：自己走 SHOW_ITEM_GAIN_INCHAT，他人走 SHOW_FOREIGN_EFFECT。
+     * effect 0 = LevelUp（083 必有）；15 = 装备升级光效作强化感。
+     */
+    public static void broadcastSoulWeaponEffect(org.gms.client.Character chr) {
+        if (chr == null || chr.getMap() == null) {
+            return;
+        }
+        chr.sendPacket(showSpecialEffect(0));
+        chr.sendPacket(showSpecialEffect(15));
+        chr.getMap().broadcastMessage(chr, showForeignEffect(chr.getId(), 0), false);
+        chr.getMap().broadcastMessage(chr, showForeignEffect(chr.getId(), 15), false);
+    }
+
+    /** @deprecated 地图 FIELD_EFFECT，角色身上几乎看不到；请用 {@link #broadcastSoulWeaponEffect} */
+    public static Packet soulWeaponEffect() {
+        return showEffect("Effect/BasicEff.img/LevelUp");
+    }
+
     public static Packet removePlayerFromMap(int chrId) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_PLAYER_FROM_MAP);
         p.writeInt(chrId);
@@ -2885,7 +2993,8 @@ public class PacketCreator {
         //3D 00 0A 43 01 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
         final OutPacket p = OutPacket.create(SendOpcode.CHAR_INFO);
         p.writeInt(chr.getId());
-        p.writeByte(chr.getLevel());
+        // v83 CHAR_INFO 等级为 byte；300 级钳制到 255，避免截成 44
+        p.writeByte(Math.min(255, chr.getLevel()));
         p.writeShort(chr.getJob().getId());
         p.writeShort(chr.getFame());
         p.writeByte(chr.getMarriageRing() != null ? 1 : 0);
@@ -6177,7 +6286,7 @@ public class PacketCreator {
         p.writeInt(entry.getChrId()); //ID
         p.writeInt(entry.getSenior() != null ? entry.getSenior().getChrId() : 0); //parent ID
         p.writeShort(entry.getJob().getId()); //job id
-        p.writeByte(entry.getLevel()); //level
+        p.writeByte(Math.min(255, entry.getLevel())); //level (family UI is byte; clamp >255)
         p.writeBool(isOnline); //isOnline
         p.writeInt(entry.getReputation()); //current rep
         p.writeInt(entry.getTotalReputation()); //total rep
@@ -7849,23 +7958,37 @@ public class PacketCreator {
         p.writeInt(equip.getEquipSkillLevel());
         long skillExpire = equip.getEquipSkillExpire();
         p.writeLong(skillExpire > 0 ? getTime(skillExpire) : 0L);
-        p.writeShort(equip.getStr());
-        p.writeShort(equip.getDex());
-        p.writeShort(equip.getInt());
-        p.writeShort(equip.getLuk());
-        p.writeShort(equip.getHp());
-        p.writeShort(equip.getMp());
-        p.writeShort(equip.getWatk());
-        p.writeShort(equip.getMatk());
-        p.writeShort(equip.getWdef());
-        p.writeShort(equip.getMdef());
-        p.writeShort(equip.getAcc());
-        p.writeShort(equip.getAvoid());
+        // 与 addItemInfo 一致：面板/他人详情可见 Hyper+潜能
+        org.gms.potential.PotentialHyperService.StatBonus pot =
+                org.gms.potential.PotentialHyperService.computeBonus(equip);
+        p.writeShort(clampEquipStat(equip.getStr() + pot.str));
+        p.writeShort(clampEquipStat(equip.getDex() + pot.dex));
+        p.writeShort(clampEquipStat(equip.getInt() + pot.inte));
+        p.writeShort(clampEquipStat(equip.getLuk() + pot.luk));
+        p.writeShort(clampEquipStat(equip.getHp() + pot.hp));
+        p.writeShort(clampEquipStat(equip.getMp() + pot.mp));
+        p.writeShort(clampEquipStat(equip.getWatk() + pot.watk));
+        p.writeShort(clampEquipStat(equip.getMatk() + pot.matk));
+        p.writeShort(clampEquipStat(equip.getWdef() + pot.wdef));
+        p.writeShort(clampEquipStat(equip.getMdef() + pot.mdef));
+        p.writeShort(clampEquipStat(equip.getAcc() + pot.acc));
+        p.writeShort(clampEquipStat(equip.getAvoid() + pot.avoid));
         p.writeShort(equip.getHands());
-        p.writeShort(equip.getSpeed());
-        p.writeShort(equip.getJump());
+        p.writeShort(clampEquipStat(equip.getSpeed() + pot.speed));
+        p.writeShort(clampEquipStat(equip.getJump() + pot.jump));
         p.writeByte(equip.getUpgradeSlots());
         return p;
+    }
+
+    /** 装备属性 short 封包防溢出（Hyper/潜能叠入后）。 */
+    private static short clampEquipStat(int value) {
+        if (value > Short.MAX_VALUE) {
+            return Short.MAX_VALUE;
+        }
+        if (value < Short.MIN_VALUE) {
+            return Short.MIN_VALUE;
+        }
+        return (short) value;
     }
 
 }

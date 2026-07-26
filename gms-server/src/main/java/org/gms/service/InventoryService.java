@@ -207,6 +207,11 @@ public class InventoryService {
                     .equipSkillId(obj.getInt("equipSkillId"))
                     .equipSkillLevel(obj.getInt("equipSkillLevel"))
                     .equipSkillExpire(obj.getLong("equipSkillExpire"))
+                    .potential1(obj.getInt("potential1"))
+                    .potential2(obj.getInt("potential2"))
+                    .potential3(obj.getInt("potential3"))
+                    .potentialGrade(obj.getInt("potentialGrade"))
+                    .enhance(obj.getInt("enhance"))
                     .build());
         }
         return rtnDTO;
@@ -264,6 +269,11 @@ public class InventoryService {
                         .equipSkillId(equip.getEquipSkillId())
                         .equipSkillLevel(equip.getEquipSkillLevel())
                         .equipSkillExpire(equip.getEquipSkillExpire())
+                        .potential1(equip.getPotential1())
+                        .potential2(equip.getPotential2())
+                        .potential3(equip.getPotential3())
+                        .potentialGrade((int) equip.getPotentialGrade())
+                        .enhance((int) equip.getEnhance())
                         .build());
             }
             return rtnDTO;
@@ -320,6 +330,11 @@ public class InventoryService {
             if (equipment.getEquipSkillId() != null) equip.setEquipSkillId(equipment.getEquipSkillId());
             if (equipment.getEquipSkillLevel() != null) equip.setEquipSkillLevel(equipment.getEquipSkillLevel());
             if (equipment.getEquipSkillExpire() != null) equip.setEquipSkillExpire(equipment.getEquipSkillExpire());
+            if (equipment.getPotential1() != null) equip.setPotential1(equipment.getPotential1());
+            if (equipment.getPotential2() != null) equip.setPotential2(equipment.getPotential2());
+            if (equipment.getPotential3() != null) equip.setPotential3(equipment.getPotential3());
+            if (equipment.getPotentialGrade() != null) equip.setPotentialGrade(equipment.getPotentialGrade().byteValue());
+            if (equipment.getEnhance() != null) equip.setEnhance(equipment.getEnhance().byteValue());
         }
         character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
     }

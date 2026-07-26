@@ -254,7 +254,12 @@ public class Inventory implements Iterable<Item> {
                 inventory.put(dSlot, source);
                 inventory.remove(sSlot);
             } else if (target.getItemId() == source.getItemId() && !ItemConstants.isRechargeable(source.getItemId()) && isSameOwner(source, target)) {
-                if (type.getType() == InventoryType.EQUIP.getType() || type.getType() == InventoryType.CASH.getType()) {
+                // Equip always swaps. Pets (cash) must not quantity-merge.
+                // Other Cash items (cubes etc.) must stack like USE/ETC — otherwise
+                // InventoryMergeHandler swaps forever when qty < slotMax and freezes the client.
+                final boolean cashPet = type.getType() == InventoryType.CASH.getType()
+                        && (ItemConstants.isPet(source.getItemId()) || source.getPet() != null || target.getPet() != null);
+                if (type.getType() == InventoryType.EQUIP.getType() || cashPet) {
                     swap(target, source);
                 } else if (source.getQuantity() + target.getQuantity() > slotMax) {
                     short rest = (short) ((source.getQuantity() + target.getQuantity()) - slotMax);

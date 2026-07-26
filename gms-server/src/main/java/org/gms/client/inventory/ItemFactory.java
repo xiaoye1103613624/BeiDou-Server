@@ -114,6 +114,11 @@ public enum ItemFactory {
         equip.setInt((short) rs.getInt("int"));
         equip.setJump((short) rs.getInt("jump"));
         equip.setVicious((short) rs.getInt("vicious"));
+        try {
+            equip.setPlatinum(rs.getByte("platinum"));
+        } catch (SQLException ignored) {
+            // V1.11.37 前兼容
+        }
         equip.setFlag((short) rs.getInt("flag"));
         equip.setLuk((short) rs.getInt("luk"));
         equip.setMatk((short) rs.getInt("matk"));
@@ -134,6 +139,40 @@ public enum ItemFactory {
         equip.setEquipSkillId(rs.getInt("equipSkillId"));
         equip.setEquipSkillLevel(rs.getInt("equipSkillLevel"));
         equip.setEquipSkillExpire(rs.getLong("equipSkillExpire"));
+        try {
+            equip.setPotential1(rs.getInt("potential1"));
+            equip.setPotential2(rs.getInt("potential2"));
+            equip.setPotential3(rs.getInt("potential3"));
+            equip.setPotentialGrade(rs.getByte("potentialGrade"));
+            equip.setEnhance(rs.getByte("enhance"));
+        } catch (SQLException ignored) {
+            // 迁移前兼容
+        }
+        try {
+            equip.setBonusPotential1(rs.getInt("bonusPotential1"));
+            equip.setBonusPotential2(rs.getInt("bonusPotential2"));
+            equip.setBonusPotential3(rs.getInt("bonusPotential3"));
+            equip.setBonusPotentialGrade(rs.getByte("bonusPotentialGrade"));
+            try {
+                equip.setSoulId(rs.getInt("soulId"));
+                equip.setSoulOption(rs.getInt("soulOption"));
+                equip.setSocket1(rs.getInt("socket1"));
+                try {
+                    equip.setSocket2(rs.getInt("socket2"));
+                } catch (SQLException ignored) {
+                    // V1.11.34 前兼容
+                }
+                try {
+                    equip.setSocket3(rs.getInt("socket3"));
+                } catch (SQLException ignored) {
+                    // V1.11.35 前兼容
+                }
+            } catch (SQLException ignored) {
+                // 旧库未跑 Flyway 时兼容
+            }
+        } catch (SQLException ignored) {
+            // Phase3 附加潜能迁移前兼容
+        }
 
         return equip;
     }
@@ -244,7 +283,9 @@ public enum ItemFactory {
                         psItem.executeUpdate();
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            try (PreparedStatement psEquip = con.prepareStatement(
+                                    "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`) "
+                                            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                                 try (ResultSet rs = psItem.getGeneratedKeys()) {
                                     if (!rs.next()) {
                                         throw new RuntimeException("Inserting item failed.");
@@ -273,13 +314,28 @@ public enum ItemFactory {
                                 psEquip.setInt(18, equip.getJump());
                                 psEquip.setInt(19, 0);
                                 psEquip.setInt(20, equip.getVicious());
-                                psEquip.setInt(21, equip.getItemLevel());
-                                psEquip.setInt(22, equip.getItemExp());
-                                psEquip.setInt(23, equip.getRingId());
-                                psEquip.setInt(24, equip.getAnvilItemId());
-                                psEquip.setInt(25, equip.getEquipSkillId());
-                                psEquip.setInt(26, equip.getEquipSkillLevel());
-                                psEquip.setLong(27, equip.getEquipSkillExpire());
+                                psEquip.setInt(21, equip.getPlatinum());
+                                psEquip.setInt(22, equip.getItemLevel());
+                                psEquip.setInt(23, equip.getItemExp());
+                                psEquip.setInt(24, equip.getRingId());
+                                psEquip.setInt(25, equip.getAnvilItemId());
+                                psEquip.setInt(26, equip.getEquipSkillId());
+                                psEquip.setInt(27, equip.getEquipSkillLevel());
+                                psEquip.setLong(28, equip.getEquipSkillExpire());
+                                psEquip.setInt(29, equip.getPotential1());
+                                psEquip.setInt(30, equip.getPotential2());
+                                psEquip.setInt(31, equip.getPotential3());
+                                psEquip.setInt(32, equip.getPotentialGrade());
+                                psEquip.setInt(33, equip.getEnhance());
+                                psEquip.setInt(34, equip.getBonusPotential1());
+                                psEquip.setInt(35, equip.getBonusPotential2());
+                                psEquip.setInt(36, equip.getBonusPotential3());
+                                psEquip.setInt(37, equip.getBonusPotentialGrade());
+                                psEquip.setInt(38, equip.getSoulId());
+                                psEquip.setInt(39, equip.getSoulOption());
+                                psEquip.setInt(40, equip.getSocket1());
+                                psEquip.setInt(41, equip.getSocket2());
+                                psEquip.setInt(42, equip.getSocket3());
                                 psEquip.executeUpdate();
                             }
                         }
@@ -408,7 +464,9 @@ public enum ItemFactory {
 
                 // Equipment
                 if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    try (PreparedStatement ps = con.prepareStatement(
+                            "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`) "
+                                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                         ps.setInt(1, genKey);
 
                         Equip equip = (Equip) item;
@@ -431,13 +489,28 @@ public enum ItemFactory {
                         ps.setInt(18, equip.getJump());
                         ps.setInt(19, 0);
                         ps.setInt(20, equip.getVicious());
-                        ps.setInt(21, equip.getItemLevel());
-                        ps.setInt(22, equip.getItemExp());
-                        ps.setInt(23, equip.getRingId());
-                        ps.setInt(24, equip.getAnvilItemId());
-                        ps.setInt(25, equip.getEquipSkillId());
-                        ps.setInt(26, equip.getEquipSkillLevel());
-                        ps.setLong(27, equip.getEquipSkillExpire());
+                        ps.setInt(21, equip.getPlatinum());
+                        ps.setInt(22, equip.getItemLevel());
+                        ps.setInt(23, equip.getItemExp());
+                        ps.setInt(24, equip.getRingId());
+                        ps.setInt(25, equip.getAnvilItemId());
+                        ps.setInt(26, equip.getEquipSkillId());
+                        ps.setInt(27, equip.getEquipSkillLevel());
+                        ps.setLong(28, equip.getEquipSkillExpire());
+                        ps.setInt(29, equip.getPotential1());
+                        ps.setInt(30, equip.getPotential2());
+                        ps.setInt(31, equip.getPotential3());
+                        ps.setInt(32, equip.getPotentialGrade());
+                        ps.setInt(33, equip.getEnhance());
+                        ps.setInt(34, equip.getBonusPotential1());
+                        ps.setInt(35, equip.getBonusPotential2());
+                        ps.setInt(36, equip.getBonusPotential3());
+                        ps.setInt(37, equip.getBonusPotentialGrade());
+                        ps.setInt(38, equip.getSoulId());
+                        ps.setInt(39, equip.getSoulOption());
+                        ps.setInt(40, equip.getSocket1());
+                        ps.setInt(41, equip.getSocket2());
+                        ps.setInt(42, equip.getSocket3());
                         ps.executeUpdate();
                     }
                 }
