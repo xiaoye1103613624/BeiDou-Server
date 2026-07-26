@@ -65,7 +65,9 @@ function buildMenuText() {
     text += generalSelect(41, 每日福利) + generalSelect(31, 师徒系统) + generalSelect(42, 赞助福利)+generalSelect(43, "CD_KEY");
     text += changeLine.repeat(2);
 
-    text += generalSelect(22, " 收集系统")+ "\t" + generalSelect(32, "家族系统") + "\t" + generalSelect(44, "银行系统")+ "\t" + generalSelect(33, "兑换中心");
+    text += generalSelect(23, " 快速转职")+ "\t" + generalSelect(22, " 收集系统")+ "\t" + generalSelect(32, "家族系统") + "\t" + generalSelect(44, "银行系统");
+    text += changeLine.repeat(2);
+    text += generalSelect(33, "兑换中心");
     text += changeLine.repeat(2);
 
     if (cm.getPlayer().isGM()) {
@@ -132,7 +134,10 @@ function doSelect(selection) {
             openNpc("每日签到");
             break;
         case 22:
-            openNpc("xy/卡片收集");
+            openNpc("xy/collect/卡片收集");
+            break;
+        case 23:
+            openNpc("快速转职");
             break;
         case 31:
             openNpc("xy/mentor/师徒系统");

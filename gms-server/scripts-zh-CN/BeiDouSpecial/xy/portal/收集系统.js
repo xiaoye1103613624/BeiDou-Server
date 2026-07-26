@@ -26,7 +26,7 @@ function showMenu() {
     text += "\t" + 奖励.repeat(6) + "\r\n\r\n";
     text += "#b收集怪物卡片、钓鱼或兑换专属戒指！#k\r\n\r\n";
     text += "━━━ 图鉴收集 ━━━\r\n";
-    text += "#L310#卡片收集  #d收集怪物卡片，换取戒指#k#l\r\n";
+    text += "#L310#卡片收集  #d城镇 / 野外精英 / 远征Boss#k#l\r\n";
     text += "#L301#玩具收集  #d收集玩具图鉴#k#l\r\n";
     text += "#L303##r强化戒指#k  #d根据卡片图鉴等级兑换戒指#k#l\r\n";
     text += "\r\n━━━ 钓鱼系统 ━━━\r\n";

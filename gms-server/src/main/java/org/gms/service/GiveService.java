@@ -31,6 +31,8 @@ import static java.util.concurrent.TimeUnit.DAYS;
 public class GiveService {
     @Autowired
     CharacterService characterService;
+    @Autowired
+    SponsorService sponsorService;
 
     public void give(GiveResourceReqDTO submitData) {
         if (submitData.getPlayerId() == 0) {
@@ -136,7 +138,25 @@ public class GiveService {
             case 13:
                 changeMap(chr, submitData.getQuantity());
                 break;
+            case 14: // 赞助充值：总赞助+可消费赞助同时增加
+                giveSponsorChr(chr, submitData.getQuantity());
+                break;
         }
+    }
+
+    private void giveSponsorChr(Character chr, int quantity) {
+        if (quantity == 0) {
+            throw new BizException("赞助充值数量不能为0");
+        }
+        if (quantity > 0) {
+            sponsorService.recharge(chr.getId(), quantity);
+            chr.message("获得赞助 +" + quantity + "（总赞助与可消费赞助均已增加）");
+        } else {
+            // 负数：仅扣可消费赞助（不回退总赞助）
+            sponsorService.spend(chr.getId(), -quantity);
+            chr.message("扣除可消费赞助 " + (-quantity));
+        }
+        log.info("GM发放赞助 角色={}({}) qty={}", chr.getName(), chr.getId(), quantity);
     }
 
     private void giveNxAllOnlineChr(int quantity, int type) {

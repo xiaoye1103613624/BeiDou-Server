@@ -1,10 +1,12 @@
 /*
-    赞助中心 — 查看赞助金额、领取赞助档位奖励（每档限领一次）
-    同账号不同角色赞助额互相隔离
+    赞助中心 — 查看总赞助/可消费赞助，领取赞助档位奖励（每档限领一次）
+    角色独立：总赞助只增不减（档位），可消费赞助用于商店扣减
 **/
 var status = 0;
-var sponsorConfigs = [];   // [{id, amount, rewards}]
-var totalSponsor = 0;      // 当前角色累计赞助金额
+var sponsorConfigs = [];
+var totalSponsor = 0;
+var spendableSponsor = 0;
+var sponsorService = null;
 
 function start() {
     status = -1;
@@ -17,19 +19,16 @@ function action(mode, type, selection) {
     if (mode == 1) status++; else status--;
 
     if (status == 0) {
-        // ===== 加载赞助数据 =====
         try {
             var ServerManager = Java.type('org.gms.manager.ServerManager');
-            var SponsorService = Java.type('org.gms.service.SponsorService');
             var context = ServerManager.getApplicationContext();
-            var service = context.getBean("sponsorService");
+            sponsorService = context.getBean("sponsorService");
 
-            // 获取角色赞助记录
-            var record = service.getRecordByPlayerId(cm.getPlayer().getId());
+            var record = sponsorService.getRecordByPlayerId(cm.getPlayer().getId());
             totalSponsor = record != null ? record.getTotalSponsor() : 0;
+            spendableSponsor = record != null ? record.getSpendableSponsor() : 0;
 
-            // 获取所有启用配置
-            var configs = service.listConfigs();
+            var configs = sponsorService.listConfigs();
             sponsorConfigs = [];
             for (var i = 0; i < configs.size(); i++) {
                 var c = configs.get(i);
@@ -41,14 +40,14 @@ function action(mode, type, selection) {
                 });
             }
         } catch (e) {
-            cm.sendOk("系统错误，请联系管理员。\r\n" + e.getMessage());
+            cm.sendOk("系统错误，请联系管理员。\r\n" + e);
             cm.dispose(); return;
         }
 
-        // ===== 显示赞助面板 =====
         var text = "#e#d赞助中心#n#k\r\n\r\n";
-        text += "当前累计赞助额：#r" + totalSponsor + "元#k\r\n";
-        text += "#d赞助额通过CDK兑换累积，角色独立计算。#k\r\n\r\n";
+        text += "总赞助：#r" + totalSponsor + "#k（档位达标，只增不减）\r\n";
+        text += "可消费赞助：#b" + spendableSponsor + "#k（商店购买扣减）\r\n";
+        text += "#d充值时两者同时增加；购买只扣可消费赞助。#k\r\n\r\n";
         text += "#e可领取的赞助奖励：#n\r\n\r\n";
 
         if (sponsorConfigs.length == 0) {
@@ -57,12 +56,12 @@ function action(mode, type, selection) {
             cm.dispose(); return;
         }
 
-        for (var i = 0; i < sponsorConfigs.length; i++) {
-            var sc = sponsorConfigs[i];
-            var claimed = isClaimed(sc.id);
+        for (var j = 0; j < sponsorConfigs.length; j++) {
+            var sc = sponsorConfigs[j];
+            var claimed = sponsorService.isClaimed(cm.getPlayer().getId(), sc.id);
             var canClaim = totalSponsor >= sc.amount;
 
-            text += "#L" + i + "#";
+            text += "#L" + j + "#";
             if (claimed) {
                 text += "#d[已领取]#k ";
             } else if (canClaim) {
@@ -70,74 +69,28 @@ function action(mode, type, selection) {
             } else {
                 text += "#r[未达标]#k ";
             }
-            text += "#e" + (sc.name || ("赞助满" + sc.amount + "元")) + "#n  (满#b" + sc.amount + "元#k)";
-            text += "  →  ";
-            // 显示奖励概要
-            var rewardText = getRewardSummary(sc.rewards);
-            text += rewardText;
+            text += "#e" + (sc.name || ("赞助满" + sc.amount)) + "#n  (满#b" + sc.amount + "#k)";
+            text += "  →  " + getRewardSummary(sc.rewards);
             text += "#l\r\n";
         }
 
-        text += "\r\n#e#r当前金币：#b" + cm.getPlayer().getMeso() + "#k";
         cm.sendSimple(text);
 
     } else if (status == 1) {
-        // ===== 领取所选奖励 =====
         var idx = selection;
         if (idx < 0 || idx >= sponsorConfigs.length) { cm.dispose(); return; }
-        var sc = sponsorConfigs[idx];
+        var sc2 = sponsorConfigs[idx];
 
-        // 检查是否已领取
-        if (isClaimed(sc.id)) {
-            cm.sendOk("该档奖励已经领取过了！");
-            cm.dispose(); return;
-        }
-
-        // 检查赞助额
-        if (totalSponsor < sc.amount) {
-            cm.sendOk("赞助金额不足！\r\n当前累计：#r" + totalSponsor + "元#k\r\n需要：#r" + sc.amount + "元#k");
-            cm.dispose(); return;
-        }
-
-        // 检查背包空间（仅检查道具类型奖励）
-        if (!checkInventorySpace(sc.rewards)) {
-            cm.sendOk("背包空间不足，请清理背包后再来领取。");
-            cm.dispose(); return;
-        }
-
-        // 发放奖励
         try {
-            var ServerManager = Java.type('org.gms.manager.ServerManager');
-            var SponsorService = Java.type('org.gms.service.SponsorService');
-            var service = ServerManager.getApplicationContext().getBean("sponsorService");
-            var result = service.claimReward(cm.getPlayer().getId(), sc.id, cm.getPlayer());
-
-            // 标记已领取
-            markClaimed(sc.id);
-
+            var result = sponsorService.claimReward(cm.getPlayer().getId(), sc2.id, cm.getPlayer());
             cm.sendOk("领取成功！\r\n\r\n" + result);
-            cm.dispose();
-        } catch (e) {
-            cm.sendOk("领取失败：" + e.getMessage());
-            cm.dispose();
+        } catch (e2) {
+            cm.sendOk("领取失败：" + e2);
         }
+        cm.dispose();
     }
 }
 
-// ==================== 辅助函数 ====================
-
-/** 检查是否已领取（通过CharacterExtendValue持久化） */
-function isClaimed(configId) {
-    var val = cm.getCharacterExtendValue("sponsor_config_" + configId);
-    return val != null && val == "1";
-}
-
-/** 标记已领取 */
-function markClaimed(configId) {
-    cm.saveOrUpdateCharacterExtendValue("sponsor_config_" + configId, "1");
-}
-
-/** 奖励概要 */
 function getRewardSummary(rewards) {
     if (rewards == null || rewards.size() == 0) return "无奖励";
     var parts = [];
@@ -146,6 +99,8 @@ function getRewardSummary(rewards) {
         var qty = r.getQty();
         if (r.getType() == "nx") {
             parts.push("点券×" + qty);
+        } else if (r.getType() == "maple") {
+            parts.push("抵用×" + qty);
         } else if (r.getType() == "meso") {
             parts.push("金币×" + qty);
         } else if (r.getType() == "item") {
@@ -153,18 +108,4 @@ function getRewardSummary(rewards) {
         }
     }
     return parts.join("  ");
-}
-
-/** 检查背包空间（仅道具类型） */
-function checkInventorySpace(rewards) {
-    if (rewards == null) return true;
-    for (var i = 0; i < rewards.size(); i++) {
-        var r = rewards.get(i);
-        if (r.getType() == "item" && r.getId() >= 1000000) {
-            if (!cm.canHold(r.getId(), r.getQty())) {
-                return false;
-            }
-        }
-    }
-    return true;
 }

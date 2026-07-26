@@ -1349,8 +1349,38 @@ public class AbstractPlayerInteraction {
         return getPlayer().getCurrentOnlineTime();
     }
 
+    // ==================== 角色赞助（总赞助 / 可消费赞助） ====================
 
+    private org.gms.service.SponsorService sponsorService() {
+        var ctx = org.gms.manager.ServerManager.getApplicationContext();
+        if (ctx == null) {
+            throw new IllegalStateException("Spring 上下文不可用");
+        }
+        return ctx.getBean(org.gms.service.SponsorService.class);
+    }
 
+    /** 总赞助（累计，只增不减，档位达标用） */
+    public int getTotalSponsor() {
+        return sponsorService().getTotalSponsor(getPlayer().getId());
+    }
 
+    /** 可消费赞助（商店扣减用） */
+    public int getSponsor() {
+        return sponsorService().getSpendableSponsor(getPlayer().getId());
+    }
+
+    /**
+     * 充值入账：总赞助与可消费赞助同时 +amount。
+     */
+    public void gainSponsor(int amount) {
+        sponsorService().recharge(getPlayer().getId(), amount);
+    }
+
+    /**
+     * 扣减可消费赞助；成功返回 true，余额不足返回 false。
+     */
+    public boolean spendSponsor(int amount) {
+        return sponsorService().trySpend(getPlayer().getId(), amount);
+    }
 
 }
