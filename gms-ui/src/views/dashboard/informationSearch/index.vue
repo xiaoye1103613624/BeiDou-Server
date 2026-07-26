@@ -95,7 +95,12 @@
                   {{ record.name }}
                 </a-button>
                 <template #content>
-                  <img :src="getImg(record.type, record.id)" alt="" />
+                  <img
+                    :src="getImg(record.type, record.id)"
+                    :data-item-id="record.id"
+                    alt=""
+                    @error="onItemIconError"
+                  />
                 </template>
               </a-popover>
             </template>
@@ -118,7 +123,7 @@
   import { useI18n } from 'vue-i18n';
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import {
     InformationSearch,
     InformationResult,

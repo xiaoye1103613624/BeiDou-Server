@@ -248,7 +248,18 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
+            // PetSkill must be in the login inventory blob — forceUpdate after getCharInfo can miss
+            // (and Item.copy used to reload pets from DB with stale flag=0). Sync memory/DB first.
+            for (Pet pet : player.getPets()) {
+                if (pet != null) {
+                    player.syncPetSkillsFromEquips(player.getPetIndex(pet), false);
+                }
+            }
+
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
+            // Enable native second-pendant UI (CWvsContext flag → CUIEquip+0x5E8).
+            // Without this, hit-test can work via ijl15 overlay but the equip icon never draws.
+            c.sendPacket(PacketCreator.setExtraPendantSlot(true));
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);
@@ -261,6 +272,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendKeymap();
             player.sendQuickmap();
             player.sendMacros();
+            org.gms.reincarnation.ReincarnationSupport.onLogin(player);
 
             // pot bindings being passed through other characters on the account detected thanks to Croosade dev team
             KeyBinding autohpPot = player.getKeymap().get(91);
@@ -398,7 +410,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (newcomer) {
                 for (Pet pet : player.getPets()) {
                     if (pet != null) {
-                        wserv.registerPetHunger(player, player.getPetIndex(pet));
+                        byte pIdx = player.getPetIndex(pet);
+                        // PetSkill already synced before getCharInfo; only register hunger here.
+                        wserv.registerPetHunger(player, pIdx);
                     }
                 }
 

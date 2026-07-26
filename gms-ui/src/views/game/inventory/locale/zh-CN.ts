@@ -38,5 +38,7 @@ export default {
   'inventoryList.button.save': '保存',
   'inventoryList.button.cancel': '取消',
   'inventoryList.button.delete': '删除',
+  'inventoryList.button.batchDelete': '批量删除',
   'inventoryList.confirm.delete': '你确定要删除这个道具吗？',
+  'inventoryList.confirm.batchDelete': '确定删除所选道具吗？此操作不可恢复。',
 };

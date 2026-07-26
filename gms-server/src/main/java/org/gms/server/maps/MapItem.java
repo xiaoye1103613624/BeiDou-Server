@@ -129,7 +129,8 @@ public class MapItem extends AbstractMapObject {
     }
 
     public final boolean hasExpiredOwnershipTime() {
-        return System.currentTimeMillis() - dropTime >= SECONDS.toMillis(15);
+        // dropTime uses Server.getCurrentTime(); keep the same clock here.
+        return org.gms.net.server.Server.getInstance().getCurrentTime() - dropTime >= SECONDS.toMillis(15);
     }
 
     public final boolean canBePickedBy(Character chr) {

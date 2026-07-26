@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-modal
     v-model:visible="visible"
     :ok-loading="loading"
@@ -14,7 +14,12 @@
         <a-form-item label="物品">
           <a-space>
             {{ formData.itemId }}
-            <img :src="getIconUrl('item', formData.itemId)" alt="" />
+            <img
+              :src="getIconUrl('item', formData.itemId)"
+              :data-item-id="formData.itemId"
+              alt=""
+              @error="onItemIconError"
+            />
           </a-space>
         </a-form-item>
         <a-form-item label="数量">
@@ -161,7 +166,7 @@
   import { cashShopFormState, offSale, onSale } from '@/api/cashShop';
   import useLoading from '@/hooks/loading';
   import { Message } from '@arco-design/web-vue';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
 
   const { setLoading, loading } = useLoading(false);
   const visible = ref<boolean>(false);

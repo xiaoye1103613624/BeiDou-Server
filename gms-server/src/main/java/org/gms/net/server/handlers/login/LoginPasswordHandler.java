@@ -32,12 +32,15 @@ import org.gms.util.BCrypt;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.HexTool;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Calendar;
 
 public final class LoginPasswordHandler implements PacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(LoginPasswordHandler.class);
 
     @Override
     public boolean validateState(Client c) {
@@ -55,6 +58,7 @@ public final class LoginPasswordHandler implements PacketHandler {
         String login = p.readString();
         String pwd = p.readString();
         c.setAccountName(login);
+        log.info("[LoginFlow] CheckPassword recv account={} ip={}", login, remoteHost);
 
         p.skip(6);   // localhost masked the initial part with zeroes...
         byte[] hwidNibbles = p.readBytes(4);
@@ -116,7 +120,9 @@ public final class LoginPasswordHandler implements PacketHandler {
         if (c.finishLogin() == 0) {
             c.checkChar(c.getAccID());
             login(c);
+            log.info("[LoginFlow] AuthSuccess sent account={} accId={}", login, c.getAccID());
         } else {
+            log.warn("[LoginFlow] finishLogin failed account={} → already logged in?", login);
             c.sendPacket(PacketCreator.getLoginFailed(7));
         }
     }

@@ -13,7 +13,7 @@ var ItemInformationProvider = Java.type("org.gms.server.ItemInformationProvider"
 
 var ITEM_IDS = [2460026, 2431144];
 /** 有属性单件最高绝对概率（%）；属性分更高则更低 */
-var STATED_TOP_PCT = 0.5;
+var STATED_TOP_PCT = 0.001;
 /** 内部权重精度（1 = 0.0001%） */
 var PROB_SCALE = 1000000;
 var PAGE_SIZE = 12;

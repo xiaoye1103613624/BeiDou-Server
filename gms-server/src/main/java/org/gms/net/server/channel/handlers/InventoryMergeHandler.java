@@ -89,7 +89,13 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
                         break;
                     }
 
+                    final short beforeQty = dstItem.getQuantity();
                     InventoryManipulator.move(c, inventoryType, src, dst);
+                    dstItem = inventory.getItem(dst);
+                    // Guard: if move could not increase dst stack (e.g. pet/cash swap), stop.
+                    if (dstItem == null || dstItem.getQuantity() <= beforeQty) {
+                        break;
+                    }
                 }
             }
 
@@ -164,7 +170,12 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
                         break;
                     }
 
+                    final short beforeQty = dstItem.getQuantity();
                     InventoryManipulator.move(c, inventoryType, src, dst);
+                    dstItem = inventory.getItem(dst);
+                    if (dstItem == null || dstItem.getQuantity() <= beforeQty) {
+                        break;
+                    }
                 }
             }
 

@@ -28,8 +28,11 @@ import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class CharlistRequestHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(CharlistRequestHandler.class);
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
@@ -38,6 +41,7 @@ public final class CharlistRequestHandler extends AbstractPacketHandler {
 
         World wserv = Server.getInstance().getWorld(world);
         if (wserv == null || wserv.isWorldCapacityFull()) {
+            log.warn("[LoginFlow] CharList rejected worldFull/missing world={} account={}", world, c.getAccountName());
             c.sendPacket(PacketCreator.getServerStatus(2));
             return;
         }
@@ -45,12 +49,20 @@ public final class CharlistRequestHandler extends AbstractPacketHandler {
         int channel = p.readByte() + 1;
         Channel ch = wserv.getChannel(channel);
         if (ch == null) {
+            log.warn("[LoginFlow] CharList rejected badChannel world={} channel={} account={}", world, channel, c.getAccountName());
             c.sendPacket(PacketCreator.getServerStatus(2));
             return;
         }
 
         c.setWorld(world);
         c.setChannel(channel);
-        c.sendCharList(world);
+        log.info("[LoginFlow] CharListRequest account={} world={} channel={}", c.getAccountName(), world, channel);
+        try {
+            c.sendCharList(world);
+            log.info("[LoginFlow] CharList sent account={} world={} channel={}", c.getAccountName(), world, channel);
+        } catch (Exception e) {
+            log.error("[LoginFlow] CharList FAILED account={} world={}", c.getAccountName(), world, e);
+            throw e;
+        }
     }
 }

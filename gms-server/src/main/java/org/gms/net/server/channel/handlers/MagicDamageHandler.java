@@ -76,8 +76,9 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             if (chr.skillIsCooling(attack.skill)) {
                 return;
             } else {
-                c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
-                chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
+                int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
+                c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
+                chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
             }
         }
         applyAttack(attack, chr, effect.getAttackCount()

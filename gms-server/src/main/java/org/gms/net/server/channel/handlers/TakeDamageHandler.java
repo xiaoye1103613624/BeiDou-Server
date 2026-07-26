@@ -221,6 +221,24 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         }
                     }
                 }
+                // Phase11：潜能 DAMreflect（prop 概率，反弹伤害%）
+                if (damage > 0 && !attacker.isBoss() && chr.getPotDamReflect() > 0) {
+                    int prop = chr.getPotDamReflectProp();
+                    if (prop <= 0) {
+                        prop = 100;
+                    }
+                    if (org.gms.util.Randomizer.nextInt(100) < prop) {
+                        int bouncedamage = damage * chr.getPotDamReflect() / 100;
+                        int reflectCap = (int) Math.min(Integer.MAX_VALUE, attacker.getMaxHp() / 5);
+                        if (bouncedamage > reflectCap) {
+                            bouncedamage = reflectCap;
+                        }
+                        if (bouncedamage > 0) {
+                            map.damageMonster(chr, attacker, bouncedamage);
+                            map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), true);
+                        }
+                    }
+                }
             }
         }
 

@@ -72,6 +72,7 @@ import org.gms.server.maps.MapleTVEffect;
 import org.gms.server.maps.PlayerShopItem;
 import org.gms.service.NoteService;
 import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 import org.gms.util.Pair;
 
 import java.awt.Rectangle;
@@ -236,7 +237,12 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
             }
             remove(c, position, itemId);
-        } else if (itemType == 506) {//操作道具的现金物品、取名、封印、孵化
+        } else if (itemType == 506) {//操作道具的现金物品、取名、封印、孵化、魔方
+            // Phase9：官方 Cash 魔方（5062000/01/02/2100）— 对齐 095 UseCashItem
+            if (org.gms.potential.PotentialHyperConfig.isCashCube(itemId)) {
+                handleCashCube(c, player, position, itemId, p);
+                return;
+            }
             Item eq = null;
             if (itemId == 5060000) { // Item tag.
                 int equipSlot = p.readShort();
@@ -635,21 +641,48 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.enableActions();
         } else if (itemType == 552) { //DS EGG THING    //宿命剪刀
             c.enableActions();
-        } else if (itemType == 557) {//金锤子
-            p.readInt(); // 读取一个整数，但未使用
-            int itemSlot = p.readInt(); // 读取装备所在的槽位
-            p.readInt(); // 读取一个整数，但未使用
-            final Equip equip = (Equip) player.getInventory(InventoryType.EQUIP).getItem((short) itemSlot); // 获取指定槽位的装备
-            if (equip.getVicious() >= 2 || player.getInventory(InventoryType.CASH).findById(ItemId.VICIOUS_HAMMER) == null) {
-                c.enableActions(); // 发送启用操作的封包，修复金锤子失败后客户端假死。
-                return; // 如果装备的金锤子使用次数大于等于2或玩家没有金锤子，则返回
+        } else if (itemType == 557) {//金锤子 / 白金锤
+            p.readInt();
+            int itemSlot = p.readInt();
+            p.readInt();
+            final Equip equip = (Equip) player.getInventory(InventoryType.EQUIP).getItem((short) itemSlot);
+            if (equip == null) {
+                c.enableActions();
+                return;
             }
-            equip.setVicious(equip.getVicious() + 1); // 增加装备的金锤子已使用次数
-            equip.setUpgradeSlots(equip.getUpgradeSlots() + 1); // 增加装备的升级插槽数量
-            remove(c, position, itemId); // 移除指定位置的物品
-            c.enableActions(); // 发送启用操作的封包
-            c.sendPacket(PacketCreator.sendHammerData(equip.getVicious())); // 发送锤子数据封包
-            player.forceUpdateItem(equip); // 强制更新装备信息
+            if (itemId == ItemId.PLATINUM_HAMMER) {
+                if (equip.getPlatinum() >= 5
+                        || player.getInventory(InventoryType.CASH).findById(ItemId.PLATINUM_HAMMER) == null) {
+                    player.dropMessage(5, "白金锤最多使用5次，或背包无白金锤。");
+                    c.enableActions();
+                    return;
+                }
+                int rate = Math.max(20, 100 - equip.getPlatinum() * 20);
+                if (Randomizer.nextInt(100) >= rate) {
+                    remove(c, position, itemId);
+                    player.dropMessage(5, "【白金锤】强化失败（成功率" + rate + "%），未留下可修复次数。");
+                    c.enableActions();
+                    return;
+                }
+                equip.setPlatinum((byte) (equip.getPlatinum() + 1));
+                equip.setUpgradeSlots((byte) (equip.getUpgradeSlots() + 1));
+                remove(c, position, itemId);
+                c.enableActions();
+                c.sendPacket(PacketCreator.sendHammerData(equip.getPlatinum()));
+                player.forceUpdateItem(equip);
+                player.dropMessage(5, "【白金锤】成功 → 永久升级次数+" + equip.getPlatinum() + "/5");
+                return;
+            }
+            if (equip.getVicious() >= 2 || player.getInventory(InventoryType.CASH).findById(ItemId.VICIOUS_HAMMER) == null) {
+                c.enableActions();
+                return;
+            }
+            equip.setVicious(equip.getVicious() + 1);
+            equip.setUpgradeSlots(equip.getUpgradeSlots() + 1);
+            remove(c, position, itemId);
+            c.enableActions();
+            c.sendPacket(PacketCreator.sendHammerData(equip.getVicious()));
+            player.forceUpdateItem(equip);
         } else if (itemType == 591) { // 伤害皮肤选择器（5910000，不消耗）
             log.info("chr {} opened damage skin picker via item {} slot {}",
                     player.getId(), itemId, position);
@@ -779,6 +812,140 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.enableActions();
         }
         c.enableActions();
+    }
+
+    /**
+     * 官方 Cash 魔方：封包在 itemId 后读装备栏槽位（int），对齐 095 InventoryHandler.UseCashItem。
+     * <p>
+     * v083 客户端无奇迹魔方「点选装备」UI，双击时常不带有效槽位；因此：
+     * <ul>
+     *   <li>优先用封包槽位（装备栏 &gt;0 / 已穿戴 &lt;0）</li>
+     *   <li>无效时自动选【背包·装备栏】第一件已有潜能的装备</li>
+     *   <li>仍无目标则提示：USE 别名拖放 / {@code !potential cube &lt;槽&gt;}</li>
+     * </ul>
+     */
+    private static void handleCashCube(Client c, Character player, short cashPos, int itemId, InPacket p) {
+        int minLevel = org.gms.potential.PotentialHyperConfig.isSuperCube(itemId) ? 100 : 10;
+        if (player.getLevel() < minLevel) {
+            player.dropMessage(1, "等级不足" + minLevel + "，无法使用该魔方。");
+            c.enableActions();
+            return;
+        }
+        Equip equip = resolveCashCubeTarget(player, p);
+        if (equip == null) {
+            player.dropMessage(5, "未找到可用装备。请：①从【现金栏】拖魔方到【背包装备栏】目标装备上；"
+                    + "②或把已鉴定潜能的装备放在装备栏后双击魔方（自动选第一件）；"
+                    + "③或 !potential cube <装备栏槽位>；"
+                    + "④或 !item 2049910/2049916 后从【消耗栏】拖到装备上。"
+                    + "魔方成功后需放大镜再次鉴定。");
+            c.enableActions();
+            return;
+        }
+        // 095：使用前需 USE 栏有空位放碎片
+        if (player.getInventory(InventoryType.USE).isFull()) {
+            player.dropMessage(5, "消耗栏已满，请留出空位存放方块碎片。");
+            c.enableActions();
+            return;
+        }
+        org.gms.potential.PotentialHyperService.Result result;
+        boolean force = player.isGM();
+        if (org.gms.potential.PotentialHyperConfig.isMainCube(itemId)) {
+            result = org.gms.potential.PotentialHyperService.applyMainCube(player, equip, itemId, force);
+        } else if (org.gms.potential.PotentialHyperConfig.isPremiumCube(itemId)) {
+            result = org.gms.potential.PotentialHyperService.applyPremiumCube(player, equip, itemId, force);
+        } else if (org.gms.potential.PotentialHyperConfig.isSuperCube(itemId)) {
+            result = org.gms.potential.PotentialHyperService.applySuperCube(player, equip, itemId, force);
+        } else if (org.gms.potential.PotentialHyperConfig.isUltimateCube(itemId)) {
+            result = org.gms.potential.PotentialHyperService.applyUltimateCube(player, equip, itemId, force);
+        } else if (org.gms.potential.PotentialHyperConfig.isWeirdCube(itemId)) {
+            result = org.gms.potential.PotentialHyperService.applyWeirdCube(player, equip, itemId, force);
+        } else if (org.gms.potential.PotentialHyperConfig.isBonusCube(itemId)) {
+            result = org.gms.potential.PotentialHyperService.applyBonusCube(player, equip, itemId, force);
+        } else {
+            c.enableActions();
+            return;
+        }
+        if (result == org.gms.potential.PotentialHyperService.Result.INVALID
+                || result == org.gms.potential.PotentialHyperService.Result.FAIL) {
+            c.enableActions();
+            return;
+        }
+        remove(c, cashPos, itemId);
+        List<ModifyInventory> mods = new ArrayList<>();
+        mods.add(new ModifyInventory(3, equip));
+        mods.add(new ModifyInventory(0, equip));
+        c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        // 碎片
+        int frag = org.gms.potential.PotentialHyperConfig.isSuperCube(itemId)
+                || org.gms.potential.PotentialHyperConfig.isUltimateCube(itemId)
+                ? org.gms.potential.PotentialHyperConfig.ITEM_SUPER_CUBE_FRAGMENT
+                : org.gms.potential.PotentialHyperConfig.ITEM_CUBE_FRAGMENT;
+        InventoryManipulator.addById(c, frag, (short) 1);
+        String tag;
+        if (org.gms.potential.PotentialHyperConfig.isUltimateCube(itemId)) {
+            tag = "终极神奇魔方";
+        } else if (org.gms.potential.PotentialHyperConfig.isWeirdCube(itemId)) {
+            tag = "怪异魔方";
+        } else if (org.gms.potential.PotentialHyperConfig.isBonusCube(itemId)) {
+            tag = "大师附加神奇魔方";
+        } else if (org.gms.potential.PotentialHyperConfig.isSuperCube(itemId)) {
+            tag = "超级神奇魔方";
+        } else if (org.gms.potential.PotentialHyperConfig.isPremiumCube(itemId)) {
+            tag = "高级神奇魔方";
+        } else {
+            tag = "神奇魔方";
+        }
+        String where = equip.getPosition() < 0 ? "已穿戴" : ("装备栏第" + equip.getPosition() + "格");
+        // 仅本人聊天可见；不再发 0x17A 弹窗（确定键在 083 不可靠）
+        org.gms.potential.PotentialHyperService.notifyCubeResult(player, tag,
+                (org.gms.potential.PotentialHyperConfig.CUBE_RESET_TO_HIDDEN
+                        ? "重随成功（" + where + "，未鉴定，请用放大镜）。 "
+                        : "重随成功（" + where + "）。 ")
+                        + org.gms.potential.PotentialHyperService.describe(equip));
+        c.enableActions();
+    }
+
+    /**
+     * 解析 Cash 魔方目标装备：封包槽位 → 装备栏/已穿戴；无效则自动选装备栏第一件有潜能的。
+     */
+    private static Equip resolveCashCubeTarget(Character player, InPacket p) {
+        int eqSlot = 0;
+        if (p.available() >= 4) {
+            eqSlot = p.readInt();
+        } else if (p.available() >= 2) {
+            eqSlot = p.readShort();
+        }
+        if (eqSlot < 0) {
+            Item worn = player.getInventory(InventoryType.EQUIPPED).getItem((short) eqSlot);
+            if (worn instanceof Equip equip) {
+                return equip;
+            }
+        } else if (eqSlot > 0) {
+            Item bag = player.getInventory(InventoryType.EQUIP).getItem((short) eqSlot);
+            if (bag instanceof Equip equip) {
+                return equip;
+            }
+        }
+        // v083 双击常无槽位：自动选【背包装备栏】第一件已有潜能的装备
+        Equip auto = null;
+        short bestPos = Short.MAX_VALUE;
+        for (Item it : player.getInventory(InventoryType.EQUIP).list()) {
+            if (!(it instanceof Equip e)) {
+                continue;
+            }
+            if (e.getPotentialGrade() <= 0 && e.getPotential1() <= 0) {
+                continue;
+            }
+            if (e.getPosition() > 0 && e.getPosition() < bestPos) {
+                bestPos = e.getPosition();
+                auto = e;
+            }
+        }
+        if (auto != null) {
+            player.dropMessage(5, "083无选装UI：已自动选择装备栏第" + auto.getPosition()
+                    + "格。指定其它装备请拖魔方到该装备上，或 !potential cube <槽>。");
+        }
+        return auto;
     }
 
     private static void remove(Client c, short position, int itemid) {

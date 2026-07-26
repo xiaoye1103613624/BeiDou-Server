@@ -33,13 +33,19 @@ function action(mode, type, selection) {
             "#L1#天赋学习#l\r\n" +
             "#L2#天赋兑换#l\r\n" +
             "#L3#天赋购买#l\r\n" +
-            "#L4#查看我的天赋#l"
+            "#L4#查看我的天赋#l\r\n" +
+            "#L5##b逆袭银币兑换#k（100万经验=1个）#l"
         );
     } else if (status === 1) {
         modeSel = selection;
         if (modeSel === 4) {
             cm.sendOk(buildOwnedText());
             cm.dispose();
+            return;
+        }
+        if (modeSel === 5) {
+            cm.dispose();
+            cm.openNpc(9031014, "xy/匠人街/逆袭银币兑换");
             return;
         }
         if (modeSel < 1 || modeSel > 3) {

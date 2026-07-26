@@ -51,26 +51,41 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
 
+        // 自定义拍卖菜单：挑战副本 Event / 限制地图内也允许打开
         if (!GameConfig.getServerBoolean("use_mts")) {
+            if (!chr.isAlive()) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+            if (chr.getLevel() < 10) {
+                c.sendPacket(PacketCreator.blockedMessage2(5));
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
             openCenterScript(c);
             return;
         }
 
         if (chr.getEventInstance() != null) {
-            c.sendPacket(PacketCreator.serverNotice(5, "Entering Cash Shop or MTS are disabled when registered on an event."));
+            // 匠人街挑战副本允许打开拍卖脚本
+            if (isChallengeDungeonEvent(chr)) {
+                openCenterScript(c);
+                return;
+            }
+            c.sendPacket(PacketCreator.serverNotice(5, "当前正在参加活动/副本，无法进入拍卖行。"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
         if (MiniDungeonInfo.isDungeonMap(chr.getMapId())) {
-            c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
+            c.sendPacket(PacketCreator.serverNotice(5, "在迷你地牢内时，无法进入拍卖行。"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
         if (FieldLimit.CANNOTMIGRATE.check(chr.getMap().getFieldLimit())) {
-            chr.dropMessage(1, "You can't do it here in this map.");
-            c.sendPacket(PacketCreator.enableActions());
+            // 高版本 Boss 图常带 CANNOTMIGRATE；挑战场景改为打开自定义拍卖
+            openCenterScript(c);
             return;
         }
 
@@ -280,6 +295,15 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
      * @param c 客户端
      */
     private void openCenterScript(Client c) {
-        NPCScriptManager.getInstance().start(c, NpcId.BEI_DOU_NPC_BASE, null);
+        // 直接打开拍卖菜单，避开 9900001 跳板
+        NPCScriptManager.getInstance().start(c, NpcId.BEI_DOU_NPC_BASE, "xy_拍卖_v001", c.getPlayer());
+    }
+
+    private static boolean isChallengeDungeonEvent(Character chr) {
+        if (chr.getEventInstance() == null) {
+            return false;
+        }
+        String name = chr.getEventInstance().getName();
+        return name != null && name.startsWith("ChallengeDungeon");
     }
 }

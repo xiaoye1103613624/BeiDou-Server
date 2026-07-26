@@ -240,8 +240,14 @@ public class MapId {
     private static final int PIER_ON_THE_BEACH = 251000100;
     private static final int PEACEFUL_SHIP = 541010110;
 
+    /** 精灵钓鱼场（自由市场余夫传送） */
+    public static final int SPIRIT_FISHING_GROUND = 749050502;
+
     public static boolean isFishingArea(int mapId) {
-        return mapId == ON_THE_WAY_TO_THE_HARBOR || mapId == PIER_ON_THE_BEACH || mapId == PEACEFUL_SHIP;
+        return mapId == ON_THE_WAY_TO_THE_HARBOR
+                || mapId == PIER_ON_THE_BEACH
+                || mapId == PEACEFUL_SHIP
+                || mapId == SPIRIT_FISHING_GROUND;
     }
 
     // Wedding

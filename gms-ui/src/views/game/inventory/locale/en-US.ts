@@ -38,5 +38,8 @@ export default {
   'inventoryList.button.save': 'Save',
   'inventoryList.button.cancel': 'Cancel',
   'inventoryList.button.delete': 'Delete',
+  'inventoryList.button.batchDelete': 'Batch Delete',
   'inventoryList.confirm.delete': 'Are you sure you want to delete this item?',
+  'inventoryList.confirm.batchDelete':
+    'Delete selected items? This cannot be undone.',
 };

@@ -13,6 +13,8 @@ import autoban from '@/views/game/autoban/locale/en-US';
 import setItem from '@/views/game/setItem/locale/en-US';
 import enhanceRule from '@/views/game/enhanceRule/locale/en-US';
 import carryItemStat from '@/views/game/carryItemStat/locale/en-US';
+import alchemyRecipe from '@/views/game/alchemyRecipe/locale/en-US';
+import forgeRecipe from '@/views/game/forgeRecipe/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -33,6 +35,8 @@ export default {
   'menu.game.setItem': 'Set Item',
   'menu.game.enhanceRule': 'Enhance Rule',
   'menu.game.carryItemStat': 'Carry Item Stat',
+  'menu.game.alchemyRecipe': 'Alchemy Recipe',
+  'menu.game.forgeRecipe': 'Forge Recipe',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -68,4 +72,6 @@ export default {
   ...setItem,
   ...enhanceRule,
   ...carryItemStat,
+  ...alchemyRecipe,
+  ...forgeRecipe,
 };

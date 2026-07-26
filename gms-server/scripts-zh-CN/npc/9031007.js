@@ -1,4 +1,4 @@
-// 匠人街 · 警示 · 材料商人
+// 匠人街 · 蒙斯 · 材料商人
 var status = -1;
 
 function start() {

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="container">
     <Breadcrumb />
     <a-card
@@ -124,7 +124,12 @@
                   {{ record.itemName }}
                 </a-button>
                 <template #content>
-                  <img :src="getIconUrl('item', record.itemId)" alt="" />
+                  <img
+                    :src="getIconUrl('item', record.itemId)"
+                    :data-item-id="record.itemId"
+                    alt=""
+                    @error="onItemIconError"
+                  />
                 </template>
               </a-popover>
             </template>
@@ -244,7 +249,7 @@
   } from '@/api/drop';
   import { DropState } from '@/store/modules/drop/type';
   import useLoading from '@/hooks/loading';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import { Message } from '@arco-design/web-vue';
 
   const { setLoading, loading } = useLoading(false);

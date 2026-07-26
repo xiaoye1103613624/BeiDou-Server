@@ -13,6 +13,8 @@ import autoban from '@/views/game/autoban/locale/zh-CN';
 import setItem from '@/views/game/setItem/locale/zh-CN';
 import enhanceRule from '@/views/game/enhanceRule/locale/zh-CN';
 import carryItemStat from '@/views/game/carryItemStat/locale/zh-CN';
+import alchemyRecipe from '@/views/game/alchemyRecipe/locale/zh-CN';
+import forgeRecipe from '@/views/game/forgeRecipe/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -34,6 +36,8 @@ export default {
   'menu.game.setItem': '套装管理',
   'menu.game.enhanceRule': '强化规则',
   'menu.game.carryItemStat': '携带物属性',
+  'menu.game.alchemyRecipe': '炼金配方管理',
+  'menu.game.forgeRecipe': '打造配方管理',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -71,4 +75,6 @@ export default {
   ...setItem,
   ...enhanceRule,
   ...carryItemStat,
+  ...alchemyRecipe,
+  ...forgeRecipe,
 };

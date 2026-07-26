@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-modal v-model:visible="visible" :width="1000" :ok-loading="loading">
     <template #title> {{ title }} </template>
     <a-row>
@@ -55,7 +55,12 @@
         </a-table-column>
         <a-table-column title="物品图标" :width="90" align="center">
           <template #cell="{ record }">
-            <img :src="getIconUrl('item', record.itemId)" alt="" />
+            <img
+              :src="getIconUrl('item', record.itemId)"
+              :data-item-id="record.itemId"
+              alt=""
+              @error="onItemIconError"
+            />
           </template>
         </a-table-column>
         <a-table-column title="数量" :width="80" align="center">
@@ -115,7 +120,7 @@
 
 <script lang="ts" setup>
   import useLoading from '@/hooks/loading';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import { ref } from 'vue';
   import {
     GachaponPoolState,

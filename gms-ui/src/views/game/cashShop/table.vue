@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-card class="general-card">
     <a-space>
       <a-space>
@@ -60,7 +60,9 @@
           <template #cell="{ record }">
             <img
               :src="getIconUrl('item', record.itemId)"
+              :data-item-id="record.itemId"
               :alt="record.itemId"
+              @error="onItemIconError"
             />
           </template>
         </a-table-column>
@@ -211,7 +213,7 @@
   } from '@/api/cashShop';
   import CashShopForm from '@/views/game/cashShop/form.vue';
   import { cashShopState } from '@/store/modules/cashShop/type';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import { Message, TableRowSelection } from '@arco-design/web-vue';
 
   const { loading, setLoading } = useLoading(false);

@@ -10975,6 +10975,18 @@
         <string name="desc" value="利用炼金术制作的药丸。\n30分钟内力量增加9。"/>
         <string name="name" value="强化3级力量药丸"/>
     </imgdir>
+    <imgdir name="2004900">
+        <string name="desc" value="双击使用后增加1次普通挑战副本剩余次数。\n次数可叠加，跨天自动重置为3次。"/>
+        <string name="name" value="普通挑战恢复剂"/>
+    </imgdir>
+    <imgdir name="2004901">
+        <string name="desc" value="双击使用后增加1次进阶挑战副本剩余次数。\n次数可叠加，跨天自动重置为3次。"/>
+        <string name="name" value="进阶挑战恢复剂"/>
+    </imgdir>
+    <imgdir name="2004902">
+        <string name="desc" value="双击使用后增加1次团队挑战副本剩余次数。\n次数可叠加，跨天自动重置为3次。"/>
+        <string name="name" value="团队挑战恢复剂"/>
+    </imgdir>
     <imgdir name="2004133">
         <string name="desc" value="利用炼金术制作的药丸。\n30分钟内力量增加12。"/>
         <string name="name" value="强化4级力量药丸"/>
@@ -26652,6 +26664,11 @@
         <string name="desc" value="为C级装备物品附加潜能，但不减少可升级次数。\n#c只能用于C级物品#\n成功率：100%"/>
         <string name="name" value="特殊潜能附加卷轴"/>
     </imgdir>
+        <imgdir name="2049902">
+            <string name="name" value="附加潜能附加卷轴"/>
+            <string name="desc" value="给已有主潜能的装备附加附加潜能（三条）。成功率约70%。"/>
+        </imgdir>
+
     <imgdir name="2049404">
         <string name="autodesc" value="\r\n#c#"/>
         <string name="desc" value="不减少强化次数，给予7周年纪念版新黄金枫叶武器潜在能力。只能用于7周年新黄金枫叶武器上。"/>
@@ -26673,14 +26690,28 @@
         <string name="name" value="高级潜能附加卷轴"/>
     </imgdir>
     <imgdir name="2049408">
-        <string name="autodesc" value="\r\n#c为普通等级的装备道具附加潜能\r\n#"/>
-        <string name="desc" value="为C级装备物品附加潜能，但不减少可升级次数。\n#c只能用于C级物品#\n成功率：70%，失败时物品损坏"/>
-        <string name="name" value="潜能附加卷轴"/>
+        <string name="name" value="A级潜能卷轴100%"/>
+        <string name="desc" value="用于B级以下的物品，可以在该物品上附加A级潜能。附加潜能后，可以通过放大镜查看封印的潜能。失败损毁装备几率0%。"/>
+    </imgdir>
+    <imgdir name="2049409">
+        <string name="name" value="A级潜能卷轴15%"/>
+        <string name="desc" value="用于B级以下的物品，可以在该物品上附加A级潜能。附加潜能后，可以通过放大镜查看封印的潜能。失败损毁装备几率0%。"/>
+    </imgdir>
+    <imgdir name="2049410">
+        <string name="name" value="A级潜能卷轴30%"/>
+        <string name="desc" value="用于B级以下的物品，可以在该物品上附加A级潜能。附加潜能后，可以通过放大镜查看封印的潜能。失败损毁装备几率0%。"/>
+    </imgdir>
+    <imgdir name="2049411">
+        <string name="name" value="A级潜能卷轴50%"/>
+        <string name="desc" value="用于B级以下的物品，可以在该物品上附加A级潜能。附加潜能后，可以通过放大镜查看封印的潜能。失败损毁装备几率0%。"/>
     </imgdir>
     <imgdir name="2049412">
-        <string name="autodesc" value="\r\n#c为普通等级的装备道具附加潜能\r\n#"/>
-        <string name="desc" value="为普通等级的装备附加潜能，但不减少可升级次数。\n#c只能用于普通等级的道具#\n成功率90%，失败时道具会被破坏"/>
-        <string name="name" value="高级潜能附加卷轴"/>
+        <string name="name" value="S级潜能卷轴80%"/>
+        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。失败后100%损毁。"/>
+    </imgdir>
+    <imgdir name="2049413">
+        <string name="name" value="S级潜能卷轴50%"/>
+        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。失败后100%损毁。"/>
     </imgdir>
     <imgdir name="2049414">
         <string name="autodesc" value="\r\n#c为普通等级的装备道具附加潜能\r\n#"/>
@@ -27081,14 +27112,20 @@
         <string name="name" value="S级潜能卷轴 80%"/>
     </imgdir>
     <imgdir name="2049751">
-        <string name="autodesc" value="\r\n#c成功率60%\r\n为潜在等级低的道具升级潜在等级\r\n#"/>
-        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。"/>
-        <string name="name" value="S级潜能卷轴 60%"/>
+        <string name="name" value="S级潜能卷轴50%"/>
+        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。失败后100%损毁。"/>
     </imgdir>
     <imgdir name="2049752">
-        <string name="autodesc" value="\r\n#c成功率30%\r\n为潜在等级低的道具升级潜在等级\r\n#"/>
-        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。"/>
-        <string name="name" value="S级潜能卷轴 30%"/>
+        <string name="name" value="S级潜能卷轴30%"/>
+        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。失败后100%损毁。"/>
+    </imgdir>
+    <imgdir name="2049753">
+        <string name="name" value="S级潜能卷轴15%"/>
+        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。失败后60%损毁。"/>
+    </imgdir>
+    <imgdir name="2049754">
+        <string name="name" value="S级潜能卷轴10%"/>
+        <string name="desc" value="对B级以下的道具使用后，附加S级潜能。潜能附加后，可通过放大镜进行查看。失败后60%损毁。"/>
     </imgdir>
     <imgdir name="2049756">
         <string name="desc" value="在B级以下的道具上使用，可以在道具上附加S级潜能。附加潜能后，可以通过放大镜查看封印的潜能。"/>
@@ -27165,6 +27202,34 @@
     <imgdir name="2049901">
         <string name="autodesc" value="\r\n#c成功率5%\r\n#"/>
         <string name="name" value="神秘的砧子"/>
+    </imgdir>
+    <imgdir name="2049910">
+        <string name="name" value="神奇魔方"/>
+        <string name="desc" value="对已有主潜能的装备使用，按当前品阶重新随机主潜能。不可用于独特。成功率100%。等同Cash神奇魔方（5062000）。"/>
+    </imgdir>
+    <imgdir name="2049911">
+        <string name="name" value="附加潜能魔方"/>
+        <string name="desc" value="对已有附加潜能的装备使用，重新随机三条附加潜能。成功率100%。"/>
+    </imgdir>
+    <imgdir name="2049912">
+        <string name="name" value="潜能品阶提升卷"/>
+        <string name="desc" value="提升装备主潜能品阶一级（最高传说），并重新随机主潜能。"/>
+    </imgdir>
+    <imgdir name="2049913">
+        <string name="name" value="星岩镶嵌卷"/>
+        <string name="desc" value="为装备镶嵌一枚星岩（写入星岩槽），提供额外属性加成。"/>
+    </imgdir>
+    <imgdir name="2049914">
+        <string name="name" value="灵魂宝珠开槽卷"/>
+        <string name="desc" value="为#c武器#开启灵魂槽（成功率100%）。开槽后可镶嵌早期宝珠2591000~2591009。已开槽请勿重复使用；清除请用2049915。"/>
+    </imgdir>
+    <imgdir name="2049915">
+        <string name="name" value="灵魂宝珠清除卷"/>
+        <string name="desc" value="清除武器上的灵魂开槽与宝珠。"/>
+    </imgdir>
+    <imgdir name="2049916">
+        <string name="name" value="超级神奇魔方"/>
+        <string name="desc" value="对已有潜能的装备使用，按当前品阶重新赋予主潜能。可用于独特与传说；约8%概率提升一阶（最高传说）。成功率100%。等同Cash超级神奇魔方（5062002）。"/>
     </imgdir>
     <imgdir name="2060008">
         <string name="desc" value="装着质量很好的箭矢的箭筒。必须和弓一起使用。\n攻击力+ 3"/>
@@ -39540,8 +39605,8 @@
         <string name="name" value="飘飘气球骑宠2小时使用券"/>
     </imgdir>
     <imgdir name="2431952">
-        <string name="desc" value="为了更好地进化而特别制作的成长秘药。只需喝一口就能成长1级。\n#c但是，超过180级的角色只会增加倾向，不会增加等级。#"/>
-        <string name="name" value="进化暴风成长秘药"/>
+        <string name="desc" value="双击使用回复100体力值(炼金炼药等用的)。"/>
+        <string name="name" value="小型体力回复药剂(回复体力值)"/>
     </imgdir>
     <imgdir name="2431953">
         <string name="desc" value="据说使用之后神之子可以获得特殊的力量。\n#c使用时会增加一定数值的武器点数。#"/>
@@ -40827,24 +40892,24 @@
         <string name="name" value="刻印的最高级朦胧石"/>
     </imgdir>
     <imgdir name="2432443">
-        <string name="desc" value="最低级朦胧石。#双击#装备后，可以使骗过起源之塔结界的时间增加很少一点。"/>
-        <string name="name" value="最低级朦胧石"/>
+        <string name="desc" value="用于进阶装备。"/>
+        <string name="name" value="普通精铁石（用于进阶装备）"/>
     </imgdir>
     <imgdir name="2432444">
-        <string name="desc" value="低级朦胧石。#双击#装备后，可以使骗过起源之塔结界的时间略微增加一点。"/>
-        <string name="name" value="低级朦胧石"/>
+        <string name="desc" value="用于进阶装备。"/>
+        <string name="name" value="中级精铁石（用于进阶装备）"/>
     </imgdir>
     <imgdir name="2432445">
-        <string name="desc" value="中级朦胧石。#双击#装备后，可以使骗过起源之塔结界的时间增加一点。"/>
-        <string name="name" value="中级朦胧石"/>
+        <string name="desc" value="用于进阶装备。"/>
+        <string name="name" value="高级精铁石（用于进阶装备）"/>
     </imgdir>
     <imgdir name="2432446">
-        <string name="desc" value="高级朦胧石。#双击#装备后，可以使骗过起源之塔结界的时间增加很多。"/>
-        <string name="name" value="高级朦胧石"/>
+        <string name="desc" value="用于进阶装备。"/>
+        <string name="name" value="究极精铁石（用于进阶装备）"/>
     </imgdir>
     <imgdir name="2432447">
-        <string name="desc" value="最高级朦胧石。#双击#装备后，可以使骗过起源之塔结界的时间增加非常多。"/>
-        <string name="name" value="最高级朦胧石"/>
+        <string name="desc" value="用于进阶装备。"/>
+        <string name="name" value="神级精铁石（用于进阶装备）"/>
     </imgdir>
     <imgdir name="2432448">
         <string name="desc" value="可以暂时骗过23层的结界的卡片。"/>
@@ -61759,20 +61824,20 @@
         <string name="name" value="红包增益 - 经验2倍"/>
     </imgdir>
     <imgdir name="2460000">
-        <string name="name" value="潜能魔方[普通]"/>
-        <string name="desc" value="#c[双击使用]\n将鉴定过的装备潜能词条重新进行洗练\n范围:山铜级 - 翡翠级\n请把装备放在[装备栏第一格]#\n"/>
+        <string name="name" value="鉴定放大镜(初级)"/>
+        <string name="desc" value="可以鉴定物品中封印的潜能的神秘放大镜。\n#c可用于需求等级30以下的装备。#\n把放大镜拖到未鉴定潜能的装备上使用。"/>
     </imgdir>
     <imgdir name="2460001">
-        <string name="name" value="潜能魔方[高级]"/>
-        <string name="desc" value="#c[双击使用]\n将鉴定过的装备潜能词条重新进行洗练\n范围:白金级 - 神兵级\n请把装备放在[装备栏第一格]#\n"/>
+        <string name="name" value="鉴定放大镜(中级)"/>
+        <string name="desc" value="可以鉴定物品中封印的潜能的神秘放大镜。\n#c可用于需求等级70以下的装备。#\n把放大镜拖到未鉴定潜能的装备上使用。"/>
     </imgdir>
     <imgdir name="2460002">
-        <string name="name" value="潜能魔方[超级]"/>
-        <string name="desc" value="#c[双击使用]\n将鉴定过的装备潜能词条重新进行洗练\n范围:白金级 - 神兵级\n还可以决定是否适用当前重置的潜能\n请把装备放在[装备栏第一格]#\n"/>
+        <string name="name" value="鉴定放大镜(高级)"/>
+        <string name="desc" value="可以鉴定物品中封印的潜能的神秘放大镜。\n#c可用于需求等级120以下的装备。#\n把放大镜拖到未鉴定潜能的装备上使用。"/>
     </imgdir>
     <imgdir name="2460003">
-        <string name="desc" value="可以鉴定物品中封印的潜能的神秘放大镜。\n#c可以鉴定所有级别物品。#\n双击后可在包裹或身着装备上移动，呈放大镜图标时请尝试鉴定。"/>
         <string name="name" value="鉴定放大镜(特级)"/>
+        <string name="desc" value="可以鉴定物品中封印的潜能的神秘放大镜。\n#c可以鉴定所有级别物品。#\n把放大镜拖到未鉴定潜能的装备上使用。"/>
     </imgdir>
     <imgdir name="2460004">
         <string name="desc" value="在拍卖强化中心使用\n#c可以鉴定所有普通装备，而不受等级影响。#"/>
@@ -87443,7 +87508,7 @@
     </imgdir>
     <imgdir name="2430023">
         <string name="name" value="轮回石碑"/>
-        <string name="desc" value="使用后将在当前地图召唤&apos;轮回&apos;，召唤期间该地图怪物刷新数量与速度大幅提升。同一地图同一时刻只能存在一个轮回，部分特殊地图无法使用。"/>
+        <string name="desc" value="【消耗品】使用后将在当前地图召唤&apos;轮回&apos;，召唤期间该地图怪物刷新数量与速度大幅提升。同一地图同一时刻只能存在一个轮回，部分特殊地图无法使用。装备版请用1132300轮回碑石。"/>
     </imgdir>
     <imgdir name="2432076">
         <string name="name" value="xy一键售卖"/>
@@ -87471,11 +87536,11 @@
     </imgdir>
     <imgdir name="2439101">
         <string name="name" value="时装强化卷"/>
-        <string name="desc" value="双击使用。随机提升时装四维、攻击力、魔力0~4。\r\n强化装备栏第一格现金时装；最大次数=自带次数+金锤子+50；成功率15%。\r\n可选祝福卷轴2340000保护：开启后失败不扣次数（消耗祝福卷轴）；未开启则失败算1次。无祝福卷轴时会提示。"/>
+        <string name="desc" value="可以用于装备强化，提升装备属性。"/>
     </imgdir>
     <imgdir name="2439102">
         <string name="name" value="装备强化卷"/>
-        <string name="desc" value="双击使用。随机提升装备四维、攻击力、魔力0~4。\r\n强化装备栏第一格普通装备；最大次数=自带次数+金锤子+50；成功率15%。\r\n可选祝福卷轴2340000保护：开启后失败不扣次数（消耗祝福卷轴）；未开启则失败算1次。无祝福卷轴时会提示。"/>
+        <string name="desc" value="可以用于装备强化，提升装备属性。"/>
     </imgdir>
     <imgdir name="2439103">
         <string name="name" value="全能强化卷"/>
@@ -88283,5 +88348,25 @@
     </imgdir>
     <imgdir name="2388164">
         <string name="name" value="Magnus Card"/>
+    
+<imgdir name="2013012"></imgdir>
+
+<imgdir name="2435822"></imgdir>
+
+<imgdir name="2435823"></imgdir>
+
+<imgdir name="2435826"></imgdir>
+</imgdir>
+    <imgdir name="2049917">
+        <string name="name" value="终极神奇魔方"/>
+        <string name="desc" value="消耗栏别名。升阶率高于超级神奇魔方，最高传说。"/>
+    </imgdir>
+    <imgdir name="2049919">
+        <string name="name" value="怪异魔方"/>
+        <string name="desc" value="消耗栏别名。仅稀有/史诗可用。"/>
+    </imgdir>
+    <imgdir name="2043026">
+        <string name="name" value="单手剑攻击力卷轴60%"/>
+        <string name="desc" value="为单手剑增加攻击力。\n成功率：60%\n物理攻击力 +9"/>
     </imgdir>
 </imgdir>

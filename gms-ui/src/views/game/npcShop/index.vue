@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="container" :loading="true">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.game.npcShop')">
@@ -126,7 +126,11 @@
           />
           <a-table-column title="物品图片" align="center" :width="100">
             <template #cell="{ record }">
-              <img :src="getIconUrl('item', record.itemId)" />
+              <img
+                :src="getIconUrl('item', record.itemId)"
+                :data-item-id="record.itemId"
+                @error="onItemIconError"
+              />
             </template>
           </a-table-column>
           <a-table-column title="物品ID" :width="100" align="center">
@@ -242,7 +246,7 @@
   } from '@/api/npcShop';
   import { NpcShopItemState, NpcShopState } from '@/store/modules/npcShop/type';
   import { Message } from '@arco-design/web-vue';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
 
   const { loading, setLoading } = useLoading(false);
 

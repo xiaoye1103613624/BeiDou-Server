@@ -1,4 +1,4 @@
-// 匠人街 · 矿石工作台
+// 匠人街 · 分解机器
 var status = -1;
 
 function start() {
@@ -15,6 +15,6 @@ function action(mode, type, selection) {
 
     if (status === 0) {
         cm.dispose();
-        cm.openNpc(9031002);
+        cm.openNpc(9031011, "xy/匠人街/分解机器");
     }
 }

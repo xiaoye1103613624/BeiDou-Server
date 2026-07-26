@@ -301,6 +301,26 @@
       <int name="npc" value="9010010"/>
     </imgdir>
   </imgdir>
+  <imgdir name="02430023">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="32">
+        <vector name="origin" x="-1" y="32"/>
+        <string name="_outlink" value="Item/Consume/0243.img/02430016/info/icon"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="31">
+        <vector name="origin" x="-1" y="32"/>
+        <string name="_outlink" value="Item/Consume/0243.img/02430016/info/iconRaw"/>
+      </canvas>
+      <int name="price" value="0"/>
+      <int name="slotMax" value="100"/>
+      <int name="tradeBlock" value="1"/>
+      <int name="notSale" value="1"/>
+    </imgdir>
+    <imgdir name="spec">
+      <string name="script" value="reincarnationMonument"/>
+      <int name="npc" value="9010010"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="02430026">
     <imgdir name="info">
       <canvas name="icon" format="1" scale="0">

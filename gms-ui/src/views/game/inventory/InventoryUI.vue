@@ -38,6 +38,14 @@
 
   async function getFromCacheOrDownload(itemId: number): Promise<string> {
     try {
+      const local = await fetch(`/item-icons/${itemId}.png`);
+      if (local.ok) {
+        return URL.createObjectURL(await local.blob());
+      }
+    } catch {
+      // fall through to CDN
+    }
+    try {
       const response = await maplestoryioAPI.get(
         `/GMS/83/item/${itemId}/icon?resize=4`,
         { responseType: 'blob' }
