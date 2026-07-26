@@ -66,6 +66,13 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         int __skillLevel = p.readByte();
         Skill skill = SkillFactory.getSkill(skillid);
         int skillLevel = chr.getSkillLevel(skill);
+
+        // 装备版轮回碑石：穿戴时劫持英雄之回声系（1005，非 PQ）为刷怪加成
+        // 注意：1009–1011/1020 是客户端 PQ 技能，普通地图会提示「该技能无法在当前地图使用」
+        if (org.gms.reincarnation.ReincarnationSupport.tryHandleSkill(c, chr, skillid)) {
+            return;
+        }
+
         if (skillid % 10000000 == 1010 || skillid % 10000000 == 1011) {
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
@@ -88,6 +95,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                 if (StatEffect.isHerosWill(skillid) && GameConfig.getServerBoolean("use_fast_reuse_hero_will")) {
                     cooldownTime /= 60;
                 }
+                cooldownTime = chr.getEffectiveCooldownSeconds(cooldownTime);
 
                 c.sendPacket(PacketCreator.skillCooldown(skillid, cooldownTime));
                 chr.addCooldown(skillid, currentServerTime(), SECONDS.toMillis(cooldownTime));

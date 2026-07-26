@@ -101,6 +101,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
 
+import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -108,6 +109,10 @@ public class MapleMap {
     private static final Logger log = LoggerFactory.getLogger(MapleMap.class);
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
     private static final Map<Integer, Pair<Integer, Integer>> dropBoundsCache = new HashMap<>(100);
+    /** 轮回石碑「轮回」怪物ID（客户端已有贴图）。 */
+    private static final int REINCARNATION_MOB_ID = 9990100;
+    /** 轮回石碑单次效果时长。 */
+    private static final long REINCARNATION_DURATION_MS = HOURS.toMillis(1);
 
     private final Map<Integer, MapObject> mapobjects = new LinkedHashMap<>();
     private final Set<Integer> selfDestructives = new LinkedHashSet<>();
@@ -115,6 +120,12 @@ public class MapleMap {
     private final Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<>());
     private final AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
     private final AtomicInteger droppedItemCount = new AtomicInteger(0);
+    /** 当前地图存活的「轮回」怪物；null 表示未施放。 */
+    private volatile Monster reincarnationMonster;
+    /** 施放轮回的角色ID。 */
+    private volatile int reincarnationOwnerId;
+    /** 轮回到期自动移除任务。 */
+    private volatile ScheduledFuture<?> reincarnationExpireTask;
     private final Collection<Character> characters = new LinkedHashSet<>();
     private final Map<Integer, Set<Integer>> mapParty = new LinkedHashMap<>();
     private final Map<Integer, Portal> portals = new HashMap<>();
@@ -2750,6 +2761,12 @@ public class MapleMap {
             broadcastGMMessage(PacketCreator.removePlayerFromMap(chr.getId()));
         }
 
+        // 轮回施放者离开地图时自动结束加成
+        if (isDbgActive() && reincarnationOwnerId == chr.getId()) {
+            closeDbg(chr);
+            broadcastMessage(PacketCreator.serverNotice(5, "离开了地图，轮回石碑效果已结束。"));
+        }
+
         chr.leaveMap();
 
         for (Summon summon : new ArrayList<>(chr.getSummonsValues())) {
@@ -3741,13 +3758,18 @@ public class MapleMap {
             chrRLock.unlock();
         }
 
+        boolean dbgActive = isDbgActive();
         int numShouldSpawn = getNumShouldSpawn(numPlayers);
+        if (dbgActive) {
+            // 轮回石碑生效：大幅提升刷怪数量，并强制刷新生成点冷却
+            numShouldSpawn = Math.max(numShouldSpawn, monsterSpawn.size()) * 5;
+        }
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = new ArrayList<>(getMonsterSpawn());
             Collections.shuffle(randomSpawn);
             short spawned = 0;
             for (SpawnPoint spawnPoint : randomSpawn) {
-                if (spawnPoint.shouldSpawn()) {
+                if (dbgActive ? spawnPoint.shouldForceSpawn() : spawnPoint.shouldSpawn()) {
                     spawnMonster(spawnPoint.getMonster());
                     spawned++;
                     if (spawned >= numShouldSpawn) {
@@ -3782,6 +3804,110 @@ public class MapleMap {
                 }
             }
         }
+    }
+
+    /**
+     * 轮回石碑：地图上是否有存活的「轮回」怪物。
+     */
+    public boolean isDbgActive() {
+        Monster mob = reincarnationMonster;
+        return mob != null && mob.isAlive();
+    }
+
+    /**
+     * 轮回石碑：在玩家位置召唤「轮回」怪物。
+     * 同图同时仅允许一只；他人占用时拒绝；本人可重置并续 1 小时。
+     *
+     * @return true 表示召唤成功
+     */
+    public boolean setDbg(final Character chr) {
+        if (isDbgActive() && reincarnationOwnerId != chr.getId()) {
+            chr.dropMessage(5, "地图上有人施放了轮回");
+            return false;
+        }
+
+        cancelReincarnationTimer();
+        Monster existingMob = reincarnationMonster;
+        if (existingMob != null && existingMob.isAlive()) {
+            killMonster(existingMob, null, false, 1);
+        }
+
+        final Monster template = LifeFactory.getMonster(REINCARNATION_MOB_ID);
+        if (template == null) {
+            chr.dropMessage(5, "轮回石碑暂时无法使用，请联系管理员。");
+            return false;
+        }
+        final Monster mob = new Monster(template);
+        mob.setPosition(chr.getPosition());
+        mob.setFh(chr.getFh());
+        reincarnationOwnerId = chr.getId();
+        reincarnationMonster = mob;
+        mob.addListener(new MonsterListener() {
+            @Override
+            public void monsterKilled(int aniTime) {
+                if (reincarnationMonster == mob) {
+                    clearReincarnationState();
+                }
+            }
+
+            @Override
+            public void monsterDamaged(Character from, int trueDmg) {
+            }
+
+            @Override
+            public void monsterHealed(int trueHeal) {
+            }
+        });
+        spawnMonster(mob);
+        reincarnationExpireTask = TimerManager.getInstance().schedule(this::expireReincarnation, REINCARNATION_DURATION_MS);
+        chr.dropMessage(5, "轮回石碑已激活，效果持续1小时。");
+        return true;
+    }
+
+    /**
+     * 轮回石碑：关闭当前地图轮回效果（施放者或 GM）。
+     */
+    public boolean closeDbg(final Character chr) {
+        if (!isDbgActive()) {
+            return false;
+        }
+        if (reincarnationOwnerId != chr.getId() && !chr.isGM()) {
+            chr.dropMessage(5, "地图上有人施放了轮回，无法关闭");
+            return false;
+        }
+        Monster mob = reincarnationMonster;
+        cancelReincarnationTimer();
+        if (mob != null && mob.isAlive()) {
+            killMonster(mob, null, false, 1);
+        }
+        clearReincarnationState();
+        return true;
+    }
+
+    private void cancelReincarnationTimer() {
+        ScheduledFuture<?> task = reincarnationExpireTask;
+        if (task != null) {
+            TimerManager.getInstance().stop(task);
+            reincarnationExpireTask = null;
+        }
+    }
+
+    private void clearReincarnationState() {
+        reincarnationMonster = null;
+        reincarnationOwnerId = 0;
+        cancelReincarnationTimer();
+    }
+
+    private void expireReincarnation() {
+        Monster mob = reincarnationMonster;
+        if (mob == null || !mob.isAlive()) {
+            clearReincarnationState();
+            return;
+        }
+        for (Character player : getAllPlayers()) {
+            player.dropMessage(5, "轮回石碑效果时间已到，已自动消失。");
+        }
+        killMonster(mob, null, false, 1);
     }
 
     public void mobMpRecovery() {
