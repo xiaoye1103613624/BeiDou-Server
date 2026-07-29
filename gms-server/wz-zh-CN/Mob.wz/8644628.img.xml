@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8644628.img">
+    <imgdir name="info">
+        <int name="level" value="254" />
+        <int name="maxHP" value="1000000000" />
+        <int name="acc" value="10" />
+        <int name="eva" value="0" />
+        <int name="pushed" value="5" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="1N" />
+        <int name="hideHP" value="1" />
+        <int name="hideName" value="1" />
+        <int name="noFlip" value="1" />
+        <int name="boss" value="1" />
+        <int name="fixedDamage" value="10000000" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="cooltime" value="5000" />
+                <int name="doFirst" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="exp" value="0" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-350" y="-650" />
+                <vector name="rb" x="350" y="0" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="450" />
+            <int name="delay" value="90" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

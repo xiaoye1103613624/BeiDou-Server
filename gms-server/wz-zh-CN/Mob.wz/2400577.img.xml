@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2400577.img">
+    <imgdir name="info">
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="HPgaugeHide" value="1" />
+        <int name="level" value="180" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="50000" />
+        <int name="maxMP" value="20000" />
+        <int name="PADamage" value="9165" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="9068" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="speed" value="-30" />
+        <int name="pushed" value="6500" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="27574" />
+        <int name="summonType" value="1" />
+        <int name="category" value="1" />
+        <string name="mobType" value="1N" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+        </imgdir>
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="hoyoung_StoryBoss" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-300" y="-50" />
+                <vector name="rb" x="0" y="0" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="450" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+        <uol name="33" value="17" />
+        <uol name="34" value="18" />
+        <uol name="35" value="19" />
+        <uol name="36" value="20" />
+        <uol name="37" value="21" />
+        <uol name="38" value="22" />
+        <uol name="39" value="23" />
+        <uol name="40" value="24" />
+        <uol name="41" value="25" />
+        <uol name="42" value="26" />
+        <uol name="43" value="27" />
+        <uol name="44" value="28" />
+        <uol name="45" value="29" />
+        <uol name="46" value="30" />
+        <uol name="47" value="31" />
+        <uol name="48" value="32" />
+    </imgdir>
+</imgdir>

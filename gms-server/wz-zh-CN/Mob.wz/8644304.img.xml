@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8644304.img">
+    <imgdir name="info">
+        <int name="level" value="235" />
+        <int name="bodyAttack" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="maxHP" value="288184000" />
+        <int name="maxMP" value="50000" />
+        <int name="PADamage" value="1" />
+        <int name="PDDamage" value="1" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="1" />
+        <int name="MDDamage" value="1" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="3000" />
+        <int name="eva" value="930" />
+        <int name="pushed" value="18000" />
+        <int name="exp" value="0" />
+        <int name="summonType" value="88" />
+        <int name="category" value="1" />
+        <string name="mobType" value="1N" />
+        <int name="flySpeed" value="140" />
+        <int name="invincible" value="1" />
+        <imgdir name="selfDestruction">
+            <int name="action" value="2" />
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="ignoreStance" value="100" />
+                <int name="notMissAttack" value="1" />
+                <int name="ignoreEvasion" value="100" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="firstAttackRange">
+            <vector name="lt" x="-8000" y="-8000" />
+            <vector name="rb" x="8000" y="8000" />
+        </imgdir>
+        <int name="overSpeed" value="1" />
+        <int name="minimap" value="1" />
+        <int name="isNotChaseSummoned" value="1" />
+        <int name="noDebuff" value="1" />
+    </imgdir>
+    <imgdir name="fly">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-82" y="-112" />
+                <vector name="rb" x="112" y="95" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="conMP" value="0" />
+        </imgdir>
+    </imgdir>
+</imgdir>

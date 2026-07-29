@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8642022.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="2" />
+                <int name="bulletSpeed" value="400" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="229" />
+        <int name="maxHP" value="506876800" />
+        <int name="maxMP" value="45000" />
+        <int name="speed" value="20" />
+        <int name="PADamage" value="16088" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="15975" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="930" />
+        <int name="eva" value="270" />
+        <int name="pushed" value="16000" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="4" />
+        <string name="mobType" value="1N" />
+        <int name="exp" value="402466" />
+        <int name="firstAttack" value="1" />
+        <int name="PDDamage" value="16088" />
+        <int name="MDDamage" value="15975" />
+        <int name="bodyAttack" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-193" y="-154" />
+                <vector name="rb" x="89" y="31" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="delay" value="60" />
+            <int name="attackAfter" value="960" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-49" y="-38" />
+                <int name="r" value="1000" />
+            </imgdir>
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="960" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

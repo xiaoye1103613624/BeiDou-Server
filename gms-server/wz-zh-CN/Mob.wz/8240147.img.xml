@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8240147.img">
+    <imgdir name="info">
+        <int name="boss" value="1" />
+        <int name="level" value="150" />
+        <int name="maxHP" value="60000000" />
+        <int name="maxMP" value="1000000" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="acc" value="203" />
+        <int name="eva" value="51" />
+        <int name="speed" value="50" />
+        <int name="pushed" value="2000000000" />
+        <float name="fs" value="10.0" />
+        <int name="category" value="0" />
+        <int name="summonType" value="1" />
+        <string name="mobType" value="1N" />
+        <int name="hideHP" value="1" />
+        <int name="PADamage" value="1000" />
+        <int name="PDDamage" value="1000" />
+        <int name="MADamage" value="1000" />
+        <int name="MDDamage" value="1000" />
+        <int name="firstAttack" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="skeleton" value="1" />
+        <int name="nonLevelCheckEVA" value="1" />
+        <int name="nonLevelCheckACC" value="1" />
+        <int name="skelAniMixRate" value="0" />
+        <imgdir name="firstAttackRange">
+            <vector name="lt" x="-1024" y="-800" />
+            <vector name="rb" x="1024" y="800" />
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <string name="info" value="밀치기 넉백 공격" />
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="fixDamR" value="5" />
+                <int name="cooltime" value="8000" />
+                <int name="afterDelay" value="6000" />
+                <int name="ignoreStance" value="100" />
+                <int name="notMissAttack" value="1" />
+                <int name="ignoreEvasion" value="100" />
+                <int name="knockback" value="1" />
+            </imgdir>
+            <imgdir name="1">
+                <string name="info" value="내려찍기, 아래로 넉백 공격 밀치기와 연계하기 쉽게 돌무더기 소환" />
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="fixDamR" value="5" />
+                <int name="cooltime" value="8000" />
+                <int name="afterDelay" value="6000" />
+                <int name="ignoreStance" value="100" />
+                <int name="ignoreEvasion" value="100" />
+                <int name="notMissAttack" value="1" />
+                <int name="dragdown" value="1" />
+                <int name="jumpAttack" value="1" />
+                <imgdir name="jumpAttackInfo">
+                    <int name="impact" value="1000" />
+                    <int name="min" value="60" />
+                    <int name="max" value="120" />
+                </imgdir>
+                <imgdir name="callSkillWithData">
+                    <int name="skill" value="201" />
+                    <int name="level" value="176" />
+                    <int name="delay" value="2000" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <string name="info" value="돌무더기소환, 액션없이" />
+                <int name="action" value="1" />
+                <int name="skill" value="201" />
+                <int name="level" value="176" />
+                <int name="skillAfter" value="500" />
+                <int name="afterDelay" value="3000" />
+                <int name="onlyOtherSkill" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="speak">
+            <int name="chatBalloon" value="0" />
+            <imgdir name="0">
+                <int name="hp" value="50000000" />
+                <string name="0" value="没用的。我是奉王命守护遗迹的不死存在！" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="hp" value="30000000" />
+                <string name="0" value="没错，卑贱的你们是无法打败我的！" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="hp" value="20000000" />
+                <string name="0" value="没错，我就是守卫！" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="hp" value="10000000" />
+                <string name="0" value="没错，卑贱的你们是无法打败我的！" />
+                <string name="1" value="没用的。我是奉王命守护遗迹的不死存在！" />
+                <string name="2" value="没错，我就是守卫！" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="damagedBySelectedSkill">
+            <int name="0" value="80001910" />
+            <int name="1" value="80001911" />
+            <int name="2" value="80001912" />
+            <int name="3" value="80001913" />
+            <int name="4" value="80001914" />
+            <int name="5" value="80001915" />
+            <int name="6" value="80001916" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-480" y="-150" />
+                <vector name="rb" x="50" y="-10" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="2160" />
+        </imgdir>
+        <string name="aniName" value="06_attack_B" />
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-400" y="-600" />
+                <vector name="rb" x="0" y="10" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="1650" />
+        </imgdir>
+        <string name="aniName" value="05_attack_A" />
+    </imgdir>
+    <imgdir name="skill1">
+        <string name="aniName" value="07_attack_C" />
+    </imgdir>
+    <imgdir name="move">
+        <string name="aniName" value="03_move" />
+    </imgdir>
+    <imgdir name="stand">
+        <string name="aniName" value="02_stand" />
+    </imgdir>
+    <imgdir name="die1">
+        <string name="aniName" value="08_die" />
+    </imgdir>
+    <imgdir name="sleep">
+        <string name="aniName" value="00_bit stand" />
+    </imgdir>
+    <imgdir name="wakeup">
+        <string name="aniName" value="01_summon" />
+    </imgdir>
+    <imgdir name="say">
+        <string name="aniName" value="04_tire" />
+    </imgdir>
+    <imgdir name="HitParts">
+        <imgdir name="1">
+            <string name="info" value="Hardness" />
+            <imgdir name="0">
+                <imgdir name="stat">
+                    <string name="info" value="부위의 속성값" />
+                    <int name="durability" value="80" />
+                    <int name="hardness" value="100" />
+                </imgdir>
+                <imgdir name="hitEvent">
+                    <string name="info" value="해당 부위 타격시 처리해야할 내용들" />
+                    <string name="replaceHitEffect" value="Mob/8881000.img/HitEffect/0" />
+                    <string name="replaceHitSound" value="Sound/SoundEff.img/urus/hardHit" />
+                </imgdir>
+                <imgdir name="breakEvent">
+                    <string name="info" value="info에 durability가 없으면 사용불가" />
+                    <string name="changeAction" value="tire" />
+                    <imgdir name="slotAttachment" />
+                    <imgdir name="effect" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <string name="info" value="Weakness" />
+            <imgdir name="0">
+                <imgdir name="stat">
+                    <string name="info" value="부위의 속성값" />
+                    <int name="durability" value="99999999" />
+                    <int name="hardness" value="50" />
+                </imgdir>
+                <imgdir name="hitEvent">
+                    <string name="info" value="해당 부위 타격시 처리해야할 내용들" />
+                    <string name="replaceHitEffect" value="Mob/8881000.img/HitEffect/1" />
+                    <string name="replaceHitSound" value="Sound/SoundEff.img/urus/midHit" />
+                </imgdir>
+                <imgdir name="breakEvent">
+                    <string name="info" value="info에 durability가 없으면 사용불가" />
+                    <imgdir name="slotAttachment" />
+                    <imgdir name="effect" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="HitBlendEffect">
+        <imgdir name="info">
+            <int name="alpha" value="80" />
+            <int name="red" value="255" />
+            <int name="green" value="255" />
+            <int name="blue" value="255" />
+            <int name="loopCount" value="3" />
+            <int name="delay" value="200" />
+        </imgdir>
+        <imgdir name="HitPartsToSlot">
+            <imgdir name="1">
+                <string name="L_arm_A" value="L_arm_A" />
+                <string name="L_arm_B_01" value="L_arm_B_01" />
+                <string name="L_arm_B_02" value="L_arm_B_02" />
+                <string name="L_arm_B_03" value="L_arm_B_03" />
+                <string name="L_arm_B_04" value="L_arm_B_04" />
+                <string name="L_arm_C_01" value="L_arm_C_01" />
+                <string name="L_arm_C_02" value="L_arm_C_02" />
+                <string name="L_arm_C_03" value="L_arm_C_03" />
+                <string name="L_arm_C_04" value="L_arm_C_04" />
+                <string name="L_arm_C_05" value="L_arm_C_05" />
+                <string name="head copy" value="head copy" />
+                <string name="r_arm_A" value="r_arm_A" />
+                <string name="r_arm_B_01" value="r_arm_B_01" />
+                <string name="r_arm_B_02" value="r_arm_B_02" />
+                <string name="r_arm_B_03" value="r_arm_B_03" />
+                <string name="r_arm_B_04" value="r_arm_B_04" />
+                <string name="r_arm_C_01" value="r_arm_C_01" />
+                <string name="r_arm_C_02" value="r_arm_C_02" />
+                <string name="r_arm_C_03" value="r_arm_C_03" />
+                <string name="r_arm_C_04" value="r_arm_C_04" />
+                <string name="r_arm_C_05" value="r_arm_C_05" />
+                <string name="L_leg" value="L_leg" />
+                <string name="R_leg" value="R_leg" />
+                <string name="body_01" value="body_01" />
+                <string name="body_02" value="body_02" />
+                <string name="body_03" value="body_03" />
+                <string name="body_04" value="body_04" />
+                <string name="body_05" value="body_05" />
+                <string name="body_06" value="body_06" />
+                <string name="body_07" value="body_07" />
+                <string name="body_08" value="body_08" />
+                <string name="body_09" value="body_09" />
+                <string name="body_10" value="body_10" />
+                <string name="body_back" value="body_back" />
+            </imgdir>
+            <imgdir name="2">
+                <string name="body_core_1" value="body_core_1" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <sound name="8240147" />
+</imgdir>

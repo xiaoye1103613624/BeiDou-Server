@@ -44,7 +44,13 @@ public enum MobSkillType {
     EVA(155),
     SPEED(156),
     SEAL_SKILL(157),
-    SUMMON(200);
+    SUMMON(200),
+    // 高版本扩展技能 (186版新增, 占位待实现具体效果)
+    SUMMON_BOMB(201),   // 召唤炸弹/爆炸召唤物 (186版154个怪物使用)
+    SUMMON_MULTI(202),  // 多重召唤 (186版14个怪物使用)
+    UNKNOWN_207(207);   // 未知高版本技能 (186版27个怪物使用)
+
+    // 扩展上限从200→210以支持高版本
 
     private final int id;
 
@@ -63,7 +69,8 @@ public enum MobSkillType {
     }
 
     private static boolean isOutOfIdRange(int id) {
-        return id < 100 || id > 200;
+        // 扩展上限200→210以支持186版新技能ID(201/202/207)
+        return id < 100 || id > 210;
     }
 
     public int getId() {

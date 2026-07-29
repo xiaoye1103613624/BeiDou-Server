@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2600321.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="disease" value="132" />
+                <int name="level" value="13" />
+                <int name="knockback" value="1" />
+                <int name="cooltime" value="3000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="146" />
+                <int name="action" value="1" />
+                <int name="level" value="7" />
+                <int name="skillAfter" value="540" />
+                <int name="effectAfter" value="540" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="passive">
+            <imgdir name="0">
+                <int name="skill" value="202" />
+                <int name="level" value="3" />
+            </imgdir>
+        </imgdir>
+        <int name="useReaction" value="1" />
+        <int name="wp" value="20" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="level" value="137" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="4250000" />
+        <int name="maxMP" value="150000" />
+        <int name="PADamage" value="4381" />
+        <int name="PDDamage" value="10" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="4012" />
+        <int name="MDDamage" value="10" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="423" />
+        <int name="eva" value="115" />
+        <int name="pushed" value="2800" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="72400" />
+        <int name="category" value="7" />
+        <int name="undead" value="1" />
+        <string name="mobType" value="14N" />
+        <int name="charismaEXP" value="45" />
+        <int name="rareItemDropLevel" value="2" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="skill1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="hit">
+            </imgdir>
+            <imgdir name="range">
+                <vector name="lt" x="-225" y="-104" />
+                <vector name="rb" x="5" y="10" />
+            </imgdir>
+            <int name="attackAfter" value="450" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-161" y="-114" />
+                <vector name="rb" x="0" y="5" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="pos" value="1" />
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="720" />
+        </imgdir>
+    </imgdir>
+</imgdir>

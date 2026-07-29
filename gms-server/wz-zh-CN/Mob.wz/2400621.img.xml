@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2400621.img">
+    <imgdir name="info">
+        <int name="level" value="18" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="325" />
+        <int name="maxMP" value="40" />
+        <int name="speed" value="-30" />
+        <int name="PADamage" value="80" />
+        <int name="PDDamage" value="12" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="75" />
+        <int name="MDDamage" value="40" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="23" />
+        <int name="eva" value="1" />
+        <int name="pushed" value="50" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <string name="mobType" value="8N" />
+        <int name="invincible" value="1" />
+        <int name="boss" value="1" />
+        <imgdir name="patrol">
+            <int name="range" value="300" />
+            <int name="detectX" value="150" />
+            <int name="senseX" value="100" />
+            <imgdir name="patrolMark">
+                <imgdir name="sense">
+                </imgdir>
+                <imgdir name="userDetect">
+                </imgdir>
+                <imgdir name="attractDetect">
+                </imgdir>
+                <imgdir name="attractArrive">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="ban">
+            <int name="banType" value="1" />
+            <string name="banMsg" value="被伯爵家的佣人发现了！" />
+            <imgdir name="banMap">
+                <imgdir name="0">
+                    <int name="field" value="410000344" />
+                    <string name="portal" value="sp" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="patrolSense">
+    </imgdir>
+    <imgdir name="patrolUserdetect">
+    </imgdir>
+    <imgdir name="patrolAttractdetect">
+    </imgdir>
+    <imgdir name="patrolAttractarrive">
+    </imgdir>
+</imgdir>

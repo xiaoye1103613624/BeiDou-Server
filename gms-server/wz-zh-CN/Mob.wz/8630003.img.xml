@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8630003.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="2" />
+                <int name="bulletSpeed" value="300" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="173" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="5510800" />
+        <int name="maxMP" value="25000" />
+        <int name="speed" value="-10" />
+        <int name="PADamage" value="8483" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="8385" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="pushed" value="6000" />
+        <int name="exp" value="22823" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="15N" />
+        <int name="firstAttack" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="5" y="-73" />
+                <int name="r" value="300" />
+            </imgdir>
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="960" />
+        </imgdir>
+        <uol name="14" value="../stand/0" />
+        <uol name="15" value="../stand/1" />
+        <uol name="16" value="../stand/2" />
+        <uol name="17" value="../stand/3" />
+        <uol name="18" value="../stand/4" />
+        <uol name="19" value="../stand/5" />
+    </imgdir>
+</imgdir>

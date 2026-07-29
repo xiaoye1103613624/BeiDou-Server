@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8620014.img">
+    <imgdir name="info">
+        <int name="chaseSpeed" value="10" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="magic" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="170" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="24854000" />
+        <int name="maxMP" value="18000" />
+        <int name="speed" value="-10" />
+        <int name="PADamage" value="10584" />
+        <int name="PDDamage" value="170" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="10458" />
+        <int name="MDDamage" value="210" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="pushed" value="4970800" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="62781" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="7N" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-200" y="-110" />
+                <vector name="rb" x="200" y="40" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="pos" value="3" />
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="240" />
+        </imgdir>
+        <uol name="21" value="../stand/0" />
+        <uol name="22" value="../stand/1" />
+        <uol name="23" value="../stand/2" />
+        <uol name="24" value="../stand/3" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="chase">
+    </imgdir>
+</imgdir>

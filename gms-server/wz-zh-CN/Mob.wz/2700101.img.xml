@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2700101.img">
+    <imgdir name="info">
+        <int name="level" value="200" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="10000000" />
+        <int name="maxMP" value="25000" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="SchoolAttackMasterMob" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="10000" />
+        <int name="PDDamage" value="100" />
+        <int name="PDRate" value="50" />
+        <int name="MADamage" value="10000" />
+        <int name="MDDamage" value="100" />
+        <int name="MDRate" value="50" />
+        <int name="acc" value="790" />
+        <int name="eva" value="250" />
+        <int name="pushed" value="10000" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="64640" />
+        <int name="summonType" value="1" />
+        <int name="category" value="6" />
+        <string name="mobType" value="1N" />
+        <string name="elemAttr" value="H3D2" />
+        <int name="boss" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="3" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="ignoreFieldOut" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="explosiveReward" value="1" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="type" value="2" />
+                <int name="conMP" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="cooltime" value="2000" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="5" />
+                <int name="magic" value="1" />
+                <int name="fixDamR" value="30" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="disease" value="174" />
+                <int name="level" value="11" />
+                <int name="fixDamR" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="214" />
+                <int name="action" value="1" />
+                <int name="level" value="7" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="onlyFsm" value="1" />
+                <int name="skill" value="176" />
+                <int name="action" value="2" />
+                <int name="level" value="17" />
+                <int name="priority" value="2" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="speak">
+            <string name="0" value="冲啊" />
+            <int name="chatBalloon" value="0" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-81" y="-63" />
+                <int name="r" value="500" />
+            </imgdir>
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attach" value="1" />
+            <int name="attackAfter" value="750" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-50" y="-288" />
+                <vector name="rb" x="51" y="-5" />
+                <int name="start" value="-5" />
+                <int name="areaCount" value="5" />
+                <int name="attackCount" value="5" />
+            </imgdir>
+            <imgdir name="areaWarning">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="effectAfter" value="0" />
+            <int name="attackAfter" value="2880" />
+            <int name="onlyFsm" value="1" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack3">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-500" y="-300" />
+                <vector name="rb" x="500" y="10" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="500" />
+            <int name="onlyFsm" value="1" />
+        </imgdir>
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="你想往哪里逃" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="1000" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+        <uol name="0" value="../attack2/0" />
+        <uol name="1" value="../attack2/1" />
+        <uol name="2" value="../attack2/2" />
+        <uol name="3" value="../attack2/3" />
+        <uol name="4" value="../attack2/4" />
+        <uol name="5" value="../attack2/5" />
+        <uol name="6" value="../attack2/6" />
+        <uol name="7" value="../attack2/7" />
+        <uol name="8" value="../attack2/8" />
+        <uol name="9" value="../attack2/9" />
+        <uol name="10" value="../attack2/10" />
+        <uol name="11" value="../attack2/11" />
+        <uol name="12" value="../attack2/12" />
+        <uol name="13" value="../attack2/13" />
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="快速按左右方向键，摆脱石化状态！" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill1">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="神来之笔！" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="1050" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill2">
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="快后退！靠近挥舞的画笔非常危险！" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

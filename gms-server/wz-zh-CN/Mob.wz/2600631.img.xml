@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2600631.img">
+    <imgdir name="info">
+        <int name="hpTagColor" value="4" />
+        <int name="hpTagBgcolor" value="1" />
+        <int name="firstAttack" value="1" />
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="126" />
+                <int name="action" value="2" />
+                <int name="level" value="1" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="720" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="201" />
+                <int name="action" value="3" />
+                <int name="level" value="77" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="720" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="skill" value="201" />
+                <int name="action" value="3" />
+                <int name="level" value="78" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="720" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="skill" value="171" />
+                <int name="action" value="4" />
+                <int name="level" value="4" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="skill" value="105" />
+                <int name="action" value="1" />
+                <int name="level" value="7" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="skill" value="186" />
+                <int name="action" value="2" />
+                <int name="level" value="7" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="720" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="skill" value="146" />
+                <int name="action" value="1" />
+                <int name="level" value="4" />
+                <int name="effectAfter" value="7" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="revive">
+            <int name="0" value="2600632" />
+        </imgdir>
+        <int name="mbookID" value="8500002" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="10" />
+                <int name="magic" value="1" />
+                <string name="elemAttr" value="L" />
+                <int name="deadlyAttack" value="1" />
+                <int name="doFirst" value="1" />
+                <int name="cooltime" value="20000" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="100" />
+                <int name="magic" value="1" />
+                <string name="elemAttr" value="I" />
+                <int name="fixDamR" value="50" />
+                <int name="disease" value="123" />
+                <int name="level" value="4" />
+                <int name="fixDamRType" value="1" />
+                <int name="cooltime" value="10000" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="10" />
+                <int name="magic" value="1" />
+                <string name="elemAttr" value="L" />
+                <int name="fixDamR" value="50" />
+                <int name="disease" value="122" />
+                <int name="level" value="9" />
+                <int name="cooltime" value="5000" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="action" value="4" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="100" />
+                <int name="magic" value="1" />
+                <string name="elemAttr" value="F" />
+                <int name="fixDamR" value="50" />
+                <int name="disease" value="120" />
+                <int name="level" value="16" />
+                <int name="fixDamRType" value="1" />
+                <int name="cooltime" value="15000" />
+            </imgdir>
+        </imgdir>
+        <int name="useReaction" value="1" />
+        <int name="level" value="168" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="5125000" />
+        <int name="maxMP" value="225000" />
+        <int name="speed" value="-40" />
+        <int name="PADamage" value="7064" />
+        <int name="PDDamage" value="1000" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="7345" />
+        <int name="MDDamage" value="1100" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="pushed" value="5500" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <int name="hpRecovery" value="10000" />
+        <int name="mpRecovery" value="50000" />
+        <string name="mobType" value="14N" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="skill1">
+    </imgdir>
+    <imgdir name="skill2">
+    </imgdir>
+    <imgdir name="skill3">
+    </imgdir>
+    <imgdir name="skill4">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-670" y="-465" />
+                <vector name="rb" x="670" y="0" />
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="effectAfter" value="0" />
+            <int name="attackAfter" value="1260" />
+        </imgdir>
+        <uol name="15" value="../stand/0" />
+        <uol name="16" value="../stand/1" />
+        <uol name="17" value="../stand/2" />
+        <uol name="18" value="../stand/3" />
+        <uol name="19" value="../stand/4" />
+        <uol name="20" value="../stand/5" />
+        <uol name="35" value="33" />
+        <uol name="36" value="32" />
+        <uol name="37" value="33" />
+        <uol name="38" value="34" />
+        <uol name="39" value="33" />
+        <uol name="40" value="32" />
+        <uol name="41" value="33" />
+        <uol name="42" value="34" />
+        <uol name="43" value="33" />
+        <uol name="44" value="32" />
+        <uol name="45" value="33" />
+        <uol name="46" value="34" />
+        <uol name="47" value="33" />
+        <uol name="48" value="32" />
+        <uol name="49" value="31" />
+        <uol name="50" value="30" />
+        <uol name="51" value="29" />
+        <uol name="52" value="28" />
+        <uol name="53" value="27" />
+        <uol name="54" value="26" />
+        <uol name="55" value="25" />
+        <uol name="56" value="26" />
+        <uol name="57" value="25" />
+        <uol name="58" value="24" />
+        <uol name="59" value="23" />
+        <uol name="60" value="22" />
+        <uol name="61" value="21" />
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-670" y="-465" />
+                <vector name="rb" x="670" y="0" />
+            </imgdir>
+            <imgdir name="effect">
+                <uol name="14" value="0" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="810" />
+        </imgdir>
+        <uol name="0" value="../attack1/0" />
+        <uol name="1" value="../attack1/1" />
+        <uol name="2" value="../attack1/2" />
+        <uol name="3" value="../attack1/3" />
+        <uol name="4" value="../attack1/4" />
+        <uol name="5" value="../attack1/5" />
+        <uol name="6" value="../attack1/6" />
+        <uol name="7" value="../attack1/7" />
+        <uol name="8" value="../attack1/8" />
+        <uol name="9" value="../attack1/9" />
+        <uol name="10" value="../attack1/10" />
+        <uol name="11" value="../attack1/11" />
+        <uol name="12" value="../attack1/12" />
+        <uol name="13" value="../attack1/13" />
+        <uol name="14" value="../attack1/14" />
+        <uol name="15" value="../stand/0" />
+        <uol name="16" value="../stand/1" />
+        <uol name="17" value="../stand/2" />
+        <uol name="18" value="../stand/3" />
+        <uol name="19" value="../stand/4" />
+        <uol name="20" value="../stand/5" />
+    </imgdir>
+    <imgdir name="attack3">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-800" y="-600" />
+                <vector name="rb" x="800" y="250" />
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="effect0">
+                <int name="effectType" value="1" />
+                <int name="effectDistance" value="300" />
+                <int name="randomPos" value="1" />
+                <int name="delay" value="1100" />
+                <imgdir name="0">
+                </imgdir>
+                <imgdir name="1">
+                </imgdir>
+                <imgdir name="2">
+                </imgdir>
+                <imgdir name="3">
+                    <uol name="1" value="../2/1" />
+                </imgdir>
+                <imgdir name="4">
+                    <uol name="0" value="../1/1" />
+                </imgdir>
+                <vector name="lt" x="-800" y="-350" />
+                <vector name="rb" x="800" y="250" />
+            </imgdir>
+            <imgdir name="hit">
+                <uol name="3" value="0" />
+                <uol name="4" value="1" />
+                <uol name="5" value="2" />
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="0" />
+        </imgdir>
+        <uol name="0" value="../attack1/0" />
+        <uol name="1" value="../attack1/1" />
+        <uol name="2" value="../attack1/2" />
+        <uol name="3" value="../attack1/3" />
+        <uol name="4" value="../attack1/4" />
+        <uol name="5" value="../attack1/5" />
+        <uol name="6" value="../attack1/6" />
+        <uol name="7" value="../attack1/7" />
+        <uol name="8" value="../attack1/8" />
+        <uol name="9" value="../attack1/9" />
+        <uol name="10" value="../attack1/10" />
+        <uol name="11" value="../attack1/11" />
+        <uol name="12" value="../attack1/12" />
+        <uol name="13" value="../attack1/13" />
+        <uol name="14" value="../attack1/14" />
+        <uol name="15" value="../stand/0" />
+        <uol name="16" value="../stand/1" />
+        <uol name="17" value="../stand/2" />
+        <uol name="18" value="../stand/3" />
+        <uol name="19" value="../stand/4" />
+        <uol name="20" value="../stand/5" />
+    </imgdir>
+    <imgdir name="attack4">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-670" y="-465" />
+                <vector name="rb" x="670" y="0" />
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="540" />
+        </imgdir>
+        <uol name="0" value="../attack1/0" />
+        <uol name="1" value="../attack1/1" />
+        <uol name="2" value="../attack1/2" />
+        <uol name="3" value="../attack1/3" />
+        <uol name="4" value="../attack1/4" />
+        <uol name="5" value="../attack1/5" />
+        <uol name="6" value="../attack1/6" />
+        <uol name="7" value="../attack1/7" />
+        <uol name="8" value="../attack1/8" />
+        <uol name="9" value="../attack1/9" />
+        <uol name="10" value="../attack1/10" />
+        <uol name="11" value="../attack1/11" />
+        <uol name="12" value="../attack1/12" />
+        <uol name="13" value="../attack1/13" />
+        <uol name="14" value="../attack1/14" />
+        <uol name="15" value="../stand/0" />
+        <uol name="16" value="../stand/1" />
+        <uol name="17" value="../stand/2" />
+        <uol name="18" value="../stand/3" />
+        <uol name="19" value="../stand/4" />
+        <uol name="20" value="../stand/5" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

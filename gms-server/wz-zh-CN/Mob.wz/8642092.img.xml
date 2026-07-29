@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8642092.img">
+    <imgdir name="info">
+        <int name="level" value="220" />
+        <int name="firstAttack" value="1" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="4000000000" />
+        <int name="maxMP" value="2000000" />
+        <int name="speed" value="1" />
+        <int name="PADamage" value="15075" />
+        <int name="PDDamage" value="15075" />
+        <int name="PDRate" value="20" />
+        <int name="MADamage" value="14963" />
+        <int name="MDDamage" value="14963" />
+        <int name="MDRate" value="20" />
+        <int name="acc" value="900" />
+        <int name="eva" value="240" />
+        <int name="pushed" value="15000" />
+        <int name="fs" value="11" />
+        <int name="exp" value="0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="0" />
+        <string name="mobType" value="1N" />
+        <int name="mobJobCategory" value="0" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="30" />
+                <int name="type" value="3" />
+                <int name="cooltime" value="7000" />
+                <int name="fixDamR" value="15" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="70" />
+                <int name="type" value="3" />
+                <int name="level" value="3" />
+                <int name="fixDamR" value="15" />
+                <int name="cooltime" value="10000" />
+                <int name="tremble" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="boss" value="1" />
+        <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+        <int name="hpTagColor" value="6" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="1UserDamageHPr" value="20" />
+        <int name="1UserDamageInvincibleTime" value="5000" />
+        <int name="ignoreMoveImpact" value="1" />
+    </imgdir>
+    <int name="level" value="220" />
+    <int name="firstAttack" value="1" />
+    <int name="bodyAttack" value="1" />
+    <int name="maxHP" value="4000000000" />
+    <int name="maxMP" value="2000000" />
+    <int name="speed" value="1" />
+    <int name="PADamage" value="15075" />
+    <int name="PDDamage" value="15075" />
+    <int name="PDRate" value="20" />
+    <int name="MADamage" value="14963" />
+    <int name="MDDamage" value="14963" />
+    <int name="MDRate" value="20" />
+    <int name="acc" value="900" />
+    <int name="eva" value="240" />
+    <int name="pushed" value="15000" />
+    <int name="fs" value="11" />
+    <int name="exp" value="0" />
+    <int name="summonType" value="1" />
+    <int name="category" value="0" />
+    <string name="mobType" value="1N" />
+    <int name="mobJobCategory" value="0" />
+    <imgdir name="attack">
+        <imgdir name="0">
+            <int name="action" value="1" />
+            <int name="attackRatio" value="30" />
+            <int name="type" value="3" />
+            <int name="cooltime" value="7000" />
+            <int name="fixDamR" value="15" />
+        </imgdir>
+        <imgdir name="1">
+            <int name="action" value="2" />
+            <int name="attackRatio" value="70" />
+            <int name="type" value="3" />
+            <int name="level" value="3" />
+            <int name="fixDamR" value="15" />
+            <int name="cooltime" value="10000" />
+            <int name="tremble" value="1" />
+        </imgdir>
+    </imgdir>
+    <int name="boss" value="1" />
+    <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+    <int name="hpTagColor" value="6" />
+    <int name="hpTagBgcolor" value="5" />
+    <int name="1UserDamageHPr" value="20" />
+    <int name="1UserDamageInvincibleTime" value="5000" />
+    <int name="ignoreMoveImpact" value="1" />
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-100" y="-360" />
+                <vector name="rb" x="100" y="5" />
+                <int name="start" value="-4" />
+                <int name="areaCount" value="9" />
+                <int name="attackCount" value="7" />
+            </imgdir>
+            <imgdir name="areaWarning">
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="1920" />
+            <int name="randDelayAttack" value="2500" />
+        </imgdir>
+        <uol name="24" value="../stand/0" />
+        <uol name="25" value="../stand/1" />
+        <uol name="26" value="../stand/2" />
+        <uol name="27" value="../stand/3" />
+        <uol name="28" value="../stand/4" />
+        <uol name="29" value="../stand/5" />
+        <uol name="30" value="../stand/6" />
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-92" y="-305" />
+                <vector name="rb" x="91" y="6" />
+                <int name="start" value="-6" />
+                <int name="areaCount" value="12" />
+                <int name="attackCount" value="6" />
+            </imgdir>
+            <imgdir name="areaWarning">
+                <uol name="6" value="0" />
+                <uol name="7" value="1" />
+                <uol name="8" value="2" />
+                <uol name="9" value="3" />
+                <uol name="10" value="4" />
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="1080" />
+        </imgdir>
+        <uol name="24" value="../stand/0" />
+        <uol name="25" value="../stand/1" />
+        <uol name="26" value="../stand/2" />
+        <uol name="27" value="../stand/3" />
+        <uol name="28" value="../stand/4" />
+        <uol name="29" value="../stand/5" />
+        <uol name="30" value="../stand/6" />
+    </imgdir>
+</imgdir>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="4230140.img">
+    <imgdir name="info">
+        <string name="elemAttr" value="S1" />
+        <int name="level" value="110" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="4970800" />
+        <int name="maxMP" value="18000" />
+        <int name="speed" value="3" />
+        <int name="PADamage" value="7560" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="7470" />
+        <int name="MDDamage" value="40" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="pushed" value="5500" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <string name="mobType" value="8N" />
+        <int name="invincible" value="1" />
+        <int name="boss" value="1" />
+        <imgdir name="patrol">
+            <int name="range" value="300" />
+            <int name="detectX" value="150" />
+            <int name="senseX" value="100" />
+            <imgdir name="patrolMark">
+                <imgdir name="sense">
+                </imgdir>
+                <imgdir name="userDetect">
+                </imgdir>
+                <imgdir name="attractDetect">
+                </imgdir>
+                <imgdir name="attractArrive">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="ban">
+            <int name="banType" value="1" />
+            <string name="banMsg" value="被警卫兵发现了。先后退吧。" />
+            <imgdir name="banMap">
+                <imgdir name="0">
+                    <int name="field" value="221030550" />
+                    <string name="portal" value="west00" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand">
+        <uol name="3" value="0" />
+        <uol name="4" value="1" />
+        <uol name="5" value="2" />
+        <uol name="6" value="0" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="patrolSense">
+        <uol name="0" value="../move/0" />
+        <uol name="1" value="../move/1" />
+        <uol name="2" value="../move/2" />
+        <uol name="3" value="../move/3" />
+    </imgdir>
+    <imgdir name="patrolUserdetect">
+        <uol name="0" value="../move/0" />
+        <uol name="1" value="../move/1" />
+        <uol name="2" value="../move/2" />
+        <uol name="3" value="../move/3" />
+    </imgdir>
+    <imgdir name="patrolAttractdetect">
+        <uol name="0" value="../move/0" />
+        <uol name="1" value="../move/1" />
+        <uol name="2" value="../move/2" />
+        <uol name="3" value="../move/3" />
+    </imgdir>
+    <imgdir name="patrolAttractarrive">
+        <uol name="0" value="../move/0" />
+        <uol name="1" value="../move/1" />
+        <uol name="2" value="../move/2" />
+        <uol name="3" value="../move/3" />
+    </imgdir>
+</imgdir>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2600910.img">
+    <imgdir name="info">
+        <int name="firstAttack" value="1" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="knockback" value="1" />
+                <int name="disease" value="125" />
+                <int name="level" value="27" />
+                <int name="afterDelay" value="2000" />
+                <int name="cooltime" value="5000" />
+                <int name="fixDamR" value="50" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="fixDamR" value="50" />
+                <int name="afterDelay" value="2000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="145" />
+                <int name="action" value="1" />
+                <int name="level" value="12" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="133" />
+                <int name="action" value="2" />
+                <int name="level" value="14" />
+                <int name="skillAfter" value="840" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="skill" value="114" />
+                <int name="action" value="3" />
+                <int name="level" value="63" />
+                <int name="skillAfter" value="1350" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="skill" value="181" />
+                <int name="action" value="1" />
+                <int name="level" value="4" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="skill" value="171" />
+                <int name="action" value="1" />
+                <int name="level" value="4" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="skill" value="120" />
+                <int name="action" value="1" />
+                <int name="level" value="19" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="skill" value="112" />
+                <int name="action" value="4" />
+                <int name="level" value="4" />
+                <int name="skillAfter" value="1500" />
+            </imgdir>
+        </imgdir>
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="level" value="140" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="14800000" />
+        <int name="maxMP" value="480000" />
+        <int name="PADamage" value="6081" />
+        <int name="PDDamage" value="50" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="5927" />
+        <int name="MDDamage" value="40" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="423" />
+        <int name="eva" value="115" />
+        <int name="pushed" value="2800" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="248800" />
+        <int name="summonType" value="1" />
+        <int name="category" value="1" />
+        <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+        <string name="mobType" value="16N" />
+        <int name="wp" value="40" />
+        <int name="rareItemDropLevel" value="2" />
+        <int name="charismaEXP" value="60" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-452" y="-219" />
+                <vector name="rb" x="-17" y="88" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="1320" />
+        </imgdir>
+        <uol name="18" value="../move/0" />
+        <uol name="19" value="../move/1" />
+        <uol name="20" value="../move/2" />
+        <uol name="21" value="../move/3" />
+        <uol name="22" value="../move/4" />
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-425" y="-293" />
+                <vector name="rb" x="378" y="-3" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="2160" />
+        </imgdir>
+        <uol name="25" value="../move/1" />
+        <uol name="26" value="../move/2" />
+        <uol name="27" value="../move/3" />
+        <uol name="28" value="../move/4" />
+    </imgdir>
+    <imgdir name="skill1">
+        <uol name="17" value="../move/0" />
+        <uol name="18" value="../move/1" />
+        <uol name="19" value="../move/2" />
+        <uol name="20" value="../move/3" />
+        <uol name="21" value="../move/4" />
+    </imgdir>
+    <imgdir name="skill2">
+    </imgdir>
+    <imgdir name="skill3">
+    </imgdir>
+    <imgdir name="skill4">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="sleep">
+    </imgdir>
+    <imgdir name="wakeup">
+    </imgdir>
+</imgdir>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8230044.img">
+    <imgdir name="info">
+        <int name="level" value="110" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="617100" />
+        <int name="maxMP" value="3000" />
+        <int name="speed" value="-35" />
+        <int name="PADamage" value="445" />
+        <int name="PDRate" value="20" />
+        <int name="MADamage" value="1330" />
+        <int name="MDRate" value="20" />
+        <int name="acc" value="360" />
+        <int name="eva" value="97" />
+        <int name="pushed" value="1500" />
+        <float name="fs" value="10.0" />
+        <int name="category" value="1" />
+        <string name="mobType" value="2N" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="114" />
+                <int name="action" value="1" />
+                <int name="level" value="15" />
+                <int name="effectAfter" value="0" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="120" />
+                <int name="action" value="1" />
+                <int name="level" value="12" />
+                <int name="effectAfter" value="0" />
+            </imgdir>
+        </imgdir>
+        <int name="exp" value="3059" />
+        <int name="changeableMob" value="1" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-41" y="-14" />
+                <int name="r" value="600" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="1200" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill1">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

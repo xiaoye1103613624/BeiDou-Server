@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8850111.img">
+    <imgdir name="info">
+        <int name="level" value="140" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="2100000000" />
+        <string name="finalmaxHP" value="10500000000" />
+        <int name="maxMP" value="90000" />
+        <int name="mpRecovery" value="1000" />
+        <int name="speed" value="-60" />
+        <int name="PDDamage" value="1700" />
+        <int name="PDRate" value="100" />
+        <int name="MDRate" value="100" />
+        <int name="MDDamage" value="1930" />
+        <int name="acc" value="723" />
+        <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+        <int name="eva" value="625" />
+        <int name="pushed" value="1000000000" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="2040000" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <int name="firstAttack" value="1" />
+        <string name="mobType" value="1N" />
+        <int name="boss" value="1" />
+        <int name="explosiveReward" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="rareItemDropLevel" value="3" />
+        <int name="PADamage" value="20000" />
+        <int name="MADamage" value="25000" />
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="133" />
+                <int name="action" value="3" />
+                <int name="level" value="27" />
+                <int name="skillAfter" value="1760" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="129" />
+                <int name="action" value="1" />
+                <int name="level" value="13" />
+                <int name="skillAfter" value="990" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="skill" value="201" />
+                <int name="action" value="2" />
+                <int name="level" value="159" />
+                <int name="skillAfter" value="1440" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="skill" value="172" />
+                <int name="action" value="4" />
+                <int name="level" value="1" />
+                <int name="skillAfter" value="1260" />
+                <int name="effectAfter" value="1260" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="skill" value="145" />
+                <int name="action" value="6" />
+                <int name="level" value="38" />
+                <int name="effectAfter" value="0" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="skill" value="200" />
+                <int name="action" value="5" />
+                <int name="level" value="222" />
+                <int name="skillAfter" value="1440" />
+                <int name="preSkillIndex" value="7" />
+                <int name="preSkillCount" value="5" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="skill" value="171" />
+                <int name="action" value="7" />
+                <int name="level" value="1" />
+                <int name="effectAfter" value="630" />
+                <int name="skillAfter" value="630" />
+            </imgdir>
+            <imgdir name="7">
+                <int name="skill" value="201" />
+                <int name="action" value="5" />
+                <int name="level" value="158" />
+                <int name="skillAfter" value="1440" />
+            </imgdir>
+            <imgdir name="8">
+                <int name="skill" value="201" />
+                <int name="action" value="2" />
+                <int name="level" value="160" />
+                <int name="skillAfter" value="1440" />
+            </imgdir>
+            <imgdir name="9">
+                <int name="skill" value="114" />
+                <int name="action" value="7" />
+                <int name="level" value="43" />
+                <int name="skillAfter" value="630" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="ban">
+            <string name="banMsg" value="시그너스에 의해 알 수 없는 곳으로 추방됩니다." />
+            <imgdir name="banMap">
+                <imgdir name="0">
+                    <int name="instanceField" value="271041100" />
+                    <int name="field" value="271041300" />
+                    <string name="portal" value="sp" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="revive">
+            <int name="0" value="8840006" />
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+                <int name="fixDamR" value="100" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="2" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+                <int name="bulletSpeed" value="100" />
+                <int name="fixDamR" value="100" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="10" />
+                <int name="magic" value="1" />
+                <int name="disease" value="131" />
+                <int name="level" value="13" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="action" value="4" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="2" />
+                <int name="disease" value="173" />
+                <int name="level" value="1" />
+                <int name="fixDamR" value="10" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="action" value="5" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+                <int name="fixDamR" value="90" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="action" value="6" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+                <int name="fixDamR" value="100" />
+            </imgdir>
+        </imgdir>
+        <int name="showNotRemoteDam" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="wp" value="150" />
+        <int name="charismaEXP" value="159" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-111" y="-550" />
+                <vector name="rb" x="96" y="1" />
+                <int name="start" value="-4" />
+                <int name="areaCount" value="9" />
+                <int name="attackCount" value="5" />
+            </imgdir>
+            <imgdir name="areaWarning">
+                <uol name="13" value="11" />
+                <uol name="14" value="12" />
+                <uol name="15" value="11" />
+                <uol name="16" value="12" />
+                <uol name="17" value="11" />
+                <uol name="18" value="12" />
+                <uol name="19" value="11" />
+                <uol name="20" value="12" />
+                <uol name="21" value="11" />
+                <uol name="22" value="12" />
+                <uol name="23" value="11" />
+                <uol name="24" value="12" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="3510" />
+        </imgdir>
+        <uol name="17" value="11" />
+        <uol name="18" value="12" />
+        <uol name="19" value="13" />
+        <uol name="20" value="14" />
+        <uol name="21" value="15" />
+        <uol name="22" value="16" />
+        <uol name="23" value="11" />
+        <uol name="24" value="12" />
+        <uol name="25" value="13" />
+        <uol name="26" value="14" />
+        <uol name="27" value="15" />
+        <uol name="28" value="16" />
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-55" y="-84" />
+                <int name="r" value="400" />
+            </imgdir>
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="bulletCount" value="1" />
+            <int name="attackAfter" value="1200" />
+        </imgdir>
+        <uol name="17" value="../move/0" />
+        <uol name="18" value="../move/1" />
+        <uol name="19" value="../move/2" />
+        <uol name="20" value="../move/3" />
+    </imgdir>
+    <imgdir name="attack3">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-200" y="-150" />
+                <vector name="rb" x="200" y="0" />
+                <int name="start" value="-1" />
+                <int name="areaCount" value="3" />
+                <int name="attackCount" value="1" />
+            </imgdir>
+            <imgdir name="areaWarning">
+                <uol name="12" value="6" />
+                <uol name="13" value="7" />
+                <uol name="14" value="8" />
+                <uol name="15" value="9" />
+                <uol name="16" value="10" />
+                <uol name="17" value="11" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="2950" />
+        </imgdir>
+        <uol name="20" value="../move/0" />
+        <uol name="21" value="../move/1" />
+        <uol name="22" value="../move/2" />
+        <uol name="23" value="../move/3" />
+    </imgdir>
+    <imgdir name="attack4">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-100" y="-150" />
+                <vector name="rb" x="100" y="0" />
+                <int name="start" value="-4" />
+                <int name="areaCount" value="9" />
+                <int name="attackCount" value="4" />
+            </imgdir>
+            <imgdir name="areaWarning">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="4080" />
+        </imgdir>
+        <uol name="13" value="11" />
+        <uol name="14" value="10" />
+        <uol name="15" value="9" />
+        <uol name="16" value="8" />
+        <uol name="17" value="7" />
+        <uol name="18" value="6" />
+        <uol name="19" value="7" />
+        <uol name="20" value="8" />
+        <uol name="21" value="9" />
+        <uol name="22" value="10" />
+        <uol name="23" value="11" />
+        <uol name="24" value="12" />
+        <uol name="34" value="../stand/0" />
+        <uol name="35" value="../stand/1" />
+        <uol name="36" value="../stand/2" />
+        <uol name="37" value="../stand/3" />
+    </imgdir>
+    <imgdir name="attack5">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-111" y="-550" />
+                <vector name="rb" x="96" y="1" />
+                <int name="start" value="-5" />
+                <int name="areaCount" value="11" />
+                <int name="attackCount" value="11" />
+            </imgdir>
+            <imgdir name="areaWarning">
+                <uol name="13" value="11" />
+                <uol name="14" value="12" />
+                <uol name="15" value="11" />
+                <uol name="16" value="12" />
+                <uol name="17" value="11" />
+                <uol name="18" value="12" />
+                <uol name="19" value="11" />
+                <uol name="20" value="12" />
+                <uol name="21" value="11" />
+                <uol name="22" value="12" />
+                <uol name="23" value="11" />
+                <uol name="24" value="12" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="3510" />
+            <int name="onlyFsm" value="1" />
+        </imgdir>
+        <uol name="17" value="11" />
+        <uol name="18" value="12" />
+        <uol name="19" value="13" />
+        <uol name="20" value="14" />
+        <uol name="21" value="15" />
+        <uol name="22" value="16" />
+        <uol name="23" value="11" />
+        <uol name="24" value="12" />
+        <uol name="25" value="13" />
+        <uol name="26" value="14" />
+        <uol name="27" value="15" />
+        <uol name="28" value="16" />
+    </imgdir>
+    <imgdir name="attack6">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-111" y="-550" />
+                <vector name="rb" x="96" y="1" />
+                <int name="start" value="-5" />
+                <int name="areaCount" value="11" />
+                <int name="attackCount" value="8" />
+            </imgdir>
+            <imgdir name="areaWarning">
+                <uol name="13" value="11" />
+                <uol name="14" value="12" />
+                <uol name="15" value="11" />
+                <uol name="16" value="12" />
+                <uol name="17" value="11" />
+                <uol name="18" value="12" />
+                <uol name="19" value="11" />
+                <uol name="20" value="12" />
+                <uol name="21" value="11" />
+                <uol name="22" value="12" />
+                <uol name="23" value="11" />
+                <uol name="24" value="12" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="3510" />
+            <int name="effectAfter" value="0" />
+            <int name="randDelayAttack" value="4500" />
+        </imgdir>
+        <uol name="17" value="11" />
+        <uol name="18" value="12" />
+        <uol name="19" value="13" />
+        <uol name="20" value="14" />
+        <uol name="21" value="15" />
+        <uol name="22" value="16" />
+        <uol name="23" value="11" />
+        <uol name="24" value="12" />
+        <uol name="25" value="13" />
+        <uol name="26" value="14" />
+        <uol name="27" value="15" />
+        <uol name="28" value="16" />
+    </imgdir>
+    <imgdir name="skill1">
+    </imgdir>
+    <imgdir name="skill2">
+        <uol name="20" value="../move/0" />
+        <uol name="21" value="../move/1" />
+        <uol name="22" value="../move/2" />
+        <uol name="23" value="../move/3" />
+    </imgdir>
+    <imgdir name="skill3">
+        <uol name="21" value="../stand/0" />
+        <uol name="22" value="../stand/1" />
+        <uol name="23" value="../stand/2" />
+        <uol name="24" value="../stand/3" />
+    </imgdir>
+    <imgdir name="skill4">
+    </imgdir>
+    <imgdir name="skill5">
+    </imgdir>
+    <imgdir name="skill6">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="저의 충성스러운 기사단장들을 물리치기 전에는 절 쓰러뜨릴 수 없을거에요." />
+            <int name="floatNotice" value="54" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill7">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="sleep">
+    </imgdir>
+    <imgdir name="wakeup">
+    </imgdir>
+</imgdir>

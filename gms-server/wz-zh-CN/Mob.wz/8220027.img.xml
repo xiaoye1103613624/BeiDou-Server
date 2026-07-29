@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8220027.img">
+    <imgdir name="info">
+        <int name="level" value="10" />
+        <int name="maxHP" value="6200" />
+        <int name="maxMP" value="100000" />
+        <int name="mpRecovery" value="10000" />
+        <int name="speed" value="100" />
+        <int name="PADamage" value="22000" />
+        <int name="MADamage" value="24000" />
+        <int name="PDRate" value="30" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="100" />
+        <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+        <int name="eva" value="100" />
+        <int name="pushed" value="700" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <int name="firstAttack" value="1" />
+        <string name="mobType" value="1N" />
+        <int name="boss" value="1" />
+        <int name="wp" value="0" />
+        <imgdir name="speak">
+            <int name="chatBalloon" value="0" />
+        </imgdir>
+        <int name="fixedDamage" value="777" />
+        <int name="peddlerMob" value="1" />
+        <int name="onlyHittedByCommonAttack" value="1" />
+        <int name="peddlerDamR" value="1" />
+        <int name="peddlerCount" value="5" />
+        <int name="removeAfter" value="23" />
+        <int name="ignoreMovable" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+        <imgdir name="speak">
+            <int name="prob" value="50" />
+            <string name="0" value="我有宝物的事情，是秘密。" />
+            <string name="1" value="怎么感觉被打中的话，宝物就会掉呢。" />
+            <string name="2" value="宝物必须自己直接去捡才行。你应该知道吧？" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="move">
+        <imgdir name="speak">
+            <int name="prob" value="50" />
+            <string name="0" value="我有宝物的事情，是秘密。" />
+            <string name="1" value="怎么感觉被打中的话，宝物就会掉呢。" />
+            <string name="2" value="宝物必须自己直接去捡才行。你应该知道吧？" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+        <imgdir name="speak">
+            <int name="prob" value="50" />
+            <string name="0" value="我的宝物～" />
+            <string name="2" value="宝物必须自己直接去捡才行。你应该知道吧？" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

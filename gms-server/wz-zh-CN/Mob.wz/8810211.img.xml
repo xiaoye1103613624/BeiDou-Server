@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8810211.img">
+    <imgdir name="info">
+        <int name="flySpeed" value="20" />
+        <int name="firstAttack" value="1" />
+        <int name="level" value="103" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="4372500" />
+        <int name="maxMP" value="210" />
+        <int name="PADamage" value="1471" />
+        <int name="PDDamage" value="900" />
+        <int name="PDRate" value="25" />
+        <int name="MADamage" value="1458" />
+        <int name="MDDamage" value="580" />
+        <int name="MDRate" value="25" />
+        <int name="acc" value="450" />
+        <int name="eva" value="100" />
+        <int name="pushed" value="5000" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="1050" />
+        <int name="summonType" value="1" />
+        <int name="category" value="4" />
+        <string name="mobType" value="7N" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="magic" value="1" />
+                <int name="doFirst" value="1" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="magic" value="1" />
+                <int name="level" value="7" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="firstAttackRange">
+            <vector name="lt" x="-1024" y="-800" />
+            <vector name="rb" x="1024" y="800" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-25" y="-42" />
+                <vector name="rb" x="25" y="0" />
+                <int name="start" value="-7" />
+                <int name="areaCount" value="15" />
+                <int name="attackCount" value="4" />
+            </imgdir>
+            <imgdir name="areaWarning">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="1680" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-350" y="-140" />
+                <vector name="rb" x="30" y="10" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="300" />
+        </imgdir>
+        <uol name="6" value="../fly/0" />
+        <uol name="7" value="../fly/1" />
+        <uol name="8" value="../fly/2" />
+        <uol name="9" value="../fly/3" />
+        <uol name="10" value="../fly/4" />
+        <uol name="11" value="../fly/5" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

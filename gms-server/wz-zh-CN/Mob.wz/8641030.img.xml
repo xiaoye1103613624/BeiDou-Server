@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8641030.img">
+    <imgdir name="info">
+        <int name="level" value="200" />
+        <int name="maxHP" value="2100000000" />
+        <int name="maxMP" value="187500" />
+        <int name="PADamage" value="20946" />
+        <int name="PDDamage" value="170" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="20661" />
+        <int name="MDDamage" value="210" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="832" />
+        <int name="eva" value="240" />
+        <int name="speed" value="1" />
+        <int name="pushed" value="13000" />
+        <int name="fs" value="11" />
+        <int name="exp" value="0" />
+        <int name="summonType" value="78" />
+        <int name="summonEffect" value="78" />
+        <int name="category" value="0" />
+        <int name="boss" value="1" />
+        <int name="noFlip" value="1" />
+        <int name="ignoreMovable" value="1" />
+        <imgdir name="movePerHit">
+            <int name="distance" value="50" />
+            <int name="count" value="2" />
+            <int name="speedR" value="10" />
+            <int name="way" value="0" />
+        </imgdir>
+        <int name="fixedDamage" value="1" />
+        <int name="hideHP" value="1" />
+        <int name="hideUserDamage" value="1" />
+        <imgdir name="onlySelectedSkill">
+            <int name="0" value="80002685" />
+        </imgdir>
+        <imgdir name="createInvincible">
+            <int name="skillID" value="146" />
+            <int name="level" value="19" />
+        </imgdir>
+        <int name="noDebuff" value="1" />
+        <int name="ignoreLevelOptimum" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="move">
+        <uol name="0" value="../stand/0" />
+        <uol name="1" value="../stand/1" />
+        <uol name="2" value="../stand/2" />
+        <uol name="3" value="../stand/3" />
+        <uol name="4" value="../stand/4" />
+        <uol name="5" value="../stand/5" />
+        <uol name="6" value="../stand/6" />
+        <uol name="7" value="../stand/7" />
+        <uol name="8" value="../stand/8" />
+        <uol name="9" value="../stand/9" />
+    </imgdir>
+</imgdir>

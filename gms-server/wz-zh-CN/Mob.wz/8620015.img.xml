@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8620015.img">
+    <imgdir name="info">
+        <int name="chaseSpeed" value="60" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="50" />
+                <int name="type" value="0" />
+                <int name="attackCount" value="2" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="172" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="26640000" />
+        <int name="maxMP" value="20000" />
+        <int name="PADamage" value="11739" />
+        <int name="PDDamage" value="170" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="11603" />
+        <int name="MDDamage" value="210" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="pushed" value="5328000" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="66714" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="7N" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-61" y="-71" />
+                <vector name="rb" x="-5" y="0" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="240" />
+        </imgdir>
+        <uol name="9" value="../stand/0" />
+        <uol name="10" value="../stand/1" />
+        <uol name="11" value="../stand/2" />
+        <uol name="12" value="../stand/3" />
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-90" y="-65" />
+                <vector name="rb" x="-20" y="10" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="270" />
+        </imgdir>
+        <uol name="11" value="../stand/0" />
+        <uol name="12" value="../stand/1" />
+        <uol name="13" value="../stand/2" />
+        <uol name="14" value="../stand/3" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="chase">
+    </imgdir>
+</imgdir>

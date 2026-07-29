@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2700102.img">
+    <imgdir name="info">
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="201" />
+                <int name="action" value="1" />
+                <int name="level" value="112" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="600" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="type" value="2" />
+                <int name="conMP" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="cooltime" value="2000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="speak">
+            <string name="0" value="冲啊" />
+            <int name="chatBalloon" value="0" />
+        </imgdir>
+        <int name="level" value="200" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="10000000" />
+        <int name="maxMP" value="25000" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="SchoolAttackMasterMob" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="10000" />
+        <int name="PDDamage" value="100" />
+        <int name="PDRate" value="50" />
+        <int name="MADamage" value="10000" />
+        <int name="MDDamage" value="100" />
+        <int name="MDRate" value="50" />
+        <int name="acc" value="790" />
+        <int name="eva" value="250" />
+        <int name="pushed" value="10000" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="64640" />
+        <int name="summonType" value="1" />
+        <int name="category" value="6" />
+        <string name="mobType" value="1N" />
+        <string name="elemAttr" value="H3D2" />
+        <int name="boss" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="3" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="ignoreFieldOut" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-71" y="-65" />
+                <int name="r" value="500" />
+            </imgdir>
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attach" value="1" />
+            <int name="attackAfter" value="450" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill1">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="我来介绍下我的研究成果吧！" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="960" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="先摧毁被召唤出的器械。如果器械增多，会造成很多麻烦。" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

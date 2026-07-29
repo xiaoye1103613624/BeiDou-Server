@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="4230127.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="2" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="165" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="4142000" />
+        <int name="maxMP" value="16000" />
+        <int name="speed" value="-40" />
+        <int name="PADamage" value="7110" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="7020" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="pushed" value="5000" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="17910" />
+        <int name="summonType" value="1" />
+        <int name="category" value="5" />
+        <string name="mobType" value="4N" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="jump">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-39" y="-22" />
+                <int name="r" value="280" />
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="ball">
+                <int name="rotatePeriod" value="200" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="effectAfter" value="0" />
+            <int name="attackAfter" value="500" />
+        </imgdir>
+        <uol name="7" value="0" />
+        <uol name="8" value="1" />
+        <uol name="9" value="2" />
+        <uol name="10" value="3" />
+        <uol name="11" value="4" />
+        <uol name="12" value="5" />
+        <uol name="13" value="6" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

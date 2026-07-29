@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8500012.img">
+    <imgdir name="info">
+        <int name="noregen" value="1" />
+        <int name="firstAttack" value="1" />
+        <string name="defaultHP" value="无法测定" />
+        <string name="defaultMP" value="无法测定" />
+        <int name="rareItemDropLevel" value="3" />
+        <imgdir name="default">
+        </imgdir>
+        <int name="charismaEXP" value="97" />
+        <int name="level" value="155" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="2100000000" />
+        <int name="maxMP" value="2000000" />
+        <int name="speed" value="60" />
+        <int name="PADamage" value="20000" />
+        <int name="PDRate" value="90" />
+        <int name="MADamage" value="25000" />
+        <int name="MDRate" value="90" />
+        <int name="acc" value="600" />
+        <int name="eva" value="500" />
+        <int name="pushed" value="1000000000" />
+        <int name="boss" value="1" />
+        <int name="exp" value="1234200" />
+        <int name="summonType" value="1" />
+        <int name="category" value="5" />
+        <string name="mobType" value="7N" />
+        <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="2" />
+                <int name="magic" value="1" />
+                <int name="bulletSpeed" value="300" />
+                <int name="fixDamR" value="30" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="201" />
+                <int name="action" value="1" />
+                <int name="level" value="233" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="1200" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="105" />
+                <int name="action" value="2" />
+                <int name="level" value="17" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="960" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="skill" value="241" />
+                <int name="action" value="3" />
+                <int name="level" value="4" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="630" />
+                <int name="preSkillIndex" value="3" />
+                <int name="preSkillCount" value="1" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="skill" value="241" />
+                <int name="action" value="4" />
+                <int name="level" value="5" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="630" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="skill" value="241" />
+                <int name="action" value="5" />
+                <int name="level" value="6" />
+                <int name="onlyOtherSkill" value="1" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="skill" value="241" />
+                <int name="action" value="6" />
+                <int name="level" value="6" />
+                <int name="onlyOtherSkill" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="explosiveReward" value="1" />
+        <string name="finalmaxHP" value="16600000000" />
+        <imgdir name="speak" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="showNotRemoteDam" value="1" />
+        <int name="isRemoteRange" value="1" />
+        <int name="wp" value="50" />
+    </imgdir>
+    <imgdir name="fly">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="-75" y="-31" />
+                <int name="r" value="500" />
+            </imgdir>
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="bulletCount" value="6" />
+            <int name="attackAfter" value="990" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill1">
+    </imgdir>
+    <imgdir name="skill2">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="帕普拉图斯吸收异界的帕普拉图斯，恢复了血量。" />
+            <int name="floatNotice" value="237" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill3">
+    </imgdir>
+    <imgdir name="skill4">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="和其他队员聚在一起，就可以抵抗时间激流。" />
+            <int name="floatNotice" value="237" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill5">
+        <imgdir name="hit">
+        </imgdir>
+        <int name="repeatFrameTime" value="30000" />
+        <int name="repeatFrameIdx" value="21" />
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="帕普拉图斯的警报响起！你的体力在持续减少，当心！" />
+            <int name="floatNotice" value="237" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill6">
+    </imgdir>
+</imgdir>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8940012.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="type" value="2" />
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="bulletSpeed" value="500" />
+                <int name="fixDamR" value="5" />
+                <int name="cooltime" value="10" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="type" value="0" />
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="cooltime" value="7" />
+                <int name="ignoreEvasion" value="5" />
+                <int name="fixDamR" value="10" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="30" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="9999" />
+        <int name="maxMP" value="5000" />
+        <int name="PADamage" value="666" />
+        <int name="PDRate" value="50" />
+        <int name="MDRate" value="50" />
+        <int name="MADamage" value="666" />
+        <int name="PDDamage" value="170" />
+        <int name="MDDamage" value="170" />
+        <int name="acc" value="100" />
+        <int name="eva" value="100" />
+        <int name="pushed" value="999999" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="6" />
+        <string name="mobType" value="1N" />
+        <int name="boss" value="1" />
+        <int name="flySpeed" value="0" />
+        <imgdir name="speak">
+            <int name="chatBalloon" value="0" />
+        </imgdir>
+        <int name="fixedDamage" value="999" />
+    </imgdir>
+    <imgdir name="stand">
+        <imgdir name="speak">
+            <int name="prob" value="10" />
+            <string name="0" value="내가 왜 여기에 있지." />
+            <string name="1" value="내가 누구인지 기억나지 않아." />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="speak">
+            <int name="prob" value="10" />
+            <string name="0" value="누군가를 공격해야 할 것 같아." />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="ball">
+            </imgdir>
+            <imgdir name="hit">
+                <int name="pos" value="2" />
+            </imgdir>
+            <imgdir name="range">
+                <int name="r" value="300" />
+                <vector name="sp" x="-82" y="-2" />
+            </imgdir>
+            <int name="effectAfter" value="0" />
+            <int name="attackAfter" value="720" />
+        </imgdir>
+        <uol name="12" value="0" />
+        <uol name="13" value="0" />
+        <uol name="14" value="0" />
+        <imgdir name="speak">
+            <int name="prob" value="10" />
+            <string name="0" value="난 싸우기 싫어..." />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="hit">
+            </imgdir>
+            <imgdir name="range">
+                <vector name="lt" x="-256" y="-305" />
+                <vector name="rb" x="253" y="73" />
+            </imgdir>
+            <int name="attackAfter" value="1080" />
+        </imgdir>
+        <uol name="16" value="0" />
+        <uol name="17" value="0" />
+        <imgdir name="speak">
+            <int name="prob" value="10" />
+            <string name="0" value="난 싸우기 싫어..." />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+        <imgdir name="speak">
+            <int name="prob" value="10" />
+            <string name="0" value="아아... 난 결국 누구였던거지." />
+        </imgdir>
+    </imgdir>
+    <imgdir name="regen">
+    </imgdir>
+</imgdir>

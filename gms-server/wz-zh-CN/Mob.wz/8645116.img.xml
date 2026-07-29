@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8645116.img">
+    <imgdir name="info">
+        <int name="level" value="100" />
+        <int name="firstAttack" value="1" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="70000" />
+        <int name="maxMP" value="2200" />
+        <int name="speed" value="-30" />
+        <int name="PADamage" value="575" />
+        <int name="PDDamage" value="170" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="605" />
+        <int name="MDDamage" value="210" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="203" />
+        <int name="eva" value="51" />
+        <int name="pushed" value="900" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="1N" />
+        <int name="mobJobCategory" value="0" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+        </imgdir>
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="Cerenium1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <int name="attackAfter" value="720" />
+            <imgdir name="range">
+                <vector name="lt" x="-142" y="-82" />
+                <vector name="rb" x="60" y="5" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="pos" value="3" />
+                <int name="attach" value="1" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

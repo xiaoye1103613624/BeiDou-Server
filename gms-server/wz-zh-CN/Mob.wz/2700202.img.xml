@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2700202.img">
+    <imgdir name="info">
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="217" />
+                <int name="action" value="1" />
+                <int name="level" value="3" />
+                <int name="effectAfter" value="0" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="224" />
+                <int name="action" value="2" />
+                <int name="level" value="1" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="2760" />
+                <int name="priority" value="2" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="skill" value="224" />
+                <int name="action" value="2" />
+                <int name="level" value="2" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="2760" />
+                <int name="priority" value="2" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="skill" value="170" />
+                <int name="action" value="3" />
+                <int name="level" value="26" />
+                <int name="skillForbid" value="3200" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="skill" value="220" />
+                <int name="action" value="5" />
+                <int name="level" value="1" />
+                <int name="skillAfter" value="450" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="skill" value="145" />
+                <int name="action" value="4" />
+                <int name="level" value="32" />
+                <int name="skillAfter" value="150" />
+                <int name="onlyOtherSkill" value="1" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="skill" value="176" />
+                <int name="action" value="6" />
+                <int name="level" value="16" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="1800" />
+                <int name="priority" value="2" />
+                <int name="onlyFsm" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="cooltime" value="8000" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="200" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="10000000" />
+        <int name="maxMP" value="25000" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="SchoolAttackBoss" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="10000" />
+        <int name="PDDamage" value="100" />
+        <int name="PDRate" value="50" />
+        <int name="MADamage" value="10000" />
+        <int name="MDDamage" value="100" />
+        <int name="MDRate" value="50" />
+        <int name="acc" value="790" />
+        <int name="eva" value="250" />
+        <int name="pushed" value="10000" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="64640" />
+        <int name="summonType" value="1" />
+        <int name="category" value="6" />
+        <string name="mobType" value="1N" />
+        <string name="elemAttr" value="H3D2" />
+        <int name="boss" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <imgdir name="speak">
+            <string name="0" value="冲啊" />
+            <int name="chatBalloon" value="0" />
+        </imgdir>
+        <int name="ignoreFieldOut" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="explosiveReward" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-88" y="-160" />
+                <vector name="rb" x="28" y="20" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="600" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill1">
+        <imgdir name="speak">
+            <int name="prob" value="50" />
+            <string name="0" value="快滚开，你这个家伙！" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="750" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill2">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="没什么比涂画更有趣了" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="900" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill3">
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="我要踩扁你" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="1200" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="那家伙消失了！它不知会从什么地方出现，快躲开！" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skillAfter3">
+    </imgdir>
+    <imgdir name="skill4">
+        <imgdir name="speak">
+            <int name="prob" value="50" />
+            <string name="0" value="看看我的厉害吧！" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="750" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill5">
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="它会在一定时间内使出各种攻击，你一定要小心。" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill6">
+        <imgdir name="speak">
+            <int name="prob" value="50" />
+            <string name="0" value="看到我的成绩后，你可不要吃惊。" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="1500" />
+            <vector name="addPos" x="0" y="40" />
+        </imgdir>
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="我感受到了十分强烈的气息！必须要确保充足的体力。" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

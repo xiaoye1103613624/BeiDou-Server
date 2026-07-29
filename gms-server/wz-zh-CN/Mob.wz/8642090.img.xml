@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8642090.img">
+    <imgdir name="info">
+        <int name="level" value="220" />
+        <int name="firstAttack" value="1" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="1000000000" />
+        <int name="maxMP" value="2000000" />
+        <int name="speed" value="1" />
+        <int name="PADamage" value="15075" />
+        <int name="PDDamage" value="15075" />
+        <int name="PDRate" value="20" />
+        <int name="MADamage" value="14963" />
+        <int name="MDDamage" value="14963" />
+        <int name="MDRate" value="20" />
+        <int name="acc" value="900" />
+        <int name="eva" value="240" />
+        <int name="pushed" value="15000" />
+        <int name="fs" value="11" />
+        <int name="exp" value="0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="0" />
+        <string name="mobType" value="1N" />
+        <int name="mobJobCategory" value="0" />
+        <int name="boss" value="1" />
+        <string name="elemAttr" value="P2H2F2I2S2L2D2" />
+        <int name="fixedBodyAttackDamageR" value="10" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+        </imgdir>
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="1UserDamageHPr" value="20" />
+        <int name="1UserDamageInvincibleTime" value="5000" />
+        <int name="ignoreMoveImpact" value="1" />
+    </imgdir>
+    <imgdir name="die1">
+        <uol name="0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="regen">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-262" y="-127" />
+                <vector name="rb" x="269" y="4" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="attackAfter" value="480" />
+        </imgdir>
+    </imgdir>
+</imgdir>

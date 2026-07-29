@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2400302.img">
+    <imgdir name="info">
+        <int name="level" value="18" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="325" />
+        <int name="maxMP" value="40" />
+        <int name="speed" value="-30" />
+        <int name="PADamage" value="80" />
+        <int name="MADamage" value="75" />
+        <int name="PDRate" value="10" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="23" />
+        <int name="eva" value="1" />
+        <int name="pushed" value="20" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="32" />
+        <int name="summonType" value="1" />
+        <int name="category" value="1" />
+        <string name="mobType" value="1N" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-150" y="-61" />
+                <vector name="rb" x="32" y="1" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="960" />
+            <int name="delay" value="120" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

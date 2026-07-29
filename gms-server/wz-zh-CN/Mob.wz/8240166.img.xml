@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8240166.img">
+    <imgdir name="info">
+        <int name="skeleton" value="1" />
+        <int name="level" value="5" />
+        <int name="maxHP" value="5000000" />
+        <int name="acc" value="203" />
+        <int name="eva" value="51" />
+        <float name="fs" value="10.0" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="1N" />
+        <int name="blockUserMove" value="1" />
+        <int name="bodyAttack" value="1" />
+        <int name="skelAniMixRate" value="0" />
+        <int name="nonLevelCheckEVA" value="1" />
+        <int name="nonLevelCheckACC" value="1" />
+        <int name="noFlip" value="1" />
+        <imgdir name="speak">
+            <int name="chatBalloon" value="0" />
+            <imgdir name="0">
+                <int name="hp" value="4000000" />
+                <string name="0" value="...!" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="hp" value="3000000" />
+                <string name="0" value="你们无法过我这关。" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="hp" value="2000000" />
+                <string name="0" value="...!!" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="hp" value="1000000" />
+                <string name="0" value="...!!!" />
+                <string name="1" value="你们无法过我这关。" />
+                <string name="2" value="符文石怪……！" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="damagedBySelectedSkill">
+            <int name="0" value="80001910" />
+            <int name="1" value="80001911" />
+            <int name="2" value="80001912" />
+            <int name="3" value="80001913" />
+            <int name="4" value="80001914" />
+            <int name="5" value="80001915" />
+            <int name="6" value="80001916" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="regen">
+        <string name="aniName" value="00_summon" />
+    </imgdir>
+    <imgdir name="die1">
+        <string name="aniName" value="02_die" />
+    </imgdir>
+    <imgdir name="stand">
+        <string name="aniName" value="01_stand" />
+    </imgdir>
+    <sound name="8240166" />
+</imgdir>

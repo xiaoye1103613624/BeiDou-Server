@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2400576.img">
+    <imgdir name="info">
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="HPgaugeHide" value="1" />
+        <int name="level" value="170" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="50000" />
+        <int name="maxMP" value="18000" />
+        <int name="PADamage" value="7560" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="7470" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="640" />
+        <int name="eva" value="180" />
+        <int name="speed" value="-30" />
+        <int name="pushed" value="5500" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="20927" />
+        <int name="summonType" value="1" />
+        <int name="category" value="1" />
+        <string name="elemAttr" value="I2L2F2H2D2" />
+        <string name="mobType" value="4N" />
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="200" />
+                <int name="action" value="1" />
+                <int name="level" value="27" />
+                <int name="effectAfter" value="0" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+                <string name="elemAttr" value="L" />
+            </imgdir>
+        </imgdir>
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="hoyoung_StoryBoss" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="jump">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-250" y="-160" />
+                <vector name="rb" x="250" y="0" />
+            </imgdir>
+            <imgdir name="effect">
+                <imgdir name="0">
+                </imgdir>
+                <imgdir name="1">
+                </imgdir>
+                <imgdir name="2">
+                </imgdir>
+                <int name="x" value="105" />
+                <int name="y" value="130" />
+                <int name="fall" value="400" />
+                <int name="start" value="150" />
+                <int name="interval" value="90" />
+                <int name="count" value="25" />
+                <int name="duration" value="500" />
+                <int name="effectType" value="2" />
+                <int name="delay" value="1000" />
+                <vector name="lt" x="-250" y="-160" />
+                <vector name="rb" x="250" y="0" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="600" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="skill1">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+        <uol name="33" value="17" />
+        <uol name="34" value="18" />
+        <uol name="35" value="19" />
+        <uol name="36" value="20" />
+        <uol name="37" value="21" />
+        <uol name="38" value="22" />
+        <uol name="39" value="23" />
+        <uol name="40" value="24" />
+        <uol name="41" value="25" />
+        <uol name="42" value="26" />
+        <uol name="43" value="27" />
+        <uol name="44" value="28" />
+        <uol name="45" value="29" />
+        <uol name="46" value="30" />
+        <uol name="47" value="31" />
+        <uol name="48" value="32" />
+    </imgdir>
+</imgdir>

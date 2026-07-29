@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="3501100.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="3" />
+                <int name="conMP" value="2" />
+                <int name="magic" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="53" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="7200" />
+        <int name="maxMP" value="800" />
+        <int name="speed" value="-40" />
+        <int name="PADamage" value="271" />
+        <int name="PDDamage" value="570" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="284" />
+        <int name="MDDamage" value="570" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="90" />
+        <int name="eva" value="20" />
+        <int name="pushed" value="400" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="210" />
+        <int name="summonType" value="1" />
+        <int name="category" value="2" />
+        <string name="mobType" value="1H" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="TDungeon30to60" />
+        <string name="descLevelforWorldmap" value="30-59" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-68" y="-88" />
+                <vector name="rb" x="-8" y="-1" />
+                <int name="start" value="-3" />
+                <int name="areaCount" value="7" />
+                <int name="attackCount" value="7" />
+            </imgdir>
+            <imgdir name="areaWarning">
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="840" />
+            <int name="effectAfter" value="840" />
+        </imgdir>
+        <uol name="11" value="../stand/0" />
+        <uol name="12" value="../stand/1" />
+        <uol name="13" value="../stand/2" />
+        <uol name="14" value="../stand/3" />
+        <uol name="15" value="../stand/4" />
+        <uol name="16" value="../stand/5" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

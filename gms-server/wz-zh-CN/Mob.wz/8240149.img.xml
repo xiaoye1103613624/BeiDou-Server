@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8240149.img">
+    <imgdir name="info">
+        <int name="ignoreFieldOut" value="1" />
+        <string name="elemAttr" value="" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="level" value="150" />
+        <int name="bodyAttack" value="1" />
+        <string name="finalmaxHP" value="6300000000" />
+        <int name="maxHP" value="70000000" />
+        <int name="maxMP" value="120" />
+        <int name="speed" value="20" />
+        <int name="PADamage" value="140" />
+        <int name="PDRate" value="10" />
+        <int name="MDRate" value="10" />
+        <int name="MADamage" value="135" />
+        <int name="acc" value="40" />
+        <int name="eva" value="72" />
+        <int name="pushed" value="150" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="0" />
+        <int name="category" value="1" />
+        <string name="mobType" value="7N" />
+        <int name="explosiveReward" value="1" />
+        <int name="individualReward" value="1" />
+        <int name="skeleton" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="noFlip" value="1" />
+        <int name="skelAniMixRate" value="0" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="knockback" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="selfDestruction">
+            <int name="action" value="4" />
+            <int name="removeAfter" value="10" />
+        </imgdir>
+        <imgdir name="revive">
+            <int name="0" value="8240150" />
+        </imgdir>
+        <int name="nonLevelCheckEVA" value="1" />
+        <int name="nonLevelCheckACC" value="1" />
+        <int name="PDDamage" value="10" />
+        <int name="MDDamage" value="15" />
+    </imgdir>
+    <imgdir name="stand">
+        <string name="aniName" value="03_cave over_01_stand" />
+    </imgdir>
+    <imgdir name="revive">
+        <string name="aniName" value="03_cave over_00_fall" />
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-235" y="-410" />
+                <vector name="rb" x="0" y="0" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="300" />
+        </imgdir>
+        <string name="aniName" value="03_cave over_04_attack" />
+    </imgdir>
+    <imgdir name="hit1">
+        <string name="aniName" value="03_cave over_02_stand2" />
+    </imgdir>
+    <imgdir name="die1">
+        <string name="aniName" value="03_cave over_02_stand2" />
+    </imgdir>
+    <imgdir name="spine_effect">
+        <imgdir name="03_cave over_04_attack_effect">
+            <int name="z" value="-400000" />
+            <int name="delay" value="5000" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="HitParts">
+        <imgdir name="1">
+            <imgdir name="0">
+                <imgdir name="stat">
+                    <string name="info" value="부위의 속성값" />
+                    <int name="durability" value="100" />
+                    <int name="hardness" value="25" />
+                </imgdir>
+                <imgdir name="hitEvent">
+                    <string name="info" value="해당 부위 타격시 처리해야할 내용들" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <sound name="8240149" />
+</imgdir>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8240150.img">
+    <imgdir name="info">
+        <int name="ignoreFieldOut" value="1" />
+        <string name="elemAttr" value="" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="level" value="150" />
+        <int name="bodyAttack" value="1" />
+        <string name="finalmaxHP" value="6300000000" />
+        <int name="maxHP" value="1" />
+        <int name="maxMP" value="120" />
+        <int name="speed" value="40" />
+        <int name="PADamage" value="140" />
+        <int name="PDRate" value="10" />
+        <int name="MDRate" value="10" />
+        <int name="MADamage" value="135" />
+        <int name="acc" value="40" />
+        <int name="eva" value="72" />
+        <int name="pushed" value="150" />
+        <float name="fs" value="10.0" />
+        <int name="boss" value="1" />
+        <int name="exp" value="0" />
+        <int name="category" value="1" />
+        <string name="mobType" value="7N" />
+        <int name="explosiveReward" value="1" />
+        <int name="individualReward" value="1" />
+        <int name="skeleton" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+        <int name="skelAniMixRate" value="0" />
+        <int name="firstAttack" value="1" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="50" />
+                <int name="type" value="9" />
+                <int name="fixDamR" value="3" />
+                <int name="disease" value="125" />
+                <int name="level" value="40" />
+                <int name="bulletSpeed" value="120" />
+                <int name="cooltime" value="2000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="236" />
+                <int name="action" value="1" />
+                <int name="level" value="1" />
+                <int name="priority" value="1" />
+                <int name="fixDamR" value="3" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="176" />
+                <int name="action" value="2" />
+                <int name="level" value="37" />
+                <int name="skillAfter" value="3166" />
+                <int name="fixDamR" value="3" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="skill" value="201" />
+                <int name="action" value="3" />
+                <int name="level" value="177" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="1080" />
+                <int name="fixDamR" value="3" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="revive">
+            <int name="0" value="8240149" />
+        </imgdir>
+        <imgdir name="damagedBySelectedSkill">
+            <int name="0" value="80001896" />
+        </imgdir>
+        <int name="nonLevelCheckEVA" value="1" />
+        <int name="nonLevelCheckACC" value="1" />
+        <int name="PDDamage" value="10" />
+        <int name="MDDamage" value="15" />
+    </imgdir>
+    <imgdir name="stand">
+        <string name="aniName" value="01_stand_1" />
+    </imgdir>
+    <imgdir name="move">
+        <string name="aniName" value="02_move1_2" />
+    </imgdir>
+    <imgdir name="revive">
+        <string name="aniName" value="01_stand_1" />
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="sp" x="0" y="100" />
+                <int name="r" value="800" />
+                <int name="radius" value="50" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="1000" />
+            <imgdir name="ball">
+            </imgdir>
+        </imgdir>
+        <string name="aniName" value="04_attack_02" />
+    </imgdir>
+    <imgdir name="skill1">
+        <string name="aniName" value="05_jump_1" />
+    </imgdir>
+    <imgdir name="skillAfter1">
+        <string name="aniName" value="05_jump_2" />
+    </imgdir>
+    <imgdir name="skill2">
+        <string name="aniName" value="04_attack_03" />
+    </imgdir>
+    <imgdir name="skillAfter2">
+        <string name="aniName" value="04_attack_03_1" />
+    </imgdir>
+    <imgdir name="skill3">
+        <string name="aniName" value="04_attack_01" />
+    </imgdir>
+    <imgdir name="HitParts">
+        <imgdir name="1">
+            <imgdir name="0">
+                <imgdir name="stat">
+                    <string name="info" value="부위의 속성값" />
+                    <int name="durability" value="100" />
+                    <int name="hardness" value="25" />
+                </imgdir>
+                <imgdir name="hitEvent">
+                    <string name="info" value="해당 부위 타격시 처리해야할 내용들" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="spine_effect">
+        <imgdir name="04_attack_01_effect">
+        </imgdir>
+    </imgdir>
+    <sound name="8240150" />
+</imgdir>

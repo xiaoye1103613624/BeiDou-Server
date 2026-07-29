@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="2700100.img">
+    <imgdir name="info">
+        <int name="level" value="200" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="10000000" />
+        <int name="maxMP" value="25000" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="SchoolAttackMasterMob" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="10000" />
+        <int name="PDDamage" value="100" />
+        <int name="PDRate" value="50" />
+        <int name="MADamage" value="10000" />
+        <int name="MDDamage" value="100" />
+        <int name="MDRate" value="50" />
+        <int name="acc" value="790" />
+        <int name="eva" value="250" />
+        <int name="pushed" value="999999999" />
+        <float name="fs" value="10.0" />
+        <int name="exp" value="64640" />
+        <int name="summonType" value="1" />
+        <int name="category" value="6" />
+        <string name="mobType" value="1N" />
+        <string name="elemAttr" value="H3D2" />
+        <int name="boss" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="3" />
+        <int name="hpTagBgcolor" value="5" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="80" />
+                <int name="type" value="0" />
+                <int name="cooltime" value="5000" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="10" />
+                <int name="type" value="0" />
+                <int name="conMP" value="1" />
+                <int name="fixDamR" value="50" />
+                <int name="fixDamRType" value="1" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="10" />
+                <int name="type" value="0" />
+                <int name="conMP" value="1" />
+                <int name="fixDamR" value="25" />
+                <int name="fixDamRType" value="1" />
+                <int name="disease" value="219" />
+                <int name="level" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="speak">
+            <string name="0" value="冲啊" />
+            <int name="chatBalloon" value="0" />
+        </imgdir>
+        <int name="ignoreFieldOut" value="1" />
+        <int name="ignoreMoveImpact" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-192" y="-86" />
+                <vector name="rb" x="57" y="-26" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="450" />
+            <int name="delay" value="120" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack2">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-193" y="-53" />
+                <vector name="rb" x="193" y="7" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="1350" />
+            <int name="onlyFsm" value="1" />
+        </imgdir>
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="该打针了！" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="1200" />
+            <vector name="addPos" x="0" y="70" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="attack3">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-193" y="-53" />
+                <vector name="rb" x="193" y="7" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="1350" />
+            <int name="onlyFsm" value="1" />
+        </imgdir>
+        <imgdir name="speak">
+            <int name="prob" value="100" />
+            <string name="0" value="我来让你生病吧！" />
+            <int name="cryBalloon" value="0" />
+            <int name="front" value="1" />
+            <int name="delay" value="1200" />
+            <vector name="addPos" x="0" y="70" />
+        </imgdir>
+        <imgdir name="message">
+            <int name="type" value="158" />
+            <int name="delay" value="5000" />
+            <string name="0" value="小心啊！如果被击中，攻击力和防御力都会减半！" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>

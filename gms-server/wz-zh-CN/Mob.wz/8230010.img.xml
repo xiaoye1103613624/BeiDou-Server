@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8230010.img">
+    <imgdir name="info">
+        <int name="firstAttack" value="1" />
+        <int name="level" value="110" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="411400" />
+        <int name="maxMP" value="3000" />
+        <int name="PADamage" value="1340" />
+        <int name="PDDamage" value="100" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="1330" />
+        <int name="MDDamage" value="100" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="360" />
+        <int name="eva" value="97" />
+        <int name="pushed" value="1300" />
+        <int name="exp" value="3059" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="D2" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="changeableMob" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-197" y="-63" />
+                <vector name="rb" x="197" y="30" />
+            </imgdir>
+            <imgdir name="hit">
+                <int name="attach" value="1" />
+            </imgdir>
+            <int name="effectAfter" value="0" />
+            <int name="attackAfter" value="1350" />
+        </imgdir>
+        <uol name="16" value="../stand/0" />
+        <uol name="17" value="../stand/1" />
+        <uol name="18" value="../stand/2" />
+        <uol name="19" value="../stand/3" />
+        <uol name="20" value="../stand/4" />
+        <uol name="21" value="../stand/5" />
+        <uol name="22" value="../stand/6" />
+        <uol name="23" value="../stand/7" />
+    </imgdir>
+</imgdir>

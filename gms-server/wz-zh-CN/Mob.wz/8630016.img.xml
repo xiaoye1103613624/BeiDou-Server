@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8630016.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="magic" value="1" />
+            </imgdir>
+        </imgdir>
+        <int name="level" value="181" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="7205000" />
+        <int name="maxMP" value="35000" />
+        <int name="speed" value="-20" />
+        <int name="PADamage" value="9975" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="9870" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="723" />
+        <int name="eva" value="205" />
+        <int name="pushed" value="7000" />
+        <int name="exp" value="28800" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="7N" />
+        <float name="fs" value="10.0" />
+        <int name="firstAttack" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="-300" y="-153" />
+                <vector name="rb" x="-36" y="10" />
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+            <int name="attackAfter" value="840" />
+        </imgdir>
+        <uol name="12" value="../stand/0" />
+        <uol name="13" value="../stand/1" />
+        <uol name="14" value="../stand/2" />
+        <uol name="15" value="../stand/3" />
+        <uol name="16" value="../stand/4" />
+        <uol name="17" value="../stand/5" />
+    </imgdir>
+    <imgdir name="hit1">
+    </imgdir>
+    <imgdir name="die1">
+    </imgdir>
+</imgdir>
