@@ -45,11 +45,29 @@ public enum EquipSlot {
     MEDAL("Me", -49),              // 勋章（任务/活动获得，索引在很后面）
     BELT("Be", -50),               // 腰带（也是后期加入的，排在勋章后面）
 
+    // ========== 徽章 & 图腾（UI 红标 9/10，ijl15 BP54/55）==========
+    // 徽章 118 / islot Ba → −54（cash 客户端仍可能发 −154）；图腾 120 / islot To → −55（−155）。
+    // 勿把图腾再标 Po（口袋）；客户端 −54/−55 用影子 ZRef（同 −53）。
+    // isAllowed 同时放行普通槽与 cash 槽别名，避免客户端 cash 标记与服务端不一致时拒穿。
+    BADGE("Ba", -54, -154),
+    TOTEM("To", -55, -155),
+
+    // ========== 口袋（WZ 有 Po 道具但 ijl15 尚未加 UI 槽）= =========
+    // 0116xxx 系列道具 islot=Po，Character.wz/Accessory 已有 81 件。
+    // −21 为后 BigBang 标准口袋槽位；cash 形态 −121。
+    // ⚠ 需要客户端 ijl15 增加 BP21 绘制 + GetItem/SetItem 绑定后才真正可用。
+    POCKET("Po", -21, -121),
+
     // ========== 宠物（特殊逻辑，无索引） ==========
     PET_EQUIP,                     // 宠物装备（走宠物数据包，不走角色穿戴包，所以不需要String和int）
 
-    //ANDROID("Dr", -21),   // 机器人（部分版本）
-    //HEART("Ht", -22);     // 心脏（机器人心脏）
+    // ========== 安卓 & 心脏 ==========
+    // 安卓 0166xxx / islot Dr → −22（cash −122）；心脏 0167xxx / islot Ht → −23（cash −123）。
+    // WZ 数据：Character.wz/Android/ 209 个 XML（2026-07-30 已修正 islot Tm→Dr）。
+    // 心脏 WZ：186 无独立 Heart/ 目录，BMS250 道具代码有 1672000~1672086 约 30 种心脏 ID。
+    // ⚠ ijl15 目前无 Android/Heart 装备窗 UI，需客户端改造后才真正可用。
+    ANDROID("Dr", -22, -122),   // 机器人（需搭配心脏一起装备）
+    HEART("Ht", -23, -123);     // 心脏（机器人动力源）
     ;
 
     private String name;
@@ -70,15 +88,18 @@ public enum EquipSlot {
     public boolean isAllowed(int slot, boolean cash) {
         if (slot < 0) {
             if (allowed != null) {
-                for (Integer allow : allowed) {
-                    int condition = cash ? allow - 100 : allow;
-                    if (slot == condition) {
+                for (int allow : allowed) {
+                    // 普通槽与 cash 别名（allow-100）都放行：扩展 UI（图腾 −155 等）
+                    // 常在 WZ cash=0 时仍发 cash 形态槽号，仅按 cash 标志减 100 会误拒。
+                    if (slot == allow || slot == allow - 100) {
                         return true;
                     }
                 }
             }
+            // 未知 islot（如 PET_EQUIP）时，点装仍允许任意负槽（原逻辑）
+            return cash;
         }
-        return cash && slot < 0;
+        return false;
     }
 
     public static EquipSlot getFromTextSlot(String slot) {
