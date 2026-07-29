@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="BossPapulatus.img">
+    <imgdir name="ticktockLaser">
+        <imgdir name="objInfo">
+            <imgdir name="0">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaserE0_0" />
+                <int name="type" value="0" />
+                <int name="angleBase" value="60" />
+                <int name="anglePerSec" value="35" />
+            </imgdir>
+            <imgdir name="1">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaserE0_1" />
+                <int name="type" value="1" />
+                <int name="angleBase" value="270" />
+                <int name="anglePerSec" value="-10" />
+            </imgdir>
+            <imgdir name="2">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaserE2_0" />
+                <int name="type" value="0" />
+                <int name="angleBase" value="130" />
+                <int name="anglePerSec" value="-20" />
+            </imgdir>
+            <imgdir name="3">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaserE2_1" />
+                <int name="type" value="1" />
+                <int name="angleBase" value="130" />
+                <int name="anglePerSec" value="30" />
+            </imgdir>
+            <imgdir name="4">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaserE0_0" />
+                <int name="type" value="0" />
+                <int name="angleBase" value="0" />
+                <int name="anglePerSec" value="30" />
+            </imgdir>
+            <imgdir name="5">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaserE0_1" />
+                <int name="type" value="1" />
+                <int name="angleBase" value="300" />
+                <int name="anglePerSec" value="-10" />
+            </imgdir>
+            <imgdir name="6">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaser0" />
+                <int name="type" value="0" />
+                <int name="angleBase" value="0" />
+                <int name="anglePerSec" value="100" />
+            </imgdir>
+            <imgdir name="7">
+                <vector name="lt" x="92" y="-12" />
+                <vector name="rb" x="913" y="6" />
+                <string name="objTag" value="ticktockLaser1" />
+                <int name="type" value="1" />
+                <int name="angleBase" value="300" />
+                <int name="anglePerSec" value="-10" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="type">
+            <imgdir name="0">
+                <imgdir name="activate">
+                </imgdir>
+                <imgdir name="repeat_back">
+                </imgdir>
+                <imgdir name="repeat">
+                </imgdir>
+                <imgdir name="repeat_front">
+                </imgdir>
+                <imgdir name="deactivate">
+                </imgdir>
+                <imgdir name="blocked">
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <imgdir name="activate">
+                </imgdir>
+                <imgdir name="repeat_back">
+                </imgdir>
+                <imgdir name="repeat">
+                </imgdir>
+                <imgdir name="repeat_front">
+                </imgdir>
+                <imgdir name="deactivate">
+                </imgdir>
+                <imgdir name="blocked">
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <imgdir name="activate">
+                </imgdir>
+                <imgdir name="repeat_back">
+                </imgdir>
+                <imgdir name="repeat">
+                </imgdir>
+                <imgdir name="repeat_front">
+                </imgdir>
+                <imgdir name="deactivate">
+                </imgdir>
+                <imgdir name="blocked">
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <imgdir name="activate">
+                </imgdir>
+                <imgdir name="repeat_back">
+                </imgdir>
+                <imgdir name="repeat">
+                </imgdir>
+                <imgdir name="repeat_front">
+                </imgdir>
+                <imgdir name="deactivate">
+                </imgdir>
+                <imgdir name="blocked">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="overlapEffect">
+        </imgdir>
+        <imgdir name="pairInfo">
+            <imgdir name="0">
+                <int name="obj0" value="0" />
+                <int name="obj1" value="1" />
+                <int name="duration" value="10000" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="obj0" value="2" />
+                <int name="obj1" value="3" />
+                <int name="duration" value="24000" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="obj0" value="4" />
+                <int name="obj1" value="5" />
+                <int name="duration" value="24000" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="obj0" value="6" />
+                <int name="obj1" value="7" />
+                <int name="duration" value="10000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="phaseInfo">
+            <imgdir name="2">
+                <int name="pair" value="1" />
+                <int name="cooltime" value="30000" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="pair" value="2" />
+                <int name="cooltime" value="20000" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="pair" value="0" />
+                <int name="cooltime" value="20000" />
+            </imgdir>
+            <imgdir name="12">
+                <int name="pair" value="2" />
+                <int name="cooltime" value="20000" />
+            </imgdir>
+            <imgdir name="13">
+                <int name="pair" value="1" />
+                <int name="cooltime" value="15000" />
+            </imgdir>
+            <imgdir name="15">
+                <int name="pair" value="-1" />
+                <int name="cooltime" value="10000" />
+            </imgdir>
+            <imgdir name="21">
+                <int name="pair" value="2" />
+                <int name="cooltime" value="15000" />
+            </imgdir>
+            <imgdir name="22">
+                <int name="pair" value="-1" />
+                <int name="cooltime" value="12000" />
+            </imgdir>
+            <imgdir name="23">
+                <int name="pair" value="-1" />
+                <int name="cooltime" value="10000" />
+            </imgdir>
+            <imgdir name="25">
+                <int name="pair" value="-1" />
+                <int name="cooltime" value="7000" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ticktockCrane">
+        <imgdir name="info">
+            <imgdir name="0">
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+                <vector name="tweezerBase" x="0" y="50" />
+                <string name="objTag" value="ticktockCraneE0" />
+                <int name="moveBoundY" value="270" />
+                <int name="timeIdleUp" value="3000" />
+                <int name="timeMoveDown" value="900" />
+                <int name="timeIdleDown" value="800" />
+                <int name="timeMoveUp" value="1200" />
+                <int name="timeHold" value="2000" />
+                <int name="timeRelease" value="700" />
+            </imgdir>
+            <imgdir name="1">
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+                <vector name="tweezerBase" x="0" y="50" />
+                <string name="objTag" value="ticktockCraneE1" />
+                <int name="moveBoundY" value="360" />
+                <int name="timeIdleUp" value="4000" />
+                <int name="timeMoveDown" value="800" />
+                <int name="timeIdleDown" value="1000" />
+                <int name="timeMoveUp" value="600" />
+                <int name="timeHold" value="2000" />
+                <int name="timeRelease" value="700" />
+            </imgdir>
+            <imgdir name="2">
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+                <vector name="tweezerBase" x="0" y="50" />
+                <string name="objTag" value="ticktockCraneE2" />
+                <int name="moveBoundY" value="210" />
+                <int name="timeIdleUp" value="8000" />
+                <int name="timeMoveDown" value="800" />
+                <int name="timeIdleDown" value="1000" />
+                <int name="timeMoveUp" value="600" />
+                <int name="timeHold" value="2000" />
+                <int name="timeRelease" value="700" />
+            </imgdir>
+            <imgdir name="3">
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+                <vector name="tweezerBase" x="0" y="50" />
+                <string name="objTag" value="ticktockCraneE3" />
+                <int name="moveBoundY" value="210" />
+                <int name="timeIdleUp" value="10000" />
+                <int name="timeMoveDown" value="900" />
+                <int name="timeIdleDown" value="800" />
+                <int name="timeMoveUp" value="1200" />
+                <int name="timeHold" value="2000" />
+                <int name="timeRelease" value="700" />
+            </imgdir>
+            <imgdir name="4">
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+                <vector name="tweezerBase" x="0" y="50" />
+                <string name="objTag" value="ticktockCrane0" />
+                <int name="moveBoundY" value="300" />
+                <int name="timeIdleUp" value="15000" />
+                <int name="timeMoveDown" value="900" />
+                <int name="timeIdleDown" value="600" />
+                <int name="timeMoveUp" value="1200" />
+                <int name="timeHold" value="2000" />
+                <int name="timeRelease" value="700" />
+            </imgdir>
+            <imgdir name="5">
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+                <vector name="tweezerBase" x="0" y="50" />
+                <string name="objTag" value="ticktockCrane1" />
+                <int name="moveBoundY" value="360" />
+                <int name="timeIdleUp" value="12000" />
+                <int name="timeMoveDown" value="900" />
+                <int name="timeIdleDown" value="1000" />
+                <int name="timeMoveUp" value="1200" />
+                <int name="timeHold" value="2000" />
+                <int name="timeRelease" value="700" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="middle">
+        </imgdir>
+        <imgdir name="tweezer">
+            <imgdir name="hold">
+                <imgdir name="front">
+                </imgdir>
+                <imgdir name="back">
+                </imgdir>
+                <int name="repeatFrame" value="7" />
+                <vector name="lt" x="-54" y="35" />
+                <vector name="rb" x="64" y="144" />
+            </imgdir>
+            <imgdir name="idle">
+                <imgdir name="back">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal_Mission">
+        <imgdir name="hp">
+            <int name="0" value="0" />
+            <int name="1" value="1" />
+            <int name="2" value="10" />
+            <int name="3" value="100" />
+        </imgdir>
+        <imgdir name="difficulty">
+            <imgdir name="easy">
+                <int name="hp_min" value="0" />
+                <int name="hp_max" value="2" />
+                <imgdir name="setCount">
+                    <int name="0" value="2" />
+                    <int name="2" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="normal">
+                <int name="hp_min" value="0" />
+                <int name="hp_max" value="3" />
+                <imgdir name="setCount">
+                    <int name="0" value="1" />
+                    <int name="3" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="chaos">
+                <int name="hp_min" value="0" />
+                <int name="hp_max" value="3" />
+                <imgdir name="setCount">
+                    <int name="0" value="1" />
+                    <int name="1" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="UIEvent.img">
+    <imgdir name="TacticalRelay">
+        <string name="dateStart" value="201811290000" />
+        <string name="dateEnd" value="201812120000" />
+        <string name="script" value="q100045s" />
+        <imgdir name="TotalScore">
+            <int name="questID" value="500555" />
+            <string name="questEx" value="total" />
+        </imgdir>
+        <imgdir name="TodayScore">
+            <int name="questID" value="500555" />
+            <imgdir name="questEx">
+                <string name="1" value="s1" />
+                <string name="2" value="s2" />
+                <string name="3" value="s3" />
+                <string name="4" value="s4" />
+                <string name="5" value="s5" />
+                <string name="6" value="s6" />
+                <string name="7" value="s7" />
+                <string name="8" value="s8" />
+                <string name="9" value="s9" />
+                <string name="10" value="s10" />
+                <string name="11" value="s11" />
+                <string name="12" value="s12" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="Mission">
+            <string name="1" value="狩猎300只等级范围怪物" />
+            <string name="2" value="完成100次连续击破" />
+            <string name="3" value="消灭3只精英怪物" />
+            <string name="4" value="击败普通BOSS" />
+            <string name="5" value="狩猎300只星之力怪物" />
+            <string name="6" value="通关1次怪物公园" />
+            <string name="7" value="消灭3只星之力精英怪物" />
+            <string name="8" value="击败1次高级或进阶BOSS" />
+            <string name="9" value="狩猎神秘河怪物300只" />
+            <string name="10" value="完成100次多连击" />
+            <string name="11" value="消灭1次精英BOSS" />
+            <string name="12" value="击败进阶鲁塔比斯BOSS之一\n（每个角色1周仅限完成1次）" />
+        </imgdir>
+        <imgdir name="ClearCharacterInfo">
+            <imgdir name="1">
+                <int name="questID" value="500556" />
+                <string name="questEx" value="s1" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="questID" value="500556" />
+                <string name="questEx" value="s2" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="questID" value="500556" />
+                <string name="questEx" value="s3" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="questID" value="500556" />
+                <string name="questEx" value="s4" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="questID" value="500557" />
+                <string name="questEx" value="s5" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="questID" value="500557" />
+                <string name="questEx" value="s6" />
+            </imgdir>
+            <imgdir name="7">
+                <int name="questID" value="500557" />
+                <string name="questEx" value="s7" />
+            </imgdir>
+            <imgdir name="8">
+                <int name="questID" value="500557" />
+                <string name="questEx" value="s8" />
+            </imgdir>
+            <imgdir name="9">
+                <int name="questID" value="500558" />
+                <string name="questEx" value="s9" />
+            </imgdir>
+            <imgdir name="10">
+                <int name="questID" value="500558" />
+                <string name="questEx" value="s10" />
+            </imgdir>
+            <imgdir name="11">
+                <int name="questID" value="500558" />
+                <string name="questEx" value="s11" />
+            </imgdir>
+            <imgdir name="12">
+                <int name="questID" value="500558" />
+                <string name="questEx" value="s12" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="BonusIndex">
+            <string name="1" value="由战士完成" />
+            <string name="2" value="由魔法师完成" />
+            <string name="3" value="由弓箭手完成" />
+            <string name="4" value="由飞侠完成" />
+            <string name="5" value="由海盗完成" />
+            <string name="6" value="击败普通暗黑龙王" />
+            <string name="7" value="击败普通卡雄" />
+            <string name="8" value="击败普通班·雷昂" />
+            <string name="9" value="击败普通阿卡伊勒" />
+            <string name="10" value="击败普通麦格纳斯" />
+            <string name="11" value="击败普通帕普拉图斯" />
+            <string name="12" value="击败普通希纳斯" />
+            <string name="13" value="击败高级希拉" />
+            <string name="14" value="击败进阶品克缤" />
+            <string name="15" value="击败进阶扎昆" />
+            <string name="16" value="击败高级麦格纳斯" />
+            <string name="17" value="由飞侠\n独自击败半半" />
+            <string name="18" value="由海盗\n独自击败血腥女王" />
+            <string name="19" value="由战士\n独自击败皮埃尔" />
+            <string name="20" value="由魔法师\n独自击败半半" />
+            <string name="21" value="由弓箭手\n独自击败血腥女王" />
+            <string name="22" value="由飞侠\n独自击败皮埃尔" />
+            <string name="23" value="由海盗\n独自击败半半" />
+            <string name="24" value="由战士\n独自击败血腥女王" />
+            <string name="25" value="由魔法师\n独自击败皮埃尔" />
+            <string name="26" value="由弓箭手\n独自击败贝伦" />
+            <string name="27" value="由飞侠\n独自击败贝伦" />
+            <string name="28" value="由海盗\n独自击败贝伦" />
+            <string name="29" value="由战士\n独自击败贝伦" />
+            <string name="30" value="由魔法师\n独自击败贝伦" />
+        </imgdir>
+        <imgdir name="BonusSchedule">
+            <imgdir name="1">
+                <int name="1" value="5" />
+                <int name="2" value="1" />
+                <int name="3" value="2" />
+                <int name="4" value="3" />
+                <int name="5" value="4" />
+                <int name="6" value="5" />
+                <int name="7" value="1" />
+                <int name="8" value="2" />
+                <int name="9" value="3" />
+                <int name="10" value="4" />
+                <int name="11" value="5" />
+                <int name="12" value="1" />
+                <int name="13" value="2" />
+                <int name="14" value="3" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="1" value="1" />
+                <int name="2" value="2" />
+                <int name="3" value="3" />
+                <int name="4" value="4" />
+                <int name="5" value="5" />
+                <int name="6" value="1" />
+                <int name="7" value="2" />
+                <int name="8" value="3" />
+                <int name="9" value="4" />
+                <int name="10" value="5" />
+                <int name="11" value="1" />
+                <int name="12" value="2" />
+                <int name="13" value="3" />
+                <int name="14" value="4" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="1" value="2" />
+                <int name="2" value="3" />
+                <int name="3" value="4" />
+                <int name="4" value="5" />
+                <int name="5" value="1" />
+                <int name="6" value="2" />
+                <int name="7" value="3" />
+                <int name="8" value="4" />
+                <int name="9" value="5" />
+                <int name="10" value="1" />
+                <int name="11" value="2" />
+                <int name="12" value="3" />
+                <int name="13" value="4" />
+                <int name="14" value="5" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="1" value="6" />
+                <int name="2" value="7" />
+                <int name="3" value="8" />
+                <int name="4" value="9" />
+                <int name="5" value="10" />
+                <int name="6" value="11" />
+                <int name="7" value="12" />
+                <int name="8" value="6" />
+                <int name="9" value="7" />
+                <int name="10" value="8" />
+                <int name="11" value="9" />
+                <int name="12" value="10" />
+                <int name="13" value="11" />
+                <int name="14" value="12" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="1" value="3" />
+                <int name="2" value="4" />
+                <int name="3" value="5" />
+                <int name="4" value="1" />
+                <int name="5" value="2" />
+                <int name="6" value="3" />
+                <int name="7" value="4" />
+                <int name="8" value="5" />
+                <int name="9" value="1" />
+                <int name="10" value="2" />
+                <int name="11" value="3" />
+                <int name="12" value="4" />
+                <int name="13" value="5" />
+                <int name="14" value="1" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="1" value="4" />
+                <int name="2" value="5" />
+                <int name="3" value="1" />
+                <int name="4" value="2" />
+                <int name="5" value="3" />
+                <int name="6" value="4" />
+                <int name="7" value="5" />
+                <int name="8" value="1" />
+                <int name="9" value="2" />
+                <int name="10" value="3" />
+                <int name="11" value="4" />
+                <int name="12" value="5" />
+                <int name="13" value="1" />
+                <int name="14" value="2" />
+            </imgdir>
+            <imgdir name="7">
+                <int name="1" value="5" />
+                <int name="2" value="1" />
+                <int name="3" value="2" />
+                <int name="4" value="3" />
+                <int name="5" value="4" />
+                <int name="6" value="5" />
+                <int name="7" value="1" />
+                <int name="8" value="2" />
+                <int name="9" value="3" />
+                <int name="10" value="4" />
+                <int name="11" value="5" />
+                <int name="12" value="1" />
+                <int name="13" value="2" />
+                <int name="14" value="3" />
+            </imgdir>
+            <imgdir name="8">
+                <int name="1" value="13" />
+                <int name="2" value="14" />
+                <int name="3" value="15" />
+                <int name="4" value="16" />
+                <int name="5" value="13" />
+                <int name="6" value="14" />
+                <int name="7" value="15" />
+                <int name="8" value="16" />
+                <int name="9" value="13" />
+                <int name="10" value="14" />
+                <int name="11" value="15" />
+                <int name="12" value="16" />
+                <int name="13" value="13" />
+                <int name="14" value="14" />
+            </imgdir>
+            <imgdir name="9">
+                <int name="1" value="1" />
+                <int name="2" value="2" />
+                <int name="3" value="3" />
+                <int name="4" value="4" />
+                <int name="5" value="5" />
+                <int name="6" value="1" />
+                <int name="7" value="2" />
+                <int name="8" value="3" />
+                <int name="9" value="4" />
+                <int name="10" value="5" />
+                <int name="11" value="1" />
+                <int name="12" value="2" />
+                <int name="13" value="3" />
+                <int name="14" value="4" />
+            </imgdir>
+            <imgdir name="10">
+                <int name="1" value="2" />
+                <int name="2" value="3" />
+                <int name="3" value="4" />
+                <int name="4" value="5" />
+                <int name="5" value="1" />
+                <int name="6" value="2" />
+                <int name="7" value="3" />
+                <int name="8" value="4" />
+                <int name="9" value="5" />
+                <int name="10" value="1" />
+                <int name="11" value="2" />
+                <int name="12" value="3" />
+                <int name="13" value="4" />
+                <int name="14" value="5" />
+            </imgdir>
+            <imgdir name="11">
+                <int name="1" value="3" />
+                <int name="2" value="4" />
+                <int name="3" value="5" />
+                <int name="4" value="1" />
+                <int name="5" value="2" />
+                <int name="6" value="3" />
+                <int name="7" value="4" />
+                <int name="8" value="5" />
+                <int name="9" value="1" />
+                <int name="10" value="2" />
+                <int name="11" value="3" />
+                <int name="12" value="4" />
+                <int name="13" value="5" />
+                <int name="14" value="1" />
+            </imgdir>
+            <imgdir name="12">
+                <int name="1" value="17" />
+                <int name="2" value="18" />
+                <int name="3" value="19" />
+                <int name="4" value="20" />
+                <int name="5" value="21" />
+                <int name="6" value="22" />
+                <int name="7" value="23" />
+                <int name="8" value="24" />
+                <int name="9" value="25" />
+                <int name="10" value="26" />
+                <int name="11" value="27" />
+                <int name="12" value="28" />
+                <int name="13" value="29" />
+                <int name="14" value="30" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="CurrentMission">
+            <int name="questID" value="500555" />
+            <string name="questEx" value="current" />
+        </imgdir>
+        <imgdir name="BonusClearInfo">
+            <imgdir name="1">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s1" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s2" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s3" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s4" />
+            </imgdir>
+            <imgdir name="5">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s5" />
+            </imgdir>
+            <imgdir name="6">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s6" />
+            </imgdir>
+            <imgdir name="7">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s7" />
+            </imgdir>
+            <imgdir name="8">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s8" />
+            </imgdir>
+            <imgdir name="9">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s9" />
+            </imgdir>
+            <imgdir name="10">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s10" />
+            </imgdir>
+            <imgdir name="11">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s11" />
+            </imgdir>
+            <imgdir name="12">
+                <int name="questID" value="500591" />
+                <string name="questEx" value="s12" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="2020TobenHair">
+        <string name="dateStart" value="202012020700" />
+        <string name="dateEnd" value="202012160000" />
+        <imgdir name="Skill">
+            <imgdir name="0">
+                <string name="msg" value="#padX" />
+                <int name="id" value="80002910" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="0" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="msg" value="#strX" />
+                <int name="id" value="80002911" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="1" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="msg" value="#mhpX" />
+                <int name="id" value="80002912" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="2" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="2" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="msg" value="#ignoreMobpdpR" />
+                <int name="id" value="80002913" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="3" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="msg" value="#nbdR" />
+                <int name="id" value="80002914" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="4" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="4" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="msg" value="#bdR" />
+                <int name="id" value="80002915" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="5" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="msg" value="#bufftimeR" />
+                <int name="id" value="80002916" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="6" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="6" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="msg" value="#cr" />
+                <int name="id" value="80002917" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="7" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="7" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="msg" value="#arcX" />
+                <int name="id" value="80002918" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="8" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="msg" value="#expRPerM" />
+                <int name="id" value="80002919" />
+                <imgdir name="count">
+                    <int name="questID" value="500998" />
+                    <string name="questEx" value="9" />
+                </imgdir>
+                <imgdir name="lv">
+                    <int name="questID" value="500997" />
+                    <string name="questEx" value="9" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="LevelUpReq">
+            <int name="1" value="1" />
+            <int name="2" value="2" />
+            <int name="3" value="6" />
+            <int name="4" value="9" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="17thPassiveBuff">
+        <string name="dateStart" value="201811290000" />
+        <string name="dateEnd" value="202108040000" />
+        <int name="baseSkill" value="80002926" />
+        <imgdir name="LevelUpReq">
+            <int name="1" value="1" />
+            <int name="2" value="2" />
+            <int name="3" value="3" />
+        </imgdir>
+        <imgdir name="Skill">
+            <imgdir name="0">
+                <int name="id" value="80002927" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="0" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#padX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <int name="id" value="80002928" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="1" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#strX" />
+                    <string name="1" value="#mhpX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <int name="id" value="80002929" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="2" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#ignoreMobpdpR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <int name="id" value="80002930" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="3" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#nbdR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <int name="id" value="80002931" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="4" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#bdR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <int name="id" value="80002932" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="5" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#bufftimeR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <int name="id" value="80002933" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="6" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#cr" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <int name="id" value="80002934" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="7" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#arcX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <int name="id" value="80002935" />
+                <imgdir name="lv">
+                    <int name="questID" value="501046" />
+                    <string name="questEx" value="8" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#expRPerM" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="18thPassiveBuff">
+        <string name="dateStart" value="202104080000" />
+        <string name="dateEnd" value="202106170000" />
+        <int name="baseSkill" value="80003035" />
+        <imgdir name="LevelUpReq">
+            <int name="1" value="1" />
+            <int name="2" value="2" />
+            <int name="3" value="3" />
+        </imgdir>
+        <imgdir name="Skill">
+            <imgdir name="0">
+                <int name="id" value="80003036" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="0" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#padX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <int name="id" value="80003037" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="1" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#bdR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <int name="id" value="80003038" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="2" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#ignoreMobpdpR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <int name="id" value="80003039" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="3" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#strX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <int name="id" value="80003040" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="4" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#mhpX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <int name="id" value="80003041" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="5" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#bufftimeR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <int name="id" value="80003042" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="6" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#cr" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <int name="id" value="80003043" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="7" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#nbdR" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <int name="id" value="80003044" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="8" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#arcX" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <int name="id" value="80003045" />
+                <imgdir name="lv">
+                    <int name="questID" value="501378" />
+                    <string name="questEx" value="9" />
+                </imgdir>
+                <imgdir name="msg">
+                    <string name="0" value="#expRPerM" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

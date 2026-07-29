@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="ChewChewFoodTruck.img">
+    <imgdir name="info">
+        <imgdir name="statusUI">
+            <imgdir name="truckLevel">
+                <imgdir name="0">
+                    <int name="questID" value="18330" />
+                    <string name="questEx" value="tLv" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="cookingLevel">
+                <imgdir name="0">
+                    <int name="questID" value="18330" />
+                    <string name="questEx" value="cLv" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="visitLevel">
+                <imgdir name="0">
+                    <int name="questID" value="18330" />
+                    <string name="questEx" value="vLv" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="speedLevel">
+                <imgdir name="0">
+                    <int name="questID" value="18330" />
+                    <string name="questEx" value="sLv" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="fame">
+                <imgdir name="0">
+                    <int name="questID" value="18595" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="questID" value="15728" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="questID" value="15729" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="questID" value="15730" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="questID" value="15731" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+                <imgdir name="5">
+                    <int name="questID" value="15732" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+                <imgdir name="6">
+                    <int name="questID" value="15733" />
+                    <string name="questEx" value="fame" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="coin">
+                <imgdir name="0">
+                    <int name="questID" value="18595" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="questID" value="15728" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="questID" value="15729" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="questID" value="15730" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="questID" value="15731" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+                <imgdir name="5">
+                    <int name="questID" value="15732" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+                <imgdir name="6">
+                    <int name="questID" value="15733" />
+                    <string name="questEx" value="coin" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="mainUI">
+            <imgdir name="mainTimer">
+                <int name="questID" value="15740" />
+            </imgdir>
+            <imgdir name="slot">
+                <string name="orderEx" value="o" />
+                <string name="orderStateEx" value="os" />
+                <string name="orderTypeEx" value="ot" />
+                <imgdir name="timer">
+                    <imgdir name="0">
+                        <int name="questID" value="15728" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="questID" value="15729" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="questID" value="15730" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="questID" value="15731" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="questID" value="15732" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="questID" value="15733" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="timerForCooking">
+                    <imgdir name="0">
+                        <int name="questID" value="15734" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="questID" value="15735" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="questID" value="15736" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="questID" value="15737" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="questID" value="15738" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="questID" value="15739" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="clickSlot">
+                    <imgdir name="0">
+                        <string name="script" value="ccftSlot1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <string name="script" value="ccftSlot2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <string name="script" value="ccftSlot3" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <string name="script" value="ccftSlot4" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <string name="script" value="ccftSlot5" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <string name="script" value="ccftSlot6" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="board">
+                <int name="questID" value="15734" />
+                <string name="questEx" value="str" />
+            </imgdir>
+            <imgdir name="orderCount">
+                <int name="questID" value="18330" />
+                <string name="questEx" value="slot" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="material">
+        <imgdir name="0">
+            <string name="name" value="甜味蹄" />
+            <int name="itemID" value="4034942" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="0" />
+            <int name="price" value="1" />
+        </imgdir>
+        <imgdir name="1">
+            <string name="name" value="辣味蹄" />
+            <int name="itemID" value="4034943" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="1" />
+            <int name="price" value="2" />
+        </imgdir>
+        <imgdir name="2">
+            <string name="name" value="油腻皮" />
+            <int name="itemID" value="4034944" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="2" />
+            <int name="price" value="1" />
+        </imgdir>
+        <imgdir name="3">
+            <string name="name" value="酸味皮" />
+            <int name="itemID" value="4034945" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="3" />
+            <int name="price" value="2" />
+        </imgdir>
+        <imgdir name="4">
+            <string name="name" value="清淡鬃毛" />
+            <int name="itemID" value="4034946" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="4" />
+            <int name="price" value="1" />
+        </imgdir>
+        <imgdir name="5">
+            <string name="name" value="厚实鬃毛" />
+            <int name="itemID" value="4034947" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="5" />
+            <int name="price" value="2" />
+        </imgdir>
+        <imgdir name="6">
+            <string name="name" value="松软脚掌" />
+            <int name="itemID" value="4034948" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="6" />
+            <int name="price" value="2" />
+        </imgdir>
+        <imgdir name="7">
+            <string name="name" value="劲道脚掌" />
+            <int name="itemID" value="4034949" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="7" />
+            <int name="price" value="3" />
+        </imgdir>
+        <imgdir name="8">
+            <string name="name" value="硬实鳍" />
+            <int name="itemID" value="4034950" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="8" />
+            <int name="price" value="3" />
+        </imgdir>
+        <imgdir name="9">
+            <string name="name" value="酸酸鳍" />
+            <int name="itemID" value="4034951" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="9" />
+            <int name="price" value="4" />
+        </imgdir>
+        <imgdir name="10">
+            <string name="name" value="酥脆背壳" />
+            <int name="itemID" value="4034952" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="10" />
+            <int name="price" value="3" />
+        </imgdir>
+        <imgdir name="11">
+            <string name="name" value="柔嫩背壳" />
+            <int name="itemID" value="4034953" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="11" />
+            <int name="price" value="4" />
+        </imgdir>
+        <imgdir name="12">
+            <string name="name" value="光滑羽毛" />
+            <int name="itemID" value="4034954" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="12" />
+            <int name="price" value="4" />
+        </imgdir>
+        <imgdir name="13">
+            <string name="name" value="粘稠羽毛" />
+            <int name="itemID" value="4034955" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="13" />
+            <int name="price" value="5" />
+        </imgdir>
+        <imgdir name="14">
+            <string name="name" value="涩味牙" />
+            <int name="itemID" value="4034956" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="14" />
+            <int name="price" value="5" />
+        </imgdir>
+        <imgdir name="15">
+            <string name="name" value="劲道牙" />
+            <int name="itemID" value="4034957" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="15" />
+            <int name="price" value="5" />
+        </imgdir>
+        <imgdir name="16">
+            <string name="name" value="呲溜果" />
+            <int name="itemID" value="4034958" />
+            <int name="questID" value="15726" />
+            <string name="questEx" value="16" />
+            <int name="price" value="5" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="merchant">
+        <imgdir name="9010066">
+            <string name="info" value="菠萝鹿" />
+            <imgdir name="0">
+                <int name="material" value="0" />
+                <int name="price" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010067">
+            <string name="info" value="长角菠萝鹿" />
+            <imgdir name="0">
+                <int name="material" value="1" />
+                <int name="price" value="2" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010068">
+            <string name="info" value="幽纳纳" />
+            <imgdir name="0">
+                <int name="material" value="2" />
+                <int name="price" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010069">
+            <string name="info" value="兰纳纳" />
+            <imgdir name="0">
+                <int name="material" value="3" />
+                <int name="price" value="2" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010070">
+            <string name="info" value="普里温" />
+            <imgdir name="0">
+                <int name="material" value="4" />
+                <int name="price" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010071">
+            <string name="info" value="愤怒普里温" />
+            <imgdir name="0">
+                <int name="material" value="5" />
+                <int name="price" value="2" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010072">
+            <string name="info" value="夹生的卢斯狼" />
+            <imgdir name="0">
+                <int name="material" value="6" />
+                <int name="price" value="2" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010073">
+            <string name="info" value="熟透的卢斯狼" />
+            <imgdir name="0">
+                <int name="material" value="7" />
+                <int name="price" value="3" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010074">
+            <string name="info" value="绿色鲶鱼" />
+            <imgdir name="0">
+                <int name="material" value="8" />
+                <int name="price" value="3" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010075">
+            <string name="info" value="蓝色鲶鱼" />
+            <imgdir name="0">
+                <int name="material" value="9" />
+                <int name="price" value="4" />
+            </imgdir>
+            <imgdir name="1">
+                <short name="material" value="8" />
+                <int name="price" value="4" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010076">
+            <string name="info" value="犀牛龟" />
+            <imgdir name="0">
+                <int name="material" value="10" />
+                <int name="price" value="3" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010077">
+            <string name="info" value="犀牛龟队长" />
+            <imgdir name="0">
+                <int name="material" value="11" />
+                <int name="price" value="4" />
+            </imgdir>
+            <imgdir name="1">
+                <short name="material" value="10" />
+                <int name="price" value="4" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010078">
+            <string name="info" value="克里拉" />
+            <imgdir name="0">
+                <int name="material" value="12" />
+                <int name="price" value="4" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010079">
+            <string name="info" value="克里拉族长" />
+            <imgdir name="0">
+                <int name="material" value="13" />
+                <int name="price" value="5" />
+            </imgdir>
+            <imgdir name="1">
+                <short name="material" value="12" />
+                <int name="price" value="5" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010080">
+            <string name="info" value="柏纱克" />
+            <imgdir name="0">
+                <int name="material" value="14" />
+                <int name="price" value="5" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010081">
+            <string name="info" value="柏纱克族长" />
+            <imgdir name="0">
+                <int name="material" value="15" />
+                <int name="price" value="5" />
+            </imgdir>
+            <imgdir name="1">
+                <short name="material" value="14" />
+                <int name="price" value="5" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9010082">
+            <string name="info" value="馋涎树" />
+            <imgdir name="0">
+                <int name="material" value="16" />
+                <int name="price" value="5" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="food">
+        <imgdir name="0">
+            <string name="name" value="惊人炸串" />
+            <int name="itemID" value="4034959" />
+            <int name="price" value="20" />
+            <int name="fame" value="5" />
+            <int name="cookingTime" value="15" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="0" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="4" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <string name="name" value="顿悟小炒" />
+            <int name="itemID" value="4034960" />
+            <int name="price" value="20" />
+            <int name="fame" value="5" />
+            <int name="cookingTime" value="15" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="2" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="6" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <string name="name" value="弹弹面" />
+            <int name="itemID" value="4034961" />
+            <int name="price" value="40" />
+            <int name="fame" value="10" />
+            <int name="cookingTime" value="20" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="0" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="4" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="8" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <string name="name" value="神奇炖菜" />
+            <int name="itemID" value="4034962" />
+            <int name="price" value="40" />
+            <int name="fame" value="10" />
+            <int name="cookingTime" value="20" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="2" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="6" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="10" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="4">
+            <string name="name" value="哈哈卷" />
+            <int name="itemID" value="4034963" />
+            <int name="price" value="40" />
+            <int name="fame" value="10" />
+            <int name="cookingTime" value="20" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="4" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="8" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="12" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="5">
+            <string name="name" value="呼呼汤" />
+            <int name="itemID" value="4034964" />
+            <int name="price" value="40" />
+            <int name="fame" value="10" />
+            <int name="cookingTime" value="20" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="8" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="10" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="14" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="6">
+            <string name="name" value="咳咳烧烤" />
+            <int name="itemID" value="4034965" />
+            <int name="price" value="80" />
+            <int name="fame" value="20" />
+            <int name="cookingTime" value="30" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="2" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="6" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="12" />
+                    <int name="count" value="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="material" value="16" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="7">
+            <string name="name" value="额啊沙拉" />
+            <int name="itemID" value="4034966" />
+            <int name="price" value="80" />
+            <int name="fame" value="20" />
+            <int name="cookingTime" value="30" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="4" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="10" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="16" />
+                    <int name="count" value="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="material" value="14" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="8">
+            <string name="name" value="嘻嘻炒饭" />
+            <int name="itemID" value="4034967" />
+            <int name="price" value="20" />
+            <int name="fame" value="5" />
+            <int name="cookingTime" value="15" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="5" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="1" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="9">
+            <string name="name" value="呵呵饺子" />
+            <int name="itemID" value="4034968" />
+            <int name="price" value="20" />
+            <int name="fame" value="5" />
+            <int name="cookingTime" value="15" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="3" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="7" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="10">
+            <string name="name" value="哎哟披萨" />
+            <int name="itemID" value="4034969" />
+            <int name="price" value="60" />
+            <int name="fame" value="15" />
+            <int name="cookingTime" value="25" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="5" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="1" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="9" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="11">
+            <string name="name" value="哈面包" />
+            <int name="itemID" value="4034970" />
+            <int name="price" value="60" />
+            <int name="fame" value="15" />
+            <int name="cookingTime" value="25" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="3" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="7" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="11" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="12">
+            <string name="name" value="五彩酱菜" />
+            <int name="itemID" value="4034971" />
+            <int name="price" value="60" />
+            <int name="fame" value="15" />
+            <int name="cookingTime" value="25" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="5" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="9" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="13" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="13">
+            <string name="name" value="营养粥" />
+            <int name="itemID" value="4034972" />
+            <int name="price" value="60" />
+            <int name="fame" value="15" />
+            <int name="cookingTime" value="25" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="9" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="11" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="15" />
+                    <int name="count" value="2" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="14">
+            <string name="name" value="呜呜果酒" />
+            <int name="itemID" value="4034973" />
+            <int name="price" value="80" />
+            <int name="fame" value="20" />
+            <int name="cookingTime" value="30" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="3" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="7" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="16" />
+                    <int name="count" value="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="material" value="13" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="15">
+            <string name="name" value="哇哇米肠" />
+            <int name="itemID" value="4034974" />
+            <int name="price" value="80" />
+            <int name="fame" value="20" />
+            <int name="cookingTime" value="30" />
+            <imgdir name="recipe">
+                <imgdir name="0">
+                    <int name="material" value="5" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="material" value="11" />
+                    <int name="count" value="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="material" value="16" />
+                    <int name="count" value="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="material" value="15" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="tutorial">
+        <imgdir name="0">
+        </imgdir>
+        <imgdir name="1">
+        </imgdir>
+        <imgdir name="2">
+        </imgdir>
+        <imgdir name="3">
+        </imgdir>
+        <imgdir name="4">
+        </imgdir>
+        <imgdir name="5">
+        </imgdir>
+        <imgdir name="6">
+        </imgdir>
+        <imgdir name="7">
+        </imgdir>
+        <imgdir name="8">
+        </imgdir>
+        <imgdir name="9">
+        </imgdir>
+        <imgdir name="10">
+        </imgdir>
+        <imgdir name="11">
+        </imgdir>
+    </imgdir>
+</imgdir>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="Puppet.img">
+    <imgdir name="1">
+        <imgdir name="info">
+            <int name="fly" value="1" />
+        </imgdir>
+        <imgdir name="action">
+            <imgdir name="stand">
+            </imgdir>
+            <imgdir name="attack0">
+                <imgdir name="info">
+                    <int name="type" value="1" />
+                    <int name="fixdamage" value="3000000000" />
+                    <int name="delay" value="1080" />
+                    <vector name="ptStart" x="-60" y="-40" />
+                    <int name="range" value="2000" />
+                    <int name="bulletSpeed" value="500" />
+                    <vector name="lt" x="-45" y="-45" />
+                    <vector name="rb" x="45" y="45" />
+                    <imgdir name="ball">
+                    </imgdir>
+                    <imgdir name="hit">
+                    </imgdir>
+                </imgdir>
+                <uol name="21" value="../stand/0" />
+                <uol name="22" value="../stand/1" />
+                <uol name="23" value="../stand/2" />
+                <uol name="24" value="../stand/3" />
+                <uol name="25" value="../stand/4" />
+                <uol name="26" value="../stand/5" />
+                <uol name="27" value="../stand/6" />
+                <uol name="28" value="../stand/7" />
+            </imgdir>
+            <imgdir name="attack1">
+                <imgdir name="info">
+                    <int name="type" value="2" />
+                    <int name="fixdamage" value="9999999999" />
+                    <int name="delay" value="540" />
+                    <int name="interval" value="180" />
+                    <int name="attackCount" value="13" />
+                    <imgdir name="hit">
+                    </imgdir>
+                    <vector name="lt" x="-1100" y="-85" />
+                    <vector name="rb" x="-10" y="-5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="teleportv">
+            </imgdir>
+            <imgdir name="teleporta">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="2">
+        <imgdir name="info">
+            <int name="fly" value="1" />
+        </imgdir>
+        <imgdir name="action">
+            <imgdir name="stand">
+            </imgdir>
+            <imgdir name="attack0">
+                <imgdir name="info">
+                    <int name="type" value="1" />
+                    <int name="fixdamage" value="1000000" />
+                    <int name="delay" value="1080" />
+                    <vector name="ptStart" x="-60" y="-40" />
+                    <int name="range" value="2000" />
+                    <int name="bulletSpeed" value="500" />
+                    <vector name="lt" x="-45" y="-45" />
+                    <vector name="rb" x="45" y="45" />
+                    <imgdir name="ball">
+                    </imgdir>
+                    <imgdir name="hit">
+                    </imgdir>
+                </imgdir>
+                <uol name="21" value="../stand/0" />
+                <uol name="22" value="../stand/1" />
+                <uol name="23" value="../stand/2" />
+                <uol name="24" value="../stand/3" />
+                <uol name="25" value="../stand/4" />
+                <uol name="26" value="../stand/5" />
+                <uol name="27" value="../stand/6" />
+                <uol name="28" value="../stand/7" />
+            </imgdir>
+            <imgdir name="attack1">
+                <imgdir name="info">
+                    <int name="type" value="2" />
+                    <int name="fixdamage" value="9999999999" />
+                    <int name="delay" value="540" />
+                    <int name="interval" value="180" />
+                    <int name="attackCount" value="13" />
+                    <imgdir name="hit">
+                    </imgdir>
+                    <vector name="lt" x="-1100" y="-85" />
+                    <vector name="rb" x="-10" y="-5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="teleportv">
+            </imgdir>
+            <imgdir name="teleporta">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

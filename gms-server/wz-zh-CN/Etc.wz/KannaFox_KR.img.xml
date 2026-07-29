@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="KannaFox_KR.img">
+    <imgdir name="rolePlaying">
+        <imgdir name="info">
+            <int name="chatBalloon" value="96" />
+            <int name="nameTag" value="96" />
+            <string name="name" value="小白" />
+        </imgdir>
+        <imgdir name="Event">
+            <imgdir name="bind">
+                <int name="skill" value="80001845" />
+                <string name="chat" value="幽玄气息！！" />
+            </imgdir>
+            <imgdir name="heal">
+                <int name="skill" value="80001842" />
+                <string name="chat" value="恢复！！" />
+                <imgdir name="condition">
+                    <int name="remainHp" value="50" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="fireBarrier">
+                <int name="skill" value="80001843" />
+                <string name="chat" value="花炎结界！！" />
+            </imgdir>
+            <imgdir name="foxBless">
+                <int name="skill" value="80001844" />
+                <string name="chat" value="祝福！！" />
+            </imgdir>
+            <imgdir name="levelup">
+                <string name="emotion" value="glitter" />
+            </imgdir>
+            <imgdir name="dead">
+                <string name="emotion" value="cry" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="BasicClothes">
+            <int name="face" value="20079" />
+            <imgdir name="0">
+                <int name="Longcoat" value="1052471" />
+                <int name="hair" value="36320" />
+                <int name="cape" value="1102490" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="Longcoat" value="1052475" />
+                <int name="hair" value="36321" />
+                <int name="cape" value="1102493" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="Effect">
+            <imgdir name="teleport">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="trans">
+            </imgdir>
+            <imgdir name="teleportBig">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="teleportSmall">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="Clothes">
+            <int name="face" value="20079" />
+            <imgdir name="Basic">
+                <int name="Longcoat" value="1052471" />
+                <int name="hair" value="36320" />
+                <int name="cape" value="1102490" />
+            </imgdir>
+            <imgdir name="Upgrade">
+                <int name="Longcoat" value="1052475" />
+                <int name="hair" value="36321" />
+                <int name="cape" value="1102493" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

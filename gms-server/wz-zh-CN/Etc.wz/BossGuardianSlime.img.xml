@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="BossGuardianSlime.img">
+    <imgdir name="AngelSlimeGauge">
+        <imgdir name="effect">
+        </imgdir>
+        <imgdir name="gauge">
+            <imgdir name="gauge">
+            </imgdir>
+            <imgdir name="gaugeOff">
+            </imgdir>
+        </imgdir>
+        <vector name="icon" x="26" y="31" />
+        <imgdir name="gaugeSkill">
+        </imgdir>
+        <imgdir name="crystalSkill">
+        </imgdir>
+        <vector name="cooldown" x="35" y="48" />
+        <imgdir name="number">
+        </imgdir>
+        <imgdir name="particle">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="AngelSlimeDeath">
+        <int name="scaleOnLoad" value="200" />
+    </imgdir>
+    <imgdir name="magmaSlime">
+        <imgdir name="areaWarning">
+        </imgdir>
+        <imgdir name="object">
+        </imgdir>
+        <imgdir name="fly">
+        </imgdir>
+        <imgdir name="die">
+        </imgdir>
+        <imgdir name="die2">
+        </imgdir>
+    </imgdir>
+    <imgdir name="mascotHelp">
+        <imgdir name="mascotSlime">
+        </imgdir>
+        <imgdir name="lockon">
+        </imgdir>
+        <imgdir name="mysticShot">
+        </imgdir>
+        <imgdir name="hit">
+        </imgdir>
+        <imgdir name="crystal">
+            <imgdir name="regen">
+            </imgdir>
+            <imgdir name="stand1">
+            </imgdir>
+            <imgdir name="stand2">
+            </imgdir>
+            <imgdir name="die">
+            </imgdir>
+            <string name="action" value="mascotCrystal" />
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="remote">
+                <imgdir name="regen">
+                    <int name="a0" value="180" />
+                </imgdir>
+                <imgdir name="stand1">
+                    <int name="a0" value="180" />
+                </imgdir>
+                <imgdir name="stand2">
+                    <int name="a0" value="180" />
+                </imgdir>
+                <imgdir name="die">
+                    <int name="a0" value="180" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="choice">
+            <imgdir name="sp">
+                <vector name="upper" x="130" y="-150" />
+                <vector name="under" x="130" y="40" />
+            </imgdir>
+            <imgdir name="effect">
+            </imgdir>
+            <imgdir name="effect1">
+            </imgdir>
+            <imgdir name="effect2">
+            </imgdir>
+            <imgdir name="effect3">
+            </imgdir>
+            <int name="time" value="10000" />
+            <imgdir name="character">
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="effect1">
+                </imgdir>
+                <imgdir name="effect2">
+                </imgdir>
+                <imgdir name="effect3">
+                </imgdir>
+                <imgdir name="effect4">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="multiTrack">
+        <imgdir name="battle">
+            <string name="key" value="GuardianSlime:Battle" />
+            <int name="fadeIn" value="1000" />
+            <int name="fadeOut" value="2000" />
+        </imgdir>
+        <imgdir name="wave">
+            <string name="key" value="GuardianSlime:Wave" />
+            <int name="fadeIn" value="0" />
+            <int name="fadeOut" value="0" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="holyGate">
+        <imgdir name="holygate_a">
+            <imgdir name="0">
+            </imgdir>
+        </imgdir>
+        <imgdir name="holygate_b">
+            <imgdir name="0">
+            </imgdir>
+        </imgdir>
+        <imgdir name="holygate_c">
+            <imgdir name="0">
+            </imgdir>
+        </imgdir>
+        <imgdir name="holygate_d">
+            <imgdir name="0">
+            </imgdir>
+        </imgdir>
+        <imgdir name="create">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+        </imgdir>
+        <imgdir name="loop">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+        </imgdir>
+        <imgdir name="death">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="slimeWave">
+        <imgdir name="default">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+            <imgdir name="3">
+            </imgdir>
+            <imgdir name="4">
+            </imgdir>
+            <imgdir name="5">
+            </imgdir>
+        </imgdir>
+        <imgdir name="defaultSpeedUp">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+            <imgdir name="3">
+            </imgdir>
+            <imgdir name="4">
+            </imgdir>
+            <imgdir name="5">
+            </imgdir>
+        </imgdir>
+        <imgdir name="haloWave">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+            <imgdir name="3">
+            </imgdir>
+            <imgdir name="4">
+            </imgdir>
+            <imgdir name="5">
+            </imgdir>
+        </imgdir>
+        <imgdir name="haloSpeedUp">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+            <imgdir name="2">
+            </imgdir>
+            <imgdir name="3">
+            </imgdir>
+            <imgdir name="4">
+            </imgdir>
+            <imgdir name="5">
+            </imgdir>
+        </imgdir>
+        <imgdir name="regen">
+            <imgdir name="default">
+            </imgdir>
+            <imgdir name="defaultSpeedUp">
+            </imgdir>
+            <imgdir name="haloWave">
+            </imgdir>
+            <imgdir name="haloSpeedUp">
+            </imgdir>
+        </imgdir>
+        <imgdir name="vector">
+            <imgdir name="normal">
+                <imgdir name="0">
+                    <vector name="lt" x="-40" y="-61" />
+                    <vector name="rb" x="31" y="3" />
+                </imgdir>
+                <imgdir name="1">
+                    <vector name="lt" x="-23" y="-46" />
+                    <vector name="rb" x="27" y="2" />
+                </imgdir>
+                <imgdir name="2">
+                    <vector name="lt" x="-23" y="-37" />
+                    <vector name="rb" x="42" y="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <vector name="lt" x="-16" y="-28" />
+                    <vector name="rb" x="19" y="-2" />
+                </imgdir>
+                <imgdir name="4">
+                    <vector name="lt" x="-18" y="-34" />
+                    <vector name="rb" x="22" y="-1" />
+                </imgdir>
+                <imgdir name="5">
+                    <vector name="lt" x="-10" y="-16" />
+                    <vector name="rb" x="10" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="speedUp">
+                <imgdir name="0">
+                    <vector name="lt" x="-43" y="-58" />
+                    <vector name="rb" x="37" y="10" />
+                </imgdir>
+                <imgdir name="1">
+                    <vector name="lt" x="-32" y="-49" />
+                    <vector name="rb" x="27" y="4" />
+                </imgdir>
+                <imgdir name="2">
+                    <vector name="lt" x="-32" y="-34" />
+                    <vector name="rb" x="33" y="4" />
+                </imgdir>
+                <imgdir name="3">
+                    <vector name="lt" x="-25" y="-28" />
+                    <vector name="rb" x="19" y="7" />
+                </imgdir>
+                <imgdir name="4">
+                    <vector name="lt" x="-18" y="-28" />
+                    <vector name="rb" x="21" y="4" />
+                </imgdir>
+                <imgdir name="5">
+                    <vector name="lt" x="-10" y="-13" />
+                    <vector name="rb" x="10" y="4" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="swept">
+            <imgdir name="default">
+            </imgdir>
+            <imgdir name="defaultSpeedUp">
+            </imgdir>
+            <imgdir name="haloWave">
+            </imgdir>
+            <imgdir name="haloSpeedUp">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="buffEffect">
+    </imgdir>
+    <imgdir name="groggyEffect">
+    </imgdir>
+    <imgdir name="miniMap">
+        <imgdir name="0">
+            <int name="width" value="2645" />
+            <int name="height" value="2465" />
+            <int name="centerX" value="600" />
+            <int name="centerY" value="2296" />
+            <int name="mag" value="4" />
+        </imgdir>
+        <imgdir name="1">
+            <int name="width" value="2645" />
+            <int name="height" value="2465" />
+            <int name="centerX" value="600" />
+            <int name="centerY" value="2296" />
+            <int name="mag" value="4" />
+        </imgdir>
+        <imgdir name="2">
+            <int name="width" value="2645" />
+            <int name="height" value="2465" />
+            <int name="centerX" value="600" />
+            <int name="centerY" value="2296" />
+            <int name="mag" value="4" />
+        </imgdir>
+        <imgdir name="3">
+            <int name="width" value="2645" />
+            <int name="height" value="2465" />
+            <int name="centerX" value="600" />
+            <int name="centerY" value="2296" />
+            <int name="mag" value="4" />
+        </imgdir>
+        <imgdir name="4">
+            <int name="width" value="2645" />
+            <int name="height" value="2465" />
+            <int name="centerX" value="600" />
+            <int name="centerY" value="2296" />
+            <int name="mag" value="4" />
+        </imgdir>
+    </imgdir>
+</imgdir>

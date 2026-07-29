@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="AnnualEvent.img">
+    <imgdir name="info">
+        <string name="dateStart" value="202111030900" />
+        <string name="dateEnd" value="202112010000" />
+        <int name="questID" value="501612" />
+        <string name="eventKey" value="event" />
+        <string name="weekKey" value="week" />
+        <string name="gradeKey" value="lv" />
+    </imgdir>
+    <imgdir name="MainEvent">
+        <imgdir name="info">
+            <int name="questID" value="501613" />
+            <string name="gaugeKey" value="g" />
+            <string name="dailyCntKey" value="d" />
+            <string name="ticketCntKey" value="t" />
+        </imgdir>
+        <imgdir name="RideAttraction2">
+            <string name="info" value="questID 501613 / g: 게이지 저장 (fullGuaugeCnt 도달 시 발동) / d: 스킬 발동된 횟수 저장" />
+            <int name="fullGaugeCnt" value="500" />
+            <int name="dailyLimit" value="50" />
+            <int name="buffSkillID" value="80012239" />
+            <imgdir name="grade">
+                <imgdir name="0">
+                    <int name="giveExp" value="800" />
+                    <int name="buffSkillLv" value="1" />
+                    <imgdir name="skill">
+                        <int name="0" value="80012231" />
+                    </imgdir>
+                    <imgdir name="fever">
+                        <int name="prob" value="30" />
+                        <int name="skillID" value="80012235" />
+                        <int name="feverGiveExp" value="830" />
+                        <int name="buffSkillLv" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="1">
+                    <int name="giveExp" value="850" />
+                    <int name="buffSkillLv" value="3" />
+                    <imgdir name="skill">
+                        <int name="0" value="80012231" />
+                        <int name="1" value="80012232" />
+                    </imgdir>
+                    <imgdir name="fever">
+                        <int name="prob" value="30" />
+                        <int name="skillID" value="80012236" />
+                        <int name="feverGiveExp" value="880" />
+                        <int name="buffSkillLv" value="4" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="2">
+                    <int name="giveExp" value="900" />
+                    <int name="buffSkillLv" value="5" />
+                    <imgdir name="skill">
+                        <int name="0" value="80012231" />
+                        <int name="1" value="80012232" />
+                        <int name="2" value="80012233" />
+                    </imgdir>
+                    <imgdir name="fever">
+                        <int name="prob" value="30" />
+                        <int name="skillID" value="80012237" />
+                        <int name="feverGiveExp" value="940" />
+                        <int name="buffSkillLv" value="6" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="3">
+                    <int name="giveExp" value="960" />
+                    <int name="buffSkillLv" value="7" />
+                    <imgdir name="skill">
+                        <int name="0" value="80012231" />
+                        <int name="1" value="80012232" />
+                        <int name="2" value="80012233" />
+                        <int name="3" value="80012234" />
+                    </imgdir>
+                    <imgdir name="fever">
+                        <int name="prob" value="30" />
+                        <int name="skillID" value="80012238" />
+                        <int name="feverGiveExp" value="1000" />
+                        <int name="buffSkillLv" value="8" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="4">
+                    <int name="giveExp" value="960" />
+                    <int name="buffSkillLv" value="7" />
+                    <imgdir name="skill">
+                        <int name="0" value="80012231" />
+                        <int name="1" value="80012232" />
+                        <int name="2" value="80012233" />
+                        <int name="3" value="80012234" />
+                    </imgdir>
+                    <imgdir name="fever">
+                        <int name="prob" value="30" />
+                        <int name="buffSkillLv" value="8" />
+                        <int name="skillID" value="80012238" />
+                        <int name="feverGiveExp" value="1000" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="scriptName">
+                <string name="reward" value="RideAttraction2_fever_normal" />
+                <string name="reward_fever" value="RideAttraction2_fever_bonus" />
+                <string name="stardustMax" value="RideAttraction2_dustLimit" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="CannonAttraction">
+            <string name="info" value="questID 501613 / g: 게이지 누적값 기록 (아이템 스크립트에서 기록, fullGuaugeCnt 도달 시 발동횟수 누적) / t: 스킬발동 가능횟수 저장 / d: 스킬 발동된 횟수 저장" />
+            <int name="itemID" value="2633929" />
+            <int name="prob" value="5" />
+            <int name="fullGaugeCnt" value="10" />
+            <int name="dailyLimit" value="30" />
+            <imgdir name="grade">
+                <imgdir name="0">
+                    <int name="skillID" value="80012241" />
+                    <imgdir name="itemList">
+                        <imgdir name="mapleWorld">
+                            <int name="itemID" value="2633930" />
+                            <int name="min" value="11" />
+                            <int name="max" value="16" />
+                        </imgdir>
+                        <imgdir name="arcaneRiver">
+                            <int name="itemID" value="2633931" />
+                            <int name="min" value="11" />
+                            <int name="max" value="16" />
+                        </imgdir>
+                        <imgdir name="grandis">
+                            <int name="itemID" value="2633932" />
+                            <int name="min" value="11" />
+                            <int name="max" value="16" />
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="1">
+                    <int name="skillID" value="80012242" />
+                    <imgdir name="itemList">
+                        <imgdir name="mapleWorld">
+                            <int name="itemID" value="2633933" />
+                            <int name="min" value="13" />
+                            <int name="max" value="18" />
+                        </imgdir>
+                        <imgdir name="arcaneRiver">
+                            <int name="itemID" value="2633934" />
+                            <int name="min" value="13" />
+                            <int name="max" value="18" />
+                        </imgdir>
+                        <imgdir name="grandis">
+                            <int name="itemID" value="2633935" />
+                            <int name="min" value="13" />
+                            <int name="max" value="18" />
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="2">
+                    <int name="skillID" value="80012243" />
+                    <imgdir name="itemList">
+                        <imgdir name="mapleWorld">
+                            <int name="itemID" value="2633936" />
+                            <int name="min" value="16" />
+                            <int name="max" value="21" />
+                        </imgdir>
+                        <imgdir name="arcaneRiver">
+                            <int name="itemID" value="2633937" />
+                            <int name="min" value="16" />
+                            <int name="max" value="21" />
+                        </imgdir>
+                        <imgdir name="grandis">
+                            <int name="itemID" value="2633938" />
+                            <int name="min" value="16" />
+                            <int name="max" value="21" />
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="3">
+                    <int name="skillID" value="80012244" />
+                    <imgdir name="itemList">
+                        <imgdir name="mapleWorld">
+                            <int name="itemID" value="2633939" />
+                            <int name="min" value="20" />
+                            <int name="max" value="25" />
+                        </imgdir>
+                        <imgdir name="arcaneRiver">
+                            <int name="itemID" value="2633940" />
+                            <int name="min" value="20" />
+                            <int name="max" value="25" />
+                        </imgdir>
+                        <imgdir name="grandis">
+                            <int name="itemID" value="2633941" />
+                            <int name="min" value="20" />
+                            <int name="max" value="25" />
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="4">
+                    <int name="skillID" value="80012244" />
+                    <imgdir name="itemList">
+                        <imgdir name="mapleWorld">
+                            <int name="itemID" value="2633939" />
+                            <int name="min" value="20" />
+                            <int name="max" value="25" />
+                        </imgdir>
+                        <imgdir name="arcaneRiver">
+                            <int name="itemID" value="2633940" />
+                            <int name="min" value="20" />
+                            <int name="max" value="25" />
+                        </imgdir>
+                        <imgdir name="grandis">
+                            <int name="itemID" value="2633941" />
+                            <int name="min" value="20" />
+                            <int name="max" value="25" />
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="scriptName">
+                <string name="reward" value="cannonAttraction_Reward" />
+                <string name="stardustMax" value="cannonAttraction_dustLimit" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="Skill">
+        <imgdir name="info">
+            <int name="point_qid" value="501611" />
+            <string name="point_key" value="point" />
+            <int name="skill_qid" value="501614" />
+            <int name="deco_qid" value="501615" />
+            <string name="memo_TW" value="skill 및 deco는 저장 방식은 기존과 동일&#xD;&#xA;&#xD;&#xA;skill : list의 index와 매칭 / deco : UI버튼의 index와 매칭" />
+        </imgdir>
+        <imgdir name="list">
+            <int name="0" value="80011880" />
+            <int name="1" value="80011881" />
+            <int name="2" value="80011882" />
+            <int name="3" value="80011883" />
+            <int name="4" value="80011884" />
+            <int name="5" value="80011885" />
+            <int name="6" value="80011886" />
+            <int name="7" value="80011887" />
+            <int name="8" value="80011888" />
+            <int name="9" value="80011889" />
+            <int name="10" value="80011890" />
+            <int name="11" value="80011891" />
+            <int name="12" value="80011894" />
+            <int name="13" value="80011895" />
+            <int name="14" value="80011896" />
+            <int name="15" value="80011897" />
+            <int name="16" value="80011898" />
+            <int name="17" value="80011899" />
+            <int name="18" value="80011900" />
+            <int name="19" value="80011901" />
+            <int name="20" value="80011902" />
+        </imgdir>
+        <imgdir name="monsterLife">
+            <string name="farmEfficiency" value="0" />
+            <string name="fusionUpProb" value="0" />
+            <string name="specialFusionUpProb" value="0" />
+            <string name="tutorialQuestUpProb" value="0" />
+        </imgdir>
+        <imgdir name="grade">
+            <imgdir name="0">
+                <string name="info" value="skillID : 해당 인덱스의 스킬 ID, needSkillID : 선행스킬" />
+                <imgdir name="0">
+                    <int name="skillIcon" value="0" />
+                    <int name="skillID" value="80011880" />
+                    <int name="point" value="900" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="skillIcon" value="1" />
+                    <int name="skillID" value="80011884" />
+                    <int name="point" value="900" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="skillIcon" value="2" />
+                    <int name="skillID" value="80011888" />
+                    <int name="point" value="900" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="skillIcon" value="3" />
+                    <int name="skillID" value="80011894" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="skillIcon" value="5" />
+                    <int name="skillID" value="80011896" />
+                    <int name="point" value="1000" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <imgdir name="0">
+                    <int name="skillIcon" value="0" />
+                    <int name="skillID" value="80011881" />
+                    <int name="needSkillID" value="80011880" />
+                    <int name="point" value="950" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="skillIcon" value="1" />
+                    <int name="skillID" value="80011885" />
+                    <int name="needSkillID" value="80011884" />
+                    <int name="point" value="950" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="skillIcon" value="2" />
+                    <int name="skillID" value="80011889" />
+                    <int name="needSkillID" value="80011888" />
+                    <int name="point" value="950" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="skillIcon" value="4" />
+                    <int name="skillID" value="80011895" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="skillIcon" value="7" />
+                    <int name="skillID" value="80011898" />
+                    <int name="point" value="1000" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <imgdir name="0">
+                    <int name="skillIcon" value="0" />
+                    <int name="skillID" value="80011882" />
+                    <int name="needSkillID" value="80011881" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="skillIcon" value="1" />
+                    <int name="skillID" value="80011886" />
+                    <int name="needSkillID" value="80011885" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="skillIcon" value="2" />
+                    <int name="skillID" value="80011890" />
+                    <int name="needSkillID" value="80011889" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="skillIcon" value="6" />
+                    <int name="skillID" value="80011897" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="skillIcon" value="8" />
+                    <int name="skillID" value="80011899" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="5">
+                    <int name="skillIcon" value="9" />
+                    <int name="skillID" value="80011900" />
+                    <int name="point" value="1000" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <imgdir name="0">
+                    <int name="skillIcon" value="0" />
+                    <int name="skillID" value="80011883" />
+                    <int name="needSkillID" value="80011882" />
+                    <int name="point" value="1050" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="skillIcon" value="1" />
+                    <int name="skillID" value="80011887" />
+                    <int name="needSkillID" value="80011886" />
+                    <int name="point" value="1050" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="skillIcon" value="2" />
+                    <int name="skillID" value="80011891" />
+                    <int name="needSkillID" value="80011890" />
+                    <int name="point" value="1050" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="skillIcon" value="10" />
+                    <int name="skillID" value="80011901" />
+                    <int name="point" value="1000" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="skillIcon" value="11" />
+                    <int name="skillID" value="80011902" />
+                    <int name="point" value="1000" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <string name="memo_TW" value="info : 이벤트 기본정보 / MainEvent : 메인이벤트 관련 정보 / Skill : 축제 꾸미기 관련 정보" />
+</imgdir>

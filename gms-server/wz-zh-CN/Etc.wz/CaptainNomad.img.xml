@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="CaptainNomad.img">
+    <imgdir name="suit">
+        <imgdir name="basic">
+            <imgdir name="99">
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-46" />
+                </imgdir>
+                <int name="def" value="0" />
+                <int name="rdef" value="0" />
+                <int name="weight" value="10" />
+                <string name="name" value="기본슈트 (basic suit)" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="closerange">
+            <imgdir name="100">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="2" />
+                <int name="rdef" value="0" />
+                <int name="weight" value="20" />
+                <string name="name" value="근거리방어 mk1 (melee defense suit mk1)" />
+            </imgdir>
+            <imgdir name="101">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="4" />
+                <int name="rdef" value="0" />
+                <int name="weight" value="15" />
+                <string name="name" value="근거리방어 mk2 (melee defense suit mk2)" />
+            </imgdir>
+            <imgdir name="102">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="6" />
+                <int name="rdef" value="0" />
+                <int name="weight" value="10" />
+                <string name="name" value="근거리방어 mk3 (melee defense suit mk3)" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="longrange">
+            <imgdir name="200">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="0" />
+                <int name="rdef" value="2" />
+                <int name="weight" value="20" />
+                <string name="name" value="원거리방어 mk1 (ranged defense suit mk1)" />
+            </imgdir>
+            <imgdir name="201">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="0" />
+                <int name="rdef" value="4" />
+                <int name="weight" value="15" />
+                <string name="name" value="원거리방어 mk2 (ranged defense suit mk2)" />
+            </imgdir>
+            <imgdir name="202">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="0" />
+                <int name="rdef" value="6" />
+                <int name="weight" value="10" />
+                <string name="name" value="원거리방어 mk3 (ranged defense suit mk3)" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="complex">
+            <imgdir name="300">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="1" />
+                <int name="rdef" value="1" />
+                <int name="weight" value="20" />
+                <string name="name" value="복합방어 mk1 (mixed defense suit mk1)" />
+            </imgdir>
+            <imgdir name="301">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="2" />
+                <int name="rdef" value="2" />
+                <int name="weight" value="15" />
+                <string name="name" value="복합방어 mk2 (mixed defense suit mk2)" />
+            </imgdir>
+            <imgdir name="302">
+                <imgdir name="body">
+                    <imgdir name="walk">
+                    </imgdir>
+                    <imgdir name="stand">
+                    </imgdir>
+                    <imgdir name="jump">
+                    </imgdir>
+                    <imgdir name="walkback">
+                    </imgdir>
+                    <int name="startX" value="-12" />
+                    <int name="startY" value="-43" />
+                </imgdir>
+                <imgdir name="head">
+                    <int name="startX" value="0" />
+                    <int name="startY" value="-40" />
+                </imgdir>
+                <int name="def" value="3" />
+                <int name="rdef" value="3" />
+                <int name="weight" value="10" />
+                <string name="name" value="복합방어 mk3 (mixed defense suit mk3)" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="weapon">
+        <imgdir name="longrange">
+            <imgdir name="pistol">
+                <imgdir name="shoot">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011585" />
+                    <int name="weight" value="1" />
+                    <int name="reloadTime" value="2000" />
+                    <int name="attackMode" value="1" />
+                    <int name="maxBullet" value="13" />
+                    <int name="maxMag" value="10" />
+                    <string name="GunName" value="pistol" />
+                    <short name="availableStart" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="smg">
+                <imgdir name="shoot">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011586" />
+                    <int name="weight" value="2" />
+                    <int name="reloadTime" value="3000" />
+                    <int name="attackMode" value="0" />
+                    <int name="maxBullet" value="60" />
+                    <int name="maxMag" value="4" />
+                    <string name="GunName" value="smg" />
+                    <short name="availableStart" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="ar">
+                <imgdir name="shoot">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011587" />
+                    <int name="weight" value="3" />
+                    <int name="reloadTime" value="3000" />
+                    <int name="attackMode" value="0" />
+                    <int name="maxBullet" value="40" />
+                    <int name="maxMag" value="4" />
+                    <string name="GunName" value="assault rifle" />
+                    <short name="availableStart" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="shotgun">
+                <imgdir name="shoot">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011588" />
+                    <int name="weight" value="4" />
+                    <int name="reloadTime" value="4000" />
+                    <int name="attackMode" value="1" />
+                    <int name="maxBullet" value="24" />
+                    <string name="GunName" value="shotgun" />
+                    <short name="availableStart" value="-1" />
+                    <int name="maxMag" value="6" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="launcher">
+                <imgdir name="shoot">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011589" />
+                    <int name="weight" value="5" />
+                    <int name="reloadTime" value="7000" />
+                    <int name="attackMode" value="2" />
+                    <int name="maxBullet" value="30" />
+                    <string name="GunName" value="rocket launcher" />
+                    <short name="availableStart" value="-1" />
+                    <int name="maxMag" value="3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="flamethrower">
+                <imgdir name="shoot">
+                </imgdir>
+                <imgdir name="loop">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011590" />
+                    <int name="weight" value="10" />
+                    <int name="reloadTime" value="10000" />
+                    <int name="attackMode" value="0" />
+                    <int name="maxBullet" value="500" />
+                    <int name="maxMag" value="1" />
+                    <string name="GunName" value="flamethrower" />
+                    <short name="availableStart" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="minigun">
+                <imgdir name="shoot">
+                </imgdir>
+                <int name="startX" value="10" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011591" />
+                    <int name="weight" value="10" />
+                    <int name="reloadTime" value="15000" />
+                    <int name="attackMode" value="0" />
+                    <int name="maxBullet" value="350" />
+                    <int name="maxMag" value="0" />
+                    <string name="GunName" value="minigun" />
+                    <short name="availableStart" value="-1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="closerange">
+            <imgdir name="spear">
+                <imgdir name="shoot">
+                </imgdir>
+                <imgdir name="shoot2">
+                </imgdir>
+                <int name="startX" value="13" />
+                <int name="startY" value="-38" />
+                <imgdir name="info">
+                    <string name="info" value="skill: 연결되는 스킬아이디, weight: 무기무게, reloadTime: 장전시간밀리세컨드, attackMode: 0자동/1반자동/2수동, maxBullet: 탄창에 들어가는 총알 수, maxMag: 소지할 수 있는 최대 탄창 수" />
+                    <int name="skill" value="80011635" />
+                    <int name="reloadTime" value="0" />
+                    <int name="attackMode" value="2" />
+                    <int name="weight" value="6" />
+                    <string name="maxBullet" value="999999999" />
+                    <int name="maxMag" value="0" />
+                    <short name="availableStart" value="-1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="town">
+        <imgdir name="0">
+            <imgdir name="body">
+                <imgdir name="walk">
+                </imgdir>
+                <imgdir name="stand">
+                </imgdir>
+                <imgdir name="jump">
+                </imgdir>
+                <imgdir name="walkback">
+                </imgdir>
+                <int name="startX" value="-27" />
+                <int name="startY" value="-87" />
+            </imgdir>
+            <int name="def" value="0" />
+            <int name="rdef" value="0" />
+            <int name="weight" value="10" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="ForceAtomMove">
+        <int name="ForceAtomCollisionMoveRatio" value="100" />
+    </imgdir>
+    <imgdir name="MovementInfo">
+        <int name="NormalSpeed" value="100" />
+        <int name="NormalJump" value="100" />
+        <int name="NormalMove" value="80" />
+        <int name="Dash" value="200" />
+        <int name="FlashJump" value="200" />
+        <int name="JetPack" value="200" />
+    </imgdir>
+</imgdir>

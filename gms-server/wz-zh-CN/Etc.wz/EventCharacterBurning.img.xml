@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="EventCharacterBurning.img">
+    <int name="levelUpEffectDelay" value="1000" />
+    <imgdir name="LimitedJobCode">
+        <int name="0" value="10000" />
+        <int name="1" value="10100" />
+        <int name="2" value="10110" />
+        <int name="3" value="10111" />
+        <int name="4" value="10112" />
+        <int name="5" value="13000" />
+        <int name="6" value="13100" />
+        <int name="7" value="13500" />
+        <int name="8" value="16001" />
+        <int name="9" value="16200" />
+        <int name="10" value="16210" />
+        <int name="11" value="16211" />
+        <int name="12" value="16212" />
+    </imgdir>
+    <imgdir name="Event">
+        <imgdir name="0">
+            <string name="start" value="201812271000" />
+            <string name="end" value="202109090600" />
+            <int name="maxLevel" value="130" />
+            <int name="minLevel" value="10" />
+            <int name="addPoint" value="2" />
+            <int name="maxCount" value="2" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="EventEx">
+        <imgdir name="0">
+            <string name="start" value="202201120900" />
+            <string name="end" value="202202222359" />
+            <int name="maxLevel" value="200" />
+            <int name="minLevel" value="10" />
+            <int name="addPoint" value="2" />
+        </imgdir>
+        <imgdir name="1">
+            <string name="start" value="202202230900" />
+            <string name="end" value="202204052359" />
+            <int name="maxLevel" value="200" />
+            <int name="minLevel" value="10" />
+            <int name="addPoint" value="2" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="AllowWorldID">
+        <int name="0" value="48" />
+        <int name="1" value="49" />
+        <int name="2" value="52" />
+    </imgdir>
+    <imgdir name="WorldTransferEventWorldID" />
+</imgdir>

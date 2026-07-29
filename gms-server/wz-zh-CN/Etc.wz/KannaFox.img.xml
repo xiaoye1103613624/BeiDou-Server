@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="KannaFox.img">
+    <imgdir name="default">
+        <imgdir name="info">
+            <int name="chatBalloon" value="96" />
+            <int name="nameTag" value="96" />
+            <string name="name" value="小白狐" />
+        </imgdir>
+        <imgdir name="Effect">
+            <imgdir name="teleport">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="trans">
+            </imgdir>
+            <imgdir name="teleportBig">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="teleportSmall">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="Clothes">
+            <int name="face" value="24065" />
+            <int name="skin" value="12" />
+            <imgdir name="Basic">
+                <int name="Longcoat" value="1052949" />
+                <int name="hair" value="38920" />
+            </imgdir>
+            <imgdir name="Upgrade">
+                <int name="Longcoat" value="1052949" />
+                <int name="hair" value="38920" />
+            </imgdir>
+            <imgdir name="Upgrade02">
+                <int name="Longcoat" value="1052949" />
+                <int name="hair" value="38920" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="Event">
+            <imgdir name="bind">
+                <int name="skill" value="42101023" />
+                <string name="chat" value="幽玄气息！！" />
+            </imgdir>
+            <imgdir name="heal">
+                <int name="skill" value="42101020" />
+                <string name="chat" value="回复！！" />
+                <imgdir name="condition">
+                    <int name="remainHp" value="60" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="fireBarrier">
+                <int name="skill" value="42101021" />
+                <string name="chat" value="花炎结界！！" />
+            </imgdir>
+            <imgdir name="foxBless">
+                <int name="skill" value="42101022" />
+                <string name="chat" value="祝福！！" />
+            </imgdir>
+            <imgdir name="levelup">
+                <string name="emotion" value="欢呼雀跃" />
+            </imgdir>
+            <imgdir name="dead">
+                <string name="emotion" value="哭泣" />
+            </imgdir>
+            <imgdir name="heal02">
+                <int name="skill" value="42121020" />
+                <string name="chat" value="回复！！" />
+                <imgdir name="condition">
+                    <int name="remainHp" value="70" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="BasicClothes">
+            <int name="face" value="20079" />
+            <imgdir name="0">
+                <int name="Longcoat" value="1052471" />
+                <int name="hair" value="36320" />
+                <int name="cape" value="1102490" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="Longcoat" value="1052475" />
+                <int name="hair" value="36321" />
+                <int name="cape" value="1102493" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rolePlaying">
+        <imgdir name="info">
+            <int name="chatBalloon" value="96" />
+            <int name="nameTag" value="96" />
+            <string name="name" value="小白狐" />
+        </imgdir>
+        <imgdir name="BasicClothes">
+            <int name="face" value="20079" />
+            <imgdir name="0">
+                <int name="Longcoat" value="1052471" />
+                <int name="hair" value="36320" />
+                <int name="cape" value="1102490" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="Longcoat" value="1052475" />
+                <int name="hair" value="36321" />
+                <int name="cape" value="1102493" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="Effect">
+            <imgdir name="teleport">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="trans">
+            </imgdir>
+            <imgdir name="teleportBig">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="teleportSmall">
+                <imgdir name="condition">
+                    <vector name="lt" x="-300" y="-70" />
+                    <vector name="rb" x="100" y="0" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="Clothes">
+            <int name="face" value="24065" />
+            <int name="skin" value="12" />
+            <imgdir name="Basic">
+                <int name="Longcoat" value="1052949" />
+                <int name="hair" value="38920" />
+            </imgdir>
+            <imgdir name="Upgrade">
+                <int name="Longcoat" value="1052949" />
+                <int name="hair" value="38920" />
+            </imgdir>
+            <imgdir name="Upgrade02">
+                <int name="Longcoat" value="1052949" />
+                <int name="hair" value="38920" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="Event">
+            <imgdir name="bind">
+                <int name="skill" value="80011059" />
+                <string name="chat" value="幽玄气息！！" />
+            </imgdir>
+            <imgdir name="heal">
+                <int name="skill" value="80011056" />
+                <string name="chat" value="回复！！" />
+                <imgdir name="condition">
+                    <int name="remainHp" value="50" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="fireBarrier">
+                <int name="skill" value="80011057" />
+                <string name="chat" value="花炎结界！！" />
+            </imgdir>
+            <imgdir name="foxBless">
+                <int name="skill" value="80011058" />
+                <string name="chat" value="祝福！！" />
+            </imgdir>
+            <imgdir name="levelup">
+                <string name="emotion" value="欢呼雀跃" />
+            </imgdir>
+            <imgdir name="dead">
+                <string name="emotion" value="哭泣" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

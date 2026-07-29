@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="FieldAttackObjInfo.img">
+    <imgdir name="1">
+        <imgdir name="info">
+            <int name="type" value="1" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001000" />
+                    <int name="repeat" value="1" />
+                </imgdir>
+            </imgdir>
+            <string name="name" value="箭矢炮盘设置物" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+            <imgdir name="stand">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="2">
+        <imgdir name="info">
+            <int name="type" value="2" />
+            <int name="boardAble" value="1" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="80001331" />
+                </imgdir>
+            </imgdir>
+            <string name="name" value="海加顿飞机搭乘物" />
+            <int name="range" value="300" />
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+            <imgdir name="stand">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="afterDesc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="3">
+        <imgdir name="info">
+            <int name="type" value="3" />
+            <string name="name" value="海加顿大炮" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001002" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="4">
+        <imgdir name="info">
+            <int name="type" value="4" />
+            <string name="name" value="海加顿巨叉" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="18" />
+            <int name="boardY" value="-65" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001003" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+            <imgdir name="stand">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="5">
+        <imgdir name="info">
+            <int name="type" value="5" />
+            <string name="name" value="玩家攻击" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001004" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="6">
+        <imgdir name="info">
+            <int name="type" value="6" />
+            <string name="name" value="奖励秋千" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="-124" />
+            <int name="boardY" value="-1" />
+            <int name="pageIdx" value="3" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="stand">
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+            <imgdir name="hit">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="desc2">
+        </imgdir>
+        <imgdir name="desc3">
+        </imgdir>
+    </imgdir>
+    <imgdir name="7">
+        <imgdir name="info">
+            <int name="type" value="7" />
+            <string name="name" value="奖励跷跷板" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="135" />
+            <int name="boardY" value="18" />
+            <int name="pageIdx" value="3" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="stand">
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="desc2">
+        </imgdir>
+        <imgdir name="desc3">
+        </imgdir>
+    </imgdir>
+    <imgdir name="8">
+        <imgdir name="info">
+            <int name="type" value="8" />
+            <string name="name" value="守城战大炮" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001005" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="afterDesc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="9">
+        <imgdir name="info">
+            <int name="type" value="9" />
+            <string name="name" value="守城战大炮" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001006" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="afterDesc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="10">
+        <imgdir name="info">
+            <int name="type" value="10" />
+            <string name="name" value="守城战大炮" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001007" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="afterDesc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="11">
+        <imgdir name="info">
+            <int name="type" value="11" />
+            <string name="name" value="守城战大炮" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001008" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+        <imgdir name="afterDesc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="12">
+        <imgdir name="info">
+            <int name="type" value="12" />
+            <string name="name" value="阻止黑太阳士兵入侵" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001009" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="1" />
+            <imgdir name="needBullet">
+                <int name="quest" value="100347" />
+                <string name="key" value="bomb" />
+                <string name="msg" value="没有炮弹，无法使用。需消灭黑太阳步兵，获得炮弹。" />
+            </imgdir>
+            <int name="noSkillAlpha" value="1" />
+            <int name="allowMorphOrRiding" value="1" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="13">
+        <imgdir name="info">
+            <int name="type" value="13" />
+            <string name="name" value="阻止黑太阳士兵入侵" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001010" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="2" />
+            <imgdir name="needBullet">
+                <int name="quest" value="100347" />
+                <string name="key" value="bomb" />
+                <string name="msg" value="没有炮弹，无法使用。需消灭黑太阳步兵，获得炮弹。" />
+            </imgdir>
+            <int name="noSkillAlpha" value="1" />
+            <int name="allowMorphOrRiding" value="1" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="14">
+        <imgdir name="info">
+            <int name="type" value="14" />
+            <string name="name" value="阻止黑太阳士兵入侵" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001011" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="3" />
+            <imgdir name="needBullet">
+                <int name="quest" value="100347" />
+                <string name="key" value="bomb" />
+                <string name="msg" value="没有炮弹，无法使用。需消灭黑太阳步兵，获得炮弹。" />
+            </imgdir>
+            <int name="noSkillAlpha" value="1" />
+            <int name="allowMorphOrRiding" value="1" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="15">
+        <imgdir name="info">
+            <int name="type" value="15" />
+            <string name="name" value="阻止黑太阳士兵入侵" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001012" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="4" />
+            <imgdir name="needBullet">
+                <int name="quest" value="100347" />
+                <string name="key" value="bomb" />
+                <string name="msg" value="没有炮弹，无法使用。需消灭黑太阳步兵，获得炮弹。" />
+            </imgdir>
+            <int name="noSkillAlpha" value="1" />
+            <int name="allowMorphOrRiding" value="1" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="16">
+        <imgdir name="info">
+            <int name="type" value="16" />
+            <string name="name" value="阻止黑太阳士兵入侵" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001013" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+            <imgdir name="needBullet">
+                <int name="quest" value="100347" />
+                <string name="key" value="bomb" />
+                <string name="msg" value="没有炮弹，无法使用。需消灭黑太阳步兵，获得炮弹。" />
+            </imgdir>
+            <int name="noSkillAlpha" value="1" />
+            <int name="allowMorphOrRiding" value="1" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="17">
+        <imgdir name="info">
+            <int name="type" value="5" />
+            <string name="name" value="跑旗赛" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="45" />
+            <int name="boardY" value="-58" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001004" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="5" />
+            <imgdir name="needBullet">
+                <int name="quest" value="32581" />
+                <string name="key" value="bomb" />
+                <string name="screenMsg" value="已使用3次以上大炮，无法继续使用。" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="create">
+            </imgdir>
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="10" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="18">
+        <imgdir name="info">
+            <int name="type" value="18" />
+            <string name="name" value="保护埃斯佩拉" />
+            <int name="range" value="4000" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="100" />
+            <int name="boardY" value="-18" />
+            <imgdir name="attackInfo">
+                <imgdir name="0">
+                    <int name="skill" value="95001014" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="skill" value="95001015" />
+                </imgdir>
+            </imgdir>
+            <int name="pageIdx" value="3" />
+            <int name="noSkillAlpha" value="1" />
+            <int name="allowMorphOrRiding" value="1" />
+            <int name="removeEffect" value="1" />
+            <imgdir name="boardableRect">
+                <vector name="lt" x="-91" y="-48" />
+                <vector name="rb" x="208" y="129" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="stand">
+                <int name="aim" value="1" />
+                <int name="moveX" value="-40" />
+                <int name="moveY" value="0" />
+            </imgdir>
+            <imgdir name="attack">
+                <imgdir name="0">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="aim" value="1" />
+                    <int name="moveX" value="10" />
+                    <int name="moveY" value="0" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="base">
+            <imgdir name="forward">
+            </imgdir>
+            <imgdir name="back">
+            </imgdir>
+        </imgdir>
+        <imgdir name="effect">
+            <imgdir name="0">
+            </imgdir>
+            <imgdir name="1">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc">
+        </imgdir>
+    </imgdir>
+    <imgdir name="1000">
+        <imgdir name="info">
+            <int name="type" value="8" />
+            <string name="name" value="獎勵 跳跳板" />
+            <int name="range" value="300" />
+            <int name="boardAble" value="1" />
+            <int name="boardX" value="0" />
+            <int name="boardY" value="-100" />
+            <int name="pageIdx" value="3" />
+        </imgdir>
+        <imgdir name="act">
+            <imgdir name="stand">
+            </imgdir>
+            <imgdir name="remove">
+            </imgdir>
+            <imgdir name="create">
+            </imgdir>
+        </imgdir>
+        <imgdir name="desc3">
+        </imgdir>
+    </imgdir>
+</imgdir>

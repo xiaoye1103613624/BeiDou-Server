@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="3003301.img">
+    <imgdir name="info">
+        <imgdir name="illustration2">
+            <imgdir name="face">
+            </imgdir>
+        </imgdir>
+        <int name="forceMove" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+    </imgdir>
+    <imgdir name="cry">
+        <int name="special" value="1" />
+    </imgdir>
+    <imgdir name="boom">
+        <int name="special" value="1" />
+    </imgdir>
+    <imgdir name="move">
+    </imgdir>
+    <imgdir name="condition1">
+        <uol name="stand" value="../stand" />
+        <uol name="cry" value="../cry" />
+        <uol name="boom" value="../boom" />
+        <uol name="move" value="../move" />
+        <int name="34454" value="2" />
+        <int name="hide" value="1" />
+    </imgdir>
+    <imgdir name="condition2">
+        <uol name="stand" value="../stand" />
+        <uol name="cry" value="../cry" />
+        <uol name="boom" value="../boom" />
+        <uol name="move" value="../move" />
+        <int name="34454" value="1" />
+        <int name="hide" value="1" />
+    </imgdir>
+</imgdir>
