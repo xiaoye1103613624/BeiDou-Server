@@ -51,9 +51,7 @@ function playerEntry(eim, player) {
     player.changeMap(DEFENSE_MAP, 0);
     em.setProperty("noEntry", "true");
 
-    var PacketCreator = Java.type('org.gms.util.PacketCreator');
-    player.sendPacket(PacketCreator.getClock(EVENT_TIME * 60));
-    eim.startEventTimer(EVENT_TIME * 60000);
+    eim.startEventTimer(EVENT_TIME * 60000); // 内部已包含时钟包
 
     player.message("[蘑菇城堡] 城堡防御战开始! 准备迎接怪物进攻!");
     startNextWave(eim);
@@ -83,14 +81,12 @@ function startNextWave(eim) {
     for (var i = 0; i < wave.mobs.length; i++) {
         var mc = wave.mobs[i];
         for (var j = 0; j < mc[1]; j++) {
-            var mob = Java.type('org.gms.server.life.LifeFactory').getMonster(mc[0]);
-            if (mob != null) {
-                map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(
-                    -150 + Math.floor(Math.random() * 300),
-                    -42
-                ));
-                waveTotalMobs++;
-            }
+            // GraalJS兼容: spawnMonsterOnGroundBelow(int id, x, y) 自带创建
+            map.spawnMonsterOnGroundBelow(mc[0],
+                -150 + Math.floor(Math.random() * 300),
+                -42
+            );
+            waveTotalMobs++;
         }
     }
 

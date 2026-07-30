@@ -182,6 +182,7 @@ public enum RecvOpcode implements Opcode {
     MONSTER_BOMB(0xC1), // 怪物炸弹
     MOB_DAMAGE_MOB(0xC2), // 怪物对怪物造成伤害
     NPC_ACTION(0xC5), // NPC动作
+    SIDEBAR_TOOL(0xC6), // 侧边栏工具点击(ijl15自定义)
     ITEM_PICKUP(0xCA), // 捡起物品
     DAMAGE_REACTOR(0xCD), // 反应堆受到伤害
     TOUCHING_REACTOR(0xCE), // 触碰反应堆
@@ -209,6 +210,7 @@ public enum RecvOpcode implements Opcode {
     BEAUTY_ACTION(0x174), // 美容院操作
     SET_ITEM_BONUS_REQUEST(0x177), // 套装展示按需拉取
     DAILY_CHECKIN(0x11A), // 每日签到
+    COLORING_PRISM_ACTION(0x11D), // 七彩棱镜：请求列表 / 确认 / 清除
     BAG_WINDOW(0x3724), // 收纳背包窗口操作
     USER_INFO_EX(0x3726), // 查看他人装备详情
 

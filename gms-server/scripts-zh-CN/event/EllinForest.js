@@ -76,9 +76,7 @@ function playerEntry(eim, player) {
     player.changeMap(STAGE_MAPS[0], 0);
     em.setProperty("noEntry", "true");
 
-    var PacketCreator = Java.type('org.gms.util.PacketCreator');
-    player.sendPacket(PacketCreator.getClock(EVENT_TIME * 60));
-    eim.startEventTimer(EVENT_TIME * 60000);
+    eim.startEventTimer(EVENT_TIME * 60000); // 内部已包含时钟包
 
     // 开始第1关
     spawnStage(eim, 0);
@@ -96,14 +94,12 @@ function spawnStage(eim, stageIndex) {
     for (var i = 0; i < stage.mobs.length; i++) {
         var mobConfig = stage.mobs[i];
         for (var j = 0; j < mobConfig.count; j++) {
-            var mob = Java.type('org.gms.server.life.LifeFactory').getMonster(mobConfig.id);
-            if (mob != null) {
-                map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(
-                    -200 + Math.floor(Math.random() * 400),
-                    -42
-                ));
-                stageMobs.push(mobConfig.id);
-            }
+            // GraalJS兼容: 直接使用int ID, 不调Java.type()
+            map.spawnMonsterOnGroundBelow(mobConfig.id,
+                -200 + Math.floor(Math.random() * 400),
+                -42
+            );
+            stageMobs.push(mobConfig.id);
         }
     }
 
@@ -151,10 +147,8 @@ function monsterKilled(mob, eim) {
             }
             var bossMap = eim.getInstanceMap(BOSS_MAP);
             if (bossMap != null) {
-                var bossMob = Java.type('org.gms.server.life.LifeFactory').getMonster(BOSS_ID);
-                if (bossMob != null) {
-                    bossMap.spawnMonsterOnGroundBelow(bossMob, new java.awt.Point(0, -42));
-                }
+                // GraalJS兼容: spawnMonsterOnGroundBelow(int id, x, y)
+                bossMap.spawnMonsterOnGroundBelow(BOSS_ID, 0, -42);
             }
         }
     } else {

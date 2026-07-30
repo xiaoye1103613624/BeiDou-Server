@@ -229,6 +229,8 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.SKILL_EFFECT, new SkillEffectHandler());
         registerHandler(RecvOpcode.MESSENGER, new MessengerHandler());
         registerHandler(RecvOpcode.NPC_ACTION, new NPCAnimationHandler());
+        // 侧边栏工具 (ijl15 sidetoolbar)
+        registerHandler(RecvOpcode.SIDEBAR_TOOL, new SidebarToolHandler());
         registerHandler(RecvOpcode.CHECK_CASH, new TouchingCashShopHandler());
         registerHandler(RecvOpcode.CASHSHOP_OPERATION, new CashOperationHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.COUPON_CODE, new CouponCodeHandler());
@@ -277,6 +279,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.BEAUTY_ACTION, new BeautyHandler());
         registerHandler(RecvOpcode.SET_ITEM_BONUS_REQUEST, new SetItemBonusRequestHandler());
         registerHandler(RecvOpcode.DAILY_CHECKIN, new DailyCheckinHandler());
+        registerHandler(RecvOpcode.COLORING_PRISM_ACTION, new ColoringPrismHandler());
         registerHandler(RecvOpcode.BAG_WINDOW, new BagWindowHandler());
         registerHandler(RecvOpcode.USER_INFO_EX, new UserInfoExHandler());
         registerHandler(RecvOpcode.SCRIPTED_ITEM, new ScriptedItemHandler());

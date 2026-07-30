@@ -73,17 +73,13 @@ function playerEntry(eim, player) {
     var map = eim.getInstanceMap(entryMap);
     var bossId = parseInt(eim.getProperty("bossId"));
 
-    // 生成Boss
-    map.spawnMonsterOnGroundBelow(
-        Java.type('org.gms.server.life.LifeFactory').getMonster(bossId),
-        new java.awt.Point(0, -42)
-    );
+    // 生成Boss (GraalJS兼容: spawnMonsterOnGroundBelow(int id, x, y) 自带创建)
+    map.spawnMonsterOnGroundBelow(bossId, 0, -42);
 
     player.changeMap(entryMap, 0);
     em.setProperty("noEntry", "true");
 
-    var PacketCreator = Java.type('org.gms.util.PacketCreator');
-    player.sendPacket(PacketCreator.getClock(eventTime * 60));
+    // startEventTimer 内部已包含时钟包发送
     eim.startEventTimer(eventTime * 60000);
 
     // 公告Boss名称
