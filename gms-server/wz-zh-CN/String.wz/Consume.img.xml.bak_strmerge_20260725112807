@@ -27224,7 +27224,7 @@
         <string name="name" value="弓专用钛质箭矢"/>
     </imgdir>
     <imgdir name="2060013">
-        <string name="desc" value="装着白金中箭的箭筒。必须和弓一起使用。\n攻击力 +6"/>
+        <string name="desc" value="装着白金中箭的箭筒。必须和弓一起使用。\n攻击力 +35"/>
         <string name="name" value="白金箭矢"/>
     </imgdir>
     <imgdir name="2060016">
@@ -27236,7 +27236,7 @@
         <string name="name" value="弩专用优质箭矢"/>
     </imgdir>
     <imgdir name="2061007">
-        <string name="desc" value="装着用高级钢铁制作而成的、攻击力更强的箭矢的箭筒。必须和弩一起使用。\n攻击力+ 4"/>
+        <string name="desc" value="装着用高级钢铁制作而成的、攻击力更强的箭矢的箭筒。必须和弩一起使用。\n攻击力+ 5"/>
         <string name="name" value="弩专用强化箭矢"/>
     </imgdir>
     <imgdir name="2061008">
@@ -27256,8 +27256,11 @@
         <string name="name" value="巨型雪球"/>
     </imgdir>
     <imgdir name="2070020">
-        <string name="desc" value="喜气洋洋的鞭炮，有时可用来进行攻击。\n攻击力+17"/>
+        <string name="desc" value="喜气洋洋的鞭炮，有时可用来进行攻击。+35"/>
         <string name="name" value="鞭炮"/>
+    </imgdir>
+    <imgdir name="2070021">
+        <string name="name" value="蛋糕镖"/>
     </imgdir>
     <imgdir name="2070025">
         <string name="desc" value="用钢铁制作而成的飞镖。装有很多个，全部用完后必须重新补充。 \n\n攻击力+ 35"/>
@@ -33225,6 +33228,14 @@
         <string name="desc" value="允许你 #c传送到世界地图的中的大多数地区 #. \n而且还可以让你 #c传送到特定角色所在的地图#只要他们和你在一个区和一个频道。 除指定地图外，还可以记录#c13#个传送地图\n#c&lt;可以移动前往的村庄&gt;#\n#c射手村, 魔法密林, 勇士部落, 废都, 诺特勒斯, 天空之城, 玩具城, 水下世界, 神木村, 武陵, 阿里安特, 埃德尔斯坦#."/>
         <string name="name" value="瞬移石"/>
     </imgdir>
+    <imgdir name="2330007">
+        <string name="desc" value="弹头可贯穿机械军团的特殊装甲。科技含量高，是以存在宇宙中的未知能量制成，弹头侧面画有装饰。\r\n攻击力 +30"/>
+        <string name="name" value="高科技穿甲弹"/>
+    </imgdir>
+    <imgdir name="2330008">
+        <string name="desc" value="钢铁制作的子弹。有很多个，全部用完后必须重新补充。 \n\n攻击力+ 32"/>
+        <string name="name" value="黄金子弹"/>
+    </imgdir>
     <imgdir name="2330012">
         <string name="desc" value="钢铁制作的子弹。有很多个，全部用完后必须重新补充。 \n\n攻击力+ 30"/>
         <string name="name" value="龙之精魄"/>
@@ -33232,6 +33243,10 @@
     <imgdir name="2330013">
         <string name="desc" value="钢铁制作的子弹。有很多个，全部用完后必须重新补充。 \n\n攻击力+ 35"/>
         <string name="name" value="龙之血魄"/>
+    </imgdir>
+    <imgdir name="2330016">
+        <string name="desc" value="用白金制作而成的子弹。装有很多颗，全部用完后，必须重新补充。\n\n攻击力+22"/>
+        <string name="name" value="白金子弹"/>
     </imgdir>
     <imgdir name="2350000">
         <string name="desc" value="使用后，#c当前世界#的角色栏增加#c1格#。(已达到最大值时无法增加。)"/>
@@ -66651,8 +66666,8 @@
         <string name="name" value="四级防爆卷轴"/>
     </imgdir>
     <imgdir name="2532000">
-        <string name="desc" value="安全卷轴：装备强化失败时不会扣除可升级次数（防扣次数，非防爆）。"/>
-        <string name="name" value="安全卷轴"/>
+        <string name="desc" value="可以防止装备升星时失败掉级"/>
+        <string name="name" value="五级防爆卷轴"/>
     </imgdir>
     <imgdir name="2532001">
         <string name="desc" value="可以防止装备升星时失败掉级"/>
@@ -87472,24 +87487,24 @@
         <string name="desc" value="使用后将在当前地图召唤&apos;轮回&apos;，召唤期间该地图怪物刷新数量与速度大幅提升。同一地图同一时刻只能存在一个轮回，部分特殊地图无法使用。"/>
     </imgdir>
     <imgdir name="2432076">
-        <string name="name" value="装备出售卡"/>
-        <string name="desc" value="直接出售装备栏后48格中的所有装备。可放快捷键，不消耗。"/>
+        <string name="name" value="xy一键售卖"/>
+        <string name="desc" value="直接出售48-96格中的所有装备。可放快捷键，不消耗。"/>
     </imgdir>
     <imgdir name="2432077">
-        <string name="name" value="北斗菜单卡"/>
-        <string name="desc" value="使用后打开拍卖/功能菜单（监狱除外）。可放快捷键，不消耗。"/>
+        <string name="name" value="xy快捷功能"/>
+        <string name="desc" value="使用后打开拍卖快捷功能。可放快捷键，不消耗。"/>
     </imgdir>
     <imgdir name="2432074">
-        <string name="name" value="装备出售确认卡"/>
-        <string name="desc" value="双击后一键出售装备栏后48格装备，出售前需确认，不消耗。可放快捷键。"/>
+        <string name="name" value="一键出售卡(需确认)"/>
+        <string name="desc" value="双击后可一键出售背包内多余道具，出售前需确认，不消耗道具。"/>
     </imgdir>
     <imgdir name="2432080">
-        <string name="name" value="装备出售卡"/>
-        <string name="desc" value="直接出售装备栏后48格中的所有装备。可放快捷键，不消耗。"/>
+        <string name="name" value="xy一键售卖"/>
+        <string name="desc" value="直接出售48-96格中的所有装备。可放快捷键，不消耗。"/>
     </imgdir>
     <imgdir name="2432081">
-        <string name="name" value="装备出售确认卡"/>
-        <string name="desc" value="出售装备栏后48格中的所有装备，使用前需确认。可放快捷键，不消耗。"/>
+        <string name="name" value="xy一键售卖（确认版）"/>
+        <string name="desc" value="出售48-96格中的所有装备，使用前需确认。可放快捷键，不消耗。"/>
     </imgdir>
     <imgdir name="2432356">
         <string name="name" value="北斗卫星手册"/>
@@ -88309,261 +88324,5 @@
     </imgdir>
     <imgdir name="2388164">
         <string name="name" value="Magnus Card"/>
-    </imgdir>
-    <imgdir name="2330007">
-        <string name="name" value="高科技穿甲弹"/>
-        <string name="desc" value="弹头可贯穿机械军团的特殊装甲。科技含量高，是以存在宇宙中的未知能量制成，弹头侧面画有装饰。\r\n攻击力 +22"/>
-    </imgdir>
-    <imgdir name="2330008">
-        <string name="name" value="钢铁子弹"/>
-        <string name="desc" value="钢铁制作的子弹。有很多个，全部用完后必须重新补充。 \n\n攻击力+ 22"/>
-    </imgdir>
-    <imgdir name="2330009">
-        <string name="name" value="特殊子弹"/>
-        <string name="desc" value="特殊弹药（私服/活动弹）。装有极少发，用完后需补充。"/>
-    </imgdir>
-    <imgdir name="2330010">
-        <string name="name" value="强化子弹"/>
-        <string name="desc" value="强化制作的子弹。有很多个，全部用完后必须重新补充。\n攻击力+11"/>
-    </imgdir>
-    <imgdir name="2330011">
-        <string name="name" value="进阶子弹"/>
-        <string name="desc" value="进阶制作的子弹。有很多个，全部用完后必须重新补充。\n攻击力+14"/>
-    </imgdir>
-    <imgdir name="2330016">
-        <string name="name" value="白金子弹"/>
-        <string name="desc" value="用白金制作而成的子弹。装有很多颗，全部用完后，必须重新补充。\n\n攻击力+22"/>
-    </imgdir>
-    <imgdir name="2333000">
-        <string name="name" value="特效子弹A"/>
-        <string name="desc" value="带有特殊弹道外观的子弹（私服特效弹）。攻击力以枪械为准。"/>
-    </imgdir>
-    <imgdir name="2333001">
-        <string name="name" value="特效子弹B"/>
-        <string name="desc" value="带有特殊弹道外观的子弹（私服特效弹）。攻击力以枪械为准。"/>
-    </imgdir>
-    <imgdir name="2070021">
-        <string name="name" value="蛋糕镖"/>
-        <string name="desc" value="蛋糕造型的飞镖。装有很多个，全部用完后必须重新补充。\n攻击力+20"/>
-    </imgdir>
-    <imgdir name="2079988">
-        <string name="name" value="无限飞镖改"/>
-        <string name="desc" value="用钢铁制作而成的飞镖。\n攻击力+26"/>
-    </imgdir>
-    <imgdir name="2079989">
-        <string name="name" value="自定义飞镖"/>
-        <string name="desc" value="自定义飞镖。装有很多个，全部用完后必须重新补充。"/>
-    </imgdir>
-    <imgdir name="2079990">
-        <string name="name" value="自定义飞镖"/>
-        <string name="desc" value="自定义飞镖。装有很多个，全部用完后必须重新补充。"/>
-    </imgdir>
-    <imgdir name="2079992">
-        <string name="name" value="自定义飞镖"/>
-        <string name="desc" value="自定义飞镖。装有很多个，全部用完后必须重新补充。"/>
-    </imgdir>
-    <imgdir name="2079993">
-        <string name="name" value="自定义飞镖"/>
-        <string name="desc" value="自定义飞镖。装有很多个，全部用完后必须重新补充。"/>
-    </imgdir>
-    <imgdir name="2079994">
-        <string name="name" value="自定义飞镖"/>
-        <string name="desc" value="自定义飞镖。装有很多个，全部用完后必须重新补充。"/>
-    </imgdir>
-    <imgdir name="2049403">
-        <string name="name" value="潜能卷轴2049403"/>
-        <string name="desc" value="为装备附加潜能。"/>
-    </imgdir>
-    <imgdir name="2049409">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049410">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049411">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049413">
-        <string name="name" value="S级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cS级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049422">
-        <string name="name" value="潜能卷轴2049422"/>
-        <string name="desc" value="为装备附加潜能。"/>
-    </imgdir>
-    <imgdir name="2049423">
-        <string name="name" value="潜能卷轴2049423"/>
-        <string name="desc" value="为装备附加潜能。"/>
-    </imgdir>
-    <imgdir name="2049706">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049707">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049708">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049711">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049712">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049713">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049714">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049719">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049720">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049721">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049722">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049723">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049724">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049725">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049726">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049727">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049728">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049729">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049731">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049732">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049733">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049734">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049735">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049736">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049737">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049738">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049739">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049740">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049742">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049743">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049744">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049745">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049746">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049747">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049748">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049749">
-        <string name="name" value="A级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cA级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049753">
-        <string name="name" value="S级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cS级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049754">
-        <string name="name" value="S级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cS级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049755">
-        <string name="name" value="S级潜能卷轴"/>
-        <string name="desc" value="为没有潜能的装备附加#cS级#潜能。成功后需用放大镜鉴定。"/>
-    </imgdir>
-    <imgdir name="2049916">
-        <string name="name" value="超级神奇魔方"/>
-        <string name="desc" value="可以重新设置装备道具潜能的超级神奇魔方。可用于S与SS；约8%概率提升一阶（最高SS）。\n#c只能用于已鉴定潜能的装备#\n#c（消耗栏别名，效果同点券栏同名魔方）#"/>
-    </imgdir>
-    <imgdir name="2049917">
-        <string name="name" value="终极神奇魔方"/>
-        <string name="desc" value="可以重新设置装备潜能的终极神奇魔方。升阶率高于超级神奇魔方，最高SS。\n#c只能用于已鉴定潜能的装备#\n#c（消耗栏别名，效果同点券栏同名魔方）#"/>
-    </imgdir>
-    <imgdir name="2049919">
-        <string name="name" value="怪异魔方"/>
-        <string name="desc" value="只能用于B/A潜能装备的魔方，不会升到S或SS。\n#c结果物最高：A#\n#c（消耗栏别名，效果同点券栏同名魔方）#"/>
     </imgdir>
 </imgdir>
