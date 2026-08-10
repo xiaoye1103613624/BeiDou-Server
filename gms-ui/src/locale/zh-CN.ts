@@ -14,7 +14,13 @@ import setItem from '@/views/game/setItem/locale/zh-CN';
 import enhanceRule from '@/views/game/enhanceRule/locale/zh-CN';
 import carryItemStat from '@/views/game/carryItemStat/locale/zh-CN';
 import alchemyRecipe from '@/views/game/alchemyRecipe/locale/zh-CN';
+import alchemistRecipe from '@/views/game/alchemistRecipe/locale/zh-CN';
 import forgeRecipe from '@/views/game/forgeRecipe/locale/zh-CN';
+import alchemyTier from '@/views/game/alchemyTier/locale/zh-CN';
+import petGrowth from '@/views/game/petGrowth/locale/zh-CN';
+import sponsor from '@/views/game/sponsor/locale/zh-CN';
+import skillTech from '@/views/game/skillTech/locale/zh-CN';
+import opLog from '@/views/game/opLog/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -37,7 +43,13 @@ export default {
   'menu.game.enhanceRule': '强化规则',
   'menu.game.carryItemStat': '携带物属性',
   'menu.game.alchemyRecipe': '炼金配方管理',
+  'menu.game.alchemistRecipe': '炼药配方管理',
   'menu.game.forgeRecipe': '打造配方管理',
+  'menu.game.alchemyTier': '炼金品级管理',
+  'menu.game.petGrowth': '宠物成长进阶',
+  'menu.game.sponsor': '赞助档位',
+  'menu.game.skillTech': '技能技改',
+  'menu.game.opLog': '操作日志',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -76,5 +88,11 @@ export default {
   ...enhanceRule,
   ...carryItemStat,
   ...alchemyRecipe,
+  ...alchemistRecipe,
   ...forgeRecipe,
+  ...alchemyTier,
+  ...petGrowth,
+  ...sponsor,
+  ...skillTech,
+  ...opLog,
 };

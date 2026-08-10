@@ -153,11 +153,71 @@ const GAME: AppRouteRecordRaw = {
       },
     },
     {
+      path: 'alchemistRecipe',
+      name: 'alchemistRecipe',
+      component: () => import('@/views/game/alchemistRecipe/index.vue'),
+      meta: {
+        locale: 'menu.game.alchemistRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
       path: 'forgeRecipe',
       name: 'forgeRecipe',
       component: () => import('@/views/game/forgeRecipe/index.vue'),
       meta: {
         locale: 'menu.game.forgeRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'alchemyTier',
+      name: 'alchemyTier',
+      component: () => import('@/views/game/alchemyTier/index.vue'),
+      meta: {
+        locale: 'menu.game.alchemyTier',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'petGrowth',
+      name: 'petGrowth',
+      component: () => import('@/views/game/petGrowth/index.vue'),
+      meta: {
+        locale: 'menu.game.petGrowth',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'sponsor',
+      name: 'sponsor',
+      component: () => import('@/views/game/sponsor/index.vue'),
+      meta: {
+        locale: 'menu.game.sponsor',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'skillTech',
+      name: 'skillTech',
+      component: () => import('@/views/game/skillTech/index.vue'),
+      meta: {
+        locale: 'menu.game.skillTech',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'opLog',
+      name: 'opLog',
+      component: () => import('@/views/game/opLog/index.vue'),
+      meta: {
+        locale: 'menu.game.opLog',
         requiresAuth: true,
         roles: ['admin'],
       },

@@ -1,10 +1,10 @@
-﻿<template>
+<template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.forgeRecipe')">
+    <a-card class="general-card" :title="$t('menu.game.alchemistRecipe')">
       <!-- 查询条件 -->
       <a-form layout="inline" :model="query">
-        <a-form-item :label="$t('forgeRecipe.column.tierRequired')">
+        <a-form-item :label="$t('alchemistRecipe.column.tierRequired')">
           <a-select
             v-model="query.tierRequired"
             placeholder="全部"
@@ -17,7 +17,7 @@
             </a-option>
           </a-select>
         </a-form-item>
-        <a-form-item :label="$t('forgeRecipe.column.enabled')">
+        <a-form-item :label="$t('alchemistRecipe.column.enabled')">
           <a-select
             v-model="query.enabled"
             placeholder="全部"
@@ -29,10 +29,10 @@
             <a-option :value="0">已禁用</a-option>
           </a-select>
         </a-form-item>
-        <a-form-item :label="$t('forgeRecipe.column.resultItemId')">
+        <a-form-item :label="$t('alchemistRecipe.column.resultItemId')">
           <a-input-number
             v-model="query.resultItemId"
-            :placeholder="$t('forgeRecipe.column.resultItemId')"
+            :placeholder="$t('alchemistRecipe.column.resultItemId')"
             :style="{ width: '160px' }"
           />
         </a-form-item>
@@ -74,7 +74,7 @@
           >
             <template #columns>
               <a-table-column
-                :title="$t('forgeRecipe.column.resultItemPhoto')"
+                :title="$t('alchemistRecipe.column.resultItemPhoto')"
                 align="center"
                 :width="70"
               >
@@ -89,50 +89,61 @@
                 </template>
               </a-table-column>
               <a-table-column
-                :title="$t('forgeRecipe.column.name')"
-                data-index="name"
+                :title="$t('alchemistRecipe.column.resultItemName')"
+                data-index="resultItemName"
                 :width="160"
-                align="center"
                 show-overflow-tooltip
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.resultItemId')"
+                :title="$t('alchemistRecipe.column.resultItemId')"
                 data-index="resultItemId"
                 :width="100"
                 align="center"
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.expGain')"
+                :title="$t('alchemistRecipe.column.resultCount')"
+                data-index="resultCount"
+                :width="90"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('alchemistRecipe.column.expGain')"
                 data-index="expGain"
                 :width="90"
                 align="center"
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.mesoCost')"
+                :title="$t('alchemistRecipe.column.staminaCost')"
+                data-index="staminaCost"
+                :width="90"
+                align="center"
+              />
+              <a-table-column
+                :title="$t('alchemistRecipe.column.mesoCost')"
                 data-index="mesoCost"
                 :width="110"
                 align="center"
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.material1ItemId')"
+                :title="$t('alchemistRecipe.column.material1ItemId')"
                 data-index="material1ItemId"
                 :width="110"
                 align="center"
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.material2ItemId')"
+                :title="$t('alchemistRecipe.column.material2ItemId')"
                 data-index="material2ItemId"
                 :width="110"
                 align="center"
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.material3ItemId')"
+                :title="$t('alchemistRecipe.column.material3ItemId')"
                 data-index="material3ItemId"
                 :width="110"
                 align="center"
               />
               <a-table-column
-                :title="$t('forgeRecipe.column.enabled')"
+                :title="$t('alchemistRecipe.column.enabled')"
                 :width="80"
                 align="center"
               >
@@ -144,7 +155,7 @@
                 </template>
               </a-table-column>
               <a-table-column
-                :title="$t('forgeRecipe.column.operation')"
+                :title="$t('alchemistRecipe.column.operation')"
                 :width="160"
                 fixed="right"
                 align="center"
@@ -156,10 +167,10 @@
                       size="mini"
                       @click="editRecipeClick(record)"
                     >
-                      {{ $t('forgeRecipe.button.edit') }}
+                      {{ $t('alchemistRecipe.button.edit') }}
                     </a-button>
                     <a-popconfirm
-                      :content="$t('forgeRecipe.delete.confirm')"
+                      :content="$t('alchemistRecipe.delete.confirm')"
                       position="top"
                       @ok="deleteClick(record.id)"
                     >
@@ -180,23 +191,15 @@
       <a-modal
         v-model:visible="modalVisible"
         :title="modalTitle"
-        :width="760"
+        :width="700"
         @ok="saveClick"
         @cancel="onCancel"
       >
         <a-form :model="form" layout="vertical">
-          <a-divider>{{ $t('forgeRecipe.title.basic') }}</a-divider>
+          <a-divider>{{ $t('alchemistRecipe.title.basic') }}</a-divider>
           <a-row :gutter="16">
             <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.name')">
-                <a-input
-                  v-model="form.name"
-                  :placeholder="$t('forgeRecipe.column.name')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.tierRequired')">
+              <a-form-item :label="$t('alchemistRecipe.column.tierRequired')">
                 <a-input-number
                   v-model="form.tierRequired"
                   :min="0"
@@ -205,9 +208,18 @@
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.resultItemId')">
+              <a-form-item :label="$t('alchemistRecipe.column.resultItemId')">
                 <a-input-number
                   v-model="form.resultItemId"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :label="$t('alchemistRecipe.column.resultCount')">
+                <a-input-number
+                  v-model="form.resultCount"
+                  :min="1"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -215,7 +227,7 @@
           </a-row>
           <a-row :gutter="16">
             <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.expGain')">
+              <a-form-item :label="$t('alchemistRecipe.column.expGain')">
                 <a-input-number
                   v-model="form.expGain"
                   :min="0"
@@ -224,18 +236,18 @@
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.mesoCost')">
+              <a-form-item :label="$t('alchemistRecipe.column.staminaCost')">
                 <a-input-number
-                  v-model="form.mesoCost"
+                  v-model="form.staminaCost"
                   :min="0"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.sortOrder')">
+              <a-form-item :label="$t('alchemistRecipe.column.mesoCost')">
                 <a-input-number
-                  v-model="form.sortOrder"
+                  v-model="form.mesoCost"
                   :min="0"
                   style="width: 100%"
                 />
@@ -244,16 +256,27 @@
           </a-row>
           <a-row :gutter="16">
             <a-col :span="8">
-              <a-form-item :label="$t('forgeRecipe.column.enabled')">
+              <a-form-item :label="$t('alchemistRecipe.column.sortOrder')">
+                <a-input-number
+                  v-model="form.sortOrder"
+                  :min="0"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :label="$t('alchemistRecipe.column.enabled')">
                 <a-switch v-model="enabledBool" />
               </a-form-item>
             </a-col>
           </a-row>
 
-          <a-divider>{{ $t('forgeRecipe.title.material') }}</a-divider>
-          <a-row v-for="n in 3" :key="n" :gutter="16">
+          <a-divider>{{ $t('alchemistRecipe.title.material') }}</a-divider>
+          <a-row v-for="n in 5" :key="n" :gutter="16">
             <a-col :span="12">
-              <a-form-item :label="$t(`forgeRecipe.column.material${n}ItemId`)">
+              <a-form-item
+                :label="$t(`alchemistRecipe.column.material${n}ItemId`)"
+              >
                 <a-input-number
                   :model-value="getMaterial(n, 'ItemId', form)"
                   style="width: 100%"
@@ -262,25 +285,14 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item :label="$t(`forgeRecipe.column.material${n}Count`)">
+              <a-form-item
+                :label="$t(`alchemistRecipe.column.material${n}Count`)"
+              >
                 <a-input-number
                   :model-value="getMaterial(n, 'Count', form)"
                   :min="0"
                   style="width: 100%"
                   @update:model-value="setMaterial(n, 'Count', $event, form)"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-
-          <a-divider>{{ $t('forgeRecipe.title.stats') }}</a-divider>
-          <a-row :gutter="16">
-            <a-col v-for="stat in statFields" :key="stat.key" :span="6">
-              <a-form-item :label="$t(`forgeRecipe.column.${stat.key}`)">
-                <a-input-number
-                  v-model="form[stat.key]"
-                  :min="0"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -301,20 +313,19 @@
     getRecipeList,
     saveRecipe,
     toggleEnabled,
-  } from '@/api/forgeRecipe';
-  import type { ForgeRecipeForm } from '@/api/forgeRecipe';
+  } from '@/api/alchemistRecipe';
   import { getTierList } from '@/api/alchemyTier';
+  import type { AlchemistRecipeForm } from '@/api/alchemistRecipe';
   import { Message } from '@arco-design/web-vue';
   import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
 
   const { t } = useI18n();
-
   const { loading, setLoading } = useLoading(false);
 
   const tierNames = ref<Record<number, string>>({});
   const getTierNames = async () => {
     try {
-      const { data } = await getTierList(3);
+      const { data } = await getTierList(2);
       const map: Record<number, string> = {};
       (
         data as unknown as { id: number; sortOrder: number; name: string }[]
@@ -334,7 +345,7 @@
     return def.map((name, i) => ({ value: i, label: names[i] ?? name }));
   });
 
-  const allData = ref<ForgeRecipeForm[]>([]);
+  const allData = ref<AlchemistRecipeForm[]>([]);
   const query = reactive<{
     tierRequired?: number;
     enabled?: number;
@@ -348,7 +359,7 @@
     setLoading(true);
     try {
       const { data } = await getRecipeList();
-      allData.value = data as unknown as ForgeRecipeForm[];
+      allData.value = data as unknown as AlchemistRecipeForm[];
     } finally {
       setLoading(false);
     }
@@ -383,9 +394,9 @@
 
   const groupHeader = (group: {
     tierRequired: number;
-    recipes: ForgeRecipeForm[];
+    recipes: AlchemistRecipeForm[];
   }) =>
-    `${tierNames.value[group.tierRequired] ?? group.tierRequired}级打造 (${
+    `${tierNames.value[group.tierRequired] ?? group.tierRequired}级炼药 (${
       group.recipes.length
     })`;
 
@@ -400,22 +411,20 @@
       : []
   );
 
-  // 弹窗控制
   const modalVisible = ref(false);
   const editingId = ref<number | null>(null);
+  const modalTitle = computed(() =>
+    editingId.value
+      ? `${t('alchemistRecipe.button.edit')} - ${form.value.resultItemId}`
+      : t('button.create')
+  );
 
-  const modalTitle = computed(() => {
-    if (editingId.value) {
-      return `${t('forgeRecipe.button.edit')} - ${form.value.name}`;
-    }
-    return t('button.create');
-  });
-
-  const emptyForm = (): ForgeRecipeForm => ({
-    name: '',
+  const emptyForm = (): AlchemistRecipeForm => ({
     tierRequired: 0,
     resultItemId: undefined,
+    resultCount: 1,
     expGain: 0,
+    staminaCost: 0,
     mesoCost: 0,
     material1ItemId: undefined,
     material1Count: 0,
@@ -423,53 +432,15 @@
     material2Count: 0,
     material3ItemId: undefined,
     material3Count: 0,
-    strMin: 0,
-    strMax: 0,
-    dexMin: 0,
-    dexMax: 0,
-    intMin: 0,
-    intMax: 0,
-    lukMin: 0,
-    lukMax: 0,
-    watkMin: 0,
-    watkMax: 0,
-    matkMin: 0,
-    matkMax: 0,
+    material4ItemId: undefined,
+    material4Count: 0,
+    material5ItemId: undefined,
+    material5Count: 0,
     sortOrder: 0,
     enabled: 1,
   });
 
-  type NumericFormKey =
-    | 'strMin'
-    | 'strMax'
-    | 'dexMin'
-    | 'dexMax'
-    | 'intMin'
-    | 'intMax'
-    | 'lukMin'
-    | 'lukMax'
-    | 'watkMin'
-    | 'watkMax'
-    | 'matkMin'
-    | 'matkMax';
-
-  const statFields: { key: NumericFormKey }[] = [
-    { key: 'strMin' },
-    { key: 'strMax' },
-    { key: 'dexMin' },
-    { key: 'dexMax' },
-    { key: 'intMin' },
-    { key: 'intMax' },
-    { key: 'lukMin' },
-    { key: 'lukMax' },
-    { key: 'watkMin' },
-    { key: 'watkMax' },
-    { key: 'matkMin' },
-    { key: 'matkMax' },
-  ];
-
-  // 表单数据
-  const form = ref<ForgeRecipeForm>(emptyForm());
+  const form = ref<AlchemistRecipeForm>(emptyForm());
 
   const enabledBool = computed({
     get: () => form.value.enabled === 1,
@@ -486,10 +457,22 @@
   const getMaterial = (
     n: number,
     suffix: 'ItemId' | 'Count',
-    f: ForgeRecipeForm
+    f: AlchemistRecipeForm
   ): number | undefined => {
-    const itemIds = [f.material1ItemId, f.material2ItemId, f.material3ItemId];
-    const counts = [f.material1Count, f.material2Count, f.material3Count];
+    const itemIds = [
+      f.material1ItemId,
+      f.material2ItemId,
+      f.material3ItemId,
+      f.material4ItemId,
+      f.material5ItemId,
+    ];
+    const counts = [
+      f.material1Count,
+      f.material2Count,
+      f.material3Count,
+      f.material4Count,
+      f.material5Count,
+    ];
     const idx = n - 1;
     return suffix === 'ItemId' ? itemIds[idx] : counts[idx];
   };
@@ -498,28 +481,41 @@
     n: number,
     suffix: 'ItemId' | 'Count',
     v: number | undefined,
-    f: ForgeRecipeForm
+    f: AlchemistRecipeForm
   ) => {
-    const itemIds = [f.material1ItemId, f.material2ItemId, f.material3ItemId];
-    const counts = [f.material1Count, f.material2Count, f.material3Count];
+    const itemIds = [
+      f.material1ItemId,
+      f.material2ItemId,
+      f.material3ItemId,
+      f.material4ItemId,
+      f.material5ItemId,
+    ];
+    const counts = [
+      f.material1Count,
+      f.material2Count,
+      f.material3Count,
+      f.material4Count,
+      f.material5Count,
+    ];
     const idx = n - 1;
     if (suffix === 'ItemId') itemIds[idx] = v;
     else counts[idx] = v;
   };
 
-  // 新增配方
   const addRecipeClick = () => {
     resetForm();
     modalVisible.value = true;
   };
 
-  // 编辑配方
-  const editRecipeClick = async ({ id }: ForgeRecipeForm) => {
+  const editRecipeClick = async ({ id }: AlchemistRecipeForm) => {
     if (id == null) return;
     setLoading(true);
     try {
       const { data } = await getRecipe(id);
-      form.value = { ...emptyForm(), ...(data as unknown as ForgeRecipeForm) };
+      form.value = {
+        ...emptyForm(),
+        ...(data as unknown as AlchemistRecipeForm),
+      };
       editingId.value = form.value.id ?? null;
       modalVisible.value = true;
     } finally {
@@ -527,16 +523,15 @@
     }
   };
 
-  // 保存
   const saveClick = async () => {
-    if (!form.value.name) {
-      Message.warning('请输入配方名称');
+    if (!form.value.resultItemId) {
+      Message.warning('请输入产出物品ID');
       return;
     }
     setLoading(true);
     try {
       await saveRecipe(form.value);
-      Message.success(t('forgeRecipe.save.success'));
+      Message.success(t('alchemistRecipe.save.success'));
       modalVisible.value = false;
       resetForm();
       await loadData();
@@ -545,20 +540,18 @@
     }
   };
 
-  // 删除
   const deleteClick = async (id: number) => {
     setLoading(true);
     try {
       await deleteRecipe(id);
-      Message.success(t('forgeRecipe.delete.success'));
+      Message.success(t('alchemistRecipe.delete.success'));
       await loadData();
     } finally {
       setLoading(false);
     }
   };
 
-  // 快速切换启用/禁用状态
-  const onToggleEnabled = async (record: ForgeRecipeForm, v: boolean) => {
+  const onToggleEnabled = async (record: AlchemistRecipeForm, v: boolean) => {
     try {
       await toggleEnabled(record.id!);
       record.enabled = v ? 1 : 0;
@@ -568,7 +561,6 @@
     }
   };
 
-  // 取消弹窗
   const onCancel = () => {
     modalVisible.value = false;
   };
@@ -576,7 +568,7 @@
 
 <script lang="ts">
   export default {
-    name: 'ForgeRecipe',
+    name: 'AlchemistRecipe',
   };
 </script>
 

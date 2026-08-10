@@ -1,6 +1,7 @@
 export default {
   'alchemyRecipe.column.id': 'ID',
   'alchemyRecipe.column.resultItemPhoto': '产出图标',
+  'alchemyRecipe.column.resultItemName': '产出物品',
   'alchemyRecipe.column.resultItemId': '产出物品ID',
   'alchemyRecipe.column.resultCount': '产出数量',
   'alchemyRecipe.column.tierRequired': '所需品级',

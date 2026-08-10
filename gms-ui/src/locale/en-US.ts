@@ -14,7 +14,13 @@ import setItem from '@/views/game/setItem/locale/en-US';
 import enhanceRule from '@/views/game/enhanceRule/locale/en-US';
 import carryItemStat from '@/views/game/carryItemStat/locale/en-US';
 import alchemyRecipe from '@/views/game/alchemyRecipe/locale/en-US';
+import alchemistRecipe from '@/views/game/alchemistRecipe/locale/en-US';
 import forgeRecipe from '@/views/game/forgeRecipe/locale/en-US';
+import alchemyTier from '@/views/game/alchemyTier/locale/en-US';
+import petGrowth from '@/views/game/petGrowth/locale/en-US';
+import sponsor from '@/views/game/sponsor/locale/en-US';
+import skillTech from '@/views/game/skillTech/locale/en-US';
+import opLog from '@/views/game/opLog/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -36,7 +42,13 @@ export default {
   'menu.game.enhanceRule': 'Enhance Rule',
   'menu.game.carryItemStat': 'Carry Item Stat',
   'menu.game.alchemyRecipe': 'Alchemy Recipe',
+  'menu.game.alchemistRecipe': 'Alchemist Recipe',
   'menu.game.forgeRecipe': 'Forge Recipe',
+  'menu.game.alchemyTier': 'Alchemy Tier',
+  'menu.game.petGrowth': 'Pet Growth',
+  'menu.game.sponsor': 'Sponsor Tiers',
+  'menu.game.skillTech': 'Skill Tech',
+  'menu.game.opLog': 'Operation Log',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -73,5 +85,11 @@ export default {
   ...enhanceRule,
   ...carryItemStat,
   ...alchemyRecipe,
+  ...alchemistRecipe,
   ...forgeRecipe,
+  ...alchemyTier,
+  ...petGrowth,
+  ...sponsor,
+  ...skillTech,
+  ...opLog,
 };

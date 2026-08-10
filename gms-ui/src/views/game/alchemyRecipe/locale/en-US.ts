@@ -1,6 +1,7 @@
 export default {
   'alchemyRecipe.column.id': 'ID',
   'alchemyRecipe.column.resultItemPhoto': 'Icon',
+  'alchemyRecipe.column.resultItemName': 'Result Item',
   'alchemyRecipe.column.resultItemId': 'Result Item ID',
   'alchemyRecipe.column.resultCount': 'Result Count',
   'alchemyRecipe.column.tierRequired': 'Tier Required',
