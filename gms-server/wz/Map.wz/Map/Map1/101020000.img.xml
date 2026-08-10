@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imgdir name="101020000.img">
+<imgdir indent="2" media="NONE" name="101020000.img">
   <imgdir name="info">
     <int name="version" value="10"/>
     <int name="cloud" value="0"/>
     <int name="town" value="0"/>
     <int name="returnMap" value="101000000"/>
-    <float name="mobRate" value="1.299998"/>
+    <float name="mobRate" value="1.2999983"/>
     <string name="bgm" value="Bgm01/MoonlightShadow"/>
     <string name="mapDesc" value=""/>
     <int name="forcedReturn" value="999999999"/>
@@ -1406,10 +1406,8 @@
     </imgdir>
   </imgdir>
   <imgdir name="0">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="0">
         <string name="oS" value="guide"/>
@@ -1462,10 +1460,8 @@
     </imgdir>
   </imgdir>
   <imgdir name="1">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="20">
         <string name="oS" value="acc2"/>
@@ -4242,10 +4238,8 @@
     </imgdir>
   </imgdir>
   <imgdir name="2">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="5">
         <string name="oS" value="connect"/>
@@ -5163,10 +5157,8 @@
     </imgdir>
   </imgdir>
   <imgdir name="3">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
     <imgdir name="obj">
       <imgdir name="1">
         <string name="oS" value="acc2"/>
@@ -5413,36 +5405,24 @@
     </imgdir>
   </imgdir>
   <imgdir name="4">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
   </imgdir>
   <imgdir name="5">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
   </imgdir>
   <imgdir name="6">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
   </imgdir>
   <imgdir name="7">
-    <imgdir name="info">
-    </imgdir>
-    <imgdir name="tile">
-    </imgdir>
-    <imgdir name="obj">
-    </imgdir>
+    <imgdir name="info"/>
+    <imgdir name="tile"/>
+    <imgdir name="obj"/>
   </imgdir>
   <imgdir name="reactor">
     <imgdir name="0">
@@ -14973,8 +14953,7 @@
     </imgdir>
   </imgdir>
   <imgdir name="miniMap">
-    <canvas name="canvas" width="138" height="422">
-    </canvas>
+    <canvas format="1" height="422" name="canvas" scale="0" width="138"/>
     <int name="width" value="2211"/>
     <int name="height" value="6757"/>
     <int name="centerX" value="1135"/>
@@ -14983,12 +14962,12 @@
   </imgdir>
   <imgdir name="portal">
     <imgdir name="0">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="814"/>
-      <int name="y" value="2019"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
+      <string name="pn" value="down00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-965"/>
+      <int name="y" value="2174"/>
+      <int name="tm" value="10006060"/>
+      <string name="tn" value="east00"/>
     </imgdir>
     <imgdir name="1">
       <string name="pn" value="sp"/>
