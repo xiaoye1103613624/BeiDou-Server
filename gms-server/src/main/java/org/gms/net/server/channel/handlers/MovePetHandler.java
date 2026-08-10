@@ -23,6 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.inventory.Pet;
 import org.gms.net.packet.InPacket;
 import org.gms.server.movement.LifeMovementFragment;
 import org.gms.util.PacketCreator;
@@ -44,11 +45,19 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
             return;
         }
         Character player = c.getPlayer();
+        // Packet can arrive before login finishes / after logout / mid-transition (account null in logs).
+        if (player == null || player.getMap() == null) {
+            return;
+        }
         byte slot = player.getPetIndex(petId);
         if (slot == -1) {
             return;
         }
-        player.getPet(slot).updatePosition(res);
+        Pet pet = player.getPet(slot);
+        if (pet == null) {
+            return;
+        }
+        pet.updatePosition(res);
         player.getMap().broadcastMessage(player, PacketCreator.movePet(player.getId(), petId, slot, res), false);
     }
 }

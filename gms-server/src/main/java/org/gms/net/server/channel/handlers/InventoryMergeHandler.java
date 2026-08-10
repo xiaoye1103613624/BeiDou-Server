@@ -45,6 +45,10 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         p.readInt();
         chr.getAutoBanManager().setTimestamp(2, Server.getInstance().getCurrentTimestamp(), 4);
 
+        // AUX wire-omit (GREEN_ENTER_OMIT_AUX62): flush ghost −62 before merge/sort.
+        // When flag false: recover is no-op.
+        InventoryManipulator.recoverWireOmittedAuxToBag(c);
+
         if (!GameConfig.getServerBoolean("use_item_sort")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -56,80 +60,83 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
             return;
         }
 
-        if (p.available() > 0) {
-            handleSlotLockMerge(p, c, invType);
-            return;
-        }
-
-        InventoryType inventoryType = InventoryType.getByType(invType);
-        Inventory inventory = c.getPlayer().getInventory(inventoryType);
-        inventory.lockInventory();
         try {
-            //------------------- RonanLana's SLOT MERGER -----------------
-
-            ItemInformationProvider ii = ItemInformationProvider.getInstance();
-            Item srcItem, dstItem;
-
-            for (short dst = 1; dst <= inventory.getSlotLimit(); dst++) {
-                dstItem = inventory.getItem(dst);
-                if (dstItem == null) {
-                    continue;
-                }
-
-                for (short src = (short) (dst + 1); src <= inventory.getSlotLimit(); src++) {
-                    srcItem = inventory.getItem(src);
-                    if (srcItem == null) {
-                        continue;
-                    }
-
-                    if (dstItem.getItemId() != srcItem.getItemId()) {
-                        continue;
-                    }
-                    if (dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) {
-                        break;
-                    }
-
-                    final short beforeQty = dstItem.getQuantity();
-                    InventoryManipulator.move(c, inventoryType, src, dst);
-                    dstItem = inventory.getItem(dst);
-                    // Guard: if move could not increase dst stack (e.g. pet/cash swap), stop.
-                    if (dstItem == null || dstItem.getQuantity() <= beforeQty) {
-                        break;
-                    }
-                }
+            if (p.available() > 0) {
+                handleSlotLockMerge(p, c, invType);
+                return;
             }
 
-            //------------------------------------------------------------
+            InventoryType inventoryType = InventoryType.getByType(invType);
+            Inventory inventory = c.getPlayer().getInventory(inventoryType);
+            inventory.lockInventory();
+            try {
+                //------------------- RonanLana's SLOT MERGER -----------------
 
-            inventory = c.getPlayer().getInventory(inventoryType);
-            boolean sorted = false;
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
+                Item srcItem, dstItem;
 
-            while (!sorted) {
-                short freeSlot = inventory.getNextFreeSlot();
+                for (short dst = 1; dst <= inventory.getSlotLimit(); dst++) {
+                    dstItem = inventory.getItem(dst);
+                    if (dstItem == null) {
+                        continue;
+                    }
 
-                if (freeSlot != -1) {
-                    short itemSlot = -1;
-                    for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i = (short) (i + 1)) {
-                        if (inventory.getItem(i) != null) {
-                            itemSlot = i;
+                    for (short src = (short) (dst + 1); src <= inventory.getSlotLimit(); src++) {
+                        srcItem = inventory.getItem(src);
+                        if (srcItem == null) {
+                            continue;
+                        }
+
+                        if (dstItem.getItemId() != srcItem.getItemId()) {
+                            continue;
+                        }
+                        if (dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) {
+                            break;
+                        }
+
+                        final short beforeQty = dstItem.getQuantity();
+                        InventoryManipulator.move(c, inventoryType, src, dst);
+                        dstItem = inventory.getItem(dst);
+                        // Guard: if move could not increase dst stack (e.g. pet/cash swap), stop.
+                        if (dstItem == null || dstItem.getQuantity() <= beforeQty) {
                             break;
                         }
                     }
-                    if (itemSlot > 0) {
-                        InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                }
+
+                //------------------------------------------------------------
+
+                inventory = c.getPlayer().getInventory(inventoryType);
+                boolean sorted = false;
+
+                while (!sorted) {
+                    short freeSlot = inventory.getNextFreeSlot();
+
+                    if (freeSlot != -1) {
+                        short itemSlot = -1;
+                        for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i = (short) (i + 1)) {
+                            if (inventory.getItem(i) != null) {
+                                itemSlot = i;
+                                break;
+                            }
+                        }
+                        if (itemSlot > 0) {
+                            InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                        } else {
+                            sorted = true;
+                        }
                     } else {
                         sorted = true;
                     }
-                } else {
-                    sorted = true;
                 }
+            } finally {
+                inventory.unlockInventory();
             }
-        } finally {
-            inventory.unlockInventory();
-        }
 
-        c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
-        c.sendPacket(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
+        } finally {
+            c.sendPacket(PacketCreator.enableActions());
+        }
     }
 
     private void handleSlotLockMerge(InPacket p, Client c, byte invType) {
@@ -213,6 +220,6 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         }
 
         c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
-        c.sendPacket(PacketCreator.enableActions());
+        // enableActions: outer handlePacket finally
     }
 }

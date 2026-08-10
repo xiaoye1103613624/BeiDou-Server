@@ -675,6 +675,7 @@ public class Server {
             futures.add(initExecutor.submit(DamageSkinCatalog::loadOrSeed));
             futures.add(initExecutor.submit(SetItemManager::loadOrSeed));
             futures.add(initExecutor.submit(() -> org.gms.potential.ItemOptionProvider.getInstance().load()));
+            futures.add(initExecutor.submit(org.gms.server.cashshop.CashShopCatalog::load));
             // Wait on all async tasks to complete
             for (Future<?> future : futures) {
                 future.get();

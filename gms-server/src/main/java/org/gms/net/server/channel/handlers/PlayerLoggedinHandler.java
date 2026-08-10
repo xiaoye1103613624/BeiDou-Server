@@ -256,6 +256,21 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
             }
 
+            // 登录前迁移废弃扩展 cash 别名（−152/−153/−154/−155）；不得动真实戒位 −52/−53。
+            org.gms.client.inventory.manipulator.InventoryManipulator.migrateCashRingsOffExtendedSlots(player);
+            // Diagnose Addon desync (ghost unequip / blank aux): log seats CharInfo will wire.
+            {
+                var eq = player.getInventory(org.gms.client.inventory.InventoryType.EQUIPPED);
+                StringBuilder sb = new StringBuilder("login addon seats char=").append(player.getName());
+                for (short seat : new short[]{-52, -53, -54, -55, -56, -57, -58, -59, -60, -61, -62,
+                        -154, -155, -156, -157, -158, -159, -160, -161, -162, -10, -33}) {
+                    var it = eq.getItem(seat);
+                    if (it != null) {
+                        sb.append(' ').append(seat).append('=').append(it.getItemId());
+                    }
+                }
+                org.slf4j.LoggerFactory.getLogger(PlayerLoggedinHandler.class).info(sb.toString());
+            }
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             // Enable native second-pendant UI (CWvsContext flag → CUIEquip+0x5E8).
             // Without this, hit-test can work via ijl15 overlay but the equip icon never draws.
@@ -351,6 +366,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
             //展示服务信息
             org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(player);
+            try {
+                org.gms.service.MedalGrowthService.get().syncOnLogin(player);
+            } catch (Exception ignore) {
+            }
             noteService.show(player);
             //异常地图掉线信息提示
             c.getSysRescue().showMapChangeMessage(player);
@@ -395,6 +414,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             player.refreshSetBonus();
 
+            // 七彩棱镜：登录下发本人染色列表（客户端延迟 ApplyOwned）
+            c.sendPacket(org.gms.server.coloring.ColoringPrismPackets.dyeList(
+                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(player.getId())));
+
             // 每日签到：可领则自动弹窗
             if (player.getLevel() >= org.gms.server.dailycheckin.DailyCheckinRewards.MIN_LEVEL) {
                 int checkinClaimable = player.refreshCheckin();
@@ -422,6 +445,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
 
                 player.reloadQuestExpirations();
+
+                org.gms.reincarnation.ReincarnationSupport.onLogin(player);
 
                     /*
                     if (!c.hasVotedAlready()){

@@ -45,6 +45,8 @@ import org.gms.client.processor.stat.AssignAPProcessor;
 import org.gms.client.processor.stat.AssignSPProcessor;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
+import org.gms.manager.ServerManager;
+import org.gms.service.PetGrowthService;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
@@ -191,9 +193,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 int SPFrom = p.readInt();
                 Skill skillSPTo = SkillFactory.getSkill(SPTo);
                 Skill skillSPFrom = SkillFactory.getSkill(SPFrom);
-                byte curLevel = player.getSkillLevel(skillSPTo);
-                byte curLevelSPFrom = player.getSkillLevel(skillSPFrom);
-                if ((curLevel < skillSPTo.getMaxLevel()) && curLevelSPFrom > 0) {
+                // SP 重置卷：只动原始等级，且不超过 spMaxLevel
+                byte curLevel = player.getSkillLevelRaw(skillSPTo);
+                byte curLevelSPFrom = player.getSkillLevelRaw(skillSPFrom);
+                if ((curLevel < skillSPTo.getSpMaxLevel()) && curLevelSPFrom > 0) {
                     player.changeSkillLevel(skillSPFrom, (byte) (curLevelSPFrom - 1), player.getMasterLevel(skillSPFrom), -1);
                     player.changeSkillLevel(skillSPTo, (byte) (curLevel + 1), player.getMasterLevel(skillSPTo), -1);
 
@@ -243,13 +246,27 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 handleCashCube(c, player, position, itemId, p);
                 return;
             }
+            // Soft095 防-x Cash：预涂 SHIELD_WARD / SLOTS_PROTECT / SCROLL_PROTECT / LUCKS_KEY
+            if (itemId == 5064000 || itemId == 5064003
+                    || itemId == 5064100 || itemId == 5064101
+                    || itemId == 5064300
+                    || itemId == 5063000 || itemId == 5063100
+                    || itemId == 5068000 || itemId == 5068100 || itemId == 5068200) {
+                handleProtectCashItem(c, player, position, itemId, p);
+                return;
+            }
             Item eq = null;
             if (itemId == 5060000) { // Item tag.
                 int equipSlot = p.readShort();
                 if (equipSlot == 0) {
                     return;
                 }
-                eq = player.getInventory(InventoryType.EQUIPPED).getItem((short) equipSlot);
+                short eqPos = (short) equipSlot;
+                if (eqPos < 0) {
+                    eqPos = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                            player.getInventory(InventoryType.EQUIPPED), eqPos);
+                }
+                eq = player.getInventory(InventoryType.EQUIPPED).getItem(eqPos);
                 eq.setOwner(player.getName());
             } else if (itemId == 5060001 || itemId == 5061000 || itemId == 5061001 || itemId == 5061002 || itemId == 5061003) { // Sealing lock
                 InventoryType type = InventoryType.getByType((byte) p.readInt());
@@ -461,6 +478,13 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                         isUse = true;
                         pet.gainTamenessFullness(player, pair.getLeft(), 100, 1, true);
                         remove(c, position, itemId);
+                        try {
+                            var ctx = ServerManager.getApplicationContext();
+                            if (ctx != null) {
+                                ctx.getBean(PetGrowthService.class).onPetFed(player, pet, itemId);
+                            }
+                        } catch (Exception ignored) {
+                        }
                         break;
                     }
                 } else {
@@ -593,6 +617,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             boolean useCashEquip = false;       //是否允许对现金装备进行延期，需要客户端配合插件才能支持
 
             short itemSlot = p.readShort(); // 读取装备所在的槽位
+            if (itemSlot < 0) {
+                itemSlot = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                        player.getInventory(InventoryType.EQUIPPED), itemSlot);
+            }
 
             Item equip = player.getInventory(InventoryType.EQUIPPED).getItem(itemSlot);// 获取指定槽位的装备
             ItemInformationProvider.ItemCashInfo itemHourglass = ii.getItemCashInfo(itemId);        // 获取魔法沙漏的增加时间和天数上限
@@ -815,6 +843,50 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
     }
 
     /**
+     * Soft095 防-x Cash 预涂：拖到目标装备上。
+     * 5064000/03 → SHIELD_WARD；5064100/01/8100 → SLOTS_PROTECT；
+     * 5064300/8200 → SCROLL_PROTECT；5063000/3100/8000 → LUCKS_KEY（3100 兼 SHIELD_WARD）。
+     */
+    private static void handleProtectCashItem(Client c, Character player, short cashPos, int itemId, InPacket p) {
+        InventoryType type;
+        short slot;
+        try {
+            type = InventoryType.getByType((byte) p.readInt());
+            slot = (short) p.readInt();
+        } catch (Exception e) {
+            player.dropMessage(5, "请把保护道具拖到目标装备上使用。");
+            c.enableActions();
+            return;
+        }
+        if (slot < 0) {
+            slot = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                    player.getInventory(InventoryType.EQUIPPED), slot);
+            type = InventoryType.EQUIPPED;
+        }
+        Item raw = player.getInventory(type).getItem(slot);
+        if (!(raw instanceof Equip equip)) {
+            player.dropMessage(5, "只能对装备使用该保护道具。");
+            c.enableActions();
+            return;
+        }
+
+        if (!org.gms.potential.PotentialHyperService.applyProtectCashFlag(player, equip, itemId)) {
+            c.enableActions();
+            return;
+        }
+        player.forceUpdateItem(equip);
+        remove(c, cashPos, itemId);
+        c.enableActions();
+    }
+
+    /**
+     * @deprecated 保留旧名；实际走 {@link #handleProtectCashItem}
+     */
+    private static void handleShieldWard(Client c, Character player, short cashPos, int itemId, InPacket p) {
+        handleProtectCashItem(c, player, cashPos, itemId, p);
+    }
+
+    /**
      * 官方 Cash 魔方：封包在 itemId 后读装备栏槽位（int），对齐 095 InventoryHandler.UseCashItem。
      * <p>
      * v083 客户端无奇迹魔方「点选装备」UI，双击时常不带有效槽位；因此：
@@ -916,7 +988,9 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             eqSlot = p.readShort();
         }
         if (eqSlot < 0) {
-            Item worn = player.getInventory(InventoryType.EQUIPPED).getItem((short) eqSlot);
+            short resolved = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                    player.getInventory(InventoryType.EQUIPPED), (short) eqSlot);
+            Item worn = player.getInventory(InventoryType.EQUIPPED).getItem(resolved);
             if (worn instanceof Equip equip) {
                 return equip;
             }

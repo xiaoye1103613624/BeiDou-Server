@@ -64,7 +64,18 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
 
         Point pos = null;
         int __skillLevel = p.readByte();
+        // Temporary cast probe (1121015 / LoginTest): proves whether UseSkill reached server.
+        if (skillid == 1121015 || "LoginTest".equals(chr.getName())) {
+            String msg = "[SPECIAL_MOVE] " + chr.getName() + " skill=" + skillid + " clientLv=" + __skillLevel;
+            System.out.println(msg);
+            chr.dropMessage(5, msg);
+        }
         Skill skill = SkillFactory.getSkill(skillid);
+        if (skill == null) {
+            chr.dropMessage(5, "技能施放失败: 未知技能 " + skillid + "（服务端未加载）");
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
         int skillLevel = chr.getSkillLevel(skill);
 
         // 装备版轮回碑石：穿戴时劫持英雄之回声系（1005，非 PQ）为刷怪加成
@@ -82,7 +93,14 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         }
-        if (skillLevel == 0 || skillLevel != __skillLevel) {
+        if (skillLevel == 0) {
+            chr.dropMessage(5, "技能施放失败: " + skillid + " 等级为0（先 !skill " + skillid + " 1）");
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+        if (skillLevel != __skillLevel) {
+            chr.dropMessage(5, "技能施放失败: " + skillid + " 等级不一致 服务端=" + skillLevel + " 客户端=" + __skillLevel);
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
 

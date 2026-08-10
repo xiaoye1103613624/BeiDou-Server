@@ -484,7 +484,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     game.broadcast(PacketCreator.getMatchCardSelect(game, turn, slot, firstslot, 1));
                 }
             } else if (mode == Action.SET_MESO.getCode()) {
-                chr.getTrade().setMeso(p.readInt());
+                chr.getTrade().setMeso(p.readLong());
             } else if (mode == Action.SET_ITEMS.getCode()) {
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 InventoryType ivType = InventoryType.getByType(p.readByte());
@@ -584,7 +584,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message7")));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
-                } else if (ItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
+                } else if (!GameConfig.getServerBoolean("trade_limit_item_cash")
+                        && ItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
                     if (ItemConstants.isPet(ivItem.getItemId())) {
                         c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message8")));
                     } else {

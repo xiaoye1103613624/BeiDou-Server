@@ -369,8 +369,11 @@ public final class RingActionHandler extends AbstractPacketHandler {
                         InventoryManipulator.addById(source.getClient(), newItemId, (short) 1);
                         InventoryManipulator.addById(c, (newItemId + 1), (short) 1);
 
-                        source.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
+        source.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
                         target.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
+
+                        source.dropMessage(6, "恭喜！你们已成功订婚。");
+                        target.dropMessage(6, "恭喜！你们已成功订婚。");
 
                         source.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(target.getId(), target.getMapId()));
                         target.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(source.getId(), source.getMapId()));

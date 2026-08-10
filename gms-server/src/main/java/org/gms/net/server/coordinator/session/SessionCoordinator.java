@@ -198,11 +198,21 @@ public class SessionCoordinator {
         try {
             if (!loginStorage.registerLogin(accountId)) {
                 return AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS;
-            } else if (routineCheck && !attemptAccountAccess(accountId, hwid, routineCheck)) {
-                return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
-            } else if (onlineRemoteHwids.contains(hwid)) {
+            }
+
+            // Wrong-password path (routineCheck): only rate-limit / HWID quota checks.
+            // Must NOT mark HWID online — otherwise the next correct password returns
+            // REMOTE_LOGGEDIN and the client shows "wrong gateway / personal information".
+            if (routineCheck) {
+                if (!attemptAccountAccess(accountId, hwid, true)) {
+                    return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
+                }
+                return AntiMulticlientResult.SUCCESS;
+            }
+
+            if (onlineRemoteHwids.contains(hwid)) {
                 return AntiMulticlientResult.REMOTE_LOGGEDIN;
-            } else if (!attemptAccountAccess(accountId, hwid, routineCheck)) {
+            } else if (!attemptAccountAccess(accountId, hwid, false)) {
                 return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
             }
 

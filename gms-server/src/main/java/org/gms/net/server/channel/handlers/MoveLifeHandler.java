@@ -42,6 +42,7 @@ import org.gms.exception.EmptyMovementException;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Danny (Leifde)
@@ -92,7 +93,13 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             useSkillLevel = skillLv;
 
             if (monster.hasSkill(useSkillId, useSkillLevel)) {
-                MobSkillType mobSkillType = MobSkillType.from(useSkillId).orElseThrow();
+                Optional<MobSkillType> typeOpt = MobSkillType.from(useSkillId);
+                if (typeOpt.isEmpty()) {
+                    // 高版本未知 MobSkill：跳过施放，避免移动包处理崩溃
+                    rawActivity = -1;
+                    pOption = 0;
+                } else {
+                MobSkillType mobSkillType = typeOpt.get();
                 MobSkill toUse = MobSkillFactory.getMobSkillOrThrow(mobSkillType, useSkillLevel);
 
                 if (monster.canUseSkill(toUse, true)) {
@@ -103,6 +110,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                         banishPlayers = new LinkedList<>();
                         toUse.applyEffect(player, monster, true, banishPlayers);
                     }
+                }
                 }
             }
         } else {

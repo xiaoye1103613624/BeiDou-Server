@@ -65,7 +65,12 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                 ItemInformationProvider ii = ItemInformationProvider.getInstance(); // 获取物品信息提供者实例
                 Character chr = c.getPlayer(); // 获取当前玩家
-                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(equipSlot); // 获取要升级的装备
+                // Addon −54…−62 ↔ −154…−162：绿客户端可能发 UI 座，物品在 cash 镜像座
+                if (equipSlot < 0) {
+                    equipSlot = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                            chr.getInventory(InventoryType.EQUIPPED), equipSlot);
+                }
+                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(equipSlot);
                 Skill LegendarySpirit = SkillFactory.getSkill(1003); // 获取传奇精神技能
                 if (chr.getSkillLevel(LegendarySpirit) > 0 && equipSlot >= 0) {
                     legendarySpirit = true;
@@ -93,7 +98,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                         announceCannotScroll(c, legendarySpirit);
                         return;
                     }
-                    handlePotentialOrHyper(c, chr, toScroll, scroll, equipSlot, legendarySpirit);
+                    handlePotentialOrHyper(c, chr, toScroll, scroll, equipSlot, legendarySpirit, whiteScroll);
                     return;
                 }
 
@@ -104,75 +109,131 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                 byte oldLevel = toScroll.getLevel(); // 记录装备的原始等级
                 byte oldSlots = toScroll.getUpgradeSlots(); // 记录装备的原始升级插槽数量
+                short oldFlag = toScroll.getFlag();
                 Item wscroll = null;
 
+                final boolean protectFamily = ItemConstants.isProtectFamilyScroll(scroll.getItemId());
+
                 if (ItemConstants.isCleanSlate(scroll.getItemId()) && !ii.canUseCleanSlate(toScroll)) {
-                    announceCannotScroll(c, legendarySpirit); // 如果清洁卷轴不能用于该装备，通知客户端无法使用
+                    announceCannotScroll(c, legendarySpirit);
                     return;
-                } else if (!ItemConstants.isModifierScroll(scroll.getItemId()) && toScroll.getUpgradeSlots() < 1) {
-                    announceCannotScroll(c, legendarySpirit); // 如果不是修饰卷轴且没有升级插槽，通知客户端无法使用
+                } else if (!protectFamily && !ItemConstants.isModifierScroll(scroll.getItemId()) && toScroll.getUpgradeSlots() < 1) {
+                    announceCannotScroll(c, legendarySpirit);
                     return;
                 }
 
-                List<Integer> scrollReqs = ii.getScrollReqs(scroll.getItemId()); // 获取卷轴的要求列表
+                // Soft095：特殊保护卷 enhance>=8 不可用（Cash 涂盾另走 UseCashItem 细规则）
+                if (protectFamily && toScroll.getEnhance() >= 8) {
+                    chr.dropMessage(5, "强化阶段过高，无法使用该保护卷轴。");
+                    announceCannotScroll(c, legendarySpirit);
+                    return;
+                }
+
+                List<Integer> scrollReqs = ii.getScrollReqs(scroll.getItemId());
                 if (scrollReqs.size() > 0 && !scrollReqs.contains(toScroll.getItemId())) {
-                    announceCannotScroll(c, legendarySpirit); // 如果装备不符合卷轴的要求，通知客户端无法使用
+                    announceCannotScroll(c, legendarySpirit);
                     return;
                 }
                 if (whiteScroll) {
-                    wscroll = useInventory.findById(ItemId.WHITE_SCROLL); // 查找白色卷轴
+                    wscroll = useInventory.findById(ItemId.WHITE_SCROLL);
                     if (wscroll == null) {
-                        whiteScroll = false; // 如果找不到白色卷轴，则不使用白色卷轴
+                        whiteScroll = false;
                     }
                 }
 
-                if (!ItemConstants.isChaosScroll(scroll.getItemId()) && !ItemConstants.isCleanSlate(scroll.getItemId())) {
+                if (!protectFamily && !ItemConstants.isChaosScroll(scroll.getItemId()) && !ItemConstants.isCleanSlate(scroll.getItemId())) {
                     if (!canScroll(scroll.getItemId(), toScroll.getItemId())) {
-                        announceCannotScroll(c, legendarySpirit); // 如果卷轴不能用于该装备，通知客户端无法使用
+                        announceCannotScroll(c, legendarySpirit);
                         return;
                     }
                 }
 
-                Equip scrolled = (Equip) ii.scrollEquipWithId(toScroll, scroll.getItemId(), whiteScroll, 0, chr.isGM()); // 使用卷轴升级装备
-                ScrollResult scrollSuccess = Equip.ScrollResult.FAIL; // 默认设置为失败
+                Equip scrolled = (Equip) ii.scrollEquipWithId(toScroll, scroll.getItemId(), whiteScroll, 0, chr.isGM());
+                ScrollResult scrollSuccess = Equip.ScrollResult.FAIL;
                 if (scrolled == null) {
-                    scrollSuccess = Equip.ScrollResult.CURSE; // 卷轴诅咒装备
+                    // Soft095 SHIELD_WARD：诅咒炸装 → FAIL + 清盾
+                    if (ItemConstants.hasFlag(oldFlag, ItemConstants.SHIELD_WARD)) {
+                        scrolled = toScroll;
+                        scrolled.setFlag(ItemConstants.withoutFlag(oldFlag, ItemConstants.SHIELD_WARD));
+                        scrollSuccess = Equip.ScrollResult.FAIL;
+                        chr.dropMessage(5, "保护之盾生效，装备未损坏（护盾已消耗）。");
+                    } else {
+                        scrollSuccess = Equip.ScrollResult.CURSE;
+                    }
+                } else if (protectFamily) {
+                    // 保护卷涂 flag 成功：flag 增加即 SUCCESS
+                    if (scrolled.getFlag() != oldFlag) {
+                        scrollSuccess = Equip.ScrollResult.SUCCESS;
+                    } else {
+                        scrollSuccess = Equip.ScrollResult.FAIL;
+                        chr.dropMessage(5, "无法对该装备使用此保护卷轴。");
+                    }
                 } else if (scrolled.getLevel() > oldLevel || (ItemConstants.isCleanSlate(scroll.getItemId()) && scrolled.getUpgradeSlots() == oldSlots + 1) || ItemConstants.isFlagModifier(scroll.getItemId(), scrolled.getFlag())) {
-                    scrollSuccess = Equip.ScrollResult.SUCCESS; // 卷轴成功升级装备
+                    scrollSuccess = Equip.ScrollResult.SUCCESS;
                 }
 
-                useInventory.lockInventory(); // 锁定使用栏库存
+                // Soft095：普通砸卷后消耗 SHIELD_WARD（成功/失败均消耗；保护卷本身不扣盾）
+                if (!protectFamily && scrolled != null
+                        && ItemConstants.hasFlag(oldFlag, ItemConstants.SHIELD_WARD)
+                        && !ItemConstants.isCleanSlate(scroll.getItemId())) {
+                    scrolled.setFlag(ItemConstants.withoutFlag(scrolled.getFlag(), ItemConstants.SHIELD_WARD));
+                }
+
+                // Soft095 String：SCROLL_PROTECT — 失败时保留卷轴并消耗防护；成功也消耗防护
+                boolean keepScroll = false;
+                if (!protectFamily
+                        && ItemConstants.hasFlag(oldFlag, ItemConstants.SCROLL_PROTECT)
+                        && !ItemConstants.isCleanSlate(scroll.getItemId())) {
+                    if (scrolled != null) {
+                        scrolled.setFlag(ItemConstants.withoutFlag(scrolled.getFlag(), ItemConstants.SCROLL_PROTECT));
+                    }
+                    if (scrollSuccess == Equip.ScrollResult.FAIL || scrollSuccess == Equip.ScrollResult.CURSE) {
+                        keepScroll = true;
+                        chr.dropMessage(5, "卷轴防护生效，使用的卷轴没有消失。");
+                    }
+                }
+
+                if (!protectFamily && scrollSuccess == Equip.ScrollResult.FAIL
+                        && scrolled != null && scrolled.getUpgradeSlots() == oldSlots
+                        && ItemConstants.hasFlag(oldFlag, ItemConstants.SLOTS_PROTECT)
+                        && !ItemConstants.hasFlag(scrolled.getFlag(), ItemConstants.SLOTS_PROTECT)) {
+                    chr.dropMessage(5, "由于卷轴效果，升级次数没有减少。");
+                }
+
+                useInventory.lockInventory();
                 try {
                     if (scroll.getQuantity() < 1) {
-                        announceCannotScroll(c, legendarySpirit); // 如果卷轴数量不足，通知客户端无法使用
+                        announceCannotScroll(c, legendarySpirit);
                         return;
                     }
 
                     if (whiteScroll && !ItemConstants.isCleanSlate(scroll.getItemId())) {
                         if (wscroll.getQuantity() < 1) {
-                            announceCannotScroll(c, legendarySpirit); // 如果白色卷轴数量不足，通知客户端无法使用
+                            announceCannotScroll(c, legendarySpirit);
                             return;
                         }
 
-                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false); // 移除一个白色卷轴
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
                     }
 
-                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false); // 移除一个卷轴
+                    if (!keepScroll) {
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
+                    }
                 } finally {
-                    useInventory.unlockInventory(); // 解锁使用栏库存
+                    useInventory.unlockInventory();
                 }
 
-                final List<ModifyInventory> mods = new ArrayList<>(); // 创建修改库存的操作列表
+                final List<ModifyInventory> mods = new ArrayList<>();
                 if (scrollSuccess == Equip.ScrollResult.CURSE) {
                     if (!ItemId.isWeddingRing(toScroll.getItemId())) {
-                        mods.add(new ModifyInventory(3, toScroll)); // 标记装备被移除
+                        mods.add(new ModifyInventory(3, toScroll));
                         if (equipSlot < 0) {
                             Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
 
                             inv.lockInventory();
                             try {
-                                chr.unequippedItem(toScroll); // 卸下装备
-                                inv.removeItem(toScroll.getPosition()); // 移除装备
+                                chr.unequippedItem(toScroll);
+                                inv.removeItem(toScroll.getPosition());
                             } finally {
                                 inv.unlockInventory();
                             }
@@ -181,7 +242,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                             inv.lockInventory();
                             try {
-                                inv.removeItem(toScroll.getPosition()); // 移除装备
+                                inv.removeItem(toScroll.getPosition());
                             } finally {
                                 inv.unlockInventory();
                             }
@@ -190,17 +251,17 @@ public final class ScrollHandler extends AbstractPacketHandler {
                         scrolled = toScroll;
                         scrollSuccess = Equip.ScrollResult.FAIL;
 
-                        mods.add(new ModifyInventory(3, scrolled)); // 标记装备被移除
-                        mods.add(new ModifyInventory(0, scrolled)); // 标记装备被添加回库存
+                        mods.add(new ModifyInventory(3, scrolled));
+                        mods.add(new ModifyInventory(0, scrolled));
                     }
                 } else {
-                    mods.add(new ModifyInventory(3, scrolled)); // 标记装备被移除
-                    mods.add(new ModifyInventory(0, scrolled)); // 标记装备被添加回库存
+                    mods.add(new ModifyInventory(3, scrolled));
+                    mods.add(new ModifyInventory(0, scrolled));
                 }
-                c.sendPacket(PacketCreator.modifyInventory(true, mods)); // 发送修改库存的封包
-                chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, whiteScroll)); // 广播卷轴效果
+                c.sendPacket(PacketCreator.modifyInventory(true, mods));
+                chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, whiteScroll));
                 if (equipSlot < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE)) {
-                    chr.equipChanged(); // 通知客户端装备发生变化
+                    chr.equipChanged();
                 }
             } finally {
                 c.releaseClient(); // 释放客户端资源
@@ -210,6 +271,11 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
     private static void handlePotentialOrHyper(Client c, Character chr, Equip equip, Item scroll,
                                                short equipSlot, boolean legendarySpirit) {
+        handlePotentialOrHyper(c, chr, equip, scroll, equipSlot, legendarySpirit, false);
+    }
+
+    private static void handlePotentialOrHyper(Client c, Character chr, Equip equip, Item scroll,
+                                               short equipSlot, boolean legendarySpirit, boolean whiteScroll) {
         org.gms.potential.PotentialHyperService.Result result;
         final int scrollId = scroll.getItemId();
         boolean isHyper = org.gms.potential.PotentialHyperConfig.isHyperScroll(scrollId);
@@ -218,13 +284,23 @@ public final class ScrollHandler extends AbstractPacketHandler {
         boolean isPhase4 = org.gms.potential.PotentialHyperConfig.isCubeOrGradeOrSocketScroll(scrollId)
                 || org.gms.potential.PotentialHyperConfig.isSoulScroll(scrollId);
         boolean isReset = org.gms.constants.inventory.ItemConstants.isResetScroll(scrollId);
+        boolean isFlame = org.gms.flame.FlameConfig.isFlameItem(scrollId);
         if (isHyper) {
-            // 禁止 chr.isGM() 强制成功（否则 GM 永远必成）；强制设星用 !potential star
-            result = org.gms.potential.PotentialHyperService.applyHyperScroll(chr, equip, scrollId, false);
+            // Soft095：Hyper 仅认装备上预涂 SHIELD_WARD；ws/白卷不参与防炸
+            result = org.gms.potential.PotentialHyperService.applyHyperScroll(
+                    chr, equip, scrollId, false, false);
         } else if (org.gms.potential.PotentialHyperConfig.isMagnifyingGlass(scrollId)) {
             result = org.gms.potential.PotentialHyperService.applyMagnify(chr, equip, scrollId);
         } else if (isReset) {
             result = org.gms.potential.EquipResetService.applyResetScroll(chr, equip, scrollId, chr.isGM());
+        } else if (isFlame) {
+            org.gms.flame.FlameService.Result fr =
+                    org.gms.flame.FlameService.applyFlameItem(chr, equip, scrollId, chr.isGM());
+            result = switch (fr) {
+                case SUCCESS -> org.gms.potential.PotentialHyperService.Result.SUCCESS;
+                case FAIL -> org.gms.potential.PotentialHyperService.Result.FAIL;
+                default -> org.gms.potential.PotentialHyperService.Result.INVALID;
+            };
         } else if (isPhase4) {
             result = org.gms.potential.PotentialHyperService.applyPhase4Scroll(chr, equip, scrollId, chr.isGM());
         } else if (isBonus) {
@@ -300,6 +376,9 @@ public final class ScrollHandler extends AbstractPacketHandler {
                         cubeResultHint(desc));
             } else if (org.gms.potential.PotentialHyperConfig.isBonusCube(scrollId)) {
                 chr.dropMessage(5, "【魔方】附加潜能已重随。 " + desc);
+            } else if (isFlame) {
+                chr.dropMessage(5, "【火花】涅槃火焰已附加。");
+                org.gms.server.equipgrowth.EquipGrowthTipManager.pushGrowthTipIfNeeded(chr, equip);
             } else if (isReset) {
                 chr.dropMessage(5, "【还原】已清除砸卷属性/Hyper/黄金锤（潜能与白金锤保留）。 " + desc);
             } else if (org.gms.potential.PotentialHyperConfig.isGradeUpgradeScroll(scrollId)) {
@@ -327,8 +406,11 @@ public final class ScrollHandler extends AbstractPacketHandler {
             if (isHyper) {
                 int rate = org.gms.potential.PotentialHyperConfig.getHyperSuccessRate(
                         scroll.getItemId(), equip.getEnhance());
-                chr.dropMessage(5, "【Hyper】强化失败（当前★" + equip.getEnhance()
-                        + "，成功率" + rate + "%）。");
+                boolean hasWard = org.gms.constants.inventory.ItemConstants.hasFlag(
+                        equip.getFlag(), org.gms.constants.inventory.ItemConstants.SHIELD_WARD);
+                chr.dropMessage(5, "【Hyper】强化失败（当前★" + (equip.getEnhance() & 0xFF)
+                        + "，成功率" + rate + "%）。"
+                        + (hasWard ? "" : " 防炸请先对装备使用保护之盾（5064000/2531*），不要勾选祝福卷。"));
             } else if (isBonus) {
                 chr.dropMessage(5, "【附加潜能】附加失败。");
             } else if (isReset) {
@@ -348,7 +430,9 @@ public final class ScrollHandler extends AbstractPacketHandler {
             }
         } else if (result == org.gms.potential.PotentialHyperService.Result.CURSE) {
             if (isHyper) {
-                chr.dropMessage(5, "【Hyper】强化失败，装备被损毁！（GM 可用 !potential star 安全设星）");
+                chr.dropMessage(5, "【Hyper】强化失败，装备被损毁！"
+                        + "防炸请先对装备使用保护之盾（5064000/2531*）。"
+                        + "（GM 可用 !potential star 安全设星）");
             } else {
                 chr.dropMessage(5, "强化失败，装备被损坏。");
             }
