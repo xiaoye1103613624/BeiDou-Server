@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MapleLib">
+      <HintPath>E:\pro\WzImg-MCP-Server\Tools\WzConverter\bin\Release\net10.0-windows\MapleLib.dll</HintPath>
+    </Reference>
+    <Reference Include="spine-csharp">
+      <HintPath>E:\pro\WzImg-MCP-Server\Tools\WzConverter\bin\Release\net10.0-windows\spine-csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LZ4pn">
+      <HintPath>E:\pro\WzImg-MCP-Server\Tools\WzConverter\bin\Release\net10.0-windows\LZ4pn.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>E:\pro\WzImg-MCP-Server\Tools\WzConverter\bin\Release\net10.0-windows\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>E:\pro\WzImg-MCP-Server\Tools\WzConverter\bin\Release\net10.0-windows\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
