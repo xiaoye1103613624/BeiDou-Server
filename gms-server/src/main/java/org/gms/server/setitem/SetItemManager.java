@@ -358,7 +358,25 @@ public final class SetItemManager {
             copy.skillMods.clear();
             total.merge(copy);
         }
+        foldAddLevelSkillMods(total, chr.getJob().getId());
         return total;
+    }
+
+    /** skillMods.addLevel → skillLevels，使穿戴后生效等级 (+N) 真正叠加。 */
+    private static void foldAddLevelSkillMods(SetBonus bonus, int jobId) {
+        if (bonus == null || bonus.skillMods.isEmpty()) {
+            return;
+        }
+        for (SetSkillMod mod : bonus.skillMods) {
+            if (mod.addLevel() <= 0) {
+                continue;
+            }
+            int skillId = convertSkillIdByJob(mod.skillId(), jobId);
+            if (skillId == -1) {
+                skillId = mod.skillId();
+            }
+            bonus.skillLevels.merge(skillId, mod.addLevel(), Integer::sum);
+        }
     }
 
     public static SetBonus getSetBonusForSet(Character chr, int setId) {
@@ -382,6 +400,7 @@ public final class SetItemManager {
         }
         copy.skillLevels.clear();
         copy.skillLevels.putAll(converted);
+        foldAddLevelSkillMods(copy, chr.getJob().getId());
         return copy;
     }
 
@@ -547,6 +566,7 @@ public final class SetItemManager {
         }
         copy.skillLevels.clear();
         copy.skillLevels.putAll(converted);
+        foldAddLevelSkillMods(copy, jobId);
         return copy;
     }
 

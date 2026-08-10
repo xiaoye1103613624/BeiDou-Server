@@ -1,5 +1,6 @@
 package org.gms.server.beauty;
 
+import org.gms.client.Client;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
@@ -21,6 +22,24 @@ public final class BeautyPackets {
         OutPacket p = OutPacket.create(SendOpcode.BEAUTY_RESULT);
         p.writeByte(RESP_OPEN);
         return p;
+    }
+
+    /**
+     * NPC / 命令统一入口：OPEN + DATA。
+     * 客户端不能只依赖 OPEN 后再 REQUEST 回包（脚本路径曾出现“点了无界面”）。
+     */
+    public static void openSalon(Client c) {
+        if (c == null || c.getPlayer() == null) {
+            return;
+        }
+        int chrId = c.getPlayer().getId();
+        int unlocked = BeautyStorage.getUnlockedSlots(chrId);
+        if (unlocked <= 0) {
+            BeautyStorage.setUnlockedSlots(chrId, SLOT_COUNT);
+            unlocked = SLOT_COUNT;
+        }
+        c.sendPacket(beautyOpen());
+        c.sendPacket(beautyData(unlocked, BeautyStorage.loadAll(chrId)));
     }
 
     public static Packet beautyData(int unlockedSlots, List<BeautyData> rows) {

@@ -28,6 +28,10 @@ public final class BeautyHandler extends AbstractPacketHandler {
     private static final int TYPE_SKIN = 2;
     private static final int SLOT_COUNT = 6;
     private static final int BEAUTY_ITEM_ID = 5920000;
+    /** 自定义美容院应用造型：每次 2000 点券 + 100W 金币 */
+    private static final int APPLY_NX_COST = 2000;
+    private static final int APPLY_MESO_COST = 1_000_000;
+    private static final int CASH_NX = 1;
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -64,6 +68,13 @@ public final class BeautyHandler extends AbstractPacketHandler {
 
     private void sendData(Client c, Character chr) {
         int unlocked = BeautyStorage.getUnlockedSlots(chr.getId());
+        // Private-server default: unlock all slots when the character has never
+        // used item 5920000. Otherwise the UI only shows grey locked slots and
+        // Save/Apply appear "missing".
+        if (unlocked <= 0) {
+            BeautyStorage.setUnlockedSlots(chr.getId(), SLOT_COUNT);
+            unlocked = SLOT_COUNT;
+        }
         List<BeautyData> rows = BeautyStorage.loadAll(chr.getId());
         c.sendPacket(BeautyPackets.beautyData(unlocked, rows));
     }
@@ -123,6 +134,19 @@ public final class BeautyHandler extends AbstractPacketHandler {
         if (match == null) {
             return;
         }
+        int nx = chr.getCashShop().getCash(CASH_NX);
+        if (nx < APPLY_NX_COST) {
+            chr.dropMessage(5, "点券不足。应用造型需要 " + APPLY_NX_COST + " 点券，当前 " + nx + "。");
+            sendData(c, chr);
+            return;
+        }
+        if (chr.getMeso() < APPLY_MESO_COST) {
+            chr.dropMessage(5, "金币不足。应用造型需要 " + APPLY_MESO_COST + " 金币。");
+            sendData(c, chr);
+            return;
+        }
+        chr.getCashShop().gainCash(CASH_NX, -APPLY_NX_COST);
+        chr.gainMeso(-APPLY_MESO_COST, false);
         if (type == TYPE_HAIR) {
             chr.setHair(match.hair());
             chr.updateSingleStat(Stat.HAIR, match.hair());
@@ -137,6 +161,7 @@ public final class BeautyHandler extends AbstractPacketHandler {
             }
         }
         chr.equipChanged();
+        chr.dropMessage(5, "已应用造型，扣除 " + APPLY_NX_COST + " 点券与 " + APPLY_MESO_COST + " 金币。");
         sendData(c, chr);
     }
 

@@ -11,6 +11,10 @@ public class BeautyCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        c.sendPacket(BeautyPackets.beautyOpen());
+        if (c.getPlayer() == null) {
+            return;
+        }
+        // OPEN then DATA — same path as NPC 9105006 / 便民工具.
+        BeautyPackets.openSalon(c);
     }
 }
