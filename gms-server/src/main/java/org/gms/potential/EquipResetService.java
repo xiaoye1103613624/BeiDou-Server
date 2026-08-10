@@ -61,6 +61,7 @@ public final class EquipResetService {
         equip.setLevel((byte) 0);
         equip.setEnhance((byte) 0);
         equip.setVicious((short) 0);
+        equip.clearChaosLedger();
         // 基础槽 + 白金锤永久次数（黄金锤次数已清零）
         int baseSlots = blank.getUpgradeSlots();
         equip.setUpgradeSlots((byte) Math.min(127, Math.max(0, baseSlots + plat)));

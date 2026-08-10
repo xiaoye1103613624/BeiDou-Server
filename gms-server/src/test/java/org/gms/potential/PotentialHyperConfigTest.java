@@ -12,23 +12,37 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PotentialHyperConfigTest {
 
     @Test
-    void maxEnhanceIsTen() {
-        assertEquals(10, PotentialHyperConfig.MAX_ENHANCE);
-        assertEquals(10, PotentialHyperConfig.getHyperMaxEnhance(2049300));
-        assertEquals(2, PotentialHyperConfig.getHyperMaxEnhance(2049309));
-        assertEquals(5, PotentialHyperConfig.getHyperMaxEnhance(2049310));
+    void maxEnhanceIsTwentyFive095() {
+        assertEquals(25, PotentialHyperConfig.MAX_ENHANCE);
+        assertEquals(25, PotentialHyperConfig.getHyperMaxEnhance(2049300));
+        // N 星卷无 WZ 时 forceUpgrade 缺省 1 → 回落绝对上限；有 WZ 时见集成环境
+        assertEquals(5, HyperEnhance095.enchantStarCap(90, false));
+        assertEquals(10, HyperEnhance095.enchantStarCap(110, false));
+        assertEquals(25, HyperEnhance095.enchantStarCap(150, false));
+        assertEquals(15, HyperEnhance095.enchantStarCap(150, true));
     }
 
     @Test
-    void t5RatesMatchScrollDesc() {
-        // 2049300 T5：1星100% … 10星55%
+    void t5RatesMatch095Formula() {
+        // 2049300：缺 WZ success → max(100-enhance*10, 5)
         assertEquals(100, PotentialHyperConfig.getHyperSuccessRate(2049300, 0));
-        assertEquals(95, PotentialHyperConfig.getHyperSuccessRate(2049300, 1));
-        assertEquals(55, PotentialHyperConfig.getHyperSuccessRate(2049300, 9));
+        assertEquals(90, PotentialHyperConfig.getHyperSuccessRate(2049300, 1));
+        assertEquals(50, PotentialHyperConfig.getHyperSuccessRate(2049300, 5));
+        assertEquals(10, PotentialHyperConfig.getHyperSuccessRate(2049300, 9));
+        assertEquals(5, PotentialHyperConfig.getHyperSuccessRate(2049300, 10));
+    }
+
+    @Test
+    void ordinaryScrollUses80Base() {
+        assertEquals(80, PotentialHyperConfig.getHyperSuccessRate(2049301, 0));
+        assertEquals(80, PotentialHyperConfig.getHyperSuccessRate(2049307, 0));
+        assertEquals(100, PotentialHyperConfig.getHyperSuccessRate(2049302, 0));
+        assertEquals(0, PotentialHyperConfig.curseForHyperScroll(2049302));
     }
 
     @Test
     void artifactRatesDeclineToTen() {
+        // 缺 WZ 时与高级卷同公式（100 档）
         assertEquals(100, PotentialHyperConfig.getHyperSuccessRate(2049306, 0));
         assertEquals(10, PotentialHyperConfig.getHyperSuccessRate(2049306, 9));
     }
@@ -134,12 +148,15 @@ class PotentialHyperConfigTest {
     }
 
     @Test
-    void equipOptionLevelMatches095ReqDiv10() {
+    void equipOptionLevelMatches095ClientIndex() {
+        // Client: nLevel=(req-1)/10 → WZ node N=nLevel+1
         assertEquals(1, PotentialRules095.equipOptionLevel(0));
-        assertEquals(1, PotentialRules095.equipOptionLevel(9));
+        assertEquals(1, PotentialRules095.equipOptionLevel(1));
         assertEquals(1, PotentialRules095.equipOptionLevel(10));
+        assertEquals(2, PotentialRules095.equipOptionLevel(11));
         assertEquals(3, PotentialRules095.equipOptionLevel(30));
-        assertEquals(3, PotentialRules095.equipOptionLevel(39)); // 095 req/10=3（旧 (req+9)/10 会得到 4）
+        assertEquals(4, PotentialRules095.equipOptionLevel(39));
+        assertEquals(4, PotentialRules095.equipOptionLevel(40));
         assertEquals(10, PotentialRules095.equipOptionLevel(100));
         assertEquals(20, PotentialRules095.equipOptionLevel(200));
         assertEquals(20, PotentialRules095.equipOptionLevel(999));

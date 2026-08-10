@@ -37,15 +37,19 @@ public final class PotentialRules095 {
     }
 
     /**
-     * 装备 reqLevel → ItemOption {@code level} 表索引（对齐 095 {@code getReqLevel/10}）。
+     * 装备 reqLevel → ItemOption {@code level} 节点名（1~20）。
      * <p>
-     * 095 {@code PlayerStats}/{@code UseMagnify} 用 list 下标 {@code req/10}（XML level 从 1 起时有 off-by-one）；
-     * 本服用 Map 按<strong>节点名</strong>取值，故 {@code max(1, req/10)}：装等 100→level10，装等 0/1~9→level1。
-     * 品阶本身不改索引；高品阶靠抽到更高 optionId 族（4xxxx 同 level 数值更大）。
+     * 对齐 095 客户端 {@code BasicStat/SecondaryStat::SetFrom}：
+     * {@code nLevel = (nrLevel - 1) / 10} 作为 0-based 数组下标，而
+     * {@code LoadItemOptionLevelData} 把 WZ {@code level/"N"} 装进 {@code a[N-1]}，
+     * 故节点名 {@code N = (req - 1) / 10 + 1}（req≤0 时按 1）。
+     * 例：req 1~10→1，11~20→2，39→4，100→10。
+     * 品阶本身不改索引；高品阶靠抽到更高 optionId 族。
      */
     public static int equipOptionLevel(int equipReqLevel) {
-        int lv = Math.max(0, equipReqLevel) / 10;
-        return Math.max(1, Math.min(20, lv));
+        int req = Math.max(0, equipReqLevel);
+        int node = req <= 0 ? 1 : (req - 1) / 10 + 1;
+        return Math.max(1, Math.min(20, node));
     }
 
     /**
@@ -416,5 +420,10 @@ public final class PotentialRules095 {
     /** 首次附加时 3 线概率（095 resetPotentialA/S：nextInt(10) &lt;= 1 → 约 20%）。 */
     public static int firstIdentifyLinesWide() {
         return Randomizer.nextInt(10) <= 1 ? 3 : 2;
+    }
+
+    /** 附加魔方：2→3 线解锁（与宽池首鉴同约 20%）。 */
+    public static boolean bonusCubeUnlockThirdLine() {
+        return Randomizer.nextInt(10) <= 1;
     }
 }

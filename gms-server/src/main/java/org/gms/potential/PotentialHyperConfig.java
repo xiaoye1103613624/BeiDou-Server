@@ -3,7 +3,9 @@ package org.gms.potential;
 /**
  * 潜能 / Hyper / 附加潜能 / 魔方 / 灵魂 / 星岩 移植配置。
  * <p>
- * Hyper 上限与成功率对齐卷轴 String 文案（常见 T 卷 1~10 星表）；失败默认不炸装。
+ * Hyper 星上限 / 成功率 / 炸装对齐 095 {@link HyperEnhance095}；
+ * 属性仍用 {@link HyperEnhanceTable} 虚拟加算（有意不同）。
+ * 失败炸装见 {@link #HYPER_DESTROY_ON_FAIL}；防炸仅预涂 SHIELD_WARD（Soft095，无砸星 YesNo）。
  */
 public final class PotentialHyperConfig {
     private PotentialHyperConfig() {}
@@ -315,14 +317,14 @@ public final class PotentialHyperConfig {
                 || isCubeOrGradeOrSocketScroll(itemId)
                 || isSoulScroll(itemId)
                 || isMagnifyingGlass(itemId)
-                || org.gms.constants.inventory.ItemConstants.isResetScroll(itemId);
+                || org.gms.constants.inventory.ItemConstants.isResetScroll(itemId)
+                || org.gms.flame.FlameConfig.isFlameItem(itemId);
     }
 
     /**
-     * Hyper 全局星数上限（对齐常见卷轴「1~10星」文案；tip/companion 同步 10）。
-     * 个别「N星装备强化卷」另见 {@link #getHyperMaxEnhance(int)}。
+     * Hyper 全局绝对星上限（对齐 095 高等级段 25；具体装备见 {@link HyperEnhance095#equipStarCap}）。
      */
-    public static final int MAX_ENHANCE = 10;
+    public static final int MAX_ENHANCE = HyperEnhance095.ABSOLUTE_MAX_STARS;
     public static final int MAX_GRADE = 5;
 
     /**
@@ -353,26 +355,23 @@ public final class PotentialHyperConfig {
     public static final boolean HYPER_DESTROY_ON_FAIL = true;
 
     /**
+     * Soft095：Hyper 炸装<strong>不</strong>用白卷/背包临时扣保护道具。
+     * 仅已预涂 {@link org.gms.constants.inventory.ItemConstants#SHIELD_WARD} 生效。
+     * 恒 false；保留常量以免旧脚本/文档引用编译失败。
+     */
+    public static final boolean HYPER_WHITE_SCROLL_PROTECTS = false;
+
+    /**
      * Hyper 失败诅咒兜底（百分数）。仅当 {@link #HYPER_DESTROY_ON_FAIL} 且卷无专用表项时使用。
      * Phase1 曾恒 0；Phase10 对齐 095 缺 cursed 时默认 100。
      */
     public static final int DEFAULT_HYPER_CURSED = 100;
 
     /**
-     * 单卷 Hyper 失败炸装率。{@code 2049302} 等保星卷=0；文案「失败不破坏」族=0；其余对齐 095。
+     * 单卷 Hyper 失败炸装率 — 委托 {@link HyperEnhance095#curseRate(int)}。
      */
     public static int curseForHyperScroll(int scrollId) {
-        if (!HYPER_DESTROY_ON_FAIL) {
-            return 0;
-        }
-        return switch (scrollId) {
-            // 095：2049302 强制成功且 curse=0；部分「不破坏」卷
-            case 2049302, 2049305, 2049314, 2049315, 2049316, 2049317, 2049318 -> 0;
-            // 常见强化卷：失败按 cursed≈100（与 095 缺表默认一致）
-            case 2049300, 2049301, 2049303, 2049304, 2049306, 2049307,
-                 2049308, 2049309, 2049310, 2049311, 2049312, 2049313 -> 100;
-            default -> DEFAULT_HYPER_CURSED;
-        };
+        return HyperEnhance095.curseRate(scrollId);
     }
 
     /** 魔方默认成功率（官服近乎必成；私服可调） */
@@ -401,76 +400,23 @@ public final class PotentialHyperConfig {
      */
     public static final boolean CLEAR_ON_TRADE = true;
 
-    // —— T5~T0 / 神器 / 史诗：String desc「N星：x%」表（下标 0 = 冲 1 星）——
-    private static final int[] RATE_T5 = {100, 95, 90, 85, 80, 75, 70, 65, 60, 55};
-    private static final int[] RATE_T4 = {95, 90, 85, 80, 75, 70, 65, 60, 55, 50};
-    private static final int[] RATE_T3 = {90, 85, 80, 75, 70, 65, 60, 55, 50, 45};
-    private static final int[] RATE_T2 = {85, 80, 75, 70, 65, 60, 55, 50, 45, 40};
-    private static final int[] RATE_T1 = {80, 75, 70, 65, 60, 55, 50, 45, 40, 35};
-    private static final int[] RATE_T0 = {75, 70, 65, 60, 55, 50, 45, 40, 35, 30};
-    private static final int[] RATE_ARTIFACT = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10};
-    private static final int[] RATE_EPIC = {80, 70, 60, 50, 40, 30, 20, 10, 5, 5};
+    // —— Hyper 成功率 / 星上限：见 HyperEnhance095（读 WZ + 095 公式）——
 
     /**
-     * 该卷允许的最大星数（不超过 {@link #MAX_ENHANCE}）。
-     * 「2/3/4/5星装备强化卷」按名称/autodesc 截断；其余默认 10。
+     * 该卷一次使用相关的星数上限提示（N 星卷= forceUpgrade；逐星卷= 装备级上限封顶）。
      */
     public static int getHyperMaxEnhance(int scrollId) {
-        int cap = switch (scrollId) {
-            case 2049309, 2049320, 2049326, 2049327 -> 2;
-            case 2049311, 2049319, 2049321, 2049328 -> 3;
-            case 2049312 -> 4;
-            case 2049308, 2049310, 2049313, 2049322, 2049324 -> 5;
-            default -> MAX_ENHANCE;
-        };
-        return Math.min(MAX_ENHANCE, cap);
+        int fu = HyperEnhance095.forceUpgrade(scrollId);
+        if (fu > 1) {
+            return Math.min(MAX_ENHANCE, fu);
+        }
+        return MAX_ENHANCE;
     }
 
     /**
-     * 冲下一星的成功率（百分数）。
-     *
-     * @param scrollId       Hyper 卷 ID
-     * @param currentEnhance 当前星数（0~max-1）；表项对应「冲到 currentEnhance+1」
+     * 冲下一星（或 N 星卷本次）的成功率（百分数）。
      */
     public static int getHyperSuccessRate(int scrollId, int currentEnhance) {
-        int[] table = hyperRateTable(scrollId);
-        int idx = Math.max(0, currentEnhance);
-        if (idx >= table.length) {
-            return Math.max(1, table[table.length - 1]);
-        }
-        return Math.max(1, Math.min(100, table[idx]));
-    }
-
-    private static int[] hyperRateTable(int scrollId) {
-        return switch (scrollId) {
-            case 2049300 -> RATE_T5;
-            case 2049301 -> RATE_T4;
-            case 2049302 -> RATE_T3;
-            case 2049303 -> RATE_T2;
-            case 2049304 -> RATE_T1;
-            case 2049305 -> RATE_T0;
-            case 2049306, 2049323, 2049325 -> RATE_ARTIFACT;
-            case 2049307 -> RATE_EPIC;
-            // 固定成功率卷：按 autodesc，长度=该卷星上限
-            case 2049308, 2049310 -> flatRate(50, 5);
-            case 2049309 -> flatRate(80, 2);
-            case 2049311, 2049321 -> flatRate(60, 3);
-            case 2049312 -> flatRate(40, 4);
-            case 2049313, 2049322, 2049324 -> flatRate(30, 5);
-            case 2049319 -> flatRate(60, 3);
-            case 2049320, 2049326 -> flatRate(90, 2);
-            case 2049327 -> flatRate(30, 2);
-            case 2049328 -> flatRate(10, 3);
-            default -> RATE_T5;
-        };
-    }
-
-    private static int[] flatRate(int rate, int stars) {
-        int n = Math.max(1, Math.min(MAX_ENHANCE, stars));
-        int[] t = new int[n];
-        for (int i = 0; i < n; i++) {
-            t[i] = rate;
-        }
-        return t;
+        return HyperEnhance095.successRate(scrollId, currentEnhance);
     }
 }

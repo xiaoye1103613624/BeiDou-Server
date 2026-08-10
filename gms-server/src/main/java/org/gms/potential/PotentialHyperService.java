@@ -2,6 +2,7 @@ package org.gms.potential;
 
 import org.gms.client.Character;
 import org.gms.client.inventory.Equip;
+import org.gms.reforge.ReforgeService;
 import org.gms.server.ItemInformationProvider;
 import org.gms.util.Randomizer;
 import org.slf4j.Logger;
@@ -51,40 +52,71 @@ public final class PotentialHyperService {
         if (equip == null) {
             return b;
         }
-        int req = ItemInformationProvider.getInstance().getEquipLevelReq(equip.getItemId());
-        int potLevel = PotentialRules095.equipOptionLevel(req);
-
-        ItemOptionProvider opt = ItemOptionProvider.getInstance();
-        applyOption(b, opt.getStats(equip.getPotential1(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getPotential2(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getPotential3(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getBonusPotential1(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getBonusPotential2(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getBonusPotential3(), potLevel), charLevel);
-        // 旧版随机灵魂 option；新版 2591 宝珠由 SoulWeaponService 叠固定表
-        if (!org.gms.soul.SoulOrbConfig.isOrb(equip.getSoulId())) {
-            applyOption(b, opt.getStats(equip.getSoulOption(), potLevel), charLevel);
-        }
-        org.gms.soul.SoulWeaponService.applyOrbBonus(b, equip);
-        applyOption(b, opt.getStats(equip.getSocket1(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getSocket2(), potLevel), charLevel);
-        applyOption(b, opt.getStats(equip.getSocket3(), potLevel), charLevel);
-
-        int star = Math.max(0, Math.min(PotentialHyperConfig.MAX_ENHANCE, equip.getEnhance()));
-        if (star > 0) {
-            int all = HyperEnhanceTable.cumulativeAllStat(star);
-            int atk = HyperEnhanceTable.cumulativeAtk(star, equip.getItemId());
-            b.str += all;
-            b.dex += all;
-            b.inte += all;
-            b.luk += all;
-            b.watk += atk;
-            b.matk += atk;
-        }
+        EquipSourceOps.Breakdown parts = EquipSourceOps.getBreakdown(
+                equip, charLevel, ReforgeService.cachedAffixes());
+        addBonus(b, parts.potential);
+        addBonus(b, parts.bonusPotential);
+        addBonus(b, parts.soul);
+        addBonus(b, parts.socket);
+        addBonus(b, parts.hyper);
+        addBonus(b, parts.reforge);
+        addBonus(b, parts.infusion);
+        addBonus(b, parts.gem);
+        addBonus(b, parts.flame);
         return b;
     }
 
+    /** 分来源加算结果（tip / GM）；战斗合计仍用 {@link #computeBonus}。 */
+    public static EquipSourceOps.Breakdown computeBonusBySource(Equip equip, int charLevel) {
+        return EquipSourceOps.getBreakdown(equip, charLevel, ReforgeService.cachedAffixes());
+    }
+
+    private static void addBonus(StatBonus dest, StatBonus src) {
+        if (src == null) {
+            return;
+        }
+        dest.str += src.str;
+        dest.dex += src.dex;
+        dest.inte += src.inte;
+        dest.luk += src.luk;
+        dest.hp += src.hp;
+        dest.mp += src.mp;
+        dest.watk += src.watk;
+        dest.matk += src.matk;
+        dest.wdef += src.wdef;
+        dest.mdef += src.mdef;
+        dest.acc += src.acc;
+        dest.avoid += src.avoid;
+        dest.speed += src.speed;
+        dest.jump += src.jump;
+        dest.strR += src.strR;
+        dest.dexR += src.dexR;
+        dest.intR += src.intR;
+        dest.lukR += src.lukR;
+        dest.hpR += src.hpR;
+        dest.mpR += src.mpR;
+        dest.padR += src.padR;
+        dest.madR += src.madR;
+        dest.critRate += src.critRate;
+        dest.critDam += src.critDam;
+        dest.damR += src.damR;
+        dest.bossDamR += src.bossDamR;
+        dest.ignoreDef += src.ignoreDef;
+        dest.dropProp += src.dropProp;
+        dest.mesoProp += src.mesoProp;
+        dest.damReflect += src.damReflect;
+        dest.damReflectProp += src.damReflectProp;
+        dest.allSkill += src.allSkill;
+        dest.cooltimeReduce += src.cooltimeReduce;
+        dest.mpconReduce += src.mpconReduce;
+    }
+
     private static void applyOption(StatBonus b, Map<String, Integer> stats, int charLevel) {
+        applyOptionPublic(b, stats, charLevel);
+    }
+
+    /** 供 {@link EquipSourceOps} 分来源加算。 */
+    public static void applyOptionPublic(StatBonus b, Map<String, Integer> stats, int charLevel) {
         if (stats == null || stats.isEmpty()) {
             return;
         }
@@ -173,7 +205,7 @@ public final class PotentialHyperService {
             return Result.INVALID;
         }
         if (PotentialRules095.hasMainPotential(equip.getPotentialGrade(), equip.getPotential1())) {
-            chr.dropMessage(5, "该装备已有潜能，请使用神奇魔方（5062000）重随（独特除外）；未鉴定请先用放大镜。");
+            chr.dropMessage(5, "该装备已有潜能，请使用神奇魔方（5062000）重随（S级除外）；未鉴定请先用放大镜。");
             return Result.INVALID;
         }
         int success = PotentialHyperConfig.successForPotentialScroll(scrollId);
@@ -262,13 +294,13 @@ public final class PotentialHyperService {
         if (!forceSuccess && Randomizer.nextInt(100) >= success) {
             return Result.FAIL;
         }
-        int lines = PotentialRules095.firstIdentifyLinesNormal();
+        int lines = PotentialRules095.firstIdentifyLinesWide();
         // 与主潜能首次一致：绝大多数稀有，小概率史诗/独特；池按品阶分档
         int grade = PotentialRules095.rollInitialGradeNormal();
         int[] rolled = rollBonusOptions(equip.getItemId(), grade, lines);
         equip.setBonusPotential1(rolled[0]);
         equip.setBonusPotential2(rolled[1]);
-        equip.setBonusPotential3(rolled[2]);
+        equip.setBonusPotential3(lines >= 3 ? rolled[2] : 0);
         equip.setBonusPotentialGrade((byte) grade);
         log.info("bonus potential applied char={} equip={} scroll={} grade={} opts={}/{}/{}",
                 chr.getId(), equip.getItemId(), scrollId, grade, rolled[0], rolled[1], rolled[2]);
@@ -277,11 +309,20 @@ public final class PotentialHyperService {
 
     /**
      * Hyper 升星：要求 upgradeSlots==0（升级结束）。
-     * 成功率按卷轴表；失败按 {@link PotentialHyperConfig#curseForHyperScroll} 可能炸装（095 风格）。
+     * Soft095：炸装仅由装备上预涂 {@link org.gms.constants.inventory.ItemConstants#SHIELD_WARD} 吸收；
+     * 无砸星 YesNo、不从背包扣保护道具、不认 whiteScroll。
      * {@code forceSuccess} 仅供 GM 命令显式传入；ScrollHandler 不得用 isGM 恒 true。
      * GM 安全设星请用 {@code !potential star}。
      */
     public static Result applyHyperScroll(Character chr, Equip equip, int scrollId, boolean forceSuccess) {
+        return applyHyperScroll(chr, equip, scrollId, forceSuccess, false);
+    }
+
+    /**
+     * @param whiteScroll Soft095 scrollEnhance 忽略白卷防炸；保留参数仅兼容旧调用，恒忽略。
+     */
+    public static Result applyHyperScroll(Character chr, Equip equip, int scrollId,
+                                          boolean forceSuccess, boolean whiteScroll) {
         if (equip == null || !PotentialHyperConfig.isHyperScroll(scrollId)) {
             return Result.INVALID;
         }
@@ -290,23 +331,195 @@ public final class PotentialHyperService {
                     + "次），再使用强化卷。GM 可用 !potential star <槽> <星> 强制设星。");
             return Result.INVALID;
         }
-        int maxStar = PotentialHyperConfig.getHyperMaxEnhance(scrollId);
-        if (equip.getEnhance() >= maxStar) {
-            chr.dropMessage(5, "已达 Hyper 强化上限（★" + maxStar + "）。");
+        final int equipCap = HyperEnhance095.equipStarCap(equip.getItemId());
+        final int forceUp = HyperEnhance095.forceUpgrade(scrollId);
+        // 095：N 星卷仅能在 ★0 使用
+        if (!forceSuccess && forceUp > 1 && equip.getEnhance() >= 1) {
+            chr.dropMessage(5, "该强化卷只能用于未强化（★0）的装备（一次升 " + forceUp + " 星）。");
+            return Result.INVALID;
+        }
+        if (equip.getEnhance() >= equipCap) {
+            chr.dropMessage(5, "已达该装备 Hyper 强化上限（★" + equipCap + "，按需求等级）。");
             return Result.INVALID;
         }
         int success = PotentialHyperConfig.getHyperSuccessRate(scrollId, equip.getEnhance());
         if (!forceSuccess && Randomizer.nextInt(100) >= success) {
             int curse = PotentialHyperConfig.curseForHyperScroll(scrollId);
             if (curse > 0 && Randomizer.nextInt(100) < curse) {
+                // Soft095：curse→null 后 InventoryHandler 用 SHIELD_WARD 吸炸
+                if (tryAbsorbHyperDestroy(chr, equip)) {
+                    return Result.FAIL;
+                }
+                clearShieldWard(equip);
                 return Result.CURSE;
             }
+            // Soft095：普通失败也消耗 SHIELD_WARD
+            clearShieldWard(equip);
             return Result.FAIL;
         }
-        equip.setEnhance((byte) (equip.getEnhance() + 1));
-        log.info("hyper enhance char={} equip={} scroll={} star={} rate={}",
-                chr.getId(), equip.getItemId(), scrollId, equip.getEnhance(), success);
+        // 095：成功后按 forceUpgrade 连升（受装备星上限截断）
+        int steps = Math.max(1, forceUp);
+        int before = equip.getEnhance() & 0xFF;
+        for (int i = 0; i < steps; i++) {
+            int cur = equip.getEnhance() & 0xFF;
+            if (cur >= equipCap) {
+                break;
+            }
+            equip.setEnhance((byte) (cur + 1));
+        }
+        clearShieldWard(equip);
+        log.info("hyper enhance char={} equip={} scroll={} star={}->{} fu={} rate={} cap={}",
+                chr.getId(), equip.getItemId(), scrollId, before, equip.getEnhance() & 0xFF,
+                forceUp, success, equipCap);
         return Result.SUCCESS;
+    }
+
+    /**
+     * Soft095：即将炸装时仅检查装备上已预涂的 SHIELD_WARD；清盾后变为 FAIL。
+     * 不消耗背包 5064000/2531*，不读 whiteScroll/ws 位。
+     */
+    public static boolean tryAbsorbHyperDestroy(Character chr, Equip equip) {
+        return tryAbsorbHyperDestroy(chr, equip, false);
+    }
+
+    /**
+     * @param whiteScroll 忽略（Soft095 无 Hyper 背包扣盾路径）；保留重载兼容旧调用。
+     */
+    public static boolean tryAbsorbHyperDestroy(Character chr, Equip equip, boolean whiteScroll) {
+        if (chr == null || equip == null) {
+            return false;
+        }
+        if ((equip.getFlag() & org.gms.constants.inventory.ItemConstants.SHIELD_WARD) != 0) {
+            clearShieldWard(equip);
+            chr.dropMessage(5, "【Hyper】保护之盾生效，装备未损坏（护盾已消耗）。");
+            log.info("hyper protect shield-ward char={} equip={}", chr.getId(), equip.getItemId());
+            return true;
+        }
+        return false;
+    }
+
+    static void clearShieldWard(Equip equip) {
+        if (equip == null) {
+            return;
+        }
+        short flag = equip.getFlag();
+        short ward = org.gms.constants.inventory.ItemConstants.SHIELD_WARD;
+        if ((flag & ward) != 0) {
+            equip.setFlag((short) (flag & ~ward));
+        }
+    }
+
+    /** 给装备涂 Hyper 防炸盾（供 Cash 保护之盾使用）。默认按 5064000（enhance < 8）。 */
+    public static boolean applyShieldWard(Character chr, Equip equip) {
+        return applyShieldWard(chr, equip, 5064000);
+    }
+
+    /** @param shieldItemId 5064000: enhance < 8; 5064003: enhance < 7 (Soft095 maxSuperiorEqp) */
+    public static boolean applyShieldWard(Character chr, Equip equip, int shieldItemId) {
+        if (chr == null || equip == null) {
+            return false;
+        }
+        short ward = org.gms.constants.inventory.ItemConstants.SHIELD_WARD;
+        if ((equip.getFlag() & ward) != 0) {
+            chr.dropMessage(5, "该装备已有保护之盾。");
+            return false;
+        }
+        // Soft095: 5064000 block enhance>=8; 5064003 maxSuperiorEqp=7 -> enhance>=7
+        int maxExclusive = (shieldItemId == 5064003) ? 7 : 8;
+        if (equip.getEnhance() >= maxExclusive) {
+            chr.dropMessage(5, "强化阶段过高，无法使用保护之盾（需低于 ★" + maxExclusive + "）。");
+            return false;
+        }
+        equip.setFlag((short) (equip.getFlag() | ward));
+        chr.dropMessage(5, "保护之盾已施加：下次 Hyper/砸卷失败时装备不会损坏（成功或失败均消耗）。");
+        return true;
+    }
+
+    /**
+     * Soft095 Cash 防-x 预涂。多种 flag 可 OR 共存（String：「可与保护/安全/复原之盾一起使用」）。
+     * 5063100 为幸运+防暴组合（同 Soft095 scrollEquip 路径）。
+     */
+    public static boolean applyProtectCashFlag(Character chr, Equip equip, int itemId) {
+        if (chr == null || equip == null) {
+            return false;
+        }
+        short flag = equip.getFlag();
+
+        if (org.gms.constants.inventory.ItemConstants.isPetOnlyProtectScroll(itemId)) {
+            if (!org.gms.constants.inventory.ItemConstants.isPetEquip(equip.getItemId())) {
+                chr.dropMessage(5, "该保护道具只能用于宠物装备。");
+                return false;
+            }
+        } else if (org.gms.constants.inventory.ItemConstants.isPetEquip(equip.getItemId())) {
+            chr.dropMessage(5, "普通保护道具不能用于宠物装备。");
+            return false;
+        }
+
+        boolean paintedLuck = false;
+
+        // 幸运系
+        if (org.gms.constants.inventory.ItemConstants.isLuckScroll(itemId)) {
+            if (org.gms.constants.inventory.ItemConstants.hasFlag(flag, org.gms.constants.inventory.ItemConstants.LUCKS_KEY)) {
+                chr.dropMessage(5, "该装备已有幸运日效果。");
+            } else {
+                flag = org.gms.constants.inventory.ItemConstants.withFlag(flag, org.gms.constants.inventory.ItemConstants.LUCKS_KEY);
+                paintedLuck = true;
+                chr.dropMessage(5, "幸运日已施加：下次砸卷成功率提高 10%。");
+            }
+            if (!org.gms.constants.inventory.ItemConstants.isShieldWardScroll(itemId)) {
+                if (paintedLuck) {
+                    equip.setFlag(flag);
+                }
+                return paintedLuck;
+            }
+        }
+
+        // 防暴 / 保护之盾
+        if (org.gms.constants.inventory.ItemConstants.isShieldWardScroll(itemId)) {
+            if (!applyShieldWard(chr, equip, itemId == 5063100 ? 5064000 : itemId)) {
+                if (paintedLuck) {
+                    equip.setFlag(flag);
+                    return true;
+                }
+                return false;
+            }
+            if (paintedLuck) {
+                equip.setFlag(org.gms.constants.inventory.ItemConstants.withFlag(equip.getFlag(),
+                        org.gms.constants.inventory.ItemConstants.LUCKS_KEY));
+            }
+            return true;
+        }
+
+        if (org.gms.constants.inventory.ItemConstants.isSlotsProtectScroll(itemId)) {
+            if (org.gms.constants.inventory.ItemConstants.hasFlag(flag, org.gms.constants.inventory.ItemConstants.SLOTS_PROTECT)) {
+                chr.dropMessage(5, "该装备已有安全之盾（防扣次数）。");
+                return false;
+            }
+            if (equip.getEnhance() >= 8) {
+                chr.dropMessage(5, "强化阶段过高，无法使用安全之盾。");
+                return false;
+            }
+            equip.setFlag(org.gms.constants.inventory.ItemConstants.withFlag(flag, org.gms.constants.inventory.ItemConstants.SLOTS_PROTECT));
+            chr.dropMessage(5, "安全之盾已施加：下次砸卷失败时不扣除可升级次数。");
+            return true;
+        }
+
+        if (org.gms.constants.inventory.ItemConstants.isScrollProtectScroll(itemId)) {
+            if (org.gms.constants.inventory.ItemConstants.hasFlag(flag, org.gms.constants.inventory.ItemConstants.SCROLL_PROTECT)) {
+                chr.dropMessage(5, "该装备已有卷轴防护。");
+                return false;
+            }
+            if (equip.getEnhance() >= 8) {
+                chr.dropMessage(5, "强化阶段过高，无法使用卷轴防护。");
+                return false;
+            }
+            equip.setFlag(org.gms.constants.inventory.ItemConstants.withFlag(flag, org.gms.constants.inventory.ItemConstants.SCROLL_PROTECT));
+            chr.dropMessage(5, "卷轴防护已施加：下次砸卷失败时使用的卷轴不会消失。");
+            return true;
+        }
+
+        chr.dropMessage(5, "未知的保护道具。");
+        return false;
     }
 
     /**
@@ -333,7 +546,7 @@ public final class PotentialHyperService {
         }
         int grade = Math.max(1, equip.getPotentialGrade());
         if (!PotentialHyperConfig.allowsMainCubeGrade(grade)) {
-            chr.dropMessage(5, "该装备潜能为独特，无法使用神奇魔方。请使用高级神奇魔方（5062001）或超级神奇魔方（5062002）。");
+            chr.dropMessage(5, "该装备潜能为S级，无法使用神奇魔方。请使用高级神奇魔方（5062001）或超级神奇魔方（5062002）。");
             return Result.INVALID;
         }
         if (!forceSuccess && Randomizer.nextInt(100) >= PotentialHyperConfig.DEFAULT_CUBE_SUCCESS) {
@@ -369,7 +582,7 @@ public final class PotentialHyperService {
         }
         int grade = Math.max(1, equip.getPotentialGrade());
         if (!PotentialHyperConfig.allowsPremiumCubeGrade(grade)) {
-            chr.dropMessage(5, "该装备潜能为传说，无法使用高级神奇魔方。请使用超级神奇魔方（5062002）。");
+            chr.dropMessage(5, "该装备潜能为SS级，无法使用高级神奇魔方。请使用超级神奇魔方（5062002）。");
             return Result.INVALID;
         }
         if (!forceSuccess && Randomizer.nextInt(100) >= PotentialHyperConfig.DEFAULT_CUBE_SUCCESS) {
@@ -471,7 +684,7 @@ public final class PotentialHyperService {
         }
         int grade = Math.max(1, equip.getPotentialGrade());
         if (!PotentialHyperConfig.allowsWeirdCubeGrade(grade)) {
-            chr.dropMessage(5, "怪异魔方仅可用于稀有/史诗潜能装备。");
+            chr.dropMessage(5, "怪异魔方仅可用于B/A级潜能装备。");
             return Result.INVALID;
         }
         if (!forceSuccess && Randomizer.nextInt(100) >= PotentialHyperConfig.DEFAULT_CUBE_SUCCESS) {
@@ -504,6 +717,10 @@ public final class PotentialHyperService {
         }
         int lines = PotentialRules095.cubeLineCount(
                 equip.getBonusPotential1(), equip.getBonusPotential2(), equip.getBonusPotential3());
+        // 附加魔方：2 线约 20% 升 3 线（对齐 095 附加宽池首鉴）
+        if (lines < 3 && PotentialRules095.bonusCubeUnlockThirdLine()) {
+            lines = 3;
+        }
         int[] rolled = rollBonusOptions(equip.getItemId(), grade, lines);
         equip.setBonusPotential1(rolled[0]);
         equip.setBonusPotential2(rolled[1]);
@@ -530,7 +747,7 @@ public final class PotentialHyperService {
             return Result.INVALID;
         }
         if (grade >= PotentialHyperConfig.MAX_GRADE) {
-            chr.dropMessage(5, "主潜能已达传说品阶。");
+            chr.dropMessage(5, "主潜能已达SS级。");
             return Result.INVALID;
         }
         if (grade <= 0) {
@@ -836,14 +1053,15 @@ public final class PotentialHyperService {
         return sb.toString().trim();
     }
 
+    /** 玩家可见品阶俗称（C/B/A/S/SS）；内部 grade 数值不变。 */
     private static String gradeName(int g) {
         return switch (g) {
-            case 1 -> "普通";
-            case 2 -> "稀有";
-            case 3 -> "史诗";
-            case 4 -> "独特";
-            case 5 -> "传说";
-            default -> "无";
+            case 1 -> "C";
+            case 2 -> "B";
+            case 3 -> "A";
+            case 4 -> "S";
+            case 5 -> "SS";
+            default -> "C";
         };
     }
 
