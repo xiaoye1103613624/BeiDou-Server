@@ -128,6 +128,16 @@ public class PacketCreator {
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
     private final static long PERMANENT = 150841440000000000L; // 00 C0 9B 90 7D E5 17 02
 
+    /**
+     * v83-vanilla item/inventory layout switch (08-10, reversible).
+     * The default ijl15-extended layout carries +70B equip tail (anvil/star/potential/
+     * socket) and mixed-size separators which a vanilla-v83 client decodes to EOF
+     * ("38 已到文件结尾"). Flip to true (server JVM property) so the plain v83
+     * client can decode getCharInfo without EOF: -Dgms.packet.itemInfo.v83vanilla=true
+     */
+    private final static boolean V83_VANILLA =
+            Boolean.parseBoolean(System.getProperty("gms.packet.itemInfo.v83vanilla", "false"));
+
     public static long getTime(long utcTimestamp) {
         if (utcTimestamp < 0 && utcTimestamp >= -3) {
             if (utcTimestamp == -1) {
@@ -238,7 +248,7 @@ public class PacketCreator {
             p.writeString(chr.getLinkedName());
         }
 
-        p.writeInt(chr.getMeso());
+        p.writeLong(chr.getMeso());
         addInventoryInfo(p, chr);
         addSkillInfo(p, chr);
         addQuestInfo(p, chr);
@@ -298,11 +308,16 @@ public class PacketCreator {
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
             short eqPos = item.getPosition();
-            // AvatarLook（选角/外观）：仍跳过第二坠与扩展戒，避免选角解析踩未画槽。
-            // 进图后的装备栏同步见 addInventoryInfo（−51/−52/−53 已放行）。
+            // AvatarLook（选角/外观）：跳过扩展 Addon 槽与第二坠，避免选角解析踩未画槽。
+            // 进图后的装备栏同步见 addInventoryInfo（−51/−52..−61 已放行）。
             if (eqPos == -52 || eqPos == -53 || eqPos == -152 || eqPos == -153
+                    || eqPos == -54 || eqPos == -55 || eqPos == -56 || eqPos == -57 || eqPos == -58
+                    || eqPos == -154 || eqPos == -155 || eqPos == -156 || eqPos == -157 || eqPos == -158
                     || eqPos == -51 || eqPos == -151
-                    || eqPos == -59 || eqPos == -159) {
+                    || eqPos == -59 || eqPos == -159
+                    || eqPos == -33 || eqPos == -133
+                    || eqPos == -60 || eqPos == -160 || eqPos == -61 || eqPos == -161
+                    || eqPos == -62 || eqPos == -162) {
                 continue;
             }
             short pos = (short) (eqPos * -1);  //修复其他角色无法看到现金勋章
@@ -552,6 +567,10 @@ public class PacketCreator {
             equip = (Equip) item;
             isRing = equip.getRingId() > -1;
         }
+        if (V83_VANILLA) {
+            addItemInfoV83Vanilla(p, item, zeroPosition, isCash, isRing);
+            return;
+        }
         if (!zeroPosition) {
             if (equip != null) {
                 if (pos < 0) {
@@ -651,14 +670,14 @@ public class PacketCreator {
             // Hyper ★ + potential (must match ijl15 GW_ItemSlotEquip @ 0x10D+)
             p.writeByte(equip.getEnhance());
             p.writeByte(equip.getPotentialGrade());
-            p.writeShort(0); // reserved
+            p.writeShort(equip.getInfusion() & 0xFF); // reserved → 注能等级 ★ (低字节)
             p.writeInt(equip.getPotential1());
             p.writeInt(equip.getPotential2());
             p.writeInt(equip.getPotential3());
             // Phase3 附加潜能 (+16B → size 0x12C)
             p.writeByte(equip.getBonusPotentialGrade());
             p.writeByte(0); // pad
-            p.writeShort(0); // reserved
+            p.writeShort(equip.getGemInlay() & 0xFF); // reserved → 宝石镶嵌等级 宝X (低字节; 高字节未用)
             p.writeInt(equip.getBonusPotential1());
             p.writeInt(equip.getBonusPotential2());
             p.writeInt(equip.getBonusPotential3());
@@ -668,8 +687,89 @@ public class PacketCreator {
             p.writeInt(equip.getSocket1());
             p.writeInt(equip.getSocket2());
             p.writeInt(equip.getSocket3());
+            // PhaseV 破界等级 0~50 → socket3 后独立 short (0x140→0x142, ijl15 decode 同步)
+            p.writeShort(equip.getBreakthrough() & 0xFF);
+            // 混沌累计仅落库，不进登录/库存封包尾（进图 Decode 多读 28B 会导致选角闪退）。
+            // tip 深绿待独立 opcode / 安全尾标记后再开。
         }
 
+    }
+
+    private static void addItemInfoV83Vanilla(OutPacket p, Item item, boolean zeroPosition, boolean isCash, boolean isRing) {
+        if (item.getItemType() != 1) {
+            p.writeByte(zeroPosition ? 0 : item.getPosition());
+            p.writeByte(item.getItemType());
+            p.writeInt(item.getItemId());
+            p.writeBool(isCash);
+            if (isCash) {
+                p.writeLong(item.getPetId() > -1 ? item.getPetId() : isRing ? ((Equip) item).getRingId() : item.getCashId());
+            }
+            addExpirationTime(p, item.getExpiration());
+            p.writeShort(item.getQuantity());
+            p.writeString(item.getOwner());
+            p.writeShort(item.getFlag());
+            if (ItemConstants.isRechargeable(item.getItemId())) {
+                p.writeInt(2);
+                p.writeBytes(new byte[]{(byte) 0x54, 0, 0, (byte) 0x34});
+            }
+            return;
+        }
+        Equip equip = (Equip) item;
+        short rawPos = item.getPosition();
+        boolean masking = false;
+        byte pos;
+        if (zeroPosition) {
+            p.writeByte(0);
+            pos = 0;
+        } else if (rawPos <= -1) {
+            pos = (byte) (rawPos * -1);
+            if (pos > 100) {
+                masking = true;
+                p.writeByte(pos - 100);
+            } else {
+                p.writeByte(pos);
+            }
+        } else {
+            p.writeByte(rawPos);
+        }
+        p.writeByte(item.getItemType());
+        p.writeInt(item.getItemId());
+        p.writeBool(isCash);
+        if (isCash) {
+            p.writeLong(equip.getRingId() > -1 ? equip.getRingId() : item.getCashId());
+        }
+        addExpirationTime(p, item.getExpiration());
+        p.writeByte(equip.getUpgradeSlots());
+        p.writeByte(equip.getLevel());
+        p.writeShort(equip.getStr());
+        p.writeShort(equip.getDex());
+        p.writeShort(equip.getInt());
+        p.writeShort(equip.getLuk());
+        p.writeShort(equip.getHp());
+        p.writeShort(equip.getMp());
+        p.writeShort(equip.getWatk());
+        p.writeShort(equip.getMatk());
+        p.writeShort(equip.getWdef());
+        p.writeShort(equip.getMdef());
+        p.writeShort(equip.getAcc());
+        p.writeShort(equip.getAvoid());
+        p.writeShort(equip.getHands());
+        p.writeShort(equip.getSpeed());
+        p.writeShort(equip.getJump());
+        p.writeString(equip.getOwner());
+        p.writeByte(0); // locked (v83 vanilla; gms Equip has no locked state)
+        p.writeShort(equip.getFlag());
+        if (!masking) {
+            p.writeInt(0);
+            p.writeByte(0);
+            p.writeShort(equip.getVicious());
+            p.writeShort(0);
+            p.writeLong(0L);
+            p.writeLong(getTime(-2));
+        } else {
+            p.writeBytes(new byte[]{0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x70, 0x3E, (byte) 0xBC, 0x5C, 0x4C, 0x07, (byte) 0xCA, 0x01});
+        }
+        p.writeInt(-1);
     }
 
     private static void addInventoryInfo(OutPacket p, Character chr) {
@@ -683,9 +783,9 @@ public class PacketCreator {
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
         for (Item item : equippedC) {
             short eqPos = item.getPosition();
-            // −59/−159：095 号，083 不用。−52/−53：SIX_RING_SAFE_20260726x 放行（BP52/53 UI+HitTest）。
-            // 第二坠 −51/−151：已放行。
-            if (eqPos == -59 || eqPos == -159) {
+            // ADDON_SLOTMAP_910: −54..−61 放行；−62/−162 omitted while GREEN_ENTER_OMIT_AUX62
+            // (A0BE14C9 JG_ONLY). Flip that flag after BP62 enter-green → CharInfo wires −62.
+            if (org.gms.constants.inventory.ExtendedEquipRegistry.isGreenEnterWireOmit(eqPos)) {
                 continue;
             }
             if (eqPos <= -100) {
@@ -697,15 +797,27 @@ public class PacketCreator {
         for (Item item : equipped) {    // equipped doesn't actually need sorting, thanks Pllsz
             addItemInfo(p, item);
         }
-        p.writeShort(0); // start of equip cash
+        if (V83_VANILLA) {
+            p.writeByte(0);
+        } else {
+            p.writeShort(0); // start of equip cash
+        }
         for (Item item : equippedCash) {
             addItemInfo(p, item);
         }
-        p.writeShort(0); // start of equip inventory
+        if (V83_VANILLA) {
+            p.writeByte(0);
+        } else {
+            p.writeShort(0); // start of equip inventory
+        }
         for (Item item : chr.getInventory(InventoryType.EQUIP).list()) {
             addItemInfo(p, item);
         }
-        p.writeInt(0);
+        if (V83_VANILLA) {
+            p.writeByte(0);
+        } else {
+            p.writeInt(0);
+        }
         for (Item item : chr.getInventory(InventoryType.USE).list()) {
             addItemInfo(p, item);
         }
@@ -1230,6 +1342,8 @@ public class PacketCreator {
                     }
                 } else if (mask == Stat.EXP.getValue()) {
                     // 8-byte EXP (matches ijl15 level300 Decode8)
+                    p.writeLong(Math.max(0L, value));
+                } else if (mask == Stat.MESO.getValue()) {
                     p.writeLong(Math.max(0L, value));
                 } else if (mask < 0xFFFF) {
                     p.writeShort((short) value);
@@ -3468,11 +3582,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeMesoSet(byte number, int meso) {
+    public static Packet getTradeMesoSet(byte number, long meso) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SET_MESO.getCode());
         p.writeByte(number);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -3852,7 +3966,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, int meso) {
+    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x16);
         p.writeInt(npcId);
@@ -3860,7 +3974,7 @@ public class PacketCreator {
         p.writeShort(0x7E);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         p.writeShort(0);
         p.writeByte((byte) items.size());
         for (Item item : items) {
@@ -3882,14 +3996,14 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet mesoStorage(byte slots, int meso) {
+    public static Packet mesoStorage(byte slots, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x13);
         p.writeByte(slots);
         p.writeShort(2);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -3984,6 +4098,10 @@ public class PacketCreator {
         p.writeInt(customHP.right);
         p.writeByte(tagColor);
         p.writeByte(tagBgColor);
+        // BeiDou: append real 64-bit HP for client HUD (green bar still uses scaled ints above).
+        // Vanilla OnFieldEffect stops after tagBgColor; leftover longs are ignored unless ijl15 reads them.
+        p.writeLong(Math.max(0L, currHP));
+        p.writeLong(Math.max(0L, maxHP));
         return p;
     }
 
@@ -5283,7 +5401,7 @@ public class PacketCreator {
         p.writeInt(NpcId.FREDRICK);
         p.writeInt(32272); //id
         p.skip(5);
-        p.writeInt(chr.getMerchantNetMeso());
+        p.writeLong(chr.getMerchantNetMeso());
         p.writeByte(0);
         try {
             List<Pair<Item, InventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
@@ -5478,11 +5596,11 @@ public class PacketCreator {
                 p.writeInt(s.getMesos());
                 p.writeString(s.getBuyer());
             }
-            p.writeInt(chr.getMerchantMeso());//:D?
+            p.writeLong(chr.getMerchantMeso());//:D?
         }
         p.writeString(hm.getDescription());
         p.writeByte(0x20); // slotMax (32)
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         if (hm.getItems().isEmpty()) {
             p.writeByte(0);//Hmm??
@@ -5500,7 +5618,7 @@ public class PacketCreator {
     public static Packet updateHiredMerchant(HiredMerchant hm, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         for (PlayerShopItem item : hm.getItems()) {
             p.writeShort(item.getBundles());
@@ -7907,6 +8025,59 @@ public class PacketCreator {
         for (Map.Entry<Integer, Integer> e : skillBonuses.entrySet()) {
             p.writeInt(e.getKey());
             p.writeInt(e.getValue());
+        }
+        return p;
+    }
+
+    /** 装备成长属性 tip (SendOpcode 0x17B) — 按需回复或变更点推送 */
+    public static Packet equipGrowthTip(int itemId, boolean hasData, String text) {
+        return equipGrowthTip(itemId, hasData, text, null);
+    }
+
+    /**
+     * @param growthBonusByStat 可选，长度 15（STR..Jump），主 tip 分色用；旧客户端忽略尾部。
+     * @param flameBonusByStat 可选，长度 15，火花绿字；接在成长尾后，旧 DLL 忽略。
+     */
+    public static Packet equipGrowthTip(int itemId, boolean hasData, String text, int[] growthBonusByStat) {
+        return equipGrowthTip(itemId, hasData, text, growthBonusByStat, null);
+    }
+
+    public static Packet equipGrowthTip(int itemId, boolean hasData, String text,
+                                        int[] growthBonusByStat, int[] flameBonusByStat) {
+        OutPacket p = OutPacket.create(SendOpcode.EQUIP_GROWTH_TIP);
+        p.writeInt(itemId);
+        p.writeByte(hasData ? 1 : 0);
+        p.writeString(hasData && text != null ? text : "");
+        // 尾部：flag(1) + 15×short 成长增量（旧 DLL 读完 string 即停，兼容）
+        if (growthBonusByStat != null && growthBonusByStat.length > 0) {
+            p.writeByte(1);
+            for (int i = 0; i < 15; i++) {
+                int v = i < growthBonusByStat.length ? growthBonusByStat[i] : 0;
+                p.writeShort(Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, v)));
+            }
+        } else {
+            p.writeByte(0);
+        }
+        // 火花：flag(1) + 15×short；旧客户端不读
+        if (flameBonusByStat != null && flameBonusByStat.length > 0) {
+            boolean any = false;
+            for (int v : flameBonusByStat) {
+                if (v != 0) {
+                    any = true;
+                    break;
+                }
+            }
+            if (any) {
+                p.writeByte(1);
+                for (int i = 0; i < 15; i++) {
+                    int v = i < flameBonusByStat.length ? flameBonusByStat[i] : 0;
+                    p.writeShort(Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, v)));
+                }
+            } else {
+                p.writeByte(0);
+            }
+        } else {
+            p.writeByte(0);
         }
         return p;
     }

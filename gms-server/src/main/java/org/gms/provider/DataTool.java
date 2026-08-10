@@ -93,25 +93,30 @@ public class DataTool {
     }
 
     public static int getIntConvert(String path, Data data) {
-        Data d = data.getChildByPath(path);
-        if (d.getType() == DataType.STRING) {
-            return Integer.parseInt(getString(d));
-        } else {
-            return getInt(d);
-        }
+        return getIntConvert(path, data, 0);
     }
 
     public static int getInt(Data data, int def) {
         if (data == null || data.getData() == null) {
             return def;
         } else if (data.getType() == DataType.STRING) {
-            return Integer.parseInt(getString(data));
+            try {
+                String raw = getString(data);
+                if (raw == null || !raw.trim().matches("-?\\d+")) {
+                    return def;
+                }
+                return Integer.parseInt(raw.trim());
+            } catch (NumberFormatException nfe) {
+                return def;
+            }
         } else {
             Object numData = data.getData();
             if (numData instanceof Integer) {
                 return (Integer) numData;
+            } else if (numData instanceof Number) {
+                return ((Number) numData).intValue();
             } else {
-                return (Short) numData;
+                return def;
             }
         }
     }
@@ -179,7 +184,20 @@ public class DataTool {
         if (child == null || child.getData() == null) {
             return null;
         } else if (child.getType() == DataType.STRING) {
-            return Long.parseLong(getString(child));
+            String raw = getString(child);
+            if (raw == null) {
+                return null;
+            }
+            raw = raw.trim();
+            // 高版本 Mob 常见占位 maxHP（如 "??????"），真实血量多在 finalmaxHP
+            if (!raw.matches("-?\\d+")) {
+                return null;
+            }
+            try {
+                return Long.parseLong(raw);
+            } catch (NumberFormatException nfe) {
+                return null;
+            }
         } else {
             Object numData = child.getData();
             return ((Number) numData).longValue();

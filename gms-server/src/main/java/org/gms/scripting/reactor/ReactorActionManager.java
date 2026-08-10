@@ -264,7 +264,11 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
     public void spawnMonster(int id, int qty, Point pos) {
         for (int i = 0; i < qty; i++) {
-            reactor.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(id), pos);
+            Monster monster = LifeFactory.getMonster(id);
+            if (monster == null) {
+                continue;
+            }
+            reactor.getMap().spawnMonsterOnGroundBelow(monster, pos);
         }
     }
 

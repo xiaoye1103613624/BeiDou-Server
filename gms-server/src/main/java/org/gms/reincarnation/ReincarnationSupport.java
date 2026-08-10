@@ -142,6 +142,10 @@ public final class ReincarnationSupport {
         syncSkill(chr, Announce.UNEQUIP);
     }
 
+    public static void onEquipChanged(Character chr) {
+        onLogin(chr);
+    }
+
     public static void onLogin(Character chr) {
         if (chr == null) {
             return;

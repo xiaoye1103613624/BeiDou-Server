@@ -52,12 +52,10 @@ public class MapFactory {
     private static final Logger log = LoggerFactory.getLogger(MapFactory.class);
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
 
-    /** 高版本portal类型兼容映射: v083仅支持0-7, 8+降级为基础spawn */
-    private static int remapPortalType(int pt, int mapid) {
+    /** 高版本portal类型兼容: pt>=8降级为spawn(0) */
+    private static int remapPortalType(int pt) {
         if (pt >= 0 && pt <= 7) return pt;
-        if (pt == 6) return 6; // DOOR_PORTAL in some versions
-        log.warn("Map {} portal pt={} remapped to spawn(0)", mapid, pt);
-        return 0; // SPAWN
+        return 0;
     }
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
@@ -179,20 +177,18 @@ public class MapFactory {
 
         map.setFieldLimit(DataTool.getInt(infoData.getChildByPath("fieldLimit"), 0));
         map.setMobInterval((short) DataTool.getInt(infoData.getChildByPath("createMobInterval"), 5000));
-        // 高版本地图fieldType检测: >10可能包含v083不支持的客户端特性
+        // 高版本地图fieldType检测
         int fieldType = DataTool.getInt(infoData.getChildByPath("fieldType"), 0);
-        if (fieldType > 10) {
-            log.warn("Map {} has high fieldType={}, may cause client crash", mapid, fieldType);
-        }
+        if (fieldType > 10) log.warn("Map {} has high fieldType={}", mapid, fieldType);
         PortalFactory portalFactory = new PortalFactory();
         Data portalData = mapData.getChildByPath("portal");
         if (portalData != null) {
             for (Data portal : portalData) {
                 int pt = DataTool.getInt(portal.getChildByPath("pt"));
-                map.addPortal(portalFactory.makePortal(remapPortalType(pt, mapid), portal));
+                map.addPortal(portalFactory.makePortal(remapPortalType(pt), portal));
             }
         } else {
-            log.warn("Map {} missing portal node, skipping portal load", mapid);
+            log.warn("Map {} missing portal node", mapid);
         }
         Data timeMob = infoData.getChildByPath("timeMob");
         if (timeMob != null) {
@@ -255,7 +251,7 @@ public class MapFactory {
             }
         }
         } else {
-            log.warn("Map {} missing foothold node, creating empty tree", mapid);
+            log.warn("Map {} missing foothold node", mapid);
         }
         FootholdTree fTree = new FootholdTree(lBound, uBound);
         for (Foothold fh : allFootholds) {

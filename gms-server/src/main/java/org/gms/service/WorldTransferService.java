@@ -104,7 +104,7 @@ public class WorldTransferService {
         charactersMapper.update(CharactersDO.builder()
                 .id(charactersDO.getId())
                 .world(data.getTo())
-                .meso(Math.min(charactersDO.getMeso(), 1000000))
+                .meso(Math.min(charactersDO.getMeso() == null ? 0L : charactersDO.getMeso(), 1000000L))
                 .guildid(0)
                 .guildrank(0)
                 .build());

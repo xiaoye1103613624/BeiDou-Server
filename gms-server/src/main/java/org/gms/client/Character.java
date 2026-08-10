@@ -281,6 +281,8 @@ public class Character extends AbstractCharacterObject {
     private transient int setDamageSkin;
     private transient boolean setSkillBonusSent;
     private transient Map<Integer, Integer> setSkillBonusLevels = new HashMap<>();
+    /** 脚本追加的技能等级加成（与套装/灵韵合并进生效等级，不占 SP）。 */
+    private transient Map<Integer, Integer> scriptSkillBonusLevels = new HashMap<>();
     private transient Map<Integer, Byte> setActiveSkillBackup = new HashMap<>();
     /** 灵韵穿戴前的本技等级备份（与套装 activeSkill 隔离）。 */
     private transient Map<Integer, Byte> spiritSkillBackup = new HashMap<>();
@@ -315,10 +317,10 @@ public class Character extends AbstractCharacterObject {
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicLong exp = new AtomicLong();
     private final AtomicInteger gachaExp = new AtomicInteger();
-    private final AtomicInteger meso = new AtomicInteger();
+    private final AtomicLong meso = new AtomicLong();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
-    private int merchantmeso;
+    private long merchantmeso;
     @Getter
     @Setter
     private BuddyList buddylist;
@@ -2809,6 +2811,7 @@ public class Character extends AbstractCharacterObject {
         equipchanged = true;
         markCombatStatsDirty();
         refreshSetBonus();
+        org.gms.soul.SoulWeaponService.syncItemEffect(this);
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
         }
@@ -2890,38 +2893,125 @@ public class Character extends AbstractCharacterObject {
         updateLocalStats();
 
         if (notifyClient && client != null) {
-            // STAT_CHANGED 的 STR/DEX/INT/LUK 是角色基础四维(AP)，客户端会再叠加已装备属性。
-            // Hyper/潜能平坦值写在 addItemInfo 封包里（computeBonus(equip,0)），勿再并入基础侧。
-            // 等级缩放(inc*lv)与百分比(inc*r)不在装备封包 → 补进 STAT，否则 tip 有、面板/客户端伤害无。
-            int lvStr = 0, lvDex = 0, lvInt = 0, lvLuk = 0;
-            for (Item item : getInventory(InventoryType.EQUIPPED)) {
-                if (!(item instanceof Equip eq)) {
-                    continue;
-                }
-                org.gms.potential.PotentialHyperService.StatBonus full =
-                        org.gms.potential.PotentialHyperService.computeBonus(eq, getLevel());
-                org.gms.potential.PotentialHyperService.StatBonus base =
-                        org.gms.potential.PotentialHyperService.computeBonus(eq, 0);
-                lvStr += full.str - base.str;
-                lvDex += full.dex - base.dex;
-                lvInt += full.inte - base.inte;
-                lvLuk += full.luk - base.luk;
-            }
-            // 与 recalcEquipStats 同序：先 (AP+装备平坦含lv) 再乘百分比
-            int pctStr = (getStr() + equipstr) * potStrR / 100;
-            int pctDex = (getDex() + equipdex) * potDexR / 100;
-            int pctInt = (getInt() + equipint_) * potIntR / 100;
-            int pctLuk = (getLuk() + equipluk) * potLukR / 100;
+            // ADDON_SERVER_STATS_20260802: STAT_CHANGED 四维 = AP + 套装/潜能lv/% +
+            // 客户端 Occ-OFF 盲区槽平坦(+潜能base)。客户端仍叠加经典装备封包属性。
+            // 勿开 Addon Combat/MainStat Occ（进图 AV @535351）；Si −10 走原生不盲。
             List<Pair<Stat, Long>> statup = new ArrayList<>(6);
-            statup.add(new Pair<>(Stat.STR, (long) (getStr() + setBonusStr + lvStr + pctStr)));
-            statup.add(new Pair<>(Stat.DEX, (long) (getDex() + setBonusDex + lvDex + pctDex)));
-            statup.add(new Pair<>(Stat.INT, (long) (getInt() + setBonusInt_ + lvInt + pctInt)));
-            statup.add(new Pair<>(Stat.LUK, (long) (getLuk() + setBonusLuk + lvLuk + pctLuk)));
+            appendClientDisplayBaseFourStats(statup);
             statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
             statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
             sendSetBonusPackets();
         }
+    }
+
+    /**
+     * ADDON_SERVER_STATS_20260802 — slots the v083 client does <b>not</b> fold into
+     * 四维 while Addon/Combat/MainStat Occ stay OFF (enter-safe). Flat equip +
+     * potential base (charLevel=0) are injected via STAT_CHANGED; lv-scaled pot
+     * and % still come from {@link #appendClientDisplayBaseFourStats}.
+     * <p>
+     * Si −10 is classic (client-native) — never list it here or 四维 double-counts.
+     * Re-enable Occ only with a proven enter-safe path; then remove these seats.
+     * <p>
+     * Phase 2: delegated to {@link org.gms.constants.inventory.ExtendedEquipRegistry}
+     * (identical seat list to prior switch).
+     */
+    public static boolean isClientBlindEquipSlot(short pos) {
+        return org.gms.constants.inventory.ExtendedEquipRegistry.isClientBlindEquipSlot(pos);
+    }
+
+    /**
+     * Overlay STR/DEX/INT/LUK already present in {@code statup} with display-base
+     * values (AP assign / level-up paths). Leaves other stats untouched.
+     */
+    public void overlayClientDisplayBaseFourStats(List<Pair<Stat, Long>> statup) {
+        if (statup == null || statup.isEmpty()) {
+            return;
+        }
+        int[] four = computeClientDisplayBaseFourStats();
+        for (int i = 0; i < statup.size(); i++) {
+            Pair<Stat, Long> p = statup.get(i);
+            if (p == null || p.getLeft() == null) {
+                continue;
+            }
+            switch (p.getLeft()) {
+                case STR -> statup.set(i, new Pair<>(Stat.STR, (long) four[0]));
+                case DEX -> statup.set(i, new Pair<>(Stat.DEX, (long) four[1]));
+                case INT -> statup.set(i, new Pair<>(Stat.INT, (long) four[2]));
+                case LUK -> statup.set(i, new Pair<>(Stat.LUK, (long) four[3]));
+                default -> {
+                }
+            }
+        }
+    }
+
+    /** Append display-base STR/DEX/INT/LUK (wear/login refresh). */
+    public void appendClientDisplayBaseFourStats(List<Pair<Stat, Long>> statup) {
+        int[] four = computeClientDisplayBaseFourStats();
+        statup.add(new Pair<>(Stat.STR, (long) four[0]));
+        statup.add(new Pair<>(Stat.DEX, (long) four[1]));
+        statup.add(new Pair<>(Stat.INT, (long) four[2]));
+        statup.add(new Pair<>(Stat.LUK, (long) four[3]));
+    }
+
+    /**
+     * ADDON_STATS_UNEQUIP_20260802 — always push Occ-OFF display 四维 + MAXHP/MP.
+     * Call after wear/unequip even if {@link #refreshSetBonus} early-returned.
+     */
+    public void forceSyncClientDisplayStats() {
+        if (client == null) {
+            return;
+        }
+        // Ensure equipstr/pot*% match current EQUIPPED before computing overlay.
+        equipchanged = true;
+        updateLocalStats();
+        List<Pair<Stat, Long>> statup = new ArrayList<>(6);
+        appendClientDisplayBaseFourStats(statup);
+        statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
+        statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
+        sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
+    }
+
+    /**
+     * @return [str, dex, int, luk] for STAT_CHANGED — client still adds classic equip flats.
+     */
+    public int[] computeClientDisplayBaseFourStats() {
+        // Hyper/潜能平坦值写在 addItemInfo（computeBonus(equip,0)），经典槽勿并入基础侧。
+        // 等级缩放(inc*lv)与百分比(inc*r)不在装备封包 → 补进 STAT。
+        // Occ-OFF 盲区槽：客户端既不加平坦也不加潜能 base → 一并补进。
+        int lvStr = 0, lvDex = 0, lvInt = 0, lvLuk = 0;
+        int blindStr = 0, blindDex = 0, blindInt = 0, blindLuk = 0;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (!(item instanceof Equip eq)) {
+                continue;
+            }
+            org.gms.potential.PotentialHyperService.StatBonus full =
+                    org.gms.potential.PotentialHyperService.computeBonus(eq, getLevel());
+            org.gms.potential.PotentialHyperService.StatBonus base =
+                    org.gms.potential.PotentialHyperService.computeBonus(eq, 0);
+            lvStr += full.str - base.str;
+            lvDex += full.dex - base.dex;
+            lvInt += full.inte - base.inte;
+            lvLuk += full.luk - base.luk;
+            if (isClientBlindEquipSlot(eq.getPosition())) {
+                blindStr += eq.getStr() + base.str;
+                blindDex += eq.getDex() + base.dex;
+                blindInt += eq.getInt() + base.inte;
+                blindLuk += eq.getLuk() + base.luk;
+            }
+        }
+        // 与 recalcEquipStats 同序：先 (AP+装备平坦含lv) 再乘百分比
+        int pctStr = (getStr() + equipstr) * potStrR / 100;
+        int pctDex = (getDex() + equipdex) * potDexR / 100;
+        int pctInt = (getInt() + equipint_) * potIntR / 100;
+        int pctLuk = (getLuk() + equipluk) * potLukR / 100;
+        return new int[]{
+                getStr() + setBonusStr + lvStr + pctStr + blindStr,
+                getDex() + setBonusDex + lvDex + pctDex + blindDex,
+                getInt() + setBonusInt_ + lvInt + pctInt + blindInt,
+                getLuk() + setBonusLuk + lvLuk + pctLuk + blindLuk
+        };
     }
 
     /** 携带物配置物品变化时标记脏（Profile 在下次读取时刷新）。 */
@@ -2937,7 +3027,59 @@ public class Character extends AbstractCharacterObject {
             sendPacket(PacketCreator.setItemSkillBonus(SetItemManager.buildAllSetBonusTexts(this)));
             setSkillBonusSent = true;
         }
-        sendPacket(PacketCreator.sendSetSkillBonus(setSkillBonusLevels));
+        sendPacket(PacketCreator.sendSetSkillBonus(getMergedSkillBonusLevels()));
+    }
+
+    /** 套装/灵韵 + 脚本 技能等级加成（客户端 (+N) 展示）。 */
+    public Map<Integer, Integer> getMergedSkillBonusLevels() {
+        Map<Integer, Integer> merged = new HashMap<>(setSkillBonusLevels);
+        for (Map.Entry<Integer, Integer> e : scriptSkillBonusLevels.entrySet()) {
+            if (e.getValue() != null && e.getValue() != 0) {
+                merged.merge(e.getKey(), e.getValue(), Integer::sum);
+            }
+        }
+        return merged;
+    }
+
+    /**
+     * 脚本追加技能等级（不占 SP，可超过 spMaxLevel，上限为技改后的 getMaxLevel）。
+     * @param absolute 为 true 时设为 amount，否则在现有脚本加成上累加
+     */
+    public void gainScriptSkillBonus(int skillId, int amount, boolean absolute) {
+        if (skillId <= 0) {
+            return;
+        }
+        if (absolute) {
+            if (amount <= 0) {
+                scriptSkillBonusLevels.remove(skillId);
+            } else {
+                scriptSkillBonusLevels.put(skillId, amount);
+            }
+        } else {
+            if (amount == 0) {
+                return;
+            }
+            int next = scriptSkillBonusLevels.getOrDefault(skillId, 0) + amount;
+            if (next <= 0) {
+                scriptSkillBonusLevels.remove(skillId);
+            } else {
+                scriptSkillBonusLevels.put(skillId, next);
+            }
+        }
+        if (client != null) {
+            sendPacket(PacketCreator.sendSetSkillBonus(getMergedSkillBonusLevels()));
+        }
+    }
+
+    public void clearScriptSkillBonus(int skillId) {
+        if (skillId <= 0) {
+            scriptSkillBonusLevels.clear();
+        } else {
+            scriptSkillBonusLevels.remove(skillId);
+        }
+        if (client != null) {
+            sendPacket(PacketCreator.sendSetSkillBonus(getMergedSkillBonusLevels()));
+        }
     }
 
     private static int percentOfBase(int base, int percent) {
@@ -3185,6 +3327,10 @@ public class Character extends AbstractCharacterObject {
         mods.add(new ModifyInventory(3, item));
         mods.add(new ModifyInventory(0, item));
         sendPacket(PacketCreator.modifyInventory(true, mods));
+        // 规范：装备变更点附带成长 tip 摘要，悬停可读缓存（少/零 0x17D）
+        if (item instanceof Equip equip) {
+            org.gms.server.equipgrowth.EquipGrowthTipManager.pushGrowthTipIfNeeded(this, equip);
+        }
     }
 
     public void gainGachaExp() {
@@ -3378,28 +3524,49 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public boolean canHoldMeso(int gain) {  // thanks lucasziron for pointing out a need to check space availability for mesos on player transactions
-        long nextMeso = (long) meso.get() + gain;
-        return nextMeso <= Integer.MAX_VALUE;
+    public boolean canHoldMeso(long gain) {  // thanks lucasziron for pointing out a need to check space availability for mesos on player transactions
+        long nextMeso = meso.get() + gain;
+        return nextMeso <= Long.MAX_VALUE;
+    }
+
+    public boolean canHoldMeso(int gain) {
+        return canHoldMeso((long) gain);
     }
 
     public void gainMeso(int gain) {
-        gainMeso(gain, true, false, true);
+        gainMeso((long) gain, true, false, true);
     }
 
     public void gainMeso(int gain, boolean show) {
-        gainMeso(gain, show, false, false);
+        gainMeso((long) gain, show, false, false);
     }
 
     public void gainMeso(int gain, boolean show, boolean enableActions, boolean inChat) {
+        gainMeso((long) gain, show, enableActions, inChat);
+    }
+
+    public void gainMeso(long gain) {
+        gainMeso(gain, true, false, true);
+    }
+
+    public void gainMeso(long gain, boolean show) {
+        gainMeso(gain, show, false, false);
+    }
+
+    public void gainMeso(long gain, boolean show, boolean enableActions, boolean inChat) {
         long nextMeso;
         petLock.lock();
         try {
-            nextMeso = (long) meso.get() + gain;  // thanks Thora for pointing integer overflow here
-            if (nextMeso > Integer.MAX_VALUE) {
-                gain -= (int) (nextMeso - Integer.MAX_VALUE);
-            } else if (nextMeso < 0) {
-                gain = -meso.get();
+            // long addition wraps in Java — use overflow-safe clamp (not nextMeso > Long.MAX_VALUE).
+            final long cur = meso.get();
+            if (gain > 0) {
+                if (cur > Long.MAX_VALUE - gain) {
+                    gain = Long.MAX_VALUE - cur;
+                }
+            } else if (gain < 0) {
+                if (gain == Long.MIN_VALUE || cur < -gain) {
+                    gain = -cur;
+                }
             }
             nextMeso = meso.addAndGet(gain);
         } finally {
@@ -3407,12 +3574,13 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (gain != 0) {
-            updateSingleStat(Stat.MESO, (int) nextMeso, enableActions);
+            updateSingleStat(Stat.MESO, nextMeso, enableActions);
             if (gain > 0) {
                 addPartyTrackerMeso(gain);
             }
             if (show) {
-                sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
+                int showGain = gain > Integer.MAX_VALUE ? Integer.MAX_VALUE : (gain < Integer.MIN_VALUE ? Integer.MIN_VALUE : (int) gain);
+                sendPacket(PacketCreator.getShowMesoGain(showGain, inChat));
             }
         } else {
             enableActions();
@@ -4929,7 +5097,7 @@ public class Character extends AbstractCharacterObject {
             return 1;
         }
 
-        return expRate;
+        return expRate * org.gms.config.PetGrowthManager.getSummonedExpBonus(this);
     }
 
     public float getLevelExpRate() {
@@ -4968,13 +5136,13 @@ public class Character extends AbstractCharacterObject {
         return dropCoupon;
     }
 
-    /** 含潜能掉落%（incRewardProp） */
+    /** 含潜能掉落%（incRewardProp）；召唤中的成长宠倍率在末尾乘算 */
     public float getDropRate() {
         float base = dropRate;
         if (potDropProp > 0) {
             base *= (1f + potDropProp / 100f);
         }
-        return base;
+        return base * org.gms.config.PetGrowthManager.getSummonedDropBonus(this);
     }
 
     public float getRawDropRate() {
@@ -4990,13 +5158,13 @@ public class Character extends AbstractCharacterObject {
         return mesoCoupon;
     }
 
-    /** 含潜能金币%（incMesoProp） */
+    /** 含潜能金币%（incMesoProp）；召唤中的成长宠倍率在末尾乘算 */
     public float getMesoRate() {
         float base = mesoRate;
         if (potMesoProp > 0) {
             base *= (1f + potMesoProp / 100f);
         }
-        return base;
+        return base * org.gms.config.PetGrowthManager.getSummonedMesoBonus(this);
     }
 
     public float getRawMesoRate() {
@@ -5289,19 +5457,19 @@ public class Character extends AbstractCharacterObject {
         return GameConstants.getJobMaxLevel(job);
     }
 
-    public int getMeso() {
+    public long getMeso() {
         return meso.get();
     }
 
-    public void setMeso(int meso) {
+    public void setMeso(long meso) {
         this.meso.set(meso);
     }
 
-    public int getMerchantMeso() {
+    public long getMerchantMeso() {
         return merchantmeso;
     }
 
-    public int getMerchantNetMeso() {
+    public long getMerchantNetMeso() {
         int elapsedDays = 0;
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -5323,7 +5491,7 @@ public class Character extends AbstractCharacterObject {
 
         long netMeso = merchantmeso; // negative mesos issues found thanks to Flash, Vcoc
         netMeso = (netMeso * (100 - elapsedDays)) / 100;
-        return (int) netMeso;
+        return netMeso;
     }
 
     public GuildCharacter getMGC() {
@@ -6143,6 +6311,7 @@ public class Character extends AbstractCharacterObject {
         }
         byte base = getSkillLevelRaw(skill);
         int bonus = setSkillBonusLevels.getOrDefault(skill.getId(), 0);
+        bonus += scriptSkillBonusLevels.getOrDefault(skill.getId(), 0);
         // incAllskill：仅对已学技能生效（base>0）
         if (base > 0) {
             bonus += Math.max(0, potAllSkill);
@@ -6657,8 +6826,10 @@ public class Character extends AbstractCharacterObject {
             statup.add(new Pair<>(Stat.LEVEL, (long) (level)));
             statup.add(new Pair<>(Stat.MAXHP, (long) (clientMaxHp)));
             statup.add(new Pair<>(Stat.MAXMP, (long) (clientMaxMp)));
-            statup.add(new Pair<>(Stat.STR, (long) (attrStr)));
-            statup.add(new Pair<>(Stat.DEX, (long) (attrDex)));
+            // ADDON_SERVER_STATS_20260802: level-up STR/DEX 用 display-base（含盲区槽）
+            int[] four = computeClientDisplayBaseFourStats();
+            statup.add(new Pair<>(Stat.STR, (long) four[0]));
+            statup.add(new Pair<>(Stat.DEX, (long) four[1]));
 
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
         } finally {
@@ -7128,8 +7299,8 @@ public class Character extends AbstractCharacterObject {
             }
         }
         chr.setRemainingSp(remainingSps);
-        chr.setMeso(charactersDO.getMeso());
-        chr.setMerchantMeso(charactersDO.getMerchantmesos());
+        chr.setMeso(charactersDO.getMeso() == null ? 0L : charactersDO.getMeso());
+        chr.setMerchantMeso(charactersDO.getMerchantmesos() == null ? 0L : charactersDO.getMerchantmesos());
         chr.setGMLevel(charactersDO.getGm());
         chr.setSkinColor(SkinColor.getById(charactersDO.getSkincolor()));
         chr.setGender(charactersDO.getGender());
@@ -7953,6 +8124,113 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /** 换装后强制重算并下发本地属性（供 InventoryManipulator 等调用）。 */
+    public void forceUpdateLocalStats() {
+        updateLocalStats();
+    }
+
+    // —— 脚本日限 / 元宝：用 questprogress 字符串持久化（key=0 存 blob）——
+    private static final int BOSS_LOG_QUEST = 9900350;
+    private static final int MONEYB_QUEST = 9900360;
+    private static final int SCRIPT_BLOB_PROGRESS_ID = 0;
+
+    public int getBossLog(String bossType) {
+        ensureBossLogDayReset();
+        return readScriptBlobInt(BOSS_LOG_QUEST, bossType, 0);
+    }
+
+    public void setBossLog(String bossType) {
+        setBossLog(bossType, getBossLog(bossType) + 1);
+    }
+
+    public void setBossLog(String bossType, int count) {
+        ensureBossLogDayReset();
+        writeScriptBlobInt(BOSS_LOG_QUEST, bossType, Math.max(0, count));
+    }
+
+    public int getmoneyb() {
+        return readScriptBlobInt(MONEYB_QUEST, "moneyb", 0);
+    }
+
+    public void setmoneyb(int delta) {
+        writeScriptBlobInt(MONEYB_QUEST, "moneyb", Math.max(0, getmoneyb() + delta));
+    }
+
+    private void ensureBossLogDayReset() {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        String today = "" + cal.get(java.util.Calendar.YEAR)
+                + (cal.get(java.util.Calendar.MONTH) + 1)
+                + cal.get(java.util.Calendar.DAY_OF_MONTH);
+        QuestStatus qr = getQuestNAdd(Quest.getInstance(BOSS_LOG_QUEST));
+        java.util.Map<String, String> blob = parseScriptBlob(qr.getProgress(SCRIPT_BLOB_PROGRESS_ID));
+        if (!today.equals(blob.get("_date"))) {
+            blob.clear();
+            blob.put("_date", today);
+            qr.setProgress(SCRIPT_BLOB_PROGRESS_ID, serializeScriptBlob(blob));
+            if (qr.getStatus() == QuestStatus.Status.NOT_STARTED) {
+                qr.setStatus(QuestStatus.Status.STARTED);
+            }
+            updateQuestStatus(qr);
+        }
+    }
+
+    private int readScriptBlobInt(int questId, String key, int def) {
+        QuestStatus qr = getQuestNAdd(Quest.getInstance(questId));
+        java.util.Map<String, String> blob = parseScriptBlob(qr.getProgress(SCRIPT_BLOB_PROGRESS_ID));
+        String raw = blob.get(key);
+        if (raw == null || raw.isEmpty()) {
+            return def;
+        }
+        try {
+            return Integer.parseInt(raw);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    private void writeScriptBlobInt(int questId, String key, int value) {
+        QuestStatus qr = getQuestNAdd(Quest.getInstance(questId));
+        java.util.Map<String, String> blob = parseScriptBlob(qr.getProgress(SCRIPT_BLOB_PROGRESS_ID));
+        blob.put(key, String.valueOf(value));
+        qr.setProgress(SCRIPT_BLOB_PROGRESS_ID, serializeScriptBlob(blob));
+        if (qr.getStatus() == QuestStatus.Status.NOT_STARTED) {
+            qr.setStatus(QuestStatus.Status.STARTED);
+        }
+        updateQuestStatus(qr);
+    }
+
+    private static java.util.Map<String, String> parseScriptBlob(String raw) {
+        java.util.Map<String, String> map = new java.util.LinkedHashMap<>();
+        if (raw == null || raw.isEmpty() || "000".equals(raw)) {
+            return map;
+        }
+        for (String part : raw.split(";")) {
+            if (part.isEmpty()) {
+                continue;
+            }
+            int eq = part.indexOf('=');
+            if (eq <= 0) {
+                continue;
+            }
+            map.put(part.substring(0, eq), part.substring(eq + 1));
+        }
+        return map;
+    }
+
+    private static String serializeScriptBlob(java.util.Map<String, String> map) {
+        if (map == null || map.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (java.util.Map.Entry<String, String> e : map.entrySet()) {
+            if (sb.length() > 0) {
+                sb.append(';');
+            }
+            sb.append(e.getKey()).append('=').append(e.getValue());
+        }
+        return sb.toString();
+    }
+
     public void receivePartyMemberHP() {
         prtLock.lock();
         try {
@@ -8226,7 +8504,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(9, hair);
                     ps.setInt(10, face);
                     ps.setInt(11, mapId);
-                    ps.setInt(12, Math.abs(meso.get()));
+                    ps.setLong(12, Math.abs(meso.get()));
                     ps.setInt(13, 0);
                     ps.setInt(14, accountId);
                     ps.setString(15, name);
@@ -8422,7 +8700,7 @@ public class Character extends AbstractCharacterObject {
                             ps.setInt(21, getHp() < 1 ? map.getReturnMapId() : map.getId());
                         }
                     }
-                    ps.setInt(22, meso.get());
+                    ps.setLong(22, meso.get());
                     ps.setInt(23, hpMpApUsed);
                     if (map == null || map.getId() == MapId.CRIMSONWOOD_VALLEY_1 || map.getId() == MapId.CRIMSONWOOD_VALLEY_2) {  // reset to first spawnpoint on those maps
                         ps.setInt(24, 0);
@@ -8880,11 +9158,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void addMerchantMesos(int add) {
-        final int newAmount = (int) Math.min((long) merchantmeso + add, Integer.MAX_VALUE);
+        addMerchantMesos((long) add);
+    }
+
+    public void addMerchantMesos(long add) {
+        final long newAmount = Math.min(merchantmeso + add, Long.MAX_VALUE);
         setMerchantMeso(newAmount);
     }
 
-    public void setMerchantMeso(int set) {
+    public void setMerchantMeso(long set) {
         characterService.update(CharactersDO.builder()
                 .id(id)
                 .merchantmesos(set)
@@ -8893,11 +9175,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void withdrawMerchantMesos() {
-        int merchantMeso = this.getMerchantNetMeso();
-        int playerMeso = this.getMeso();
+        long merchantMeso = this.getMerchantNetMeso();
+        long playerMeso = this.getMeso();
 
         if (merchantMeso > 0) {
-            int possible = Integer.MAX_VALUE - playerMeso;
+            long possible = Long.MAX_VALUE - playerMeso;
 
             if (possible > 0) {
                 if (possible < merchantMeso) {
@@ -8909,7 +9191,7 @@ public class Character extends AbstractCharacterObject {
                 }
             }
         } else {
-            int nextMeso = playerMeso + merchantMeso;
+            long nextMeso = playerMeso + merchantMeso;
 
             if (nextMeso < 0) {
                 this.gainMeso(-playerMeso, false);

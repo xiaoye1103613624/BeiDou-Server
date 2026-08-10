@@ -457,9 +457,13 @@ public class PotentialCommand extends Command {
     }
 
     private static Equip getEquip(Character chr, short slot) {
-        Item it = slot < 0
-                ? chr.getInventory(InventoryType.EQUIPPED).getItem(slot)
-                : chr.getInventory(InventoryType.EQUIP).getItem(slot);
+        if (slot < 0) {
+            slot = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                    chr.getInventory(InventoryType.EQUIPPED), slot);
+            Item it = chr.getInventory(InventoryType.EQUIPPED).getItem(slot);
+            return it instanceof Equip e ? e : null;
+        }
+        Item it = chr.getInventory(InventoryType.EQUIP).getItem(slot);
         return it instanceof Equip e ? e : null;
     }
 

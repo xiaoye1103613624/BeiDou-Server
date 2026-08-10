@@ -1866,10 +1866,16 @@ public class MapleMap {
 
     public void spawnMonsterOnGroundBelow(int id, int x, int y) {
         Monster mob = LifeFactory.getMonster(id);
+        if (mob == null) {
+            return;
+        }
         spawnMonsterOnGroundBelow(mob, new Point(x, y));
     }
 
     public void spawnMonsterOnGroundBelow(Monster mob, Point pos) {
+        if (mob == null) {
+            return;
+        }
         Point spos = new Point(pos.x, pos.y - 1);
         spos = calcPointBelow(spos);
         spos.y--;
@@ -2644,6 +2650,41 @@ public class MapleMap {
         }
         if (chr.getActiveDamageSkin() != 0) {
             broadcastMessage(chr, PacketCreator.damageSkinBroadcast(chr.getId(), chr.getActiveDamageSkin()), false);
+        }
+
+        // 七彩棱镜：进图双向同步染色
+        broadcastColoringPrism(chr);
+        broadcastColoringPrismToNewer(chr);
+    }
+
+    /**
+     * 将进入者的染色广播给同图其他人。
+     */
+    public void broadcastColoringPrism(Character entering) {
+        List<org.gms.server.coloring.ColoringPrismDye> dyes =
+                org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(entering.getId());
+        if (dyes.isEmpty()) {
+            return;
+        }
+        broadcastMessage(entering,
+                org.gms.server.coloring.ColoringPrismPackets.dyeMerge(entering.getId(), dyes), false);
+    }
+
+    /**
+     * 将同图其他人的染色发给刚进图的玩家。
+     */
+    public void broadcastColoringPrismToNewer(Character entering) {
+        for (Character other : getAllPlayers()) {
+            if (other == entering) {
+                continue;
+            }
+            List<org.gms.server.coloring.ColoringPrismDye> dyes =
+                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(other.getId());
+            if (dyes.isEmpty()) {
+                continue;
+            }
+            entering.sendPacket(
+                    org.gms.server.coloring.ColoringPrismPackets.dyeMerge(other.getId(), dyes));
         }
     }
 

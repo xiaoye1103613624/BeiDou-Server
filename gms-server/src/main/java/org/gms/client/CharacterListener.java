@@ -47,6 +47,8 @@ public class CharacterListener implements AbstractCharacterListener {
         for (Map.Entry<Stat, Integer> s : character.statUpdates.entrySet()) {
             statup.add(new Pair<>(s.getKey(), s.getValue().longValue()));
         }
+        // ADDON_SERVER_STATS_20260802: AP/池更新也带上 Occ-OFF 盲区四维，避免加点后扩展属性被冲掉。
+        character.overlayClientDisplayBaseFourStats(statup);
 
         character.sendPacket(PacketCreator.updatePlayerStats(statup, true, character));
     }

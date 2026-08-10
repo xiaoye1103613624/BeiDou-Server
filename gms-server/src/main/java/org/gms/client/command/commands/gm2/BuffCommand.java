@@ -46,7 +46,9 @@ public class BuffCommand extends Command {
 
         Skill skill = SkillFactory.getSkill(skillid);
         if (skill != null) {
+            // primary=true → also broadcast showBuffEffect (cast V FX from client Skill.img)
             skill.getEffect(skill.getMaxLevel()).applyTo(player);
+            player.dropMessage(5, "已施加技能增益 " + skillid + "（含 showBuffEffect；若无特效请确认客户端 Skill.img 有 effect 且已重启）");
         }
     }
 }

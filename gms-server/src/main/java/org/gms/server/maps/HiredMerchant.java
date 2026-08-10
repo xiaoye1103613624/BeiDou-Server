@@ -327,14 +327,14 @@ public class HiredMerchant extends AbstractMapObject {
                                 ps.setInt(1, ownerId);
                                 try (ResultSet rs = ps.executeQuery()) {
                                     if (rs.next()) {
-                                        merchantMesos = rs.getInt(1);
+                                        merchantMesos = rs.getLong(1);
                                     }
                                 }
                             }
                             merchantMesos += price;
 
                             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
-                                ps.setInt(1, (int) Math.min(merchantMesos, Integer.MAX_VALUE));
+                                ps.setLong(1, Math.min(merchantMesos, Long.MAX_VALUE));
                                 ps.setInt(2, ownerId);
                                 ps.executeUpdate();
                             }

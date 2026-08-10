@@ -305,7 +305,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return completeQuest(id, npc);
     }
 
-    public int getMeso() {
+    public long getMeso() {
         return getPlayer().getMeso();
     }
 
@@ -313,8 +313,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getPlayer().gainMeso(gain);
     }
 
+    public void gainMeso(long gain) {
+        getPlayer().gainMeso(gain);
+    }
+
     public void gainMeso(Double gain) {
-        getPlayer().gainMeso(gain.intValue());
+        getPlayer().gainMeso(gain.longValue());
     }
 
     public void gainExp(int gain) {
@@ -1496,5 +1500,87 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public int ultimateLearnRate(int talentId) {
         int cur = getTalentLevel(talentId);
         return org.gms.talent.TalentConfig.ultimateSuccessRate(cur);
+    }
+
+    /**
+     * 高级BOSS召唤：在指定地图坐标生成自定义HP/EXP的Boss怪物。
+     *
+     * @param bossId  怪物ID
+     * @param hp      自定义HP（覆盖WZ默认值）
+     * @param exp     自定义EXP（覆盖WZ默认值）
+     * @param count   生成数量
+     * @param mapId   目标地图ID
+     * @param x       生成X坐标
+     * @param y       生成Y坐标
+     */
+    public void 召唤怪物(int bossId, long hp, int exp, int count, int mapId, int x, int y) {
+        var map = getPlayer().getMap(mapId, false);
+        if (map == null) {
+            map = getPlayer().getClient().getChannelServer().getMapFactory().getMap(mapId);
+        }
+        if (map == null) {
+            log.warn("召唤怪物失败：地图 {} 不存在", mapId);
+            return;
+        }
+        if (hp <= 0) hp = 1;
+        if (count <= 0) count = 1;
+
+        for (int i = 0; i < count; i++) {
+            var mob = org.gms.server.life.LifeFactory.getMonster(bossId);
+            if (mob == null) {
+                log.warn("召唤怪物失败：怪物ID {} 不存在", bossId);
+                return;
+            }
+            // 覆盖HP/EXP
+            mob.setOverrideStats(new org.gms.server.life.OverrideMonsterStats(hp, 0, exp));
+
+            var pt = new java.awt.Point(x + (i * 80), y);
+            map.spawnMonsterOnGroundBelow(mob, pt);
+        }
+    }
+
+    /**
+     * 刷新当前地图怪物（清除后重新生成）。
+     */
+    public void 刷新地图() {
+        var map = getPlayer().getMap();
+        if (map != null) {
+            map.killAllMonsters();
+            map.respawn();
+        }
+    }
+
+    public int getBossLog(String bossType) {
+        return getPlayer().getBossLog(bossType);
+    }
+
+    public void setBossLog(String bossType) {
+        getPlayer().setBossLog(bossType);
+    }
+
+    public void setBossLog(String bossType, int count) {
+        getPlayer().setBossLog(bossType, count);
+    }
+
+    /**
+     * 全服喇叭广播。
+     * @param type  5=红字 6=蓝字 2=黄字
+     * @param msg   消息内容
+     */
+    public void 喇叭(int type, String msg) {
+        var packet = org.gms.util.PacketCreator.serverNotice(type, msg);
+        try {
+            org.gms.net.server.Server.getInstance().broadcastMessage(getPlayer().getWorld(), packet);
+        } catch (Exception e) {
+            log.warn("喇叭广播失败", e);
+        }
+    }
+
+    public int getmoneyb() {
+        return getPlayer().getmoneyb();
+    }
+
+    public void setmoneyb(int delta) {
+        getPlayer().setmoneyb(delta);
     }
 }

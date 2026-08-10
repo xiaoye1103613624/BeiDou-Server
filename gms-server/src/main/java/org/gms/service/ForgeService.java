@@ -3,6 +3,7 @@ package org.gms.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.gms.config.AlchemyTierManager;
 import org.gms.dao.entity.ForgeDO;
 import org.gms.dao.mapper.ForgeMapper;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,8 @@ import java.util.Date;
  * 锻造师副职业服务。等级/经验按角色隔离，经验只增不减，升级不会重置为0，
  * 经验池与炼药师({@link AlchemistService})、炼金师({@link AlchemyService})完全独立。
  * <p>
- * 品级曲线默认与炼药师/炼金师相同（入门/普通/职业/大师/宗师，宗师无上限），如需独立调整
- * 直接修改 {@link #TIERS} 即可，不影响其他副职业数据。
+ * 品级曲线由共享品级表（{@link AlchemyTierManager}，type=锻造）提供，默认与炼药/炼金一致
+ * （入门/普通/职业/大师/宗师，宗师无上限），后台可独立调整。
  * </p>
  */
 @Slf4j
@@ -23,34 +24,16 @@ import java.util.Date;
 @AllArgsConstructor
 public class ForgeService {
 
-    /** 锻造师等级定义：名称、该等级起始累计经验、该等级所需经验跨度 */
-    public record Tier(String name, long expStart, long expSize) {
-        public boolean isMax() {
-            return expSize == Long.MAX_VALUE;
-        }
-    }
-
-    public static final Tier[] TIERS = new Tier[]{
-            new Tier("入门", 0L, 800L),
-            new Tier("普通", 800L, 1600L),
-            new Tier("职业", 2400L, 64000L),
-            new Tier("大师", 66400L, 128000L),
-            new Tier("宗师", 194400L, Long.MAX_VALUE),
-    };
+    /** 锻造师副职业类型常量 */
+    public static final int TIER_TYPE = AlchemyTierManager.TYPE_FORGE;
 
     private final ForgeMapper forgeMapper;
 
     /**
-     * 根据累计经验计算当前所处等级下标。
+     * 根据累计经验计算当前所处等级下标（品级配置来自数据库缓存）。
      */
     public int getTierIndex(long exp) {
-        int index = 0;
-        for (int i = 0; i < TIERS.length; i++) {
-            if (exp >= TIERS[i].expStart()) {
-                index = i;
-            }
-        }
-        return index;
+        return AlchemyTierManager.getTierIndex(TIER_TYPE, exp);
     }
 
     /**

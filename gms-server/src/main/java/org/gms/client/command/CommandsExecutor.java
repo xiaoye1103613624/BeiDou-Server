@@ -106,15 +106,19 @@ public class CommandsExecutor {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message4"));
             return;
         }
-        final String splitRegex = "[ ]";
-        String[] splitedMessage = message.substring(1).split(splitRegex, 2);
+        // 用 \\s+ 折叠连续空格，避免 "!item 5000765  90" 拆出空参数导致 NumberFormatException
+        final String splitRegex = "\\s+";
+        String raw = message.substring(1).trim();
+        String[] splitedMessage = raw.split(splitRegex, 2);
         if (splitedMessage.length < 2) {
             splitedMessage = new String[]{splitedMessage[0], ""};
         }
 
         client.getPlayer().setLastCommandMessage(splitedMessage[1]);    // thanks Tochi & Nulliphite for noticing string messages being marshalled lowercase
         final String commandName = splitedMessage[0].toLowerCase();
-        final String[] lowercaseParams = splitedMessage[1].toLowerCase().split(splitRegex);
+        final String[] lowercaseParams = splitedMessage[1].isBlank()
+                ? new String[]{}
+                : splitedMessage[1].toLowerCase().trim().split(splitRegex);
 
         final Command command = registeredCommands.get(commandName);
         if (command == null) {
@@ -127,7 +131,9 @@ public class CommandsExecutor {
         }
         String[] params;
         if (lowercaseParams.length > 0 && !lowercaseParams[0].isEmpty()) {
-            params = Arrays.copyOfRange(lowercaseParams, 0, lowercaseParams.length);
+            params = Arrays.stream(lowercaseParams)
+                    .filter(p -> p != null && !p.isBlank())
+                    .toArray(String[]::new);
         } else {
             params = new String[]{};
         }
@@ -210,6 +216,7 @@ public class CommandsExecutor {
         addCommand("enableauth", EnableAuthCommand.class);
         addCommand("toggleexp", ToggleExpCommand.class);
         addCommand("mylawn", MapOwnerClaimCommand.class);
+        addCommand(new String[]{"beauty", "美容院", "美容美发"}, BeautyCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -260,6 +267,7 @@ public class CommandsExecutor {
         addCommand("maxstat", 2, MaxStatCommand.class);
         addCommand("maxskill", 2, MaxSkillCommand.class);
         addCommand("resetskill", 2, ResetSkillCommand.class);
+        addCommand("skill", 2, SkillCommand.class);
         addCommand("search", 2, SearchCommand.class);
         addCommand("jail", 2, JailCommand.class);
         addCommand("unjail", 2, UnJailCommand.class);

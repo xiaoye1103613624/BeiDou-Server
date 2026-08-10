@@ -211,6 +211,8 @@ public class SoulCommand extends Command {
     private static Equip getEquip(Character chr, short slot) {
         Item it;
         if (slot < 0) {
+            slot = org.gms.constants.inventory.ExtendedEquipRegistry.resolveEquippedSlotAlias(
+                    chr.getInventory(InventoryType.EQUIPPED), slot);
             it = chr.getInventory(InventoryType.EQUIPPED).getItem(slot);
         } else {
             it = chr.getInventory(InventoryType.EQUIP).getItem(slot);

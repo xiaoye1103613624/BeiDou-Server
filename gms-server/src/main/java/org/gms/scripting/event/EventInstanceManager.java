@@ -620,7 +620,9 @@ public class EventInstanceManager {
                     expedition.monsterKilled(chr, mob);
                 }
             }
-        } catch (ScriptException | NoSuchMethodException ex) {
+        } catch (NoSuchMethodException ex) {
+            // Optional script hook — many events omit monsterValue.
+        } catch (ScriptException ex) {
             ex.printStackTrace();
         }
     }

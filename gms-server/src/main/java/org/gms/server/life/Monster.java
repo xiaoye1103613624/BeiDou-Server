@@ -1051,7 +1051,8 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public Packet makeBossHPBarPacket() {
-        return PacketCreator.customShowBossHP((byte) 5, getId(), getHp(), getMaxHp(), getTagColor(), getTagBgColor());
+        // Prefer override/changeable max (getMobMaxHp) so OverrideMonsterStats > INT_MAX reaches writeLong.
+        return PacketCreator.customShowBossHP((byte) 5, getId(), getHp(), getMobMaxHp(), getTagColor(), getTagBgColor());
     }
 
     public boolean hasBossHPBar() {

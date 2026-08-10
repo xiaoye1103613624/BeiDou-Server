@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class LifeFactory {
@@ -397,7 +398,15 @@ public class LifeFactory {
             attackInfos.addAll(linkStats.getRight());
         }
 
-        stats.setHp(DataTool.getLong("maxHP", monsterInfoData, 1));
+        // 高版本部分 Boss 的 maxHP 为占位串（??????），改读 finalmaxHP
+        long maxHp = DataTool.getLong("maxHP", monsterInfoData, -1L);
+        if (maxHp < 0) {
+            maxHp = DataTool.getLong("finalmaxHP", monsterInfoData, 1L);
+        }
+        if (maxHp < 1) {
+            maxHp = 1L;
+        }
+        stats.setHp(maxHp);
         stats.setFriendly(DataTool.getIntConvert("damagedByMob", monsterInfoData, stats.isFriendly() ? 1 : 0) == 1);
         stats.setPADamage(DataTool.getIntConvert("PADamage", monsterInfoData));
         stats.setPDDamage(DataTool.getIntConvert("PDDamage", monsterInfoData));
@@ -478,7 +487,14 @@ public class LifeFactory {
             while (monsterSkillInfoData.getChildByPath(Integer.toString(i)) != null) {
                 int skillId = DataTool.getInt(i + "/skill", monsterSkillInfoData, 0);
                 int skillLv = DataTool.getInt(i + "/level", monsterSkillInfoData, 0);
-                MobSkillType type = MobSkillType.from(skillId).orElseThrow();
+                Optional<MobSkillType> typeOpt = MobSkillType.from(skillId);
+                if (typeOpt.isEmpty()) {
+                    // 高版本 MobSkill 未接入枚举时跳过，避免召唤直接崩溃
+                    log.warn("Skip unknown mob skill id={} level={} for mob {}", skillId, skillLv, mid);
+                    i++;
+                    continue;
+                }
+                MobSkillType type = typeOpt.get();
                 skills.add(new MobSkillId(type, skillLv));
 
                 Data monsterSkillData = monsterData.getChildByPath("skill" + (i + 1));
@@ -488,8 +504,9 @@ public class LifeFactory {
                         animationTime += DataTool.getIntConvert("delay", effectEntry, 0);
                     }
 
-                    MobSkill skill = MobSkillFactory.getMobSkillOrThrow(type, skillLv);
-                    mi.setMobSkillAnimationTime(skill, animationTime);
+                    final int skillAnimationTime = animationTime;
+                    MobSkillFactory.getMobSkill(type, skillLv).ifPresent(skill ->
+                            mi.setMobSkillAnimationTime(skill, skillAnimationTime));
                 }
 
                 i++;
@@ -570,14 +587,18 @@ public class LifeFactory {
             MonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 Pair<MonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
+                if (mobStats == null || mobStats.getLeft() == null) {
+                    log.error("[SEVERE] MOB {} has no stats data.", mid);
+                    return null;
+                }
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
 
                 monsterStats.put(mid, stats);
             }
             return new Monster(mid, stats);
-        } catch (NullPointerException npe) {
-            log.error("[SEVERE] MOB {} failed to load.", mid, npe);
+        } catch (Exception e) {
+            log.error("[SEVERE] MOB {} failed to load.", mid, e);
             return null;
         }
     }

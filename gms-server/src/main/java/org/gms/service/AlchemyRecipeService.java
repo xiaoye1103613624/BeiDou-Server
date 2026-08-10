@@ -7,6 +7,7 @@ import org.gms.config.AlchemyRecipeManager;
 import org.gms.dao.entity.AlchemyRecipeDO;
 import org.gms.dao.mapper.AlchemyRecipeMapper;
 import org.gms.model.dto.AlchemyRecipeDTO;
+import org.gms.server.ItemInformationProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,11 +145,20 @@ public class AlchemyRecipeService {
         AlchemyRecipeManager.reload();
     }
 
+    private String getItemName(Integer itemId) {
+        try {
+            return itemId == null ? null : ItemInformationProvider.getInstance().getName(itemId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private AlchemyRecipeDTO toDTO(AlchemyRecipeDO d) {
         return AlchemyRecipeDTO.builder()
                 .id(d.getId())
                 .tierRequired(d.getTierRequired())
                 .resultItemId(d.getResultItemId())
+                .resultItemName(getItemName(d.getResultItemId()))
                 .resultCount(d.getResultCount())
                 .expGain(d.getExpGain())
                 .staminaCost(d.getStaminaCost())

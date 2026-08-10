@@ -281,6 +281,10 @@ public class WeddingPackets extends PacketCreator {
      */
     public static Packet OnMarriageResult(int marriageId, Character chr, boolean wedding) {
         OutPacket p = OutPacket.create(SendOpcode.MARRIAGE_RESULT);
+        // GMS case 11 = AddTail marriage record + StringPool#4253 tip.
+        // Chinese pool 4253 was「此请帖无效」(invitation invalid) — Cosmic reused 11 for
+        // engagement success, so tip looked like「数据无效」. Keep 11 for record semantics
+        // (spouse chat without @relog); tip text fixed in ijl15 ReplacementFuncs #4253.
         p.writeByte(11);
         p.writeInt(marriageId);
         p.writeInt(chr.getGender() == 0 ? chr.getId() : chr.getPartnerId());

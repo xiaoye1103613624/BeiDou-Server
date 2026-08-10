@@ -36,6 +36,12 @@ public final class SoulOrbConfig {
     public static final int FULL_SOUL_PAD_R = 10;
     public static final int FULL_SOUL_MAD_R = 10;
 
+    /**
+     * 镶珠武器身上环绕特效（客户端 {@code Effect/ItemEff.img/2591999}，复用 SoulStandard/On）。
+     * 非背包道具，仅服务端 {@code Character.itemEffect} 引用。
+     */
+    public static final int ITEM_EFFECT_ID = 2591999;
+
     public enum SkillKind {
         NONE,
         /** 最终伤害 +N%（武公：100 → ×2） */

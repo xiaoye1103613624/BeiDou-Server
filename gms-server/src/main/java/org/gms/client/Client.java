@@ -710,14 +710,21 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);  //loginok == 4，但是会导致限制多开参数 deterred_multi_client == true 时密码错误一次返回REMOTE_REACHED_LIMIT，需要重开客户端
+            // loginok==4 (wrong password): still run attempt checks for flood control,
+            // but never let multi-client results override the "incorrect password" reply.
+            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
+
+            if (loginok == 4) {
+                if (res == AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS) {
+                    return 16;
+                }
+                return 4;
+            }
 
             return switch (res) {
                 case SUCCESS -> {
-                    if (loginok == 0) {
-                        loginattempt = 0;
-                    }
-                    yield loginok;
+                    loginattempt = 0;
+                    yield 0;
                 }
                 case REMOTE_LOGGEDIN -> 17;
                 case REMOTE_REACHED_LIMIT -> 13;

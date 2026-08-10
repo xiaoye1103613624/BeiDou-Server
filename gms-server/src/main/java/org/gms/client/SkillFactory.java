@@ -112,6 +112,27 @@ public class SkillFactory {
         }
 
         skills = loadedSkills;
+        // 技改配置：扩展等级节点 / 覆盖 spMaxLevel（Spring 就绪后）
+        try {
+            org.gms.skilltech.SkillTechManager.applyAll();
+        } catch (Throwable t) {
+            // 启动早期或无配置时忽略
+        }
+    }
+
+    /** 热重载全部技能（WZ + 技改）。 */
+    public static synchronized void reloadAllSkills() {
+        loadAllSkills();
+    }
+
+    /** 用可变 map 替换内部缓存（技改热更新单技能时用）。 */
+    public static void putSkill(Skill skill) {
+        if (skill == null) {
+            return;
+        }
+        Map<Integer, Skill> next = new HashMap<>(skills);
+        next.put(skill.getId(), skill);
+        skills = next;
     }
 
     private static Skill loadFromData(int id, Data data) {
@@ -374,6 +395,11 @@ public class SkillFactory {
 
         for (Data level : data.getChildByPath("level")) {
             ret.addLevelEffect(StatEffect.loadSkillEffectFromData(level, id, isBuff));
+        }
+        // 可选 WZ 字段：手动加点上限（技改后效果等级可高于此值）
+        int spMax = DataTool.getInt("spMaxLevel", data, -1);
+        if (spMax > 0) {
+            ret.setSpMaxLevel(spMax);
         }
         ret.setAnimationTime(0);
         if (effect != null) {

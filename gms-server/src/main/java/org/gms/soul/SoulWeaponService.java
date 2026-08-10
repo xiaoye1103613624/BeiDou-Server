@@ -153,6 +153,7 @@ public final class SoulWeaponService {
         equip.setEquipSkillLevel(1);
         log.info("soul orb applied char={} equip={} orb={} replaced={}",
                 chr.getId(), equip.getItemId(), orbId, old);
+        syncItemEffect(chr);
         return PotentialHyperService.Result.SUCCESS;
     }
 
@@ -174,6 +175,7 @@ public final class SoulWeaponService {
         equip.setEquipSkillLevel(0);
         if (chr != null) {
             clearBuff(chr.getId());
+            syncItemEffect(chr);
             log.info("soul cleared char={} equip={} was={}:{}", chr.getId(), equip.getItemId(), oldId, oldOpt);
         }
         return PotentialHyperService.Result.SUCCESS;
@@ -242,6 +244,35 @@ public final class SoulWeaponService {
             }
         }
         return null;
+    }
+
+    /**
+     * 穿戴已镶珠武器时挂上 ItemEff（2591999）；卸下/清珠时仅清除本特效，不覆盖玩家点选的 cash 特效。
+     */
+    public static void syncItemEffect(Character chr) {
+        if (chr == null) {
+            return;
+        }
+        boolean wantSoul = findEquippedSoulWeapon(chr) != null;
+        int cur = chr.getItemEffect();
+        int target;
+        if (wantSoul) {
+            if (cur != 0 && cur != SoulOrbConfig.ITEM_EFFECT_ID) {
+                return; // 已有其它 itemEffect（如商城特效），不抢
+            }
+            target = SoulOrbConfig.ITEM_EFFECT_ID;
+        } else if (cur == SoulOrbConfig.ITEM_EFFECT_ID) {
+            target = 0;
+        } else {
+            return;
+        }
+        if (cur == target) {
+            return;
+        }
+        chr.setItemEffect(target);
+        if (chr.getMap() != null) {
+            chr.getMap().broadcastMessage(chr, PacketCreator.itemEffect(chr.getId(), target), false);
+        }
     }
 
     public static void useSoulSkill(Character chr) {

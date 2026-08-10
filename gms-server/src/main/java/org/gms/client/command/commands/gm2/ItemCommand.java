@@ -49,17 +49,31 @@ public class ItemCommand extends Command {
             return;
         }
 
-        int itemId = Integer.parseInt(params[0]);
+        int itemId;
+        try {
+            itemId = Integer.parseInt(params[0].trim());
+        } catch (NumberFormatException e) {
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
+            return;
+        }
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-        if (ii.getName(itemId) == null || !ii.itemExists(itemId)) {
+        // 「不存在」以 Character/Item WZ 为准；String 缺名不应阻断 GM 发放（Android 等高版本常见）
+        if (!ii.itemExists(itemId)) {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
 
         short quantity = 1;
+        Integer second = null;
         if (params.length >= 2) {
-            quantity = Short.parseShort(params[1]);
+            try {
+                second = Integer.parseInt(params[1].trim());
+            } catch (NumberFormatException e) {
+                player.yellowMessage(I18nUtil.getMessage("ItemCommand.message2"));
+                return;
+            }
+            quantity = second.shortValue();
         }
 
         if (GameConfig.getServerBoolean("block_generate_cash_item") && ii.isCash(itemId)) {
@@ -84,9 +98,9 @@ public class ItemCommand extends Command {
         }
 
         if (ItemConstants.isPet(itemId)) {
-            if (params.length >= 2) {   // thanks to istreety & TacoBell
+            if (second != null) {   // thanks to istreety & TacoBell；第二参数=天数
                 quantity = 1;
-                long days = Math.max(1, Integer.parseInt(params[1]));
+                long days = Math.max(1, second);
                 long expiration = System.currentTimeMillis() + DAYS.toMillis(days);
                 int petid = Pet.createPet(itemId);
 

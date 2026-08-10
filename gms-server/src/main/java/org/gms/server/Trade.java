@@ -76,8 +76,8 @@ public class Trade {
     private Trade partner = null;
     private final List<Item> items = new ArrayList<>();
     private List<Item> exchangeItems;
-    private int meso = 0;
-    private int exchangeMeso;
+    private long meso = 0;
+    private long exchangeMeso;
     private final AtomicBoolean locked = new AtomicBoolean(false);
     private final Character chr;
     private final byte number;
@@ -143,9 +143,9 @@ public class Trade {
 
             chr.gainMeso(exchangeMeso - fee, show, true, show);
             if (fee > 0) {
-                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee",fee,GameConstants.numberWithCommas(exchangeMeso - fee)));
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee", fee, GameConstants.numberWithCommas((int) (exchangeMeso - fee))));
             } else {
-                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee",GameConstants.numberWithCommas(exchangeMeso)));
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee", GameConstants.numberWithCommas((int) exchangeMeso)));
             }
 
             result = TradeResult.NO_RESPONSE.getValue();
@@ -199,11 +199,11 @@ public class Trade {
         return locked.get();
     }
 
-    private int getMeso() {
+    private long getMeso() {
         return meso;
     }
 
-    public void setMeso(int meso) {
+    public void setMeso(long meso) {
         if (locked.get()) {
             throw new RuntimeException(I18nUtil.getLogMessage("Trade.info.setMeso.msg1"));
         }
@@ -266,7 +266,7 @@ public class Trade {
         return new LinkedList<>(items);
     }
 
-    public int getExchangeMesos() {
+    public long getExchangeMesos() {
         return exchangeMeso;
     }
 
@@ -389,7 +389,7 @@ public class Trade {
                     partner.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
                 } else {
-                    local.getChr().addMesosTraded(local.exchangeMeso);
+                    local.getChr().addMesosTraded((int) local.exchangeMeso);
                 }
             } else if (level != -1 && partner.getChr().getLevel() <= level) {
                 if (mesomax != -1 && partner.getChr().getMesosTraded() + partner.exchangeMeso > mesomax) {
@@ -398,7 +398,7 @@ public class Trade {
                     local.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
                 } else {
-                    partner.getChr().addMesosTraded(partner.exchangeMeso);
+                    partner.getChr().addMesosTraded((int) partner.exchangeMeso);
                 }
             }
 

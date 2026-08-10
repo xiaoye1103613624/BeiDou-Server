@@ -35,4 +35,6 @@ public class Hero {
     public static final int ENRAGE = 1121010;
     public static final int HEROS_WILL = 1121011;
     public static final int BRANDISH = 1121008;
+    /** V-skill FX pilot (灵气武器), buff cast — double-click / hotkey. */
+    public static final int AURA_WEAPON_PILOT = 1121015;
 }

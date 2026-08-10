@@ -26,6 +26,7 @@ public class ForgeRecipeService {
 
     private final ForgeRecipeMapper recipeMapper;
     private final ForgeService forgeService;
+    private final StaminaService staminaService;
 
     /**
      * 查询所有已启用配方，按品级、排序号升序。
@@ -46,14 +47,15 @@ public class ForgeRecipeService {
     }
 
     /**
-     * 打造：校验配方启用、锻造师品级是否达到要求、增加锻造师经验。
+     * 打造：校验配方启用、锻造师品级是否达到要求、扣除体力、增加锻造师经验。
      * 金币/材料的校验与扣除、产出装备的发放均由脚本在调用本方法前后自行处理。
      *
      * @return 打造后的累计经验
      * @throws IllegalArgumentException 配方不存在/已禁用、品级不足
+     * @throws IllegalStateException    体力不足
      */
     @Transactional
-    public long craft(Integer characterId, Long recipeId) {
+    public long craft(Integer characterId, Integer accountId, Long recipeId) {
         ForgeRecipeDO recipe = getRecipe(recipeId);
         if (recipe == null || recipe.getEnabled() == null || recipe.getEnabled() != 1) {
             throw new IllegalArgumentException("配方不存在或已禁用");
@@ -62,6 +64,9 @@ public class ForgeRecipeService {
         int currentTierIndex = forgeService.getTierIndex(forge.getExp());
         if (currentTierIndex < recipe.getTierRequired()) {
             throw new IllegalArgumentException("锻造师等级不足，无法打造该配方");
+        }
+        if (recipe.getStaminaCost() != null && recipe.getStaminaCost() > 0) {
+            staminaService.consumeStamina(accountId, recipe.getStaminaCost());
         }
         long newExp = forgeService.addExp(characterId, recipe.getExpGain());
         log.info("角色 {} 打造配方 {} 成功，获得经验 {}", characterId, recipeId, recipe.getExpGain());
@@ -95,12 +100,23 @@ public class ForgeRecipeService {
                 .resultItemId(dto.getResultItemId())
                 .expGain(dto.getExpGain())
                 .mesoCost(dto.getMesoCost())
+                .staminaCost(dto.getStaminaCost())
                 .material1ItemId(dto.getMaterial1ItemId())
                 .material1Count(dto.getMaterial1Count())
                 .material2ItemId(dto.getMaterial2ItemId())
                 .material2Count(dto.getMaterial2Count())
                 .material3ItemId(dto.getMaterial3ItemId())
                 .material3Count(dto.getMaterial3Count())
+                .material4ItemId(dto.getMaterial4ItemId())
+                .material4Count(dto.getMaterial4Count())
+                .material5ItemId(dto.getMaterial5ItemId())
+                .material5Count(dto.getMaterial5Count())
+                .material6ItemId(dto.getMaterial6ItemId())
+                .material6Count(dto.getMaterial6Count())
+                .material7ItemId(dto.getMaterial7ItemId())
+                .material7Count(dto.getMaterial7Count())
+                .material8ItemId(dto.getMaterial8ItemId())
+                .material8Count(dto.getMaterial8Count())
                 .strMin(dto.getStrMin())
                 .strMax(dto.getStrMax())
                 .dexMin(dto.getDexMin())
@@ -113,6 +129,14 @@ public class ForgeRecipeService {
                 .watkMax(dto.getWatkMax())
                 .matkMin(dto.getMatkMin())
                 .matkMax(dto.getMatkMax())
+                .pddMin(dto.getPddMin())
+                .pddMax(dto.getPddMax())
+                .mddMin(dto.getMddMin())
+                .mddMax(dto.getMddMax())
+                .hpMin(dto.getHpMin())
+                .hpMax(dto.getHpMax())
+                .mpMin(dto.getMpMin())
+                .mpMax(dto.getMpMax())
                 .sortOrder(dto.getSortOrder())
                 .enabled(dto.getEnabled() != null ? dto.getEnabled() : 1)
                 .build();
@@ -159,12 +183,23 @@ public class ForgeRecipeService {
                 .resultItemId(d.getResultItemId())
                 .expGain(d.getExpGain())
                 .mesoCost(d.getMesoCost())
+                .staminaCost(d.getStaminaCost())
                 .material1ItemId(d.getMaterial1ItemId())
                 .material1Count(d.getMaterial1Count())
                 .material2ItemId(d.getMaterial2ItemId())
                 .material2Count(d.getMaterial2Count())
                 .material3ItemId(d.getMaterial3ItemId())
                 .material3Count(d.getMaterial3Count())
+                .material4ItemId(d.getMaterial4ItemId())
+                .material4Count(d.getMaterial4Count())
+                .material5ItemId(d.getMaterial5ItemId())
+                .material5Count(d.getMaterial5Count())
+                .material6ItemId(d.getMaterial6ItemId())
+                .material6Count(d.getMaterial6Count())
+                .material7ItemId(d.getMaterial7ItemId())
+                .material7Count(d.getMaterial7Count())
+                .material8ItemId(d.getMaterial8ItemId())
+                .material8Count(d.getMaterial8Count())
                 .strMin(d.getStrMin())
                 .strMax(d.getStrMax())
                 .dexMin(d.getDexMin())
@@ -177,6 +212,14 @@ public class ForgeRecipeService {
                 .watkMax(d.getWatkMax())
                 .matkMin(d.getMatkMin())
                 .matkMax(d.getMatkMax())
+                .pddMin(d.getPddMin())
+                .pddMax(d.getPddMax())
+                .mddMin(d.getMddMin())
+                .mddMax(d.getMddMax())
+                .hpMin(d.getHpMin())
+                .hpMax(d.getHpMax())
+                .mpMin(d.getMpMin())
+                .mpMax(d.getMpMax())
                 .sortOrder(d.getSortOrder())
                 .enabled(d.getEnabled())
                 .build();
