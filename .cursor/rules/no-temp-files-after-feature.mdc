@@ -1,0 +1,27 @@
+﻿---
+description: After finishing a server feature, delete temp/log/AI process files; do not leave them in the repo
+alwaysApply: true
+---
+
+# No leftover temp files after features
+
+## Mandate
+
+When a server/WZ-tool/feature batch finishes, **delete** temporary and process artifacts. Do not keep `_tmp*`, probe JSON, compile logs, or `_batch_commit_*.py` after use.
+
+## Delete (examples)
+
+- `_tmp*`, `_boot_test/`, `_cmp*`, `_batch_commit_server.py` (after commits)
+- `*.log`, `*.err`, `tmp_*.txt`, `logs_server_*.log`
+- Tool build trees: `tools/**/bin`, `obj`, `out`, `__pycache__`, `*.bak_work`, one-off `ProbeSkill.csx` / `Verify.csx`
+- Downloaded binaries not meant for git (e.g. `tools/handle64.exe`)
+
+## Keep
+
+- Real Java/TS sources, Flyway, scripts under `scripts/`
+- Intentional `tools/*.py` utilities and small extract project sources (not their build outputs)
+- `.cursor/rules` and docs the team relies on
+
+## After cleanup
+
+Update `.gitignore` if a new junk pattern appeared. Prefer deleting untracked junk over committing it.

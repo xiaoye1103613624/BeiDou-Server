@@ -37,3 +37,22 @@ src/main/resources/static/
 /**.txt
 _**
 .**
+
+# Temp / AI process (explicit; complements _** and **.log)
+*.err
+_build_*.err
+_boot_test/
+_cmp*/
+_batch_commit*.py
+tmp_*.log
+tmp_*.txt
+logs_server_*.log
+build_dev*.log
+tools/handle64.exe
+tools/**/bin/
+tools/**/obj/
+tools/**/out/
+tools/**/__pycache__/
+**/*.bak_work
+**/ProbeSkill.csx
+**/Verify.csx
