@@ -75,6 +75,28 @@ public class InventoryequipmentDO implements Serializable  {
     /** 白金锤已用次数（永久） */
     private Integer platinum;
 
+    /** 洗炼词条1：高16位=affixOrdinal 低16位=prefixLv */
+    private Integer reforge1;
+    /** 洗炼词条2 */
+    private Integer reforge2;
+    /** 洗炼词条3 */
+    private Integer reforge3;
+    /** 洗炼锁定位掩码 */
+    private Integer reforgeLock;
+
+    /** 注能等级 0~10（⚡） */
+    private Integer infusion;
+
+    /** 宝石镶嵌等级 0~16（宝X） */
+    private Integer gemInlay;
+    /** 每级2bit水晶类型 0力量/1敏捷/2智慧/3幸运 */
+    private Integer gemTypes;
+
+    /** 破界等级 0~50 */
+    private Integer breakthrough;
+    /** 破界 13 属性激活掩码 */
+    private Integer breakthroughPool;
+
     private Integer itemlevel;
 
     private Integer itemexp;
@@ -110,5 +132,63 @@ public class InventoryequipmentDO implements Serializable  {
 
     @Column("enhance")
     private Integer enhance;
+
+    @Column("bonusPotential1")
+    private Integer bonuspotential1;
+
+    @Column("bonusPotential2")
+    private Integer bonuspotential2;
+
+    @Column("bonusPotential3")
+    private Integer bonuspotential3;
+
+    @Column("bonusPotentialGrade")
+    private Integer bonuspotentialgrade;
+
+    @Column("soulId")
+    private Integer soulid;
+
+    @Column("soulOption")
+    private Integer souloption;
+
+    @Column("socket1")
+    private Integer socket1;
+
+    @Column("socket2")
+    private Integer socket2;
+
+    @Column("socket3")
+    private Integer socket3;
+
+    @Column("chaosStr")
+    private Integer chaosstr;
+    @Column("chaosDex")
+    private Integer chaosdex;
+    @Column("chaosInt")
+    private Integer chaosint;
+    @Column("chaosLuk")
+    private Integer chaosluk;
+    @Column("chaosHp")
+    private Integer chaoshp;
+    @Column("chaosMp")
+    private Integer chaosmp;
+    @Column("chaosWatk")
+    private Integer chaoswatk;
+    @Column("chaosMatk")
+    private Integer chaosmatk;
+    @Column("chaosWdef")
+    private Integer chaoswdef;
+    @Column("chaosMdef")
+    private Integer chaosmdef;
+    @Column("chaosAcc")
+    private Integer chaosacc;
+    @Column("chaosAvoid")
+    private Integer chaosavoid;
+    @Column("chaosSpeed")
+    private Integer chaosspeed;
+    @Column("chaosJump")
+    private Integer chaosjump;
+    @Column("exGradeOption")
+    private Long exgradeoption;
 
 }

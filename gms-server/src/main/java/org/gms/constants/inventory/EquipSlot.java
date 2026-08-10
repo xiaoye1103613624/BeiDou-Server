@@ -26,7 +26,11 @@ public enum EquipSlot {
     CAPE("Sr", -9),               // 披风/斗篷
 
     // ========== 副手 & 武器 ==========
-    SHIELD("Si", -10),            // 盾牌（战士/法师副手）
+    // 私服真正分槽（ADDON_AUX_SLOT62）：
+    //   109 盾 → 原生 Si −10；134/135 辅助武器 → Addon 独立槽 −62（可同时穿，互不顶掉）。
+    // 双手主武仍只卸 −10；纹章 119 等 Addon 禁止走 Si。
+    SHIELD("Si", -10),            // 仅盾牌 109
+    AUX_WEAPON("Aw", -62, -162),  // 辅助武器 134/135（Addon 第三行；非官服同槽）
     WEAPON("Wp", -11),            // 主武器（双手武器或法杖等）
     WEAPON_2("WpSi", -11),        // 单手武器（可搭配盾牌，如单手剑、单手斧）
     LOW_WEAPON("WpSp", -11),      // 低/特殊武器（如弓、弩、拳套，通常双手持握）
@@ -38,36 +42,30 @@ public enum EquipSlot {
     // 第二吊坠 −51（083 原生 BP51）。UI：pendant2_ui=true 进图后挂槽。
     PENDANT("Pe", -17, -51),       // 项链/吊坠：主 −17 + 第二 −51
 
-    // ========== 坐骑 & 肩饰 & 勋章 & 腰带 ==========
+    // ========== 坐骑 & 肩饰 & 勋章 & 腰带 & 口袋 ==========
     TAMED_MOB("Tm", -18),          // 驯服怪物（骑宠本体）
     SADDLE("Sd", -19),             // 鞍具（骑宠装备）
     SHOULDER("Sh", -20),           // 肩饰（115xxx；客户端 BP20；勿用 Sd/−8，与手套冲突）
+    // 口袋 116xxxx：主栏红 9 (104,200) / BP33（ijl15 ADDON_FULLSLOTS_20260801）
+    POCKET("Po", -33, -133),
     MEDAL("Me", -49),              // 勋章（任务/活动获得，索引在很后面）
     BELT("Be", -50),               // 腰带（也是后期加入的，排在勋章后面）
 
-    // ========== 徽章 & 图腾（UI 红标 9/10，ijl15 BP54/55）==========
-    // 徽章 118 / islot Ba → −54（cash 客户端仍可能发 −154）；图腾 120 / islot To → −55（−155）。
-    // 勿把图腾再标 Po（口袋）；客户端 −54/−55 用影子 ZRef（同 −53）。
-    // isAllowed 同时放行普通槽与 cash 槽别名，避免客户端 cash 标记与服务端不一致时拒穿。
-    BADGE("Ba", -54, -154),
-    TOTEM("To", -55, -155),
 
-    // ========== 口袋（WZ 有 Po 道具但 ijl15 尚未加 UI 槽）= =========
-    // 0116xxx 系列道具 islot=Po，Character.wz/Accessory 已有 81 件。
-    // −21 为后 BigBang 标准口袋槽位；cash 形态 −121。
-    // ⚠ 需要客户端 ijl15 增加 BP21 绘制 + GetItem/SetItem 绑定后才真正可用。
-    POCKET("Po", -21, -121),
+    // ========== 扩展装备栏 Addon 2×4（ijl15 ADDON_RULES_STATS_20260802）==========
+    // Top: Totem×4 BP55–58（恰好 4，拒第 5）；Bot: Emblem59 / Android60 / Heart61 / Badge54
+    // 口袋 BP33/−33；辅助 134/135 → −62（Addon row3）；109 → −10；徽章/图腾/纹章永不进 −10。
+    // 119→−59 only（WZ islot Si 不得走 SHIELD）。
+    // 注意：v083 客户端 BP21/22 = 宠物名牌/道具袋（−121/−122 亦为宠物 cash），
+    // 机器人/心脏必须用 sidecar BP60/61（cash −160/−161），禁止 −21/−22。
+    BADGE("Ba", -54, -154),
+    TOTEM("To", -55, -56, -57, -58, -155, -156, -157, -158),
+    EMBLEM("Em", -59, -159),       // 纹章 119xxxx（sidecar 可穿）
+    ANDROID("Dr", -60, -160),      // 机器人 166xxxx（sidecar BP60）
+    HEART("Ht", -61, -161),        // 心脏 167xxxx（sidecar BP61 / Machine Heart）
 
     // ========== 宠物（特殊逻辑，无索引） ==========
     PET_EQUIP,                     // 宠物装备（走宠物数据包，不走角色穿戴包，所以不需要String和int）
-
-    // ========== 安卓 & 心脏 ==========
-    // 安卓 0166xxx / islot Dr → −22（cash −122）；心脏 0167xxx / islot Ht → −23（cash −123）。
-    // WZ 数据：Character.wz/Android/ 209 个 XML（2026-07-30 已修正 islot Tm→Dr）。
-    // 心脏 WZ：186 无独立 Heart/ 目录，BMS250 道具代码有 1672000~1672086 约 30 种心脏 ID。
-    // ⚠ ijl15 目前无 Android/Heart 装备窗 UI，需客户端改造后才真正可用。
-    ANDROID("Dr", -22, -122),   // 机器人（需搭配心脏一起装备）
-    HEART("Ht", -23, -123);     // 心脏（机器人动力源）
     ;
 
     private String name;
@@ -85,21 +83,27 @@ public enum EquipSlot {
         return name;
     }
 
+    /**
+     * Dual-band seats (Badge/Totem/… list both −bp and −(bp+100)): accept <b>exact</b>
+     * match so cash items can land on normal −bp (sidecar arena; GetItem normal-only).
+     * Classic seats list only normal −bp: cash still matches via {@code allow - 100}.
+     * <p>
+     * Old {@code cash ? allow-100 : allow} rejected cash badge/aux at −54/−62 when the
+     * array already contained −154/−162 (double-shift → −254/−262) — wear fail / desync.
+     */
     public boolean isAllowed(int slot, boolean cash) {
-        if (slot < 0) {
-            if (allowed != null) {
-                for (int allow : allowed) {
-                    // 普通槽与 cash 别名（allow-100）都放行：扩展 UI（图腾 −155 等）
-                    // 常在 WZ cash=0 时仍发 cash 形态槽号，仅按 cash 标志减 100 会误拒。
-                    if (slot == allow || slot == allow - 100) {
-                        return true;
-                    }
+        if (slot < 0 && allowed != null) {
+            for (int allow : allowed) {
+                if (slot == allow) {
+                    return true;
+                }
+                // Classic cash mirror when allowed[] lists only the normal seat.
+                if (cash && allow > -100 && slot == allow - 100) {
+                    return true;
                 }
             }
-            // 未知 islot（如 PET_EQUIP）时，点装仍允许任意负槽（原逻辑）
-            return cash;
         }
-        return false;
+        return cash && slot < 0;
     }
 
     public static EquipSlot getFromTextSlot(String slot) {

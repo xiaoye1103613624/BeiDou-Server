@@ -130,4 +130,45 @@ public class InventoryEquipRtnDTO {
     private Integer potentialGrade;
     /** Hyper 星级 */
     private Integer enhance;
+    /** 附加潜能 */
+    private Integer bonusPotential1;
+    private Integer bonusPotential2;
+    private Integer bonusPotential3;
+    private Integer bonusPotentialGrade;
+    /** 灵魂 / 星岩 */
+    private Integer soulId;
+    private Integer soulOption;
+    private Integer socket1;
+    private Integer socket2;
+    private Integer socket3;
+    /** 白金锤已用次数 */
+    private Integer platinum;
+    /** 洗炼 */
+    private Integer reforge1;
+    private Integer reforge2;
+    private Integer reforge3;
+    private Integer reforgeLock;
+    /** 注能等级 0~10（⚡） */
+    private Integer infusion;
+    /** 宝石镶嵌等级（宝X），0~16 */
+    private Integer gemInlay;
+    /** 破界等级 0~50 */
+    private Integer breakthrough;
+    /** 破界 13 属性激活掩码 */
+    private Integer breakthroughPool;
+    /** 混沌卷累计（可负）；橙桶 = 本体增量 − 混沌 */
+    private Integer chaosStr;
+    private Integer chaosDex;
+    private Integer chaosInt;
+    private Integer chaosLuk;
+    private Integer chaosHp;
+    private Integer chaosMp;
+    private Integer chaosWatk;
+    private Integer chaosMatk;
+    private Integer chaosWdef;
+    private Integer chaosMdef;
+    private Integer chaosAcc;
+    private Integer chaosAvoid;
+    private Integer chaosSpeed;
+    private Integer chaosJump;
 }

@@ -167,6 +167,67 @@ public enum ItemFactory {
                 } catch (SQLException ignored) {
                     // V1.11.35 前兼容
                 }
+                try {
+                    equip.setReforge1(rs.getInt("reforge1"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setReforge2(rs.getInt("reforge2"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setReforge3(rs.getInt("reforge3"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setReforgeLock(rs.getByte("reforgeLock"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setInfusion(rs.getByte("infusion"));
+                } catch (SQLException ignored) {
+                    // V1.13.0 前兼容
+                }
+                try {
+                    equip.setGemInlay(rs.getByte("gemInlay"));
+                    equip.setGemTypes(rs.getInt("gemTypes"));
+                } catch (SQLException ignored) {
+                    // V1.15.0 前兼容
+                }
+                try {
+                    equip.setBreakthrough(rs.getByte("breakthrough"));
+                    equip.setBreakthroughPool(rs.getInt("breakthroughPool"));
+                } catch (SQLException ignored) {
+                    // V1.17.0 前兼容
+                }
+                try {
+                    equip.setChaosStr(rs.getShort("chaosStr"));
+                    equip.setChaosDex(rs.getShort("chaosDex"));
+                    equip.setChaosInt(rs.getShort("chaosInt"));
+                    equip.setChaosLuk(rs.getShort("chaosLuk"));
+                    equip.setChaosHp(rs.getShort("chaosHp"));
+                    equip.setChaosMp(rs.getShort("chaosMp"));
+                    equip.setChaosWatk(rs.getShort("chaosWatk"));
+                    equip.setChaosMatk(rs.getShort("chaosMatk"));
+                    equip.setChaosWdef(rs.getShort("chaosWdef"));
+                    equip.setChaosMdef(rs.getShort("chaosMdef"));
+                    equip.setChaosAcc(rs.getShort("chaosAcc"));
+                    equip.setChaosAvoid(rs.getShort("chaosAvoid"));
+                    equip.setChaosSpeed(rs.getShort("chaosSpeed"));
+                    equip.setChaosJump(rs.getShort("chaosJump"));
+                } catch (SQLException ignored) {
+                    // V1.11.54 前兼容
+                }
+                try {
+                    equip.setExGradeOption(rs.getLong("exGradeOption"));
+                    org.gms.flame.FlameService.decodeToFlameStat(equip);
+                } catch (SQLException ignored) {
+                    // V1.11.59 前兼容
+                }
             } catch (SQLException ignored) {
                 // 旧库未跑 Flyway 时兼容
             }
@@ -284,8 +345,8 @@ public enum ItemFactory {
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
                             try (PreparedStatement psEquip = con.prepareStatement(
-                                    "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`) "
-                                            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                                    "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`,`chaosStr`,`chaosDex`,`chaosInt`,`chaosLuk`,`chaosHp`,`chaosMp`,`chaosWatk`,`chaosMatk`,`chaosWdef`,`chaosMdef`,`chaosAcc`,`chaosAvoid`,`chaosSpeed`,`chaosJump`,`exGradeOption`,`infusion`,`gemInlay`,`gemTypes`,`breakthrough`,`breakthroughPool`) "
+                                            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                                 try (ResultSet rs = psItem.getGeneratedKeys()) {
                                     if (!rs.next()) {
                                         throw new RuntimeException("Inserting item failed.");
@@ -336,6 +397,30 @@ public enum ItemFactory {
                                 psEquip.setInt(40, equip.getSocket1());
                                 psEquip.setInt(41, equip.getSocket2());
                                 psEquip.setInt(42, equip.getSocket3());
+                                psEquip.setInt(43, equip.getReforge1());
+                                psEquip.setInt(44, equip.getReforge2());
+                                psEquip.setInt(45, equip.getReforge3());
+                                psEquip.setByte(46, equip.getReforgeLock());
+                                psEquip.setShort(47, equip.getChaosStr());
+                                psEquip.setShort(48, equip.getChaosDex());
+                                psEquip.setShort(49, equip.getChaosInt());
+                                psEquip.setShort(50, equip.getChaosLuk());
+                                psEquip.setShort(51, equip.getChaosHp());
+                                psEquip.setShort(52, equip.getChaosMp());
+                                psEquip.setShort(53, equip.getChaosWatk());
+                                psEquip.setShort(54, equip.getChaosMatk());
+                                psEquip.setShort(55, equip.getChaosWdef());
+                                psEquip.setShort(56, equip.getChaosMdef());
+                                psEquip.setShort(57, equip.getChaosAcc());
+                                psEquip.setShort(58, equip.getChaosAvoid());
+                                psEquip.setShort(59, equip.getChaosSpeed());
+                                psEquip.setShort(60, equip.getChaosJump());
+                                psEquip.setLong(61, equip.getExGradeOption());
+                                psEquip.setByte(62, equip.getInfusion());
+                                psEquip.setByte(63, equip.getGemInlay());
+                                psEquip.setInt(64, equip.getGemTypes());
+                                psEquip.setByte(65, equip.getBreakthrough());
+                                psEquip.setInt(66, equip.getBreakthroughPool());
                                 psEquip.executeUpdate();
                             }
                         }
@@ -465,8 +550,8 @@ public enum ItemFactory {
                 // Equipment
                 if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
                     try (PreparedStatement ps = con.prepareStatement(
-                            "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`) "
-                                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                            "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`,`chaosStr`,`chaosDex`,`chaosInt`,`chaosLuk`,`chaosHp`,`chaosMp`,`chaosWatk`,`chaosMatk`,`chaosWdef`,`chaosMdef`,`chaosAcc`,`chaosAvoid`,`chaosSpeed`,`chaosJump`,`exGradeOption`,`infusion`,`gemInlay`,`gemTypes`,`breakthrough`,`breakthroughPool`) "
+                                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                         ps.setInt(1, genKey);
 
                         Equip equip = (Equip) item;
@@ -511,6 +596,30 @@ public enum ItemFactory {
                         ps.setInt(40, equip.getSocket1());
                         ps.setInt(41, equip.getSocket2());
                         ps.setInt(42, equip.getSocket3());
+                        ps.setInt(43, equip.getReforge1());
+                        ps.setInt(44, equip.getReforge2());
+                        ps.setInt(45, equip.getReforge3());
+                        ps.setByte(46, equip.getReforgeLock());
+                        ps.setShort(47, equip.getChaosStr());
+                        ps.setShort(48, equip.getChaosDex());
+                        ps.setShort(49, equip.getChaosInt());
+                        ps.setShort(50, equip.getChaosLuk());
+                        ps.setShort(51, equip.getChaosHp());
+                        ps.setShort(52, equip.getChaosMp());
+                        ps.setShort(53, equip.getChaosWatk());
+                        ps.setShort(54, equip.getChaosMatk());
+                        ps.setShort(55, equip.getChaosWdef());
+                        ps.setShort(56, equip.getChaosMdef());
+                        ps.setShort(57, equip.getChaosAcc());
+                        ps.setShort(58, equip.getChaosAvoid());
+                        ps.setShort(59, equip.getChaosSpeed());
+                        ps.setShort(60, equip.getChaosJump());
+                        ps.setLong(61, equip.getExGradeOption());
+                        ps.setByte(62, equip.getInfusion());
+                        ps.setByte(63, equip.getGemInlay());
+                        ps.setInt(64, equip.getGemTypes());
+                        ps.setByte(65, equip.getBreakthrough());
+                        ps.setInt(66, equip.getBreakthroughPool());
                         ps.executeUpdate();
                     }
                 }
