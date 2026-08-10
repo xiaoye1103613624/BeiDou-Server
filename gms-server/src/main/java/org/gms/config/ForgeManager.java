@@ -30,14 +30,14 @@ public class ForgeManager {
      * 查询锻造师品级总数（入门/普通/职业/大师/宗师 共5级）。
      */
     public static int getTierCount() {
-        return ForgeService.TIERS.length;
+        return AlchemyTierManager.getTierCount(ForgeService.TIER_TYPE);
     }
 
     /**
      * 查询指定品级名称。
      */
     public static String getTierName(int tierIndex) {
-        return ForgeService.TIERS[tierIndex].name();
+        return AlchemyTierManager.getTierName(ForgeService.TIER_TYPE, tierIndex);
     }
 
     /**
@@ -52,14 +52,13 @@ public class ForgeManager {
             ForgeDO forge = getService().getOrCreate(characterId);
             long exp = forge.getExp();
             int tierIndex = getService().getTierIndex(exp);
-            ForgeService.Tier tier = ForgeService.TIERS[tierIndex];
             result.put("success", true);
             result.put("exp", exp);
             result.put("tierIndex", tierIndex);
-            result.put("tierName", tier.name());
-            result.put("progress", exp - tier.expStart());
-            result.put("tierSize", tier.isMax() ? -1L : tier.expSize());
-            result.put("isMax", tier.isMax());
+            result.put("tierName", AlchemyTierManager.getTierName(ForgeService.TIER_TYPE, tierIndex));
+            result.put("progress", exp - AlchemyTierManager.getExpStart(ForgeService.TIER_TYPE, tierIndex));
+            result.put("tierSize", AlchemyTierManager.getExpSize(ForgeService.TIER_TYPE, tierIndex));
+            result.put("isMax", AlchemyTierManager.isMaxTier(ForgeService.TIER_TYPE, tierIndex));
         } catch (Exception e) {
             result.put("success", false);
             result.put("message", e.getMessage());

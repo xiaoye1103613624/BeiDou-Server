@@ -43,6 +43,9 @@ public class ForgeRecipeDO implements Serializable {
     /** 打造消耗金币 */
     private Long mesoCost;
 
+    /** 打造消耗体力 */
+    private Integer staminaCost;
+
     /** 材料1物品ID */
     private Integer material1ItemId;
 
@@ -60,6 +63,36 @@ public class ForgeRecipeDO implements Serializable {
 
     /** 材料3所需数量 */
     private Integer material3Count;
+
+    /** 材料4物品ID */
+    private Integer material4ItemId;
+
+    /** 材料4所需数量 */
+    private Integer material4Count;
+
+    /** 材料5物品ID */
+    private Integer material5ItemId;
+
+    /** 材料5所需数量 */
+    private Integer material5Count;
+
+    /** 材料6物品ID */
+    private Integer material6ItemId;
+
+    /** 材料6所需数量 */
+    private Integer material6Count;
+
+    /** 材料7物品ID */
+    private Integer material7ItemId;
+
+    /** 材料7所需数量 */
+    private Integer material7Count;
+
+    /** 材料8物品ID */
+    private Integer material8ItemId;
+
+    /** 材料8所需数量 */
+    private Integer material8Count;
 
     /** 力量默认随机区间下限(0表示该配方不涉及此属性) */
     private Integer strMin;
@@ -96,6 +129,30 @@ public class ForgeRecipeDO implements Serializable {
 
     /** 魔攻默认随机区间上限 */
     private Integer matkMax;
+
+    /** 物理防御力默认随机区间下限(0表示该配方不涉及此属性) */
+    private Integer pddMin;
+
+    /** 物理防御力默认随机区间上限 */
+    private Integer pddMax;
+
+    /** 魔法防御力默认随机区间下限(0表示该配方不涉及此属性) */
+    private Integer mddMin;
+
+    /** 魔法防御力默认随机区间上限 */
+    private Integer mddMax;
+
+    /** MaxHP默认随机区间下限(0表示该配方不涉及此属性) */
+    private Integer hpMin;
+
+    /** MaxHP默认随机区间上限 */
+    private Integer hpMax;
+
+    /** MaxMP默认随机区间下限(0表示该配方不涉及此属性) */
+    private Integer mpMin;
+
+    /** MaxMP默认随机区间上限 */
+    private Integer mpMax;
 
     /** 同品级内显示排序 */
     private Integer sortOrder;

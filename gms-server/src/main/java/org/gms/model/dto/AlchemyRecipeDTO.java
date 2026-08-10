@@ -28,6 +28,9 @@ public class AlchemyRecipeDTO implements Serializable {
     /** 炼制产出物品ID */
     private Integer resultItemId;
 
+    /** 炼制产出物品名称（由物品ID解析，仅供后台展示） */
+    private String resultItemName;
+
     /** 炼制产出物品数量 */
     private Integer resultCount;
 

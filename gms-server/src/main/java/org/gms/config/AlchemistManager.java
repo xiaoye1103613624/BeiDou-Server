@@ -39,14 +39,14 @@ public class AlchemistManager {
      * 查询炼药师品级总数（入门/普通/职业/大师/宗师 共5级）。
      */
     public static int getTierCount() {
-        return AlchemistService.TIERS.length;
+        return AlchemyTierManager.getTierCount(AlchemistService.TIER_TYPE);
     }
 
     /**
      * 查询指定品级名称。
      */
     public static String getTierName(int tierIndex) {
-        return AlchemistService.TIERS[tierIndex].name();
+        return AlchemyTierManager.getTierName(AlchemistService.TIER_TYPE, tierIndex);
     }
 
     /**
@@ -61,14 +61,13 @@ public class AlchemistManager {
             AlchemistDO alchemist = getService().getOrCreate(characterId);
             long exp = alchemist.getExp();
             int tierIndex = getService().getTierIndex(exp);
-            AlchemistService.Tier tier = AlchemistService.TIERS[tierIndex];
             result.put("success", true);
             result.put("exp", exp);
             result.put("tierIndex", tierIndex);
-            result.put("tierName", tier.name());
-            result.put("progress", exp - tier.expStart());
-            result.put("tierSize", tier.isMax() ? -1L : tier.expSize());
-            result.put("isMax", tier.isMax());
+            result.put("tierName", AlchemyTierManager.getTierName(AlchemistService.TIER_TYPE, tierIndex));
+            result.put("progress", exp - AlchemyTierManager.getExpStart(AlchemistService.TIER_TYPE, tierIndex));
+            result.put("tierSize", AlchemyTierManager.getExpSize(AlchemistService.TIER_TYPE, tierIndex));
+            result.put("isMax", AlchemyTierManager.isMaxTier(AlchemistService.TIER_TYPE, tierIndex));
         } catch (Exception e) {
             result.put("success", false);
             result.put("message", e.getMessage());
@@ -83,10 +82,10 @@ public class AlchemistManager {
      * @param tierIndex 品级下标（0=入门 1=普通 2=职业 3=大师 4=宗师）
      * @return {success, message, exp(炼制后的累计经验), staminaLeft(炼制后剩余体力), brewExp(本次获得经验)}
      */
-    public static Map<String, Object> brew(Integer characterId, Integer accountId, int tierIndex) {
+    public static Map<String, Object> brew(Integer characterId, Integer accountId, int tierIndex, int expGain, int staminaCost) {
         Map<String, Object> result = new LinkedHashMap<>();
         try {
-            if (tierIndex < 0 || tierIndex >= AlchemistService.TIERS.length) {
+            if (tierIndex < 0 || tierIndex >= AlchemyTierManager.getTierCount(AlchemistService.TIER_TYPE)) {
                 throw new IllegalArgumentException("药水品级不合法");
             }
             AlchemistDO alchemist = getService().getOrCreate(characterId);
@@ -94,13 +93,12 @@ public class AlchemistManager {
             if (currentTierIndex < tierIndex) {
                 throw new IllegalArgumentException("炼药师等级不足，无法炼制该品级的药水");
             }
-            AlchemistService.Tier tier = AlchemistService.TIERS[tierIndex];
-            getStaminaService().consumeStamina(accountId, tier.staminaCost());
-            long newExp = getService().addExp(characterId, tier.brewExp());
+            getStaminaService().consumeStamina(accountId, staminaCost);
+            long newExp = getService().addExp(characterId, expGain);
             result.put("success", true);
             result.put("message", "炼制成功");
             result.put("exp", newExp);
-            result.put("brewExp", tier.brewExp());
+            result.put("brewExp", expGain);
             result.put("staminaLeft", getStaminaService().getStamina(accountId));
         } catch (Exception e) {
             result.put("success", false);

@@ -83,12 +83,23 @@ public class ForgeRecipeManager {
         map.put("resultItemId", recipe.getResultItemId());
         map.put("expGain", recipe.getExpGain());
         map.put("mesoCost", recipe.getMesoCost());
+        map.put("staminaCost", recipe.getStaminaCost());
         map.put("material1ItemId", recipe.getMaterial1ItemId());
         map.put("material1Count", recipe.getMaterial1Count());
         map.put("material2ItemId", recipe.getMaterial2ItemId());
         map.put("material2Count", recipe.getMaterial2Count());
         map.put("material3ItemId", recipe.getMaterial3ItemId());
         map.put("material3Count", recipe.getMaterial3Count());
+        map.put("material4ItemId", recipe.getMaterial4ItemId());
+        map.put("material4Count", recipe.getMaterial4Count());
+        map.put("material5ItemId", recipe.getMaterial5ItemId());
+        map.put("material5Count", recipe.getMaterial5Count());
+        map.put("material6ItemId", recipe.getMaterial6ItemId());
+        map.put("material6Count", recipe.getMaterial6Count());
+        map.put("material7ItemId", recipe.getMaterial7ItemId());
+        map.put("material7Count", recipe.getMaterial7Count());
+        map.put("material8ItemId", recipe.getMaterial8ItemId());
+        map.put("material8Count", recipe.getMaterial8Count());
         map.put("strMin", recipe.getStrMin());
         map.put("strMax", recipe.getStrMax());
         map.put("dexMin", recipe.getDexMin());
@@ -101,6 +112,14 @@ public class ForgeRecipeManager {
         map.put("watkMax", recipe.getWatkMax());
         map.put("matkMin", recipe.getMatkMin());
         map.put("matkMax", recipe.getMatkMax());
+        map.put("pddMin", recipe.getPddMin());
+        map.put("pddMax", recipe.getPddMax());
+        map.put("mddMin", recipe.getMddMin());
+        map.put("mddMax", recipe.getMddMax());
+        map.put("hpMin", recipe.getHpMin());
+        map.put("hpMax", recipe.getHpMax());
+        map.put("mpMin", recipe.getMpMin());
+        map.put("mpMax", recipe.getMpMax());
         return map;
     }
 
@@ -135,15 +154,15 @@ public class ForgeRecipeManager {
     }
 
     /**
-     * 打造：校验品级要求，增加锻造师经验。
+     * 打造：校验品级要求、扣除体力、增加锻造师经验。
      * 金币/材料的校验与扣除、产出装备的发放需脚本在调用前后自行处理。
      *
      * @return {success, message, exp(打造后的累计经验)}
      */
-    public static Map<String, Object> craft(Integer characterId, Long recipeId) {
+    public static Map<String, Object> craft(Integer characterId, Integer accountId, Long recipeId) {
         Map<String, Object> result = new LinkedHashMap<>();
         try {
-            long newExp = getService().craft(characterId, recipeId);
+            long newExp = getService().craft(characterId, accountId, recipeId);
             result.put("success", true);
             result.put("message", "打造成功");
             result.put("exp", newExp);
