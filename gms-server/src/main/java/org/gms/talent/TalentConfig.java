@@ -27,9 +27,10 @@ public final class TalentConfig {
     public static final int ULTIMATE_BUFF_DURATION_MS = 30_000;
 
     /** 兑换材料。 */
-    public static final int MAT_PRIMARY = 4031740;   // 正直的魔法石 → 初级书
-    public static final int MAT_MID = 4031741;       // 信赖的魔法石 → 中级书
-    public static final int MAT_ADV = 4031739;       // 谦虚的魔法石 → 高级书
+    public static final int MAT_PRIMARY = 4032862;   // → 初级书 (4461xxx)
+    public static final int MAT_MID = 4032873;       // → 中级书 (4462xxx)
+    public static final int MAT_ADV = 4031739;       // → 高级书 (4463xxx)
+    public static final int MAT_ULT = 4032868;       // → 终极书 (4464xxx)
     public static final int EXCHANGE_RATE = 10;
 
     /** 购买价格（金币）。 */
@@ -116,7 +117,7 @@ public final class TalentConfig {
             case PRIMARY -> MAT_PRIMARY;
             case MID -> MAT_MID;
             case ADVANCED -> MAT_ADV;
-            case ULTIMATE -> 0;
+            case ULTIMATE -> MAT_ULT;
         };
     }
 

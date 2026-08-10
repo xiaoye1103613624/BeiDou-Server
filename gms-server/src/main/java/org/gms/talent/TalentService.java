@@ -144,20 +144,15 @@ public final class TalentService {
         if (book == null || book.tier() != TalentTier.ULTIMATE) {
             return "请选择终极天赋书。";
         }
-        if (chr.getItemQuantity(TalentConfig.MAT_PRIMARY, false) < TalentConfig.EXCHANGE_RATE
-                || chr.getItemQuantity(TalentConfig.MAT_MID, false) < TalentConfig.EXCHANGE_RATE
-                || chr.getItemQuantity(TalentConfig.MAT_ADV, false) < TalentConfig.EXCHANGE_RATE) {
-            return "需要各 " + TalentConfig.EXCHANGE_RATE + " 个正直/信赖/谦虚的魔法石。";
+        int mat = TalentConfig.MAT_ULT;
+        if (chr.getItemQuantity(mat, false) < TalentConfig.EXCHANGE_RATE) {
+            return "材料不足，需要 " + TalentConfig.EXCHANGE_RATE + " 个 #z" + mat + "#。";
         }
         if (!InventoryManipulator.checkSpace(chr.getClient(), book.itemId(), 1, "")) {
             return "背包空间不足。";
         }
-        InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(TalentConfig.MAT_PRIMARY),
-                TalentConfig.MAT_PRIMARY, TalentConfig.EXCHANGE_RATE, false, false);
-        InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(TalentConfig.MAT_MID),
-                TalentConfig.MAT_MID, TalentConfig.EXCHANGE_RATE, false, false);
-        InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(TalentConfig.MAT_ADV),
-                TalentConfig.MAT_ADV, TalentConfig.EXCHANGE_RATE, false, false);
+        InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(mat),
+                mat, TalentConfig.EXCHANGE_RATE, false, false);
         InventoryManipulator.addById(chr.getClient(), book.itemId(), (short) 1);
         return "兑换成功：获得 " + book.displayName() + " ×1";
     }
