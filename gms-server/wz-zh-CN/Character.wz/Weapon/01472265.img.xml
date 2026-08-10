@@ -4,12 +4,10 @@
     <canvas name="icon" format="2" scale="0">
       <vector name="origin" x="0" y="33"/>
       <string name="_hash" value="de44c7a72a4c898214513dd2412579e9081820944ca21661d17d94ede19ddd95"/>
-      <string name="_outlink" value="Character/Weapon/01472277.img/info/icon"/>
     </canvas>
     <canvas name="iconRaw" format="2" scale="0">
       <vector name="origin" x="0" y="33"/>
       <string name="_hash" value="ad40abb1edc29ea709697b5b118a49542d6b61a0f73c63c18fdbbea80e96ad0c"/>
-      <string name="_outlink" value="Character/Weapon/01472277.img/info/iconRaw"/>
     </canvas>
     <string name="islot" value="Wp"/>
     <string name="vslot" value="Wp"/>
@@ -18,27 +16,23 @@
     <short name="attack" value="7"/>
     <string name="afterImage" value="swordOL"/>
     <string name="sfx" value="tGlove"/>
-    <int name="reqJob" value="8"/>
-    <int name="reqLevel" value="200"/>
     <int name="tuc" value="8"/>
     <int name="reqSTR" value="0"/>
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
-    <int name="reqLUK" value="600"/>
-    <int name="incPAD" value="149"/>
-    <int name="incDEX" value="100"/>
-    <int name="incLUK" value="100"/>
-    <int name="attackSpeed" value="4"/>
-    <int name="price" value="1"/>
+    <int name="reqLUK" value="0"/>
+    <int name="incPAD" value="500"/>
+    <int name="attackSpeed" value="1"/>
     <int name="equipTradeBlock" value="1"/>
-    <int name="imdR" value="20"/>
-    <int name="bdR" value="30"/>
-    <int name="bossReward" value="1"/>
     <int name="tradeAvailable" value="2"/>
-    <int name="exItem" value="1"/>
-    <int name="charmEXP" value="200"/>
     <int name="setItemID" value="620"/>
-    <int name="limitBreak" value="49999999"/>
+    <int name="reqJob" value="0"/>
+    <int name="reqLevel" value="0"/>
+    <int name="price" value="0"/>
+    <int name="incLUK" value="500"/>
+    <int name="incINT" value="500"/>
+    <int name="incDEX" value="500"/>
+    <int name="incSTR" value="500"/>
   </imgdir>
   <imgdir name="walk1">
     <imgdir name="0">
@@ -49,7 +43,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="dfe8e94b8878756ccbae5f3bf203d5c42c5e465d263cf187a8fc20ad68326d2e"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -60,7 +53,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="7a8bdc46e520b5147c181f92eda80ea769ab0c55c3964bccf31823300b3b2432"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/walk1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -73,7 +65,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -85,7 +77,7 @@
           <vector name="hand" x="12" y="6"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -103,7 +95,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/walk1/1/weapon"/>
+        <string name="_inlink" value="walk1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -114,7 +106,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="965f77fdef595657ab7b9963f14644387eb6d670f14199b3c04bbe0745695bff"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/alert/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -124,7 +115,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/alert/1/weapon"/>
+        <string name="_inlink" value="alert/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -137,7 +128,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="bd0d5cb9739e9f3a435669c89f8a692667dea2a94067f8e37840311c6542e7ae"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -148,7 +138,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="66edd0890f10885b64a9593e7e25bd952d5feb5153bc4659112f30bbfa71ab4a"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO1/2/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -161,7 +150,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="9c034473367be61c15cbfa20fec3755f4170d58b4bbd0e8ed6ac94881b2b3275"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO2/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -171,7 +159,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO2/0/weapon"/>
+        <string name="_inlink" value="swingO2/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -182,7 +170,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="ef81c1b65b01ee13272490c62221af79c068613b8274a3c8a049e3cb1adda271"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO2/2/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -195,7 +182,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="9ed509dd924440c0ac381e99035afa5d99f78e83500560dba6cfd0f5a0d242e5"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO3/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -206,7 +192,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="76c295fc2a80a57449f6208798d62bbb4e4b3409ebc510a0aefeedc74d6e3f11"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO3/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -218,7 +203,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO2/2/weapon"/>
+        <string name="_inlink" value="swingO2/2/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="3">
@@ -229,7 +214,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="35e44e9cc8b52c2432f6380b93fc0eb7d989709ca26d9315890349a375c30abb"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingOF/3/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -241,7 +225,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -252,7 +236,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="77489147be4938892fd0c46a15f839ca0b7020f9bd919bbadb3bfe74188a3e57"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/stabO1/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -265,7 +248,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="7f011a90cf868536957be8219e5ade3ab3ef2cfab6611e4de572105942ee8671"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/stabO2/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -275,7 +257,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/stabO1/1/weapon"/>
+        <string name="_inlink" value="stabO1/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -288,7 +270,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="12b845f5cca8ea127280d937eeffa60833c75bb0def20053789aa1d488ae01b8"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/stabOF/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -298,7 +279,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/stabOF/0/weapon"/>
+        <string name="_inlink" value="stabOF/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -308,7 +289,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/stabO1/1/weapon"/>
+        <string name="_inlink" value="stabO1/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -321,7 +302,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="187a14d1991efee307462cc85e1888ef09ed222b813ff61b24ec5fc2e7c21c94"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/proneStab/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -332,7 +312,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="b678228380f3879b78cbb83d95d7a5b6496099ffd716554f033eb063971f014b"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/proneStab/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -361,7 +340,6 @@
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
         <string name="_hash" value="06b1ffc9db8562ab44c0af4e4bd1238b4d8595e878794b5921b6c62825836997"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/fly/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -376,7 +354,7 @@
           <vector name="navel" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverGlove"/>
-        <string name="_outlink" value="Character/Weapon/01472277.img/swingO2/0/weapon"/>
+        <string name="_inlink" value="swingO2/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>

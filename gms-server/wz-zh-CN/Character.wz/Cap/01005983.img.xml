@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="01005983.img" indent="2" media="NONE">
   <imgdir name="info">
-    <canvas name="icon" format="2" scale="0">
+    <canvas name="icon" format="1" scale="0">
       <vector name="origin" x="2" y="34"/>
       <string name="_hash" value="be17c9286cfb4293d3fc3cbbe16b9ddaa003cdd13b8c87789626464cf327e0b3"/>
     </canvas>
-    <canvas name="iconRaw" format="2" scale="0">
+    <canvas name="iconRaw" format="1" scale="0">
       <vector name="origin" x="2" y="34"/>
       <string name="_hash" value="0dd55a9c26ba8df5911357bbe845959be2d4e3bbc5c5d71af8d80499c1a1751e"/>
     </canvas>
@@ -13,32 +13,27 @@
     <string name="vslot" value="CpH1H5"/>
     <int name="tuc" value="11"/>
     <int name="reqJob" value="8"/>
-    <int name="reqLevel" value="0"/>
+    <int name="reqLevel" value="250"/>
     <int name="reqSTR" value="0"/>
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
-    <int name="reqLUK" value="0"/>
+    <int name="reqLUK" value="750"/>
+    <int name="incLUK" value="80"/>
+    <int name="incDEX" value="80"/>
+    <int name="incPDD" value="750"/>
     <int name="price" value="1"/>
     <int name="cash" value="0"/>
+    <int name="incPAD" value="10"/>
     <int name="equipTradeBlock" value="1"/>
+    <int name="tradeAvailable" value="2"/>
     <int name="charmEXP" value="200"/>
     <int name="bossReward" value="1"/>
     <int name="exItem" value="1"/>
     <int name="imdR" value="15"/>
     <int name="setItemID" value="889"/>
-    <int name="incACC" value="180"/>
-    <int name="incDEX" value="23"/>
-    <int name="incEVA" value="90"/>
-    <int name="incINT" value="23"/>
-    <int name="incLUK" value="23"/>
-    <int name="incMDD" value="293"/>
-    <int name="incMHP" value="270"/>
-    <int name="incMMP" value="270"/>
-    <int name="incPDD" value="293"/>
-    <int name="incSTR" value="23"/>
   </imgdir>
   <imgdir name="default">
-    <canvas name="default" format="2" scale="0">
+    <canvas name="default" format="1" scale="0">
       <vector name="origin" x="18" y="26"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>
@@ -46,7 +41,7 @@
       <string name="z" value="cap"/>
       <string name="_hash" value="d0dabbd09aee4de202042320f3ccc6cdff31dcb5f40eaacd1dde7a5ff262712a"/>
     </canvas>
-    <canvas name="defaultAc" format="2" scale="0">
+    <canvas name="defaultAc" format="1" scale="0">
       <vector name="origin" x="22" y="30"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>
@@ -56,7 +51,7 @@
     </canvas>
   </imgdir>
   <imgdir name="backDefault">
-    <canvas name="default1" format="2" scale="0">
+    <canvas name="default1" format="1" scale="0">
       <vector name="origin" x="23" y="26"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>
@@ -64,7 +59,7 @@
       <string name="z" value="backCap"/>
       <string name="_hash" value="22551219c7d2fa444bfffdbf58b1eb9c59f6b2fe21006a22bc04a324aed3ba53"/>
     </canvas>
-    <canvas name="defaultAc" format="2" scale="0">
+    <canvas name="defaultAc" format="1" scale="0">
       <vector name="origin" x="27" y="30"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>

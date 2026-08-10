@@ -4,12 +4,10 @@
     <canvas name="icon" format="2" scale="0">
       <vector name="origin" x="3" y="34"/>
       <string name="_hash" value="69a21feae1ee68bd7d27995e81ee6b3fb3c7a76752ebdc49c3128140de0789dc"/>
-      <string name="_outlink" value="Character/Weapon/01322263.img/info/icon"/>
     </canvas>
     <canvas name="iconRaw" format="2" scale="0">
       <vector name="origin" x="3" y="34"/>
       <string name="_hash" value="a24da392739d9d704125249cf6b242b63904bd683e96873cad53691ff94eb8ed"/>
-      <string name="_outlink" value="Character/Weapon/01322263.img/info/iconRaw"/>
     </canvas>
     <string name="islot" value="Wp"/>
     <string name="vslot" value="Wp"/>
@@ -19,14 +17,14 @@
     <string name="afterImage" value="mace"/>
     <string name="sfx" value="mace"/>
     <int name="reqJob" value="1"/>
-    <int name="reqLevel" value="200"/>
+    <int name="reqLevel" value="0"/>
     <int name="reqSTR" value="600"/>
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
     <int name="reqLUK" value="0"/>
-    <int name="incSTR" value="150"/>
-    <int name="incDEX" value="150"/>
-    <int name="incPAD" value="326"/>
+    <int name="incSTR" value="1000"/>
+    <int name="incDEX" value="1000"/>
+    <int name="incPAD" value="2000"/>
     <int name="tuc" value="8"/>
     <int name="price" value="1"/>
     <int name="attackSpeed" value="5"/>
@@ -57,7 +55,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="57238906a5e6f94c364db15d105092a1af569d62b436561980c74df1c7a0ddcb"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -68,7 +65,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="fe6c5214d4a044f4c46c53247e178fc34302c8393eb053ad161e6c70c584efe4"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -78,7 +74,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="3">
@@ -89,7 +85,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="ec84bab8b626dbb96eafd9a692ab3d654c17b75e451ccda6428ae288b6ad09d3"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/3/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="particle">
@@ -127,7 +122,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/3/weapon"/>
+        <string name="_inlink" value="walk1/3/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -137,7 +132,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/3/weapon"/>
+        <string name="_inlink" value="walk1/3/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -147,7 +142,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/3/weapon"/>
+        <string name="_inlink" value="walk1/3/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="particle">
@@ -185,7 +180,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverHand"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/1/weapon"/>
+        <string name="_inlink" value="walk1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -195,7 +190,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverHand"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/1/weapon"/>
+        <string name="_inlink" value="walk1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -205,7 +200,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverHand"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/1/weapon"/>
+        <string name="_inlink" value="walk1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="particle">
@@ -244,7 +239,6 @@
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
         <string name="_hash" value="c98114b921e17b7badbb57327aec6ccbdb034235140b4583ed26928334620dfa"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -255,7 +249,6 @@
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
         <string name="_hash" value="07462cdca89840153e7e701780876109aed4904712bee6b67267016e0338007f"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO1/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -266,7 +259,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="3f405785656596f4c6a45430a21c382c2b6ea4fceb67df7c1db20218748d4a88"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO1/2/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -278,7 +270,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO1/2/weapon"/>
+        <string name="_inlink" value="swingO1/2/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -289,7 +281,6 @@
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
         <string name="_hash" value="5b1e8ee604b2627b9024280cfcd057744535eb8cb6f70352322daa71b870b576"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -300,7 +291,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="d0de85dd3119e4cdd99ebd4fd7366aa024df650c5979eb5cbc2c788c88b900fa"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/2/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -312,7 +302,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/1/weapon"/>
+        <string name="_inlink" value="swingO2/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -322,7 +312,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverBody"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -332,7 +322,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO1/0/weapon"/>
+        <string name="_inlink" value="swingO1/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -345,7 +335,6 @@
         </imgdir>
         <string name="z" value="weapon"/>
         <string name="_hash" value="f94618c57685fe3a93a2b10c110f36720280bb0e8744d75bd81487127414c10f"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingOF/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -355,7 +344,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="backWeapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO1/2/weapon"/>
+        <string name="_inlink" value="swingO1/2/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -365,7 +354,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/1/weapon"/>
+        <string name="_inlink" value="swingO2/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="3">
@@ -376,7 +365,6 @@
         </imgdir>
         <string name="z" value="weaponBelowBody"/>
         <string name="_hash" value="1e4d6f5bbf79b10a6118f0ce2c729a1cd850002bebf7b1c5e4056c66f3b33477"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingOF/3/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -388,7 +376,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -398,7 +386,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -410,7 +398,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponBelowArm"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -420,7 +408,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -432,7 +420,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -442,7 +430,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="2">
@@ -452,7 +440,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weapon"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -464,7 +452,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponBelowArm"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -474,7 +462,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponBelowArm"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/walk1/0/weapon"/>
+        <string name="_inlink" value="walk1/0/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -502,7 +490,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverArm"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/1/weapon"/>
+        <string name="_inlink" value="swingO2/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
@@ -512,7 +500,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverArm"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/1/weapon"/>
+        <string name="_inlink" value="swingO2/1/weapon"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -524,7 +512,7 @@
           <vector name="hand" x="0" y="0"/>
         </imgdir>
         <string name="z" value="weaponOverArm"/>
-        <string name="_outlink" value="Character/Weapon/01322263.img/swingO2/1/weapon"/>
+        <string name="_inlink" value="swingO2/1/weapon"/>
       </canvas>
     </imgdir>
     <imgdir name="particle">
