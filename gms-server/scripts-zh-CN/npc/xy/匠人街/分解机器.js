@@ -26,6 +26,15 @@ var EQUIP_STONE = 4032171;
 var FASHION_NX = 300;
 var EXCHANGE_COST = 10;
 
+// 物品删除：背包分类 (对应 InventoryType 枚举值)
+var DEL_CATEGORIES = [
+    { name: "装备栏", type: 1 },
+    { name: "消耗栏", type: 2 },
+    { name: "设置栏", type: 3 },
+    { name: "其他栏", type: 4 },
+    { name: "现金栏", type: 5 }
+];
+
 // 083 基础 10% 卷轴（success=10），用于兑换目录
 var SCROLL_10PCT = [
     2040002, 2040005, 2040026, 2040031, 2040100, 2040105, 2040200, 2040205,
@@ -49,6 +58,12 @@ var inputQty = 0;
 var keepFront = true;
 var keepBack = true;
 
+// ===== 物品删除 状态 =====
+var delPhase = 0;    // 0=选择分类 1=选择物品 2=确认删除
+var delCat = -1;     // 当前分类 (0装备 1消耗 2设置 3其他 4现金)
+var delList = [];    // [{itemId, qty}]
+var delSelectedIdx = -1;
+
 function start() {
     status = -1;
     feature = 0;
@@ -58,6 +73,10 @@ function start() {
     inputQty = 0;
     keepFront = true;
     keepBack = true;
+    delPhase = 0;
+    delCat = -1;
+    delList = [];
+    delSelectedIdx = -1;
     action(1, 0, 0);
 }
 
@@ -93,6 +112,8 @@ function action(mode, type, selection) {
         handleFashionOneClick(selection);
     } else if (feature === 5) {
         handleTalent(selection);
+    } else if (feature === 6) {
+        handleItemDelete(selection);
     } else {
         cm.dispose();
     }
@@ -109,6 +130,7 @@ function handleMain(selection) {
         text += "#L3#装备分解#l 「可以将特定的装备分解为强化石。」\r\n";
         text += "#L4#时装分解#l 「可以将特定的时装分解为点券。」\r\n";
         text += "#L5#天赋分解#l 「可以将天赋书分解为兑换材料。」\r\n";
+        text += "#L6#物品删除#l 「选择背包分类并删除指定物品。」\r\n";
         cm.sendSimple(text);
         return;
     }
@@ -125,6 +147,8 @@ function handleMain(selection) {
             handleFashion(0);
         } else if (feature === 5) {
             handleTalent(0);
+        } else if (feature === 6) {
+            handleItemDelete(0);
         } else {
             cm.dispose();
         }
@@ -325,6 +349,10 @@ function getBasicScrollRate(ii, itemId) {
     var name = ii.getName(itemId);
     if (name != null) {
         if (name.indexOf("黑暗") >= 0 || name.indexOf("混沌") >= 0 || name.indexOf("祝福") >= 0) {
+            return -1;
+        }
+        // 仅基础卷轴：排除带攻击力 / 魔法力(魔力)的卷轴（这些走卷轴兑换目录）
+        if (name.indexOf("攻击") >= 0 || name.indexOf("魔力") >= 0 || name.indexOf("魔法力") >= 0) {
             return -1;
         }
     }
@@ -837,8 +865,8 @@ function handleTalent(selection) {
 function showTalentPage() {
     var text = "#e#b[天赋分解]#k#n\r\n";
     text += "天赋书 → 对应兑换材料（1:1）\r\n";
-    text += "初级→#v" + TalentConfig.MAT_PRIMARY + "# 中级→#v" + TalentConfig.MAT_MID + "# 高级→#v" + TalentConfig.MAT_ADV + "#\r\n";
-    text += "终极→三种魔法石各 1 个\r\n\r\n";
+    text += "初级→#v" + TalentConfig.MAT_PRIMARY + "# 中级→#v" + TalentConfig.MAT_MID + "#\r\n";
+    text += "高级→#v" + TalentConfig.MAT_ADV + "# 终极→#v" + TalentConfig.MAT_ULT + "#\r\n\r\n";
     text += "#L" + SEL_BACK + "##b返回#k#l\r\n";
     text += "#L" + SEL_ONECLICK + "##r一键分解全部天赋书#k#l\r\n\r\n";
     if (list.length === 0) {
@@ -911,14 +939,10 @@ function talentRewardInfo(talent) {
     if (tier === TalentTier.ADVANCED) {
         return { text: "#v" + TalentConfig.MAT_ADV + "#", mats: [{ id: TalentConfig.MAT_ADV, n: 1 }] };
     }
-    // 终极：三种各 1
+    // 终极：4032868 ×1
     return {
-        text: "#v" + TalentConfig.MAT_PRIMARY + "#+#v" + TalentConfig.MAT_MID + "#+#v" + TalentConfig.MAT_ADV + "#",
-        mats: [
-            { id: TalentConfig.MAT_PRIMARY, n: 1 },
-            { id: TalentConfig.MAT_MID, n: 1 },
-            { id: TalentConfig.MAT_ADV, n: 1 }
-        ]
+        text: "#v" + TalentConfig.MAT_ULT + "#",
+        mats: [{ id: TalentConfig.MAT_ULT, n: 1 }]
     };
 }
 
@@ -962,6 +986,178 @@ function doTalentOneClick() {
     }
     cm.sendOk("一键分解完成！共分解 #r" + totalBooks + "#k 本天赋书。");
     cm.dispose();
+}
+
+// ==================== 物品删除 ====================
+
+function handleItemDelete(selection) {
+    if (status === 0) {
+        if (delPhase === 0) {
+            showDeleteCategory();
+        } else if (delPhase === 1) {
+            showDeleteItemPage();
+        } else {
+            showDeleteConfirm();
+        }
+        return;
+    }
+    if (status === 1) {
+        if (delPhase === 0) {
+            // 分类选择
+            if (selection === SEL_BACK) {
+                backToMain();
+                return;
+            }
+            if (selection < 0 || selection >= DEL_CATEGORIES.length) {
+                cm.dispose();
+                return;
+            }
+            delCat = selection;
+            delPhase = 1;
+            scanDeleteItems();
+            currentPage = 0;
+            status = 0;
+            showDeleteItemPage();
+            return;
+        }
+        if (delPhase === 1) {
+            // 物品选择（含分页）
+            if (selection === SEL_BACK) {
+                delPhase = 0;
+                status = 0;
+                showDeleteCategory();
+                return;
+            }
+            if (selection === SEL_PREV) {
+                currentPage--;
+                status = 0;
+                showDeleteItemPage();
+                return;
+            }
+            if (selection === SEL_NEXT) {
+                currentPage++;
+                status = 0;
+                showDeleteItemPage();
+                return;
+            }
+            delSelectedIdx = selection;
+            if (delSelectedIdx < 0 || delSelectedIdx >= delList.length) {
+                cm.dispose();
+                return;
+            }
+            delPhase = 2;
+            status = 0;
+            showDeleteConfirm();
+            return;
+        }
+        if (delPhase === 2) {
+            // 删除确认
+            if (selection === 0) {
+                doDeleteItem();
+            } else {
+                // 取消 → 返回重选
+                delPhase = 1;
+                status = 0;
+                scanDeleteItems();
+                showDeleteItemPage();
+            }
+            return;
+        }
+    }
+}
+
+function showDeleteCategory() {
+    var text = "#e#b[物品删除]#k#n\r\n请选择背包分类：\r\n\r\n";
+    text += "#L" + SEL_BACK + "##b返回#k#l\r\n\r\n";
+    for (var i = 0; i < DEL_CATEGORIES.length; i++) {
+        text += "#L" + i + "##b" + DEL_CATEGORIES[i].name + "#k#l\r\n";
+    }
+    cm.sendSimple(text);
+}
+
+function showDeleteItemPage() {
+    var text = "#e#b[物品删除]#k#n - " + DEL_CATEGORIES[delCat].name + "\r\n";
+    text += "选择要删除的物品：\r\n\r\n";
+    text += "#L" + SEL_BACK + "##b返回分类#k#l\r\n\r\n";
+    if (delList.length === 0) {
+        text += "#d该分类中没有物品。#k";
+        cm.sendSimple(text);
+        return;
+    }
+    var totalPages = Math.ceil(delList.length / PAGE_SIZE);
+    if (currentPage >= totalPages) {
+        currentPage = totalPages - 1;
+    }
+    if (currentPage < 0) {
+        currentPage = 0;
+    }
+    text += "共 #b" + delList.length + "#k 种  (#b" + (currentPage + 1) + "/" + totalPages + "#k)\r\n";
+    if (currentPage > 0) {
+        text += "#L" + SEL_PREV + "##b◀ 上一页#k#l\r\n";
+    }
+    var start = currentPage * PAGE_SIZE;
+    var end = Math.min(start + PAGE_SIZE, delList.length);
+    for (var i = start; i < end; i++) {
+        var di = delList[i];
+        text += "#L" + i + "##v" + di.itemId + "# #b#z" + di.itemId + "##k #r×" + di.qty + "#k#l\r\n";
+    }
+    if (currentPage < totalPages - 1) {
+        text += "#L" + SEL_NEXT + "##b▶ 下一页#k#l\r\n";
+    }
+    cm.sendSimple(text);
+}
+
+function showDeleteConfirm() {
+    var di = delList[delSelectedIdx];
+    var text = "#e[物品删除] 确认#n\r\n\r\n";
+    text += "#v" + di.itemId + "# #b#z" + di.itemId + "##k  #r×" + di.qty + "#k\r\n\r\n";
+    text += "确认删除该物品？删除后不可恢复。\r\n";
+    text += "#L0##r确认删除#k#l\r\n";
+    text += "#L1##b取消（返回重选）#k#l";
+    cm.sendSimple(text);
+}
+
+function scanDeleteItems() {
+    delList = [];
+    var cat = DEL_CATEGORIES[delCat];
+    var inv = cm.getInventory(cat.type);
+    if (inv == null) {
+        return;
+    }
+    // 按 itemId 汇总数量
+    var qtyMap = {};
+    var iter = inv.list().iterator();
+    while (iter.hasNext()) {
+        var item = iter.next();
+        var itemId = item.getItemId();
+        if (qtyMap[itemId] == null) {
+            qtyMap[itemId] = { itemId: itemId, qty: 0 };
+        }
+        qtyMap[itemId].qty += item.getQuantity();
+    }
+    for (var k in qtyMap) {
+        delList.push(qtyMap[k]);
+    }
+}
+
+function doDeleteItem() {
+    var di = delList[delSelectedIdx];
+    var owned = cm.getItemQuantity(di.itemId);
+    if (owned < di.qty) {
+        di.qty = owned;
+    }
+    if (di.qty <= 0) {
+        cm.sendOk("该物品已不存在。");
+        cm.dispose();
+        return;
+    }
+    cm.gainItem(di.itemId, -di.qty);
+    cm.sendOk("已删除 #v" + di.itemId + "# #b#z" + di.itemId + "##k  #r×" + di.qty + "#k");
+    // 删除后回到物品列表继续选择
+    status = -1;
+    delPhase = 1;
+    scanDeleteItems();
+    action(1, 0, 0);
 }
 
 // ==================== 公共 ====================

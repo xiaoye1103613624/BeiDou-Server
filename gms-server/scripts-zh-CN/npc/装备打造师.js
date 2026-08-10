@@ -238,8 +238,8 @@ function levelDoCraft() {
         return;
     }
 
-    // 品级校验 + 锻造师经验增加（Java侧权威处理）
-    var result = ForgeRecipeManager.craft(characterId, recipe.get("id"));
+    // 品级校验 + 体力扣除 + 锻造师经验增加（Java侧权威处理）
+    var result = ForgeRecipeManager.craft(characterId, cm.getPlayer().getAccountId(), recipe.get("id"));
     if (!result.get("success")) {
         cm.sendOkLevel("Main", "打造失败：" + result.get("message"));
         return;

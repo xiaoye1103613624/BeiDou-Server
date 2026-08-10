@@ -74,7 +74,7 @@ function action(mode, type, selection) {
         var tip = "";
         if (modeSel === 2) {
             if (tierSel === 4) {
-                tip = "终极兑换：三种魔法石各 #r10#k 个 → 1 本\r\n";
+                tip = "终极兑换：材料 #r10#k 个 → 1 本\r\n";
             } else {
                 tip = "兑换比例：材料 #r10#k 个 → 1 本天赋书\r\n";
             }

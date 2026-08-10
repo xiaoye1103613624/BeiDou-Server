@@ -1,4 +1,4 @@
-/*
+﻿/*
  * 野外 Boss 手动召唤（GM工具）
  * 功能：展示Boss列表（含图标），选择后直接在当前地图玩家位置召唤
  */
@@ -70,6 +70,7 @@ var bossList = [
     [妖僧, "[ 妖  僧 ]", 9600025],
     [闹钟, "[ 闹  钟 ]", 8500001],
     [熊狮, "[ 熊  狮 ]", 9420542],
+    // 8800001=扎昆本体（带血条）；祭坛正式召唤是假身8800000+手臂8800003~8800010
     [扎昆, "[ 扎  昆 ]", 8800001],
     [黑龙, "[ 黑  龙 ]", 8810018],
     [品克宾, "[品 克 宾]", 8820001],
@@ -154,8 +155,8 @@ function action(mode, type, selection) {
             var pos = cm.getPlayer().getPosition();
             var monster = cm.getMonsterLifeFactory(inputBossId);
             if (monster == null) {
-                // 不存在，回到ID输入页重新输入（错误信息嵌入prompt，避免sendOk+sendGetNumber冲突导致客户端异常）
-                cm.sendGetNumber("#r怪物ID [" + inputBossId + "] 不存在，请重新输入！#k\r\n\r\n请输入要召唤的怪物ID：", 1, 1, 999999999);
+                // 不存在或WZ损坏/技能未支持，回到ID输入页重新输入
+                cm.sendGetNumber("#r怪物ID [" + inputBossId + "] 无法召唤（不存在或数据异常），请重新输入！#k\r\n\r\n请输入要召唤的怪物ID：", 1, 1, 999999999);
                 status = 1; // 回退，下次递增仍到status 2
             } else {
                 // 存在则召唤

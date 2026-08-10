@@ -276,7 +276,7 @@ function action(mode, type, selection) {
         // 选项2：每日额外奖励
         if (dailyRewards.length > 0) {
             if (allDone && !isDailyRewardClaimed(progress)) {
-                text += "#L2##r每日奖励 ★#k — 全部副本已完成，可领取！#l\r\n";
+                text += "#L2##r每日奖励 ⚡#k — 全部副本已完成，可领取！#l\r\n";
             } else if (isDailyRewardClaimed(progress)) {
                 text += "#L2##d每日奖励 — 已领取#k#l\r\n";
             } else {

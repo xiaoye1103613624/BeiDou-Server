@@ -1,6 +1,10 @@
 // 匠人街 · 蒙斯 · 材料商人
-// 经验商店 / 特殊商店 / 限购商店
+// 经验商店 / 特殊商店 / 限购商店 / 材料商店 / 强化商店 / 潜能商店
 // 日限：[已购 / 上限]，跨天自动清零（quest progress 记 date|count）
+// 多币种支付 = 同时扣除全部货币（金币/点卷/抵用券/赞助）
+// 限购兑换日志：白底粉字（serverNotice type=5），记录「当前 / 剩余」兑换次数
+
+var OpLogManager = Java.type('org.gms.log.OpLogManager');
 
 var CASH_NX = 1;       // 点卷
 var CASH_MAPLE = 2;    // 抵用券
@@ -9,33 +13,76 @@ var CASH_MAPLE = 2;    // 抵用券
 // 日购记录 quest（infoNumber = logKey）
 var DAILY_QUEST_SPECIAL = 9900311;
 var DAILY_QUEST_LIMITED = 9900312;
+var DAILY_QUEST_ENHANCE = 9900313;
+var DAILY_QUEST_POTENTIAL = 9900314;
+var DAILY_QUEST_MATERIAL = 9900315;
 
 var status = -1;
-var shopType = 0;      // 1经验 2特殊 3限购
+var shopType = 0;      // 1经验 2特殊 3限购 4强化 5潜能 6材料
 var selectedIdx = -1;
-var payChoice = -1;    // 多币种时选择的支付方式下标
 var buyTimes = 1;      // 购买次数（每包）
+
+// ==================== 物品配置 ====================
 
 // 经验商店：每件消耗经验
 var EXP_ITEMS = [
     { id: 4032181, qty: 1, exp: 500000 }
 ];
 
-// 特殊商店：meso/nx/maple 有值即可作为支付选项（多币种=任选其一）
-// dailyMax=每日可购次数；qty=每次获得数量
-// pending=true 表示价格待配置，禁止购买
+// 强化商店：星之力卷轴、灵魂、星岩、保护符等
+// dailyMax=每日可购次数；qty=每次获得数量；meso/nx/maple/prepaid 全部同时扣除
+var ENHANCE_ITEMS = [
+    // 星之力卷轴系列
+    { id: 2049300, qty: 1, dailyMax: 30, meso: 500000, nx: 200, name: "T5强化卷" },
+    { id: 2049301, qty: 1, dailyMax: 20, meso: 1000000, nx: 400, name: "T4强化卷" },
+    { id: 2049302, qty: 1, dailyMax: 10, meso: 2000000, nx: 800, name: "T3强化卷" },
+    // 灵魂
+    { id: 2049914, qty: 1, dailyMax: 10, meso: 3000000, nx: 1000, name: "灵魂附魔石" },
+    { id: 2049915, qty: 1, dailyMax: 10, meso: 1000000, nx: 300, name: "灵魂清除卷" },
+    // 星岩
+    { id: 2049913, qty: 1, dailyMax: 10, meso: 2000000, nx: 600, name: "星岩镶嵌卷" },
+    // 洗炼石（装备之石复用）
+    { id: 4032171, qty: 1, dailyMax: 30, meso: 500000, nx: 100, name: "洗炼石/装备之石" },
+    // 灵韵结晶
+    { id: 4021017, qty: 1, dailyMax: 10, meso: 5000000, nx: 500, name: "灵韵结晶" }
+];
+
+// 潜能商店：潜能卷、放大镜、魔方
+var POTENTIAL_ITEMS = [
+    // 潜能附加卷
+    { id: 2049402, qty: 1, dailyMax: 20, meso: 1000000, nx: 200, name: "潜能附加卷100%" },
+    { id: 2049400, qty: 1, dailyMax: 10, meso: 800000, nx: 150, name: "潜能附加卷90%" },
+    { id: 2049401, qty: 1, dailyMax: 10, meso: 600000, nx: 100, name: "潜能附加卷70%" },
+    // 放大镜
+    { id: 2460000, qty: 1, dailyMax: 30, meso: 200000, nx: 50, name: "放大镜(Lv30-)" },
+    { id: 2460001, qty: 1, dailyMax: 20, meso: 500000, nx: 150, name: "放大镜(Lv70-)" },
+    { id: 2460002, qty: 1, dailyMax: 10, meso: 1000000, nx: 300, name: "放大镜(Lv120-)" },
+    { id: 2460003, qty: 1, dailyMax: 5, meso: 3000000, nx: 800, name: "特级放大镜" },
+    // 魔方
+    { id: 5062000, qty: 1, dailyMax: 10, meso: 5000000, nx: 500, name: "神奇魔方" },
+    { id: 5062001, qty: 1, dailyMax: 5, meso: 10000000, nx: 1000, name: "高级神奇魔方" },
+    { id: 5062002, qty: 1, dailyMax: 3, meso: 20000000, nx: 2000, name: "超级神奇魔方" },
+    // 附加潜能
+    { id: 2049902, qty: 1, dailyMax: 10, meso: 3000000, nx: 400, name: "附加潜能卷" },
+    // 附加魔方
+    { id: 2049911, qty: 1, dailyMax: 5, meso: 8000000, nx: 800, name: "附加魔方" },
+    // 品阶提升
+    { id: 2049912, qty: 1, dailyMax: 3, meso: 15000000, nx: 1500, name: "品阶提升卷" }
+];
+
+// 特殊商店：meso/nx/maple 均需同时支付；pending=物品尚未实装（待另建）
 var SPECIAL_ITEMS = [
     { id: 2431952, qty: 1, dailyMax: 99, meso: 10000000, nx: 800 },
-    // 挑战恢复剂价格待配置
-    { id: 2004900, qty: 1, dailyMax: 99, pending: true },
-    { id: 2004901, qty: 1, dailyMax: 99, pending: true },
-    { id: 2004902, qty: 1, dailyMax: 99, pending: true },
+    { id: 2431952, qty: 1, dailyMax: 99, meso: 10000000, nx: 800 },
+    { id: 4036009, qty: 1, dailyMax: 99, meso: 10000000, nx: 1000, pending: true },
+    { id: 4036006, qty: 1, dailyMax: 99, meso: 10000000, nx: 1500, pending: true },
+    { id: 4036005, qty: 1, dailyMax: 99, meso: 10000000, nx: 2000, pending: true },
     { id: 2300001, qty: 1000, dailyMax: 30000, maple: 2000, nx: 2000 },
-    { id: 5360016, qty: 1, dailyMax: 1, maple: 5000, nx: 5000 },
+    { id: 5360016, qty: 1, dailyMax: 1, maple: 5000, nx: 5000, pending: true },
     { id: 2614000, qty: 1, dailyMax: 10, meso: 99999999, nx: 500 }
 ];
 
-// 限购商店：赞助=角色可消费赞助（扣减不减少总赞助）
+// 限购商店：赞助=角色可消费赞助（扣减不减少总赞助）；grantCash=直接发放货币点卷
 var LIMITED_ITEMS = [
     { id: 4032171, qty: 100, dailyMax: 9, prepaid: 20 },
     { id: 4032169, qty: 100, dailyMax: 9, prepaid: 20 },
@@ -43,28 +90,37 @@ var LIMITED_ITEMS = [
     { id: 2432444, qty: 1, dailyMax: 9, prepaid: 3 },
     { id: 2432445, qty: 1, dailyMax: 9, prepaid: 6 },
     { id: 2432446, qty: 1, dailyMax: 9, prepaid: 10 },
-    { id: 4032862, qty: 1, dailyMax: 9, prepaid: 22 },
-    { id: 4032873, qty: 1, dailyMax: 9, prepaid: 44 },
-    { id: 4032863, qty: 1, dailyMax: 9, prepaid: 66 },
-    { id: 4032868, qty: 1, dailyMax: 9, prepaid: 88 },
-    { id: 2614000, qty: 1, dailyMax: 10, prepaid: 10 }
+    { id: 4032862, qty: 1, dailyMax: 9, prepaid: 22, pending: true },
+    { id: 4032873, qty: 1, dailyMax: 9, prepaid: 44, pending: true },
+    { id: 4032863, qty: 1, dailyMax: 9, prepaid: 66, pending: true },
+    { id: 4032868, qty: 1, dailyMax: 9, prepaid: 88, pending: true },
+    { id: 2614000, qty: 1, dailyMax: 10, prepaid: 10 },
+    { grantCash: CASH_NX, grantAmt: 10000, qty: 1, dailyMax: 99, prepaid: 1, name: "点卷1W" }
 ];
+
+// 材料商店：金币 + 点卷 同时扣除
+var MATERIAL_ITEMS = [
+    { id: 4021009, qty: 1, dailyMax: 999, meso: 1000000, nx: 100, name: "星石" },
+    { id: 4011007, qty: 1, dailyMax: 999, meso: 1000000, nx: 100, name: "月石" },
+    { id: 4005000, qty: 1, dailyMax: 999, meso: 1000000, nx: 50, name: "力量水晶" },
+    { id: 4005002, qty: 1, dailyMax: 999, meso: 1000000, nx: 50, name: "敏捷水晶" },
+    { id: 4005001, qty: 1, dailyMax: 999, meso: 1000000, nx: 50, name: "智慧水晶" },
+    { id: 4005003, qty: 1, dailyMax: 999, meso: 1000000, nx: 50, name: "幸运水晶" },
+    { id: 4005004, qty: 1, dailyMax: 999, meso: 1000000, nx: 50, name: "黑暗水晶" }
+];
+
+// ==================== 状态机 ====================
 
 function start() {
     status = -1;
     shopType = 0;
     selectedIdx = -1;
-    payChoice = -1;
     buyTimes = 1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode === -1) {
-        cm.dispose();
-        return;
-    }
-    if (mode === 0) {
+    if (mode === -1 || mode === 0) {
         cm.dispose();
         return;
     }
@@ -75,9 +131,15 @@ function action(mode, type, selection) {
     } else if (shopType === 1) {
         handleExp(selection);
     } else if (shopType === 2) {
-        handleSpecial(selection);
+        handleShop(SPECIAL_ITEMS, DAILY_QUEST_SPECIAL, selection);
     } else if (shopType === 3) {
-        handleLimited(selection);
+        handleShop(LIMITED_ITEMS, DAILY_QUEST_LIMITED, selection);
+    } else if (shopType === 4) {
+        handleShop(ENHANCE_ITEMS, DAILY_QUEST_ENHANCE, selection);
+    } else if (shopType === 5) {
+        handleShop(POTENTIAL_ITEMS, DAILY_QUEST_POTENTIAL, selection);
+    } else if (shopType === 6) {
+        handleShop(MATERIAL_ITEMS, DAILY_QUEST_MATERIAL, selection);
     } else {
         cm.dispose();
     }
@@ -93,23 +155,26 @@ function handleMain(selection) {
         t += "赞助：#r" + fmt(cm.getSponsor()) + "#k  总赞助：#r" + fmt(cm.getTotalSponsor()) + "#k\r\n\r\n";
         t += "#L1##b经验商店#k#l\r\n";
         t += "#L2##b特殊商店#k#l\r\n";
-        t += "#L3##b限购商店#k#l\r\n";
+        t += "#L3##b限购商店（赞助专属）#k#l\r\n";
+        t += "#L6##b材料商店（星石/水晶）#k#l\r\n";
+        t += "#L4##b⭐ 强化材料（星之力/灵魂/星岩/洗炼/灵韵）#k#l\r\n";
+        t += "#L5##b🔮 潜能材料（卷轴/放大镜/魔方）#k#l\r\n";
         cm.sendSimple(t);
         return;
     }
     if (status === 1) {
         if (selection === 1) {
-            shopType = 1;
-            status = -1;
-            action(1, 0, 0);
+            shopType = 1; status = -1; action(1, 0, 0);
         } else if (selection === 2) {
-            shopType = 2;
-            status = -1;
-            action(1, 0, 0);
+            shopType = 2; status = -1; action(1, 0, 0);
         } else if (selection === 3) {
-            shopType = 3;
-            status = -1;
-            action(1, 0, 0);
+            shopType = 3; status = -1; action(1, 0, 0);
+        } else if (selection === 4) {
+            shopType = 4; status = -1; action(1, 0, 0);
+        } else if (selection === 5) {
+            shopType = 5; status = -1; action(1, 0, 0);
+        } else if (selection === 6) {
+            shopType = 6; status = -1; action(1, 0, 0);
         } else {
             cm.dispose();
         }
@@ -168,16 +233,20 @@ function handleExp(selection) {
         }
         cm.getPlayer().loseExp(cost, true, true);
         cm.gainItem(it2.id, gain);
+        try {
+            OpLogManager.recordExchange(cm.getPlayer(), it2.id, gain,
+                "材料商人经验商店 exp=" + cost + " item=" + it2.id + " x" + gain);
+        } catch (ex) { /* 日志失败不影响玩法 */ }
         cm.sendOk("兑换成功！\r\n获得 #v" + it2.id + "# ×" + gain + "\r\n消耗经验：#r" + fmt(cost) + "#k");
         cm.dispose();
     }
 }
 
-// ==================== 特殊商店 ====================
+// ==================== 通用日限商店（特殊/限购/强化/潜能/材料） ====================
 
-function handleSpecial(selection) {
+function handleShop(list, questId, selection) {
     if (status === 0) {
-        cm.sendSimple(buildShopList(SPECIAL_ITEMS, DAILY_QUEST_SPECIAL, "特殊商店"));
+        cm.sendSimple(buildShopList(list, questId));
         return;
     }
     if (status === 1) {
@@ -186,17 +255,17 @@ function handleSpecial(selection) {
             return;
         }
         selectedIdx = selection;
-        var it = SPECIAL_ITEMS[selectedIdx];
+        var it = list[selectedIdx];
         if (!it) {
             cm.dispose();
             return;
         }
         if (it.pending) {
-            cm.sendOk("#v" + it.id + "# #t" + it.id + "#\r\n#r价格尚未配置，暂不可购买。#k");
+            cm.sendOk("#v" + (it.id || 0) + "# " + displayName(it) + "\r\n#r该物品尚未实装，暂不可购买。#k");
             cm.dispose();
             return;
         }
-        var bought = getDailyCount(DAILY_QUEST_SPECIAL, selectedIdx);
+        var bought = getDailyCount(questId, selectedIdx);
         var remain = it.dailyMax - bought;
         if (remain <= 0) {
             cm.sendOk("今日购买次数已达上限 [" + bought + " / " + it.dailyMax + "]。");
@@ -209,159 +278,148 @@ function handleSpecial(selection) {
             cm.dispose();
             return;
         }
-        if (pays.length === 1) {
-            payChoice = 0;
-            cm.sendGetNumber(buildBuyPrompt(it, bought, pays[0]), 1, 1, remain);
-        } else {
-            // 先选支付方式
-            status = 10; // 跳到支付选择
-            var t = "#v" + it.id + "# #t" + it.id + "# ×" + it.qty + "\r\n";
-            t += "今日：#r[" + bought + " / " + it.dailyMax + "]#k\r\n\r\n请选择支付方式：\r\n";
-            for (var i = 0; i < pays.length; i++) {
-                t += "#L" + i + "#" + pays[i].label + "：#r" + fmt(pays[i].price) + "#k#l\r\n";
-            }
-            cm.sendSimple(t);
-        }
-        return;
-    }
-    if (status === 11) {
-        // 支付方式已选
-        payChoice = selection;
-        var it3 = SPECIAL_ITEMS[selectedIdx];
-        var bought3 = getDailyCount(DAILY_QUEST_SPECIAL, selectedIdx);
-        var remain3 = it3.dailyMax - bought3;
-        var pays3 = getPayOptions(it3);
-        if (payChoice < 0 || payChoice >= pays3.length) {
-            cm.dispose();
-            return;
-        }
-        cm.sendGetNumber(buildBuyPrompt(it3, bought3, pays3[payChoice]), 1, 1, remain3);
-        return;
-    }
-    if (status === 2 || status === 12) {
-        buyTimes = selection;
-        doCashBuy(SPECIAL_ITEMS[selectedIdx], DAILY_QUEST_SPECIAL, selectedIdx);
-    }
-}
-
-// ==================== 限购商店 ====================
-
-function handleLimited(selection) {
-    if (status === 0) {
-        cm.sendSimple(buildShopList(LIMITED_ITEMS, DAILY_QUEST_LIMITED, "限购商店"));
-        return;
-    }
-    if (status === 1) {
-        if (selection === 9000) {
-            backMain();
-            return;
-        }
-        selectedIdx = selection;
-        var it = LIMITED_ITEMS[selectedIdx];
-        if (!it) {
-            cm.dispose();
-            return;
-        }
-        var bought = getDailyCount(DAILY_QUEST_LIMITED, selectedIdx);
-        var remain = it.dailyMax - bought;
-        if (remain <= 0) {
-            cm.sendOk("今日购买次数已达上限 [" + bought + " / " + it.dailyMax + "]。");
-            cm.dispose();
-            return;
-        }
-        payChoice = 0;
-        var pays = getPayOptions(it);
-        cm.sendGetNumber(buildBuyPrompt(it, bought, pays[0]), 1, 1, remain);
+        cm.sendGetNumber(buildBuyPrompt(it, bought, pays), 1, 1, remain);
         return;
     }
     if (status === 2) {
         buyTimes = selection;
-        doCashBuy(LIMITED_ITEMS[selectedIdx], DAILY_QUEST_LIMITED, selectedIdx);
+        doBuy(list[selectedIdx], questId, selectedIdx);
     }
 }
 
-// ==================== 购买执行 ====================
+// ==================== 购买执行（多币种同时扣除） ====================
 
-function doCashBuy(it, questId, logKey) {
+function doBuy(it, questId, logKey) {
     if (!it || buyTimes <= 0) {
         cm.dispose();
         return;
     }
     if (it.pending) {
-        cm.sendOk("价格尚未配置，暂不可购买。");
+        cm.sendOk("该物品尚未实装，暂不可购买。");
         cm.dispose();
         return;
     }
     var bought = getDailyCount(questId, logKey);
     if (bought + buyTimes > it.dailyMax) {
-        cm.sendOk("超过今日剩余可购次数。剩余：" + (it.dailyMax - bought));
+        cm.sendOk("超过今日剩余可购次数。剩余：#r" + (it.dailyMax - bought) + "#k");
         cm.dispose();
         return;
     }
     var pays = getPayOptions(it);
-    if (payChoice < 0 || payChoice >= pays.length) {
+    if (pays.length === 0) {
+        cm.sendOk("该商品未配置价格。");
         cm.dispose();
         return;
     }
-    var pay = pays[payChoice];
-    var totalPrice = pay.price * buyTimes;
-    var gain = it.qty * buyTimes;
 
-    if (pay.type === "meso") {
-        if (cm.getPlayer().getMeso() < totalPrice) {
-            cm.sendOk("金币不足！需要 #r" + fmt(totalPrice) + "#k。");
-            cm.dispose();
-            return;
-        }
-    } else if (pay.type === "sponsor") {
-        if (cm.getSponsor() < totalPrice) {
-            cm.sendOk("赞助不足！需要 #r" + fmt(totalPrice) + "#k，当前 #r" + fmt(cm.getSponsor()) + "#k。");
-            cm.dispose();
-            return;
-        }
-    } else {
-        if (getCash(pay.cashType) < totalPrice) {
-            cm.sendOk(pay.label + "不足！需要 #r" + fmt(totalPrice) + "#k。");
-            cm.dispose();
-            return;
+    // 1) 校验所有货币是否足够（同时扣款，须全部充足）
+    var missing = [];
+    for (var i = 0; i < pays.length; i++) {
+        var need = pays[i].price * buyTimes;
+        if (pays[i].type === "meso") {
+            if (cm.getPlayer().getMeso() < need) {
+                missing.push(pays[i].label + " 需要#r" + fmt(need) + "#k 当前#r" + fmt(cm.getPlayer().getMeso()) + "#k");
+            }
+        } else if (pays[i].type === "sponsor") {
+            if (cm.getSponsor() < need) {
+                missing.push(pays[i].label + " 需要#r" + fmt(need) + "#k 当前#r" + fmt(cm.getSponsor()) + "#k");
+            }
+        } else {
+            if (getCash(pays[i].cashType) < need) {
+                missing.push(pays[i].label + " 需要#r" + fmt(need) + "#k 当前#r" + fmt(getCash(pays[i].cashType)) + "#k");
+            }
         }
     }
-    if (!cm.canHold(it.id, gain)) {
+    if (missing.length > 0) {
+        cm.sendOk("货币不足：\r\n" + missing.join("\r\n"));
+        cm.dispose();
+        return;
+    }
+
+    // 2) 背包空间（发放实物的物品才检查）
+    if (!it.grantCash && !cm.canHold(it.id, it.qty * buyTimes)) {
         cm.sendOk("背包空间不足。");
         cm.dispose();
         return;
     }
 
-    if (pay.type === "meso") {
-        cm.gainMeso(-totalPrice);
-    } else if (pay.type === "sponsor") {
-        if (!cm.spendSponsor(totalPrice)) {
-            cm.sendOk("赞助扣减失败，请重试。");
-            cm.dispose();
-            return;
+    // 3) 先扣赞助，再扣其余货币
+    for (var j = 0; j < pays.length; j++) {
+        if (pays[j].type === "sponsor") {
+            if (!cm.spendSponsor(pays[j].price * buyTimes)) {
+                cm.sendOk("赞助扣减失败，请重试。");
+                cm.dispose();
+                return;
+            }
         }
-    } else {
-        cm.getPlayer().getCashShop().gainCash(pay.cashType, -totalPrice);
     }
-    cm.gainItem(it.id, gain);
-    addDailyCount(questId, logKey, buyTimes);
+    for (var k = 0; k < pays.length; k++) {
+        var p = pays[k];
+        if (p.type === "sponsor") {
+            continue;
+        }
+        var cost = p.price * buyTimes;
+        if (p.type === "meso") {
+            cm.gainMeso(-cost);
+        } else {
+            cm.getPlayer().getCashShop().gainCash(p.cashType, -cost);
+        }
+    }
 
+    // 4) 发放奖励
+    var gainDesc;
+    if (it.grantCash) {
+        var nxGain = it.grantAmt * buyTimes;
+        cm.getPlayer().getCashShop().gainCash(it.grantCash, nxGain);
+        gainDesc = "点卷 × #r" + fmt(nxGain) + "#k";
+    } else {
+        var itemGain = it.qty * buyTimes;
+        cm.gainItem(it.id, itemGain);
+        gainDesc = "#v" + it.id + "# × " + itemGain;
+    }
+
+    // 5) 记录日限并写日志（白底粉字，含当前/剩余）
+    addDailyCount(questId, logKey, buyTimes);
     var after = getDailyCount(questId, logKey);
-    cm.sendOk("购买成功！\r\n获得 #v" + it.id + "# ×" + gain
-        + "\r\n消耗 " + pay.label + "：#r" + fmt(totalPrice) + "#k"
-        + "\r\n今日：#b[" + after + " / " + it.dailyMax + "]#k");
+    logPurchase(it, questId, logKey, after);
+
+    var payDesc = [];
+    for (var m = 0; m < pays.length; m++) {
+        payDesc.push(pays[m].label + ":#r" + fmt(pays[m].price * buyTimes) + "#k");
+    }
+    cm.sendOk("购买成功！\r\n获得 " + gainDesc
+        + "\r\n消耗 " + payDesc.join(" ")
+        + "\r\n今日：#b[" + after + " / " + it.dailyMax + "]#k  剩余 #g" + (it.dailyMax - after) + "#k 次");
     cm.dispose();
+}
+
+// ==================== 日志 ====================
+
+// 限购类兑换日志：白底粉字广播，记录「当前 / 剩余」兑换次数
+function logPurchase(it, questId, logKey, after) {
+    try {
+        var remain = it.dailyMax - after;
+        var gain = (it.grantCash ? it.grantAmt : it.qty) * buyTimes;
+        var detail = "材料商人 shopType=" + shopType + " itemId=" + (it.id || 0) + " count=" + gain
+            + " daily=" + after + "/" + it.dailyMax + " pay=" + JSON.stringify(getPayOptions(it));
+        if (it.grantCash) {
+            var summary = "兑换[点卷 * " + gain + "] 当前" + after + "/" + it.dailyMax + " 剩余" + remain;
+            OpLogManager.record(cm.getPlayer(), OpLogManager.LIMITED, summary, detail);
+        } else {
+            OpLogManager.recordLimited(cm.getPlayer(), it.id, gain, after, it.dailyMax, detail);
+        }
+    } catch (ex) { /* 日志失败不影响玩法 */ }
 }
 
 // ==================== UI 构建 ====================
 
-function buildShopList(list, questId, title) {
-    var t = "#e#b" + title + "#k#n\r\n";
-    t += "格式：物品 ×数量  [已购/日限]  价格\r\n\r\n";
+function buildShopList(list, questId) {
+    var t = "#e#b" + shopTitle() + "#k#n\r\n";
+    t += "格式：物品 ×数量  [已购/日限]  价格（多种货币同时扣除）\r\n\r\n";
     for (var i = 0; i < list.length; i++) {
         var it = list[i];
         var bought = getDailyCount(questId, i);
-        t += "#L" + i + "##v" + it.id + "# #t" + it.id + "# ×" + it.qty
+        t += "#L" + i + "#" + itemIcon(it) + " " + displayName(it) + " ×" + it.qty
             + "  #r[" + bought + " / " + it.dailyMax + "]#k  "
             + formatPriceLine(it) + "#l\r\n";
     }
@@ -369,17 +427,46 @@ function buildShopList(list, questId, title) {
     return t;
 }
 
-function buildBuyPrompt(it, bought, pay) {
+function buildBuyPrompt(it, bought, pays) {
     var remain = it.dailyMax - bought;
-    return "#v" + it.id + "# #t" + it.id + "# ×" + it.qty + " / 次\r\n"
-        + "支付：" + pay.label + " #r" + fmt(pay.price) + "#k / 次\r\n"
-        + "今日：#r[" + bought + " / " + it.dailyMax + "]#k  剩余 #b" + remain + "#k 次\r\n\r\n"
+    var t = itemIcon(it) + " " + displayName(it) + " ×" + it.qty + " / 次\r\n";
+    for (var i = 0; i < pays.length; i++) {
+        t += "支付：" + pays[i].label + " #r" + fmt(pays[i].price) + "#k / 次\r\n";
+    }
+    t += "今日：#r[" + bought + " / " + it.dailyMax + "]#k  剩余 #b" + remain + "#k 次\r\n\r\n"
         + "请输入购买次数：";
+    return t;
+}
+
+function shopTitle() {
+    if (shopType === 2) return "特殊商店";
+    if (shopType === 3) return "限购商店";
+    if (shopType === 4) return "强化材料商店";
+    if (shopType === 5) return "潜能材料商店";
+    if (shopType === 6) return "材料商店";
+    return "商店";
+}
+
+function itemIcon(it) {
+    if (it.grantCash) {
+        return "#fUI/CashShop.img/CashItem/0#";
+    }
+    return "#v" + it.id + "#";
+}
+
+function displayName(it) {
+    if (it.name) {
+        return it.name;
+    }
+    if (it.grantCash) {
+        return "点卷";
+    }
+    return "#t" + it.id + "#";
 }
 
 function formatPriceLine(it) {
     if (it.pending) {
-        return "#r价格待配置#k";
+        return "#r尚未实装#k";
     }
     var parts = [];
     if (it.meso > 0) {
@@ -394,9 +481,10 @@ function formatPriceLine(it) {
     if (it.prepaid > 0) {
         parts.push("赞助:" + fmt(it.prepaid));
     }
-    return parts.length > 0 ? parts.join(" / ") : "#r无价格#k";
+    return parts.length > 0 ? parts.join(" + ") : "#r无价格#k";
 }
 
+// 返回该物品「需同时支付」的全部货币项
 function getPayOptions(it) {
     var opts = [];
     if (it.meso > 0) {
@@ -459,7 +547,6 @@ function ensureQuest(questId) {
 function backMain() {
     shopType = 0;
     selectedIdx = -1;
-    payChoice = -1;
     status = -1;
     action(1, 0, 0);
 }

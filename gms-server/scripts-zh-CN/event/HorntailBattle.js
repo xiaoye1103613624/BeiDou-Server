@@ -83,15 +83,15 @@ function setEventExclusives(eim) {
 function setEventRewards(eim) {
     var itemSet, itemQty, evLevel, expStages, mesoStages;
 
-    evLevel = 1;    //Rewards at clear PQ
-    itemSet = [];
-    itemQty = [];
+    evLevel = 1;
+    itemSet = [1002791, 4031822, 4000314, 4001126];
+    itemQty = [1, 3, 3, 80];
     eim.setEventRewards(evLevel, itemSet, itemQty);
 
-    expStages = [];    //bonus exp given on CLEAR stage signal
+    expStages = [5000000];
     eim.setEventClearStageExp(expStages);
 
-    mesoStages = [];    //bonus meso given on CLEAR stage signal
+    mesoStages = [20000000];
     eim.setEventClearStageMeso(mesoStages);
 }
 

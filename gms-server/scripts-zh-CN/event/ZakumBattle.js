@@ -85,14 +85,15 @@ function setEventRewards(eim) {
     var itemSet, itemQty, evLevel, expStages, mesoStages;
 
     evLevel = 1;    //Rewards at clear PQ
-    itemSet = [];
-    itemQty = [];
+    // 通关奖励：扎昆头盔(1002357)、扎昆树枝(4032274)等
+    itemSet = [1002357, 4032274, 4000313, 4001126];
+    itemQty = [1, 3, 5, 50];
     eim.setEventRewards(evLevel, itemSet, itemQty);
 
-    expStages = [];    //bonus exp given on CLEAR stage signal
+    expStages = [2000000];    //通关奖励200W经验
     eim.setEventClearStageExp(expStages);
 
-    mesoStages = [];    //bonus meso given on CLEAR stage signal
+    mesoStages = [10000000];  //通关奖励1000W金币
     eim.setEventClearStageMeso(mesoStages);
 }
 

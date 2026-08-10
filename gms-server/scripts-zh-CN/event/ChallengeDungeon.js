@@ -39,6 +39,9 @@ function setup(level, lobbyid) {
     eim.setProperty("reactorName", em.getProperty("cfgReactor") || "boss");
     eim.setProperty("flag", em.getProperty("cfgFlag") || "");
     eim.setProperty("cleared", "0");
+    eim.setProperty("phase", "fight");
+    eim.setProperty("fightMin", "" + fightMin);
+    eim.setProperty("lootStartMs", "0");
 
     var map = eim.getMapInstance(mapId);
     map.killAllMonsters();
@@ -133,6 +136,11 @@ function isTargetCleared(eim, map, killedMob) {
     return hasTarget;
 }
 
+// EventInstanceManager.monsterKilled(chr,mob) always invokes this; missing → stack spam.
+function monsterValue(eim, mobId) {
+    return 1;
+}
+
 function monsterKilled(mob, eim) {
     try {
         if (eim.getProperty("cleared") === "1") {
@@ -150,17 +158,46 @@ function clearPQ(eim) {
     if (eim.getProperty("cleared") === "1") {
         return;
     }
+    // phase/lootStart first so a late fight-timer callback will not end() immediately.
     eim.setProperty("cleared", "1");
-    eim.stopEventTimer();
+    eim.setProperty("phase", "loot");
+    eim.setProperty("lootStartMs", "" + java.lang.System.currentTimeMillis());
     eim.setEventCleared();
     eim.showClearEffect();
+
+    var bossName = eim.getProperty("bossName") || "Boss";
+    var players = eim.getPlayers().iterator();
+    while (players.hasNext()) {
+        var p = players.next();
+        if (p == null) continue;
+
+        var fightMin = parseInt(eim.getProperty("fightMin") || "15");
+        var baseMeso = fightMin >= 30 ? 5000000 : (fightMin >= 20 ? 3000000 : 1000000);
+        p.gainMeso(baseMeso, true, true);
+
+        var baseExp = fightMin >= 30 ? 500000 : (fightMin >= 20 ? 300000 : 150000);
+        p.gainExp(baseExp, true, true);
+
+        p.dropMessage(5, "【" + bossName + "】讨伐成功！获得金币+" + (baseMeso / 10000) + "W 经验+" + (baseExp / 10000) + "W");
+    }
+
     eim.dropMessage(5, "挑战成功！请尽快拾取掉落，" + clearWaitMin + " 分钟后送回匠人街。");
-    eim.startEventTimer(clearWaitMin * 60000);
+    eim.restartEventTimer(clearWaitMin * 60000);
 }
 
 function scheduledTimeout(eim) {
-    if (eim.getProperty("cleared") === "1") {
+    var phase = eim.getProperty("phase") || "fight";
+    if (phase === "loot") {
+        // Ignore stale fight-timer callbacks that fire after clear flipped phase to loot.
+        var started = parseInt(eim.getProperty("lootStartMs") || "0");
+        var minLootMs = clearWaitMin * 60000 - 3000;
+        if (started > 0 && (java.lang.System.currentTimeMillis() - started) < minLootMs) {
+            return;
+        }
         end(eim);
+        return;
+    }
+    if (eim.getProperty("cleared") === "1") {
         return;
     }
     eim.dropMessage(5, "时间到，挑战失败。");

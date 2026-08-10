@@ -27,6 +27,7 @@ function showMenu() {
     text += "#b收集怪物卡片、钓鱼或兑换专属戒指！#k\r\n\r\n";
     text += "━━━ 图鉴收集 ━━━\r\n";
     text += "#L310#卡片收集  #d城镇 / 野外精英 / 远征Boss#k#l\r\n";
+    text += "#L311##r成长勋章#k  #d卡注入属性 / 勋章池幻化#k#l\r\n";
     text += "#L301#玩具收集  #d收集玩具图鉴#k#l\r\n";
     text += "#L303##r强化戒指#k  #d根据卡片图鉴等级兑换戒指#k#l\r\n";
     text += "\r\n━━━ 钓鱼系统 ━━━\r\n";
@@ -39,6 +40,7 @@ function showMenu() {
 function doSelect(selection) {
     switch (selection) {
         case 310: openSub("xy/collect/卡片收集"); break;
+        case 311: openSub("xy/collect/成长勋章"); break;
         case 301: openSub("xy/collect/玩具收集"); break;
         case 303: openSub("xy/强化戒指"); break;
         case 304: openSub("xy/钓鱼中心"); break;
