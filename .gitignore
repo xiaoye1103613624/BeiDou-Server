@@ -77,18 +77,11 @@ obj/
 aside_*/
 _quarantine_*/
 
-# Local multi-GB zh-CN WZ XML dumps (keep on disk; too large for routine git push)
+
+# Large zh-CN WZ XML trees (multi-GB; same remote already has EN wz packs). Track smaller packs only.
+
+# Large zh-CN WZ XML trees (multi-GB). Track smaller packs only.
 gms-server/wz-zh-CN/Character.wz/
 gms-server/wz-zh-CN/Map.wz/
-gms-server/wz-zh-CN/Npc.wz/
 gms-server/wz-zh-CN/Mob.wz/
-gms-server/wz-zh-CN/Item.wz/
-gms-server/wz-zh-CN/String.wz/
-gms-server/wz-zh-CN/Etc.wz/
-gms-server/wz-zh-CN/Effect.wz/
-gms-server/wz-zh-CN/Reactor.wz/
-gms-server/wz-zh-CN/Skill.wz/
-gms-server/wz-zh-CN/Sound.wz/
-gms-server/wz-zh-CN/UI.wz/
-gms-server/wz-zh-CN/TamingMob.wz/
-gms-server/wz-zh-CN/Quest.wz/
+gms-server/wz-zh-CN/Npc.wz/
