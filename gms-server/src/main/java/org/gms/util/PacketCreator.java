@@ -24,8 +24,11 @@ import com.mybatisflex.annotation.Column;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
+import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.client.Client;
 import org.gms.client.Disease;
+import org.gms.client.DamageSkinCatalog;
+import org.gms.client.DamageSkinInventory;
 import org.gms.client.FamilyEntitlement;
 import org.gms.client.FamilyEntry;
 import org.gms.client.MonsterBook;
@@ -95,6 +98,8 @@ import org.gms.server.maps.DoorObject;
 import org.gms.server.maps.Dragon;
 import org.gms.server.maps.HiredMerchant;
 import org.gms.server.maps.MapItem;
+import org.gms.server.dailycheckin.DailyCheckinRewards;
+import org.gms.server.OreStorage;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniGame;
 import org.gms.server.maps.MiniGame.MiniGameResult;
@@ -119,7 +124,7 @@ import java.util.stream.Collectors;
  */
 public class PacketCreator {
 
-    public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
+    public static final List<Pair<Stat, Long>> EMPTY_STATUPDATE = Collections.emptyList();
     private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
@@ -188,23 +193,25 @@ public class PacketCreator {
             }
         }
 
-        p.writeByte(chr.getLevel()); // level
+        // Level300: ushort level + long EXP (matches client Decode2 / Decode8 caves)
+        p.writeShort(Math.min(300, Math.max(1, chr.getLevel())));
         p.writeShort(chr.getJob().getId()); // job
         p.writeShort(chr.getStr()); // str
         p.writeShort(chr.getDex()); // dex
         p.writeShort(chr.getInt()); // int
         p.writeShort(chr.getLuk()); // luk
-        p.writeShort(chr.getHp()); // hp (?)
-        p.writeShort(chr.getClientMaxHp()); // maxhp
-        p.writeShort(chr.getMp()); // mp (?)
-        p.writeShort(chr.getClientMaxMp()); // maxmp
+        // MaxHpMp (ijl15 Decode4 @ login/charlist): HP/MP must be int, not short
+        p.writeInt(chr.getHp());
+        p.writeInt(chr.getClientMaxHp());
+        p.writeInt(chr.getMp());
+        p.writeInt(chr.getClientMaxMp());
         p.writeShort(chr.getRemainingAp()); // remaining ap
         if (GameConstants.hasSPTable(chr.getJob())) {
             addRemainingSkillInfo(p, chr);
         } else {
             p.writeShort(chr.getRemainingSp()); // remaining sp
         }
-        p.writeInt(chr.getExp()); // current exp
+        p.writeLong(Math.max(0L, chr.getExp()));
         p.writeShort(chr.getFame()); // fame
         p.writeInt(chr.getGachaExp()); //Gacha Exp
         p.writeInt(chr.getMapId()); // current map id
@@ -234,7 +241,7 @@ public class PacketCreator {
             p.writeString(chr.getLinkedName());
         }
 
-        p.writeInt(chr.getMeso());
+        p.writeLong(chr.getMeso());
         addInventoryInfo(p, chr);
         addSkillInfo(p, chr);
         addQuestInfo(p, chr);
@@ -293,7 +300,22 @@ public class PacketCreator {
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
-            short pos = (short) (item.getPosition() * -1);  //修复其他角色无法看到现金勋章
+            short eqPos = item.getPosition();
+            // AvatarLook（选角/外观）：跳过扩展槽，避免选频道后 error 38（EOF）。
+            // 进图后的装备栏同步见 addInventoryInfo。
+            if (eqPos == -20 || eqPos == -120
+                    || eqPos == -33 || eqPos == -133
+                    || eqPos == -50 || eqPos == -150
+                    || eqPos == -51 || eqPos == -151
+                    || eqPos == -52 || eqPos == -53 || eqPos == -152 || eqPos == -153
+                    || eqPos == -54 || eqPos == -55 || eqPos == -56 || eqPos == -57 || eqPos == -58
+                    || eqPos == -154 || eqPos == -155 || eqPos == -156 || eqPos == -157 || eqPos == -158
+                    || eqPos == -59 || eqPos == -159
+                    || eqPos == -60 || eqPos == -160 || eqPos == -61 || eqPos == -161
+                    || eqPos == -62 || eqPos == -162) {
+                continue;
+            }
+            short pos = (short) (eqPos * -1);  //修复其他角色无法看到现金勋章
             if (pos < 100 && myEquip.get(pos) == null) {
                 myEquip.put(pos, item.getItemId());
             } else if (pos > 100 && pos != 111) { // don't ask. o.o
@@ -359,6 +381,114 @@ public class PacketCreator {
         p.writeLong(maxDamage);
         p.writeLong(minDamage);
         p.writeInt(count);
+        return p;
+    }
+
+    public static Packet realHpMpWidget(Character chr) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA7);
+        p.writeInt(chr.getHp());
+        p.writeInt(chr.getCurrentMaxHp());
+        p.writeInt(chr.getMp());
+        p.writeInt(chr.getCurrentMaxMp());
+        return p;
+    }
+
+    public static Packet partyBuffSnapshot(Character chr) {
+        List<PlayerBuffValueHolder> buffs = chr.getAllBuffs();
+        buffs.sort((left, right) -> {
+            int leftPriority = getPartyItemAttackPriority(left);
+            int rightPriority = getPartyItemAttackPriority(right);
+            if (leftPriority != rightPriority) {
+                return Integer.compare(rightPriority, leftPriority);
+            }
+
+            int leftTotal = getPartyItemTotalAttack(left);
+            int rightTotal = getPartyItemTotalAttack(right);
+            return Integer.compare(rightTotal, leftTotal);
+        });
+
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA9);
+        p.writeInt(chr.getId());
+        p.writeByte(Math.min(255, buffs.size()));
+
+        int written = 0;
+        for (PlayerBuffValueHolder buff : buffs) {
+            if (written >= 255) {
+                break;
+            }
+
+            int sourceId = buff.effect.getBuffSourceId();
+            int remainingMs = chr.getBuffRemainingTime(sourceId);
+            int totalMs = remainingMs > 0
+                    ? (int) Math.min(Integer.MAX_VALUE, (long) remainingMs + Math.max(0, buff.usedTime))
+                    : Math.max(0, buff.effect.getBuffLocalDuration());
+
+            p.writeInt(sourceId);
+            p.writeInt(remainingMs);
+            p.writeInt(totalMs);
+            written++;
+        }
+        return p;
+    }
+
+    public static Packet emptyPartyBuffSnapshot(int characterId) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA9);
+        p.writeInt(characterId);
+        p.writeByte(0);
+        return p;
+    }
+
+    private static int getPartyItemAttackPriority(PlayerBuffValueHolder buff) {
+        if (buff.effect.isSkill()) {
+            return 0;
+        }
+        return Math.max(buff.effect.getWatk(), buff.effect.getMatk());
+    }
+
+    private static int getPartyItemTotalAttack(PlayerBuffValueHolder buff) {
+        if (buff.effect.isSkill()) {
+            return 0;
+        }
+        return buff.effect.getWatk() + buff.effect.getMatk();
+    }
+
+    public static Packet partyHpPercent(Character chr) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAA);
+        p.writeInt(chr.getId());
+        int maxHp = Math.max(1, chr.getCurrentMaxHp());
+        p.writeByte(Math.max(0, Math.min(100, chr.getHp() * 100 / maxHp)));
+        return p;
+    }
+
+    public static Packet partyTrackerVisibility(boolean visible) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAB);
+        p.writeByte(visible ? 1 : 0);
+        return p;
+    }
+
+    public static Packet partyTrackerUpdate(Character chr) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAB);
+        p.writeByte(2);
+        p.writeInt(chr.getId());
+        p.writeLong(chr.getPartyTrackerExp());
+        p.writeLong(chr.getPartyTrackerMeso());
+        return p;
+    }
+
+    public static Packet partyBuffCounts(int characterId, int count, byte[] payload) {
+        final OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAD);
+        p.writeInt(characterId);
+        p.writeByte(count);
+        if (payload != null && payload.length > 0) {
+            p.writeBytes(payload);
+        }
         return p;
     }
 
@@ -507,6 +637,10 @@ public class PacketCreator {
         }
         p.writeLong(getTime(-2));
         p.writeInt(-1);
+        // No ijl15 fusion/potential equip tail here.
+        // S8 ijl15 FusionAnvil Decode is NATIVE-V83 (does not consume +70B tail).
+        // Writing the tail desyncs getCharInfo inventory → GetObjectA STG_E_FILENOTFOUND (0x80030002).
+        // Re-enable only with client Decode tail ON + -Dgms.packet.itemInfo.v83vanilla=false.
 
     }
 
@@ -1021,14 +1155,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
+    public static Packet updatePlayerStats(List<Pair<Stat, Long>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<Stat, Integer> statupdate : stats) {
+        for (Pair<Stat, Long> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<Stat, Integer>> mystats = stats;
+        List<Pair<Stat, Long>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -1037,26 +1171,41 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<Stat, Integer> statupdate : mystats) {
+        for (Pair<Stat, Long> statupdate : mystats) {
             if (statupdate.getLeft().getValue() >= 1) {
-                if (statupdate.getLeft().getValue() == 0x1) {
-                    p.writeByte(statupdate.getRight().byteValue());
-                } else if (statupdate.getLeft().getValue() <= 0x4) {
-                    p.writeInt(statupdate.getRight());
-                } else if (statupdate.getLeft().getValue() < 0x20) {
-                    p.writeByte(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x8000) {
+                int mask = statupdate.getLeft().getValue();
+                long value = statupdate.getRight();
+                if (mask == 0x1) {
+                    p.writeByte((byte) value);
+                } else if (mask <= 0x4) {
+                    p.writeInt((int) value);
+                } else if (mask == Stat.LEVEL.getValue()) {
+                    // ushort level (matches level300 Decode2)
+                    p.writeShort((short) Math.min(300, Math.max(1, value)));
+                } else if (mask < 0x20) {
+                    p.writeByte((byte) value);
+                } else if (mask == Stat.HP.getValue() || mask == Stat.MAXHP.getValue()
+                        || mask == Stat.MP.getValue() || mask == Stat.MAXMP.getValue()) {
+                    // 4-byte HP/MP (matches ijl15 maxhpmp Decode4)
+                    p.writeInt((int) value);
+                } else if (mask == 0x8000) {
                     if (GameConstants.hasSPTable(chr.getJob())) {
                         addRemainingSkillInfo(p, chr);
                     } else {
-                        p.writeShort(statupdate.getRight().shortValue());
+                        p.writeShort((short) value);
                     }
-                } else if (statupdate.getLeft().getValue() < 0xFFFF) {
-                    p.writeShort(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x20000) {
-                    p.writeShort(statupdate.getRight().shortValue());
+                } else if (mask == Stat.EXP.getValue()) {
+                    // 8-byte EXP (matches level300 Decode8)
+                    p.writeLong(Math.max(0L, value));
+                } else if (mask == Stat.MESO.getValue()) {
+                    // 8-byte meso (matches ijl15 mesouncap Decode8)
+                    p.writeLong(Math.max(0L, value));
+                } else if (mask < 0xFFFF) {
+                    p.writeShort((short) value);
+                } else if (mask == 0x20000) {
+                    p.writeShort((short) value);
                 } else {
-                    p.writeInt(statupdate.getRight());
+                    p.writeInt((int) value);
                 }
             }
         }
@@ -1078,7 +1227,7 @@ public class PacketCreator {
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
-        p.writeShort(chr.getHp());
+        p.writeInt(chr.getHp());
         p.writeBool(chr.isChasing());
         if (chr.isChasing()) {
             chr.setChasing(false);
@@ -1096,7 +1245,7 @@ public class PacketCreator {
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
-        p.writeShort(chr.getHp());
+        p.writeInt(chr.getHp());
         p.writeBool(true);
         p.writeInt(spawnPosition.x);    // spawn position placement thanks to Arnah (Vertisy)
         p.writeInt(spawnPosition.y);
@@ -2522,6 +2671,76 @@ public class PacketCreator {
         return p;
     }
 
+        /**
+     * Phase10 魔方结果窗（ijl15 LP 0x17A）。
+     * <pre>
+     * byte success (1/0)
+     * int  cubeItemId
+     * byte uiKind   (0=MiracleCube, 1=HyperMiracleCube)
+     * byte grade    (1~5；0 时客户端按 optionId 推断)
+     * int  pot1, pot2, pot3
+     * int  equipItemId  (可选，用于 tip 数值档位；旧客户端忽略)
+     * </pre>
+     */
+    public static Packet miracleCubeResult(boolean success, int cubeItemId, byte uiKind,
+                                           byte grade, int pot1, int pot2, int pot3) {
+        return miracleCubeResult(success, cubeItemId, uiKind, grade, pot1, pot2, pot3, 0);
+    }
+
+    public static Packet miracleCubeResult(boolean success, int cubeItemId, byte uiKind,
+                                           byte grade, int pot1, int pot2, int pot3, int equipItemId) {
+        OutPacket p = OutPacket.create(SendOpcode.MIRACLE_CUBE_RESULT);
+        p.writeByte(success ? 1 : 0);
+        p.writeInt(cubeItemId);
+        p.writeByte(uiKind);
+        // Clamp: never send 0 when lines exist — client maps 1..5 to 普通..传说
+        byte g = grade;
+        if (g < 1 || g > 5) {
+            g = 0;
+            int[] opts = {pot1, pot2, pot3};
+            for (int id : opts) {
+                if (id <= 0) {
+                    continue;
+                }
+                int band = id / 10000;
+                byte inferred = (byte) (band >= 4 ? 5 : band == 3 ? 4 : band == 2 ? 3 : band == 1 ? 2 : 1);
+                if (inferred > g) {
+                    g = inferred;
+                }
+            }
+            if (g < 1) {
+                g = 1;
+            }
+        }
+        p.writeByte(g);
+        p.writeInt(pot1);
+        p.writeInt(pot2);
+        p.writeInt(pot3);
+        p.writeInt(Math.max(0, equipItemId));
+        return p;
+    }
+
+    /**
+     * 灵魂宝珠附加成功可见特效。
+     * Phase10 曾误用 FIELD_EFFECT(地图路径) + 向自己发 SHOW_FOREIGN_EFFECT（客户端忽略），几乎不可见。
+     * 对齐升级/装备升级：自己走 SHOW_ITEM_GAIN_INCHAT，他人走 SHOW_FOREIGN_EFFECT。
+     * effect 0 = LevelUp（083 必有）；15 = 装备升级光效作强化感。
+     */
+    public static void broadcastSoulWeaponEffect(org.gms.client.Character chr) {
+        if (chr == null || chr.getMap() == null) {
+            return;
+        }
+        chr.sendPacket(showSpecialEffect(0));
+        chr.sendPacket(showSpecialEffect(15));
+        chr.getMap().broadcastMessage(chr, showForeignEffect(chr.getId(), 0), false);
+        chr.getMap().broadcastMessage(chr, showForeignEffect(chr.getId(), 15), false);
+    }
+
+    /** @deprecated 地图 FIELD_EFFECT，角色身上几乎看不到；请用 {@link #broadcastSoulWeaponEffect} */
+    public static Packet soulWeaponEffect() {
+        return showEffect("Effect/BasicEff.img/LevelUp");
+    }
+
     public static Packet removePlayerFromMap(int chrId) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_PLAYER_FROM_MAP);
         p.writeInt(chrId);
@@ -3214,11 +3433,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeMesoSet(byte number, int meso) {
+    public static Packet getTradeMesoSet(byte number, long meso) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SET_MESO.getCode());
         p.writeByte(number);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -3598,7 +3817,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, int meso) {
+    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x16);
         p.writeInt(npcId);
@@ -3606,7 +3825,7 @@ public class PacketCreator {
         p.writeShort(0x7E);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         p.writeShort(0);
         p.writeByte((byte) items.size());
         for (Item item : items) {
@@ -3628,14 +3847,14 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet mesoStorage(byte slots, int meso) {
+    public static Packet mesoStorage(byte slots, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x13);
         p.writeByte(slots);
         p.writeShort(2);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -5028,7 +5247,7 @@ public class PacketCreator {
         p.writeInt(NpcId.FREDRICK);
         p.writeInt(32272); //id
         p.skip(5);
-        p.writeInt(chr.getMerchantNetMeso());
+        p.writeLong(chr.getMerchantNetMeso());
         p.writeByte(0);
         try {
             List<Pair<Item, InventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
@@ -5223,11 +5442,11 @@ public class PacketCreator {
                 p.writeInt(s.getMesos());
                 p.writeString(s.getBuyer());
             }
-            p.writeInt(chr.getMerchantMeso());//:D?
+            p.writeLong(chr.getMerchantMeso());//:D?
         }
         p.writeString(hm.getDescription());
         p.writeByte(0x10); //TODO SLOTS, which is 16 for most stores...slotMax
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         if (hm.getItems().isEmpty()) {
             p.writeByte(0);//Hmm??
@@ -5245,7 +5464,7 @@ public class PacketCreator {
     public static Packet updateHiredMerchant(HiredMerchant hm, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         for (PlayerShopItem item : hm.getItems()) {
             p.writeShort(item.getBundles());
@@ -7565,6 +7784,233 @@ public class PacketCreator {
         p.writeByte(hp);
         p.writeByte(mp);
         return p;
+    }
+
+
+
+    // ------------------------------------------------------------------
+    // 伤害皮肤封包
+    // ------------------------------------------------------------------
+
+    public static Packet damageSkinCatalog() {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_CATALOG);
+        var all = DamageSkinCatalog.getAll();
+        p.writeShort(all.size());
+        for (var e : all.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeLong(e.getValue());
+        }
+        return p;
+    }
+
+    public static Packet damageSkinInventory(Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_INVENTORY);
+        p.writeInt(chr.getActiveDamageSkin());
+        DamageSkinInventory inv = chr.getDamageSkinInventory();
+        var owned = inv.getOwnedIds();
+        int count = 0;
+        for (int id : owned) {
+            if (id != DamageSkinInventory.DEFAULT_SKIN_ID) {
+                count++;
+            }
+        }
+        p.writeShort(count);
+        for (int id : owned) {
+            if (id == DamageSkinInventory.DEFAULT_SKIN_ID) {
+                continue;
+            }
+            p.writeInt(id);
+        }
+        return p;
+    }
+
+    /** op=1 装备, op=2 购买 */
+    public static Packet damageSkinResult(int op, boolean ok, int skinId, int newMesos) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_RESULT);
+        p.writeByte(op);
+        p.writeByte(ok ? 1 : 0);
+        p.writeInt(skinId);
+        p.writeInt(newMesos);
+        return p;
+    }
+
+    public static Packet damageSkinBroadcast(int charId, int skinId) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_BROADCAST);
+        p.writeInt(charId);
+        p.writeInt(skinId);
+        return p;
+    }
+
+    // ------------------------------------------------------------------
+    // 套装封包
+    // ------------------------------------------------------------------
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_FINAL_DAMAGE);
+        p.writeShort(finalDamagePercent);
+        p.writeInt(skinId);
+        return p;
+    }
+
+    public static Packet setItemSkillBonus(Map<Integer, String> entries) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_SKILL_BONUS);
+        p.writeShort(entries.size());
+        for (Map.Entry<Integer, String> e : entries.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeByte(1);
+            p.writeString(e.getValue() != null ? e.getValue() : "");
+        }
+        return p;
+    }
+
+    public static Packet setItemSkillBonusSingle(int setId, boolean enabled, String text) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_SKILL_BONUS);
+        p.writeShort(1);
+        p.writeInt(setId);
+        p.writeByte(enabled ? 1 : 0);
+        p.writeString(text != null ? text : "");
+        return p;
+    }
+
+    public static Packet sendSetSkillBonus(Map<Integer, Integer> skillBonuses) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_SKILL_BONUS);
+        p.writeShort(skillBonuses.size());
+        for (Map.Entry<Integer, Integer> e : skillBonuses.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeInt(e.getValue());
+        }
+        return p;
+    }
+
+    /** 装备成长属性 tip (SendOpcode 0x17B) — 按需回复或变更点推送 */
+    public static Packet equipGrowthTip(int itemId, boolean hasData, String text) {
+        return equipGrowthTip(itemId, hasData, text, null);
+    }
+
+    /**
+     * @param growthBonusByStat 可选，长度 15（STR..Jump），主 tip 分色用；旧客户端忽略尾部。
+     * @param flameBonusByStat 可选，长度 15，火花绿字；接在成长尾后，旧 DLL 忽略。
+     */
+    public static Packet equipGrowthTip(int itemId, boolean hasData, String text, int[] growthBonusByStat) {
+        return equipGrowthTip(itemId, hasData, text, growthBonusByStat, null);
+    }
+
+    public static Packet equipGrowthTip(int itemId, boolean hasData, String text,
+                                        int[] growthBonusByStat, int[] flameBonusByStat) {
+        OutPacket p = OutPacket.create(SendOpcode.EQUIP_GROWTH_TIP);
+        p.writeInt(itemId);
+        p.writeByte(hasData ? 1 : 0);
+        p.writeString(hasData && text != null ? text : "");
+        // 尾部：flag(1) + 15×short 成长增量（旧 DLL 读完 string 即停，兼容）
+        if (growthBonusByStat != null && growthBonusByStat.length > 0) {
+            p.writeByte(1);
+            for (int i = 0; i < 15; i++) {
+                int v = i < growthBonusByStat.length ? growthBonusByStat[i] : 0;
+                p.writeShort(Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, v)));
+            }
+        } else {
+            p.writeByte(0);
+        }
+        // 火花：flag(1) + 15×short；旧客户端不读
+        if (flameBonusByStat != null && flameBonusByStat.length > 0) {
+            boolean any = false;
+            for (int v : flameBonusByStat) {
+                if (v != 0) {
+                    any = true;
+                    break;
+                }
+            }
+            if (any) {
+                p.writeByte(1);
+                for (int i = 0; i < 15; i++) {
+                    int v = i < flameBonusByStat.length ? flameBonusByStat[i] : 0;
+                    p.writeShort(Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, v)));
+                }
+            } else {
+                p.writeByte(0);
+            }
+        } else {
+            p.writeByte(0);
+        }
+        return p;
+    }
+
+    /** 每日签到窗口快照 (SendOpcode 0x17C) */
+    public static Packet dailyCheckinSnapshot(int currentDay, int claimedMask, int justClaimed) {
+        OutPacket p = OutPacket.create(SendOpcode.DAILY_CHECKIN);
+        p.writeByte(1);
+        p.writeByte(currentDay);
+        p.writeInt(claimedMask);
+        p.writeByte(justClaimed);
+        int n = DailyCheckinRewards.CYCLE_DAYS;
+        p.writeByte(n);
+        for (int d = 1; d <= n; d++) {
+            p.writeInt(DailyCheckinRewards.iconItemId(d));
+        }
+        for (int d = 1; d <= n; d++) {
+            p.writeString(DailyCheckinRewards.tooltip(d));
+        }
+        return p;
+    }
+
+public static Packet bagWindowSnapshot(int bagKind, OreStorage storage, boolean auto) {
+        OutPacket p = OutPacket.create(SendOpcode.BAG_WINDOW);
+        p.writeByte(1);
+        p.writeByte(bagKind);
+        List<Item> items = storage.getItems();
+        p.writeShort(items.size());
+        for (Item item : items) {
+            p.writeShort(item.getPosition());
+            addItemInfo(p, item, true);
+        }
+        for (Item item : items) {
+            p.writeShort(item.getQuantity());
+        }
+        p.writeByte(auto ? 1 : 0);
+        return p;
+    }
+
+    /** 他人装备详情 (SendOpcode 0x3727) — 供 CUIUserInfoDetail tooltip 使用 */
+    public static Packet userInfoExEquip(int charId, Equip equip) {
+        OutPacket p = OutPacket.create(SendOpcode.USER_INFO_EX);
+        p.writeByte(1);
+        p.writeInt(charId);
+        p.writeInt(equip.getItemId());
+        p.writeInt(equip.getAnvilItemId());
+        p.writeInt(equip.getEquipSkillId());
+        p.writeInt(equip.getEquipSkillLevel());
+        long skillExpire = equip.getEquipSkillExpire();
+        p.writeLong(skillExpire > 0 ? getTime(skillExpire) : 0L);
+        // 与 addItemInfo 一致：面板/他人详情可见 Hyper+潜能
+        org.gms.potential.PotentialHyperService.StatBonus pot =
+                org.gms.potential.PotentialHyperService.computeBonus(equip);
+        p.writeShort(clampEquipStat(equip.getStr() + pot.str));
+        p.writeShort(clampEquipStat(equip.getDex() + pot.dex));
+        p.writeShort(clampEquipStat(equip.getInt() + pot.inte));
+        p.writeShort(clampEquipStat(equip.getLuk() + pot.luk));
+        p.writeShort(clampEquipStat(equip.getHp() + pot.hp));
+        p.writeShort(clampEquipStat(equip.getMp() + pot.mp));
+        p.writeShort(clampEquipStat(equip.getWatk() + pot.watk));
+        p.writeShort(clampEquipStat(equip.getMatk() + pot.matk));
+        p.writeShort(clampEquipStat(equip.getWdef() + pot.wdef));
+        p.writeShort(clampEquipStat(equip.getMdef() + pot.mdef));
+        p.writeShort(clampEquipStat(equip.getAcc() + pot.acc));
+        p.writeShort(clampEquipStat(equip.getAvoid() + pot.avoid));
+        p.writeShort(equip.getHands());
+        p.writeShort(clampEquipStat(equip.getSpeed() + pot.speed));
+        p.writeShort(clampEquipStat(equip.getJump() + pot.jump));
+        p.writeByte(equip.getUpgradeSlots());
+        return p;
+    }
+
+    private static short clampEquipStat(int value) {
+        if (value > Short.MAX_VALUE) {
+            return Short.MAX_VALUE;
+        }
+        if (value < Short.MIN_VALUE) {
+            return Short.MIN_VALUE;
+        }
+        return (short) value;
     }
 
 }

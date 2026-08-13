@@ -33,6 +33,7 @@ import org.gms.client.inventory.Pet;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
+import org.gms.constants.inventory.EquipSlot;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
@@ -558,6 +559,38 @@ public class InventoryManipulator {
                 ((ItemId.isCygnusMount(source.getItemId())) && !chr.isCygnus())) {// Adventurer taming equipment    //冒险家驯服设备
             return;
         }
+        // ExtraRing −52/−53: keep client dst for normal rings; cash rings never use −152/−153.
+        if (EquipSlot.RING.getName().equals(ii.getEquipmentSlot(source.getItemId()))) {
+            final boolean cashRing = ii.isCash(source.getItemId());
+            if (cashRing) {
+                if (dst == -12 || dst == -13 || dst == -15 || dst == -16) {
+                    dst = (short) (dst - 100);
+                } else if (dst == -52 || dst == -53 || dst == -152 || dst == -153
+                        || (dst > -100 && dst < 0)) {
+                    dst = -112;
+                }
+                if (dst == -152 || dst == -153) {
+                    final short[] cashSlots = {-112, -113, -115, -116};
+                    for (short s : cashSlots) {
+                        if (eqpdInv.getItem(s) == null) {
+                            dst = s;
+                            break;
+                        }
+                    }
+                    if (dst == -152 || dst == -153) {
+                        dst = -112;
+                    }
+                }
+            }
+            if (org.gms.soul.SoulFashionRing.isSoulFashionRing(source.getItemId())) {
+                org.gms.soul.SoulFashionRing.unequipOthers(chr, source.getItemId());
+                source = (Equip) eqpInv.getItem(src);
+                if (source == null) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    return;
+                }
+            }
+        }
         boolean itemChanged = false;
 
         if (ii.isUntradeableOnEquip(source.getItemId())) {
@@ -673,6 +706,7 @@ public class InventoryManipulator {
         mods.add(new ModifyInventory(2, source, src));
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
         chr.equipChanged();
+        org.gms.reincarnation.ReincarnationSupport.onEquipped(chr, source.getItemId());
     }
 
     public static void unequip(Client c, short src, short dst) {
@@ -724,6 +758,7 @@ public class InventoryManipulator {
         
         c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(2, source, src))));
         chr.equipChanged();
+        org.gms.reincarnation.ReincarnationSupport.onUnequipped(chr, source.getItemId());
     }
 
     private static boolean isDisappearingItemDrop(Item it) {
@@ -853,5 +888,55 @@ public class InventoryManipulator {
 
     public static boolean isSandboxItem(Item it) {
         return (it.getFlag() & ItemConstants.SANDBOX) == ItemConstants.SANDBOX;
+    }
+
+    /**
+     * Move abandoned cash-extended ring aliases −152/−153 onto classic cash rings
+     * (−112…/−116) or ExtraRing seats −52/−53 before getCharInfo.
+     * Does <b>not</b> migrate real ExtraRing seats −52/−53.
+     */
+    public static void migrateCashRingsOffExtendedSlots(Character chr) {
+        if (chr == null) {
+            return;
+        }
+        Inventory eqpd = chr.getInventory(InventoryType.EQUIPPED);
+        Inventory eqpBag = chr.getInventory(InventoryType.EQUIP);
+        final short[] classicCash = {-112, -113, -115, -116};
+        final short[] badSlots = {-152, -153};
+        for (short bad : badSlots) {
+            Item it = eqpd.getItem(bad);
+            if (it == null) {
+                continue;
+            }
+            short dest = 0;
+            for (short s : classicCash) {
+                if (eqpd.getItem(s) == null) {
+                    dest = s;
+                    break;
+                }
+            }
+            if (dest == 0 && eqpd.getItem((short) -52) == null) {
+                dest = -52;
+            } else if (dest == 0 && eqpd.getItem((short) -53) == null) {
+                dest = -53;
+            }
+            eqpd.removeSlot(bad);
+            if (dest != 0) {
+                it.setPosition(dest);
+                eqpd.addItemFromDB(it);
+                log.info("migrateCashRings: chr {} {} → {}", chr.getId(), bad, dest);
+            } else {
+                short bag = eqpBag.getNextFreeSlot();
+                if (bag > 0) {
+                    it.setPosition(bag);
+                    eqpBag.addItemFromDB(it);
+                    log.info("migrateCashRings: chr {} {} → bag {}", chr.getId(), bad, bag);
+                } else {
+                    it.setPosition(bad);
+                    eqpd.addItemFromDB(it);
+                    log.warn("migrateCashRings: chr {} stuck at {} (no classic cash / bag slot)", chr.getId(), bad);
+                }
+            }
+        }
     }
 }

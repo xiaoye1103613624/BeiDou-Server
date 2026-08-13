@@ -4,8 +4,6 @@ var eventTimer = 1000 * 60 * timeLimit;
 var exitMap = 240070000;
 var eventMap = 240070010;
 var eventBossIds = [7120100, 7120101, 7120102, 8120100, 8120101, 8140510];
-var bossSpawnX = 277;
-var bossSpawnY = 379;
 
 function init() {}
 
@@ -13,11 +11,8 @@ function setup(difficulty, lobbyId) {
     var eim = em.newInstance("Nex_" + lobbyId);
     eim.setIntProperty("nex", lobbyId);
 
-    var map = eim.getInstanceMap(eventMap + 10 * lobbyId);
-    map.allowSummonState(true);
-    map.resetFully();
-    ensureBossSpawned(eim);
-    map.allowSummonState(false);
+    eim.getInstanceMap(eventMap + 10 * lobbyId).resetFully();
+    eim.getInstanceMap(eventMap + 10 * lobbyId).allowSummonState(false);
     respawn(eim);
     eim.startEventTimer(eventTimer);
     return eim;
@@ -29,7 +24,6 @@ function respawn(eim) {}
 
 function playerEntry(eim, player) {
     var cave = eim.getMapInstance(eventMap + 10 * eim.getIntProperty("nex"));
-    ensureBossSpawned(eim);
     player.changeMap(cave, 1);
 }
 
@@ -110,17 +104,6 @@ function monsterKilled(mob, eim) {
 }
 
 function allMonstersDead(eim) {}
-
-function ensureBossSpawned(eim) {
-    var lobbyId = eim.getIntProperty("nex");
-    var bossId = eventBossIds[lobbyId];
-    var map = eim.getInstanceMap(eventMap + 10 * lobbyId);
-    if (map.getMonsterById(bossId) == null) {
-        var LifeFactory = Java.type("org.gms.server.life.LifeFactory");
-        var Point = Java.type("java.awt.Point");
-        map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(bossId), new Point(bossSpawnX, bossSpawnY));
-    }
-}
 
 // ---------- FILLER FUNCTIONS ----------
 

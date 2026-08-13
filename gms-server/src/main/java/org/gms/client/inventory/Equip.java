@@ -77,6 +77,61 @@ public class Equip extends Item {
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
     private float itemExp;
     private int ringid = -1;
+    private int anvilItemId = 0;
+    /** 灵韵觉醒：附加技能 ID（0=无）。 */
+    private int equipSkillId = 0;
+    /** 灵韵觉醒：附加技能等级。 */
+    private int equipSkillLevel = 0;
+    /** 灵韵觉醒：过期时间，0=永久。 */
+    private long equipSkillExpire = 0L;
+    /** 潜能选项 1~3（ItemOption id）。 */
+    private int potential1 = 0, potential2 = 0, potential3 = 0;
+    /** 潜能品阶：0无 1普通 2稀有 3史诗 4独特 5传说。 */
+    private byte potentialGrade = 0;
+    /** Hyper 强化星级。 */
+    private byte enhance = 0;
+    /** 附加潜能选项 1~3（ItemOption id）。 */
+    private int bonusPotential1 = 0, bonusPotential2 = 0, bonusPotential3 = 0;
+    /** 附加潜能品阶：0无 1普通 … 5传说。 */
+    private byte bonusPotentialGrade = 0;
+    /** 灵魂宝珠类型（卷/展示 ID）；勿与灵韵 equipSkill* 混淆。 */
+    private int soulId = 0;
+    /** 灵魂潜能选项（ItemOption id）。 */
+    private int soulOption = 0;
+    /** 星岩槽 1（ItemOption id）。 */
+    private int socket1 = 0;
+    /** 星岩槽 2（ItemOption id）。 */
+    private int socket2 = 0;
+    /** 星岩槽 3（ItemOption id；Phase10 封包 +4 → 0x140）。 */
+    private int socket3 = 0;
+    /** 白金锤已用次数（永久加槽，还原卷不清）。最多 {@link org.gms.constants.id.ItemId#PLATINUM_HAMMER} 逻辑 5 次。 */
+    private byte platinum = 0;
+    /** 洗炼词条1：高16位=affixOrdinal 低16位=prefixLv ①~⑤ */
+    private int reforge1 = 0;
+    /** 洗炼词条2 */
+    private int reforge2 = 0;
+    /** 洗炼词条3 */
+    private int reforge3 = 0;
+    /** 洗炼锁定位掩码 bit0=slot0 bit1=slot1 bit2=slot2 */
+    private byte reforgeLock = 0;
+    /** 注能等级 0~10（⚡）：每级新增增量属性，累积叠加，与装备类型无关。 */
+    private byte infusion = 0;
+    /** 宝石镶嵌等级 0~16（宝X）：每级新增能量属性，累积叠加。 */
+    private byte gemInlay = 0;
+    /** 每级(level) 2 bit 记录该级水晶类型：0=力量/1=敏捷/2=智慧/3=幸运。 */
+    private int gemTypes = 0;
+    /** 破界等级 0~50（N=使用强化卷成功次数）。 */
+    private byte breakthrough = 0;
+    /** 破界 13 属性激活掩码（bit i=1 表示池中第 i 条当前激活，覆盖式不累加）。 */
+    private int breakthroughPool = 0;
+    /** 混沌卷累计增量（可负）；写入 body 同时记账，供 tip 深绿分色。 */
+    private short chaosStr = 0, chaosDex = 0, chaosInt = 0, chaosLuk = 0;
+    private short chaosHp = 0, chaosMp = 0, chaosWatk = 0, chaosMatk = 0;
+    private short chaosWdef = 0, chaosMdef = 0, chaosAcc = 0, chaosAvoid = 0;
+    private short chaosSpeed = 0, chaosJump = 0;
+    /** 火花/涅槃：exGradeOption 编码（对齐 265）；属性虚拟加算。 */
+    private long exGradeOption = 0L;
+    private transient org.gms.flame.EquipFlame flameStat = new org.gms.flame.EquipFlame();
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -123,6 +178,50 @@ public class Equip extends Item {
         ret.setQuantity(getQuantity());
         ret.setExpiration(getExpiration());
         ret.setGiftFrom(getGiftFrom());
+        ret.anvilItemId = anvilItemId;
+        ret.equipSkillId = equipSkillId;
+        ret.equipSkillLevel = equipSkillLevel;
+        ret.equipSkillExpire = equipSkillExpire;
+        ret.potential1 = potential1;
+        ret.potential2 = potential2;
+        ret.potential3 = potential3;
+        ret.potentialGrade = potentialGrade;
+        ret.enhance = enhance;
+        ret.bonusPotential1 = bonusPotential1;
+        ret.bonusPotential2 = bonusPotential2;
+        ret.bonusPotential3 = bonusPotential3;
+        ret.bonusPotentialGrade = bonusPotentialGrade;
+        ret.soulId = soulId;
+        ret.soulOption = soulOption;
+        ret.socket1 = socket1;
+        ret.socket2 = socket2;
+        ret.socket3 = socket3;
+        ret.platinum = platinum;
+        ret.reforge1 = reforge1;
+        ret.reforge2 = reforge2;
+        ret.reforge3 = reforge3;
+        ret.reforgeLock = reforgeLock;
+        ret.infusion = infusion;
+        ret.gemInlay = gemInlay;
+        ret.gemTypes = gemTypes;
+        ret.breakthrough = breakthrough;
+        ret.breakthroughPool = breakthroughPool;
+        ret.chaosStr = chaosStr;
+        ret.chaosDex = chaosDex;
+        ret.chaosInt = chaosInt;
+        ret.chaosLuk = chaosLuk;
+        ret.chaosHp = chaosHp;
+        ret.chaosMp = chaosMp;
+        ret.chaosWatk = chaosWatk;
+        ret.chaosMatk = chaosMatk;
+        ret.chaosWdef = chaosWdef;
+        ret.chaosMdef = chaosMdef;
+        ret.chaosAcc = chaosAcc;
+        ret.chaosAvoid = chaosAvoid;
+        ret.chaosSpeed = chaosSpeed;
+        ret.chaosJump = chaosJump;
+        ret.exGradeOption = exGradeOption;
+        ret.flameStat = flameStat != null ? flameStat.deepCopy() : new org.gms.flame.EquipFlame();
         return ret;
     }
 
@@ -786,6 +885,333 @@ public class Equip extends Item {
 
     public void setRingId(int id) {
         this.ringid = id;
+    }
+
+    public int getAnvilItemId() {
+        return anvilItemId;
+    }
+
+    public void setAnvilItemId(int anvilItemId) {
+        this.anvilItemId = anvilItemId;
+    }
+
+    public int getEquipSkillId() {
+        return equipSkillId;
+    }
+
+    public void setEquipSkillId(int equipSkillId) {
+        this.equipSkillId = equipSkillId;
+    }
+
+    public int getEquipSkillLevel() {
+        return equipSkillLevel;
+    }
+
+    public void setEquipSkillLevel(int equipSkillLevel) {
+        this.equipSkillLevel = equipSkillLevel;
+    }
+
+    public long getEquipSkillExpire() {
+        return equipSkillExpire;
+    }
+
+    public void setEquipSkillExpire(long equipSkillExpire) {
+        this.equipSkillExpire = equipSkillExpire;
+    }
+
+    public int getPotential1() {
+        return potential1;
+    }
+
+    public void setPotential1(int potential1) {
+        this.potential1 = potential1;
+    }
+
+    public int getPotential2() {
+        return potential2;
+    }
+
+    public void setPotential2(int potential2) {
+        this.potential2 = potential2;
+    }
+
+    public int getPotential3() {
+        return potential3;
+    }
+
+    public void setPotential3(int potential3) {
+        this.potential3 = potential3;
+    }
+
+    public byte getPotentialGrade() {
+        return potentialGrade;
+    }
+
+    public void setPotentialGrade(byte potentialGrade) {
+        this.potentialGrade = potentialGrade;
+    }
+
+    public byte getEnhance() {
+        return enhance;
+    }
+
+    public void setEnhance(byte enhance) {
+        this.enhance = enhance;
+    }
+
+    public int getBonusPotential1() {
+        return bonusPotential1;
+    }
+
+    public void setBonusPotential1(int bonusPotential1) {
+        this.bonusPotential1 = bonusPotential1;
+    }
+
+    public int getBonusPotential2() {
+        return bonusPotential2;
+    }
+
+    public void setBonusPotential2(int bonusPotential2) {
+        this.bonusPotential2 = bonusPotential2;
+    }
+
+    public int getBonusPotential3() {
+        return bonusPotential3;
+    }
+
+    public void setBonusPotential3(int bonusPotential3) {
+        this.bonusPotential3 = bonusPotential3;
+    }
+
+    public byte getBonusPotentialGrade() {
+        return bonusPotentialGrade;
+    }
+
+    public void setBonusPotentialGrade(byte bonusPotentialGrade) {
+        this.bonusPotentialGrade = bonusPotentialGrade;
+    }
+
+    public int getSoulId() {
+        return soulId;
+    }
+
+    public void setSoulId(int soulId) {
+        this.soulId = soulId;
+    }
+
+    public int getSoulOption() {
+        return soulOption;
+    }
+
+    public void setSoulOption(int soulOption) {
+        this.soulOption = soulOption;
+    }
+
+    public int getSocket1() {
+        return socket1;
+    }
+
+    public void setSocket1(int socket1) {
+        this.socket1 = socket1;
+    }
+
+    public int getSocket2() {
+        return socket2;
+    }
+
+    public void setSocket2(int socket2) {
+        this.socket2 = socket2;
+    }
+
+    public int getSocket3() {
+        return socket3;
+    }
+
+    public void setSocket3(int socket3) {
+        this.socket3 = socket3;
+    }
+
+    public byte getPlatinum() {
+        return platinum;
+    }
+
+    public void setPlatinum(byte platinum) {
+        this.platinum = platinum;
+    }
+
+    public int getReforge1() {
+        return reforge1;
+    }
+
+    public void setReforge1(int reforge1) {
+        this.reforge1 = reforge1;
+    }
+
+    public int getReforge2() {
+        return reforge2;
+    }
+
+    public void setReforge2(int reforge2) {
+        this.reforge2 = reforge2;
+    }
+
+    public int getReforge3() {
+        return reforge3;
+    }
+
+    public void setReforge3(int reforge3) {
+        this.reforge3 = reforge3;
+    }
+
+    public byte getReforgeLock() {
+        return reforgeLock;
+    }
+
+    public void setReforgeLock(byte reforgeLock) {
+        this.reforgeLock = reforgeLock;
+    }
+
+    public byte getInfusion() {
+        return infusion;
+    }
+
+    public void setInfusion(byte infusion) {
+        this.infusion = infusion;
+    }
+
+    public byte getGemInlay() {
+        return gemInlay;
+    }
+
+    public void setGemInlay(byte gemInlay) {
+        this.gemInlay = gemInlay;
+    }
+
+    public int getGemTypes() {
+        return gemTypes;
+    }
+
+    public void setGemTypes(int gemTypes) {
+        this.gemTypes = gemTypes;
+    }
+
+    public byte getBreakthrough() {
+        return breakthrough;
+    }
+
+    public void setBreakthrough(byte breakthrough) {
+        this.breakthrough = (byte) Math.max(0, Math.min(50, breakthrough));
+    }
+
+    public int getBreakthroughPool() {
+        return breakthroughPool;
+    }
+
+    public void setBreakthroughPool(int poolMask) {
+        this.breakthroughPool = poolMask & 0x1FFF;
+    }
+
+    public short getChaosStr() { return chaosStr; }
+    public void setChaosStr(short v) { this.chaosStr = v; }
+    public short getChaosDex() { return chaosDex; }
+    public void setChaosDex(short v) { this.chaosDex = v; }
+    public short getChaosInt() { return chaosInt; }
+    public void setChaosInt(short v) { this.chaosInt = v; }
+    public short getChaosLuk() { return chaosLuk; }
+    public void setChaosLuk(short v) { this.chaosLuk = v; }
+    public short getChaosHp() { return chaosHp; }
+    public void setChaosHp(short v) { this.chaosHp = v; }
+    public short getChaosMp() { return chaosMp; }
+    public void setChaosMp(short v) { this.chaosMp = v; }
+    public short getChaosWatk() { return chaosWatk; }
+    public void setChaosWatk(short v) { this.chaosWatk = v; }
+    public short getChaosMatk() { return chaosMatk; }
+    public void setChaosMatk(short v) { this.chaosMatk = v; }
+    public short getChaosWdef() { return chaosWdef; }
+    public void setChaosWdef(short v) { this.chaosWdef = v; }
+    public short getChaosMdef() { return chaosMdef; }
+    public void setChaosMdef(short v) { this.chaosMdef = v; }
+    public short getChaosAcc() { return chaosAcc; }
+    public void setChaosAcc(short v) { this.chaosAcc = v; }
+    public short getChaosAvoid() { return chaosAvoid; }
+    public void setChaosAvoid(short v) { this.chaosAvoid = v; }
+    public short getChaosSpeed() { return chaosSpeed; }
+    public void setChaosSpeed(short v) { this.chaosSpeed = v; }
+    public short getChaosJump() { return chaosJump; }
+    public void setChaosJump(short v) { this.chaosJump = v; }
+
+    /** 按属性下标 0..14 取混沌累计（与 tip / EquipSourceOps 一致）。 */
+    public short getChaosByStatIndex(int idx) {
+        return switch (idx) {
+            case 0 -> chaosStr;
+            case 1 -> chaosDex;
+            case 2 -> chaosInt;
+            case 3 -> chaosLuk;
+            case 4 -> chaosHp;
+            case 5 -> chaosMp;
+            case 6 -> chaosWatk;
+            case 7 -> chaosMatk;
+            case 8 -> chaosWdef;
+            case 9 -> chaosMdef;
+            case 10 -> chaosAcc;
+            case 11 -> chaosAvoid;
+            case 13 -> chaosSpeed;
+            case 14 -> chaosJump;
+            default -> 0;
+        };
+    }
+
+    public void addChaosByStatIndex(int idx, short delta) {
+        if (delta == 0) {
+            return;
+        }
+        switch (idx) {
+            case 0 -> chaosStr = (short) (chaosStr + delta);
+            case 1 -> chaosDex = (short) (chaosDex + delta);
+            case 2 -> chaosInt = (short) (chaosInt + delta);
+            case 3 -> chaosLuk = (short) (chaosLuk + delta);
+            case 4 -> chaosHp = (short) (chaosHp + delta);
+            case 5 -> chaosMp = (short) (chaosMp + delta);
+            case 6 -> chaosWatk = (short) (chaosWatk + delta);
+            case 7 -> chaosMatk = (short) (chaosMatk + delta);
+            case 8 -> chaosWdef = (short) (chaosWdef + delta);
+            case 9 -> chaosMdef = (short) (chaosMdef + delta);
+            case 10 -> chaosAcc = (short) (chaosAcc + delta);
+            case 11 -> chaosAvoid = (short) (chaosAvoid + delta);
+            case 13 -> chaosSpeed = (short) (chaosSpeed + delta);
+            case 14 -> chaosJump = (short) (chaosJump + delta);
+            default -> { }
+        }
+    }
+
+    public void clearChaosLedger() {
+        chaosStr = chaosDex = chaosInt = chaosLuk = 0;
+        chaosHp = chaosMp = chaosWatk = chaosMatk = 0;
+        chaosWdef = chaosMdef = chaosAcc = chaosAvoid = 0;
+        chaosSpeed = chaosJump = 0;
+    }
+
+    public long getExGradeOption() {
+        return exGradeOption;
+    }
+
+    public void setExGradeOption(long exGradeOption) {
+        this.exGradeOption = Math.max(0L, exGradeOption);
+    }
+
+    public org.gms.flame.EquipFlame getFlameStat() {
+        if (flameStat == null) {
+            flameStat = new org.gms.flame.EquipFlame();
+        }
+        return flameStat;
+    }
+
+    public void setFlameStat(org.gms.flame.EquipFlame flameStat) {
+        this.flameStat = flameStat != null ? flameStat : new org.gms.flame.EquipFlame();
+    }
+
+    public void setPlatinum(int platinum) {
+        this.platinum = (byte) Math.max(0, Math.min(5, platinum));
     }
 
     public boolean isWearing() {

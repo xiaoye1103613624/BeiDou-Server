@@ -114,6 +114,10 @@ public class SkillFactory {
         skills = loadedSkills;
     }
 
+    public static synchronized void reloadAllSkills() {
+        loadAllSkills();
+    }
+
     private static Skill loadFromData(int id, Data data) {
         Skill ret = new Skill(id);
         boolean isBuff = false;

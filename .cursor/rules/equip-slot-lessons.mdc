@@ -1,0 +1,71 @@
+---
+description: Equip-slot / second-pendant / six-ring lessons (wrong vs correct). Load before any ijl15 equip UI or −52/−53 bind work.
+globs:
+  - "**/shoulders/**"
+  - "**/pendant2/**"
+  - "**/装备槽*"
+alwaysApply: false
+---
+
+# 装备栏 / 第二坠 / 六戒 — 错误与正确行为
+
+**操作根：** 插件 `E:\pro\BeiDou-ijl15_S8` · 客户端 `BeiDou-Client_S8` · 服务端 `BeiDou-Server_S8`。
+
+权威记忆（按优先级；下列路径多为只读历史库）：
+
+1. `E:\pro\BeiDou-Server_xy\resource_doc\agent_memory\equip_slot_lessons.jsonl`
+2. **健康向量库** `resource_doc/agent_memory/chroma`（collection `equip_slot_lessons`；镜像 `D:\xy_vector_db\equip_slot_chroma`）
+3. `E:\资料\xiaoye\mxd学习\萧曳冒险岛\常见错误与避坑.md` §装备栏
+4. 简报：`E:\pro\BeiDou-ijl15\docs\装备槽修正-20260727ag.md`（及 af/ae/ad/ac/ab/aa/z）
+5. 旧库 `D:\xy_vector_db` / `maplestory_kb` 对**新写入不可靠**（HNSW Error finding id）；勿依赖它存装备栏课
+
+## 禁止（WRONG — 永不重复）
+
+1. **ForceDrawLoop**（`setne→mov al,1` @ `0x007FEFB9`）或 **DllMain 早挂 UI** → 登录 ALL_IDLE
+2. 改 **pet HitTest** `0x801214` / `0x8013A3`（应用角色 `GetBodyPartFromPoint` @ `0x7FEC6F`）
+3. 错 VA / 损坏 ModRM；无 **ExpectBytes** 就写洞
+4. MASM **`[ebp-14]`（十进制）** 代替 PE **`[ebp-14h]`**（`8B 4D EC`）→ **E 开装备栏卡死**（aa）
+5. 经典窄栏上用 expanded `(336,165)` / 盲目 +33 布局
+6. 右列整列 Align HitTest→Draw → **武器画到盾牌**；仅 BP4/10/11 Align；经典戒硬编码标签坐标
+7. 把 BP22/23 park 到宠物坐标 → 宠物 UI 软坏
+8. 部署 **`ezorsia\out`** 陈旧 DLL — 只用 **`out\Release`**
+9. 第二坠只做半套红修，不做护肩式 **AbleToWear call-orig-then-OK + TSecType gate NOP**
+10. 把 **−53 直接解锁进 TSecType**（无 `g_ring53ZRef` 影子）
+
+11. OccBp cave **毁掉 eax**（anBodyPart 游标）→ 红3已穿时双击闪退（at）
+11. 只把 draw imm 提到 **`0x34`** 却假定 BP53 必画 — **Character+0x5E8 常为 0**（CUIEquip 旗≠角色旗）→ 红 4 永不绘制（ac）
+12. DrawHasItem cave **只改 ZF**、不设 **edi=item*** — continue `mov esi,edi` 仍用 TSecType 垃圾（ac）
+13. 不处理 test esi（真址 **`@7FEEC2`**，勿写 7FEEC5）— BP52/53 的 esi 脏值会跳过 has_item cave
+14. draw **add-imm `0x35` + flag1** ⇒ max BP **54** → OOB walker / `cmp [ecx+edx]` → **未响应**（ad）
+15. ForceNormal VA **`7FEEC5`**（jz imm）≠ 真起点 **`7FEEC2`**（`85 F6 74 15`）→ ExpectBytes 失败、cave 未装
+16. ForceNormal special 只重放 `mov ecx`、跳 **`7FEECC`** 却漏 **`mov edx,[ebp-14h]`**（PE `@7FEEC9`）→ `cmp [ecx+edx],edi` 脏 edx → **E 卡死**（ae）；拖拽/属性可仍正常
+17. BP52 DrawHasItem **`mov edi,[[ebp-14h]]`**（UI walker）覆盖 PE 已装的 Char −52 item* → **tip/swap 正常、槽无图标**（af）
+18. 扩到 BP54/55 时仍用 **add-imm**（无固定 `mov eax,N`）→ 重蹈 BP54 hang（ak）
+19. 解锁 **−54/−55** 进原生 ZRef、无影子 → 砸 TSecType（同 −53）
+20. 图腾 XML 留 **`islot=Po`** → 走口袋/PET_EQUIP，穿不上 To 槽
+
+## 正确（CORRECT）
+
+1. HT 扩展：角色 **`0x7FEC6F`**；戒到 `BE240C`，徽章/图腾到 **`BE241C`**
+2. 护肩镜像：AbleToWear **先调原函数再强制 OK**；BP51 TSecType 失败分支 NOP（红+属性）
+3. 绘制：loop-end **`mov eax,N; nop`** @7FEFB9（戒 N=53；徽章/图腾 N=55；≠ ForceDrawLoop）
+4. DrawHasItem：BP52 **edi=`[ebp-20h]-0x1A0`**；BP53/54/55 **影子**；清 `[ebp-18h]`；BP>max 空槽
+5. **ForceNormal @7FEEC2**：BP **52..55** 强制进 `7FEEDB`；其它 `esi≠0` 必须 **`mov edx,[ebp-14h]`** 再进 `7FEECC`
+6. −52 原生空隙；−53/−54/−55 **影子**；GetItem/SetItem bound→−55；登录 apply max→55；raw walk 仍 −52
+7. 红 9/10：(104,200)/(137,200)；118→BP54，120→BP55；Accessory 路径 imm **120** + Totem 硬链到 Accessory
+6b. OccBp：push eax/ecx 保 anBodyPart 游标（at）
+8. 字节校验 + 只部署 `out\Release`；戳记 **`BADGE_TOTEM_910_20260727ak`**
+9. PS 重定向 CL stdout 易死锁；构建用 bat 内部 `>>log`，勿 `RedirectStandardOutput` 挂管道
+
+## 查询向量库
+
+```python
+import chromadb
+col = chromadb.PersistentClient(
+    r"E:\pro\BeiDou-Server_xy\resource_doc\agent_memory\chroma"
+).get_collection("equip_slot_lessons")
+r = col.query(query_texts=["装备栏 E卡死 ebp-14"], n_results=5)
+```
+
+入库：`py -3.10 E:\pro\BeiDou-Server_xy\resource_doc\agent_memory\ingest_equip_slot_chroma_fresh.py`  
+（JSONL 同步：`ingest_equip_slot_lessons.py --skip-chroma`）

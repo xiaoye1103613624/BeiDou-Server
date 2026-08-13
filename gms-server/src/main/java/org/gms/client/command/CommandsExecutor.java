@@ -209,6 +209,11 @@ public class CommandsExecutor {
         addCommand("luk", StatLukCommand.class);
         addCommand("enableauth", EnableAuthCommand.class);
         addCommand("toggleexp", ToggleExpCommand.class);
+        addCommand(new String[]{"beauty", "美容院", "美容美发"}, BeautyCommand.class);
+        addCommand(new String[]{"checkin", "签到"}, CheckinCommand.class);
+        addCommand(new String[]{"pendant2", "第二项链"}, Pendant2Command.class);
+        addCommand(new String[]{"partytracker", "队伍统计"}, PartyTrackerCommand.class);
+        addCommand(new String[]{"soulskill", "灵魂技能"}, SoulSkillCommand.class);
         addCommand("mylawn", MapOwnerClaimCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
@@ -260,6 +265,7 @@ public class CommandsExecutor {
         addCommand("maxstat", 2, MaxStatCommand.class);
         addCommand("maxskill", 2, MaxSkillCommand.class);
         addCommand("resetskill", 2, ResetSkillCommand.class);
+        addCommand("skill", 2, SkillCommand.class);
         addCommand("search", 2, SearchCommand.class);
         addCommand("jail", 2, JailCommand.class);
         addCommand("unjail", 2, UnJailCommand.class);
@@ -283,6 +289,8 @@ public class CommandsExecutor {
         addCommand("spawn", 3, SpawnCommand.class);
         addCommand("mutemap", 3, MuteMapCommand.class);
         addCommand("checkdmg", 3, CheckDmgCommand.class);
+        addCommand(new String[]{"potential", "潜能"}, 3, PotentialCommand.class);
+        addCommand(new String[]{"soul", "灵魂"}, 3, SoulCommand.class);
         addCommand("inmap", 3, InMapCommand.class);
         addCommand("reloadevents", 3, ReloadEventsCommand.class);
         addCommand("reloaddrops", 3, ReloadDropsCommand.class);

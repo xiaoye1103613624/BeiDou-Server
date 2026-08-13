@@ -151,11 +151,24 @@ public class ItemId {
     public static final int CHAOS_SCROll_60 = 2049100;
     public static final int LIAR_TREE_SAP = 2049101;
     public static final int MAPLE_SYRUP = 2049102;
+    /** 惊人混沌 ±7 */
+    public static final int AMAZING_CHAOS_SCROLL = 2049119;
+    /** 正向/正义混沌（仅 0~+range） */
+    public static final int POSITIVE_CHAOS_SCROLL = 2049122;
+    public static final int JUSTICE_CHAOS_SCROLL = 2049135;
+    public static final int AMAZING_JUSTICE_CHAOS_20 = 2049136;
     public static final int WHITE_SCROLL = 2340000;
     public static final int CLEAN_SLATE_1 = 2049000;
     public static final int CLEAN_SLATE_3 = 2049001;
     public static final int CLEAN_SLATE_5 = 2049002;
     public static final int CLEAN_SLATE_20 = 2049003;
+    /** 普通还原卷轴（清砸卷/Hyper/金锤；保留潜能与白金锤） */
+    public static final int RESET_SCROLL_70 = 2049600;
+    public static final int RESET_SCROLL_20 = 2049601;
+    public static final int RESET_SCROLL_100 = 2049610;
+    /** 高伤部位卷（示例） */
+    public static final int HIGH_ATT_1H_SWORD_60 = 2043026;
+    public static final int HIGH_ATT_TOP_60 = 2040426;
     public static final int RING_STR_100_SCROLL = 2041100;
     public static final int DRAGON_STONE_SCROLL = 2041200;
     public static final int BELT_STR_100_SCROLL = 2041300;
@@ -304,6 +317,8 @@ public class ItemId {
     public static final int WORLD_TRANSFER = 5401000;
     public static final int MAPLE_LIFE_B = 5432000;
     public static final int VICIOUS_HAMMER = 5570000;
+    /** 白金锤：永久加升级次数，最多 5 次，不被还原卷清零 */
+    public static final int PLATINUM_HAMMER = 5570001;
 
     public static final int NX_CARD_100 = 4031865;
     public static final int NX_CARD_250 = 4031866;

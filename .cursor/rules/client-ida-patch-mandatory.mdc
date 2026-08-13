@@ -1,0 +1,49 @@
+---
+description: HARD RULE — client/ijl15/EXE patches require IDA first; no blind edits; no replaying forbidden ops; proven features need impact analysis
+alwaysApply: true
+---
+
+# 客户端 / 插件修改 — 必须 IDA 对照（硬性）
+
+## Mandate（非协商）
+
+凡改动冒险岛 **客户端可执行体**（`BeiDou.exe` @ `BeiDou-Client_S8`）、**客户端插件**（`ijl15.dll` / 源码 `E:\pro\BeiDou-ijl15_S8`）、或任何对客户端行为的 **内存补丁 / Detours / cave / 二进制字节**，**必须先用 IDA**（`user-ida-pro-mcp`）查清与本次修改相关的全部数据，**对照后再改**。禁止凭印象、字符串、或「试一下」盲改。
+
+WZ/`.img` 资源仍走 `maplestory-wz-img-mcp`；本规则管 **代码/二进制行为**，不替代 WZ MCP。操作根仅 S8（服务端 `BeiDou-Server_S8` / 插件 `_S8` / 客户端 `_S8`）。
+
+**权威 SOP / 黑名单（历史归档只读；插件源码以 `_S8` 为准）：**
+
+- `E:\pro\BeiDou-ijl15\docs\CLIENT_PATCH_SOP.md`
+- `E:\pro\BeiDou-ijl15\docs\ADDON_ENTER_CRASH_AVOID.md`（含 avoid #39：无 IDA = 禁止）
+- 装备栏专题：`.cursor/rules/equip-slot-lessons.mdc`
+
+## MUST（改前 checklist）
+
+1. **IDA 健康**：`server_health` 可用；目标 IDB 已加载（客户端 EXE 或相关模块）。不可用则 **停手问用户启动 IDA/MCP**，不得用猜测继续。
+2. **查全相关信息**（写入简报再动手）：目标函数 Hex-Rays、地址、调用约定、xrefs/callers、生命周期（何时装钩、CharData/进图门闩）、相关全局/结构偏移、已有 cave/trampoline 是否冲突。
+3. **对照修改**：补丁位点、期望字节（ExpectBytes）、跳转目标、寄存器/栈槽必须与 IDA 一致；禁止抄错 VA / 十进制栈偏移当十六进制。
+4. **进图门禁**：新 stamp 先 stage（`golden\` / 测试拷），**select→enter A/B 绿** 再上 live；出红立刻按 SOP 回滚。
+
+## FORBIDDEN（危险操作 — 出现过则禁止再出现）
+
+下列为已证实进图红 / 崩溃家族，**永不复用**（完整列表以 `ADDON_ENTER_CRASH_AVOID.md` 为准；装备栏以 `equip-slot-lessons` 为准）：
+
+- 无 IDA 文档就 patch/deploy；盲 OnTick 强制调用；猜 hook；污染全量重链「碰运气」上 live
+- DllMain / 过早 Early Get·Set / LoginPersist（`EquipAddonLoginPersist`）进图红家族
+- ForceDrawLoop、错 VA、无 ExpectBytes 写洞、`[ebp-14]` 十进制当 `14h`
+- 用 `GROWTH_TIP_REEN` / 涨体积全链覆盖已绿 EXECAVE；破坏 stub `@0xAB30C`
+- 把已绿可用功能当试验场随意叠补丁
+
+**新踩坑必须立刻记入 avoid-list**，同模式禁止第二次。
+
+## 已可用功能 — 二次修改约束
+
+已验证可用（进图绿 / 用户确认可用）的客户端或插件功能：
+
+- **禁止轻易改动**（含「顺手重构」、合并无关 Phase、扩大 hook 范围）。
+- 若必须改：先做 **全局影响分析** — IDA 上该功能全部调用链与共享 cave/全局状态；与其它绿功能（hover / logout UI / 装备栏 / tip…）的交叉影响；体积与装钩时机是否改变；回滚方案与 bak SHA。
+- 分析结论未写明「无影响或可控影响 + 验证计划」前，**不得**改源码/部署覆盖 live。
+
+## IDA MCP 最小工具集
+
+`server_health` → `decompile` / `disasm` / `xrefs_to` / `xref_query` / `lookup_funcs` / `get_bytes` / `find_bytes` / `analyze_function`（按需）。先证据，后补丁。

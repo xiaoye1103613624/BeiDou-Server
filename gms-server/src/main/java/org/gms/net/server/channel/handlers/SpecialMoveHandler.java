@@ -67,6 +67,12 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         int __skillLevel = p.readByte();
         Skill skill = SkillFactory.getSkill(skillid);
         int skillLevel = chr.getSkillLevel(skill);
+
+        // 装备版轮回碑石：穿戴时劫持英雄之回声系（1005，非 PQ）为刷怪加成
+        if (org.gms.reincarnation.ReincarnationSupport.tryHandleSkill(c, chr, skillid)) {
+            return;
+        }
+
         if (skillid % 10000000 == 1010 || skillid % 10000000 == 1011) {
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;

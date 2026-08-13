@@ -27,6 +27,7 @@ import org.gms.constants.id.ItemId;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +51,25 @@ public final class ItemConstants {
     public final static short PET_COME = 0x80;
     public final static short ACCOUNT_SHARING = 0x100;
     public final static short MERGE_UNTRADEABLE = 0x200;
+    /**
+     * Soft095 防-x 装备 flag 映射（本服 bit 与 095 不完全同址，语义对齐）：
+     * <pre>
+     * 095 SHIELD_WARD   0x100  → 本服 {@link #SHIELD_WARD} 0x1000（0x100=ACCOUNT_SHARING）
+     * 095 LUCKS_KEY     0x200  → 本服 {@link #LUCKS_KEY}   0x800 （0x200=MERGE_UNTRADEABLE）
+     * 095 SLOTS_PROTECT 0x2000 → 本服 {@link #SLOTS_PROTECT} 0x2000（同）
+     * 095 SCROLL_PROTECT 0x4000→ 本服 {@link #SCROLL_PROTECT} 0x4000（同）
+     * </pre>
+     * 多种防-x 可共存：Soft095 用 {@code flag |=}，String 亦写「可与保护/安全/复原之盾一起使用」。
+     */
+    /** Hyper / 砸卷防炸（095 SHIELD_WARD）。v083 客户端未必显示盾标，仅服务端识别。 */
+    public final static short SHIELD_WARD = 0x1000;
+    /** 下次砸卷成功率 +10%（095 LUCKS_KEY=0x200，本服避 MERGE_UNTRADEABLE）。 */
+    public final static short LUCKS_KEY = 0x800;
+    /** 失败不扣可升级次数（095 SLOTS_PROTECT）。 */
+    public final static short SLOTS_PROTECT = 0x2000;
+    /** 失败不消耗卷轴（095 SCROLL_PROTECT）。
+     * Soft095 InventoryHandler 仅涂 flag、未实现保留卷轴消费；本服按官方 String 语义在失败时 keepScroll。 */
+    public final static short SCROLL_PROTECT = 0x4000;
 
     public final static Set<Integer> permanentItemids = new HashSet<>();
 
@@ -92,6 +112,46 @@ public final class ItemConstants {
 
     public static boolean isRechargeable(int itemId) {
         return isThrowingStar(itemId) || isBullet(itemId);
+    }
+
+    // ===================== 收纳背包 =====================
+    public static final Set<Integer> makerItemIds = new HashSet<>(Arrays.asList(
+            4004000, 4004001, 4004002, 4004003, 4004004, 4005000, 4005001,
+            4005002, 4005003, 4005004, 4007000, 4007001, 4007002, 4007003,
+            4007004, 4007005, 4007006, 4007007, 4010000, 4010001, 4010002,
+            4010003, 4010004, 4010005, 4010006, 4010007, 4011000, 4011001,
+            4011002, 4011003, 4011004, 4011005, 4011006, 4011007, 4011008,
+            4020000, 4020001, 4020002, 4020003, 4020004, 4020005, 4020006,
+            4020007, 4020008, 4020009, 4021000, 4021001, 4021002, 4021003,
+            4021004, 4021005, 4021006, 4021007, 4021008, 4021009, 4021010,
+            4250000, 4250001, 4250002, 4250100, 4250101, 4250102, 4250200,
+            4250201, 4250202, 4250300, 4250301, 4250302, 4250400, 4250401,
+            4250402, 4250500, 4250501, 4250502, 4250600, 4250601, 4250602,
+            4250700, 4250701, 4250702, 4250800, 4250801, 4250802, 4250900,
+            4250901, 4250902, 4251000, 4251001, 4251002, 4251100, 4251101,
+            4251102, 4251200, 4251201, 4251202, 4251300, 4251301, 4251302,
+            4251400, 4251401, 4251402, 4260000, 4260001, 4260002, 4260003,
+            4260004, 4260005, 4260006, 4260007, 4260008
+    ));
+
+    public static boolean isOreBagAllowed(int itemId) {
+        return makerItemIds.contains(itemId);
+    }
+
+    public static boolean isScrollBagAllowed(int itemId) {
+        if (itemId / 10000 == 204) {
+            return true;
+        }
+        return itemId == ItemId.WHITE_SCROLL;
+    }
+
+    public static boolean isChairBagAllowed(int itemId) {
+        return itemId / 10000 == 301;
+    }
+
+    public static boolean isMountBagAllowed(int itemId) {
+        int t = itemId / 1000;
+        return t == 1902 || t == 1912;
     }
 
     public static boolean isArrowForCrossBow(int itemId) {
@@ -147,6 +207,85 @@ public final class ItemConstants {
         return scrollId > 2048999 && scrollId < 2049004;
     }
 
+    /** Soft095 {@code isSpecialScroll}：幸运/防暴/安全/卷轴防护（及带成功率特殊卷）。 */
+    public static boolean isProtectFamilyScroll(int scrollId) {
+        return isLuckScroll(scrollId) || isShieldWardScroll(scrollId)
+                || isSlotsProtectScroll(scrollId) || isScrollProtectScroll(scrollId);
+    }
+
+    /** Soft095 {@code is幸運卷軸}：5063100/5068000 或 id/1000==2530。 */
+    public static boolean isLuckScroll(int scrollId) {
+        return switch (scrollId) {
+            case 5063100, 5068000, 5063000 -> true;
+            default -> scrollId / 1000 == 2530;
+        };
+    }
+
+    /**
+     * Soft095 {@code is防暴卷軸}：5064000/5064003（及 Soft095 误/兼列的 5063100）或 id/1000==2531。
+     * 5063100 同时是幸运+防暴组合（scrollEquip 先涂 LUCKS_KEY 再涂 SHIELD_WARD）。
+     */
+    public static boolean isShieldWardScroll(int scrollId) {
+        return switch (scrollId) {
+            case 5063100, 5064000, 5064003 -> true;
+            default -> scrollId / 1000 == 2531;
+        };
+    }
+
+    /** Soft095 {@code is安全卷軸}：5064100/01、5068100 或 id/1000==2532。 */
+    public static boolean isSlotsProtectScroll(int scrollId) {
+        return switch (scrollId) {
+            case 5064100, 5064101, 5068100 -> true;
+            default -> scrollId / 1000 == 2532;
+        };
+    }
+
+    /** Soft095 {@code is卷軸防護卷軸}：5064300/5068200。 */
+    public static boolean isScrollProtectScroll(int scrollId) {
+        return scrollId == 5064300 || scrollId == 5068200;
+    }
+
+    /** Soft095 宠物专用保护系：仅可涂在宠物装备(180xxxx)。 */
+    public static boolean isPetOnlyProtectScroll(int scrollId) {
+        return switch (scrollId) {
+            case 2530003, 5068000, 2532001, 5068100, 5068200 -> true;
+            default -> false;
+        };
+    }
+
+    public static boolean isPetEquip(int itemId) {
+        return itemId / 10000 == 180;
+    }
+
+    public static boolean hasFlag(short flag, short bit) {
+        return (flag & bit) == bit;
+    }
+
+    public static short withFlag(short flag, short bit) {
+        return (short) (flag | bit);
+    }
+
+    public static short withoutFlag(short flag, short bit) {
+        return (short) (flag & ~bit);
+    }
+
+    /** 普通还原卷轴：2049600~2049619（保留潜能/白金锤）。 */
+    public static boolean isResetScroll(int scrollId) {
+        return scrollId >= 2049600 && scrollId <= 2049619;
+    }
+
+    /** 还原卷轴成功率（百分数）。 */
+    public static int resetScrollSuccess(int scrollId) {
+        return switch (scrollId) {
+            case ItemId.RESET_SCROLL_100 -> 100;
+            case ItemId.RESET_SCROLL_70 -> 70;
+            case ItemId.RESET_SCROLL_20, 2049602 -> 20;
+            case 2049603 -> 60;
+            case 2049605 -> 50;
+            default -> 50;
+        };
+    }
+
     public static boolean isModifierScroll(int scrollId) {
         return scrollId == ItemId.SPIKES_SCROLL || scrollId == ItemId.COLD_PROTECTION_SCROLl;
     }
@@ -159,7 +298,33 @@ public final class ItemConstants {
     }
 
     public static boolean isChaosScroll(int scrollId) {
-        return scrollId >= 2049100 && scrollId <= 2049103;
+        if (scrollId >= 2049100 && scrollId <= 2049103) {
+            return true;
+        }
+        return scrollId == ItemId.AMAZING_CHAOS_SCROLL
+                || scrollId == ItemId.POSITIVE_CHAOS_SCROLL
+                || scrollId == ItemId.JUSTICE_CHAOS_SCROLL
+                || scrollId == ItemId.AMAZING_JUSTICE_CHAOS_20
+                || scrollId == 2049137
+                || scrollId == 2049138;
+    }
+
+    /** 混沌随机幅度（绝对值）。默认取服务器 chaos_scroll_stat_range。 */
+    public static int chaosStatRange(int scrollId, int defaultRange) {
+        return switch (scrollId) {
+            case ItemId.AMAZING_CHAOS_SCROLL, ItemId.AMAZING_JUSTICE_CHAOS_20, 2049137, 2049138 -> 7;
+            case ItemId.POSITIVE_CHAOS_SCROLL, ItemId.JUSTICE_CHAOS_SCROLL -> 5;
+            default -> Math.max(1, defaultRange);
+        };
+    }
+
+    /** 正义/正向混沌：只加不减（0~+range）。 */
+    public static boolean isPositiveChaosScroll(int scrollId) {
+        return scrollId == ItemId.POSITIVE_CHAOS_SCROLL
+                || scrollId == ItemId.JUSTICE_CHAOS_SCROLL
+                || scrollId == ItemId.AMAZING_JUSTICE_CHAOS_20
+                || scrollId == 2049137
+                || scrollId == 2049138;
     }
 
     public static boolean isRateCoupon(int itemId) {

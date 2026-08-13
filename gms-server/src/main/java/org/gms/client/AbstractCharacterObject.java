@@ -64,7 +64,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     protected float transientMp = Float.NEGATIVE_INFINITY;
 
     private AbstractCharacterListener listener = null;
-    protected Map<Stat, Integer> statUpdates = new HashMap<>();
+    protected Map<Stat, Long> statUpdates = new HashMap<>();
 
     protected final Lock effLock = new ReentrantLock(true);
     protected final Lock statRlock;
@@ -321,13 +321,13 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
 
                     poolUpdate = true;
                     setMaxHp(newMaxHp);
-                    statUpdates.put(Stat.MAXHP, clientMaxHp);
-                    statUpdates.put(Stat.HP, hp);
+                    statUpdates.put(Stat.MAXHP, (long) clientMaxHp);
+                    statUpdates.put(Stat.HP, (long) hp);
                 }
 
                 if (newHp != Short.MIN_VALUE) {
                     setHp(newHp);
-                    statUpdates.put(Stat.HP, hp);
+                    statUpdates.put(Stat.HP, (long) hp);
                 }
 
                 if (newMaxMp != Short.MIN_VALUE) {
@@ -337,13 +337,13 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
 
                     poolUpdate = true;
                     setMaxMp(newMaxMp);
-                    statUpdates.put(Stat.MAXMP, clientMaxMp);
-                    statUpdates.put(Stat.MP, mp);
+                    statUpdates.put(Stat.MAXMP, (long) clientMaxMp);
+                    statUpdates.put(Stat.MP, (long) mp);
                 }
 
                 if (newMp != Short.MIN_VALUE) {
                     setMp(newMp);
-                    statUpdates.put(Stat.MP, mp);
+                    statUpdates.put(Stat.MP, (long) mp);
                 }
             }
 
@@ -355,27 +355,27 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
 
                 if (newStr >= 4) {
                     setStr(newStr);
-                    statUpdates.put(Stat.STR, attrStr);
+                    statUpdates.put(Stat.STR, (long) attrStr);
                 }
 
                 if (newDex >= 4) {
                     setDex(newDex);
-                    statUpdates.put(Stat.DEX, attrDex);
+                    statUpdates.put(Stat.DEX, (long) attrDex);
                 }
 
                 if (newInt >= 4) {
                     setInt(newInt);
-                    statUpdates.put(Stat.INT, attrInt);
+                    statUpdates.put(Stat.INT, (long) attrInt);
                 }
 
                 if (newLuk >= 4) {
                     setLuk(newLuk);
-                    statUpdates.put(Stat.LUK, attrLuk);
+                    statUpdates.put(Stat.LUK, (long) attrLuk);
                 }
 
                 if (newAp >= 0) {
                     setRemainingAp(newAp);
-                    statUpdates.put(Stat.AVAILABLEAP, remainingAp);
+                    statUpdates.put(Stat.AVAILABLEAP, (long) remainingAp);
                 }
 
                 statUpdate = true;
@@ -386,7 +386,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
                 short skillbook = newSp.shortValue();
 
                 setRemainingSp(sp, skillbook);
-                statUpdates.put(Stat.AVAILABLESP, remainingSp[skillbook]);
+                statUpdates.put(Stat.AVAILABLESP, (long) remainingSp[skillbook]);
             }
 
             if (!statUpdates.isEmpty()) {

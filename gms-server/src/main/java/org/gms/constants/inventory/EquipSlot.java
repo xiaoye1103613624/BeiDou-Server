@@ -21,10 +21,13 @@ public enum EquipSlot {
     WEAPON("Wp", -11),
     WEAPON_2("WpSi", -11),
     LOW_WEAPON("WpSp", -11),
-    RING("Ri", -12, -13, -15, -16),
-    PENDANT("Pe", -17),
+    // 6 rings: classic -12/-13/-15/-16 + ExtraRing -52/-53 (UI red 3/4; client shoulders BP52/53).
+    // Cash rings must NOT land on -152/-153 (enter-invalid); see InventoryManipulator.
+    RING("Ri", -12, -13, -15, -16, -52, -53),
+    PENDANT("Pe", -17, -51),       // necklace + pendant2 -51
     TAMED_MOB("Tm", -18),
     SADDLE("Sd", -19),
+    SHOULDER("Sh", -20),           // shoulder 115xxx
     MEDAL("Me", -49),
     BELT("Be", -50),
     PET_EQUIP;

@@ -27,12 +27,12 @@ function start(){
             }
             im.removeAll(2430014);
             im.showInfo("Effect/OnUserEff/normalEffect/mushroomcastle/chatBalloon2");
-            im.dropMessage(6, 'The Poison Spore reacts with the barrier, causing it to dissipate.');
+            im.dropMessage(6,'There seems to be some movement Hmm? The barrier has been eliminated');
         } else {
-            im.message('You need to get closer to the magic barrier before using this.');
+            im.message('Getting as close as possible to the magic barrier is necessary to eliminate it');
         }
     } else {
-        im.message('There is no magic barrier here that reacts to this item.');
+        im.message('There seems to be no magic barrier that needs to be eliminated here');
     }
 
     im.dispose();

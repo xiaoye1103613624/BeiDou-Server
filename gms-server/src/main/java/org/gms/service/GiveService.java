@@ -457,13 +457,10 @@ public class GiveService {
     }
 
     private void doGainMeso(Character chr, int quantity) {
-        int meso = chr.getMeso();
-        long sum = (long) meso + (long) quantity;
+        long meso = chr.getMeso();
+        long sum = meso + quantity;
         if (sum < 0) {
-            quantity = -meso;
-        }
-        if (sum > Integer.MAX_VALUE) {
-            quantity = Integer.MAX_VALUE - meso;
+            quantity = (int) -meso;
         }
         chr.gainMeso(quantity);
     }

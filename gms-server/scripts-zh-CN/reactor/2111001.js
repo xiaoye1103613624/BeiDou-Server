@@ -1,34 +1,37 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 function act() {
+    var chaos = false;
+    try {
+        var data = rm.getPlayer().getQuestRecord(9031002).getCustomData();
+        chaos = (data === "CHAOS_ZAKUM");
+    } catch (e) {
+        chaos = false;
+    }
+
     if (rm.getPlayer().getEventInstance() != null) {
         rm.getPlayer().getEventInstance().setProperty("summoned", "true");
         rm.getPlayer().getEventInstance().setProperty("canEnter", "false");
     }
+
     rm.changeMusic("Bgm06/FinalFight");
-    rm.spawnFakeMonster(8800000);
-    for (i = 8800003; i < 8800011; i++) {
-        rm.spawnMonster(i);
+
+    if (chaos) {
+        // 混沌扎昆：本体壳 + 手臂 8800103~8800109
+        rm.spawnFakeMonster(8800100);
+        for (var i = 8800103; i <= 8800109; i++) {
+            rm.spawnMonster(i);
+        }
+        rm.mapMessage(5, "【混沌炎魔】火焰之眼的力量正在召唤混沌扎昆！");
+        try {
+            rm.getPlayer().getQuestRecord(9031002).setCustomData("");
+        } catch (e2) {
+        }
+    } else {
+        rm.spawnFakeMonster(8800000);
+        for (var j = 8800003; j < 8800011; j++) {
+            rm.spawnMonster(j);
+        }
+        rm.mapMessage(5, "【炎魔苏醒】火焰之眼的力量正在召唤扎昆！");
     }
+
     rm.createMapMonitor(280030000, "ps00");
-    rm.mapMessage(5, "【炎魔苏醒】火焰之眼的力量正在召唤扎昆！");
 }

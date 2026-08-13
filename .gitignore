@@ -34,3 +34,45 @@ main/resources/static/
 src/main/resources/static/
 .claude/settings.local.json
 CLAUDE.local.md
+
+# --- S8 hygiene (logs/temp/backups) ---
+*.log
+client_boot.log
+beidou-*.log
+bufftimer.log
+gamedata_guard.log
+out.log
+logs/
+_tmp*/
+tmp_*/
+*.tmp
+__pycache__/
+.vs/
+*.bak
+*.bak*
+*_bak*
+*.aside_*
+_quarantine*/
+*.bak_pre_*
+bak_/
+*.err
+*_tmp*
+
+# cursor local / agent junk
+_tmp*/
+_batch_commit_*.py
+*.bak_work
+
+# secrets / deps / build extras
+.env
+.env.*
+!.env.example
+credentials.json
+node_modules/
+bin/
+obj/
+*.pdb
+*.ilk
+*.exp
+aside_*/
+_quarantine_*/

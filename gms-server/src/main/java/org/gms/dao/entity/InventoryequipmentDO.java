@@ -78,4 +78,8 @@ public class InventoryequipmentDO implements Serializable  {
 
     private Integer ringid;
 
+
+    @Column("anvilItemId")
+    private Integer anvilitemid;
+
 }

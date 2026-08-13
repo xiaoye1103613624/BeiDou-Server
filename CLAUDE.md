@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端，基于 [Cosmic](https://github.com/P0nk/Cosmic)（再往上追溯是 HeavenMS/OdinMS）做汉化与优化。协议版本 `ServerConstants.VERSION = 83`，当前版本号 `BEI_DOU_VERSION = "1.11"`。
 
+**唯一操作根（S8）：** 本仓库 `E:\pro\BeiDou-Server_S8`；配套插件 `E:\pro\BeiDou-ijl15_S8`；客户端 live `E:\mxd_soft\2.客户端\083\beidou_client_xiaoye\BeiDou-Client_S8`。旧 xy / ijl15 / Client_1 不再作为日常目标。Cursor 规则见 `.cursor/rules/`。
+
 仓库分两部分：
 - `gms-server/`：Java 21 + Spring Boot 3 + Netty 的服务端，是主体。
 - `gms-ui/`：Vue 3 管理后台（Arco Design Pro 模板），构建后可嵌入服务端 jar 同源发布。

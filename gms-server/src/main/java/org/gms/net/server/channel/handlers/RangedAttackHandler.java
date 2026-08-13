@@ -130,7 +130,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         int moneyMod = money / 2;
                         money += Randomizer.nextInt(moneyMod);
                         if (money > chr.getMeso()) {
-                            money = chr.getMeso();
+                            money = (int) chr.getMeso();
                         }
                         chr.gainMeso(-money, false);
                     }

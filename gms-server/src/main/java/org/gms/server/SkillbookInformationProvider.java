@@ -26,7 +26,10 @@ import org.gms.provider.Data;
 import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
+import org.gms.provider.ContentRoot;
 import org.gms.provider.wz.WZFiles;
+import org.gms.manager.ServerManager;
+import org.gms.property.ServiceProperty;
 import org.gms.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -187,9 +190,7 @@ public class SkillbookInformationProvider {
         return loadedSkillbooks;
     }
 
-    private static void listFiles(String directoryName, ArrayList<Path> files) {
-        Path directory = Path.of(directoryName);
-
+    private static void listFiles(Path directory, ArrayList<Path> files) {
         // get all the files from a directory
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
             for (Path path : stream) {
@@ -197,7 +198,7 @@ public class SkillbookInformationProvider {
                 if (Files.isRegularFile(path)) {
                     files.add(path);
                 } else if (Files.isDirectory(path)) {
-                    listFiles(path.toAbsolutePath().toString(), files);
+                    listFiles(path, files);
                 }
             }
         } catch (IOException e) {
@@ -206,7 +207,7 @@ public class SkillbookInformationProvider {
         }
     }
 
-	private static List<Path> listFilesFromDirectoryRecursively(String directory) {
+	private static List<Path> listFilesFromDirectoryRecursively(Path directory) {
 		ArrayList<Path> files = new ArrayList<>();
 		listFiles(directory, files);
 
@@ -259,13 +260,27 @@ public class SkillbookInformationProvider {
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
-        for (Path file : listFilesFromDirectoryRecursively("./scripts")) {
-            if (file.getFileName().endsWith(".js")) {
+        collectSkillbooksFromDirectory(ContentRoot.resolve("scripts"), scriptSkillbooks);
+
+        // 同时扫描语言脚本目录（如 scripts-zh-CN），兼容 jar 启动和 IDEA 启动时的不同工作目录。
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        collectSkillbooksFromDirectory(
+                ContentRoot.resolve("scripts-" + serviceProperty.getLanguage()),
+                scriptSkillbooks);
+
+        return scriptSkillbooks;
+    }
+
+    private static void collectSkillbooksFromDirectory(Path directory, Map<Integer, SkillBookEntry> scriptSkillbooks) {
+        if (!Files.isDirectory(directory)) {
+            return;
+        }
+
+        for (Path file : listFilesFromDirectoryRecursively(directory)) {
+            if (file.getFileName().toString().endsWith(".js")) {
                 scriptSkillbooks.putAll(fileSearchMatchingData(file));
             }
         }
-
-        return scriptSkillbooks;
     }
 
     public static SkillBookEntry getSkillbookAvailability(int itemId) {

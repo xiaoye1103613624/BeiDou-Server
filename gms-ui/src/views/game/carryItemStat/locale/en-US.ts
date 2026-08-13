@@ -1,0 +1,15 @@
+export default {
+  'carryItemStat.add': 'New Carry Item',
+  'carryItemStat.reload': 'Reload',
+  'carryItemStat.detail': 'Carry Item Stat',
+  'carryItemStat.delete.confirm': 'Delete this carry item config?',
+  'carryItemStat.require.yes': 'Must Equip',
+  'carryItemStat.require.no': 'In Inventory',
+  'carryItemStat.column.itemId': 'Item ID',
+  'carryItemStat.column.itemName': 'Name',
+  'carryItemStat.column.requireEquipped': 'Equip Required',
+  'carryItemStat.column.enabled': 'Enabled',
+  'carryItemStat.column.statsJson': 'Stats JSON',
+  'carryItemStat.column.remark': 'Remark',
+  'carryItemStat.column.operate': 'Actions',
+};

@@ -1,0 +1,22 @@
+---
+description: HARD RULE — only operate on the three S8 roots (server / plugin / client)
+alwaysApply: true
+---
+
+# 唯一操作根（S8）
+
+以后**只**在下列三个目录上改代码 / 客户端 / 插件。旧 `BeiDou-Server_xy`、`BeiDou-ijl15`、`BeiDou-Client_1`、V16 live **不是**日常工作目标（本仓库若仍打开为 Cursor workspace，规则仍指向 S8）。
+
+| 用途 | 路径 |
+|------|------|
+| 服务端 | `E:\pro\BeiDou-Server_S8` |
+| 插件源码 | `E:\pro\BeiDou-ijl15_S8` |
+| 客户端 live | `E:\mxd_soft\2.客户端\083\beidou_client_xiaoye\BeiDou-Client_S8` |
+
+## 允许的非操作参考
+
+- WZ 工具：`E:\pro\orange-wz`（MCP，不是业务根）
+- 已知好客户端 / 备份：V16、`_backup_*`、`_img_merge_backup`（只读 MCP 源）
+- 历史 SOP / 文档：`E:\pro\BeiDou-ijl15\docs\`、`E:\pro\BeiDou-Server_xy\resource_doc`（只读）
+
+WZ/`.img` 仍走 MCP；EXE/插件补丁仍走 IDA 规则。仅路径根换成 S8。

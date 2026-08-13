@@ -154,11 +154,11 @@ function playerExit(eim, player) {
 
 function changedMap(eim, chr, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
-        if (eim.isEventTeamLackingNow(true, minPlayers, chr)) {
-            eim.unregisterPlayer(chr);
+        if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+            eim.unregisterPlayer(player);
             end(eim);
         } else {
-            eim.unregisterPlayer(chr);
+            eim.unregisterPlayer(player);
         }
     }
 }

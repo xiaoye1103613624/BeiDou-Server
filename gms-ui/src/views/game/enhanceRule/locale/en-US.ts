@@ -1,0 +1,15 @@
+export default {
+  'enhanceRule.add': 'New Rule',
+  'enhanceRule.reload': 'Reload',
+  'enhanceRule.detail': 'Enhance Rule',
+  'enhanceRule.delete.confirm': 'Delete this enhance rule?',
+  'enhanceRule.column.ruleName': 'Name',
+  'enhanceRule.column.equipType': 'Equip Type',
+  'enhanceRule.column.level': 'Level Range',
+  'enhanceRule.column.minLevel': 'Min Level',
+  'enhanceRule.column.maxLevel': 'Max Level',
+  'enhanceRule.column.enabled': 'Enabled',
+  'enhanceRule.column.statsJson': 'Stats JSON',
+  'enhanceRule.column.remark': 'Remark',
+  'enhanceRule.column.operate': 'Actions',
+};

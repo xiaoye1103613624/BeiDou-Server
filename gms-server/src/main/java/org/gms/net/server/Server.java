@@ -25,8 +25,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.DamageSkinCatalog;
 import org.gms.client.SkillFactory;
 import org.gms.client.command.CommandsExecutor;
+import org.gms.server.setitem.SetItemManager;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.config.GameConfig;
@@ -684,6 +686,10 @@ public class Server {
             futures.add(initExecutor.submit(CashItemFactory::loadAllCashItems));
             futures.add(initExecutor.submit(Quest::loadAllQuests));
             futures.add(initExecutor.submit(SkillbookInformationProvider::loadAllSkillbookInformation));
+            futures.add(initExecutor.submit(DamageSkinCatalog::loadOrSeed));
+            futures.add(initExecutor.submit(SetItemManager::loadOrSeed));
+            futures.add(initExecutor.submit(() -> org.gms.potential.ItemOptionProvider.getInstance().load()));
+            futures.add(initExecutor.submit(org.gms.server.cashshop.CashShopCatalog::load));
             // Wait on all async tasks to complete
             for (Future<?> future : futures) {
                 future.get();

@@ -59,9 +59,14 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendSimple("Hi, I'm #p1012117#, the most charming and stylish stylist around. If you're looking for the best looking hairdos around, look no further!\r\n\#L0##i5150040##t5150040##l\r\n\#L1##i5150044##t5150044##l");
+            cm.sendSimple("Hi, I'm #p1012117#, the most charming and stylish stylist around. If you're looking for the best looking hairdos around, look no further!\r\n\#L0##i5150040##t5150040##l\r\n\#L1##i5150044##t5150044##l\r\n#L7#Coloring Prism#l");
         } else if (status == 1) {
-            if (selection == 0) {
+            if (selection == 7) {
+                // Coloring Prism entry
+                cm.dispose();
+                cm.getPlayer().getClient().sendPacket(
+                    Java.type('org.gms.server.coloring.ColoringPrismPackets').open());
+            } else if (selection == 0) {
                 beauty = 1;
                 cm.sendYesNo("If you use this REGULAR coupon, your hair may transform into a random new look...do you still want to do it using #b#t5150040##k, I will do it anyways for you. But don't forget, it will be random!");
             } else {

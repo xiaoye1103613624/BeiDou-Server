@@ -23,7 +23,7 @@ public class CharacterListItemDTO {
     private Integer world;
     private String worldName;
     private Integer gm;
-    private Integer meso;
+    private Long meso;
     private Integer fame;
     private Integer guildid;
     private Timestamp createdate;

@@ -22,6 +22,16 @@
  */
 package org.gms.client;
 
+
+
+
+
+import org.gms.server.dailycheckin.DailyCheckinRewards;
+import org.gms.server.OreStorage;
+import org.gms.client.inventory.manipulator.KarmaManipulator;
+import org.gms.server.setitem.SetItemManager;
+import org.gms.server.setitem.SetBonus;
+import org.gms.client.DamageSkinInventory;
 import lombok.Getter;
 import lombok.Setter;
 import org.gms.client.autoban.AutobanManager;
@@ -252,6 +262,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private long jailExpiration = -1;
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
+    private transient int localwdef, localmdef, localacc, localeva, localspeed, localjump;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
     private int localchairrate;
     @Getter
@@ -284,10 +295,10 @@ public class Character extends AbstractCharacterObject {
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicInteger exp = new AtomicInteger();
     private final AtomicInteger gachaExp = new AtomicInteger();
-    private final AtomicInteger meso = new AtomicInteger();
+    private final AtomicLong meso = new AtomicLong();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
-    private int merchantmeso;
+    private long merchantmeso;
     @Getter
     @Setter
     private BuddyList buddylist;
@@ -335,6 +346,52 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private MonsterBook monsterBook;
+    @Getter
+    private final DamageSkinInventory damageSkinInventory = new DamageSkinInventory();
+    @Getter
+    @Setter
+    private int activeDamageSkin = 0;
+    @Getter
+    @Setter
+    private int checkinDay = 0;
+    @Getter
+    @Setter
+    private int checkinClaimed = 0;
+    @Getter
+    @Setter
+    private long checkinLastClaim = 0;
+    private static final long CHECKIN_PERIOD_MS = 86_400_000L;
+    private OreStorage orestorage = null;
+    private OreStorage scrollstorage = null;
+    private OreStorage chairstorage = null;
+    private OreStorage mountstorage = null;
+    private volatile boolean usedOreStorage = false;
+    private volatile boolean usedScrollStorage = false;
+    private volatile boolean usedChairStorage = false;
+    private volatile boolean usedMountStorage = false;
+    private boolean autoOreStorage = false;
+    private boolean autoScrollStorage = false;
+    private boolean autoChairStorage = false;
+    private boolean autoMountStorage = false;
+    private boolean partyTrackerVisible = true;
+    private int partyBuffCountsCount = 0;
+    private byte[] partyBuffCountsPayload = null;
+
+    @Getter
+    private transient int setFinalDamage;
+    @Getter
+    private transient double setFinalDamageMultiplier = 1.0;
+    @Getter
+    private transient int setDamageSkin;
+    private transient int setBonusStr, setBonusDex, setBonusLuk, setBonusInt_, setBonusPad, setBonusMad, setBonusMhp, setBonusMmp;
+    private transient int setBonusPdd, setBonusMdd, setBonusAcc, setBonusEva, setBonusSpeed, setBonusJump;
+    private transient boolean setSkillBonusSent;
+    private transient org.gms.talent.TalentManager talentManager;
+    private transient java.util.Map<Integer, Byte> spiritSkillBackup = new java.util.HashMap<>();
+    private transient volatile boolean combatStatsDirty = true;
+    private transient org.gms.combat.stat.CombatStatProfile combatStatProfile = org.gms.combat.stat.CombatStatProfile.EMPTY;
+    private transient java.util.Map<Integer, Integer> setSkillBonusLevels = new java.util.HashMap<>();
+
     @Getter
     @Setter
     private CashShop cashShop;
@@ -1241,14 +1298,14 @@ public class Character extends AbstractCharacterObject {
             addMaxMPMaxHP(addhp, addmp, true);
             recalcLocalStats();
 
-            List<Pair<Stat, Integer>> statup = new ArrayList<>(7);
-            statup.add(new Pair<>(Stat.HP, hp));
-            statup.add(new Pair<>(Stat.MP, mp));
-            statup.add(new Pair<>(Stat.MAXHP, clientMaxHp));
-            statup.add(new Pair<>(Stat.MAXMP, clientMaxMp));
-            statup.add(new Pair<>(Stat.AVAILABLEAP, remainingAp));
-            statup.add(new Pair<>(Stat.AVAILABLESP, remainingSp[GameConstants.getSkillBook(job.getId())]));
-            statup.add(new Pair<>(Stat.JOB, job.getId()));
+            List<Pair<Stat, Long>> statup = new ArrayList<>(7);
+            statup.add(new Pair<>(Stat.HP, (long) hp));
+            statup.add(new Pair<>(Stat.MP, (long) mp));
+            statup.add(new Pair<>(Stat.MAXHP, (long) clientMaxHp));
+            statup.add(new Pair<>(Stat.MAXMP, (long) clientMaxMp));
+            statup.add(new Pair<>(Stat.AVAILABLEAP, (long) remainingAp));
+            statup.add(new Pair<>(Stat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job.getId())]));
+            statup.add(new Pair<>(Stat.JOB, (long) job.getId()));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
         } finally {
             statWlock.unlock();
@@ -2077,6 +2134,13 @@ public class Character extends AbstractCharacterObject {
                 final Packet pickupPacket = PacketCreator.removeItemFromMap(mapitem.getObjectId(), (isPet) ? 5 : 2, this.getId(), isPet, petIndex);
 
                 Item mItem = mapitem.getItem();
+
+                if (mapitem.getMeso() <= 0 && !MapId.isSelfLootableOnly(this.getMapId()) && autoCollectToBag(mItem)) {
+                    this.getMap().pickItemDrop(pickupPacket, mapitem);
+                    enableActions();
+                    return;
+                }
+
                 boolean hasSpaceInventory = true;
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 if (ItemId.isNxCard(mapitem.getItemId()) || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
@@ -2086,7 +2150,7 @@ public class Character extends AbstractCharacterObject {
                         if (!mapitem.isPlayerDrop() || mapitem.getDropper().getObjectId() == client.getPlayer().getObjectId()) {
                             if (mapitem.getMeso() > 0) {
                                 if (!mpcs.isEmpty()) {
-                                    int mesosamm = mapitem.getMeso() / mpcs.size();
+                                    long mesosamm = mapitem.getMeso() / mpcs.size();
                                     for (Character partymem : mpcs) {
                                         if (partymem.isLoggedInWorld()) {
                                             partymem.gainMeso(mesosamm, true, true, false);
@@ -2131,7 +2195,7 @@ public class Character extends AbstractCharacterObject {
 
                     if (mapitem.getMeso() > 0) {
                         if (!mpcs.isEmpty()) {
-                            int mesosamm = mapitem.getMeso() / mpcs.size();
+                            long mesosamm = mapitem.getMeso() / mpcs.size();
                             for (Character partymem : mpcs) {
                                 if (partymem.isLoggedInWorld()) {
                                     partymem.gainMeso(mesosamm, true, true, false);
@@ -3023,6 +3087,9 @@ public class Character extends AbstractCharacterObject {
             }
             updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
             totalExpGained += total;
+            if (total > 0) {
+                addPartyTrackerExp(total);
+            }
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
             }
@@ -3111,28 +3178,49 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public boolean canHoldMeso(int gain) {  // thanks lucasziron for pointing out a need to check space availability for mesos on player transactions
-        long nextMeso = (long) meso.get() + gain;
-        return nextMeso <= Integer.MAX_VALUE;
+    public boolean canHoldMeso(long gain) {  // thanks lucasziron for pointing out a need to check space availability for mesos on player transactions
+        long nextMeso = meso.get() + gain;
+        return nextMeso <= Long.MAX_VALUE;
+    }
+
+    public boolean canHoldMeso(int gain) {
+        return canHoldMeso((long) gain);
     }
 
     public void gainMeso(int gain) {
-        gainMeso(gain, true, false, true);
+        gainMeso((long) gain, true, false, true);
     }
 
     public void gainMeso(int gain, boolean show) {
-        gainMeso(gain, show, false, false);
+        gainMeso((long) gain, show, false, false);
     }
 
     public void gainMeso(int gain, boolean show, boolean enableActions, boolean inChat) {
+        gainMeso((long) gain, show, enableActions, inChat);
+    }
+
+    public void gainMeso(long gain) {
+        gainMeso(gain, true, false, true);
+    }
+
+    public void gainMeso(long gain, boolean show) {
+        gainMeso(gain, show, false, false);
+    }
+
+    public void gainMeso(long gain, boolean show, boolean enableActions, boolean inChat) {
         long nextMeso;
         petLock.lock();
         try {
-            nextMeso = (long) meso.get() + gain;  // thanks Thora for pointing integer overflow here
-            if (nextMeso > Integer.MAX_VALUE) {
-                gain -= (int) (nextMeso - Integer.MAX_VALUE);
-            } else if (nextMeso < 0) {
-                gain = -meso.get();
+            // long addition wraps in Java — use overflow-safe clamp (not nextMeso > Long.MAX_VALUE).
+            final long cur = meso.get();
+            if (gain > 0) {
+                if (cur > Long.MAX_VALUE - gain) {
+                    gain = Long.MAX_VALUE - cur;
+                }
+            } else if (gain < 0) {
+                if (gain == Long.MIN_VALUE || cur < -gain) {
+                    gain = -cur;
+                }
             }
             nextMeso = meso.addAndGet(gain);
         } finally {
@@ -3140,9 +3228,13 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (gain != 0) {
-            updateSingleStat(Stat.MESO, (int) nextMeso, enableActions);
+            updateSingleStat(Stat.MESO, nextMeso, enableActions);
+            if (gain > 0) {
+                addPartyTrackerMeso(gain);
+            }
             if (show) {
-                sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
+                int showGain = gain > Integer.MAX_VALUE ? Integer.MAX_VALUE : (gain < Integer.MIN_VALUE ? Integer.MIN_VALUE : (int) gain);
+                sendPacket(PacketCreator.getShowMesoGain(showGain, inChat));
             }
         } else {
             enableActions();
@@ -3611,6 +3703,10 @@ public class Character extends AbstractCharacterObject {
                 effLock.unlock();
                 prtLock.unlock();
             }
+        }
+
+        if (ret) {
+            announcePartyBuffSnapshot();
         }
 
         return ret;
@@ -4969,19 +5065,19 @@ public class Character extends AbstractCharacterObject {
         return GameConstants.getJobMaxLevel(job);
     }
 
-    public int getMeso() {
+    public long getMeso() {
         return meso.get();
     }
 
-    public void setMeso(int meso) {
+    public void setMeso(long meso) {
         this.meso.set(meso);
     }
 
-    public int getMerchantMeso() {
+    public long getMerchantMeso() {
         return merchantmeso;
     }
 
-    public int getMerchantNetMeso() {
+    public long getMerchantNetMeso() {
         int elapsedDays = 0;
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -5003,7 +5099,7 @@ public class Character extends AbstractCharacterObject {
 
         long netMeso = merchantmeso; // negative mesos issues found thanks to Flash, Vcoc
         netMeso = (netMeso * (100 - elapsedDays)) / 100;
-        return (int) netMeso;
+        return netMeso;
     }
 
     public GuildCharacter getMGC() {
@@ -5372,6 +5468,18 @@ public class Character extends AbstractCharacterObject {
         return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PET_EQUIP_SLOTS.get(petIndex).itemIgnore()) != null;
     }
 
+    /**
+     * OLD merges equip-derived PetSkill bits into {@code Pet.petSkills}.
+     * S8 Pet still uses {@code petAttribute} only — keep as safe no-op until PetFlag port.
+     */
+    public void syncPetSkillsFromEquips(byte petIndex) {
+        syncPetSkillsFromEquips(petIndex, true);
+    }
+
+    public void syncPetSkillsFromEquips(byte petIndex, boolean notifyClient) {
+        // intentionally empty on S8 (no Pet.petSkills field yet)
+    }
+
     public final byte getQuestStatus(final int quest) {
         synchronized (quests) {
             QuestStatus mqs = quests.get((short) quest);
@@ -5618,6 +5726,14 @@ public class Character extends AbstractCharacterObject {
 
     public byte getSkillLevel(Skill skill) {
         if (skills.get(skill) == null) {
+            return 0;
+        }
+        return skills.get(skill).skillLevel;
+    }
+
+    /** 不含套装/灵韵加成的原始等级（穿戴备份用）。 */
+    public byte getSkillLevelRaw(Skill skill) {
+        if (skill == null || skills.get(skill) == null) {
             return 0;
         }
         return skills.get(skill).skillLevel;
@@ -6117,17 +6233,17 @@ public class Character extends AbstractCharacterObject {
             recalcLocalStats();
             changeHpMp(localMaxHp, localMaxMp, true);
 
-            List<Pair<Stat, Integer>> statup = new ArrayList<>(10);
-            statup.add(new Pair<>(Stat.AVAILABLEAP, remainingAp));
-            statup.add(new Pair<>(Stat.AVAILABLESP, remainingSp[GameConstants.getSkillBook(job.getId())]));
-            statup.add(new Pair<>(Stat.HP, hp));
-            statup.add(new Pair<>(Stat.MP, mp));
-            statup.add(new Pair<>(Stat.EXP, exp.get()));
-            statup.add(new Pair<>(Stat.LEVEL, level));
-            statup.add(new Pair<>(Stat.MAXHP, clientMaxHp));
-            statup.add(new Pair<>(Stat.MAXMP, clientMaxMp));
-            statup.add(new Pair<>(Stat.STR, attrStr));
-            statup.add(new Pair<>(Stat.DEX, attrDex));
+            List<Pair<Stat, Long>> statup = new ArrayList<>(10);
+            statup.add(new Pair<>(Stat.AVAILABLEAP, (long) remainingAp));
+            statup.add(new Pair<>(Stat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job.getId())]));
+            statup.add(new Pair<>(Stat.HP, (long) hp));
+            statup.add(new Pair<>(Stat.MP, (long) mp));
+            statup.add(new Pair<>(Stat.EXP, (long) exp.get()));
+            statup.add(new Pair<>(Stat.LEVEL, (long) level));
+            statup.add(new Pair<>(Stat.MAXHP, (long) clientMaxHp));
+            statup.add(new Pair<>(Stat.MAXMP, (long) clientMaxMp));
+            statup.add(new Pair<>(Stat.STR, (long) attrStr));
+            statup.add(new Pair<>(Stat.DEX, (long) attrDex));
 
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
         } finally {
@@ -6601,8 +6717,8 @@ public class Character extends AbstractCharacterObject {
             }
         }
         chr.setRemainingSp(remainingSps);
-        chr.setMeso(charactersDO.getMeso());
-        chr.setMerchantMeso(charactersDO.getMerchantmesos());
+        chr.setMeso(charactersDO.getMeso() == null ? 0L : charactersDO.getMeso());
+        chr.setMerchantMeso(charactersDO.getMerchantmesos() == null ? 0L : charactersDO.getMerchantmesos());
         chr.setGMLevel(charactersDO.getGm());
         chr.setSkinColor(SkinColor.getById(charactersDO.getSkincolor()));
         chr.setGender(charactersDO.getGender());
@@ -6641,6 +6757,24 @@ public class Character extends AbstractCharacterObject {
         chr.setBuddylist(new BuddyList(charactersDO.getBuddyCapacity()));
         chr.setLastExpGainTime(charactersDO.getLastExpGainTime().getTime());
         chr.setCanRecvPartySearchInvite(charactersDO.getPartySearch());
+        chr.setActiveDamageSkin(charactersDO.getActiveDamageSkin() != null ? charactersDO.getActiveDamageSkin() : 0);
+        chr.setCheckinDay(charactersDO.getCheckinDay() != null ? charactersDO.getCheckinDay() : 0);
+        chr.setCheckinClaimed(charactersDO.getCheckinClaimed() != null ? charactersDO.getCheckinClaimed() : 0);
+        chr.setCheckinLastClaim(charactersDO.getCheckinLastClaim() != null ? charactersDO.getCheckinLastClaim() : 0L);
+        try {
+            chr.getDamageSkinInventory().loadSkins(charactersDO.getId());
+        chr.orestorage = OreStorage.loadOreStorage(charactersDO.getId());
+        chr.scrollstorage = OreStorage.loadScrollStorage(charactersDO.getId());
+        chr.chairstorage = OreStorage.loadChairStorage(charactersDO.getId());
+        chr.mountstorage = OreStorage.loadMountStorage(charactersDO.getId());
+        chr.setAutoOreStorage(charactersDO.getAutoOreStorage() != null && charactersDO.getAutoOreStorage() != 0);
+        chr.setAutoScrollStorage(charactersDO.getAutoScrollStorage() != null && charactersDO.getAutoScrollStorage() != 0);
+        chr.setAutoChairStorage(charactersDO.getAutoChairStorage() != null && charactersDO.getAutoChairStorage() != 0);
+        chr.setAutoMountStorage(charactersDO.getAutoMountStorage() != null && charactersDO.getAutoMountStorage() != 0);
+        } catch (Exception e) {
+            log.warn("load damage skins failed for {}", charactersDO.getId(), e);
+        }
+
         chr.getInventory(InventoryType.EQUIP).setSlotLimit(charactersDO.getEquipslots());
         chr.getInventory(InventoryType.USE).setSlotLimit(charactersDO.getUseslots());
         chr.getInventory(InventoryType.SETUP).setSlotLimit(charactersDO.getSetupslots());
@@ -6837,6 +6971,14 @@ public class Character extends AbstractCharacterObject {
         cdo.setUseslots((int) chr.getSlots(1));
         cdo.setSetupslots((int) chr.getSlots(2));
         cdo.setEtcslots((int) chr.getSlots(3));
+        cdo.setActiveDamageSkin(chr.getActiveDamageSkin());
+        cdo.setCheckinDay(chr.getCheckinDay());
+        cdo.setCheckinClaimed(chr.getCheckinClaimed());
+        cdo.setCheckinLastClaim(chr.getCheckinLastClaim());
+        cdo.setAutoOreStorage(chr.isAutoOreStorage() ? 1 : 0);
+        cdo.setAutoScrollStorage(chr.isAutoScrollStorage() ? 1 : 0);
+        cdo.setAutoChairStorage(chr.isAutoChairStorage() ? 1 : 0);
+        cdo.setAutoMountStorage(chr.isAutoMountStorage() ? 1 : 0);
         // todo 未完成
         return cdo;
     }
@@ -7129,6 +7271,20 @@ public class Character extends AbstractCharacterObject {
         localluk += equipluk;
         localmagic += equipmagic;
         localwatk += equipwatk;
+        localstr += setBonusStr;
+        localdex += setBonusDex;
+        localint_ += setBonusInt_;
+        localluk += setBonusLuk;
+        localwatk += setBonusPad;
+        localmagic += setBonusMad;
+        localwdef += setBonusPdd;
+        localmdef += setBonusMdd;
+        localacc += setBonusAcc;
+        localeva += setBonusEva;
+        localspeed += setBonusSpeed;
+        localjump += setBonusJump;
+        localMaxHp += setBonusMhp;
+        localMaxMp += setBonusMmp;
     }
 
     public void reapplyLocalStats() {
@@ -7260,12 +7416,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public List<Pair<Stat, Integer>> recalcLocalStats() {
+    public List<Pair<Stat, Long>> recalcLocalStats() {
         effLock.lock();
         chrLock.lock();
         statWlock.lock();
         try {
-            List<Pair<Stat, Integer>> hpmpupdate = new ArrayList<>(2);
+            List<Pair<Stat, Long>> hpmpupdate = new ArrayList<>(2);
             int oldlocalmaxhp = localMaxHp;
             int oldlocalmaxmp = localMaxMp;
 
@@ -7273,7 +7429,7 @@ public class Character extends AbstractCharacterObject {
 
             if (GameConfig.getServerBoolean("use_fixed_ratio_hpmp_update")) {
                 if (localMaxHp != oldlocalmaxhp) {
-                    Pair<Stat, Integer> hpUpdate;
+                    Pair<Stat, Long> hpUpdate;
 
                     if (transientHp == Float.NEGATIVE_INFINITY) {
                         hpUpdate = calcHpRatioUpdate(localMaxHp, oldlocalmaxhp);
@@ -7285,7 +7441,7 @@ public class Character extends AbstractCharacterObject {
                 }
 
                 if (localMaxMp != oldlocalmaxmp) {
-                    Pair<Stat, Integer> mpUpdate;
+                    Pair<Stat, Long> mpUpdate;
 
                     if (transientMp == Float.NEGATIVE_INFINITY) {
                         mpUpdate = calcMpRatioUpdate(localMaxMp, oldlocalmaxmp);
@@ -7311,7 +7467,7 @@ public class Character extends AbstractCharacterObject {
         statWlock.lock();
         try {
             int oldmaxhp = localMaxHp;
-            List<Pair<Stat, Integer>> hpmpupdate = recalcLocalStats();
+            List<Pair<Stat, Long>> hpmpupdate = recalcLocalStats();
             enforceMaxHpMp();
 
             if (!hpmpupdate.isEmpty()) {
@@ -7598,7 +7754,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(9, hair);
                     ps.setInt(10, face);
                     ps.setInt(11, mapId);
-                    ps.setInt(12, Math.abs(meso.get()));
+                    ps.setLong(12, Math.abs(meso.get()));
                     ps.setInt(13, 0);
                     ps.setInt(14, accountId);
                     ps.setString(15, name);
@@ -7794,7 +7950,7 @@ public class Character extends AbstractCharacterObject {
                             ps.setInt(21, getHp() < 1 ? map.getReturnMapId() : map.getId());
                         }
                     }
-                    ps.setInt(22, meso.get());
+                    ps.setLong(22, meso.get());
                     ps.setInt(23, hpMpApUsed);
                     if (map == null || map.getId() == MapId.CRIMSONWOOD_VALLEY_1 || map.getId() == MapId.CRIMSONWOOD_VALLEY_2) {  // reset to first spawnpoint on those maps
                         ps.setInt(24, 0);
@@ -8106,6 +8262,23 @@ public class Character extends AbstractCharacterObject {
                     usedStorage = false;
                 }
 
+                if (orestorage != null && usedOreStorage) {
+                    orestorage.saveToDB(con);
+                    usedOreStorage = false;
+                }
+                if (scrollstorage != null && usedScrollStorage) {
+                    scrollstorage.saveToDB(con);
+                    usedScrollStorage = false;
+                }
+                if (chairstorage != null && usedChairStorage) {
+                    chairstorage.saveToDB(con);
+                    usedChairStorage = false;
+                }
+                if (mountstorage != null && usedMountStorage) {
+                    mountstorage.saveToDB(con);
+                    usedMountStorage = false;
+                }
+
                 con.commit();
             } catch (Exception e) {
                 con.rollback();
@@ -8227,11 +8400,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void addMerchantMesos(int add) {
-        final int newAmount = (int) Math.min((long) merchantmeso + add, Integer.MAX_VALUE);
+        addMerchantMesos((long) add);
+    }
+
+    public void addMerchantMesos(long add) {
+        final long newAmount = Math.min(merchantmeso + add, Long.MAX_VALUE);
         setMerchantMeso(newAmount);
     }
 
-    public void setMerchantMeso(int set) {
+    public void setMerchantMeso(long set) {
         characterService.update(CharactersDO.builder()
                 .id(id)
                 .merchantmesos(set)
@@ -8240,11 +8417,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void withdrawMerchantMesos() {
-        int merchantMeso = this.getMerchantNetMeso();
-        int playerMeso = this.getMeso();
+        long merchantMeso = this.getMerchantNetMeso();
+        long playerMeso = this.getMeso();
 
         if (merchantMeso > 0) {
-            int possible = Integer.MAX_VALUE - playerMeso;
+            long possible = Long.MAX_VALUE - playerMeso;
 
             if (possible > 0) {
                 if (possible < merchantMeso) {
@@ -8256,7 +8433,7 @@ public class Character extends AbstractCharacterObject {
                 }
             }
         } else {
-            int nextMeso = playerMeso + merchantMeso;
+            long nextMeso = playerMeso + merchantMeso;
 
             if (nextMeso < 0) {
                 this.gainMeso(-playerMeso, false);
@@ -8291,18 +8468,18 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private Pair<Stat, Integer> calcHpRatioUpdate(int newHp, int oldHp) {
+    private Pair<Stat, Long> calcHpRatioUpdate(int newHp, int oldHp) {
         int delta = newHp - oldHp;
         this.hp = calcHpRatioUpdate(hp, oldHp, delta);
 
         hpChangeAction(Short.MIN_VALUE);
-        return new Pair<>(Stat.HP, hp);
+        return new Pair<>(Stat.HP, (long) hp);
     }
 
-    private Pair<Stat, Integer> calcMpRatioUpdate(int newMp, int oldMp) {
+    private Pair<Stat, Long> calcMpRatioUpdate(int newMp, int oldMp) {
         int delta = newMp - oldMp;
         this.mp = calcMpRatioUpdate(mp, oldMp, delta);
-        return new Pair<>(Stat.MP, mp);
+        return new Pair<>(Stat.MP, (long) mp);
     }
 
     private static int calcTransientRatio(float transientpoint) {
@@ -8310,16 +8487,16 @@ public class Character extends AbstractCharacterObject {
         return !(ret <= 0 && transientpoint > 0.0f) ? ret : 1;
     }
 
-    private Pair<Stat, Integer> calcHpRatioTransient() {
+    private Pair<Stat, Long> calcHpRatioTransient() {
         this.hp = calcTransientRatio(transientHp * localMaxHp);
 
         hpChangeAction(Short.MIN_VALUE);
-        return new Pair<>(Stat.HP, hp);
+        return new Pair<>(Stat.HP, (long) hp);
     }
 
-    private Pair<Stat, Integer> calcMpRatioTransient() {
+    private Pair<Stat, Long> calcMpRatioTransient() {
         this.mp = calcTransientRatio(transientMp * localMaxMp);
-        return new Pair<>(Stat.MP, mp);
+        return new Pair<>(Stat.MP, (long) mp);
     }
 
     private int calcHpRatioUpdate(int curpoint, int maxpoint, int diffpoint) {
@@ -9165,11 +9342,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void updateSingleStat(Stat stat, int newval) {
+        updateSingleStat(stat, (long) newval, false);
+    }
+
+    public void updateSingleStat(Stat stat, long newval) {
         updateSingleStat(stat, newval, false);
     }
 
-    private void updateSingleStat(Stat stat, int newval, boolean itemReaction) {
-        sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Integer.valueOf(newval))), itemReaction, this));
+    private void updateSingleStat(Stat stat, long newval, boolean itemReaction) {
+        sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, newval)), itemReaction, this));
     }
 
     public void sendPacket(Packet packet) {
@@ -10323,5 +10504,347 @@ public class Character extends AbstractCharacterObject {
     /** 更新全局攻击时间戳，只被正常主动技能调用 */
     public void updateGlobalTime(long now) {
         globalAttackTime = now;
+    }
+
+
+    public void resetSetSkillBonusCache() {
+        setSkillBonusSent = false;
+    }
+
+    /** 标记战斗属性需重算（换装、携带物进出、规则热重载等）。 */
+    public void markCombatStatsDirty() {
+        combatStatsDirty = true;
+    }
+
+    public org.gms.talent.TalentManager getTalentManager() {
+        if (talentManager == null) {
+            talentManager = new org.gms.talent.TalentManager(this);
+        }
+        return talentManager;
+    }
+
+    public void loadTalents() {
+        getTalentManager().load();
+    }
+
+    /** 脏则刷新；伤害热路径读 Profile 前调用。 */
+    public void ensureCombatStatsFresh() {
+        if (combatStatsDirty) {
+            refreshSetBonus(false);
+        }
+    }
+
+    public org.gms.combat.stat.CombatStatProfile getCombatStatProfile() {
+        ensureCombatStatsFresh();
+        return combatStatProfile;
+    }
+
+
+    public java.util.Map<Integer, Byte> getSpiritSkillBackup() {
+        return spiritSkillBackup;
+    }
+
+    public void refreshSetBonus() {
+        refreshSetBonus(true);
+    }
+
+    private void refreshSetBonus(boolean notifyClient) {
+        if (!combatStatsDirty) {
+            return;
+        }
+        SetBonus bonus = SetItemManager.getTotalSetBonus(this);
+        setBonusStr = bonus.str;
+        setBonusDex = bonus.dex;
+        setBonusInt_ = bonus.int_;
+        setBonusLuk = bonus.luk;
+        setBonusPad = bonus.pad;
+        setBonusMad = bonus.mad;
+        setBonusPdd = bonus.pdd;
+        setBonusMdd = bonus.mdd;
+        setBonusAcc = bonus.acc;
+        setBonusEva = bonus.eva;
+        setBonusSpeed = bonus.speed;
+        setBonusJump = bonus.jump;
+        setBonusMhp = bonus.mhp;
+        setBonusMmp = bonus.mmp;
+        setDamageSkin = bonus.damageSkinId;
+        setFinalDamage = bonus.finalDamagePercent;
+        try {
+            combatStatProfile = org.gms.combat.provider.CombatProfileService.resolve(this, bonus);
+            setFinalDamageMultiplier = combatStatProfile.finalDamageMultiplier;
+            setFinalDamage = (int) Math.round((setFinalDamageMultiplier - 1.0) * 100.0);
+        } catch (Throwable ignore) {
+            // keep finalDamagePercent fallback
+        }
+        combatStatsDirty = false;
+        setSkillBonusLevels = new java.util.HashMap<>(
+                bonus.skillLevels != null ? bonus.skillLevels : java.util.Collections.emptyMap());
+        updateLocalStats();
+        if (notifyClient && getClient() != null) {
+            sendSetBonusPackets();
+        }
+    }
+
+    private void sendSetBonusPackets() {
+        sendPacket(PacketCreator.setItemFinalDamageBonus(setFinalDamage, setDamageSkin));
+        if (getMap() != null && getMap().getId() != 0 && !setSkillBonusSent) {
+            sendPacket(PacketCreator.setItemSkillBonus(SetItemManager.buildAllSetBonusTexts(this)));
+            setSkillBonusSent = true;
+        }
+        sendPacket(PacketCreator.sendSetSkillBonus(setSkillBonusLevels));
+    }
+
+    public int refreshCheckin() {
+        final int cycle = DailyCheckinRewards.CYCLE_DAYS;
+        if (checkinLastClaim <= 0) {
+            checkinDay = 0;
+            checkinClaimed = 0;
+        } else {
+            long elapsed = System.currentTimeMillis() - checkinLastClaim;
+            if (elapsed < CHECKIN_PERIOD_MS) {
+                return 0;
+            }
+            if (elapsed >= 2L * CHECKIN_PERIOD_MS) {
+                checkinDay = 0;
+                checkinClaimed = 0;
+            }
+        }
+        if (checkinDay >= cycle) {
+            checkinDay = 0;
+            checkinClaimed = 0;
+        }
+        return checkinDay + 1;
+    }
+
+    public void applyCheckinClaim(int d) {
+        if (d < 1 || d > DailyCheckinRewards.CYCLE_DAYS) {
+            return;
+        }
+        checkinDay = d;
+        checkinClaimed |= (1 << (d - 1));
+        checkinLastClaim = System.currentTimeMillis();
+    }
+
+    public long getCheckinCooldownSeconds() {
+        if (checkinLastClaim <= 0) {
+            return 0;
+        }
+        long remain = (checkinLastClaim + CHECKIN_PERIOD_MS) - System.currentTimeMillis();
+        return remain > 0 ? (remain + 999) / 1000 : 0;
+    }
+
+
+
+
+    public int getBuffRemainingTime(int sourceId) {
+        effLock.lock();
+        chrLock.lock();
+        try {
+            Long expire = buffExpires.get(sourceId);
+            if (expire == null) {
+                return 0;
+            }
+            long remaining = expire - org.gms.net.server.Server.getInstance().getCurrentTime();
+            if (remaining <= 0) {
+                return 0;
+            }
+            return (int) Math.min(Integer.MAX_VALUE, remaining);
+        } finally {
+            chrLock.unlock();
+            effLock.unlock();
+        }
+    }
+
+    public boolean isPartyTrackerVisible() {
+        return partyTrackerVisible;
+    }
+
+    public long getPartyTrackerExp() {
+        org.gms.net.server.world.Party currentParty = getParty();
+        return currentParty != null ? currentParty.getTrackerExp(getId()) : 0;
+    }
+
+    public long getPartyTrackerMeso() {
+        org.gms.net.server.world.Party currentParty = getParty();
+        return currentParty != null ? currentParty.getTrackerMeso(getId()) : 0;
+    }
+
+    public void setPartyTrackerVisible(boolean visible) {
+        partyTrackerVisible = visible;
+        sendPacket(PacketCreator.partyTrackerVisibility(visible));
+        if (visible) {
+            for (Character member : getPartyMembersOnline()) {
+                if (member.isLoggedInWorld()) {
+                    sendPacket(PacketCreator.partyTrackerUpdate(member));
+                }
+            }
+            if (getParty() == null) {
+                sendPacket(PacketCreator.partyTrackerUpdate(this));
+            }
+        }
+    }
+
+    public void addPartyTrackerExp(long amount) {
+        org.gms.net.server.world.Party currentParty = getParty();
+        if (amount <= 0 || currentParty == null) {
+            return;
+        }
+        currentParty.addTrackerExp(getId(), amount);
+        announcePartyTrackerUpdate();
+    }
+
+    public void addPartyTrackerMeso(long amount) {
+        org.gms.net.server.world.Party currentParty = getParty();
+        if (amount <= 0 || currentParty == null) {
+            return;
+        }
+        currentParty.addTrackerMeso(getId(), amount);
+        announcePartyTrackerUpdate();
+    }
+
+    public void announcePartyTrackerUpdate() {
+        for (Character recipient : getPartyMembersOnline()) {
+            if (recipient.isLoggedInWorld() && recipient.isPartyTrackerVisible()) {
+                recipient.sendPacket(PacketCreator.partyTrackerUpdate(this));
+            }
+        }
+    }
+
+    public void announcePartyBuffSnapshot() {
+        java.util.List<Character> recipients = getPartyMembersOnline();
+        if (recipients.isEmpty()) {
+            sendPacket(PacketCreator.partyBuffSnapshot(this));
+            return;
+        }
+        for (Character recipient : recipients) {
+            if (recipient.isLoggedInWorld()) {
+                recipient.sendPacket(PacketCreator.partyBuffSnapshot(this));
+            }
+        }
+    }
+
+    public byte[] getPartyBuffCountsPayload() {
+        return partyBuffCountsPayload;
+    }
+
+    public int getPartyBuffCountsCount() {
+        return partyBuffCountsCount;
+    }
+
+    public void setPartyBuffCounts(int count, byte[] payload) {
+        this.partyBuffCountsCount = count;
+        this.partyBuffCountsPayload = payload;
+    }
+
+
+// ===================== 收纳背包 =====================
+    public OreStorage getOreStorage() {
+        return orestorage;
+    }
+
+    public OreStorage getScrollStorage() {
+        return scrollstorage;
+    }
+
+    public OreStorage getChairStorage() {
+        return chairstorage;
+    }
+
+    public OreStorage getMountStorage() {
+        return mountstorage;
+    }
+
+    public void setUsedOreStorage() {
+        usedOreStorage = true;
+    }
+
+    public void setUsedScrollStorage() {
+        usedScrollStorage = true;
+    }
+
+    public void setUsedChairStorage() {
+        usedChairStorage = true;
+    }
+
+    public void setUsedMountStorage() {
+        usedMountStorage = true;
+    }
+
+    public boolean isAutoOreStorage() {
+        return autoOreStorage;
+    }
+
+    public void setAutoOreStorage(boolean on) {
+        this.autoOreStorage = on;
+    }
+
+    public boolean isAutoScrollStorage() {
+        return autoScrollStorage;
+    }
+
+    public void setAutoScrollStorage(boolean on) {
+        this.autoScrollStorage = on;
+    }
+
+    public boolean isAutoChairStorage() {
+        return autoChairStorage;
+    }
+
+    public void setAutoChairStorage(boolean on) {
+        this.autoChairStorage = on;
+    }
+
+    public boolean isAutoMountStorage() {
+        return autoMountStorage;
+    }
+
+    public void setAutoMountStorage(boolean on) {
+        this.autoMountStorage = on;
+    }
+
+    public static boolean bagAccepts(int kind, int itemId) {
+        return switch (kind) {
+            case 1 -> ItemConstants.isScrollBagAllowed(itemId);
+            case 2 -> ItemConstants.isChairBagAllowed(itemId);
+            case 3 -> ItemConstants.isMountBagAllowed(itemId);
+            default -> ItemConstants.isOreBagAllowed(itemId);
+        };
+    }
+
+    private boolean autoCollectToBag(Item mItem) {
+        if (mItem == null) {
+            return false;
+        }
+        int itemId = mItem.getItemId();
+        OreStorage bag;
+        int kind;
+        if (autoOreStorage && orestorage != null && ItemConstants.isOreBagAllowed(itemId)) {
+            bag = orestorage;
+            kind = 0;
+        } else if (autoScrollStorage && scrollstorage != null && ItemConstants.isScrollBagAllowed(itemId)) {
+            bag = scrollstorage;
+            kind = 1;
+        } else if (autoChairStorage && chairstorage != null && ItemConstants.isChairBagAllowed(itemId)) {
+            bag = chairstorage;
+            kind = 2;
+        } else if (autoMountStorage && mountstorage != null && ItemConstants.isMountBagAllowed(itemId)) {
+            bag = mountstorage;
+            kind = 3;
+        } else {
+            return false;
+        }
+        Item bagItem = mItem.copy();
+        KarmaManipulator.toggleKarmaFlagToUntradeable(bagItem);
+        if (bag.storeMerge(bagItem, client)) {
+            switch (kind) {
+                case 1 -> setUsedScrollStorage();
+                case 2 -> setUsedChairStorage();
+                case 3 -> setUsedMountStorage();
+                default -> setUsedOreStorage();
+            }
+            client.sendPacket(PacketCreator.bagWindowSnapshot(kind, bag, true));
+            return true;
+        }
+        return false;
     }
 }

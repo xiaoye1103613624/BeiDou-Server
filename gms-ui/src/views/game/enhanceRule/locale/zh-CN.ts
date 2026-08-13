@@ -1,0 +1,15 @@
+export default {
+  'enhanceRule.add': '新建规则',
+  'enhanceRule.reload': '热重载',
+  'enhanceRule.detail': '强化规则',
+  'enhanceRule.delete.confirm': '确认删除该强化规则？',
+  'enhanceRule.column.ruleName': '规则名',
+  'enhanceRule.column.equipType': '装备类型',
+  'enhanceRule.column.level': '等级区间',
+  'enhanceRule.column.minLevel': '最低等级',
+  'enhanceRule.column.maxLevel': '最高等级',
+  'enhanceRule.column.enabled': '启用',
+  'enhanceRule.column.statsJson': '属性JSON',
+  'enhanceRule.column.remark': '备注',
+  'enhanceRule.column.operate': '操作',
+};

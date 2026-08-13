@@ -290,6 +290,11 @@ public class ItemInformationProvider {
         return blockMouse;
     }
 
+    /** True when Item.wz (not just String.wz) has a node for this id. */
+    public boolean itemExists(int itemId) {
+        return getItemData(itemId) != null;
+    }
+
     private Data getItemData(int itemId) {
         Data ret = null;
         String idStr = "0" + itemId;
@@ -515,7 +520,7 @@ public class ItemInformationProvider {
         return ret;
     }
 
-    protected String getEquipmentSlot(int itemId) {
+    public String getEquipmentSlot(int itemId) {
         if (equipmentSlotCache.containsKey(itemId)) {
             return equipmentSlotCache.get(itemId);
         }
@@ -1803,6 +1808,15 @@ public class ItemInformationProvider {
         }
         for (Item item : items) {
             Equip equip = (Equip) item;
+            Map<String, Integer> stats = getEquipStats(equip.getItemId());
+            // Missing Character.wz / info → null. Charlist used to NPE here and DC the client
+            // after channel select. Keep the item in look without req checks.
+            if (stats == null) {
+                log.warn("canWearEquipment: missing equip stats itemId={} chr={}", equip.getItemId(), chr.getName());
+                equip.wear(true);
+                itemz.add(equip);
+                continue;
+            }
             int reqLevel = getEquipLevelReq(equip.getItemId());
             if (highfivestamp) {
                 reqLevel -= 5;
@@ -1810,28 +1824,20 @@ public class ItemInformationProvider {
                     reqLevel = 0;
                 }
             }
-            /*
-             int reqJob = getEquipStats(equip.getItemId()).get("reqJob");
-             if (reqJob != 0) {
-             Really hard check, and not really needed in this one
-             Gm's should just be GM job, and players cannot change jobs.
-             }*/
             if (reqLevel > chr.getLevel()) {
                 continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqDEX") > tdex) {
+            } else if (statOrZero(stats, "reqDEX") > tdex) {
                 continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqSTR") > tstr) {
+            } else if (statOrZero(stats, "reqSTR") > tstr) {
                 continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqLUK") > tluk) {
+            } else if (statOrZero(stats, "reqLUK") > tluk) {
                 continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqINT") > tint) {
+            } else if (statOrZero(stats, "reqINT") > tint) {
                 continue;
             }
-            int reqPOP = getEquipStats(equip.getItemId()).get("reqPOP");
-            if (reqPOP > 0) {
-                if (getEquipStats(equip.getItemId()).get("reqPOP") > fame) {
-                    continue;
-                }
+            int reqPOP = statOrZero(stats, "reqPOP");
+            if (reqPOP > 0 && reqPOP > fame) {
+                continue;
             }
             equip.wear(true);
             itemz.add(equip);
@@ -1849,7 +1855,24 @@ public class ItemInformationProvider {
         }
 
         String islot = getEquipmentSlot(id);
-        if (!EquipSlot.getFromTextSlot(islot).isAllowed(dst, isCash(id))) {
+        if (islot == null) {
+            equip.wear(false);
+            String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
+            log.warn("Chr {} tried to equip {} (no WZ slot) into slot {}", chr.getName(), itemName, dst);
+            return false;
+        }
+        final boolean cash = isCash(id);
+        boolean slotOk = EquipSlot.getFromTextSlot(islot).isAllowed(dst, cash);
+        // 轮回碑石等：WZ 可能仍是 Po/Be，但客户端图腾 UI 发 −55/−155；放行腰带与图腾槽。
+        if (!slotOk && org.gms.reincarnation.ReincarnationSupport.isReincarnationEquip(id)) {
+            slotOk = dst == -50 || dst == -150
+                    || EquipSlot.BELT.isAllowed(dst, cash)
+                    || dst == -55 || dst == -155
+                    || dst == -56 || dst == -156
+                    || dst == -57 || dst == -157
+                    || dst == -58 || dst == -158;
+        }
+        if (!slotOk) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
             Server.getInstance().broadcastGMMessage(chr.getWorld(), PacketCreator.sendYellowTip("[Warning]: " + chr.getName() + " tried to equip " + itemName + " into slot " + dst + "."));
@@ -1882,24 +1905,28 @@ public class ItemInformationProvider {
         if (highfivestamp) {
             reqLevel -= 5;
         }
+        Map<String, Integer> stats = getEquipStats(equip.getItemId());
+        if (stats == null) {
+            log.warn("canWearEquipment(dst): missing equip stats itemId={} chr={}", id, chr.getName());
+            equip.wear(false);
+            return false;
+        }
         int i = 0; //lol xD
         //Removed job check. Shouldn't really be needed.
         if (reqLevel > chr.getLevel()) {
             i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqDEX") > chr.getTotalDex()) {
+        } else if (statOrZero(stats, "reqDEX") > chr.getTotalDex()) {
             i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqSTR") > chr.getTotalStr()) {
+        } else if (statOrZero(stats, "reqSTR") > chr.getTotalStr()) {
             i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqLUK") > chr.getTotalLuk()) {
+        } else if (statOrZero(stats, "reqLUK") > chr.getTotalLuk()) {
             i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqINT") > chr.getTotalInt()) {
+        } else if (statOrZero(stats, "reqINT") > chr.getTotalInt()) {
             i++;
         }
-        int reqPOP = getEquipStats(equip.getItemId()).get("reqPOP");
-        if (reqPOP > 0) {
-            if (getEquipStats(equip.getItemId()).get("reqPOP") > chr.getFame()) {
-                i++;
-            }
+        int reqPOP = statOrZero(stats, "reqPOP");
+        if (reqPOP > 0 && reqPOP > chr.getFame()) {
+            i++;
         }
 
         if (i > 0) {
@@ -1908,6 +1935,11 @@ public class ItemInformationProvider {
         }
         equip.wear(true);
         return true;
+    }
+
+    private static int statOrZero(Map<String, Integer> stats, String key) {
+        Integer v = stats.get(key);
+        return v != null ? v : 0;
     }
 
     public ArrayList<Pair<Integer, String>> getItemDataByName(String name) {
@@ -2385,5 +2417,33 @@ public class ItemInformationProvider {
             }
         }
         return retItems;
+    }
+
+public List<Pair<String, Integer>> getItemLevelupStatsMin(int itemId, int level) {
+        List<Pair<String, Integer>> list = new LinkedList<>();
+        Data data = getEquipLevelInfo(itemId);
+        if (data == null) {
+            return list;
+        }
+        Data data2 = data.getChildByPath(Integer.toString(level));
+        if (data2 == null) {
+            return list;
+        }
+        String[] stats = {
+                "incSTR", "incDEX", "incINT", "incLUK", "incMHP", "incMMP",
+                "incPAD", "incMAD", "incPDD", "incMDD", "incACC", "incEVA",
+                "incSpeed", "incJump"
+        };
+        for (String stat : stats) {
+            Data minNode = data2.getChildByPath(stat + "Min");
+            if (minNode == null) {
+                continue;
+            }
+            int min = DataTool.getInt(minNode, 0);
+            if (min != 0) {
+                list.add(new Pair<>(stat, min));
+            }
+        }
+        return list;
     }
 }

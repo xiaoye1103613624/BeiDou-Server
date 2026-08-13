@@ -34,6 +34,7 @@ public class Skill {
     private int animationTime;
     private final int job;
     private boolean action;
+    private int spMaxLevel = -1;
 
     public Skill(int id) {
         this.id = id;
@@ -50,6 +51,42 @@ public class Skill {
 
     public int getMaxLevel() {
         return effects.size();
+    }
+
+    public int getSpMaxLevel() {
+        if (spMaxLevel > 0) {
+            return Math.min(spMaxLevel, getMaxLevel() > 0 ? getMaxLevel() : spMaxLevel);
+        }
+        return getMaxLevel();
+    }
+
+    public void setSpMaxLevel(int spMaxLevel) {
+        this.spMaxLevel = spMaxLevel;
+    }
+
+    public void applyTechExtension(int targetMax, java.util.Map<Integer, java.util.Map<String, Integer>> levelOverrides) {
+        if (targetMax <= 0) {
+            return;
+        }
+        while (effects.size() < targetMax) {
+            StatEffect base = effects.isEmpty() ? null : effects.get(effects.size() - 1);
+            int nextLv = effects.size() + 1;
+            java.util.Map<String, Integer> ov = levelOverrides != null ? levelOverrides.get(nextLv) : null;
+            if (base == null) {
+                break;
+            }
+            effects.add(base.copyWithOverrides(ov));
+        }
+        if (levelOverrides != null) {
+            for (java.util.Map.Entry<Integer, java.util.Map<String, Integer>> e : levelOverrides.entrySet()) {
+                int lv = e.getKey() == null ? 0 : e.getKey();
+                if (lv <= 0 || lv > effects.size() || e.getValue() == null || e.getValue().isEmpty()) {
+                    continue;
+                }
+                StatEffect cur = effects.get(lv - 1);
+                effects.set(lv - 1, cur.copyWithOverrides(e.getValue()));
+            }
+        }
     }
 
     public boolean isFourthJob() {

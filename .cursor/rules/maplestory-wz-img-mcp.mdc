@@ -1,0 +1,61 @@
+---
+description: HARD RULE — MapleStory client Data/WZ/.img must use MCP only (no raw copy)
+alwaysApply: true
+---
+
+# Client Data / WZ / .img — MCP Only
+
+## Mandate (non-negotiable)
+
+Any change to MapleStory **client** `Data/` / `.wz` / `.img` (Item, Character, UI, String, etc.) **MUST** go through MCP tools, or a script that only calls those MCP APIs.
+
+Raw filesystem “restore” of `.img` packs caused: malformed canvas (网页 PNG 当 ARGB8888 灌入、scale≠0、体积暴涨), CRC /「不正确的游戏数据」, `0x80030002`, config BOM / `0xc0000142`.
+
+**Client root (live, only operate here):** `E:\mxd_soft\2.客户端\083\beidou_client_xiaoye\BeiDou-Client_S8`  
+**Known-good reference (read-only MCP source):** `...\BeiDou-ClientV16.1\BeiDou-Client` + `beidou_client_xiaoye\_backup_*` / `_img_merge_backup`  
+**Related roots:** server `E:\pro\BeiDou-Server_S8` · plugin `E:\pro\BeiDou-ijl15_S8`
+
+## MUST
+
+- Use **orange-wz MCP** (primary for binary `.wz`/`.img` load/copy/paste/save) and/or **wzimg MCP** (`E:\pro\WzImg-MCP-Server`) for node-level edits.
+- v083 `IWzCanvas` 同时支持 **ARGB4444**（format 1）与 **ARGB8888**（format 2, **scale 必须为 0**）。新建图标 / 网页 PNG 默认仍写 **ARGB4444**；合法 8888 画布（MCP 编码、scale=0）可保留，禁止把网页图当 8888 灌入。不支持 ARGB1555 / DXT5 / BC7。
+- Safe restore = MCP **load → copy_nodes → paste_nodes → save_node** from a known-good source (V16 / `_backup_*` / `_img_merge_backup`).
+- Scripts may wrap MCP HTTP/stdio calls; they must **not** `Copy-Item`/`robocopy` `.img` bodies.
+
+## FORBIDDEN
+
+- `robocopy` / `Copy-Item` / raw binary edit of `.img` packs as “restore”
+- Web / quarantine 未校验的 ARGB8888 注入包（scale≠0、裸 PNG、体积异常）
+- Writing `config.ini` with **UTF-8 BOM**
+- Touching `EN\` (or other locale trees) unless the user explicitly asks
+- Seeding empty/tiny `.img` shells (< ~200B) into live `Data\`
+
+## orange-wz MCP tools (merge / copy / inject)
+
+Start (idempotent/silent): `E:\pro\orange-wz\ensure-mcp.ps1` or `start-mcp-silent.vbs` → `http://127.0.0.1:10002/mcp`. Manual GUI: `OrzRepacker.bat` / `D:\software\OrzRepacker-v1.162.50\OrzRepacker.exe`. Do **not** re-run `start-mcp.bat` on every tool call if port already up.
+
+| Op | Tools |
+|----|--------|
+| Load | `load_files`, `list_loaded_roots`, `unload_node`, `unload_all` |
+| Inspect | `list_children`, `find_node`, `get_node_detail`, `get_node_tree_json`, `search_node`, `query_nodes`, `batch_find_nodes` |
+| Merge/copy | `copy_nodes` → `paste_nodes` (`strategy`: `SKIP` / `OVERWRITE` / `ERROR`) |
+| Mutate/inject | `create_child_node`, `mutate_nodes` / `batch_update_nodes` (`set_png`, …), `delete_node` |
+| Persist | `save_node`, `save_as` |
+| Create | `create_img_file`, `create_wz_file` |
+| Key convert | `change_key` (loaded root), `batch_convert_key` (单端口并行换钥，默认 fingerprint 校验) |
+
+## Other MCP (status-sensitive)
+
+- **beidou-build** (`user-beidou-build`): build/ijl15 helpers — currently **errored** if `tools\beidou-build-mcp\server.py` missing; not a substitute for `.img` crypto-safe writes.
+- **AutoLinker** (`user-AutoLinker`): HTTP `:19207` — must be up before use; not for bulk `.img` restore.
+- **wzimg**: 74 tools (`parse_image`, `import_png`, `copy_property`, …); set `WZIMGMCP_DATA_PATH`.
+
+If WZ MCP is down: **stop and ask user to start orange-wz / fix MCP** — do **not** fall back to raw copy.
+
+## Safe restore workflow (icons / packs)
+
+1. Confirm orange-wz (or wzimg) MCP is healthy.
+2. `load_files` known-good source + live client target.
+3. Missing-only: `copy_nodes` + `paste_nodes` with `SKIP`; replace-bad: `OVERWRITE` only after verifying source PKG1/header.
+4. `save_node` on changed roots; verify sizes/headers (e.g. Consume `0243.img` ≫ 29KB).
+5. Retest client boot; never leave quarantine/web-inject dirs under live `Data\`.

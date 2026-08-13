@@ -1,0 +1,26 @@
+---
+description: 客户端展示 vs 服务端校验 — 性能/经济安全。做 tip、自定义包、gainItem、库存前先读完整规范。
+globs:
+  - "**/equipgrowth/**"
+  - "**/setitem/**"
+  - "**/EquipGrowth*"
+  - "**/InventoryManipulator*"
+  - "**/ModifyInventory*"
+alwaysApply: false
+---
+
+# 展示 vs 校验（短指针）
+
+**完整规范（必读）：**  
+`resource_doc/开发文档/客户端展示与服务端校验-性能安全规范.md`
+
+**向量库：** `resource_doc/agent_memory/session_chroma`（collection `session_lessons`）+ JSONL；镜像 `D:\xy_vector_db\session_chroma`。
+
+## 硬规则（摘要）
+
+1. **展示少请求**：悬停 tip / 套装 tip / 成长 tip → 本地画或变更推送；禁止悬停狂拉全量、超时无限重试。
+2. **经济严校验**：只信服务端库存事务；意图包 ≠ 结果包；`gainItem` / `InventoryManipulator` 权威。
+3. **防复制**：不信任客户端「获得了什么」；移物幂等+槽位校验；异常 → 回滚+封禁标记+证据日志。
+4. **资源限频**：领奖/分解/合成/商店/脚本给物 → cooldown + 日/周限 + 产出审计熔断。
+5. **反作弊不靠 tip**：不要给每个 tip 加请求。
+6. WZ 写入仍走 **orange-wz / wzimg MCP**（见 `maplestory-wz-img-mcp.mdc`）。

@@ -1,0 +1,25 @@
+# 禁止改原版地址 — CharacterData / EXE field imm
+
+## HARD RULE（用户 2026-08-04 ~20:54）
+
+「不要改原版地址，自定义的可以改。」
+
+## FORBIDDEN
+
+- Patching vanilla `BeiDou.exe` CharacterData field offsets / layout immediates:
+  skill-cool (`+0x4CB`/`+0x5FF`/…), cash lea, SAFEIMM displ×N, APPLY_ABS, BATCH_KNOWN, CTOR_FIELDS, mega leftover scans writing live EXE.
+- Redeploying MINIMAL / LAYOUT_SYNC / CTOR_FIELDS CD64 EXEs (`3C167A9B`, `EBC8666B`, `6CBFFFE6`, …) while this rule stands.
+- Treating skill-cool offset sync as a “new cooldown feature” or changing server CD protocol without a proven sync bug.
+
+## REQUIRED
+
+- Extended seats −54…−62: implement in **ijl15_S8** only (sidecar / Detours / caves / hooks).
+- CD64_TEST lab pair: EXE **`ACF10F63`** (vanilla layout) + DLL **`FA26021C`** family (1447424). **Client_S8** same; do not overwrite without user OK.
+- Gameplay/protocol changes → audit **Server_S8 + Client_S8**; pure plugin UI/sidecar → `BeiDou-ijl15_S8` only.
+- IDA still mandatory for plugin caves (`client-ida-patch-mandatory`).
+
+## Docs（历史归档只读）
+
+- `E:\pro\BeiDou-ijl15\docs\ADDON_REAL_EQUIP_EXPAND_20260804.md` §0
+- `E:\pro\BeiDou-ijl15\docs\ADDON_ENTER_CRASH_AVOID.md` avoid #56
+- `E:\pro\BeiDou-ijl15\docs\CLIENT_PATCH_SOP.md` standing rule 0

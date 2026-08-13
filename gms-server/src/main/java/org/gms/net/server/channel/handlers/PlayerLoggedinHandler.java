@@ -248,7 +248,11 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
+            // Abandoned cash-ring aliases −152/−153 only; keep ExtraRing seats −52/−53.
+            org.gms.client.inventory.manipulator.InventoryManipulator.migrateCashRingsOffExtendedSlots(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
+            // Enable native second-pendant UI (CWvsContext flag → CUIEquip+0x5E8).
+            c.sendPacket(PacketCreator.setExtraPendantSlot(true));
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);
@@ -261,6 +265,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendKeymap();
             player.sendQuickmap();
             player.sendMacros();
+            org.gms.reincarnation.ReincarnationSupport.onLogin(player);
 
             // pot bindings being passed through other characters on the account detected thanks to Croosade dev team
             KeyBinding autohpPot = player.getKeymap().get(91);
@@ -376,6 +381,25 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.updateGender(player));
             player.checkMessenger();
             c.sendPacket(PacketCreator.enableReport());
+
+            // 伤害皮肤：登录时推送商店目录与已拥有列表
+            c.sendPacket(PacketCreator.damageSkinCatalog());
+            c.sendPacket(PacketCreator.damageSkinInventory(player));
+
+            player.refreshSetBonus();
+
+            // 七彩棱镜：登录下发本人染色列表
+            c.sendPacket(org.gms.server.coloring.ColoringPrismPackets.dyeList(
+                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(player.getId())));
+
+            // 每日签到：可领则自动弹窗
+            if (player.getLevel() >= org.gms.server.dailycheckin.DailyCheckinRewards.MIN_LEVEL) {
+                int checkinClaimable = player.refreshCheckin();
+                if (checkinClaimable >= 1) {
+                    c.sendPacket(PacketCreator.dailyCheckinSnapshot(
+                            checkinClaimable, player.getCheckinClaimed(), 0));
+                }
+            }
             player.changeSkillLevel(SkillFactory.getSkill(10000000 * player.getJobType() + 12), (byte) (player.getLinkedLevel() / 10), 20, -1);
             player.checkBerserk(player.isHidden());
 

@@ -355,6 +355,23 @@ public enum SendOpcode implements Opcode {
     MAPLELIFE_ERROR(0x15E), // MapleLife错误
     VICIOUS_HAMMER(0x162), // 恶毒锤子
     VEGA_SCROLL(0x166), // VEGA卷轴
+    DAMAGE_SKIN_CATALOG(0x170), // 伤害皮肤商店目录
+    DAMAGE_SKIN_INVENTORY(0x171), // 伤害皮肤背包
+    DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果
+    DAMAGE_SKIN_BROADCAST(0x173), // 伤害皮肤广播
+    BEAUTY_RESULT(0x174), // 美容院结果
+    SET_ITEM_FINAL_DAMAGE(0x175), // 套装最终伤害% + 伤害皮肤
+    SET_ITEM_SKILL_BONUS(0x176), // 套装技能展示文字
+    SET_SKILL_BONUS(0x179), // 套装技能加成数值
+    /** Phase10：魔方结果窗（ijl15 MiracleCube / HyperMiracleCube）。0x17B 留给装备成长 tip。 */
+    MIRACLE_CUBE_RESULT(0x17A),
+    EQUIP_GROWTH_TIP(0x17B), // 装备成长属性 tip（按需回复）
+    DAILY_CHECKIN(0x17C), // 每日签到快照
+    COLORING_PRISM(0x184), // 七彩棱镜
+    BAG_WINDOW(0x3725), // 收纳背包窗口快照
+    USER_INFO_EX(0x3727), // 他人装备详情回复
+    CASHSHOP_WINDOW_SYNC(0x3731), // 窗口版现金商城同步
+    CUSTOM_PACKET(0x3713), // 自定义封包（队伍Buff/Tracker等）
     DPT_TRACKER(0x3714), // 个人伤害统计
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复

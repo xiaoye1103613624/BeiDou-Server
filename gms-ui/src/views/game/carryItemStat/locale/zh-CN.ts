@@ -1,0 +1,15 @@
+export default {
+  'carryItemStat.add': '新建携带物',
+  'carryItemStat.reload': '热重载',
+  'carryItemStat.detail': '携带物属性',
+  'carryItemStat.delete.confirm': '确认删除该携带物配置？',
+  'carryItemStat.require.yes': '需装备',
+  'carryItemStat.require.no': '背包即效',
+  'carryItemStat.column.itemId': '物品ID',
+  'carryItemStat.column.itemName': '名称',
+  'carryItemStat.column.requireEquipped': '装备要求',
+  'carryItemStat.column.enabled': '启用',
+  'carryItemStat.column.statsJson': '属性JSON',
+  'carryItemStat.column.remark': '备注',
+  'carryItemStat.column.operate': '操作',
+};
