@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="MonsterPyramid.img">
+    <imgdir name="info">
+        <int name="timeLimit" value="10000" />
+        <int name="timeLimitAI" value="2000" />
+        <imgdir name="msg">
+            <string name="pass" value="没有可堆叠的药水，进入下回合。" />
+            <string name="finishByClear" value="%s堆好了所有药水。 \n本局结束。" />
+            <string name="finishByNobodyPut" value="没有可以堆叠的药水了。\n本局结束。" />
+            <string name="timeOver" value="已超时%d次，\n超过3次将被强制退出。" />
+            <string name="close" value="现在退出将会受到入场惩罚。\n确定要退出吗？" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="UI">
+        <imgdir name="Cell">
+            <vector name="pos" x="31" y="471" />
+            <int name="intervalX" value="50" />
+            <int name="intervalY" value="-50" />
+            <int name="marginPerFloor" value="25" />
+            <imgdir name="card">
+                <imgdir name="0">
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="effect1">
+                    </imgdir>
+                    <imgdir name="effect2">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="1">
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="effect1">
+                    </imgdir>
+                    <imgdir name="effect2">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="2">
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="effect1">
+                    </imgdir>
+                    <imgdir name="effect2">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="3">
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="effect1">
+                    </imgdir>
+                    <imgdir name="effect2">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="4">
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="effect1">
+                    </imgdir>
+                    <imgdir name="effect2">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="5">
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="effect1">
+                    </imgdir>
+                    <imgdir name="effect2">
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="AvatarCard">
+            <imgdir name="cardNum">
+            </imgdir>
+            <imgdir name="turnEffect">
+            </imgdir>
+            <imgdir name="crown">
+            </imgdir>
+            <imgdir name="pos">
+                <vector name="0" x="458" y="31" />
+                <vector name="1" x="458" y="183" />
+                <vector name="2" x="458" y="335" />
+            </imgdir>
+            <vector name="avatarPos" x="42" y="111" />
+            <vector name="cardNumPos" x="39" y="9" />
+            <vector name="namePos" x="39" y="128" />
+        </imgdir>
+        <imgdir name="CardDeck">
+            <imgdir name="mobCard">
+                <imgdir name="0">
+                    <imgdir name="mouseOver">
+                    </imgdir>
+                    <imgdir name="pressed">
+                    </imgdir>
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="disappear">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="1">
+                    <imgdir name="mouseOver">
+                    </imgdir>
+                    <imgdir name="pressed">
+                    </imgdir>
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="disappear">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="2">
+                    <imgdir name="mouseOver">
+                    </imgdir>
+                    <imgdir name="pressed">
+                    </imgdir>
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="disappear">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="3">
+                    <imgdir name="mouseOver">
+                    </imgdir>
+                    <imgdir name="pressed">
+                    </imgdir>
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="disappear">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="4">
+                    <imgdir name="mouseOver">
+                    </imgdir>
+                    <imgdir name="pressed">
+                    </imgdir>
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="disappear">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="5">
+                    <imgdir name="mouseOver">
+                    </imgdir>
+                    <imgdir name="pressed">
+                    </imgdir>
+                    <imgdir name="normal">
+                    </imgdir>
+                    <imgdir name="disappear">
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="slot">
+                <int name="width" value="42" />
+                <int name="height" value="42" />
+                <imgdir name="cover">
+                </imgdir>
+            </imgdir>
+            <vector name="pos" x="27" y="509" />
+            <int name="intervalX" value="42" />
+        </imgdir>
+        <imgdir name="GuideEffect">
+        </imgdir>
+        <imgdir name="Timer">
+            <imgdir name="remainTime">
+                <imgdir name="number">
+                </imgdir>
+                <vector name="pos" x="329" y="57" />
+            </imgdir>
+            <imgdir name="gauge">
+                <vector name="pos" x="347" y="44" />
+                <int name="gaugeSize" value="88" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="Round">
+            <imgdir name="number">
+            </imgdir>
+            <vector name="pos" x="100" y="46" />
+        </imgdir>
+        <imgdir name="message">
+            <imgdir name="timeover">
+            </imgdir>
+            <imgdir name="win">
+            </imgdir>
+            <imgdir name="gameover">
+            </imgdir>
+            <imgdir name="start">
+            </imgdir>
+            <imgdir name="finish">
+            </imgdir>
+            <imgdir name="round1">
+            </imgdir>
+            <imgdir name="round2">
+            </imgdir>
+            <imgdir name="round3">
+            </imgdir>
+        </imgdir>
+        <imgdir name="WaitingCover">
+        </imgdir>
+    </imgdir>
+    <imgdir name="UIRanking">
+        <int name="intervalY" value="22" />
+        <vector name="scorePos" x="162" y="39" />
+        <vector name="namePos" x="84" y="40" />
+    </imgdir>
+</imgdir>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="0127.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <int name="gender" value="1"/>
+    <int name="chatBalloon" value="34"/>
+    <int name="nameTag" value="95"/>
+    <int name="shopUsable" value="1"/>
+  </imgdir>
+  <imgdir name="basic">
+    <int name="accessory" value="1032097"/>
+    <int name="cap" value="1004201"/>
+    <int name="longcoat" value="1052773"/>
+    <int name="shoes" value="1072944"/>
+    <int name="gloves" value="1082591"/>
+  </imgdir>
+  <imgdir name="costume">
+    <imgdir name="skin">
+      <string name="0" value="2012"/>
+    </imgdir>
+    <imgdir name="hair">
+      <int name="0" value="34783"/>
+    </imgdir>
+    <imgdir name="face">
+      <int name="0" value="24038"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="action">
+    <imgdir name="hello">
+      <imgdir name="0">
+        <string name="sound" value="hello"/>
+        <string name="face" value="smile"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="sound" value="hello"/>
+        <string name="face" value="shine"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="levelup">
+      <imgdir name="0">
+        <string name="face" value="smile"/>
+        <string name="chat" value="期待您以後的活躍呢。"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="chat" value="漂亮！讓我見識了您強大的力量！"/>
+        <string name="face" value="shine"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="dead">
+      <imgdir name="0">
+        <string name="face" value="angry"/>
+        <string name="chat" value="請加油，雖然今天輸了，但往後一定能獲得勝利的。"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="face" value="angry"/>
+        <string name="chat" value="請站起來，發揮出您真正的力量吧！"/>
+        <string name="action" value="dead"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="bye">
+      <imgdir name="0">
+        <string name="sound" value="bye"/>
+        <string name="face" value="wink"/>
+        <string name="chat" value="期待跟您再次在戰場上相見。"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="job">
+      <imgdir name="0">
+        <string name="face" value="shine"/>
+        <string name="chat" value="真厲害。現在要去尋找敵人了吧！"/>
+        <string name="sound" value="bye"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+      <imgdir name="0">
+        <string name="face" value="hit"/>
+        <string name="action" value="alert"/>
+        <int name="prob" value="10"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="prob" value="90"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>

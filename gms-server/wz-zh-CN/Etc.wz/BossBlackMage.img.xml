@@ -1,0 +1,1779 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="BossBlackMage.img">
+    <imgdir name="Bullet">
+        <imgdir name="Config">
+            <int name="range" value="2000" />
+            <int name="radius" value="10" />
+        </imgdir>
+        <imgdir name="Image">
+            <imgdir name="1">
+                <imgdir name="Loop">
+                </imgdir>
+                <imgdir name="Hit">
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <imgdir name="Loop">
+                </imgdir>
+                <imgdir name="Hit">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="Pattern">
+            <imgdir name="0">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="450" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="0" />
+                    <int name="1" value="1" />
+                    <int name="2" value="2" />
+                    <int name="3" value="3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="600" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="6" />
+                    <int name="1" value="7" />
+                    <int name="2" value="6" />
+                    <int name="3" value="7" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="600" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="4" />
+                    <int name="1" value="4" />
+                    <int name="2" value="4" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="600" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="5" />
+                    <int name="1" value="5" />
+                    <int name="2" value="5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="450" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="8" />
+                    <int name="1" value="9" />
+                    <int name="2" value="8" />
+                    <int name="3" value="9" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="450" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="10" />
+                    <int name="1" value="11" />
+                    <int name="2" value="10" />
+                    <int name="3" value="11" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="600" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="12" />
+                    <int name="1" value="12" />
+                    <int name="2" value="12" />
+                    <int name="3" value="12" />
+                    <int name="4" value="12" />
+                    <int name="5" value="12" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="600" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="13" />
+                    <int name="1" value="13" />
+                    <int name="2" value="13" />
+                    <int name="3" value="13" />
+                    <int name="4" value="13" />
+                    <int name="5" value="13" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="1500" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="14" />
+                    <int name="1" value="15" />
+                    <int name="2" value="14" />
+                    <int name="3" value="15" />
+                    <int name="4" value="14" />
+                    <int name="5" value="15" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <int name="rx" value="0" />
+                <int name="ry" value="-230" />
+                <int name="interval" value="1500" />
+                <imgdir name="GroupIndex">
+                    <int name="0" value="15" />
+                    <int name="1" value="14" />
+                    <int name="2" value="15" />
+                    <int name="3" value="14" />
+                    <int name="4" value="15" />
+                    <int name="5" value="14" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="Group">
+            <imgdir name="0">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="30" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="94" y="34" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="77" y="64" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="87" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="17" y="98" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-17" y="98" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="87" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-77" y="64" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-94" y="34" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-94" y="-34" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-77" y="-64" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="-87" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-17" y="-98" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="17" y="-98" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="-87" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="77" y="-64" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="94" y="-34" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="50" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="87" y="50" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="64" y="77" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="94" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="0" y="100" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-34" y="94" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="77" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-87" y="50" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-98" y="17" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-87" y="-50" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-64" y="-77" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="-94" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="0" y="-100" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="34" y="-94" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="-77" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="87" y="-50" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="98" y="-17" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="30" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="94" y="34" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="77" y="64" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="50" y="87" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="17" y="98" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-17" y="98" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-50" y="87" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-77" y="64" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-94" y="34" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-94" y="-34" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-77" y="-64" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-50" y="-87" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-17" y="-98" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="17" y="-98" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="50" y="-87" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="77" y="-64" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="94" y="-34" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="50" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="87" y="50" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="77" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="34" y="94" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="0" y="100" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="94" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-64" y="77" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-87" y="50" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="17" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-87" y="-50" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="-77" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-34" y="-94" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="0" y="-100" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="-94" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="64" y="-77" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="87" y="-50" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="-17" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="1" />
+                <int name="speed" value="75" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="-20" />
+                        <int name="ry" value="-20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="20" />
+                        <int name="ry" value="-20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="-20" />
+                        <int name="ry" value="20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="20" />
+                        <int name="ry" value="20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="1" />
+                <int name="speed" value="75" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="-30" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="30" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="-30" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="30" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="80" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="87" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="87" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="-87" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="-87" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="80" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="94" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="77" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="-94" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="-77" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="50" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="94" y="34" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="77" y="64" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="50" y="87" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="17" y="98" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-17" y="98" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="87" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-77" y="64" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-94" y="34" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-94" y="-34" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-77" y="-64" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="-87" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-17" y="-98" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="17" y="-98" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="50" y="-87" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="77" y="-64" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="94" y="-34" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="50" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="87" y="50" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="64" y="77" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="34" y="94" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="0" y="100" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="94" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="77" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-87" y="50" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-98" y="17" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-87" y="-50" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="-77" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="-94" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="0" y="-100" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="34" y="-94" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="64" y="-77" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="87" y="-50" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="-17" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="50" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="94" y="34" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="77" y="64" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="87" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="17" y="98" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-17" y="98" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-50" y="87" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-77" y="64" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-94" y="34" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-94" y="-34" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-77" y="-64" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-50" y="-87" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-17" y="-98" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="17" y="-98" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="-87" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="77" y="-64" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="94" y="-34" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="11">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="50" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="87" y="50" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="77" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="94" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="0" y="100" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-34" y="94" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-64" y="77" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-87" y="50" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="17" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-87" y="-50" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-64" y="-77" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-34" y="-94" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="0" y="-100" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="-94" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="-77" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="87" y="-50" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="98" y="-17" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="12">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="1" />
+                <int name="speed" value="150" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="-20" />
+                        <int name="ry" value="-20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="20" />
+                        <int name="ry" value="-20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="-20" />
+                        <int name="ry" value="20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="20" />
+                        <int name="ry" value="20" />
+                        <int name="color" value="1" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="13">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="1" />
+                <int name="speed" value="150" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="-30" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="30" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="-30" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="30" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="14">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="110" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="93" y="34" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="86" y="50" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="76" y="64" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="64" y="76" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="50" y="86" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="34" y="93" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="17" y="98" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="0" y="100" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-17" y="98" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="93" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="86" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="76" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-76" y="64" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-86" y="50" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-93" y="34" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-98" y="17" />
+                    </imgdir>
+                    <imgdir name="18">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="19">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="20">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-93" y="-34" />
+                    </imgdir>
+                    <imgdir name="21">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-86" y="-50" />
+                    </imgdir>
+                    <imgdir name="22">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-76" y="-64" />
+                    </imgdir>
+                    <imgdir name="23">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-64" y="-76" />
+                    </imgdir>
+                    <imgdir name="24">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-50" y="-86" />
+                    </imgdir>
+                    <imgdir name="25">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-34" y="-93" />
+                    </imgdir>
+                    <imgdir name="26">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="-17" y="-98" />
+                    </imgdir>
+                    <imgdir name="27">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="0" y="-100" />
+                    </imgdir>
+                    <imgdir name="28">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="17" y="-98" />
+                    </imgdir>
+                    <imgdir name="29">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="34" y="-93" />
+                    </imgdir>
+                    <imgdir name="30">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="50" y="-86" />
+                    </imgdir>
+                    <imgdir name="31">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="64" y="-76" />
+                    </imgdir>
+                    <imgdir name="32">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="76" y="-64" />
+                    </imgdir>
+                    <imgdir name="33">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="86" y="-50" />
+                    </imgdir>
+                    <imgdir name="34">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="93" y="-34" />
+                    </imgdir>
+                    <imgdir name="35">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="1" />
+                        <vector name="v" x="98" y="-17" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="15">
+                <int name="rx" value="0" />
+                <int name="ry" value="0" />
+                <int name="type" value="0" />
+                <int name="speed" value="110" />
+                <imgdir name="Bullets">
+                    <imgdir name="0">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="100" y="0" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="98" y="17" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="93" y="34" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="86" y="50" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="76" y="64" />
+                    </imgdir>
+                    <imgdir name="5">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="76" />
+                    </imgdir>
+                    <imgdir name="6">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="86" />
+                    </imgdir>
+                    <imgdir name="7">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="93" />
+                    </imgdir>
+                    <imgdir name="8">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="17" y="98" />
+                    </imgdir>
+                    <imgdir name="9">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="0" y="100" />
+                    </imgdir>
+                    <imgdir name="10">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-17" y="98" />
+                    </imgdir>
+                    <imgdir name="11">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-34" y="93" />
+                    </imgdir>
+                    <imgdir name="12">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-50" y="86" />
+                    </imgdir>
+                    <imgdir name="13">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-64" y="76" />
+                    </imgdir>
+                    <imgdir name="14">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-76" y="64" />
+                    </imgdir>
+                    <imgdir name="15">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-86" y="50" />
+                    </imgdir>
+                    <imgdir name="16">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-93" y="34" />
+                    </imgdir>
+                    <imgdir name="17">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="17" />
+                    </imgdir>
+                    <imgdir name="18">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-100" y="0" />
+                    </imgdir>
+                    <imgdir name="19">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-98" y="-17" />
+                    </imgdir>
+                    <imgdir name="20">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-93" y="-34" />
+                    </imgdir>
+                    <imgdir name="21">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-86" y="-50" />
+                    </imgdir>
+                    <imgdir name="22">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-76" y="-64" />
+                    </imgdir>
+                    <imgdir name="23">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-64" y="-76" />
+                    </imgdir>
+                    <imgdir name="24">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-50" y="-86" />
+                    </imgdir>
+                    <imgdir name="25">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-34" y="-93" />
+                    </imgdir>
+                    <imgdir name="26">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="-17" y="-98" />
+                    </imgdir>
+                    <imgdir name="27">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="0" y="-100" />
+                    </imgdir>
+                    <imgdir name="28">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="17" y="-98" />
+                    </imgdir>
+                    <imgdir name="29">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="34" y="-93" />
+                    </imgdir>
+                    <imgdir name="30">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="50" y="-86" />
+                    </imgdir>
+                    <imgdir name="31">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="64" y="-76" />
+                    </imgdir>
+                    <imgdir name="32">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="76" y="-64" />
+                    </imgdir>
+                    <imgdir name="33">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="86" y="-50" />
+                    </imgdir>
+                    <imgdir name="34">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="93" y="-34" />
+                    </imgdir>
+                    <imgdir name="35">
+                        <int name="rx" value="0" />
+                        <int name="ry" value="0" />
+                        <int name="color" value="2" />
+                        <vector name="v" x="98" y="-17" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="effect">
+            <imgdir name="loop">
+            </imgdir>
+            <imgdir name="pre">
+            </imgdir>
+            <imgdir name="end">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="hard">
+        <imgdir name="BulletAfterObtacleCollision">
+            <vector name="lt" x="-60" y="-100" />
+            <vector name="rb" x="60" y="5" />
+            <int name="speed" value="7" />
+            <int name="delay" value="630" />
+            <imgdir name="Ball">
+            </imgdir>
+            <imgdir name="End">
+            </imgdir>
+            <imgdir name="Phase2">
+                <vector name="lt" x="-950" y="50" />
+                <vector name="rb" x="950" y="100" />
+                <int name="baseX" value="0" />
+                <int name="attackIdx" value="6" />
+                <int name="mobattackref_mobid" value="8880512" />
+            </imgdir>
+            <imgdir name="Phase3">
+                <vector name="lt" x="-950" y="20" />
+                <vector name="rb" x="950" y="150" />
+                <int name="baseX" value="0" />
+                <int name="attackIdx" value="6" />
+                <int name="mobattackref_mobid" value="8880512" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="story">
+        <imgdir name="BulletAfterObtacleCollision">
+            <vector name="lt" x="-60" y="-100" />
+            <vector name="rb" x="60" y="5" />
+            <int name="speed" value="7" />
+            <int name="delay" value="630" />
+            <imgdir name="Ball">
+            </imgdir>
+            <imgdir name="End">
+            </imgdir>
+            <imgdir name="Phase2">
+                <vector name="lt" x="-950" y="50" />
+                <vector name="rb" x="950" y="100" />
+                <int name="baseX" value="0" />
+                <int name="attackIdx" value="6" />
+                <int name="mobattackref_mobid" value="8645064" />
+            </imgdir>
+            <imgdir name="Phase3">
+                <vector name="lt" x="-950" y="20" />
+                <vector name="rb" x="950" y="150" />
+                <int name="baseX" value="0" />
+                <int name="attackIdx" value="6" />
+                <int name="mobattackref_mobid" value="8645064" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

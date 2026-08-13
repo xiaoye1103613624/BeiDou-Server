@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="0103.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <int name="gender" value="1"/>
+    <int name="chatBalloon" value="36"/>
+    <int name="nameTag" value="38"/>
+  </imgdir>
+  <imgdir name="basic">
+    <int name="accessory" value="1032097"/>
+    <int name="longcoat" value="1052247"/>
+    <int name="shoes" value="1072387"/>
+  </imgdir>
+  <imgdir name="costume">
+    <imgdir name="skin">
+      <string name="0" value="2003"/>
+      <int name="1" value="2010"/>
+    </imgdir>
+    <imgdir name="hair">
+      <int name="0" value="34890"/>
+    </imgdir>
+    <imgdir name="face">
+      <int name="0" value="21038"/>
+      <int name="1" value="21138"/>
+      <int name="2" value="21238"/>
+      <int name="3" value="21338"/>
+      <int name="4" value="21438"/>
+      <int name="5" value="21538"/>
+      <int name="6" value="21638"/>
+      <int name="7" value="21738"/>
+      <int name="8" value="21838"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="action">
+    <imgdir name="hello">
+      <imgdir name="0">
+        <string name="sound" value="hello"/>
+        <string name="face" value="smile"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="sound" value="hello"/>
+        <string name="face" value="wink"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="levelup">
+      <imgdir name="0">
+        <string name="face" value="glitter"/>
+        <string name="chat" value="主人~好帥啊!"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="chat" value="很厲害耶。"/>
+        <string name="face" value="bewildered"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="dead">
+      <imgdir name="0">
+        <string name="face" value="cry"/>
+        <string name="chat" value="不可以!"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="face" value="despair"/>
+        <string name="chat" value="主~人~~~"/>
+        <string name="action" value="dead"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="bye">
+      <imgdir name="0">
+        <string name="sound" value="bye"/>
+        <string name="face" value="cry"/>
+        <string name="chat" value="我會想你的…"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="job">
+      <imgdir name="0">
+        <string name="face" value="shine"/>
+        <string name="chat" value="天啊!好帥啊!"/>
+        <string name="sound" value="bye"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+      <imgdir name="0">
+        <string name="face" value="hit"/>
+        <string name="action" value="alert"/>
+        <int name="prob" value="10"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="prob" value="90"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>

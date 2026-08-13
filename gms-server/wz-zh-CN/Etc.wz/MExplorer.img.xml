@@ -1,0 +1,3561 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="MExplorer.img">
+    <imgdir name="ability">
+        <string name="questID" value="65583" />
+        <int name="skillID" value="2027" />
+        <imgdir name="0">
+            <string name="info" value="음식 효율 증가" />
+            <int name="skill" value="2000" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="1">
+            <string name="info" value="포만감 최대치 증가" />
+            <int name="skill" value="2001" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="2">
+            <string name="info" value="행동력 최대치 증가" />
+            <int name="skill" value="2002" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="3">
+            <string name="info" value="체력 최대치 증가" />
+            <imgdir name="req">
+                <int name="2" value="10" />
+            </imgdir>
+            <int name="skill" value="2003" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="4">
+            <string name="info" value="날씨 적응력 강화" />
+            <int name="skill" value="2004" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="5">
+            <string name="info" value="체력 10% 이하일 때 보호막 생성" />
+            <int name="skill" value="2005" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="6">
+            <string name="info" value="체력 10% 이하일 때 이동 속도 증가" />
+            <imgdir name="req">
+                <int name="3" value="10" />
+            </imgdir>
+            <int name="skill" value="2006" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="7">
+            <string name="info" value="파티원 회복 포션 제작 레시피 추가" />
+            <imgdir name="req">
+                <int name="0" value="10" />
+            </imgdir>
+            <int name="skill" value="2007" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="8">
+            <string name="info" value="시작 시 비상식량 지급" />
+            <imgdir name="req">
+                <int name="7" value="2" />
+                <int name="15" value="3" />
+            </imgdir>
+            <int name="skill" value="2008" />
+            <int name="category" value="1" />
+        </imgdir>
+        <imgdir name="9">
+            <string name="info" value="채집 속도 향상" />
+            <int name="skill" value="2009" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="10">
+            <string name="info" value="채집시 x% 확률로 설정된 리워드 중 1개 추가 드랍" />
+            <int name="skill" value="2010" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="11">
+            <string name="info" value="몹처치시 x% 확률로 설정된 리워드 중 1개 추가 드랍" />
+            <int name="skill" value="2011" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="12">
+            <string name="info" value="채집도구 내구도 관련" />
+            <int name="skill" value="2012" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="13">
+            <string name="info" value="제작 시 나무 소비량 감소" />
+            <int name="skill" value="2013" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="14">
+            <string name="info" value="제작 시 돌 소비량 감소" />
+            <int name="skill" value="2014" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="15">
+            <string name="info" value="고효율 건물 제작 레시피 추가" />
+            <imgdir name="req">
+                <int name="12" value="10" />
+            </imgdir>
+            <int name="skill" value="2015" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="16">
+            <string name="info" value="내구도 회복 포션 제작 레시피 추가" />
+            <imgdir name="req">
+                <int name="9" value="15" />
+            </imgdir>
+            <int name="skill" value="2016" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="17">
+            <string name="info" value="시작 시 1단계 작업대 제공" />
+            <imgdir name="req">
+                <int name="16" value="1" />
+                <int name="24" value="10" />
+            </imgdir>
+            <int name="skill" value="2017" />
+            <int name="category" value="2" />
+        </imgdir>
+        <imgdir name="18">
+            <string name="info" value="공격속도 향상" />
+            <int name="skill" value="2018" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="19">
+            <string name="info" value="이동속도 향상" />
+            <int name="skill" value="2019" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="20">
+            <string name="info" value="행동력 포션 효율 증가" />
+            <int name="skill" value="2020" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="21">
+            <string name="info" value="밤에만 발동하는 버프 지급" />
+            <int name="skill" value="2021" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="22">
+            <string name="info" value="무기 내구도 관련" />
+            <int name="skill" value="2022" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="23">
+            <string name="info" value="공격 시 체력 회복" />
+            <int name="skill" value="2023" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="24">
+            <string name="info" value="행동력이 50% 이하일 때 공격력 증가" />
+            <string name="skill" value="2024" />
+            <int name="category" value="3" />
+            <imgdir name="req">
+                <int name="18" value="3" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="25">
+            <string name="info" value="고급 공격력 포션 제작 레시피 추가" />
+            <imgdir name="req">
+                <int name="20" value="10" />
+            </imgdir>
+            <string name="skill" value="2025" />
+            <int name="category" value="3" />
+        </imgdir>
+        <imgdir name="26">
+            <string name="info" value="시작 시 무기 아이템 제공" />
+            <imgdir name="req">
+                <int name="6" value="5" />
+                <int name="25" value="1" />
+            </imgdir>
+            <string name="skill" value="2026" />
+            <int name="category" value="3" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="recipe">
+        <imgdir name="PlayerRecipe">
+            <imgdir name="0">
+                <string name="info" value="밧줄" />
+                <int name="tabindex" value="5" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693000" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693017" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="info" value="판자" />
+                <int name="tabindex" value="5" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693018" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="info" value="숯" />
+                <int name="tabindex" value="5" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693019" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="info" value="벽돌" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693002" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693020" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="info" value="철판" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693021" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="info" value="철 막대기" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="info" value="시멘트 가루" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693002" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693024" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="info" value="화약" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693019" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693011" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693030" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="info" value="붉은꽃 가루" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691000" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693031" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="info" value="바나나 분말" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691003" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693032" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="info" value="약초 분말" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693033" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="11">
+                <string name="info" value="금괴" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693023" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="12">
+                <string name="info" value="물의 보석" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                    <int name="item" value="2693036" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693036" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693038" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="13">
+                <string name="info" value="번개의 보석" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                    <int name="item" value="2693037" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693037" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693039" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="14">
+                <string name="info" value="나사" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693025" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="15">
+                <string name="info" value="톱니바퀴" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693026" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="16">
+                <string name="info" value="레버" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693027" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="17">
+                <string name="info" value="프로펠러" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693028" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="18">
+                <string name="info" value="엔진" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693025" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693029" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="19">
+                <string name="info" value="라바스톤 가루" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693015" />
+                    <int name="count" value="3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="20">
+                <string name="info" value="모닥불" />
+                <int name="tabindex" value="3" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692005" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="21">
+                <string name="info" value="향상된 모닥불" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="15" />
+                    <string name="questExValue" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693019" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692006" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="22">
+                <string name="info" value="가로등" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692008" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="23">
+                <string name="info" value="생존 작업대" />
+                <int name="tabindex" value="3" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692000" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="24">
+                <string name="info" value="산업 작업대" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="replaceReactor" value="2692001" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="25">
+                <string name="info" value="공학 작업대" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693027" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693025" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="replaceReactor" value="2692002" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="26">
+                <string name="info" value="연금솥" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693035" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692003" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="27">
+                <string name="info" value="마법부여대" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692004" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="28">
+                <string name="info" value="조리대" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693019" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692007" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="29">
+                <string name="info" value="나무상자" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692009" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="30">
+                <string name="info" value="향상된 나무상자" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="15" />
+                    <string name="questExValue" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692010" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="31">
+                <string name="info" value="야자 텐트" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693000" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692011" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="32">
+                <string name="info" value="깃털 텐트" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693006" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692012" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="33">
+                <string name="info" value="자동 낚시대/1" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2691006" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692023" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="randGroup">
+                    <int name="id" value="1" />
+                    <float name="prob" value="0.5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="34">
+                <string name="info" value="자동 낚시대/2" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692023" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="randGroup">
+                    <int name="id" value="1" />
+                    <float name="prob" value="0.5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="35">
+                <string name="info" value="성배" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693038" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693039" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692024" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="36">
+                <string name="info" value="굴착 기계" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693029" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693027" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693006" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692026" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="37">
+                <string name="info" value="유물 탐지기" />
+                <int name="tabindex" value="3" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692027" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="38">
+                <string name="info" value="바리게이트" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692013" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="39">
+                <string name="info" value="돌벽" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692014" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="40">
+                <string name="info" value="튼튼한 돌벽" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="15" />
+                    <string name="questExValue" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693024" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693035" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692015" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="41">
+                <string name="info" value="끈끈이 발판" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693008" />
+                        <int name="count" value="5" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693024" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693035" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692016" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="42">
+                <string name="info" value="괴물소리 스피커" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693042" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693042" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692017" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="43">
+                <string name="info" value="송곳니 트랩" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692018" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="44">
+                <string name="info" value="캐논 타워" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693030" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692019" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="45">
+                <string name="info" value="파이어볼 타워" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692020" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="46">
+                <string name="info" value="라이트닝 타워" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                    <int name="item" value="2693039" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693039" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692021" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="47">
+                <string name="info" value="프로즌 타워" />
+                <int name="tabindex" value="4" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                    <int name="item" value="2693038" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693020" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693038" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2692022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="48">
+                <string name="info" value="성냥" />
+                <int name="tabindex" value="0" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690016" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="49">
+                <string name="info" value="횃불" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690017" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="50">
+                <string name="info" value="돌도끼" />
+                <int name="tabindex" value="0" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693002" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690010" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="51">
+                <string name="info" value="황금도끼" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690011" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="52">
+                <string name="info" value="전동톱" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693025" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690012" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="53">
+                <string name="info" value="돌괭이" />
+                <int name="tabindex" value="0" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693002" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690013" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="54">
+                <string name="info" value="황금괭이" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690014" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="55">
+                <string name="info" value="핸드드릴" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690015" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="56">
+                <string name="info" value="망치" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690039" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="57">
+                <string name="info" value="야자배낭" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693000" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691061" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="58">
+                <string name="info" value="가죽배낭" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691062" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="59">
+                <string name="info" value="마법배낭" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693010" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691063" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="60">
+                <string name="info" value="가죽 안장" />
+                <int name="tabindex" value="7" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                    <int name="item" value="2693016" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691078" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="61">
+                <string name="info" value="양동이" />
+                <int name="tabindex" value="0" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693034" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="62">
+                <string name="info" value="목검" />
+                <int name="tabindex" value="1" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690000" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="63">
+                <string name="info" value="삼지창" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690001" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="64">
+                <string name="info" value="그륜힐 mark-L1" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690043" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="65">
+                <string name="info" value="황금검" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690002" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="66">
+                <string name="info" value="물고기 작살/1" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691009" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690003" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="randGroup">
+                    <int name="id" value="2" />
+                    <float name="prob" value="0.5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="67">
+                <string name="info" value="물고기 작살/2" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690003" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="randGroup">
+                    <int name="id" value="2" />
+                    <float name="prob" value="0.5" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="68">
+                <string name="info" value="권총" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693030" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693025" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690004" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="69">
+                <string name="info" value="기관총" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693030" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693025" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690005" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="70">
+                <string name="info" value="맹독 호리병" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693008" />
+                        <int name="count" value="5" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690006" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="71">
+                <string name="info" value="화염도" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693005" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690007" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="72">
+                <string name="info" value="워터 지팡이" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693038" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690008" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="73">
+                <string name="info" value="라이트닝 지팡이" />
+                <int name="tabindex" value="1" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693039" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690009" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="74">
+                <string name="info" value="야자잎 모자" />
+                <int name="tabindex" value="2" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693000" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690025" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="75">
+                <string name="info" value="유물 탐사 모자" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690026" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="76">
+                <string name="info" value="뿔달린 철모자/1" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693009" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690027" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="randGroup">
+                    <int name="id" value="3" />
+                    <float name="prob" value="0.7" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="77">
+                <string name="info" value="뿔달린 철모자/2" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693014" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693014" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690027" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="randGroup">
+                    <int name="id" value="3" />
+                    <float name="prob" value="0.3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="78">
+                <string name="info" value="피뢰침 모자" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693011" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693022" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693011" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690028" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="79">
+                <string name="info" value="새둥지 모자" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                    <int name="item" value="2691007" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691007" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693000" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690029" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="80">
+                <string name="info" value="랜턴 모자" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693003" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690030" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="81">
+                <string name="info" value="리자드맨 족장 모자" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693010" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693012" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690031" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="82">
+                <string name="info" value="야자잎 옷" />
+                <int name="tabindex" value="2" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693000" />
+                        <int name="count" value="8" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690019" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="83">
+                <string name="info" value="유물 탐사복" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693006" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690020" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="84">
+                <string name="info" value="글래디에이터 갑옷" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690021" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="85">
+                <string name="info" value="황금 갑옷" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693023" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="86">
+                <string name="info" value="호피 코트" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693013" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693013" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693012" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690023" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="87">
+                <string name="info" value="우비" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691010" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693010" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690024" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="88">
+                <string name="info" value="야자샌들" />
+                <int name="tabindex" value="2" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690033" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="89">
+                <string name="info" value="가죽 신발" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="6" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693017" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690034" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="90">
+                <string name="info" value="황금 신발" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693023" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693010" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693023" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690035" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="91">
+                <string name="info" value="발바닥 신발" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="craft" value="2" />
+                    <int name="item" value="2693013" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693013" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693014" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690037" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="92">
+                <string name="info" value="깃털 신발" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693006" />
+                        <int name="count" value="8" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690036" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="93">
+                <string name="info" value="스탠스 신발" />
+                <int name="tabindex" value="2" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="2" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693007" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693024" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2690038" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="94">
+                <string name="info" value="마법날개" />
+                <int name="tabindex" value="7" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                    <int name="item" value="2693012" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693012" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693026" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691058" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="95">
+                <string name="info" value="잠수함" />
+                <int name="tabindex" value="7" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693028" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693029" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691060" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="96">
+                <string name="info" value="비행기" />
+                <int name="tabindex" value="7" />
+                <imgdir name="requirement">
+                    <int name="craft" value="3" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693018" />
+                        <int name="count" value="4" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693021" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693028" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693029" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691059" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="97">
+                <string name="info" value="행동력 파티 회복 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="7" />
+                    <string name="questExValue" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693033" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693032" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691068" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="98">
+                <string name="info" value="체력 파티회복 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="7" />
+                    <string name="questExValue" value="2" />
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691069" />
+                    <int name="count" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693033" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693032" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="99">
+                <string name="info" value="숫돌" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="16" />
+                    <string name="questExValue" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693002" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691066" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="100">
+                <string name="info" value="공격력 폭발 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                    <int name="questID" value="65583" />
+                    <string name="questExKey" value="25" />
+                    <string name="questExValue" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693031" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691067" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="101">
+                <string name="info" value="라바용액" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693040" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="102">
+                <string name="info" value="재생용액" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693031" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2693041" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="103">
+                <string name="info" value="생명력 회복 포션(소)" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693040" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693032" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693033" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691045" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="104">
+                <string name="info" value="생명력 회복 포션(대)" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693040" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693032" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693033" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691046" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="105">
+                <string name="info" value="행동력 회복 포션(소)" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693040" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693032" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693033" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691047" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="106">
+                <string name="info" value="행동력 회복 포션(대)" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693040" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693032" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693033" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691048" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="107">
+                <string name="info" value="발광 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693041" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693015" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691049" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="108">
+                <string name="info" value="공격력 향상 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693041" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693040" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691050" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="109">
+                <string name="info" value="방어력 향상 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693041" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693011" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691051" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="110">
+                <string name="info" value="이동속도 향상 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693041" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693014" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693009" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691052" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="111">
+                <string name="info" value="점프력 향상 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693041" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693012" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2693006" />
+                        <int name="count" value="2" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691053" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="112">
+                <string name="info" value="독 포션" />
+                <int name="tabindex" value="6" />
+                <imgdir name="requirement">
+                    <int name="alchemy" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693041" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2693008" />
+                        <int name="count" value="3" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691054" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="113">
+                <string name="info" value="물" />
+                <int name="tabindex" value="5" />
+                <imgdir name="requirement">
+                    <int name="craft" value="1" />
+                </imgdir>
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2693035" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691070" />
+                    <int name="count" value="4" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="cookLevel1">
+            <imgdir name="info">
+                <int name="FailedItem" value="2691044" />
+            </imgdir>
+            <imgdir name="0">
+                <string name="info" value="구운 약초" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691011" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="info" value="구운 해초" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691010" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691012" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="info" value="구운 바나나" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691013" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="info" value="코코넛 오일" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691014" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="info" value="구운 애벌레" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691006" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691015" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="info" value="구운 새알" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691007" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691016" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="info" value="구운 조개" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691017" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="info" value="구운 생선" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691009" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691018" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="info" value="구운고기" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691019" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="cookLevel2">
+            <imgdir name="info">
+                <int name="FailedItem" value="2691044" />
+                <string name="extend" value="cookLevel1" />
+            </imgdir>
+            <imgdir name="0">
+                <string name="info" value="샐러드" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691000" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691020" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="info" value="샐러드" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691000" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691020" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="info" value="샐러드" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691020" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="info" value="고기볶음" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691021" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="info" value="고기볶음" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691021" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="info" value="해산물볶음" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691009" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="info" value="해산물볶음" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691009" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="info" value="해산물볶음" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="info" value="해산물볶음" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691022" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="info" value="한약재" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691023" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="info" value="케일 주스" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691024" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="11">
+                <string name="info" value="조개탕" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691025" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="12">
+                <string name="info" value="영양죽" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691026" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="13">
+                <string name="info" value="계란후라이" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691007" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691014" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691027" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="14">
+                <string name="info" value="생선튀김" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691009" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691014" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691028" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="15">
+                <string name="info" value="고기튀김" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691014" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691029" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="16">
+                <string name="info" value="바나나칩" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691014" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691030" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="17">
+                <string name="info" value="버섯스튜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691031" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="18">
+                <string name="info" value="버섯스튜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691007" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691031" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="19">
+                <string name="info" value="버섯스튜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691011" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691031" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="20">
+                <string name="info" value="고기스튜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691005" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691032" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="21">
+                <string name="info" value="고기스튜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691007" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691032" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="22">
+                <string name="info" value="고기스튜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691011" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691032" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="23">
+                <string name="info" value="김말이 고기튀김" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691012" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691014" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691033" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="24">
+                <string name="info" value="생선찜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691008" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691034" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="25">
+                <string name="info" value="생선찜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691018" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691034" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="26">
+                <string name="info" value="고기찜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691019" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691001" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691035" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="27">
+                <string name="info" value="고기찜" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691019" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691002" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691035" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="28">
+                <string name="info" value="코코넛주스" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691004" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691036" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="29">
+                <string name="info" value="바나나주스" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691003" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691037" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="30">
+                <string name="info" value="코코넛바나나 주스" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691036" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691037" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691038" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="31">
+                <string name="info" value="스테이크" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691019" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691027" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691011" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691039" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="32">
+                <string name="info" value="모듬구이 정식" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691018" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691019" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691020" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691040" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="33">
+                <string name="info" value="고기스튜(음식 테스트용 임시)" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691028" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691029" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691020" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691041" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="34">
+                <string name="info" value="한약탕" />
+                <imgdir name="ingredients">
+                    <imgdir name="0">
+                        <int name="item" value="2691023" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="item" value="2691023" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="item" value="2691070" />
+                        <int name="count" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="result">
+                    <int name="item" value="2691042" />
+                    <int name="count" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="quest">
+        <int name="65556" value="1" />
+        <int name="65557" value="1" />
+        <int name="65558" value="1" />
+        <int name="65559" value="1" />
+        <int name="65560" value="1" />
+        <int name="65561" value="1" />
+        <int name="65562" value="1" />
+        <int name="65563" value="1" />
+        <int name="65564" value="1" />
+        <int name="65565" value="1" />
+        <int name="65566" value="1" />
+        <int name="65567" value="1" />
+        <int name="65568" value="1" />
+        <int name="65569" value="1" />
+        <int name="65570" value="1" />
+        <int name="65640" value="2" />
+        <int name="65641" value="2" />
+        <int name="65642" value="2" />
+        <int name="65643" value="2" />
+        <int name="65644" value="2" />
+        <int name="65645" value="2" />
+        <int name="65646" value="2" />
+        <int name="65647" value="2" />
+        <int name="65648" value="2" />
+        <int name="65649" value="2" />
+        <int name="65650" value="2" />
+        <int name="65651" value="2" />
+        <int name="65652" value="2" />
+        <int name="65653" value="2" />
+        <int name="65654" value="2" />
+        <int name="65655" value="2" />
+        <int name="65656" value="2" />
+        <int name="65657" value="2" />
+        <int name="65658" value="2" />
+        <int name="65659" value="2" />
+        <int name="65660" value="2" />
+        <int name="65661" value="2" />
+        <int name="65662" value="2" />
+        <int name="65668" value="1" />
+        <int name="65669" value="1" />
+        <int name="65670" value="1" />
+        <int name="65671" value="1" />
+        <int name="65672" value="1" />
+        <int name="65673" value="1" />
+        <int name="65674" value="1" />
+        <int name="65675" value="1" />
+    </imgdir>
+</imgdir>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="AbyssExpeditionConfig.img">
+    <imgdir name="slotCooltime">
+        <int name="0" value="1" />
+        <int name="1" value="3" />
+        <int name="2" value="8" />
+        <int name="3" value="15" />
+        <int name="4" value="0" />
+    </imgdir>
+    <imgdir name="levelPlaytime">
+        <int name="1" value="0" />
+        <int name="2" value="30" />
+        <int name="3" value="60" />
+        <int name="4" value="120" />
+        <int name="5" value="200" />
+        <int name="6" value="300" />
+        <int name="7" value="400" />
+        <int name="8" value="500" />
+        <int name="9" value="650" />
+        <int name="10" value="800" />
+    </imgdir>
+    <imgdir name="rank">
+        <int name="QR" value="64753" />
+        <string name="QREx" value="rank" />
+        <imgdir name="0">
+            <string name="name" value="新手" />
+            <int name="level" value="0" />
+            <int name="playTime" value="2" />
+            <int name="mercenary" value="1" />
+        </imgdir>
+        <imgdir name="1">
+            <string name="name" value="初级" />
+            <int name="level" value="10" />
+            <int name="playTime" value="3" />
+            <int name="mercenary" value="2" />
+        </imgdir>
+        <imgdir name="2">
+            <string name="name" value="高级Ⅰ" />
+            <int name="level" value="20" />
+            <int name="playTime" value="4" />
+            <int name="mercenary" value="3" />
+        </imgdir>
+        <imgdir name="3">
+            <string name="name" value="高级Ⅱ" />
+            <int name="level" value="35" />
+            <int name="playTime" value="5" />
+            <int name="mercenary" value="3" />
+        </imgdir>
+        <imgdir name="4">
+            <string name="name" value="高级 Ⅲ" />
+            <int name="level" value="50" />
+            <int name="playTime" value="6" />
+            <int name="mercenary" value="3" />
+        </imgdir>
+        <imgdir name="5">
+            <string name="name" value="资深Ⅰ" />
+            <int name="level" value="70" />
+            <int name="playTime" value="7" />
+            <int name="mercenary" value="4" />
+        </imgdir>
+        <imgdir name="6">
+            <string name="name" value="资深Ⅱ" />
+            <int name="level" value="90" />
+            <int name="playTime" value="8" />
+            <int name="mercenary" value="4" />
+        </imgdir>
+        <imgdir name="7">
+            <string name="name" value="资深Ⅲ" />
+            <int name="level" value="115" />
+            <int name="playTime" value="9" />
+            <int name="mercenary" value="4" />
+        </imgdir>
+        <imgdir name="8">
+            <string name="name" value="大师Ⅰ" />
+            <int name="level" value="140" />
+            <int name="playTime" value="10" />
+            <int name="mercenary" value="5" />
+        </imgdir>
+        <imgdir name="9">
+            <string name="name" value="大师Ⅱ" />
+            <int name="level" value="170" />
+            <int name="playTime" value="11" />
+            <int name="mercenary" value="5" />
+        </imgdir>
+        <imgdir name="10">
+            <string name="name" value="大师Ⅲ" />
+            <int name="level" value="200" />
+            <int name="playTime" value="12" />
+            <int name="mercenary" value="5" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="point">
+        <int name="QR" value="64753" />
+        <string name="QREx" value="point" />
+        <imgdir name="0">
+            <int name="interval" value="15" />
+            <int name="point" value="1" />
+            <imgdir name="mapID">
+                <int name="0" value="8671470" />
+                <int name="1" value="8671471" />
+                <int name="2" value="8671472" />
+                <int name="3" value="8671473" />
+                <int name="4" value="8671474" />
+                <int name="5" value="8671475" />
+                <int name="6" value="8671476" />
+                <int name="7" value="8671477" />
+                <int name="8" value="8671478" />
+                <int name="9" value="8671479" />
+                <int name="10" value="8671480" />
+                <int name="11" value="8671481" />
+                <int name="12" value="8671482" />
+                <int name="13" value="8671483" />
+                <int name="14" value="8671484" />
+                <int name="15" value="8671485" />
+                <int name="16" value="8671570" />
+                <int name="17" value="8671571" />
+                <int name="18" value="8671572" />
+                <int name="19" value="8671573" />
+                <int name="20" value="8671574" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="partnerEffect">
+        <imgdir name="0">
+            <int name="type" value="0" />
+            <int name="expR" value="10" />
+            <int name="m1" value="12" />
+            <int name="m2" value="15" />
+        </imgdir>
+        <imgdir name="1">
+            <int name="type" value="0" />
+            <int name="expR" value="10" />
+            <int name="m1" value="13" />
+            <int name="m2" value="19" />
+        </imgdir>
+        <imgdir name="2">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="1" />
+            <int name="m2" value="2" />
+        </imgdir>
+        <imgdir name="3">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="4" />
+            <int name="m2" value="6" />
+        </imgdir>
+        <imgdir name="4">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="5" />
+            <int name="m2" value="8" />
+        </imgdir>
+        <imgdir name="5">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="7" />
+            <int name="m2" value="18" />
+        </imgdir>
+        <imgdir name="6">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="9" />
+            <int name="m2" value="13" />
+        </imgdir>
+        <imgdir name="7">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="9" />
+            <int name="m2" value="14" />
+        </imgdir>
+        <imgdir name="8">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="10" />
+            <int name="m2" value="11" />
+        </imgdir>
+        <imgdir name="9">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="10" />
+            <int name="m2" value="16" />
+        </imgdir>
+        <imgdir name="10">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="11" />
+            <int name="m2" value="18" />
+        </imgdir>
+        <imgdir name="11">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="14" />
+            <int name="m2" value="16" />
+        </imgdir>
+        <imgdir name="12">
+            <int name="type" value="0" />
+            <int name="padX" value="30" />
+            <int name="m1" value="1" />
+            <int name="m2" value="4" />
+        </imgdir>
+        <imgdir name="13">
+            <int name="type" value="0" />
+            <int name="padX" value="30" />
+            <int name="m1" value="5" />
+            <int name="m2" value="17" />
+        </imgdir>
+        <imgdir name="14">
+            <int name="type" value="0" />
+            <int name="padX" value="-15" />
+            <int name="m1" value="5" />
+            <int name="m2" value="20" />
+        </imgdir>
+        <imgdir name="15">
+            <int name="type" value="0" />
+            <int name="padX" value="30" />
+            <int name="m1" value="7" />
+            <int name="m2" value="8" />
+        </imgdir>
+        <imgdir name="16">
+            <int name="type" value="0" />
+            <int name="padX" value="-15" />
+            <int name="m1" value="4" />
+            <int name="m2" value="15" />
+        </imgdir>
+        <imgdir name="17">
+            <int name="type" value="0" />
+            <int name="padX" value="-15" />
+            <int name="m1" value="10" />
+            <int name="m2" value="20" />
+        </imgdir>
+        <imgdir name="18">
+            <int name="type" value="0" />
+            <int name="padX" value="-15" />
+            <int name="m1" value="19" />
+            <int name="m2" value="20" />
+        </imgdir>
+        <imgdir name="19">
+            <int name="type" value="1" />
+            <int name="attackSpeed" value="-1" />
+            <int name="m1" value="3" />
+            <int name="m2" value="8" />
+        </imgdir>
+        <imgdir name="20">
+            <int name="type" value="1" />
+            <int name="attackSpeed" value="-1" />
+            <int name="m1" value="3" />
+            <int name="m2" value="17" />
+        </imgdir>
+        <imgdir name="21">
+            <int name="type" value="1" />
+            <int name="attackSpeed" value="-1" />
+            <int name="m1" value="12" />
+            <int name="m2" value="6" />
+        </imgdir>
+        <imgdir name="22">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="1" />
+            <int name="m2" value="9" />
+        </imgdir>
+        <imgdir name="23">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="2" />
+            <int name="m2" value="6" />
+        </imgdir>
+        <imgdir name="24">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="12" />
+            <int name="m2" value="14" />
+        </imgdir>
+        <imgdir name="25">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="15" />
+            <int name="m2" value="16" />
+        </imgdir>
+        <imgdir name="26">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="18" />
+            <int name="m2" value="19" />
+        </imgdir>
+        <imgdir name="27">
+            <int name="type" value="0" />
+            <int name="padX" value="30" />
+            <int name="m1" value="3" />
+            <int name="m2" value="11" />
+        </imgdir>
+        <imgdir name="28">
+            <int name="type" value="0" />
+            <int name="expR" value="10" />
+            <int name="m1" value="7" />
+            <int name="m2" value="24" />
+        </imgdir>
+        <imgdir name="29">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="21" />
+            <int name="m2" value="22" />
+        </imgdir>
+        <imgdir name="30">
+            <int name="type" value="0" />
+            <int name="speed" value="5" />
+            <int name="m1" value="23" />
+            <int name="m2" value="25" />
+        </imgdir>
+        <imgdir name="31">
+            <int name="type" value="0" />
+            <int name="padX" value="30" />
+            <int name="m1" value="22" />
+            <int name="m2" value="24" />
+        </imgdir>
+        <imgdir name="32">
+            <int name="type" value="0" />
+            <int name="padX" value="-15" />
+            <int name="m1" value="17" />
+            <int name="m2" value="25" />
+        </imgdir>
+        <imgdir name="33">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="2" />
+            <int name="m2" value="21" />
+        </imgdir>
+        <imgdir name="34">
+            <int name="type" value="1" />
+            <int name="padX" value="15" />
+            <int name="m1" value="13" />
+            <int name="m2" value="23" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="field">
+        <int name="timeOutQuestID" value="64754" />
+        <string name="timeOutQrexKey" value="time" />
+        <int name="returnFieldID" value="867147001" />
+    </imgdir>
+</imgdir>

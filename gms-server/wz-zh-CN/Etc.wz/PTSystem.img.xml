@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="PTSystem.img">
+    <imgdir name="Program">
+        <imgdir name="0">
+            <int name="expTableNo" value="0" />
+            <string name="start" value="20190717000000" />
+            <string name="end" value="20190806235959" />
+            <string name="start_t" value="20190717000000" />
+            <string name="end_t" value="20190806235959" />
+            <string name="start_d" value="20190717000000" />
+            <string name="end_d" value="20190806235959" />
+            <int name="trainerLvMin" value="105" />
+            <int name="traineeLvMin" value="105" />
+            <int name="traineeLvMax" value="189" />
+            <string name="UI" value="UI/UIWindow7.img/PTSystem/15thEvent" />
+            <int name="questID" value="500293" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="Msg">
+        <imgdir name="20">
+            <string name="info" value="训练角色登记失败" />
+            <string name="-1" value="因未知原因，请求失败。" />
+            <string name="10" value="当前无法使用内容。" />
+            <string name="11" value="有效时间已终止。" />
+            <string name="12" value="当前服务器中无法登记。" />
+            <string name="13" value="每个世界只能登记一个角色。" />
+            <string name="20" value="等级不符，无法登记为训练角色。" />
+            <string name="21" value="斗燃角色无法登记为训练角色。" />
+            <string name="22" value="教练角色无法登记为训练角色。" />
+            <string name="23" value="训练中的角色无法登记为训练角色。" />
+            <string name="24" value="正在等待删除的角色无法登记为训练角色。" />
+            <string name="25" value="该职业无法登记为训练角色。" />
+            <string name="30" value="等级不符，无法成为教练角色。" />
+            <string name="31" value="斗燃角色无法成为教练角色。" />
+            <string name="32" value="存在已登记的训练角色。" />
+            <string name="33" value="训练角色无法成为教练角色。" />
+            <string name="34" value="正在等待删除的角色无法成为教练角色。" />
+            <string name="35" value="该职业无法成为教练角色。" />
+            <string name="36" value="未完成第2章神之子，角色无法成为教练。" />
+            <string name="100" value="当前服务器中请求过多，未能处理。请稍候重试。" />
+        </imgdir>
+        <imgdir name="21">
+            <string name="info" value="训练角色删除失败" />
+            <string name="-1" value="因未知原因，请求失败。" />
+            <string name="12" value="当前服务器中无法删除。" />
+            <string name="1001" value="训练角色信息不存在。" />
+        </imgdir>
+    </imgdir>
+</imgdir>

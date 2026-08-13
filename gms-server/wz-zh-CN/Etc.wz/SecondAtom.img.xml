@@ -1,0 +1,2083 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="SecondAtom.img">
+    <imgdir name="atom">
+        <imgdir name="0">
+            <int name="type" value="1" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="endEff2">
+                </imgdir>
+                <imgdir name="move">
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="38" />
+                    <float name="secondImpact" value="7.0" />
+                    <int name="speedLimit" value="70" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-475" y="-250" />
+                    <vector name="rb" x="475" y="225" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                    <int name="adjustMode" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="type" value="0" />
+            <int name="origin" value="1" />
+            <int name="overlay" value="1" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="user_action_origin">
+                <imgdir name="default">
+                </imgdir>
+                <imgdir name="walk1_l">
+                </imgdir>
+                <imgdir name="walk1_r">
+                </imgdir>
+                <imgdir name="walk2_l">
+                </imgdir>
+                <imgdir name="walk2_r">
+                </imgdir>
+                <imgdir name="stand1_l">
+                </imgdir>
+                <imgdir name="stand1_r">
+                </imgdir>
+                <imgdir name="stand2_l">
+                </imgdir>
+                <imgdir name="stand2_r">
+                </imgdir>
+                <imgdir name="alert_l">
+                </imgdir>
+                <imgdir name="alert_r">
+                </imgdir>
+                <imgdir name="swingO1_l">
+                </imgdir>
+                <imgdir name="swingO1_r">
+                </imgdir>
+                <imgdir name="swingO2_l">
+                </imgdir>
+                <imgdir name="swingO2_r">
+                </imgdir>
+                <imgdir name="swingO3_l">
+                </imgdir>
+                <imgdir name="swingO3_r">
+                </imgdir>
+                <imgdir name="swingOF_l">
+                </imgdir>
+                <imgdir name="swingOF_r">
+                </imgdir>
+                <imgdir name="swingT1_l">
+                </imgdir>
+                <imgdir name="swingT1_r">
+                </imgdir>
+                <imgdir name="swingT2_l">
+                </imgdir>
+                <imgdir name="swingT2_r">
+                </imgdir>
+                <imgdir name="swingT3_l">
+                </imgdir>
+                <imgdir name="swingT3_r">
+                </imgdir>
+                <imgdir name="swingTF_l">
+                </imgdir>
+                <imgdir name="swingTF_r">
+                </imgdir>
+                <imgdir name="swingP1_l">
+                </imgdir>
+                <imgdir name="swingP1_r">
+                </imgdir>
+                <imgdir name="swingP2_l">
+                </imgdir>
+                <imgdir name="swingP2_r">
+                </imgdir>
+                <imgdir name="swingPF_l">
+                </imgdir>
+                <imgdir name="swingPF_r">
+                </imgdir>
+                <imgdir name="stabO1_l">
+                </imgdir>
+                <imgdir name="stabO1_r">
+                </imgdir>
+                <imgdir name="stabO2_l">
+                </imgdir>
+                <imgdir name="stabO2_r">
+                </imgdir>
+                <imgdir name="stabOF_l">
+                </imgdir>
+                <imgdir name="stabOF_r">
+                </imgdir>
+                <imgdir name="stabT1_l">
+                </imgdir>
+                <imgdir name="stabT1_r">
+                </imgdir>
+                <imgdir name="stabTF_l">
+                </imgdir>
+                <imgdir name="stabTF_r">
+                </imgdir>
+                <imgdir name="shoot1_l">
+                </imgdir>
+                <imgdir name="shoot1_r">
+                </imgdir>
+                <imgdir name="shoot2_l">
+                </imgdir>
+                <imgdir name="shoot2_r">
+                </imgdir>
+                <imgdir name="shootF_l">
+                </imgdir>
+                <imgdir name="shootF_r">
+                </imgdir>
+                <imgdir name="proneStab_l">
+                </imgdir>
+                <imgdir name="proneStab_r">
+                </imgdir>
+                <imgdir name="prone_l">
+                </imgdir>
+                <imgdir name="prone_r">
+                </imgdir>
+                <imgdir name="heal_l">
+                </imgdir>
+                <imgdir name="heal_r">
+                </imgdir>
+                <imgdir name="fly_l">
+                </imgdir>
+                <imgdir name="fly_r">
+                </imgdir>
+                <imgdir name="jump_l">
+                </imgdir>
+                <imgdir name="jump_r">
+                </imgdir>
+                <imgdir name="sit_l">
+                </imgdir>
+                <imgdir name="sit_r">
+                </imgdir>
+                <imgdir name="ladder_l">
+                </imgdir>
+                <imgdir name="ladder_r">
+                </imgdir>
+                <imgdir name="rope_l">
+                </imgdir>
+                <imgdir name="rope_r">
+                </imgdir>
+                <imgdir name="ladder2_l">
+                </imgdir>
+                <imgdir name="ladder2_r">
+                </imgdir>
+                <imgdir name="rope2_l">
+                </imgdir>
+                <imgdir name="rope2_r">
+                </imgdir>
+                <imgdir name="dead_l">
+                </imgdir>
+                <imgdir name="dead_r">
+                </imgdir>
+                <imgdir name="LWImpale_l">
+                </imgdir>
+                <imgdir name="LWImpale_r">
+                </imgdir>
+                <imgdir name="LWTread_l">
+                </imgdir>
+                <imgdir name="LWTread_r">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <int name="type" value="0" />
+            <int name="origin" value="1" />
+            <int name="overlay" value="1" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="user_action_origin">
+                <imgdir name="default">
+                </imgdir>
+                <imgdir name="walk1_l">
+                </imgdir>
+                <imgdir name="walk1_r">
+                </imgdir>
+                <imgdir name="walk2_l">
+                </imgdir>
+                <imgdir name="walk2_r">
+                </imgdir>
+                <imgdir name="stand1_l">
+                </imgdir>
+                <imgdir name="stand1_r">
+                </imgdir>
+                <imgdir name="stand2_l">
+                </imgdir>
+                <imgdir name="stand2_r">
+                </imgdir>
+                <imgdir name="alert_l">
+                </imgdir>
+                <imgdir name="alert_r">
+                </imgdir>
+                <imgdir name="swingO1_l">
+                </imgdir>
+                <imgdir name="swingO1_r">
+                </imgdir>
+                <imgdir name="swingO2_l">
+                </imgdir>
+                <imgdir name="swingO2_r">
+                </imgdir>
+                <imgdir name="swingO3_l">
+                </imgdir>
+                <imgdir name="swingO3_r">
+                </imgdir>
+                <imgdir name="swingOF_l">
+                </imgdir>
+                <imgdir name="swingOF_r">
+                </imgdir>
+                <imgdir name="swingT1_l">
+                </imgdir>
+                <imgdir name="swingT1_r">
+                </imgdir>
+                <imgdir name="swingT2_l">
+                </imgdir>
+                <imgdir name="swingT2_r">
+                </imgdir>
+                <imgdir name="swingT3_l">
+                </imgdir>
+                <imgdir name="swingT3_r">
+                </imgdir>
+                <imgdir name="swingTF_l">
+                </imgdir>
+                <imgdir name="swingTF_r">
+                </imgdir>
+                <imgdir name="swingP1_l">
+                </imgdir>
+                <imgdir name="swingP1_r">
+                </imgdir>
+                <imgdir name="swingP2_l">
+                </imgdir>
+                <imgdir name="swingP2_r">
+                </imgdir>
+                <imgdir name="swingPF_l">
+                </imgdir>
+                <imgdir name="swingPF_r">
+                </imgdir>
+                <imgdir name="stabO1_l">
+                </imgdir>
+                <imgdir name="stabO1_r">
+                </imgdir>
+                <imgdir name="stabO2_l">
+                </imgdir>
+                <imgdir name="stabO2_r">
+                </imgdir>
+                <imgdir name="stabOF_l">
+                </imgdir>
+                <imgdir name="stabOF_r">
+                </imgdir>
+                <imgdir name="stabT1_l">
+                </imgdir>
+                <imgdir name="stabT1_r">
+                </imgdir>
+                <imgdir name="stabTF_l">
+                </imgdir>
+                <imgdir name="stabTF_r">
+                </imgdir>
+                <imgdir name="shoot1_l">
+                </imgdir>
+                <imgdir name="shoot1_r">
+                </imgdir>
+                <imgdir name="shoot2_l">
+                </imgdir>
+                <imgdir name="shoot2_r">
+                </imgdir>
+                <imgdir name="shootF_l">
+                </imgdir>
+                <imgdir name="shootF_r">
+                </imgdir>
+                <imgdir name="proneStab_l">
+                </imgdir>
+                <imgdir name="proneStab_r">
+                </imgdir>
+                <imgdir name="prone_l">
+                </imgdir>
+                <imgdir name="prone_r">
+                </imgdir>
+                <imgdir name="heal_l">
+                </imgdir>
+                <imgdir name="heal_r">
+                </imgdir>
+                <imgdir name="fly_l">
+                </imgdir>
+                <imgdir name="fly_r">
+                </imgdir>
+                <imgdir name="jump_l">
+                </imgdir>
+                <imgdir name="jump_r">
+                </imgdir>
+                <imgdir name="sit_l">
+                </imgdir>
+                <imgdir name="sit_r">
+                </imgdir>
+                <imgdir name="ladder_l">
+                </imgdir>
+                <imgdir name="ladder_r">
+                </imgdir>
+                <imgdir name="rope_l">
+                </imgdir>
+                <imgdir name="rope_r">
+                </imgdir>
+                <imgdir name="ladder2_l">
+                </imgdir>
+                <imgdir name="ladder2_r">
+                </imgdir>
+                <imgdir name="rope2_l">
+                </imgdir>
+                <imgdir name="rope2_r">
+                </imgdir>
+                <imgdir name="dead_l">
+                </imgdir>
+                <imgdir name="dead_r">
+                </imgdir>
+                <imgdir name="LWImpale_l">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_l/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_l/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_l/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_l/3" />
+                </imgdir>
+                <imgdir name="LWImpale_r">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_r/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_r/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_r/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_r/3" />
+                </imgdir>
+                <imgdir name="LWTread_l">
+                </imgdir>
+                <imgdir name="LWTread_r">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <int name="type" value="0" />
+            <int name="origin" value="1" />
+            <int name="overlay" value="1" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="user_action_origin">
+                <imgdir name="default">
+                </imgdir>
+                <imgdir name="walk1_l">
+                </imgdir>
+                <imgdir name="walk1_r">
+                </imgdir>
+                <imgdir name="walk2_l">
+                </imgdir>
+                <imgdir name="walk2_r">
+                </imgdir>
+                <imgdir name="stand1_l">
+                </imgdir>
+                <imgdir name="stand1_r">
+                </imgdir>
+                <imgdir name="stand2_l">
+                </imgdir>
+                <imgdir name="stand2_r">
+                </imgdir>
+                <imgdir name="alert_l">
+                </imgdir>
+                <imgdir name="alert_r">
+                </imgdir>
+                <imgdir name="swingO1_l">
+                </imgdir>
+                <imgdir name="swingO1_r">
+                </imgdir>
+                <imgdir name="swingO2_l">
+                </imgdir>
+                <imgdir name="swingO2_r">
+                </imgdir>
+                <imgdir name="swingO3_l">
+                </imgdir>
+                <imgdir name="swingO3_r">
+                </imgdir>
+                <imgdir name="swingOF_l">
+                </imgdir>
+                <imgdir name="swingOF_r">
+                </imgdir>
+                <imgdir name="swingT1_l">
+                </imgdir>
+                <imgdir name="swingT1_r">
+                </imgdir>
+                <imgdir name="swingT2_l">
+                </imgdir>
+                <imgdir name="swingT2_r">
+                </imgdir>
+                <imgdir name="swingT3_l">
+                </imgdir>
+                <imgdir name="swingT3_r">
+                </imgdir>
+                <imgdir name="swingTF_l">
+                </imgdir>
+                <imgdir name="swingTF_r">
+                </imgdir>
+                <imgdir name="swingP1_l">
+                </imgdir>
+                <imgdir name="swingP1_r">
+                </imgdir>
+                <imgdir name="swingP2_l">
+                </imgdir>
+                <imgdir name="swingP2_r">
+                </imgdir>
+                <imgdir name="swingPF_l">
+                </imgdir>
+                <imgdir name="swingPF_r">
+                </imgdir>
+                <imgdir name="stabO1_l">
+                </imgdir>
+                <imgdir name="stabO1_r">
+                </imgdir>
+                <imgdir name="stabO2_l">
+                </imgdir>
+                <imgdir name="stabO2_r">
+                </imgdir>
+                <imgdir name="stabOF_l">
+                </imgdir>
+                <imgdir name="stabOF_r">
+                </imgdir>
+                <imgdir name="stabT1_l">
+                </imgdir>
+                <imgdir name="stabT1_r">
+                </imgdir>
+                <imgdir name="stabTF_l">
+                </imgdir>
+                <imgdir name="stabTF_r">
+                </imgdir>
+                <imgdir name="shoot1_l">
+                </imgdir>
+                <imgdir name="shoot1_r">
+                </imgdir>
+                <imgdir name="shoot2_l">
+                </imgdir>
+                <imgdir name="shoot2_r">
+                </imgdir>
+                <imgdir name="shootF_l">
+                </imgdir>
+                <imgdir name="shootF_r">
+                </imgdir>
+                <imgdir name="proneStab_l">
+                </imgdir>
+                <imgdir name="proneStab_r">
+                </imgdir>
+                <imgdir name="prone_l">
+                </imgdir>
+                <imgdir name="prone_r">
+                </imgdir>
+                <imgdir name="heal_l">
+                </imgdir>
+                <imgdir name="heal_r">
+                </imgdir>
+                <imgdir name="fly_l">
+                </imgdir>
+                <imgdir name="fly_r">
+                </imgdir>
+                <imgdir name="jump_l">
+                </imgdir>
+                <imgdir name="jump_r">
+                </imgdir>
+                <imgdir name="sit_l">
+                </imgdir>
+                <imgdir name="sit_r">
+                </imgdir>
+                <imgdir name="ladder_l">
+                </imgdir>
+                <imgdir name="ladder_r">
+                </imgdir>
+                <imgdir name="rope_l">
+                </imgdir>
+                <imgdir name="rope_r">
+                </imgdir>
+                <imgdir name="ladder2_l">
+                </imgdir>
+                <imgdir name="ladder2_r">
+                </imgdir>
+                <imgdir name="rope2_l">
+                </imgdir>
+                <imgdir name="rope2_r">
+                </imgdir>
+                <imgdir name="dead_l">
+                </imgdir>
+                <imgdir name="dead_r">
+                </imgdir>
+                <imgdir name="LWImpale_l">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_l/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_l/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_l/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_l/3" />
+                </imgdir>
+                <imgdir name="LWImpale_r">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_r/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_r/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_r/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_r/3" />
+                </imgdir>
+                <imgdir name="LWTread_l">
+                </imgdir>
+                <imgdir name="LWTread_r">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="4">
+            <int name="type" value="0" />
+            <int name="origin" value="1" />
+            <int name="overlay" value="1" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="user_action_origin">
+                <imgdir name="default">
+                </imgdir>
+                <imgdir name="walk1_l">
+                </imgdir>
+                <imgdir name="walk1_r">
+                </imgdir>
+                <imgdir name="walk2_l">
+                </imgdir>
+                <imgdir name="walk2_r">
+                </imgdir>
+                <imgdir name="stand1_l">
+                </imgdir>
+                <imgdir name="stand1_r">
+                </imgdir>
+                <imgdir name="stand2_l">
+                </imgdir>
+                <imgdir name="stand2_r">
+                </imgdir>
+                <imgdir name="alert_l">
+                </imgdir>
+                <imgdir name="alert_r">
+                </imgdir>
+                <imgdir name="swingO1_l">
+                </imgdir>
+                <imgdir name="swingO1_r">
+                </imgdir>
+                <imgdir name="swingO2_l">
+                </imgdir>
+                <imgdir name="swingO2_r">
+                </imgdir>
+                <imgdir name="swingO3_l">
+                </imgdir>
+                <imgdir name="swingO3_r">
+                </imgdir>
+                <imgdir name="swingOF_l">
+                </imgdir>
+                <imgdir name="swingOF_r">
+                </imgdir>
+                <imgdir name="swingT1_l">
+                </imgdir>
+                <imgdir name="swingT1_r">
+                </imgdir>
+                <imgdir name="swingT2_l">
+                </imgdir>
+                <imgdir name="swingT2_r">
+                </imgdir>
+                <imgdir name="swingT3_l">
+                </imgdir>
+                <imgdir name="swingT3_r">
+                </imgdir>
+                <imgdir name="swingTF_l">
+                </imgdir>
+                <imgdir name="swingTF_r">
+                </imgdir>
+                <imgdir name="swingP1_l">
+                </imgdir>
+                <imgdir name="swingP1_r">
+                </imgdir>
+                <imgdir name="swingP2_l">
+                </imgdir>
+                <imgdir name="swingP2_r">
+                </imgdir>
+                <imgdir name="swingPF_l">
+                </imgdir>
+                <imgdir name="swingPF_r">
+                </imgdir>
+                <imgdir name="stabO1_l">
+                </imgdir>
+                <imgdir name="stabO1_r">
+                </imgdir>
+                <imgdir name="stabO2_l">
+                </imgdir>
+                <imgdir name="stabO2_r">
+                </imgdir>
+                <imgdir name="stabOF_l">
+                </imgdir>
+                <imgdir name="stabOF_r">
+                </imgdir>
+                <imgdir name="stabT1_l">
+                </imgdir>
+                <imgdir name="stabT1_r">
+                </imgdir>
+                <imgdir name="stabTF_l">
+                </imgdir>
+                <imgdir name="stabTF_r">
+                </imgdir>
+                <imgdir name="shoot1_l">
+                </imgdir>
+                <imgdir name="shoot1_r">
+                </imgdir>
+                <imgdir name="shoot2_l">
+                </imgdir>
+                <imgdir name="shoot2_r">
+                </imgdir>
+                <imgdir name="shootF_l">
+                </imgdir>
+                <imgdir name="shootF_r">
+                </imgdir>
+                <imgdir name="proneStab_l">
+                </imgdir>
+                <imgdir name="proneStab_r">
+                </imgdir>
+                <imgdir name="prone_l">
+                </imgdir>
+                <imgdir name="prone_r">
+                </imgdir>
+                <imgdir name="heal_l">
+                </imgdir>
+                <imgdir name="heal_r">
+                </imgdir>
+                <imgdir name="fly_l">
+                </imgdir>
+                <imgdir name="fly_r">
+                </imgdir>
+                <imgdir name="jump_l">
+                </imgdir>
+                <imgdir name="jump_r">
+                </imgdir>
+                <imgdir name="sit_l">
+                </imgdir>
+                <imgdir name="sit_r">
+                </imgdir>
+                <imgdir name="ladder_l">
+                </imgdir>
+                <imgdir name="ladder_r">
+                </imgdir>
+                <imgdir name="rope_l">
+                </imgdir>
+                <imgdir name="rope_r">
+                </imgdir>
+                <imgdir name="ladder2_l">
+                </imgdir>
+                <imgdir name="ladder2_r">
+                </imgdir>
+                <imgdir name="rope2_l">
+                </imgdir>
+                <imgdir name="rope2_r">
+                </imgdir>
+                <imgdir name="dead_l">
+                </imgdir>
+                <imgdir name="dead_r">
+                </imgdir>
+                <imgdir name="LWImpale_l">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_l/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_l/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_l/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_l/3" />
+                </imgdir>
+                <imgdir name="LWImpale_r">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_r/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_r/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_r/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_r/3" />
+                </imgdir>
+                <imgdir name="LWTread_l">
+                </imgdir>
+                <imgdir name="LWTread_r">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="5">
+            <int name="type" value="0" />
+            <int name="origin" value="1" />
+            <int name="overlay" value="1" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="user_action_origin">
+                <imgdir name="default">
+                </imgdir>
+                <imgdir name="walk1_l">
+                </imgdir>
+                <imgdir name="walk1_r">
+                </imgdir>
+                <imgdir name="walk2_l">
+                </imgdir>
+                <imgdir name="walk2_r">
+                </imgdir>
+                <imgdir name="stand1_l">
+                </imgdir>
+                <imgdir name="stand1_r">
+                </imgdir>
+                <imgdir name="stand2_l">
+                </imgdir>
+                <imgdir name="stand2_r">
+                </imgdir>
+                <imgdir name="alert_l">
+                </imgdir>
+                <imgdir name="alert_r">
+                </imgdir>
+                <imgdir name="swingO1_l">
+                </imgdir>
+                <imgdir name="swingO1_r">
+                </imgdir>
+                <imgdir name="swingO2_l">
+                </imgdir>
+                <imgdir name="swingO2_r">
+                </imgdir>
+                <imgdir name="swingO3_l">
+                </imgdir>
+                <imgdir name="swingO3_r">
+                </imgdir>
+                <imgdir name="swingOF_l">
+                </imgdir>
+                <imgdir name="swingOF_r">
+                </imgdir>
+                <imgdir name="swingT1_l">
+                </imgdir>
+                <imgdir name="swingT1_r">
+                </imgdir>
+                <imgdir name="swingT2_l">
+                </imgdir>
+                <imgdir name="swingT2_r">
+                </imgdir>
+                <imgdir name="swingT3_l">
+                </imgdir>
+                <imgdir name="swingT3_r">
+                </imgdir>
+                <imgdir name="swingTF_l">
+                </imgdir>
+                <imgdir name="swingTF_r">
+                </imgdir>
+                <imgdir name="swingP1_l">
+                </imgdir>
+                <imgdir name="swingP1_r">
+                </imgdir>
+                <imgdir name="swingP2_l">
+                </imgdir>
+                <imgdir name="swingP2_r">
+                </imgdir>
+                <imgdir name="swingPF_l">
+                </imgdir>
+                <imgdir name="swingPF_r">
+                </imgdir>
+                <imgdir name="stabO1_l">
+                </imgdir>
+                <imgdir name="stabO1_r">
+                </imgdir>
+                <imgdir name="stabO2_l">
+                </imgdir>
+                <imgdir name="stabO2_r">
+                </imgdir>
+                <imgdir name="stabOF_l">
+                </imgdir>
+                <imgdir name="stabOF_r">
+                </imgdir>
+                <imgdir name="stabT1_l">
+                </imgdir>
+                <imgdir name="stabT1_r">
+                </imgdir>
+                <imgdir name="stabTF_l">
+                </imgdir>
+                <imgdir name="stabTF_r">
+                </imgdir>
+                <imgdir name="shoot1_l">
+                </imgdir>
+                <imgdir name="shoot1_r">
+                </imgdir>
+                <imgdir name="shoot2_l">
+                </imgdir>
+                <imgdir name="shoot2_r">
+                </imgdir>
+                <imgdir name="shootF_l">
+                </imgdir>
+                <imgdir name="shootF_r">
+                </imgdir>
+                <imgdir name="proneStab_l">
+                </imgdir>
+                <imgdir name="proneStab_r">
+                </imgdir>
+                <imgdir name="prone_l">
+                </imgdir>
+                <imgdir name="prone_r">
+                </imgdir>
+                <imgdir name="heal_l">
+                </imgdir>
+                <imgdir name="heal_r">
+                </imgdir>
+                <imgdir name="fly_l">
+                </imgdir>
+                <imgdir name="fly_r">
+                </imgdir>
+                <imgdir name="jump_l">
+                </imgdir>
+                <imgdir name="jump_r">
+                </imgdir>
+                <imgdir name="sit_l">
+                </imgdir>
+                <imgdir name="sit_r">
+                </imgdir>
+                <imgdir name="ladder_l">
+                </imgdir>
+                <imgdir name="ladder_r">
+                </imgdir>
+                <imgdir name="rope_l">
+                </imgdir>
+                <imgdir name="rope_r">
+                </imgdir>
+                <imgdir name="ladder2_l">
+                </imgdir>
+                <imgdir name="ladder2_r">
+                </imgdir>
+                <imgdir name="rope2_l">
+                </imgdir>
+                <imgdir name="rope2_r">
+                </imgdir>
+                <imgdir name="dead_l">
+                </imgdir>
+                <imgdir name="dead_r">
+                </imgdir>
+                <imgdir name="LWImpale_l">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_l/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_l/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_l/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_l/3" />
+                </imgdir>
+                <imgdir name="LWImpale_r">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_r/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_r/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_r/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_r/3" />
+                </imgdir>
+                <imgdir name="LWTread_l">
+                </imgdir>
+                <imgdir name="LWTread_r">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="6">
+            <int name="type" value="0" />
+            <int name="origin" value="1" />
+            <int name="overlay" value="1" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff2">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="user_action_origin">
+                <imgdir name="default">
+                </imgdir>
+                <imgdir name="walk1_l">
+                </imgdir>
+                <imgdir name="walk1_r">
+                </imgdir>
+                <imgdir name="walk2_l">
+                </imgdir>
+                <imgdir name="walk2_r">
+                </imgdir>
+                <imgdir name="stand1_l">
+                </imgdir>
+                <imgdir name="stand1_r">
+                </imgdir>
+                <imgdir name="stand2_l">
+                </imgdir>
+                <imgdir name="stand2_r">
+                </imgdir>
+                <imgdir name="alert_l">
+                </imgdir>
+                <imgdir name="alert_r">
+                </imgdir>
+                <imgdir name="swingO1_l">
+                </imgdir>
+                <imgdir name="swingO1_r">
+                </imgdir>
+                <imgdir name="swingO2_l">
+                </imgdir>
+                <imgdir name="swingO2_r">
+                </imgdir>
+                <imgdir name="swingO3_l">
+                </imgdir>
+                <imgdir name="swingO3_r">
+                </imgdir>
+                <imgdir name="swingOF_l">
+                </imgdir>
+                <imgdir name="swingOF_r">
+                </imgdir>
+                <imgdir name="swingT1_l">
+                </imgdir>
+                <imgdir name="swingT1_r">
+                </imgdir>
+                <imgdir name="swingT2_l">
+                </imgdir>
+                <imgdir name="swingT2_r">
+                </imgdir>
+                <imgdir name="swingT3_l">
+                </imgdir>
+                <imgdir name="swingT3_r">
+                </imgdir>
+                <imgdir name="swingTF_l">
+                </imgdir>
+                <imgdir name="swingTF_r">
+                </imgdir>
+                <imgdir name="swingP1_l">
+                </imgdir>
+                <imgdir name="swingP1_r">
+                </imgdir>
+                <imgdir name="swingP2_l">
+                </imgdir>
+                <imgdir name="swingP2_r">
+                </imgdir>
+                <imgdir name="swingPF_l">
+                </imgdir>
+                <imgdir name="swingPF_r">
+                </imgdir>
+                <imgdir name="stabO1_l">
+                </imgdir>
+                <imgdir name="stabO1_r">
+                </imgdir>
+                <imgdir name="stabO2_l">
+                </imgdir>
+                <imgdir name="stabO2_r">
+                </imgdir>
+                <imgdir name="stabOF_l">
+                </imgdir>
+                <imgdir name="stabOF_r">
+                </imgdir>
+                <imgdir name="stabT1_l">
+                </imgdir>
+                <imgdir name="stabT1_r">
+                </imgdir>
+                <imgdir name="stabTF_l">
+                </imgdir>
+                <imgdir name="stabTF_r">
+                </imgdir>
+                <imgdir name="shoot1_l">
+                </imgdir>
+                <imgdir name="shoot1_r">
+                </imgdir>
+                <imgdir name="shoot2_l">
+                </imgdir>
+                <imgdir name="shoot2_r">
+                </imgdir>
+                <imgdir name="shootF_l">
+                </imgdir>
+                <imgdir name="shootF_r">
+                </imgdir>
+                <imgdir name="proneStab_l">
+                </imgdir>
+                <imgdir name="proneStab_r">
+                </imgdir>
+                <imgdir name="prone_l">
+                </imgdir>
+                <imgdir name="prone_r">
+                </imgdir>
+                <imgdir name="heal_l">
+                </imgdir>
+                <imgdir name="heal_r">
+                </imgdir>
+                <imgdir name="fly_l">
+                </imgdir>
+                <imgdir name="fly_r">
+                </imgdir>
+                <imgdir name="jump_l">
+                </imgdir>
+                <imgdir name="jump_r">
+                </imgdir>
+                <imgdir name="sit_l">
+                </imgdir>
+                <imgdir name="sit_r">
+                </imgdir>
+                <imgdir name="ladder_l">
+                </imgdir>
+                <imgdir name="ladder_r">
+                </imgdir>
+                <imgdir name="rope_l">
+                </imgdir>
+                <imgdir name="rope_r">
+                </imgdir>
+                <imgdir name="ladder2_l">
+                </imgdir>
+                <imgdir name="ladder2_r">
+                </imgdir>
+                <imgdir name="rope2_l">
+                </imgdir>
+                <imgdir name="rope2_r">
+                </imgdir>
+                <imgdir name="dead_l">
+                </imgdir>
+                <imgdir name="dead_r">
+                </imgdir>
+                <imgdir name="LWImpale_l">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_l/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_l/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_l/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_l/3" />
+                </imgdir>
+                <imgdir name="LWImpale_r">
+                    <uol name="0" value="../../../1/user_action_origin/LWImpale_r/0" />
+                    <uol name="1" value="../../../1/user_action_origin/LWImpale_r/1" />
+                    <uol name="2" value="../../../1/user_action_origin/LWImpale_r/2" />
+                    <uol name="3" value="../../../1/user_action_origin/LWImpale_r/3" />
+                </imgdir>
+                <imgdir name="LWTread_l">
+                </imgdir>
+                <imgdir name="LWTread_r">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="7">
+            <int name="type" value="2" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="move">
+                    <int name="z" value="-3" />
+                    <int name="overlay" value="1" />
+                </imgdir>
+                <imgdir name="trailEff">
+                    <imgdir name="circle">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="square">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="trailEff2">
+                    <imgdir name="start">
+                    </imgdir>
+                    <imgdir name="end">
+                    </imgdir>
+                    <imgdir name="middle">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="stop">
+                </imgdir>
+                <imgdir name="teleport">
+                </imgdir>
+                <imgdir name="customEff">
+                    <imgdir name="0">
+                    </imgdir>
+                    <imgdir name="1">
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="150" />
+                    <int name="rotateImpact" value="5" />
+                    <int name="rotateImpactRange" value="4" />
+                    <int name="rotateImpactDelay" value="480" />
+                    <int name="rotateImpactDelayRange" value="240" />
+                    <float name="cosineIncrease" value="0.9925" />
+                    <float name="cosineIncreaseRate" value="70.0" />
+                    <int name="speedLimit" value="70" />
+                    <int name="moveSoundPlayRate" value="10" />
+                    <int name="increaseDelay" value="660" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                    <int name="delay" value="600" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="3" />
+                    <string name="effectCanvas" value="circle/0/0" />
+                    <int name="delay" value="330" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="type" value="19" />
+                    <int name="z" value="-1" />
+                    <string name="path" value="Effect/particle.img/lw_sword1" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="type" value="19" />
+                    <int name="z" value="1" />
+                    <string name="path" value="Effect/particle.img/lw_sword2" />
+                </imgdir>
+                <imgdir name="5">
+                    <int name="type" value="20" />
+                    <int name="findFromUser" value="1" />
+                    <vector name="lt" x="-515" y="-265" />
+                    <vector name="rb" x="515" y="145" />
+                    <int name="homingStat" value="1" />
+                    <int name="onlyAlert" value="1" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                    <int name="adjustMode" value="1" />
+                </imgdir>
+                <imgdir name="6">
+                    <int name="type" value="23" />
+                    <vector name="lt" x="-900" y="-600" />
+                    <vector name="rb" x="900" y="600" />
+                    <vector name="lt2" x="-400" y="-200" />
+                    <vector name="rb2" x="400" y="125" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="8">
+            <int name="type" value="3" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="endEff2">
+                </imgdir>
+                <imgdir name="startEff">
+                    <int name="z" value="-3" />
+                    <int name="overlay" value="1" />
+                </imgdir>
+                <imgdir name="move">
+                </imgdir>
+                <imgdir name="stop">
+                </imgdir>
+                <imgdir name="teleport">
+                </imgdir>
+                <imgdir name="trailEff">
+                    <imgdir name="circle">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="square">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="150" />
+                    <int name="rotateImpact" value="5" />
+                    <int name="rotateImpactRange" value="4" />
+                    <int name="rotateImpactDelay" value="480" />
+                    <int name="rotateImpactDelayRange" value="240" />
+                    <float name="cosineIncrease" value="0.9925" />
+                    <float name="cosineIncreaseRate" value="70.0" />
+                    <int name="speedLimit" value="70" />
+                    <int name="moveSoundPlayRate" value="3" />
+                    <int name="increaseDelay" value="660" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                    <int name="delay" value="600" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="19" />
+                    <int name="z" value="-1" />
+                    <string name="path" value="Effect/particle.img/lw_sword_infinite1" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="type" value="19" />
+                    <int name="z" value="1" />
+                    <string name="path" value="Effect/particle.img/lw_sword_infinite2" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="type" value="20" />
+                    <int name="findFromUser" value="1" />
+                    <vector name="lt" x="-550" y="-350" />
+                    <vector name="rb" x="550" y="225" />
+                    <int name="homingStat" value="1" />
+                    <int name="onlyAlert" value="1" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                    <int name="adjustMode" value="1" />
+                </imgdir>
+                <imgdir name="5">
+                    <int name="type" value="3" />
+                    <string name="effectCanvas" value="circle/0/0" />
+                    <int name="delay" value="330" />
+                </imgdir>
+                <imgdir name="6">
+                    <int name="type" value="23" />
+                    <vector name="lt" x="-900" y="-600" />
+                    <vector name="rb" x="900" y="600" />
+                    <vector name="lt2" x="-450" y="-275" />
+                    <vector name="rb2" x="450" y="150" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="9">
+            <int name="type" value="4" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="move">
+                    <int name="z" value="-3" />
+                    <int name="overlay" value="1" />
+                </imgdir>
+                <imgdir name="trailEff">
+                    <imgdir name="circle">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="square">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="8" />
+                    <int name="firstImpactRange" value="40" />
+                    <int name="rotateImpact" value="100" />
+                    <int name="rotateImpactRange" value="20" />
+                    <float name="cosineIncrease" value="0.999" />
+                    <float name="cosineIncreaseRate" value="100.0" />
+                    <int name="speedLimit" value="110" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="3" />
+                    <string name="effectCanvas" value="circle/0/0" />
+                    <int name="delay" value="330" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <int name="findFromUser" value="1" />
+                    <vector name="lt" x="-1500" y="-1500" />
+                    <vector name="rb" x="1500" y="1500" />
+                    <int name="homingStat" value="1" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="type" value="9" />
+                    <int name="delay" value="9999" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="10">
+            <int name="type" value="5" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="special">
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="9" />
+                    <int name="delay" value="600" />
+                    <int name="range" value="30" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="11">
+            <int name="type" value="6" />
+            <int name="overlay" value="1" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="special">
+                </imgdir>
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <int name="forward" value="0" />
+        </imgdir>
+        <imgdir name="12">
+            <int name="type" value="8" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="stop">
+                </imgdir>
+                <imgdir name="targetAttackEff">
+                    <imgdir name="0">
+                        <vector name="start" x="-235" y="-195" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <vector name="start" x="235" y="-195" />
+                        <uol name="0" value="../0/0" />
+                        <uol name="1" value="../0/1" />
+                        <uol name="2" value="../0/2" />
+                        <uol name="3" value="../0/3" />
+                        <uol name="4" value="../0/4" />
+                        <uol name="5" value="../0/5" />
+                        <uol name="6" value="../0/6" />
+                        <uol name="7" value="../0/7" />
+                        <uol name="8" value="../0/8" />
+                        <uol name="9" value="../0/9" />
+                        <uol name="10" value="../0/10" />
+                        <uol name="11" value="../0/11" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <vector name="start" x="-235" y="180" />
+                        <uol name="0" value="../0/0" />
+                        <uol name="1" value="../0/1" />
+                        <uol name="2" value="../0/2" />
+                        <uol name="3" value="../0/3" />
+                        <uol name="4" value="../0/4" />
+                        <uol name="5" value="../0/5" />
+                        <uol name="6" value="../0/6" />
+                        <uol name="7" value="../0/7" />
+                        <uol name="8" value="../0/8" />
+                        <uol name="9" value="../0/9" />
+                        <uol name="10" value="../0/10" />
+                        <uol name="11" value="../0/11" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <vector name="start" x="235" y="180" />
+                        <uol name="0" value="../0/0" />
+                        <uol name="1" value="../0/1" />
+                        <uol name="2" value="../0/2" />
+                        <uol name="3" value="../0/3" />
+                        <uol name="4" value="../0/4" />
+                        <uol name="5" value="../0/5" />
+                        <uol name="6" value="../0/6" />
+                        <uol name="7" value="../0/7" />
+                        <uol name="8" value="../0/8" />
+                        <uol name="9" value="../0/9" />
+                        <uol name="10" value="../0/10" />
+                        <uol name="11" value="../0/11" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="9" />
+                    <int name="delay" value="480" />
+                    <int name="targetResetOnEachAttack" value="1" />
+                    <imgdir name="attackEffect">
+                        <int name="randEffect" value="1" />
+                        <int name="hitEffectDelay" value="0" />
+                        <int name="withDisappear" value="1" />
+                        <int name="applyRotate" value="0" />
+                        <int name="randFlip" value="0" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-700" y="-700" />
+                    <vector name="rb" x="700" y="700" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="adjustMode" value="1" />
+                    <int name="findBossFirst" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="13">
+            <int name="type" value="7" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="4" />
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="15" />
+                    <int name="speedLimit" value="15" />
+                    <int name="rotateImpact" value="5" />
+                    <int name="rotateImpactRange" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-500" y="-400" />
+                    <vector name="rb" x="200" y="200" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="14">
+            <int name="type" value="9" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="endEff2">
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="move">
+                </imgdir>
+                <imgdir name="targetAttackEff">
+                    <imgdir name="0">
+                        <int name="anidelay" value="540" />
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="anidelay" value="630" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="anidelay" value="630" />
+                    </imgdir>
+                    <imgdir name="3">
+                        <int name="anidelay" value="720" />
+                    </imgdir>
+                    <imgdir name="4">
+                        <int name="anidelay" value="600" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="15" />
+                    <int name="rotateImpact" value="5" />
+                    <int name="rotateImpactRange" value="10" />
+                    <int name="rotateImpactDelay" value="480" />
+                    <int name="rotateImpactDelayRange" value="1200" />
+                    <float name="cosineIncrease" value="0.9925" />
+                    <float name="cosineIncreaseRate" value="70.0" />
+                    <int name="speedLimit" value="70" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                    <int name="delay" value="600" />
+                    <imgdir name="attackEffect">
+                        <int name="withDisappear" value="1" />
+                        <int name="randEffect" value="1" />
+                        <int name="hitEffectDelay" value="1" />
+                        <int name="randFlip" value="1" />
+                        <int name="applyRotate" value="0" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <int name="bFindBossFirst" value="1" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="15">
+            <int name="type" value="10" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="10" />
+                    <int name="mode" value="2" />
+                    <float name="secondImpact" value="7.0" />
+                    <int name="speedLimit" value="20" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="25" />
+                    <int name="targetType" value="1" />
+                    <int name="delay" value="500" />
+                    <int name="range" value="15" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="16">
+            <int name="type" value="11" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeat" value="1" />
+                    <int name="repeatIdx" value="8" />
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="trailEff">
+                    <imgdir name="square">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="circle">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="120" />
+                    <float name="secondImpact" value="6.0" />
+                    <int name="speedLimit" value="60" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="3" />
+                    <string name="effectCanvas" value="circle/0/0" />
+                    <int name="delay" value="180" />
+                    <string name="glowEffectCanvas" value="circle/glow/2" />
+                    <int name="glowAlpha" value="50" />
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="type" value="19" />
+                    <int name="z" value="-1" />
+                    <string name="path" value="Effect/particle.img/na_scattering_shot" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-450" y="-300" />
+                    <vector name="rb" x="450" y="300" />
+                    <int name="findBossFirst" value="1" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                    <int name="adjustMode" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="17">
+            <int name="type" value="12" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="targetAttackEff">
+                    <imgdir name="0">
+                        <int name="overlay" value="0" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="2" />
+                </imgdir>
+                <imgdir name="teleport">
+                    <int name="z" value="2" />
+                </imgdir>
+                <imgdir name="trailEff">
+                    <imgdir name="circle">
+                        <imgdir name="0">
+                        </imgdir>
+                        <imgdir name="glow">
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="customEff">
+                    <imgdir name="0">
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="z" value="2" />
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="z" value="2" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="9" />
+                    <int name="delay" value="1320" />
+                    <int name="pause" value="1" />
+                    <imgdir name="attackEffect">
+                        <int name="withDisappear" value="1" />
+                        <int name="stopOnEffect" value="1" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="20" />
+                    <int name="pause" value="1" />
+                    <vector name="lt" x="-400" y="-225" />
+                    <vector name="rb" x="400" y="140" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="findBossFirst" value="1" />
+                    <int name="avoidLastAttackMob" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="3" />
+                    <string name="effectCanvas" value="circle/0/0" />
+                    <int name="delay" value="420" />
+                    <int name="z" value="-1" />
+                    <int name="skipDistance" value="700" />
+                </imgdir>
+                <imgdir name="3">
+                    <int name="type" value="29" />
+                    <int name="origin" value="1" />
+                    <int name="offsetY" value="-10" />
+                    <int name="radius" value="150" />
+                    <float name="mulY" value="0.5" />
+                    <float name="speed" value="0.2" />
+                </imgdir>
+                <imgdir name="4">
+                    <int name="type" value="8" />
+                    <int name="pause" value="1" />
+                    <int name="rotateOnStop" value="0" />
+                    <float name="secondImpact" value="2.0" />
+                    <int name="speedLimit" value="45" />
+                    <int name="firstImpact" value="30" />
+                    <int name="rotateImpact" value="3" />
+                    <int name="rotateImpactRange" value="2" />
+                    <int name="rotateImpactDelay" value="480" />
+                    <int name="rotateImpactDelayRange" value="360" />
+                </imgdir>
+                <imgdir name="5">
+                    <int name="type" value="23" />
+                    <int name="pause" value="1" />
+                    <vector name="lt" x="-800" y="-500" />
+                    <vector name="rb" x="800" y="500" />
+                    <vector name="lt2" x="-400" y="-200" />
+                    <vector name="rb2" x="400" y="150" />
+                </imgdir>
+            </imgdir>
+            <int name="overlay" value="1" />
+        </imgdir>
+        <imgdir name="18">
+            <int name="forward" value="0" />
+            <int name="overlay" value="1" />
+            <int name="fixZ" value="1" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="startEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+                <imgdir name="endEff">
+                    <int name="z" value="-1" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="28" />
+                    <int name="attackDelay" value="300" />
+                    <int name="mobCount" value="12" />
+                    <vector name="lt" x="-300" y="-410" />
+                    <vector name="rb" x="300" y="50" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="19">
+            <int name="type" value="13" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="endEff2">
+                </imgdir>
+                <imgdir name="customEff">
+                    <imgdir name="0">
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="repeatIdx" value="6" />
+                    </imgdir>
+                    <imgdir name="2">
+                    </imgdir>
+                    <imgdir name="3">
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="pause" value="1" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="65" />
+                    <float name="secondImpact" value="50.0" />
+                    <int name="speedLimit" value="65" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                    <int name="pause" value="1" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-800" y="-300" />
+                    <vector name="rb" x="-5" y="225" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="adjustMode" value="1" />
+                    <int name="findBossFirst" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="20">
+            <int name="type" value="14" />
+            <int name="overlay" value="1" />
+            <int name="fixZ" value="1" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="21">
+            <int name="type" value="16" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="4" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+                <imgdir name="stop">
+                </imgdir>
+                <imgdir name="endEff2">
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="30" />
+                    <float name="secondImpact" value="11.0" />
+                    <int name="speedLimit" value="50" />
+                    <int name="speedRate" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-150" y="-150" />
+                    <vector name="rb" x="150" y="150" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                    <int name="alwaysRangeCheck" value="1" />
+                    <int name="findBossFirst" value="1" />
+                    <int name="fixfindPosition" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="22">
+            <string name="link" value="AMroughEruption" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="23">
+            <int name="type" value="17" />
+            <int name="forward" value="0" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="35" />
+                    <int name="speedLimit" value="35" />
+                    <float name="secondImpact" value="4.0" />
+                    <int name="rotateImpact" value="5" />
+                    <int name="rotateImpactRange" value="1" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-150" y="-150" />
+                    <vector name="rb" x="150" y="150" />
+                    <int name="findBossFirst" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="24">
+            <string name="link" value="AMeruptionAll" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="25">
+            <string name="link" value="AMroughEruption" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="26">
+            <string name="link" value="AMroughEruption" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="27">
+            <string name="link" value="AMroughEruption" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="28">
+            <string name="link" value="AMeruptionAll" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="29">
+            <string name="link" value="AMeruptionAll" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="30">
+            <string name="link" value="AMeruptionAll" />
+            <imgdir name="layer">
+                <imgdir name="parentAtom">
+                    <int name="repeatIdx" value="11" />
+                </imgdir>
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="31">
+            <int name="type" value="15" />
+            <int name="forward" value="0" />
+            <int name="overlay" value="2" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="32">
+            <int name="type" value="15" />
+            <int name="forward" value="0" />
+            <int name="overlay" value="2" />
+            <imgdir name="layer">
+                <imgdir name="startEff">
+                </imgdir>
+                <imgdir name="parentAtom">
+                </imgdir>
+                <imgdir name="endEff">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="template">
+        <imgdir name="AMroughEruption">
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="20" />
+                    <float name="secondImpact" value="19.0" />
+                    <int name="speedLimit" value="65" />
+                    <int name="speedRate" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-300" y="-250" />
+                    <vector name="rb" x="300" y="250" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="AMeruptionAll">
+            <imgdir name="command">
+                <imgdir name="0">
+                    <int name="type" value="8" />
+                    <int name="rotateOnStop" value="0" />
+                    <int name="firstImpact" value="20" />
+                    <float name="secondImpact" value="19.0" />
+                    <int name="speedLimit" value="65" />
+                    <int name="speedRate" value="2" />
+                </imgdir>
+                <imgdir name="1">
+                    <int name="type" value="9" />
+                </imgdir>
+                <imgdir name="2">
+                    <int name="type" value="20" />
+                    <vector name="lt" x="-400" y="-400" />
+                    <vector name="rb" x="400" y="400" />
+                    <int name="longTimeLadderOrRopeCheck" value="1" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

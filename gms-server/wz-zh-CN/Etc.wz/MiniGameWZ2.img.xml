@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="MiniGameWZ2.img">
+    <imgdir name="BumpCar">
+        <imgdir name="Type0">
+            <imgdir name="CarTemplates">
+                <string name="info" value="0: 낡은 범퍼카 / 1: 일반 범퍼카 / 2: 슈퍼 범퍼카 / prob: 게임시작 시 탑승할 확률" />
+                <imgdir name="red">
+                    <imgdir name="0">
+                        <int name="prob" value="15" />
+                        <float name="restitution" value="1.4" />
+                        <float name="density" value="0.9" />
+                        <float name="linearDamping" value="0.9" />
+                        <float name="power" value="4500.0" />
+                        <vector name="lt" x="-52" y="-108" />
+                        <vector name="rb" x="69" y="5" />
+                        <imgdir name="avatar">
+                            <imgdir name="move">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-2" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="0" y="-54" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <imgdir name="stand">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-57" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <string name="info" value="stand1,2: 제자리 / move: 이동 / 0~3: 애니메이션 + 0프레임:캐릭터보다 앞, 1프레임: 캐릭터보다 뒤 / delay 재생속도" />
+                        </imgdir>
+                        <imgdir name="bounding">
+                            <imgdir name="0">
+                                <vector name="lt" x="-68" y="-120" />
+                                <vector name="rb" x="68" y="-1" />
+                                <string name="type" value="Collide" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <vector name="lt" x="-5" y="-60" />
+                                <vector name="rb" x="5" y="-50" />
+                                <string name="type" value="RingOut" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <vector name="lt" x="-8" y="-63" />
+                                <vector name="rb" x="8" y="-47" />
+                                <string name="type" value="Trap" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="prob" value="70" />
+                        <float name="restitution" value="1.2" />
+                        <float name="density" value="1.0" />
+                        <float name="linearDamping" value="1.0" />
+                        <float name="power" value="6000.0" />
+                        <vector name="lt" x="-52" y="-108" />
+                        <vector name="rb" x="69" y="5" />
+                        <imgdir name="avatar">
+                            <imgdir name="move">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-2" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="0" y="-54" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <imgdir name="stand">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-57" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="bounding">
+                            <imgdir name="0">
+                                <vector name="lt" x="-68" y="-120" />
+                                <vector name="rb" x="68" y="-1" />
+                                <string name="type" value="Collide" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <vector name="lt" x="-5" y="-60" />
+                                <vector name="rb" x="5" y="-50" />
+                                <string name="type" value="RingOut" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <vector name="lt" x="-8" y="-63" />
+                                <vector name="rb" x="8" y="-47" />
+                                <string name="type" value="Trap" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="prob" value="15" />
+                        <float name="restitution" value="1.0" />
+                        <float name="density" value="1.05" />
+                        <float name="linearDamping" value="1.05" />
+                        <float name="power" value="7500.0" />
+                        <vector name="lt" x="-52" y="-108" />
+                        <vector name="rb" x="69" y="5" />
+                        <imgdir name="avatar">
+                            <imgdir name="move">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-2" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="0" y="-54" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <imgdir name="stand">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-57" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="bounding">
+                            <imgdir name="0">
+                                <vector name="lt" x="-68" y="-120" />
+                                <vector name="rb" x="68" y="-1" />
+                                <string name="type" value="Collide" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <vector name="lt" x="-5" y="-60" />
+                                <vector name="rb" x="5" y="-50" />
+                                <string name="type" value="RingOut" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <vector name="lt" x="-8" y="-63" />
+                                <vector name="rb" x="8" y="-47" />
+                                <string name="type" value="Trap" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+                <imgdir name="blue">
+                    <imgdir name="0">
+                        <int name="prob" value="15" />
+                        <float name="restitution" value="1.4" />
+                        <float name="density" value="0.9" />
+                        <float name="linearDamping" value="0.9" />
+                        <float name="power" value="4500.0" />
+                        <vector name="lt" x="-52" y="-108" />
+                        <vector name="rb" x="69" y="5" />
+                        <imgdir name="avatar">
+                            <string name="info" value="stand1,2: 제자리 / move: 이동 / 0~3: 애니메이션 + 0프레임:캐릭터보다 앞, 1프레임: 캐릭터보다 뒤 / delay 재생속도" />
+                            <imgdir name="move">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-2" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="0" y="-54" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <imgdir name="stand">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-57" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="bounding">
+                            <imgdir name="0">
+                                <vector name="lt" x="-68" y="-120" />
+                                <vector name="rb" x="68" y="-1" />
+                                <string name="type" value="Collide" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <vector name="lt" x="-5" y="-60" />
+                                <vector name="rb" x="5" y="-50" />
+                                <string name="type" value="RingOut" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <vector name="lt" x="-8" y="-63" />
+                                <vector name="rb" x="8" y="-47" />
+                                <string name="type" value="Trap" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="1">
+                        <int name="prob" value="70" />
+                        <float name="restitution" value="1.2" />
+                        <float name="density" value="1.0" />
+                        <float name="linearDamping" value="1.0" />
+                        <float name="power" value="6000.0" />
+                        <vector name="lt" x="-52" y="-108" />
+                        <vector name="rb" x="69" y="5" />
+                        <imgdir name="avatar">
+                            <imgdir name="move">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-2" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="0" y="-54" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <imgdir name="stand">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-57" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="bounding">
+                            <imgdir name="0">
+                                <vector name="lt" x="-68" y="-120" />
+                                <vector name="rb" x="68" y="-1" />
+                                <string name="type" value="Collide" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <vector name="lt" x="-5" y="-60" />
+                                <vector name="rb" x="5" y="-50" />
+                                <string name="type" value="RingOut" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <vector name="lt" x="-8" y="-63" />
+                                <vector name="rb" x="8" y="-47" />
+                                <string name="type" value="Trap" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="2">
+                        <int name="prob" value="15" />
+                        <float name="restitution" value="1.0" />
+                        <float name="density" value="1.05" />
+                        <float name="linearDamping" value="1.05" />
+                        <float name="power" value="7500.0" />
+                        <vector name="lt" x="-52" y="-108" />
+                        <vector name="rb" x="69" y="5" />
+                        <imgdir name="avatar">
+                            <imgdir name="move">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-2" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="60" />
+                                                    <vector name="pos" x="0" y="-54" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                            <imgdir name="stand">
+                                <imgdir name="LayerSlots">
+                                    <imgdir name="Slot0">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                    <imgdir name="Slot1">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <int name="z" value="-1" />
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                                <imgdir name="VectorSlots">
+                                    <imgdir name="SitSlot">
+                                        <imgdir name="Segment0">
+                                            <imgdir name="AnimReference">
+                                                <imgdir name="0">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                                <imgdir name="1">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-57" />
+                                                </imgdir>
+                                                <imgdir name="2">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-56" />
+                                                </imgdir>
+                                                <imgdir name="3">
+                                                    <int name="delay" value="90" />
+                                                    <vector name="pos" x="-1" y="-55" />
+                                                </imgdir>
+                                            </imgdir>
+                                        </imgdir>
+                                    </imgdir>
+                                </imgdir>
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="bounding">
+                            <imgdir name="0">
+                                <vector name="lt" x="-68" y="-120" />
+                                <vector name="rb" x="68" y="-1" />
+                                <string name="type" value="Collide" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <vector name="lt" x="-5" y="-60" />
+                                <vector name="rb" x="5" y="-50" />
+                                <string name="type" value="RingOut" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <vector name="lt" x="-8" y="-63" />
+                                <vector name="rb" x="8" y="-47" />
+                                <string name="type" value="Trap" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="StartPoints">
+                <imgdir name="0">
+                    <string name="team" value="red" />
+                    <vector name="pos" x="-465" y="-210" />
+                </imgdir>
+                <imgdir name="1">
+                    <string name="team" value="red" />
+                    <vector name="pos" x="-560" y="0" />
+                </imgdir>
+                <imgdir name="2">
+                    <string name="team" value="red" />
+                    <vector name="pos" x="-465" y="210" />
+                </imgdir>
+                <imgdir name="3">
+                    <string name="team" value="blue" />
+                    <vector name="pos" x="465" y="-210" />
+                </imgdir>
+                <imgdir name="4">
+                    <string name="team" value="blue" />
+                    <vector name="pos" x="560" y="0" />
+                </imgdir>
+                <imgdir name="5">
+                    <string name="team" value="blue" />
+                    <vector name="pos" x="465" y="210" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="Obstacles">
+                <imgdir name="0">
+                    <vector name="lt" x="-60" y="-90" />
+                    <vector name="rb" x="60" y="-5" />
+                    <string name="type" value="Block" />
+                </imgdir>
+                <imgdir name="1">
+                    <vector name="lt" x="-40" y="-66" />
+                    <vector name="rb" x="40" y="-4" />
+                    <string name="type" value="Block" />
+                </imgdir>
+                <imgdir name="2">
+                    <vector name="lt" x="-35" y="-65" />
+                    <vector name="rb" x="38" y="4" />
+                    <string name="type" value="Block" />
+                </imgdir>
+                <imgdir name="3">
+                    <vector name="lt" x="-26" y="-62" />
+                    <vector name="rb" x="27" y="-6" />
+                    <string name="type" value="Block" />
+                </imgdir>
+                <imgdir name="4">
+                    <vector name="lt" x="-51" y="-111" />
+                    <vector name="rb" x="49" y="-54" />
+                    <string name="type" value="Hole" />
+                </imgdir>
+                <imgdir name="5">
+                    <vector name="lt" x="-53" y="-105" />
+                    <vector name="rb" x="50" y="-44" />
+                    <string name="type" value="Hole" />
+                </imgdir>
+                <string name="info" value="z =1 : 캐릭터보다 앞 / z=-1 : 캐릭터보다 뒤 / ltrb : 충돌 영역 (닿으면 반대로 튕기거나 아웃)" />
+            </imgdir>
+            <imgdir name="ObstacleSpawnArea">
+                <int name="count" value="4" />
+                <vector name="0" x="-185" y="-210" />
+                <vector name="1" x="240" y="-90" />
+                <vector name="2" x="-220" y="140" />
+                <vector name="3" x="185" y="325" />
+            </imgdir>
+            <int name="StageRadiusA" value="750" />
+            <int name="StageRadiusB" value="420" />
+            <int name="NumQuaterSplits" value="100" />
+            <imgdir name="Effects">
+                <string name="info" value="collision: 충돌시 이펙트 / out: 아웃시 머리위에 출력될 loop 이펙트 / booster: 부스터 사용시 출력될 loop 이펙트" />
+                <imgdir name="collision">
+                </imgdir>
+                <imgdir name="out">
+                </imgdir>
+                <imgdir name="booster">
+                </imgdir>
+            </imgdir>
+            <vector name="StageOrigin" x="0" y="0" />
+            <int name="Playtime" value="65" />
+            <imgdir name="Booster">
+                <int name="rate" value="250" />
+                <int name="time" value="2500" />
+                <int name="cooltime" value="15000" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

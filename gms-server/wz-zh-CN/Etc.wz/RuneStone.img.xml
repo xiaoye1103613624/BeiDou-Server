@@ -1,0 +1,3417 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="RuneStone.img">
+    <imgdir name="runeStone">
+        <imgdir name="0">
+            <string name="info" value="基础" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏后消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <string name="info" value="万圣节" />
+            <int name="type" value="1" />
+            <vector name="space" x="0" y="-30" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <string name="info" value="5000日" />
+            <int name="type" value="1" />
+            <vector name="space" x="0" y="-30" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <string name="info" value="2018农历新年" />
+            <vector name="space" x="0" y="-35" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文登场了！请释放符文，应用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="4">
+            <string name="info" value="2017蜂蜜" />
+            <int name="type" value="1" />
+            <vector name="space" x="0" y="-30" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现了！请解放符文，享用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="5">
+            <string name="info" value="2017NOVA" />
+            <int name="type" value="1" />
+            <vector name="space" x="0" y="-80" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <uol name="0" value="../../../0/0/destroy/0" />
+                    <uol name="1" value="../../../0/0/destroy/1" />
+                    <uol name="2" value="../../../0/0/destroy/2" />
+                    <uol name="3" value="../../../0/0/destroy/3" />
+                    <uol name="4" value="../../../0/0/destroy/4" />
+                    <uol name="5" value="../../../0/0/destroy/5" />
+                    <uol name="6" value="../../../0/0/destroy/6" />
+                    <uol name="7" value="../../../0/0/destroy/7" />
+                    <uol name="8" value="../../../0/0/destroy/8" />
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现！请解放符文，享用其力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将销毁。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="6">
+            <string name="info" value="2022 춘절" />
+            <int name="type" value="1" />
+            <vector name="space" x="0" y="-35" />
+            <imgdir name="0">
+                <string name="viewName" value="神速符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="神速符文：所有的速度上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <string name="viewName" value="重生符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="重生符文：恢复力、状态异常抗性及稳如泰山上升，获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <string name="viewName" value="破灭符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="破灭符文：攻击力增强，获得解放的符文之力。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="3">
+                <string name="viewName" value="雷之符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="雷之符文：落下强力雷电，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="4">
+                <string name="viewName" value="地震符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="地震符文：变得巨大无比，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="5">
+                <string name="viewName" value="黑暗符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="黑暗符文：召唤强大的敌人，获得被解放的符文力量。 " />
+                        <int name="delay" value="90" />
+                        <string name="msgException" value="黑暗符文：已召唤出强大的敌人，只获得被解放的符文力量。" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="6">
+                <string name="viewName" value="宝物符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="宝物符文：召唤神秘怪物，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="7">
+                <string name="viewName" value="超越符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="超越符文：受冷却时间初始化效果影响的技能的冷却时间缩短为5秒，获得被解放的符文力量。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                    <uol name="0" value="../../0/destroy/0" />
+                    <uol name="1" value="../../0/destroy/1" />
+                    <uol name="2" value="../../0/destroy/2" />
+                    <uol name="3" value="../../0/destroy/3" />
+                    <uol name="4" value="../../0/destroy/4" />
+                    <uol name="5" value="../../0/destroy/5" />
+                    <uol name="6" value="../../0/destroy/6" />
+                    <uol name="7" value="../../0/destroy/7" />
+                    <uol name="8" value="../../0/destroy/8" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="8">
+                <string name="viewName" value="净化符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文出现啦！去解放符文，享用力量吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="净化符文：吸收消灭敌人的能量后，释放生成净化周围的棱镜，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级太低，无法控制符文之力！控制失败的符文将损毁消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="9">
+                <string name="viewName" value="光线符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="光线符文：神圣的光线将符文和角色连接起来，攻击敌人，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏并消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+            <imgdir name="10">
+                <string name="viewName" value="转移符文" />
+                <imgdir name="stay">
+                </imgdir>
+                <imgdir name="appear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="20" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="符文已登场！请纵享解放符文之力吧。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="disappear">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="18" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="转移符文：攻击时，强烈的火焰进行转移，攻击周围怪物，获得解放的符文之力。" />
+                        <int name="delay" value="90" />
+                    </imgdir>
+                </imgdir>
+                <imgdir name="effect">
+                </imgdir>
+                <imgdir name="destroy">
+                    <imgdir name="msgFont">
+                        <int name="fontNameType" value="3" />
+                        <int name="fontSize" value="16" />
+                        <int name="fontColorType" value="20" />
+                        <string name="msg" value="角色等级较低，无法控制符文之力！控制失败的符文将被破坏后消失。" />
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="noticeInRect">
+    </imgdir>
+    <imgdir name="errMsgFont">
+        <int name="fontNameType" value="3" />
+        <int name="fontSize" value="20" />
+        <int name="fontColorType" value="20" />
+    </imgdir>
+    <imgdir name="streamBait">
+        <imgdir name="0">
+            <string name="viewName" value="强力诱饵" />
+            <imgdir name="appear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="20" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="激流地带出现了诱饵。请发动诱饵获得力量。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="disappear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="18" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="强力诱饵：攻击力提高，获得%d%%的额外经验值。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="destroy">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="16" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="角色等级太低，无法控制诱饵之力！控制失败的诱饵将损毁消失。" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <string name="viewName" value="雷鸣诱饵" />
+            <imgdir name="appear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="20" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="激流地带出现了诱饵。请发动诱饵获得力量。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="disappear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="18" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="雷鸣诱饵：四处打雷攻击怪物。获得%d%%的额外经验值。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="destroy">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="16" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="角色等级太低，无法控制诱饵之力！控制失败的诱饵将损毁消失。" />
+                </imgdir>
+                <uol name="0" value="../../0/destroy/0" />
+                <uol name="1" value="../../0/destroy/1" />
+                <uol name="2" value="../../0/destroy/2" />
+                <uol name="3" value="../../0/destroy/3" />
+                <uol name="4" value="../../0/destroy/4" />
+                <uol name="5" value="../../0/destroy/5" />
+                <uol name="6" value="../../0/destroy/6" />
+                <uol name="7" value="../../0/destroy/7" />
+                <uol name="8" value="../../0/destroy/8" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <string name="viewName" value="神速诱饵" />
+            <imgdir name="appear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="20" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="激流地带出现了诱饵。请发动诱饵获得力量。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="disappear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="18" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="神速诱饵：所有速度加快，获得%d%%的额外经验值。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="destroy">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="16" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="角色等级太低，无法控制诱饵之力！控制失败的诱饵将损毁消失。" />
+                </imgdir>
+                <uol name="0" value="../../0/destroy/0" />
+                <uol name="1" value="../../0/destroy/1" />
+                <uol name="2" value="../../0/destroy/2" />
+                <uol name="3" value="../../0/destroy/3" />
+                <uol name="4" value="../../0/destroy/4" />
+                <uol name="5" value="../../0/destroy/5" />
+                <uol name="6" value="../../0/destroy/6" />
+                <uol name="7" value="../../0/destroy/7" />
+                <uol name="8" value="../../0/destroy/8" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <string name="viewName" value="超越诱饵" />
+            <imgdir name="appear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="20" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="激流地带出现了诱饵。请发动诱饵获得力量。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="disappear">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="18" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="超越诱饵：技能受冷却时间初始化的影响，冷却时间缩减为5秒。获得%d%%额外经验值。" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="destroy">
+                <imgdir name="msgFont">
+                    <int name="fontNameType" value="3" />
+                    <int name="fontSize" value="16" />
+                    <int name="fontColorType" value="20" />
+                    <string name="msg" value="角色等级太低，无法控制诱饵之力！控制失败的诱饵将损毁消失。" />
+                </imgdir>
+                <uol name="0" value="../../0/destroy/0" />
+                <uol name="1" value="../../0/destroy/1" />
+                <uol name="2" value="../../0/destroy/2" />
+                <uol name="3" value="../../0/destroy/3" />
+                <uol name="4" value="../../0/destroy/4" />
+                <uol name="5" value="../../0/destroy/5" />
+                <uol name="6" value="../../0/destroy/6" />
+                <uol name="7" value="../../0/destroy/7" />
+                <uol name="8" value="../../0/destroy/8" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow2">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow3">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow4">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow5">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow6">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow7">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="Noise">
+    </imgdir>
+    <imgdir name="arrow8">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="arrow9">
+        <imgdir name="0">
+            <imgdir name="stay">
+            </imgdir>
+            <imgdir name="success">
+            </imgdir>
+            <imgdir name="fail">
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

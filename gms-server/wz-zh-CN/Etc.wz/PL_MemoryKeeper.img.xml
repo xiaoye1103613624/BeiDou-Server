@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="PL_MemoryKeeper.img">
+    <imgdir name="Training">
+        <int name="questID" value="64326" />
+        <imgdir name="Msg">
+            <string name="info" value="버프별로 현재의 단계가 보여지는 텍스트( UI 하단 정보)" />
+            <imgdir name="0">
+                <string name="name" value="攻击力/魔力" />
+                <string name="msg" value="攻击力/魔力增加%d" />
+            </imgdir>
+            <imgdir name="1">
+                <string name="name" value="伤害" />
+                <string name="msg" value="攻击普通怪物时造成的伤害增加%d%%" />
+            </imgdir>
+            <imgdir name="2">
+                <string name="name" value="Boss伤害" />
+                <string name="msg" value="攻击Boss怪物时造成的伤害增加%d%%" />
+            </imgdir>
+            <imgdir name="3">
+                <string name="name" value="防御率无视" />
+                <string name="msg" value="增加无视怪物防御力 %d%% " />
+            </imgdir>
+            <imgdir name="4">
+                <string name="name" value="暴击率" />
+                <string name="msg" value="暴击率增加%d%%" />
+            </imgdir>
+            <imgdir name="5">
+                <string name="name" value="最大血量/魔量" />
+                <string name="msg" value="最大血量/魔量增加%d" />
+            </imgdir>
+            <imgdir name="6">
+                <string name="name" value="全属性" />
+                <string name="msg" value="全属性增加%d" />
+            </imgdir>
+            <imgdir name="7">
+                <string name="name" value="怪物收藏登记概率" />
+                <string name="msg" value="怪物收藏登记概率增加%d%%" />
+            </imgdir>
+            <imgdir name="8">
+                <string name="name" value="暴击伤害增加%d%%" />
+                <string name="msg" value="暴击伤害增加%d%%" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="LevelNeedCount">
+            <string name="info" value="레벨 업 시 단계 별로 소모되는 메모리 결정석 수량" />
+            <int name="0" value="0" />
+            <int name="1" value="20" />
+            <int name="2" value="40" />
+            <int name="3" value="60" />
+            <int name="4" value="80" />
+            <int name="5" value="100" />
+        </imgdir>
+        <imgdir name="BuffEffect">
+            <string name="info" value="버프별 단계 혜택" />
+            <imgdir name="0">
+                <string name="info" value="공격력/마력" />
+                <int name="0" value="0" />
+                <int name="1" value="4" />
+                <int name="2" value="8" />
+                <int name="3" value="12" />
+                <int name="4" value="16" />
+                <int name="5" value="20" />
+            </imgdir>
+            <imgdir name="1">
+                <string name="info" value="일반몬스터 공격 시 데미지 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="4" />
+                <int name="2" value="8" />
+                <int name="3" value="12" />
+                <int name="4" value="16" />
+                <int name="5" value="20" />
+            </imgdir>
+            <imgdir name="2">
+                <string name="info" value="보스몬스터 공격 시 데미지 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="4" />
+                <int name="2" value="8" />
+                <int name="3" value="12" />
+                <int name="4" value="16" />
+                <int name="5" value="20" />
+            </imgdir>
+            <imgdir name="3">
+                <string name="info" value="몬스터 방어력 무시 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="4" />
+                <int name="2" value="8" />
+                <int name="3" value="12" />
+                <int name="4" value="16" />
+                <int name="5" value="20" />
+            </imgdir>
+            <imgdir name="4">
+                <string name="info" value="크리티컬 확률 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="4" />
+                <int name="2" value="8" />
+                <int name="3" value="12" />
+                <int name="4" value="16" />
+                <int name="5" value="20" />
+            </imgdir>
+            <imgdir name="5">
+                <string name="info" value="최대 HP / MP 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="500" />
+                <int name="2" value="750" />
+                <int name="3" value="1000" />
+                <int name="4" value="1250" />
+                <int name="5" value="1500" />
+            </imgdir>
+            <imgdir name="6">
+                <string name="info" value="올스탯 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="4" />
+                <int name="2" value="8" />
+                <int name="3" value="12" />
+                <int name="4" value="16" />
+                <int name="5" value="20" />
+            </imgdir>
+            <imgdir name="7">
+                <string name="info" value="몬스터 컬렉션 추가 등록 확률" />
+                <int name="0" value="0" />
+                <int name="1" value="5" />
+                <int name="2" value="10" />
+            </imgdir>
+            <imgdir name="8">
+                <string name="info" value="크리티컬 데미지 증가" />
+                <int name="0" value="0" />
+                <int name="1" value="5" />
+                <int name="2" value="10" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="LvMsg">
+            <string name="info" value="UI 팝업 용 메세지" />
+            <imgdir name="0">
+                <string name="name" value="点击成长按钮时" />
+                <string name="msg" value="%s确定将效果成长至%d级吗？\n（需要记忆结晶数量：%d个）" />
+            </imgdir>
+            <imgdir name="1">
+                <string name="name" value="升级点数处于正常状态时" />
+                <string name="msg" value="%s 效果成长至%d级。" />
+            </imgdir>
+            <imgdir name="2">
+                <string name="name" value="升级点数不够时" />
+                <string name="msg" value="拥有的记忆结晶数量无法使%s效果成长。请查看记忆结晶的数量。" />
+            </imgdir>
+            <imgdir name="3">
+                <string name="name" value="将每日2次成长次数全部用掉时" />
+                <string name="msg" value="今天完成了2次记忆守护者训练。" />
+            </imgdir>
+            <imgdir name="4">
+                <string name="name" value="发动第一套套装效果时" />
+                <string name="msg" value="发动记忆守护者奖励效果。" />
+            </imgdir>
+            <imgdir name="5">
+                <string name="name" value="发动第二套套装效果时" />
+                <string name="msg" value="记忆守护者奖励效果变得更强了。" />
+            </imgdir>
+            <imgdir name="6">
+                <string name="name" value="当前没有获得任何效果时（toal = 0）" />
+                <string name="msg" value="当前没有应用的效果。" />
+            </imgdir>
+            <imgdir name="7">
+                <string name="name" value="奖励标识" />
+                <string name="msg" value="奖励" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="BossWill.img">
+    <imgdir name="Will">
+        <imgdir name="0">
+            <string name="info" value="easy" />
+            <imgdir name="Phase1">
+                <int name="id" value="8880310" />
+                <int name="dummy1ID" value="8880332" />
+                <int name="dummy2ID" value="8880336" />
+            </imgdir>
+            <imgdir name="Phase2">
+                <int name="id" value="8880311" />
+                <int name="dummy1ID" value="8880333" />
+                <int name="dummy2ID" value="8880337" />
+            </imgdir>
+            <imgdir name="Phase3">
+                <int name="id" value="8880312" />
+                <int name="dummy1ID" value="8880334" />
+                <int name="dummy2ID" value="8880338" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <string name="info" value="normal" />
+            <imgdir name="Phase1">
+                <int name="id" value="8880340" />
+                <imgdir name="Bottom">
+                    <int name="id" value="8880343" />
+                    <int name="dummy1ID" value="8880351" />
+                    <int name="dummy2ID" value="8880355" />
+                </imgdir>
+                <imgdir name="Top">
+                    <int name="id" value="8880344" />
+                    <int name="dummy1ID" value="8880352" />
+                    <int name="dummy2ID" value="8880356" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="Phase2">
+                <int name="id" value="8880341" />
+                <int name="dummy1ID" value="8880353" />
+                <int name="dummy2ID" value="8880357" />
+            </imgdir>
+            <imgdir name="Phase3">
+                <int name="id" value="8880342" />
+                <int name="dummy1ID" value="8880354" />
+                <int name="dummy2ID" value="8880358" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <string name="info" value="hard" />
+            <imgdir name="Phase1">
+                <int name="id" value="8880300" />
+                <imgdir name="Bottom">
+                    <int name="id" value="8880303" />
+                    <int name="dummy1ID" value="8880321" />
+                    <int name="dummy2ID" value="8880325" />
+                </imgdir>
+                <imgdir name="Top">
+                    <int name="id" value="8880304" />
+                    <int name="dummy1ID" value="8880322" />
+                    <int name="dummy2ID" value="8880326" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="Phase2">
+                <int name="id" value="8880301" />
+                <int name="dummy1ID" value="8880323" />
+                <int name="dummy2ID" value="8880327" />
+            </imgdir>
+            <imgdir name="Phase3">
+                <int name="id" value="8880302" />
+                <int name="dummy1ID" value="8880324" />
+                <int name="dummy2ID" value="8880328" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="Beholder">
+        <imgdir name="Config">
+            <imgdir name="0">
+                <imgdir name="Phase1">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-470" />
+                                <int name="ry" value="-440" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="470" />
+                                <int name="ry" value="-440" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-250" />
+                                <int name="ry" value="-370" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="250" />
+                                <int name="ry" value="-370" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="-405" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="405" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="3" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="5" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+                <imgdir name="Phase2">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-310" />
+                                <int name="ry" value="-350" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="310" />
+                                <int name="ry" value="-350" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-380" />
+                                <int name="ry" value="-330" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="380" />
+                                <int name="ry" value="-330" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="-530" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="0" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <int name="x" value="530" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="3" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="8" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+                <imgdir name="Phase3">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-330" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="-330" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-400" />
+                                <int name="ry" value="-425" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="400" />
+                                <int name="ry" value="-425" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="0" />
+                                <int name="ry" value="-280" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="3" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="5" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <imgdir name="Phase1">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-470" />
+                                <int name="ry" value="-440" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="470" />
+                                <int name="ry" value="-440" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-250" />
+                                <int name="ry" value="-370" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="250" />
+                                <int name="ry" value="-370" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="-405" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="405" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="5" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="5" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+                <imgdir name="Phase2">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-310" />
+                                <int name="ry" value="-350" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="310" />
+                                <int name="ry" value="-350" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-380" />
+                                <int name="ry" value="-330" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="380" />
+                                <int name="ry" value="-330" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="-530" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="0" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <int name="x" value="530" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="5" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="8" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+                <imgdir name="Phase3">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-330" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="-330" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-400" />
+                                <int name="ry" value="-425" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="400" />
+                                <int name="ry" value="-425" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="0" />
+                                <int name="ry" value="-280" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="5" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="5" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <imgdir name="Phase1">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-470" />
+                                <int name="ry" value="-440" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="470" />
+                                <int name="ry" value="-440" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-250" />
+                                <int name="ry" value="-370" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="250" />
+                                <int name="ry" value="-370" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="-405" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="405" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="5" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="5" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+                <imgdir name="Phase2">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-310" />
+                                <int name="ry" value="-350" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="310" />
+                                <int name="ry" value="-350" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-380" />
+                                <int name="ry" value="-330" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="380" />
+                                <int name="ry" value="-330" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="-530" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="0" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                            <imgdir name="2">
+                                <int name="x" value="530" />
+                                <int name="ry" value="-300" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="5" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="8" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+                <imgdir name="Phase3">
+                    <imgdir name="Gen">
+                        <imgdir name="0">
+                            <imgdir name="0">
+                                <int name="x" value="-330" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="-330" />
+                                <int name="ry" value="-400" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="1">
+                            <imgdir name="0">
+                                <int name="x" value="-400" />
+                                <int name="ry" value="-425" />
+                            </imgdir>
+                            <imgdir name="1">
+                                <int name="x" value="400" />
+                                <int name="ry" value="-425" />
+                            </imgdir>
+                        </imgdir>
+                        <imgdir name="2">
+                            <imgdir name="0">
+                                <int name="x" value="0" />
+                                <int name="ry" value="-280" />
+                            </imgdir>
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Straight">
+                        <imgdir name="0">
+                            <int name="shootAngleRate" value="300" />
+                            <int name="shootSpeed" value="100" />
+                            <int name="shootCount" value="5" />
+                            <int name="shootInterval" value="1800" />
+                        </imgdir>
+                    </imgdir>
+                    <imgdir name="Curve" />
+                    <int name="loopDelay" value="4000" />
+                    <int name="attackIndex" value="5" />
+                    <int name="decLunarPower" value="3" />
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="Image">
+            <imgdir name="Body">
+                <imgdir name="Start">
+                </imgdir>
+                <imgdir name="Loop">
+                </imgdir>
+                <imgdir name="End">
+                </imgdir>
+            </imgdir>
+            <imgdir name="Shoot">
+            </imgdir>
+            <imgdir name="Bullet">
+                <imgdir name="Straight">
+                    <imgdir name="Loop">
+                    </imgdir>
+                    <imgdir name="Hit">
+                    </imgdir>
+                </imgdir>
+                <imgdir name="Curve">
+                    <imgdir name="Loop">
+                    </imgdir>
+                    <imgdir name="Hit">
+                    </imgdir>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="NarrowWeb">
+        <imgdir name="Config">
+            <imgdir name="0" />
+            <imgdir name="1">
+                <int name="attackIndex" value="2" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="attackIndex" value="2" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="Web">
+        <imgdir name="Image">
+            <imgdir name="0">
+                <imgdir name="Start">
+                    <uol name="5" value="3" />
+                    <uol name="6" value="2" />
+                    <uol name="7" value="1" />
+                    <uol name="8" value="2" />
+                    <uol name="9" value="3" />
+                    <uol name="10" value="4" />
+                </imgdir>
+                <imgdir name="Loop">
+                </imgdir>
+                <imgdir name="End">
+                </imgdir>
+            </imgdir>
+            <imgdir name="1">
+                <imgdir name="Start">
+                    <uol name="5" value="3" />
+                    <uol name="6" value="2" />
+                    <uol name="7" value="1" />
+                    <uol name="8" value="2" />
+                    <uol name="9" value="3" />
+                    <uol name="10" value="4" />
+                </imgdir>
+                <imgdir name="Loop">
+                </imgdir>
+                <imgdir name="End">
+                </imgdir>
+            </imgdir>
+            <imgdir name="2">
+                <imgdir name="Start">
+                    <uol name="5" value="3" />
+                    <uol name="6" value="2" />
+                    <uol name="7" value="1" />
+                    <uol name="8" value="2" />
+                    <uol name="9" value="3" />
+                    <uol name="10" value="4" />
+                </imgdir>
+                <imgdir name="Loop">
+                </imgdir>
+                <imgdir name="End">
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ObstacleTrigger">
+        <imgdir name="0">
+            <int name="type" value="33" />
+            <int name="mobID" value="8880305" />
+            <int name="barrierCount" value="1" />
+        </imgdir>
+        <imgdir name="1">
+            <int name="type" value="34" />
+            <int name="mobID" value="8880305" />
+            <int name="barrierCount" value="1" />
+        </imgdir>
+        <imgdir name="2">
+            <int name="type" value="35" />
+            <int name="mobID" value="8880305" />
+            <int name="barrierCount" value="1" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="Infection">
+        <int name="maxDuration" value="15000" />
+        <int name="attackInterval" value="1000" />
+        <int name="userDeadlineTerm" value="7000" />
+        <int name="incUserFinalDamR" value="30" />
+        <vector name="lt" x="-140" y="-140" />
+        <vector name="rb" x="140" y="140" />
+        <imgdir name="Repeat">
+            <int name="pos" value="1" />
+            <int name="repeat" value="1" />
+        </imgdir>
+        <imgdir name="Attack">
+        </imgdir>
+        <imgdir name="AfterHostDead">
+            <int name="pos" value="1" />
+            <int name="repeat" value="1" />
+        </imgdir>
+    </imgdir>
+</imgdir>
