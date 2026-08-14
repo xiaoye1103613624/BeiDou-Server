@@ -263,9 +263,10 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     private void closeMapleSession() {
-        switch (type) {
-            case LOGIN -> SessionCoordinator.getInstance().closeLoginSession(this);
-            case CHANNEL -> SessionCoordinator.getInstance().closeSession(this, null);
+        if (type == Type.LOGIN) {
+            SessionCoordinator.getInstance().closeLoginSession(this);
+        } else if (type == Type.CHANNEL) {
+            SessionCoordinator.getInstance().closeSession(this, null);
         }
 
         try {
@@ -712,19 +713,23 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (loginok == 0 || loginok == 4) {
             AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);  //loginok == 4，但是会导致限制多开参数 deterred_multi_client == true 时密码错误一次返回REMOTE_REACHED_LIMIT，需要重开客户端
 
-            return switch (res) {
-                case SUCCESS -> {
-                    if (loginok == 0) {
-                        loginattempt = 0;
-                    }
-                    yield loginok;
+            // if-else: avoid ECJ Client$1 switch-map (breaks when javac overwrites Client.class alone)
+            if (res == AntiMulticlientResult.SUCCESS) {
+                if (loginok == 0) {
+                    loginattempt = 0;
                 }
-                case REMOTE_LOGGEDIN -> 17;
-                case REMOTE_REACHED_LIMIT -> 13;
-                case REMOTE_PROCESSING -> 10;
-                case MANY_ACCOUNT_ATTEMPTS -> 16;
-                default -> 8;
-            };
+                return loginok;
+            } else if (res == AntiMulticlientResult.REMOTE_LOGGEDIN) {
+                return 17;
+            } else if (res == AntiMulticlientResult.REMOTE_REACHED_LIMIT) {
+                return 13;
+            } else if (res == AntiMulticlientResult.REMOTE_PROCESSING) {
+                return 10;
+            } else if (res == AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS) {
+                return 16;
+            } else {
+                return 8;
+            }
         } else {
             return loginok;
         }
