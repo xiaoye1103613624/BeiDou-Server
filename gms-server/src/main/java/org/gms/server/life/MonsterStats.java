@@ -40,7 +40,10 @@ import java.util.Set;
  */
 public class MonsterStats {
     public boolean changeable;
-    public int exp, hp, mp, level, PADamage, PDDamage, MADamage, MDDamage, dropPeriod, cp, buffToGive = -1, removeAfter, acc, eva;
+    public int exp, mp, level, PADamage, PDDamage, MADamage, MDDamage, dropPeriod, cp, buffToGive = -1, removeAfter, acc, eva;
+    public long hp;
+    /** 物理/魔法防御率（%），对应 WZ PDRate / MDRate；无则 0。 */
+    public int pdr, mdr;
     public boolean boss, undead, ffaLoot, isExplosiveReward, firstAttack, removeOnMiss;
     public String name;
     public Map<String, Integer> animationTimes = new HashMap<>();
@@ -79,11 +82,11 @@ public class MonsterStats {
         this.exp = exp;
     }
 
-    public int getHp() {
+    public long getHp() {
         return hp;
     }
 
-    public void setHp(int hp) {
+    public void setHp(long hp) {
         this.hp = hp;
     }
 
@@ -334,6 +337,22 @@ public class MonsterStats {
 
     public void setPDDamage(int PDDamage) {
         this.PDDamage = PDDamage;
+    }
+
+    public int getPdr() {
+        return pdr;
+    }
+
+    public void setPdr(int pdr) {
+        this.pdr = Math.max(0, Math.min(100, pdr));
+    }
+
+    public int getMdr() {
+        return mdr;
+    }
+
+    public void setMdr(int mdr) {
+        this.mdr = Math.max(0, Math.min(100, mdr));
     }
 
     public void setMADamage(int MADamage) {

@@ -34,6 +34,8 @@ import org.gms.server.partyquest.GuardianSpawnPoint;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.NumberTool;
 import org.gms.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -47,7 +49,14 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MapFactory {
+    private static final Logger log = LoggerFactory.getLogger(MapFactory.class);
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+
+    /** 高版本portal类型兼容: pt>=8降级为spawn(0) */
+    private static int remapPortalType(int pt) {
+        if (pt >= 0 && pt <= 7) return pt;
+        return 0;
+    }
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
@@ -168,9 +177,18 @@ public class MapFactory {
 
         map.setFieldLimit(DataTool.getInt(infoData.getChildByPath("fieldLimit"), 0));
         map.setMobInterval((short) DataTool.getInt(infoData.getChildByPath("createMobInterval"), 5000));
+        // 高版本地图fieldType检测
+        int fieldType = DataTool.getInt(infoData.getChildByPath("fieldType"), 0);
+        if (fieldType > 10) log.warn("Map {} has high fieldType={}", mapid, fieldType);
         PortalFactory portalFactory = new PortalFactory();
-        for (Data portal : mapData.getChildByPath("portal")) {
-            map.addPortal(portalFactory.makePortal(DataTool.getInt(portal.getChildByPath("pt")), portal));
+        Data portalData = mapData.getChildByPath("portal");
+        if (portalData != null) {
+            for (Data portal : portalData) {
+                int pt = DataTool.getInt(portal.getChildByPath("pt"));
+                map.addPortal(portalFactory.makePortal(remapPortalType(pt), portal));
+            }
+        } else {
+            log.warn("Map {} missing portal node", mapid);
         }
         Data timeMob = infoData.getChildByPath("timeMob");
         if (timeMob != null) {
@@ -204,7 +222,9 @@ public class MapFactory {
         List<Foothold> allFootholds = new LinkedList<>();
         Point lBound = new Point();
         Point uBound = new Point();
-        for (Data footRoot : mapData.getChildByPath("foothold")) {
+        Data footholdData = mapData.getChildByPath("foothold");
+        if (footholdData != null) {
+            for (Data footRoot : footholdData) {
             for (Data footCat : footRoot) {
                 for (Data footHold : footCat) {
                     int x1 = DataTool.getInt(footHold.getChildByPath("x1"));
@@ -229,6 +249,9 @@ public class MapFactory {
                     allFootholds.add(fh);
                 }
             }
+        }
+        } else {
+            log.warn("Map {} missing foothold node", mapid);
         }
         FootholdTree fTree = new FootholdTree(lBound, uBound);
         for (Foothold fh : allFootholds) {

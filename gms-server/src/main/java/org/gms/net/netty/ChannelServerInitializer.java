@@ -32,7 +32,6 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
         if (!RateLimitUtil.getInstance().check(remoteAddress)) {
             log.warn(I18nUtil.getLogMessage("LoginServerInitializer.initChannel.warn1"), remoteAddress);
             socketChannel.close();
-            return;
         }
         final Client client = Client.createChannelClient(clientSessionId, remoteAddress, packetProcessor, world, channel);
 

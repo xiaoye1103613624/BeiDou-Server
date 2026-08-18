@@ -71,7 +71,12 @@ public class Item implements Comparable<Item> {
     }
 
     public Item copy() {
-        Item ret = new Item(id, position, quantity, petid);
+        // Share the live Pet instance — do NOT Pet.loadFromDb() here.
+        // ModifyInventory/forceUpdateItem copies items; reloading would race saveToDb and
+        // could re-encode PetSkill=0 right after syncPetSkillsFromEquips.
+        Item ret = new Item(id, position, quantity, -1);
+        ret.petid = petid;
+        ret.pet = pet;
         ret.flag = flag;
         ret.owner = owner;
         ret.expiration = expiration;

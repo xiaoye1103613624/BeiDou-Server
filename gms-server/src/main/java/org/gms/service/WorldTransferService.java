@@ -104,7 +104,7 @@ public class WorldTransferService {
         charactersMapper.update(CharactersDO.builder()
                 .id(charactersDO.getId())
                 .world(data.getTo())
-                .meso(Math.min(charactersDO.getMeso(), 1000000))
+                .meso(Math.min(charactersDO.getMeso() == null ? 0L : charactersDO.getMeso(), 1000000L))
                 .guildid(0)
                 .guildrank(0)
                 .build());
@@ -127,11 +127,7 @@ public class WorldTransferService {
     }
 
     public void cancelPendingWorldTransfer(Character chr, boolean needFinish) {
-        cancelPendingWorldTransfer(chr.getId(), needFinish);
-    }
-
-    public void cancelPendingWorldTransfer(int cid, boolean needFinish) {
-        QueryWrapper queryWrapper = QueryWrapper.create().where(WORLDTRANSFERS_D_O.CHARACTERID.eq(cid));
+        QueryWrapper queryWrapper = QueryWrapper.create().where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId()));
         if (needFinish) queryWrapper.and(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull());
         worldtransfersMapper.deleteByQuery(queryWrapper);
     }

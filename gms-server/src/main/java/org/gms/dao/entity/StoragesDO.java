@@ -36,6 +36,6 @@ public class StoragesDO implements Serializable {
 
     private Integer slots;
 
-    private Integer meso;
+    private Long meso;
 
 }

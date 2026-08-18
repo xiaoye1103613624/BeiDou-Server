@@ -26,8 +26,11 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class AfterLoginHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(AfterLoginHandler.class);
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
@@ -36,6 +39,7 @@ public final class AfterLoginHandler extends AbstractPacketHandler {
         if (p.available() > 0) {
             c3 = p.readByte();
         }
+        log.info("[LoginFlow] CheckPin/AfterLogin account={} c2={} c3={}", c.getAccountName(), c2, c3);
         if (c2 == 1 && c3 == 1) {
             if (c.getPin() == null || c.getPin().equals("")) {
                 c.sendPacket(PacketCreator.registerPin());

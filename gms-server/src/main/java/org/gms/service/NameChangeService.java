@@ -97,11 +97,7 @@ public class NameChangeService {
     }
 
     public void cancelPendingNameChange(Character chr, boolean needFinish) {
-        cancelPendingNameChange(chr.getId(), needFinish);
-    }
-
-    public void cancelPendingNameChange(int cid, boolean needFinish) {
-        QueryWrapper queryWrapper = QueryWrapper.create().where(NAMECHANGES_D_O.CHARACTERID.eq(cid));
+        QueryWrapper queryWrapper = QueryWrapper.create().where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId()));
         if (needFinish) queryWrapper.and(NAMECHANGES_D_O.COMPLETION_TIME.isNull());
         namechangesMapper.deleteByQuery(queryWrapper);
     }

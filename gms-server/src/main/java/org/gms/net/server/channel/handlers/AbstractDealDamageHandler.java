@@ -322,7 +322,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                     if (MobId.isDojoBoss(monster.getId())) {
                         if (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009) {
-                            int dmgLimit = (int) Math.ceil(0.3 * monster.getMaxHp());
+                            int dmgLimit = (int) Math.min(Integer.MAX_VALUE, Math.ceil(0.3 * monster.getMaxHp()));
                             List<Integer> _onedList = new LinkedList<>();
                             for (Integer i : onedList) {
                                 _onedList.add(i < dmgLimit ? i : dmgLimit);
@@ -334,6 +334,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                     for (Integer eachd : onedList) {
                         if (eachd != null && eachd > 0) {
+                            // 客户端上报伤害已含 v83 防御。默认与 use_server_damage_calc
+                            // 均走 ignore 修正，避免对已减伤数字再乘完整 PDR。
+                            eachd = (int) org.gms.combat.damage.DamageCalculator.applyCombatProfile(
+                                    eachd, player.getCombatStatProfile(),
+                                    monster != null ? monster.getStats() : null,
+                                    attack.magic);
                             dptAttackDamage += (long) eachd;
                         }
 
@@ -342,6 +348,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                         totDamageToOneMonster += eachd;
                     }
+                    totDamageToOneMonster = org.gms.talent.TalentService.applyOutgoingDamageBonus(player, monster, totDamageToOneMonster, attack.magic);
                     totDamage += totDamageToOneMonster;
                     monster.aggroMonsterDamage(player, totDamageToOneMonster);
                     if (player.getBuffedValue(BuffStat.PICKPOCKET) != null && (attack.skill == 0 || attack.skill == Rogue.DOUBLE_STAB || attack.skill == Bandit.SAVAGE_BLOW || attack.skill == ChiefBandit.ASSAULTER || attack.skill == ChiefBandit.BAND_OF_THIEVES || attack.skill == Shadower.ASSASSINATE || attack.skill == Shadower.TAUNT || attack.skill == Shadower.BOOMERANG_STEP)) {
@@ -367,7 +374,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             }
                         }
                     } else if (attack.skill == Marauder.ENERGY_DRAIN || attack.skill == ThunderBreaker.ENERGY_DRAIN || attack.skill == NightWalker.VAMPIRE || attack.skill == Assassin.DRAIN) {
-                        player.addHP(Math.min(monster.getMaxHp(), Math.min((int) ((double) totDamage * (double) SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(SkillFactory.getSkill(attack.skill))).getX() / 100.0), player.getCurrentMaxHp() / 2)));
+                        player.addHP(Math.min((int) Math.min(monster.getMaxHp(), Integer.MAX_VALUE), Math.min((int) ((double) totDamage * (double) SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(SkillFactory.getSkill(attack.skill))).getX() / 100.0), player.getCurrentMaxHp() / 2)));
                     } else if (attack.skill == Bandit.STEAL) {
                         Skill steal = SkillFactory.getSkill(Bandit.STEAL);
                         if (monster.getStolen().size() < 1) { // One steal per mob <3
@@ -561,7 +568,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                     if (attack.skill == Paladin.HEAVENS_HAMMER) {
                         if (!monster.isBoss()) {
-                            int trackerDamage = monster.getHp() - 1;
+                            int trackerDamage = (int) Math.min(Integer.MAX_VALUE, Math.max(0, monster.getHp() - 1));
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
@@ -576,7 +583,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     } else if (attack.skill == Aran.COMBO_TEMPEST) {
                         if (!monster.isBoss()) {
-                            int trackerDamage = monster.getHp();
+                            int trackerDamage = (int) Math.min(Integer.MAX_VALUE, monster.getHp());
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
@@ -596,6 +603,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                         map.damageMonster(player, monster, totDamageToOneMonster);
                     }
+                    org.gms.talent.TalentService.onDealDamageToMonster(player, map, monster, totDamageToOneMonster);
                     if (monster.isBuffed(MonsterStatus.WEAPON_REFLECT) && !attack.magic) {
                         for (MobSkillId msId : monster.getSkills()) {
                             if (msId.type() == MobSkillType.PHYSICAL_AND_MAGIC_COUNTER) {
@@ -963,6 +971,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 } else if (ret.skill == Hermit.SHADOW_WEB) {
                     if (monster != null) {
                         calcDmgMax = monster.getHp() / (50 - chr.getSkillLevel(skill));
+                        if (calcDmgMax > Integer.MAX_VALUE) {
+                            calcDmgMax = Integer.MAX_VALUE;
+                        }
                     }
                 } else if (ret.skill == Hermit.SHADOW_MESO) {
                     if (monster != null) {
@@ -970,13 +981,17 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                 } else if (ret.skill == Aran.BODY_PRESSURE) {
                     if (monster != null) {
-                        int bodyPressureDmg = (int) Math.ceil(monster.getMaxHp() * SkillFactory.getSkill(Aran.BODY_PRESSURE).getEffect(ret.skilllevel).getDamage() / 100.0);
+                        int bodyPressureDmg = (int) Math.min(Integer.MAX_VALUE, Math.ceil(monster.getMaxHp() * SkillFactory.getSkill(Aran.BODY_PRESSURE).getEffect(ret.skilllevel).getDamage() / 100.0));
                         if (bodyPressureDmg > calcDmgMax) {
                             calcDmgMax = bodyPressureDmg;
                         }
                     }
                 }
             }
+
+            // 套装 damR/fdR 等已在 applyAttack 中乘到实际伤害，反作弊上限需同步纳入
+            calcDmgMax = org.gms.combat.damage.DamageCalculator.applyCombatProfile(
+                    calcDmgMax, chr.getCombatStatProfile(), null, magic);
 
             for (int j = 0; j < ret.numDamage; j++) {
                 int damage = p.readInt();
@@ -1002,28 +1017,36 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 long maxWithCrit = hitDmgMax;
-                if (canCrit) // They can crit, so up the max.
-                {
-                    maxWithCrit *= 2;
+                var combatProfile = chr.getCombatStatProfile();
+                boolean profileCrit = combatProfile != null && combatProfile.critRate > 0;
+                if (canCrit || profileCrit) {
+                    maxWithCrit = (long) (hitDmgMax * org.gms.combat.damage.DamageCalculator.maxCritMultiplier(combatProfile));
                 }
 
                 // Warn if the damage is over 1.5x what we calculated above.
                 if (damage > maxWithCrit * 1.5) {
-                    AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit
+                            + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null")
+                            + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")"
+                            + " " + org.gms.combat.damage.DamageCalculator.profileSummary(combatProfile));
                 }
 
                 // Add a ab point if its over 5x what we calculated.
                 if (damage > maxWithCrit * 5) {
-                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit
+                            + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null")
+                            + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")"
+                            + " " + org.gms.combat.damage.DamageCalculator.profileSummary(combatProfile));
                 }
 
-                if (ret.skill == Marksman.SNIPE || (canCrit && damage > hitDmgMax)) {
+                if (ret.skill == Marksman.SNIPE || ((canCrit || profileCrit) && damage > hitDmgMax)) {
                     // If the skill is a crit, inverse the damage to make it show up on clients.
                     damage = -Integer.MAX_VALUE + damage - 1;
                 }
 
                 if (effect != null) {
                     int maxattack = Math.max(effect.getBulletCount(), effect.getAttackCount());
+                    maxattack += org.gms.combat.provider.SkillModProvider.addAttackCount(chr, ret.skill);
                     if (shadowPartner) {
                         maxattack = maxattack * 2;
                     }
@@ -1348,72 +1371,34 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     /**
-     * 检测攻击间隔是否异常。
+     * 检测攻击间隔
      *
-     * 三层过滤：
-     *   ① SKIP_SET / PASSIVE_SET → 直接跳过
-     *   ② < MIN_INTERVAL 网络抖动 → 透明跳过
-     *   ③ Per-skill 滑动窗口 avg + CV → 稳定高速计分，暴发仅警告
-     *   ④ 全局间隔 → 跨技能轮换计分
+     * @param chr
      */
     private static void detectionAttackInterval(Character chr, AttackInfo ret) {
         int skill = ret.skill;
-        if (SKIP_SKILL_ID_SET.contains(skill)) return;
-        if (PASSIVE_SKILL_ID_SET.contains(skill)) return;
-
-        long now = System.currentTimeMillis();
-
-        long interval = chr.getAttackInterval(skill, now);
-        if (interval == Long.MAX_VALUE || interval < Character.MIN_INTERVAL) return;
-
-        String reason = "玩家" + chr.getName() + "地图ID：" + chr.getMapId()
-                + "攻击间隔: " + interval + "技能ID：" + skill;
-
-        switch (chr.checkSkillWindow(skill, interval)) {
-            case STABLE_HACK:
-                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), reason);
-                return;
-            case BURST:
-                AutobanFactory.ATTACK_INTERVAL.alert(chr, reason);
-                break;
-            case PASS:
-                return;
-        }
-
-        long globalInterval = chr.getGlobalInterval(now);
-        if (globalInterval < Character.NORMAL_AVG) {
-            AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), reason);
-        } else {
-            chr.updateGlobalTime(now);
+        //需要跳过检测的技能 比如弓箭手的暴风箭雨 火枪手的金属风暴
+        if (!SKIP_SKILL_ID_SET.contains(skill)) {
+            long interval = chr.updateLastAttackTimeAndGetInterval(skill, System.currentTimeMillis());
+            if (interval < 250) {
+                // 检测攻击间隔 小于350mm封号
+                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + interval + "技能ID：" + skill);
+                log.warn("玩家{}地图ID：{}攻击间隔: {}技能ID：{}", chr.getName(), chr.getMapId(), interval, skill);
+            } else if (interval < 350) {
+                // 检测攻击间隔 小于500mm警告
+                AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + interval + "技能ID：" + skill);
+                log.warn("玩家{}地图ID：{}攻击间隔: {}技能ID：{}", chr.getName(), chr.getMapId(), interval, skill);
+            }
         }
     }
-
-    /** 持续施法技能：按住时连续多包，全跳过 */
+    /**
+     * 跳过攻击速度检测的技能ID
+     */
     private static final Set<Integer> SKIP_SKILL_ID_SET = Set.of(
-            Bowmaster.HURRICANE,           // 弩弓 暴风箭雨
-            WindArcher.HURRICANE,          // 风灵 暴风箭雨
-            Corsair.RAPID_FIRE,            // 火枪 金属风暴
-            Evan.FIRE_BREATH,              // 龙 火焰喷射
-            Evan.ICE_BREATH,               // 龙 寒冰喷射
-            Hero.BRANDISH,                 // 英雄 轻舞飞扬（客户端已改为按住连发）
-            DawnWarrior.BRANDISH           // 魂骑士 轻舞飞扬（同上）
-    );
-
-    /** 被动触伤技能：频率不由玩家输入控制，全跳过 */
-    private static final Set<Integer> PASSIVE_SKILL_ID_SET = Set.of(
-            Aran.BODY_PRESSURE,            // 战神 身体压杀
-            Marauder.ENERGY_CHARGE,        // 船长 能量汇集
-            ThunderBreaker.ENERGY_CHARGE,  // 雷鸣 能量汇集
-            Fighter.FINAL_ATTACK_SWORD,    // 剑客 终极剑
-            Fighter.FINAL_ATTACK_AXE,      // 剑客 终极斧
-            Page.FINAL_ATTACK_SWORD,       // 勇士 终极剑
-            Page.FINAL_ATTACK_BW,          // 勇士 终极棍
-            Spearman.FINAL_ATTACK_SPEAR,   // 枪战士 终极枪
-            Spearman.FINAL_ATTACK_POLEARM, // 枪战士 终极矛
-            Hunter.FINAL_ATTACK,           // 猎人 终极弓
-            Crossbowman.FINAL_ATTACK,      // 弩弓手 终极弩
-            DawnWarrior.FINAL_ATTACK,      // 魂骑士 终极剑
-            WindArcher.FINAL_ATTACK        // 风灵使者 终极弓
+            // 弓箭 暴风箭雨
+            Bowmaster.HURRICANE,
+            // 火枪 金属风暴
+            Corsair.RAPID_FIRE
     );
 
 

@@ -97,7 +97,8 @@ public class MonsterInformationProvider {
 
     private void retrieveGlobal() {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0");
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT * FROM drop_data_global WHERE chance > 0 AND enabled = 1");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 globaldrops.add(new MonsterGlobalDropEntry(

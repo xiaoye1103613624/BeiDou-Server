@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class LifeFactory {
@@ -53,12 +54,26 @@ public class LifeFactory {
 
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
-
-        DataProvider uiDataWZ = DataProviderFactory.getDataProvider(WZFiles.UI);
-        for (Data bossData : uiDataWZ.getData("UIWindow.img").getChildByPath("MobGage/Mob").getChildren()) {
-            ret.add(Integer.valueOf(bossData.getName()));
+        try {
+            DataProvider uiDataWZ = DataProviderFactory.getDataProvider(WZFiles.UI);
+            Data uiWindow = uiDataWZ.getData("UIWindow.img");
+            if (uiWindow == null) {
+                log.warn("UIWindow.img missing; hp-bar boss set is empty");
+                return ret;
+            }
+            Data mobGage = uiWindow.getChildByPath("MobGage/Mob");
+            if (mobGage == null) {
+                log.warn("UIWindow.img MobGage/Mob missing; hp-bar boss set is empty");
+                return ret;
+            }
+            for (Data bossData : mobGage.getChildren()) {
+                ret.add(Integer.valueOf(bossData.getName()));
+            }
+        } catch (Exception e) {
+            // Must not throw: ExceptionInInitializerError here permanently breaks LifeFactory
+            // (subsequent NoClassDefFoundError on every map/event load until JVM restart).
+            log.error("Failed to load MobGage bosses from UIWindow.img; continuing with empty set", e);
         }
-
         return ret;
     }
 
@@ -383,12 +398,32 @@ public class LifeFactory {
             attackInfos.addAll(linkStats.getRight());
         }
 
-        stats.setHp(DataTool.getIntConvert("maxHP", monsterInfoData));
+        // 高版本部分 Boss 的 maxHP 为占位串（??????），改读 finalmaxHP
+        long maxHp = DataTool.getLong("maxHP", monsterInfoData, -1L);
+        if (maxHp < 0) {
+            maxHp = DataTool.getLong("finalmaxHP", monsterInfoData, 1L);
+        }
+        if (maxHp < 1) {
+            maxHp = 1L;
+        }
+        stats.setHp(maxHp);
         stats.setFriendly(DataTool.getIntConvert("damagedByMob", monsterInfoData, stats.isFriendly() ? 1 : 0) == 1);
         stats.setPADamage(DataTool.getIntConvert("PADamage", monsterInfoData));
         stats.setPDDamage(DataTool.getIntConvert("PDDamage", monsterInfoData));
         stats.setMADamage(DataTool.getIntConvert("MADamage", monsterInfoData));
         stats.setMDDamage(DataTool.getIntConvert("MDDamage", monsterInfoData));
+        int pdr = DataTool.getIntConvert("PDRate", monsterInfoData, 0);
+        int mdr = DataTool.getIntConvert("MDRate", monsterInfoData, 0);
+        if (pdr <= 0) {
+            pdr = org.gms.combat.damage.DefenseCalculator.convertFixedDefenseToRate(
+                    stats.getPDDamage(), combatPdrConvertK());
+        }
+        if (mdr <= 0) {
+            mdr = org.gms.combat.damage.DefenseCalculator.convertFixedDefenseToRate(
+                    stats.getMDDamage(), combatPdrConvertK());
+        }
+        stats.setPdr(pdr);
+        stats.setMdr(mdr);
         stats.setMp(DataTool.getIntConvert("maxMP", monsterInfoData, stats.getMp()));
         stats.setExp(DataTool.getIntConvert("exp", monsterInfoData, stats.getExp()));
         stats.setLevel(DataTool.getIntConvert("level", monsterInfoData));
@@ -462,7 +497,14 @@ public class LifeFactory {
             while (monsterSkillInfoData.getChildByPath(Integer.toString(i)) != null) {
                 int skillId = DataTool.getInt(i + "/skill", monsterSkillInfoData, 0);
                 int skillLv = DataTool.getInt(i + "/level", monsterSkillInfoData, 0);
-                MobSkillType type = MobSkillType.from(skillId).orElseThrow();
+                Optional<MobSkillType> typeOpt = MobSkillType.from(skillId);
+                if (typeOpt.isEmpty()) {
+                    // 高版本 MobSkill 未接入枚举时跳过，避免召唤直接崩溃
+                    log.warn("Skip unknown mob skill id={} level={} for mob {}", skillId, skillLv, mid);
+                    i++;
+                    continue;
+                }
+                MobSkillType type = typeOpt.get();
                 skills.add(new MobSkillId(type, skillLv));
 
                 Data monsterSkillData = monsterData.getChildByPath("skill" + (i + 1));
@@ -472,8 +514,9 @@ public class LifeFactory {
                         animationTime += DataTool.getIntConvert("delay", effectEntry, 0);
                     }
 
-                    MobSkill skill = MobSkillFactory.getMobSkillOrThrow(type, skillLv);
-                    mi.setMobSkillAnimationTime(skill, animationTime);
+                    final int skillAnimationTime = animationTime;
+                    MobSkillFactory.getMobSkill(type, skillLv).ifPresent(skill ->
+                            mi.setMobSkillAnimationTime(skill, skillAnimationTime));
                 }
 
                 i++;
@@ -554,14 +597,18 @@ public class LifeFactory {
             MonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 Pair<MonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
+                if (mobStats == null || mobStats.getLeft() == null) {
+                    log.error("[SEVERE] MOB {} has no stats data.", mid);
+                    return null;
+                }
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
 
                 monsterStats.put(mid, stats);
             }
             return new Monster(mid, stats);
-        } catch (NullPointerException npe) {
-            log.error("[SEVERE] MOB {} failed to load.", mid, npe);
+        } catch (Exception e) {
+            log.error("[SEVERE] MOB {} failed to load.", mid, e);
             return null;
         }
     }
@@ -584,6 +631,15 @@ public class LifeFactory {
         }
 
         return -1;
+    }
+
+    private static int combatPdrConvertK() {
+        try {
+            int k = org.gms.config.GameConfig.getServerInt("combat_pdr_convert_k");
+            return k > 0 ? k : 1000;
+        } catch (Throwable ignored) {
+            return 1000;
+        }
     }
 
     private static void decodeElementalString(MonsterStats stats, String elemAttr) {

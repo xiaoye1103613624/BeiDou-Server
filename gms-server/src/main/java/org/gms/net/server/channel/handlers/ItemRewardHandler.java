@@ -54,41 +54,50 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
 
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
-        RewardItem selectedReward = null;
         int totalProb = rewards.getLeft();
-        if (totalProb > 0) {
-            int rewardRoll = Randomizer.nextInt(totalProb);
-            int cumulativeProb = 0;
-            for (RewardItem reward : rewards.getRight()) {
-                cumulativeProb += reward.prob;
-                if (rewardRoll < cumulativeProb) {
-                    selectedReward = reward;
-                    break;
-                }
+        List<RewardItem> rewardList = rewards.getRight();
+        if (totalProb <= 0 || rewardList.isEmpty()) {
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
+        int roll = Randomizer.nextInt(totalProb);
+        int cumulative = 0;
+        RewardItem reward = null;
+        for (RewardItem candidate : rewardList) {
+            cumulative += candidate.prob;
+            if (roll < cumulative) {
+                reward = candidate;
+                break;
             }
         }
-        if (selectedReward != null) {
-            if (!InventoryManipulator.checkSpace(c, selectedReward.itemid, selectedReward.quantity, "")) {
-                c.sendPacket(PacketCreator.getShowInventoryFull());
-            } else {
-                if (ItemConstants.getInventoryType(selectedReward.itemid) == InventoryType.EQUIP) {
-                    final Item item = ii.getEquipById(selectedReward.itemid);
-                    if (selectedReward.period != -1) {
-                        // TODO is this a bug, meant to be 60 * 60 * 1000?
-                        item.setExpiration(currentServerTime() + selectedReward.period * 60 * 60 * 10);
-                    }
-                    InventoryManipulator.addFromDrop(c, item, false);
-                } else {
-                    InventoryManipulator.addById(c, selectedReward.itemid, selectedReward.quantity, "", -1);
-                }
-                InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, false, false);
-                if (selectedReward.worldmsg != null) {
-                    String msg = selectedReward.worldmsg;
-                    msg = msg.replaceAll("/name", c.getPlayer().getName());
-                    msg = msg.replaceAll("/item", ii.getName(selectedReward.itemid));
-                    Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, msg));
-                }
+        if (reward == null) {
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
+        if (!InventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
+            c.sendPacket(PacketCreator.getShowInventoryFull());
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
+        if (ItemConstants.getInventoryType(reward.itemid) == InventoryType.EQUIP) {
+            final Item item = ii.getEquipById(reward.itemid);
+            if (reward.period != -1) {
+                // TODO is this a bug, meant to be 60 * 60 * 1000?
+                item.setExpiration(currentServerTime() + reward.period * 60 * 60 * 10);
             }
+            InventoryManipulator.addFromDrop(c, item, false);
+        } else {
+            InventoryManipulator.addById(c, reward.itemid, reward.quantity, "", -1);
+        }
+        InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, false, false);
+        if (reward.worldmsg != null) {
+            String msg = reward.worldmsg;
+            msg = msg.replaceAll("/name", c.getPlayer().getName());
+            msg = msg.replaceAll("/item", ii.getName(reward.itemid));
+            Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, msg));
         }
         c.sendPacket(PacketCreator.enableActions());
     }

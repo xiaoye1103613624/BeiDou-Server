@@ -83,7 +83,6 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     if (!hasNpcScript) {
                         if (!npc.hasShop()) {
                             log.warn("NPC {} ({}) is not coded", npc.getName(), npc.getId());
-                            c.sendPacket(PacketCreator.enableActions());
                             return;
                         } else if (c.getPlayer().getShop() != null) {
                             c.sendPacket(PacketCreator.enableActions());

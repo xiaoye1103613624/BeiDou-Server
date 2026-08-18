@@ -101,6 +101,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
 
+import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -108,6 +109,10 @@ public class MapleMap {
     private static final Logger log = LoggerFactory.getLogger(MapleMap.class);
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
     private static final Map<Integer, Pair<Integer, Integer>> dropBoundsCache = new HashMap<>(100);
+    /** 轮回石碑「轮回」怪物ID（客户端已有贴图）。 */
+    private static final int REINCARNATION_MOB_ID = 9990100;
+    /** 轮回石碑单次效果时长。 */
+    private static final long REINCARNATION_DURATION_MS = HOURS.toMillis(1);
 
     private final Map<Integer, MapObject> mapobjects = new LinkedHashMap<>();
     private final Set<Integer> selfDestructives = new LinkedHashSet<>();
@@ -115,6 +120,12 @@ public class MapleMap {
     private final Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<>());
     private final AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
     private final AtomicInteger droppedItemCount = new AtomicInteger(0);
+    /** 当前地图存活的「轮回」怪物；null 表示未施放。 */
+    private volatile Monster reincarnationMonster;
+    /** 施放轮回的角色ID。 */
+    private volatile int reincarnationOwnerId;
+    /** 轮回到期自动移除任务。 */
+    private volatile ScheduledFuture<?> reincarnationExpireTask;
     private final Collection<Character> characters = new LinkedHashSet<>();
     private final Map<Integer, Set<Integer>> mapParty = new LinkedHashMap<>();
     private final Map<Integer, Portal> portals = new HashMap<>();
@@ -693,7 +704,7 @@ public class MapleMap {
                     if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                         idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
-                        idrop = new Item(de.itemId, (short) 0, (short) ((de.Maximum != 1 && de.Maximum > de.Minimum)? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : de.Maximum));
+                        idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
                     }
                     spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, chr, droptype, de.questid);
                 }
@@ -754,6 +765,8 @@ public class MapleMap {
         if (useBaseRate) {
             chRate = 1;
         }
+
+        chRate *= (1.0f + (float) org.gms.talent.TalentService.getDropBonus(chr, this, mob));
 
         final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
         final List<MonsterGlobalDropEntry> globalEntry = mi.getRelevantGlobalDrops(this.getId());
@@ -1058,55 +1071,43 @@ public class MapleMap {
     public List<MapItem> updatePlayerItemDropsToParty(int partyid, int charid, List<Character> partyMembers, Character partyLeaver) {
         List<MapItem> partyDrops = new LinkedList<>();
 
-        // owner 字段(character_ownerid / party_ownerid)是实例字段,持 itemLock 的
-        // 路径会写它们,所以这里必须持同一把锁读,避免锁外读出撕裂值。
-        // 同时把对队员/leaver 的 sendPacket 收集到 packetHolder 中,
-        // 离开锁再发,避免 itemLock 持锁期间做网络 I/O。
-        Map<Character, List<Packet>> packetHolder = new HashMap<>();
-
         for (MapItem mdrop : getDroppedItems()) {
-            mdrop.lockItem();
-            try {
-                if (mdrop.isPickedUp()) {
-                    continue;
-                }
+            if (mdrop.getOwnerId() == charid) {
+                mdrop.lockItem();
+                try {
+                    if (mdrop.isPickedUp()) {
+                        continue;
+                    }
 
-                if (mdrop.getOwnerIdLocked() == charid) {
-                    mdrop.setPartyOwnerIdLocked(partyid);
+                    mdrop.setPartyOwnerId(partyid);
 
                     Packet removePacket = PacketCreator.silentRemoveItemFromMap(mdrop.getObjectId());
                     Packet updatePacket = PacketCreator.updateMapItemObject(mdrop, partyLeaver == null);
 
                     for (Character mc : partyMembers) {
                         if (this.equals(mc.getMap())) {
-                            packetHolder.computeIfAbsent(mc, k -> new ArrayList<>()).add(removePacket);
+                            mc.sendPacket(removePacket);
 
                             if (mc.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
-                                packetHolder.get(mc).add(updatePacket);
+                                mc.sendPacket(updatePacket);
                             }
                         }
                     }
 
                     if (partyLeaver != null) {
                         if (this.equals(partyLeaver.getMap())) {
-                            packetHolder.computeIfAbsent(partyLeaver, k -> new ArrayList<>()).add(removePacket);
+                            partyLeaver.sendPacket(removePacket);
 
                             if (partyLeaver.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
-                                packetHolder.get(partyLeaver).add(PacketCreator.updateMapItemObject(mdrop, true));
+                                partyLeaver.sendPacket(PacketCreator.updateMapItemObject(mdrop, true));
                             }
                         }
                     }
-                } else if (partyid != -1 && mdrop.getPartyOwnerIdLocked() == partyid) {
-                    partyDrops.add(mdrop);
+                } finally {
+                    mdrop.unlockItem();
                 }
-            } finally {
-                mdrop.unlockItem();
-            }
-        }
-
-        for (Map.Entry<Character, List<Packet>> e : packetHolder.entrySet()) {
-            for (Packet p : e.getValue()) {
-                e.getKey().sendPacket(p);
+            } else if (partyid != -1 && mdrop.getPartyOwnerId() == partyid) {
+                partyDrops.add(mdrop);
             }
         }
 
@@ -1114,28 +1115,27 @@ public class MapleMap {
     }
 
     public void updatePartyItemDropsToNewcomer(Character newcomer, List<MapItem> partyItems) {
-        // 同样:itemLock 内只构造 packet,持锁期间不做 sendPacket。
         for (MapItem mdrop : partyItems) {
-            Packet removePacket;
-            Packet updatePacket;
-
             mdrop.lockItem();
             try {
                 if (mdrop.isPickedUp()) {
                     continue;
                 }
 
-                removePacket = PacketCreator.silentRemoveItemFromMap(mdrop.getObjectId());
-                updatePacket = PacketCreator.updateMapItemObject(mdrop, true);
+                Packet removePacket = PacketCreator.silentRemoveItemFromMap(mdrop.getObjectId());
+                Packet updatePacket = PacketCreator.updateMapItemObject(mdrop, true);
+
+                if (newcomer != null) {
+                    if (this.equals(newcomer.getMap())) {
+                        newcomer.sendPacket(removePacket);
+
+                        if (newcomer.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
+                            newcomer.sendPacket(updatePacket);
+                        }
+                    }
+                }
             } finally {
                 mdrop.unlockItem();
-            }
-
-            if (newcomer != null && this.equals(newcomer.getMap())) {
-                newcomer.sendPacket(removePacket);
-                if (newcomer.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
-                    newcomer.sendPacket(updatePacket);
-                }
             }
         }
     }
@@ -1518,12 +1518,9 @@ public class MapleMap {
     }
 
     public void killMonster(int mobId) {
-        Character chr = null;
-        List<MapObject> players = getPlayers();
-        if (!players.isEmpty()) {
-            chr = (Character) players.get(0);
-        }
+        Character chr = (Character) getPlayers().get(0);
         List<Monster> mobList = getAllMonsters();
+
         for (Monster mob : mobList) {
             if (mob.getId() == mobId) {
                 this.killMonster(mob, chr, false);
@@ -1587,6 +1584,14 @@ public class MapleMap {
 
             killMonster(monster, null, false, 1);
         }
+    }
+
+    public void killAllMonsters(boolean param) {
+        killAllMonsters();
+    }
+
+    public int getMonsterCount() {
+        return getAllMonsters().size();
     }
 
     public final void destroyReactors(final int first, final int last) {
@@ -1869,10 +1874,16 @@ public class MapleMap {
 
     public void spawnMonsterOnGroundBelow(int id, int x, int y) {
         Monster mob = LifeFactory.getMonster(id);
+        if (mob == null) {
+            return;
+        }
         spawnMonsterOnGroundBelow(mob, new Point(x, y));
     }
 
     public void spawnMonsterOnGroundBelow(Monster mob, Point pos) {
+        if (mob == null) {
+            return;
+        }
         Point spos = new Point(pos.x, pos.y - 1);
         spos = calcPointBelow(spos);
         spos.y--;
@@ -2404,8 +2415,6 @@ public class MapleMap {
     }
 
     public void addPlayer(final Character chr) {
-        cleanupGhostPlayers();   // 被动清理：进图前先清掉图上"已断线未正常移除"的幽灵玩家，避免其他人仍看到他
-
         int chrSize;
         Party party = chr.getParty();
         chrWLock.lock();
@@ -2636,6 +2645,56 @@ public class MapleMap {
 
         chr.receivePartyMemberHP();
         announcePlayerDiseases(chr.getClient());
+
+        // 伤害皮肤：同步地图上其他玩家的皮肤，并广播自己的皮肤
+        for (Character other : getAllPlayers()) {
+            if (other == chr) {
+                continue;
+            }
+            int sid = other.getActiveDamageSkin();
+            if (sid != 0) {
+                chr.sendPacket(PacketCreator.damageSkinBroadcast(other.getId(), sid));
+            }
+        }
+        if (chr.getActiveDamageSkin() != 0) {
+            broadcastMessage(chr, PacketCreator.damageSkinBroadcast(chr.getId(), chr.getActiveDamageSkin()), false);
+        }
+
+        // 七彩棱镜：进图双向同步染色
+        broadcastColoringPrism(chr);
+        broadcastColoringPrismToNewer(chr);
+        org.gms.server.colorprism.ColorPrismPackets.broadcastMapTable(this);
+    }
+
+    /**
+     * 将进入者的染色广播给同图其他人。
+     */
+    public void broadcastColoringPrism(Character entering) {
+        List<org.gms.server.coloring.ColoringPrismDye> dyes =
+                org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(entering.getId());
+        if (dyes.isEmpty()) {
+            return;
+        }
+        broadcastMessage(entering,
+                org.gms.server.coloring.ColoringPrismPackets.dyeMerge(entering.getId(), dyes), false);
+    }
+
+    /**
+     * 将同图其他人的染色发给刚进图的玩家。
+     */
+    public void broadcastColoringPrismToNewer(Character entering) {
+        for (Character other : getAllPlayers()) {
+            if (other == entering) {
+                continue;
+            }
+            List<org.gms.server.coloring.ColoringPrismDye> dyes =
+                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(other.getId());
+            if (dyes.isEmpty()) {
+                continue;
+            }
+            entering.sendPacket(
+                    org.gms.server.coloring.ColoringPrismPackets.dyeMerge(other.getId(), dyes));
+        }
     }
 
     private static void announcePlayerDiseases(final Client c) {
@@ -2721,15 +2780,7 @@ public class MapleMap {
     }
 
     public void removePlayer(Character chr) {
-        // 优先重分配该玩家控制的怪物 controller，防止后续步骤抛异常导致 leaveMap()->releaseControlledMonsters() 没执行，
-        // 怪物 controller 卡在已离线玩家身上（幽灵致怪物不动的根因之一）。
-        try {
-            chr.releaseControlledMonsters();
-        } catch (Throwable t) {
-            log.warn("removePlayer 重分配怪物 controller 异常 chr={}", chr.getName(), t);
-        }
-
-        Channel cserv = chr.getClient() != null ? chr.getClient().getChannelServer() : null;
+        Channel cserv = chr.getClient().getChannelServer();
         chr.unregisterChairBuff();
 
         Party party = chr.getParty();
@@ -2744,7 +2795,7 @@ public class MapleMap {
             chrWLock.unlock();
         }
 
-        if (cserv != null && MiniDungeonInfo.isDungeonMap(mapid)) {
+        if (MiniDungeonInfo.isDungeonMap(mapid)) {
             MiniDungeon mmd = cserv.getMiniDungeon(mapid);
             if (mmd != null) {
                 if (!mmd.unregisterPlayer(chr)) {
@@ -2758,6 +2809,12 @@ public class MapleMap {
             broadcastMessage(PacketCreator.removePlayerFromMap(chr.getId()));
         } else {
             broadcastGMMessage(PacketCreator.removePlayerFromMap(chr.getId()));
+        }
+
+        // 轮回施放者离开地图时自动结束加成
+        if (isDbgActive() && reincarnationOwnerId == chr.getId()) {
+            closeDbg(chr);
+            broadcastMessage(PacketCreator.serverNotice(5, "离开了地图，轮回石碑效果已结束。"));
         }
 
         chr.leaveMap();
@@ -2776,36 +2833,6 @@ public class MapleMap {
                 this.broadcastGMPacket(chr, PacketCreator.removeDragon(chr.getId()));
             } else {
                 this.broadcastPacket(chr, PacketCreator.removeDragon(chr.getId()));
-            }
-        }
-    }
-
-    /**
-     * 被动清理本图上"已断线（isAwayFromWorld）却未被正常移除"的幽灵玩家。
-     * 在 addPlayer 时触发：新玩家进图前先清掉幽灵并广播 removePlayerFromMap，
-     * 使新玩家与图上原有玩家都不再看到这个已下线的角色。配合 Client.removePlayer 的 A 修复兜底漏网情况。
-     * awayFromWorld=true 涵盖已断开/商城/mts，这类玩家本就不该留在地图 characters，留在即幽灵，正常在线玩家 awayFromWorld=false 不受影响。
-     */
-    private void cleanupGhostPlayers() {
-        List<Character> ghosts = new ArrayList<>();
-        chrRLock.lock();
-        try {
-            for (Character c : characters) {
-                if (c != null && c.isAwayFromWorld()) {
-                    ghosts.add(c);
-                }
-            }
-        } finally {
-            chrRLock.unlock();
-        }
-
-        for (Character ghost : ghosts) {
-            log.warn("检测到幽灵玩家（已断线未正常移除），被动清理. mapId={} ghostChr={}", mapid, ghost.getName());
-            try {
-                removePlayer(ghost);
-            } catch (Throwable t) {
-                // 单个幽灵清理失败不应影响其他幽灵清理，也不应阻断 addPlayer 流程
-                log.error("清理幽灵玩家异常 mapId={} ghostChr={}", mapid, ghost.getName(), t);
             }
         }
     }
@@ -3757,6 +3784,10 @@ public class MapleMap {
         }
 
         int maxNumShouldSpawn = (int) Math.ceil(getCurrentSpawnRate(numPlayers) * monsterSpawn.size());
+        double talentMult = org.gms.talent.TalentService.getMapSpawnMultiplier(this);
+        if (talentMult > 1.0) {
+            maxNumShouldSpawn = (int) Math.ceil(maxNumShouldSpawn * talentMult);
+        }
         return maxNumShouldSpawn - spawnedMonstersOnMap.get();
     }
 
@@ -3777,22 +3808,156 @@ public class MapleMap {
             chrRLock.unlock();
         }
 
+        boolean dbgActive = isDbgActive();
         int numShouldSpawn = getNumShouldSpawn(numPlayers);
+        if (dbgActive) {
+            // 轮回石碑生效：大幅提升刷怪数量，并强制刷新生成点冷却
+            numShouldSpawn = Math.max(numShouldSpawn, monsterSpawn.size()) * 5;
+        }
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = new ArrayList<>(getMonsterSpawn());
             Collections.shuffle(randomSpawn);
             short spawned = 0;
             for (SpawnPoint spawnPoint : randomSpawn) {
-                if (spawnPoint.shouldSpawn()) {
+                if (dbgActive ? spawnPoint.shouldForceSpawn() : spawnPoint.shouldSpawn()) {
                     spawnMonster(spawnPoint.getMonster());
                     spawned++;
-
                     if (spawned >= numShouldSpawn) {
                         break;
                     }
                 }
             }
+            // 天赋额外波次：在普通怪刷怪点额外召唤不绑定 SpawnPoint 计数的克隆
+            double talentMult = org.gms.talent.TalentService.getMapSpawnMultiplier(this);
+            if (talentMult > 1.0) {
+                int extra = (int) Math.ceil((talentMult - 1.0) * getCurrentSpawnRate(numPlayers) * monsterSpawn.size());
+                int extrasSpawned = 0;
+                Collections.shuffle(randomSpawn);
+                for (SpawnPoint spawnPoint : randomSpawn) {
+                    if (extrasSpawned >= extra) {
+                        break;
+                    }
+                    int mid = spawnPoint.getMonsterId();
+                    if (org.gms.talent.TalentConfig.isFieldEliteId(mid)) {
+                        continue;
+                    }
+                    Monster template = org.gms.server.life.LifeFactory.getMonster(mid);
+                    if (template == null || template.isBoss()) {
+                        continue;
+                    }
+                    Monster extraMob = new Monster(template);
+                    extraMob.setPosition(new Point(spawnPoint.getPosition()));
+                    extraMob.setFh(spawnPoint.getFh());
+                    extraMob.setF(spawnPoint.getF());
+                    spawnMonster(extraMob);
+                    extrasSpawned++;
+                }
+            }
         }
+    }
+
+    /**
+     * 轮回石碑：地图上是否有存活的「轮回」怪物。
+     */
+    public boolean isDbgActive() {
+        Monster mob = reincarnationMonster;
+        return mob != null && mob.isAlive();
+    }
+
+    /**
+     * 轮回石碑：在玩家位置召唤「轮回」怪物。
+     * 同图同时仅允许一只；他人占用时拒绝；本人可重置并续 1 小时。
+     *
+     * @return true 表示召唤成功
+     */
+    public boolean setDbg(final Character chr) {
+        if (isDbgActive() && reincarnationOwnerId != chr.getId()) {
+            chr.dropMessage(5, "地图上有人施放了轮回");
+            return false;
+        }
+
+        cancelReincarnationTimer();
+        Monster existingMob = reincarnationMonster;
+        if (existingMob != null && existingMob.isAlive()) {
+            killMonster(existingMob, null, false, 1);
+        }
+
+        final Monster template = LifeFactory.getMonster(REINCARNATION_MOB_ID);
+        if (template == null) {
+            chr.dropMessage(5, "轮回石碑暂时无法使用，请联系管理员。");
+            return false;
+        }
+        final Monster mob = new Monster(template);
+        mob.setPosition(chr.getPosition());
+        mob.setFh(chr.getFh());
+        reincarnationOwnerId = chr.getId();
+        reincarnationMonster = mob;
+        mob.addListener(new MonsterListener() {
+            @Override
+            public void monsterKilled(int aniTime) {
+                if (reincarnationMonster == mob) {
+                    clearReincarnationState();
+                }
+            }
+
+            @Override
+            public void monsterDamaged(Character from, int trueDmg) {
+            }
+
+            @Override
+            public void monsterHealed(int trueHeal) {
+            }
+        });
+        spawnMonster(mob);
+        reincarnationExpireTask = TimerManager.getInstance().schedule(this::expireReincarnation, REINCARNATION_DURATION_MS);
+        chr.dropMessage(5, "轮回石碑已激活，效果持续1小时。");
+        return true;
+    }
+
+    /**
+     * 轮回石碑：关闭当前地图轮回效果（施放者或 GM）。
+     */
+    public boolean closeDbg(final Character chr) {
+        if (!isDbgActive()) {
+            return false;
+        }
+        if (reincarnationOwnerId != chr.getId() && !chr.isGM()) {
+            chr.dropMessage(5, "地图上有人施放了轮回，无法关闭");
+            return false;
+        }
+        Monster mob = reincarnationMonster;
+        cancelReincarnationTimer();
+        if (mob != null && mob.isAlive()) {
+            killMonster(mob, null, false, 1);
+        }
+        clearReincarnationState();
+        return true;
+    }
+
+    private void cancelReincarnationTimer() {
+        ScheduledFuture<?> task = reincarnationExpireTask;
+        if (task != null) {
+            TimerManager.getInstance().stop(task);
+            reincarnationExpireTask = null;
+        }
+    }
+
+    private void clearReincarnationState() {
+        reincarnationMonster = null;
+        reincarnationOwnerId = 0;
+        cancelReincarnationTimer();
+    }
+
+    private void expireReincarnation() {
+        Monster mob = reincarnationMonster;
+        if (mob == null || !mob.isAlive()) {
+            clearReincarnationState();
+            return;
+        }
+        for (Character player : getAllPlayers()) {
+            player.dropMessage(5, "轮回石碑效果时间已到，已自动消失。");
+        }
+        killMonster(mob, null, false, 1);
     }
 
     public void mobMpRecovery() {

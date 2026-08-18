@@ -33,15 +33,11 @@ import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.GameConfig;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
-import org.gms.net.server.channel.Channel;
-import org.gms.net.server.world.World;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Trade;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,7 +60,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Ronan - concurrency protection
  */
 public class HiredMerchant extends AbstractMapObject {
-    private static final Logger log = LoggerFactory.getLogger(HiredMerchant.class);
     private static final int VISITOR_HISTORY_LIMIT = 10;
     private static final int BLACKLIST_LIMIT = 20;
 
@@ -80,8 +75,7 @@ public class HiredMerchant extends AbstractMapObject {
     private final List<Pair<String, Byte>> messages = new LinkedList<>();
     private final List<SoldItem> sold = new LinkedList<>();
     private final AtomicBoolean open = new AtomicBoolean();
-    private final AtomicBoolean closing = new AtomicBoolean();
-    private volatile boolean published = false;
+    private boolean published = false;
     private MapleMap map;
     private final Visitor[] visitors = new Visitor[3];
     private final LinkedList<PastVisitor> visitorHistory = new LinkedList<>();
@@ -290,21 +284,14 @@ public class HiredMerchant extends AbstractMapObject {
 
     public void buy(Client c, int item, short quantity) {
         synchronized (items) {
-            if (quantity < 1 || item < 0 || item >= items.size()) {   // thanks xiaokelvin for pointing out slot check missing
-                c.sendPacket(PacketCreator.enableActions());
-                return;
-            }
-
             PlayerShopItem pItem = items.get(item);
-            if (!pItem.isExist() || pItem.getBundles() < quantity) {
-                c.sendPacket(PacketCreator.enableActions());
-                return;
-            }
-
             Item newItem = pItem.getItem().copy();
 
             newItem.setQuantity((short) ((pItem.getItem().getQuantity() * quantity)));
-            if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
+            if (quantity < 1 || !pItem.isExist() || pItem.getBundles() < quantity) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            } else if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
@@ -340,14 +327,14 @@ public class HiredMerchant extends AbstractMapObject {
                                 ps.setInt(1, ownerId);
                                 try (ResultSet rs = ps.executeQuery()) {
                                     if (rs.next()) {
-                                        merchantMesos = rs.getInt(1);
+                                        merchantMesos = rs.getLong(1);
                                     }
                                 }
                             }
                             merchantMesos += price;
 
                             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
-                                ps.setInt(1, (int) Math.min(merchantMesos, Integer.MAX_VALUE));
+                                ps.setLong(1, Math.min(merchantMesos, Long.MAX_VALUE));
                                 ps.setInt(2, ownerId);
                                 ps.executeUpdate();
                             }
@@ -383,39 +370,11 @@ public class HiredMerchant extends AbstractMapObject {
     }
 
     public void forceClose() {
-        if (!closing.compareAndSet(false, true)) {
-            return;
-        }
+        //Server.getInstance().getChannel(world, channel).removeHiredMerchant(ownerId);
+        map.broadcastMessage(PacketCreator.removeHiredMerchantBox(getOwnerId()));
+        map.removeMapObject(this);
 
-        Server server = Server.getInstance();
-        World worldServer = server.getWorld(world);
-        Channel channelServer = server.getChannel(world, channel);
-        if (channelServer != null) {
-            channelServer.removeHiredMerchant(ownerId, this);
-        }
-
-        if (map != null) {
-            map.broadcastMessage(PacketCreator.removeHiredMerchantBox(getOwnerId()));
-            map.removeMapObject(this);
-        }
-
-        boolean authoritative = worldServer != null && worldServer.isHiredMerchantRegistered(this);
-        if (!authoritative) {
-            visitorLock.lock();
-            try {
-                setOpen(false);
-                if (map != null) {
-                    removeAllVisitors();
-                }
-            } finally {
-                visitorLock.unlock();
-            }
-            log.warn("Skipping persistence for non-current HiredMerchant ownerId={}, channel={}", ownerId, channel);
-            map = null;
-            return;
-        }
-
-        Character owner = worldServer.getPlayerStorage().getCharacterById(ownerId);
+        Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
 
         visitorLock.lock();
         try {
@@ -423,13 +382,13 @@ public class HiredMerchant extends AbstractMapObject {
             removeAllVisitors();
 
             if (owner != null && owner.isLoggedInWorld() && this == owner.getHiredMerchant()) {
-                closeOwnerMerchantAfterClaim(owner);
-                map = null;
-                return;
+                closeOwnerMerchant(owner);
             }
         } finally {
             visitorLock.unlock();
         }
+
+        Server.getInstance().getWorld(world).unregisterHiredMerchant(this);
 
         try {
             saveItems(true);
@@ -437,10 +396,10 @@ public class HiredMerchant extends AbstractMapObject {
                 items.clear();
             }
         } catch (SQLException ex) {
-            log.error("Failed to save HiredMerchant items while closing ownerId={}", ownerId, ex);
+            ex.printStackTrace();
         }
 
-        Character player = worldServer.getPlayerStorage().getCharacterById(ownerId);
+        Character player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
         if (player != null) {
             player.setHasMerchant(false);
         } else {
@@ -449,29 +408,24 @@ public class HiredMerchant extends AbstractMapObject {
                 ps.setInt(1, ownerId);
                 ps.executeUpdate();
             } catch (SQLException ex) {
-                log.error("Failed to clear HiredMerchant state ownerId={}", ownerId, ex);
+                ex.printStackTrace();
             }
         }
 
-        worldServer.unregisterHiredMerchant(this);
         map = null;
     }
 
     public void closeOwnerMerchant(Character chr) {
-        if (this.isOwner(chr) && closing.compareAndSet(false, true)) {
-            closeOwnerMerchantAfterClaim(chr);
+        if (this.isOwner(chr)) {
+            this.closeShop(chr.getClient(), false);
+            chr.setHasMerchant(false);
         }
-    }
-
-    private void closeOwnerMerchantAfterClaim(Character chr) {
-        this.closeShop(chr.getClient(), false);
-        chr.setHasMerchant(false);
     }
 
     private void closeShop(Client c, boolean timeout) {
         map.removeMapObject(this);
         map.broadcastMessage(PacketCreator.removeHiredMerchantBox(ownerId));
-        c.getChannelServer().removeHiredMerchant(ownerId, this);
+        c.getChannelServer().removeHiredMerchant(ownerId);
 
         this.removeAllVisitors();
         this.removeOwner(c.getPlayer());
@@ -605,7 +559,7 @@ public class HiredMerchant extends AbstractMapObject {
 
     public boolean addItem(PlayerShopItem item) {
         synchronized (items) {
-            if (items.size() >= 16) {
+            if (items.size() >= 32) {
                 return false;
             }
 

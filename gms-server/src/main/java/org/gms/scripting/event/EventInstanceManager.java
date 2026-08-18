@@ -39,6 +39,8 @@ import org.gms.server.StatEffect;
 import org.gms.server.ThreadManager;
 import org.gms.server.TimerManager;
 import org.gms.server.expeditions.Expedition;
+import org.gms.server.expeditions.ExpeditionDeathCount;
+import org.gms.net.packet.Packet;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.life.NPC;
@@ -55,6 +57,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -94,6 +97,7 @@ public class EventInstanceManager {
 
     // 远征队相关
     private Expedition expedition = null;
+    private final AtomicBoolean deathCountWiped = new AtomicBoolean(false);
 
     // 事件使用的地图ID列表
     private final List<Integer> mapIds = new LinkedList<>();
@@ -404,6 +408,13 @@ public class EventInstanceManager {
 
     public void registerExpedition(Expedition exped) {
         expedition = exped;
+
+        int configured = ExpeditionDeathCount.configuredFor(exped.getType());
+        if (configured > 0) {
+            exped.armDeathCount(configured);
+            log.info("[DEATHCOUNT] armed {} deaths for {} expedition", configured, exped.getType());
+        }
+
         registerExpeditionTeam(exped, exped.getRecruitingMap().getId());
     }
 
@@ -498,6 +509,30 @@ public class EventInstanceManager {
             invokeScriptFunction("afterChangedMap", EventInstanceManager.this, chr, mapId);
         } catch (ScriptException | NoSuchMethodException ex) {
         } // optional
+
+        sendDeathCount(chr);
+    }
+
+    public Expedition getExpedition() {
+        return expedition;
+    }
+
+    /** 向本实例当前注册的每位玩家发包。 */
+    public void broadcastPacket(Packet packet) {
+        for (Character chr : getPlayers()) {
+            chr.sendPacket(packet);
+        }
+    }
+
+    private void sendDeathCount(final Character chr) {
+        Expedition exped = expedition;
+        if (exped == null || !exped.isDeathCountEnabled() || chr == null) {
+            return;
+        }
+        if (chr.getMap() == null || chr.getMap().getEventInstance() != this) {
+            return;
+        }
+        chr.sendPacket(PacketCreator.expeditionDeathCount(exped.getDeathCount()));
     }
 
     public synchronized void changedLeader(final PartyCharacter ldr) {
@@ -567,12 +602,68 @@ public class EventInstanceManager {
     }
 
     public void playerKilled(final Character chr) {
+        chargeDeathCount(chr);
+
         ThreadManager.getInstance().newTask(() -> {
             try {
                 invokeScriptFunction("playerDead", EventInstanceManager.this, chr);
             } catch (ScriptException | NoSuchMethodException ex) {
             } // optional
         });
+    }
+
+    private void chargeDeathCount(final Character chr) {
+        Expedition exped = expedition;
+        if (exped == null || !exped.isDeathCountEnabled() || chr == null) {
+            return;
+        }
+        if (chr.getMap() == null || chr.getMap().getEventInstance() != this) {
+            return;
+        }
+
+        int prev = exped.consumeDeath();
+        if (prev > 0) {
+            broadcastPacket(PacketCreator.expeditionDeathCount(prev - 1));
+            log.info("[DEATHCOUNT] {} died on {}, {} left", chr.getName(), exped.getType(), prev - 1);
+        } else if (prev == 0 && deathCountWiped.compareAndSet(false, true)) {
+            scheduleDeathCountWipe(exped, chr);
+        }
+    }
+
+    /**
+     * 死亡次数已耗尽后再死：全员踢出并解散远征。延迟 1.5s 让这次死亡动画可见。
+     * 不回血（尸体传送），由客户端复活提示处理。
+     */
+    private void scheduleDeathCountWipe(final Expedition exped, final Character chr) {
+        TimerManager.getInstance().schedule(() -> {
+            try {
+                if (disposed) {
+                    return;
+                }
+                List<Character> players = getPlayers();
+                if (players.isEmpty()) {
+                    return;
+                }
+                for (Character p : players) {
+                    p.dropMessage(1, "远征失败：死亡次数已用尽。");
+                }
+                dropMessage(5, "[远征] " + chr.getName() + " 在死亡次数耗尽后倒下，全员已被移出副本。");
+
+                for (Character p : players) {
+                    MapleMap cur = p.getMap();
+                    unregisterPlayer(p);
+                    if (p.isLoggedInWorld() && cur != null) {
+                        MapleMap ret = p.getWarpMap(cur.getReturnMapId());
+                        p.changeMap(ret, ret.getPortal(0));
+                    }
+                }
+                dispose();
+                log.info("[DEATHCOUNT] {} expedition wiped after {} died with the count exhausted",
+                        exped.getType(), chr.getName());
+            } catch (Exception ex) {
+                log.error("[DEATHCOUNT] failed to wipe the {} expedition", exped.getType(), ex);
+            }
+        }, 1500);
     }
 
     public void reviveMonster(final Monster mob) {
@@ -620,7 +711,9 @@ public class EventInstanceManager {
                     expedition.monsterKilled(chr, mob);
                 }
             }
-        } catch (ScriptException | NoSuchMethodException ex) {
+        } catch (NoSuchMethodException ex) {
+            // Optional script hook — many events omit monsterValue.
+        } catch (ScriptException ex) {
             ex.printStackTrace();
         }
     }
@@ -747,6 +840,10 @@ public class EventInstanceManager {
             }
         }
         return map;
+    }
+
+    public MapleMap setInstanceMap(int mapId) {
+        return getMapInstance(mapId);
     }
 
     public void setIntProperty(String key, Integer value) {

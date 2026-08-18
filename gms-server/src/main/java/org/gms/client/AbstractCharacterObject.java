@@ -38,6 +38,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author RonanLana
  */
 public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject {
+    /** Client/protocol HP&MP ceiling after 4-byte expansion (matches ijl15 maxhpmp). */
+    public static final int MAX_CLIENT_HP_MP = 99999;
+
     @Setter
     @Getter
     protected MapleMap map;
@@ -263,7 +266,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             this.transientHp = Float.NEGATIVE_INFINITY;
         }
         this.maxHp = hp_;
-        this.clientMaxHp = Math.min(30000, hp_);
+        this.clientMaxHp = Math.min(MAX_CLIENT_HP_MP, hp_);
     }
 
     protected void setMaxMp(int mp_) {
@@ -271,7 +274,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             this.transientMp = Float.NEGATIVE_INFINITY;
         }
         this.maxMp = mp_;
-        this.clientMaxMp = Math.min(30000, mp_);
+        this.clientMaxMp = Math.min(MAX_CLIENT_HP_MP, mp_);
     }
 
     private static long clampStat(int v, int min, int max) {
@@ -300,7 +303,8 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         return ret;
     }
 
-    private void changeStatPool(Long hpMpPool, Long strDexIntLuk, Long newSp, int newAp, boolean silent) {
+    private void changeStatPool(Integer newHp, Integer newMp, Integer newMaxHp, Integer newMaxMp,
+                                Long strDexIntLuk, Long newSp, int newAp, boolean silent) {
         effLock.lock();
         statWlock.lock();
         try {
@@ -308,41 +312,30 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             boolean poolUpdate = false;
             boolean statUpdate = false;
 
-            if (hpMpPool != null) {
-                short newHp = (short) (hpMpPool >> 48);
-                short newMp = (short) (hpMpPool >> 32);
-                short newMaxHp = (short) (hpMpPool >> 16);
-                short newMaxMp = hpMpPool.shortValue();
-
-                if (newMaxHp != Short.MIN_VALUE) {
-                    if (newMaxHp < 50) {
-                        newMaxHp = 50;
-                    }
-
+            if (newMaxHp != null || newHp != null || newMaxMp != null || newMp != null) {
+                if (newMaxHp != null) {
+                    int cappedMaxHp = Math.max(50, Math.min(MAX_CLIENT_HP_MP, newMaxHp));
                     poolUpdate = true;
-                    setMaxHp(newMaxHp);
+                    setMaxHp(cappedMaxHp);
                     statUpdates.put(Stat.MAXHP, clientMaxHp);
                     statUpdates.put(Stat.HP, hp);
                 }
 
-                if (newHp != Short.MIN_VALUE) {
-                    setHp(newHp);
+                if (newHp != null) {
+                    setHp(Math.min(MAX_CLIENT_HP_MP, newHp));
                     statUpdates.put(Stat.HP, hp);
                 }
 
-                if (newMaxMp != Short.MIN_VALUE) {
-                    if (newMaxMp < 5) {
-                        newMaxMp = 5;
-                    }
-
+                if (newMaxMp != null) {
+                    int cappedMaxMp = Math.max(5, Math.min(MAX_CLIENT_HP_MP, newMaxMp));
                     poolUpdate = true;
-                    setMaxMp(newMaxMp);
+                    setMaxMp(cappedMaxMp);
                     statUpdates.put(Stat.MAXMP, clientMaxMp);
                     statUpdates.put(Stat.MP, mp);
                 }
 
-                if (newMp != Short.MIN_VALUE) {
-                    setMp(newMp);
+                if (newMp != null) {
+                    setMp(Math.min(MAX_CLIENT_HP_MP, newMp));
                     statUpdates.put(Stat.MP, mp);
                 }
             }
@@ -409,7 +402,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     }
 
     public void healHpMp() {
-        updateHpMp(30000);
+        updateHpMp(getCurrentMaxHp(), getCurrentMaxMp());
     }
 
     public void updateHpMp(int x) {
@@ -425,8 +418,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     }
 
     private void changeHpMpPool(Integer hp, Integer mp, Integer maxhp, Integer maxmp, boolean silent) {
-        long hpMpPool = calcStatPoolLong(hp, mp, maxhp, maxmp);
-        changeStatPool(hpMpPool, null, null, -1, silent);
+        changeStatPool(hp, mp, maxhp, maxmp, null, null, -1, silent);
     }
 
     public void updateHp(int hp) {
@@ -596,14 +588,12 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         effLock.lock();
         statWlock.lock();
         try {
-            if (remainingAp - deltaAp < 0 || hpMpApUsed + deltaAp < 0 || maxHp >= 30000) {
+            if (remainingAp - deltaAp < 0 || hpMpApUsed + deltaAp < 0 || maxHp >= MAX_CLIENT_HP_MP) {
                 return false;
             }
 
-            long hpMpPool = calcStatPoolLong(null, null, maxHp + deltaHP, maxMp);
             long strDexIntLuk = calcStatPoolLong(attrStr, attrDex, attrInt, attrLuk);
-
-            changeStatPool(hpMpPool, strDexIntLuk, null, remainingAp - deltaAp, false);
+            changeStatPool(null, null, maxHp + deltaHP, maxMp, strDexIntLuk, null, remainingAp - deltaAp, false);
             setHpMpApUsed(hpMpApUsed + deltaAp);
             return true;
         } finally {
@@ -616,14 +606,12 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         effLock.lock();
         statWlock.lock();
         try {
-            if (remainingAp - deltaAp < 0 || hpMpApUsed + deltaAp < 0 || maxMp >= 30000) {
+            if (remainingAp - deltaAp < 0 || hpMpApUsed + deltaAp < 0 || maxMp >= MAX_CLIENT_HP_MP) {
                 return false;
             }
 
-            long hpMpPool = calcStatPoolLong(null, null, maxHp, maxMp + deltaMP);
             long strDexIntLuk = calcStatPoolLong(attrStr, attrDex, attrInt, attrLuk);
-
-            changeStatPool(hpMpPool, strDexIntLuk, null, remainingAp - deltaAp, false);
+            changeStatPool(null, null, maxHp, maxMp + deltaMP, strDexIntLuk, null, remainingAp - deltaAp, false);
             setHpMpApUsed(hpMpApUsed + deltaAp);
             return true;
         } finally {
@@ -720,13 +708,13 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
 
     private void changeStrDexIntLuk(Integer str, Integer dex, Integer int_, Integer luk, int remainingAp, boolean silent) {
         long strDexIntLuk = calcStatPoolLong(str, dex, int_, luk);
-        changeStatPool(null, strDexIntLuk, null, remainingAp, silent);
+        changeStatPool(null, null, null, null, strDexIntLuk, null, remainingAp, silent);
     }
 
     private void changeStrDexIntLukSp(Integer str, Integer dex, Integer int_, Integer luk, int remainingAp, int remainingSp, int skillbook, boolean silent) {
         long strDexIntLuk = calcStatPoolLong(str, dex, int_, luk);
         long sp = calcStatPoolLong(0, 0, remainingSp, skillbook);
-        changeStatPool(null, strDexIntLuk, sp, remainingAp, silent);
+        changeStatPool(null, null, null, null, strDexIntLuk, sp, remainingAp, silent);
     }
 
     protected void updateStrDexIntLukSp(int str, int dex, int int_, int luk, int remainingAp, int remainingSp, int skillbook) {
@@ -750,7 +738,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
 
     protected void changeRemainingSp(int remainingSp, int skillbook, boolean silent) {
         long sp = calcStatPoolLong(0, 0, remainingSp, skillbook);
-        changeStatPool(null, null, sp, Short.MIN_VALUE, silent);
+        changeStatPool(null, null, null, null, null, sp, Short.MIN_VALUE, silent);
     }
 
     public void gainSp(int deltaSp, int skillbook, boolean silent) {

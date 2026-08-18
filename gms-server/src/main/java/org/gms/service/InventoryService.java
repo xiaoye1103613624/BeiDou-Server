@@ -157,6 +157,28 @@ public class InventoryService {
         return null;
     }
 
+    private static int rowInt(Row obj, String key) {
+        try {
+            Integer v = obj.getInt(key);
+            return v != null ? v : 0;
+        } catch (Exception ignored) {
+            return 0;
+        }
+    }
+
+    private static short rowShort(Row obj, String key) {
+        try {
+            Short v = obj.getShort(key);
+            if (v != null) {
+                return v;
+            }
+            Integer i = obj.getInt(key);
+            return i != null ? i.shortValue() : 0;
+        } catch (Exception ignored) {
+            return 0;
+        }
+    }
+
     private InventorySearchRtnDTO buildByDb(Row obj) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
@@ -203,6 +225,47 @@ public class InventoryService {
                     .itemLevel(obj.getByte("itemlevel"))
                     .itemExp(obj.getInt("itemexp"))
                     .ringId(obj.getInt("ringid"))
+                    .anvilItemId(rowInt(obj, "anvilItemId"))
+                    .equipSkillId(rowInt(obj, "equipSkillId"))
+                    .equipSkillLevel(rowInt(obj, "equipSkillLevel"))
+                    .equipSkillExpire(obj.getLong("equipSkillExpire") != null ? obj.getLong("equipSkillExpire") : 0L)
+                    .potential1(rowInt(obj, "potential1"))
+                    .potential2(rowInt(obj, "potential2"))
+                    .potential3(rowInt(obj, "potential3"))
+                    .potentialGrade(rowInt(obj, "potentialGrade"))
+                    .enhance(rowInt(obj, "enhance"))
+                    .bonusPotential1(rowInt(obj, "bonusPotential1"))
+                    .bonusPotential2(rowInt(obj, "bonusPotential2"))
+                    .bonusPotential3(rowInt(obj, "bonusPotential3"))
+                    .bonusPotentialGrade(rowInt(obj, "bonusPotentialGrade"))
+                    .soulId(rowInt(obj, "soulId"))
+                    .soulOption(rowInt(obj, "soulOption"))
+                    .socket1(rowInt(obj, "socket1"))
+                    .socket2(rowInt(obj, "socket2"))
+                    .socket3(rowInt(obj, "socket3"))
+                    .platinum(rowInt(obj, "platinum"))
+                    .reforge1(rowInt(obj, "reforge1"))
+                    .reforge2(rowInt(obj, "reforge2"))
+                    .reforge3(rowInt(obj, "reforge3"))
+                    .reforgeLock(rowInt(obj, "reforgeLock"))
+                    .infusion(rowInt(obj, "infusion"))
+                    .gemInlay(rowInt(obj, "gemInlay"))
+                    .breakthrough(rowInt(obj, "breakthrough"))
+                    .breakthroughPool(rowInt(obj, "breakthroughPool"))
+                    .chaosStr((int) rowShort(obj, "chaosStr"))
+                    .chaosDex((int) rowShort(obj, "chaosDex"))
+                    .chaosInt((int) rowShort(obj, "chaosInt"))
+                    .chaosLuk((int) rowShort(obj, "chaosLuk"))
+                    .chaosHp((int) rowShort(obj, "chaosHp"))
+                    .chaosMp((int) rowShort(obj, "chaosMp"))
+                    .chaosWatk((int) rowShort(obj, "chaosWatk"))
+                    .chaosMatk((int) rowShort(obj, "chaosMatk"))
+                    .chaosWdef((int) rowShort(obj, "chaosWdef"))
+                    .chaosMdef((int) rowShort(obj, "chaosMdef"))
+                    .chaosAcc((int) rowShort(obj, "chaosAcc"))
+                    .chaosAvoid((int) rowShort(obj, "chaosAvoid"))
+                    .chaosSpeed((int) rowShort(obj, "chaosSpeed"))
+                    .chaosJump((int) rowShort(obj, "chaosJump"))
                     .build());
         }
         return rtnDTO;
@@ -256,6 +319,47 @@ public class InventoryService {
                         .itemLevel(equip.getItemLevel())
                         .itemExp(equip.getItemExp())
                         .ringId(equip.getRingId())
+                        .anvilItemId(equip.getAnvilItemId())
+                        .equipSkillId(equip.getEquipSkillId())
+                        .equipSkillLevel(equip.getEquipSkillLevel())
+                        .equipSkillExpire(equip.getEquipSkillExpire())
+                        .potential1(equip.getPotential1())
+                        .potential2(equip.getPotential2())
+                        .potential3(equip.getPotential3())
+                        .potentialGrade((int) equip.getPotentialGrade())
+                        .enhance((int) equip.getEnhance())
+                        .bonusPotential1(equip.getBonusPotential1())
+                        .bonusPotential2(equip.getBonusPotential2())
+                        .bonusPotential3(equip.getBonusPotential3())
+                        .bonusPotentialGrade((int) equip.getBonusPotentialGrade())
+                        .soulId(equip.getSoulId())
+                        .soulOption(equip.getSoulOption())
+                        .socket1(equip.getSocket1())
+                        .socket2(equip.getSocket2())
+                        .socket3(equip.getSocket3())
+                        .platinum((int) equip.getPlatinum())
+                        .reforge1(equip.getReforge1())
+                        .reforge2(equip.getReforge2())
+                        .reforge3(equip.getReforge3())
+                        .reforgeLock((int) equip.getReforgeLock())
+                        .infusion((int) equip.getInfusion())
+                        .gemInlay((int) equip.getGemInlay())
+                        .breakthrough((int) equip.getBreakthrough())
+                        .breakthroughPool(equip.getBreakthroughPool())
+                        .chaosStr((int) equip.getChaosStr())
+                        .chaosDex((int) equip.getChaosDex())
+                        .chaosInt((int) equip.getChaosInt())
+                        .chaosLuk((int) equip.getChaosLuk())
+                        .chaosHp((int) equip.getChaosHp())
+                        .chaosMp((int) equip.getChaosMp())
+                        .chaosWatk((int) equip.getChaosWatk())
+                        .chaosMatk((int) equip.getChaosMatk())
+                        .chaosWdef((int) equip.getChaosWdef())
+                        .chaosMdef((int) equip.getChaosMdef())
+                        .chaosAcc((int) equip.getChaosAcc())
+                        .chaosAvoid((int) equip.getChaosAvoid())
+                        .chaosSpeed((int) equip.getChaosSpeed())
+                        .chaosJump((int) equip.getChaosJump())
                         .build());
             }
             return rtnDTO;
@@ -308,6 +412,49 @@ public class InventoryService {
             if (equipment.getSpeed() != null) equip.setSpeed(equipment.getSpeed());
             if (equipment.getJump() != null) equip.setJump(equipment.getJump());
             if (equipment.getVicious() != null) equip.setVicious(equipment.getVicious());
+            if (equipment.getAnvilItemId() != null) equip.setAnvilItemId(equipment.getAnvilItemId());
+            if (equipment.getEquipSkillId() != null) equip.setEquipSkillId(equipment.getEquipSkillId());
+            if (equipment.getEquipSkillLevel() != null) equip.setEquipSkillLevel(equipment.getEquipSkillLevel());
+            if (equipment.getEquipSkillExpire() != null) equip.setEquipSkillExpire(equipment.getEquipSkillExpire());
+            if (equipment.getPotential1() != null) equip.setPotential1(equipment.getPotential1());
+            if (equipment.getPotential2() != null) equip.setPotential2(equipment.getPotential2());
+            if (equipment.getPotential3() != null) equip.setPotential3(equipment.getPotential3());
+            if (equipment.getPotentialGrade() != null) equip.setPotentialGrade(equipment.getPotentialGrade().byteValue());
+            if (equipment.getEnhance() != null) equip.setEnhance(equipment.getEnhance().byteValue());
+            if (equipment.getBonusPotential1() != null) equip.setBonusPotential1(equipment.getBonusPotential1());
+            if (equipment.getBonusPotential2() != null) equip.setBonusPotential2(equipment.getBonusPotential2());
+            if (equipment.getBonusPotential3() != null) equip.setBonusPotential3(equipment.getBonusPotential3());
+            if (equipment.getBonusPotentialGrade() != null) {
+                equip.setBonusPotentialGrade(equipment.getBonusPotentialGrade().byteValue());
+            }
+            if (equipment.getSoulId() != null) equip.setSoulId(equipment.getSoulId());
+            if (equipment.getSoulOption() != null) equip.setSoulOption(equipment.getSoulOption());
+            if (equipment.getSocket1() != null) equip.setSocket1(equipment.getSocket1());
+            if (equipment.getSocket2() != null) equip.setSocket2(equipment.getSocket2());
+            if (equipment.getSocket3() != null) equip.setSocket3(equipment.getSocket3());
+            if (equipment.getPlatinum() != null) equip.setPlatinum(equipment.getPlatinum());
+            if (equipment.getReforge1() != null) equip.setReforge1(equipment.getReforge1());
+            if (equipment.getReforge2() != null) equip.setReforge2(equipment.getReforge2());
+            if (equipment.getReforge3() != null) equip.setReforge3(equipment.getReforge3());
+            if (equipment.getReforgeLock() != null) equip.setReforgeLock(equipment.getReforgeLock().byteValue());
+            if (equipment.getInfusion() != null) equip.setInfusion(equipment.getInfusion().byteValue());
+            if (equipment.getGemInlay() != null) equip.setGemInlay(equipment.getGemInlay().byteValue());
+            if (equipment.getBreakthrough() != null) equip.setBreakthrough(equipment.getBreakthrough().byteValue());
+            if (equipment.getBreakthroughPool() != null) equip.setBreakthroughPool(equipment.getBreakthroughPool());
+            if (equipment.getChaosStr() != null) equip.setChaosStr(equipment.getChaosStr().shortValue());
+            if (equipment.getChaosDex() != null) equip.setChaosDex(equipment.getChaosDex().shortValue());
+            if (equipment.getChaosInt() != null) equip.setChaosInt(equipment.getChaosInt().shortValue());
+            if (equipment.getChaosLuk() != null) equip.setChaosLuk(equipment.getChaosLuk().shortValue());
+            if (equipment.getChaosHp() != null) equip.setChaosHp(equipment.getChaosHp().shortValue());
+            if (equipment.getChaosMp() != null) equip.setChaosMp(equipment.getChaosMp().shortValue());
+            if (equipment.getChaosWatk() != null) equip.setChaosWatk(equipment.getChaosWatk().shortValue());
+            if (equipment.getChaosMatk() != null) equip.setChaosMatk(equipment.getChaosMatk().shortValue());
+            if (equipment.getChaosWdef() != null) equip.setChaosWdef(equipment.getChaosWdef().shortValue());
+            if (equipment.getChaosMdef() != null) equip.setChaosMdef(equipment.getChaosMdef().shortValue());
+            if (equipment.getChaosAcc() != null) equip.setChaosAcc(equipment.getChaosAcc().shortValue());
+            if (equipment.getChaosAvoid() != null) equip.setChaosAvoid(equipment.getChaosAvoid().shortValue());
+            if (equipment.getChaosSpeed() != null) equip.setChaosSpeed(equipment.getChaosSpeed().shortValue());
+            if (equipment.getChaosJump() != null) equip.setChaosJump(equipment.getChaosJump().shortValue());
         }
         character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
     }
@@ -341,6 +488,47 @@ public class InventoryService {
                             .speed(Optional.ofNullable(equipment.getSpeed()).map(Short::intValue).orElse(null))
                             .jump(Optional.ofNullable(equipment.getJump()).map(Short::intValue).orElse(null))
                             .vicious(Optional.ofNullable(equipment.getVicious()).map(Short::intValue).orElse(null))
+                            .anvilitemid(Optional.ofNullable(equipment.getAnvilItemId()).orElse(null))
+                            .equipskillid(Optional.ofNullable(equipment.getEquipSkillId()).orElse(null))
+                            .equipskilllevel(Optional.ofNullable(equipment.getEquipSkillLevel()).orElse(null))
+                            .equipskillexpire(Optional.ofNullable(equipment.getEquipSkillExpire()).orElse(null))
+                            .potential1(Optional.ofNullable(equipment.getPotential1()).orElse(null))
+                            .potential2(Optional.ofNullable(equipment.getPotential2()).orElse(null))
+                            .potential3(Optional.ofNullable(equipment.getPotential3()).orElse(null))
+                            .potentialgrade(Optional.ofNullable(equipment.getPotentialGrade()).orElse(null))
+                            .enhance(Optional.ofNullable(equipment.getEnhance()).orElse(null))
+                            .bonuspotential1(Optional.ofNullable(equipment.getBonusPotential1()).orElse(null))
+                            .bonuspotential2(Optional.ofNullable(equipment.getBonusPotential2()).orElse(null))
+                            .bonuspotential3(Optional.ofNullable(equipment.getBonusPotential3()).orElse(null))
+                            .bonuspotentialgrade(Optional.ofNullable(equipment.getBonusPotentialGrade()).orElse(null))
+                            .soulid(Optional.ofNullable(equipment.getSoulId()).orElse(null))
+                            .souloption(Optional.ofNullable(equipment.getSoulOption()).orElse(null))
+                            .socket1(Optional.ofNullable(equipment.getSocket1()).orElse(null))
+                            .socket2(Optional.ofNullable(equipment.getSocket2()).orElse(null))
+                            .socket3(Optional.ofNullable(equipment.getSocket3()).orElse(null))
+                            .platinum(Optional.ofNullable(equipment.getPlatinum()).orElse(null))
+                            .reforge1(Optional.ofNullable(equipment.getReforge1()).orElse(null))
+                            .reforge2(Optional.ofNullable(equipment.getReforge2()).orElse(null))
+                            .reforge3(Optional.ofNullable(equipment.getReforge3()).orElse(null))
+                            .reforgeLock(Optional.ofNullable(equipment.getReforgeLock()).orElse(null))
+                            .infusion(Optional.ofNullable(equipment.getInfusion()).orElse(null))
+                            .gemInlay(Optional.ofNullable(equipment.getGemInlay()).orElse(null))
+                            .breakthrough(Optional.ofNullable(equipment.getBreakthrough()).orElse(null))
+                            .breakthroughPool(Optional.ofNullable(equipment.getBreakthroughPool()).orElse(null))
+                            .chaosstr(Optional.ofNullable(equipment.getChaosStr()).orElse(null))
+                            .chaosdex(Optional.ofNullable(equipment.getChaosDex()).orElse(null))
+                            .chaosint(Optional.ofNullable(equipment.getChaosInt()).orElse(null))
+                            .chaosluk(Optional.ofNullable(equipment.getChaosLuk()).orElse(null))
+                            .chaoshp(Optional.ofNullable(equipment.getChaosHp()).orElse(null))
+                            .chaosmp(Optional.ofNullable(equipment.getChaosMp()).orElse(null))
+                            .chaoswatk(Optional.ofNullable(equipment.getChaosWatk()).orElse(null))
+                            .chaosmatk(Optional.ofNullable(equipment.getChaosMatk()).orElse(null))
+                            .chaoswdef(Optional.ofNullable(equipment.getChaosWdef()).orElse(null))
+                            .chaosmdef(Optional.ofNullable(equipment.getChaosMdef()).orElse(null))
+                            .chaosacc(Optional.ofNullable(equipment.getChaosAcc()).orElse(null))
+                            .chaosavoid(Optional.ofNullable(equipment.getChaosAvoid()).orElse(null))
+                            .chaosspeed(Optional.ofNullable(equipment.getChaosSpeed()).orElse(null))
+                            .chaosjump(Optional.ofNullable(equipment.getChaosJump()).orElse(null))
                             .build(),
                     QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryitemsDO.getInventoryitemid())));
         }

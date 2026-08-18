@@ -20,9 +20,9 @@ public class CharacterListener implements AbstractCharacterListener {
 
     @Override
     public void onHpMpPoolUpdate() {
-        List<Pair<Stat, Integer>> hpmpupdate = character.recalcLocalStats();
-        for (Pair<Stat, Integer> p : hpmpupdate) {
-            character.statUpdates.put(p.getLeft(), p.getRight());
+        List<Pair<Stat, Long>> hpmpupdate = character.recalcLocalStats();
+        for (Pair<Stat, Long> p : hpmpupdate) {
+            character.statUpdates.put(p.getLeft(), p.getRight().intValue());
         }
 
         if (character.hp > character.localMaxHp) {
@@ -43,10 +43,12 @@ public class CharacterListener implements AbstractCharacterListener {
 
     @Override
     public void onAnnounceStatPoolUpdate() {
-        List<Pair<Stat, Integer>> statup = new ArrayList<>(8);
+        List<Pair<Stat, Long>> statup = new ArrayList<>(8);
         for (Map.Entry<Stat, Integer> s : character.statUpdates.entrySet()) {
-            statup.add(new Pair<>(s.getKey(), s.getValue()));
+            statup.add(new Pair<>(s.getKey(), s.getValue().longValue()));
         }
+        // ADDON_SERVER_STATS_20260802: AP/池更新也带上 Occ-OFF 盲区四维，避免加点后扩展属性被冲掉。
+        character.overlayClientDisplayBaseFourStats(statup);
 
         character.sendPacket(PacketCreator.updatePlayerStats(statup, true, character));
     }

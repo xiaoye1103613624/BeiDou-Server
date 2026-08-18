@@ -26,6 +26,7 @@ import org.gms.client.*;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
+import org.gms.config.PetGrowthManager;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -567,6 +568,25 @@ public class AbstractPlayerInteraction {
         return evolved;
     }
 
+    /**
+     * 用宠物精华喂养召唤中的成长宠。
+     *
+     * @param foodItemId 4310337 初级 / 4310338 高级
+     * @param petSlot    召唤槽 0~2；传 -1 自动选择第一只可成长宠
+     * @return 空串成功，否则失败原因
+     */
+    public String feedPetEssence(int foodItemId, int petSlot) {
+        return PetGrowthManager.feedEssence(getPlayer(), foodItemId, petSlot);
+    }
+
+    public int getPetGrowthExp(int petUniqueId) {
+        return PetGrowthManager.getGrowthExp(petUniqueId);
+    }
+
+    public boolean isPetGrowthPet(int petItemId) {
+        return PetGrowthManager.getStageByPetId(petItemId) != null;
+    }
+
     public void gainItem(int id, short quantity) {
         gainItem(id, quantity, false, true);
     }
@@ -968,6 +988,47 @@ public class AbstractPlayerInteraction {
         getPlayer().changeSkillLevel(skill, level, masterLevel, expiration);
     }
 
+    /**
+     * 技改额外等级：脚本追加技能等级加成（不占 SP，可超过原始上限，封顶为效果最高等级）。
+     * 例：cm.gainSkillBonus(1121008, 5) — 在已学基础上 +5
+     */
+    public void gainSkillBonus(int skillid, int amount) {
+        getPlayer().gainScriptSkillBonus(skillid, amount, false);
+    }
+
+    /** 将脚本技能加成设为绝对值。 */
+    public void setSkillBonus(int skillid, int amount) {
+        getPlayer().gainScriptSkillBonus(skillid, amount, true);
+    }
+
+    /** 清除脚本技能加成；skillid&lt;=0 时清空全部。 */
+    public void clearSkillBonus(int skillid) {
+        getPlayer().clearScriptSkillBonus(skillid);
+    }
+
+    /** 当前技能生效等级（含套装/灵韵/脚本加成）。 */
+    public int getSkillLevel(int skillid) {
+        return getPlayer().getSkillLevel(skillid);
+    }
+
+    /** 当前技能原始等级（不含加成，即 SP 点数）。 */
+    public int getSkillLevelRaw(int skillid) {
+        Skill skill = SkillFactory.getSkill(skillid);
+        return skill == null ? 0 : getPlayer().getSkillLevelRaw(skill);
+    }
+
+    /** 手动加点上限（技改前原始最高等级）。 */
+    public int getSkillSpMaxLevel(int skillid) {
+        Skill skill = SkillFactory.getSkill(skillid);
+        return skill == null ? 0 : skill.getSpMaxLevel();
+    }
+
+    /** 效果最高等级（技改后可高于 SP 上限）。 */
+    public int getSkillMaxLevel(int skillid) {
+        Skill skill = SkillFactory.getSkill(skillid);
+        return skill == null ? 0 : skill.getMaxLevel();
+    }
+
     public void removeEquipFromSlot(short slot) {
         Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
         InventoryManipulator.removeFromSlot(c, InventoryType.EQUIPPED, slot, tempItem.getQuantity(), false, false);
@@ -999,12 +1060,23 @@ public class AbstractPlayerInteraction {
 
     public void spawnMonster(int id, int x, int y) {
         Monster monster = LifeFactory.getMonster(id);
+        if (monster == null) {
+            return;
+        }
         monster.setPosition(new Point(x, y));
         getPlayer().getMap().spawnMonster(monster);
     }
 
     public Monster getMonsterLifeFactory(int mid) {
         return LifeFactory.getMonster(mid);
+    }
+
+    public String getMobNameFromId(int id) {
+        return MonsterInformationProvider.getInstance().getMobNameFromId(id);
+    }
+
+    public java.util.ArrayList<Pair<Integer, String>> getMobsIDsFromName(String search) {
+        return MonsterInformationProvider.getMobsIDsFromName(search);
     }
 
     public void spawnGuide() {
@@ -1349,8 +1421,38 @@ public class AbstractPlayerInteraction {
         return getPlayer().getCurrentOnlineTime();
     }
 
+    // ==================== 角色赞助（总赞助 / 可消费赞助） ====================
 
+    private org.gms.service.SponsorService sponsorService() {
+        var ctx = org.gms.manager.ServerManager.getApplicationContext();
+        if (ctx == null) {
+            throw new IllegalStateException("Spring 上下文不可用");
+        }
+        return ctx.getBean(org.gms.service.SponsorService.class);
+    }
 
+    /** 总赞助（累计，只增不减，档位达标用） */
+    public int getTotalSponsor() {
+        return sponsorService().getTotalSponsor(getPlayer().getId());
+    }
 
+    /** 可消费赞助（商店扣减用） */
+    public int getSponsor() {
+        return sponsorService().getSpendableSponsor(getPlayer().getId());
+    }
+
+    /**
+     * 充值入账：总赞助与可消费赞助同时 +amount。
+     */
+    public void gainSponsor(int amount) {
+        sponsorService().recharge(getPlayer().getId(), amount);
+    }
+
+    /**
+     * 扣减可消费赞助；成功返回 true，余额不足返回 false。
+     */
+    public boolean spendSponsor(int amount) {
+        return sponsorService().trySpend(getPlayer().getId(), amount);
+    }
 
 }

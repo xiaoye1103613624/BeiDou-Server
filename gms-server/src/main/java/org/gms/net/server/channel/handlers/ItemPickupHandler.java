@@ -56,8 +56,10 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
         if (Math.abs(charPos.getX() - obPos.getX()) > 800 || Math.abs(charPos.getY() - obPos.getY()) > 600) {
 
 //            AutobanFactory.DISTANCE_HACK.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
-            AutobanFactory.ITEM_VAC.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
+            AutobanFactory.DISTANCE_HACK.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
             log.warn("玩家{}地图ID：{}距离物品: {} {}", chr.getName(), chr.getMapId(), Math.abs(charPos.getX() - obPos.getX()), Math.abs(charPos.getY() - obPos.getY()));
+            // Always unlock client actions — silent return soft-locks Z-pickup / follow-up packets.
+            c.sendPacket(org.gms.util.PacketCreator.enableActions());
             return;
         }
 

@@ -44,4 +44,7 @@ public class DropDataGlobalDO implements Serializable {
 
     private String comments;
 
+    /** 1启用 0停用 */
+    private Integer enabled;
+
 }

@@ -9,6 +9,7 @@ import org.gms.dao.mapper.DropDataGlobalMapper;
 import org.gms.dao.mapper.DropDataMapper;
 import org.gms.model.dto.DropSearchReqDTO;
 import org.gms.model.dto.DropSearchRtnDTO;
+import org.gms.model.dto.MobDropGroupDTO;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.quest.Quest;
@@ -23,6 +24,51 @@ import java.util.List;
 public class DropService {
     private final DropDataMapper dropDataMapper;
     private final DropDataGlobalMapper dropDataGlobalMapper;
+    private final GameIconService gameIconService;
+
+    public Page<MobDropGroupDTO> getMobGroupList(DropSearchReqDTO data) {
+        Integer pageNo = data.getPageNo() == null || data.getPageNo() < 1 ? 1 : data.getPageNo();
+        Integer pageSize = data.getPageSize() == null || data.getPageSize() < 1 ? 20 : data.getPageSize();
+
+        List<Integer> dropperIds = null;
+        if (data.getDropperName() != null && !data.getDropperName().isEmpty()) {
+            dropperIds = MonsterInformationProvider.getMobsIDsFromName(data.getDropperName())
+                    .stream()
+                    .map(Pair::getLeft)
+                    .toList();
+            if (dropperIds.isEmpty()) {
+                return new Page<>(Collections.emptyList(), pageNo, pageSize, 0);
+            }
+        }
+
+        List<Integer> itemIds = null;
+        if (data.getItemName() != null && !data.getItemName().isEmpty()) {
+            itemIds = ItemInformationProvider.getItemsIDsFromName(data.getItemName())
+                    .stream()
+                    .map(Pair::getLeft)
+                    .toList();
+            if (itemIds.isEmpty()) {
+                return new Page<>(Collections.emptyList(), pageNo, pageSize, 0);
+            }
+        }
+
+        long total = dropDataMapper.countMobGroups(
+                data.getDropperId(), dropperIds, data.getItemId(), itemIds, data.getQuestId());
+        if (total == 0) {
+            return new Page<>(Collections.emptyList(), pageNo, pageSize, 0);
+        }
+        long offset = (long) (pageNo - 1) * pageSize;
+        List<MobDropGroupDTO> rows = dropDataMapper.selectMobGroups(
+                data.getDropperId(), dropperIds, data.getItemId(), itemIds, data.getQuestId(),
+                offset, pageSize);
+        for (MobDropGroupDTO row : rows) {
+            row.setDropperName(getMobName(row.getDropperId()));
+            String iconUrl = gameIconService.iconUrl(GameIconService.CATEGORY_MOB, row.getDropperId());
+            row.setMobIconUrl(iconUrl);
+            row.setHasIcon(iconUrl != null);
+        }
+        return new Page<>(rows, pageNo, pageSize, total);
+    }
 
     public Page<DropSearchRtnDTO> getDropList(DropSearchReqDTO data, boolean isGlobal) {
         if (isGlobal) {
@@ -30,6 +76,7 @@ public class DropService {
             if (data.getContinent() != null) dropDataGlobalDO.setContinent(data.getContinent());
             if (data.getItemId() != null) dropDataGlobalDO.setItemid(data.getItemId());
             if (data.getQuestId() != null) dropDataGlobalDO.setQuestid(data.getQuestId());
+            if (data.getEnabled() != null) dropDataGlobalDO.setEnabled(data.getEnabled());
 
             QueryWrapper queryWrapper = QueryWrapper.create(dropDataGlobalDO);
             // 物品名称模糊查询
@@ -54,12 +101,14 @@ public class DropService {
                                     .continent(record.getContinent())
                                     .itemId(record.getItemid())
                                     .itemName(getItemName(record.getItemid()))
+                                    .itemIconUrl(gameIconService.iconUrl(GameIconService.CATEGORY_ITEM, record.getItemid()))
                                     .minimumQuantity(record.getMinimumQuantity())
                                     .maximumQuantity(record.getMaximumQuantity())
                                     .questId(record.getQuestid())
                                     .questName(getQuestName(record.getQuestid()))
                                     .chance(record.getChance())
                                     .comments(record.getComments())
+                                    .enabled(record.getEnabled() == null ? 1 : record.getEnabled())
                                     .build())
                             .toList(),
                     paginate.getPageNumber(),
@@ -107,8 +156,10 @@ public class DropService {
                                     .id(record.getId())
                                     .dropperId(record.getDropperid())
                                     .dropperName(getMobName(record.getDropperid()))
+                                    .mobIconUrl(gameIconService.iconUrl(GameIconService.CATEGORY_MOB, record.getDropperid()))
                                     .itemId(record.getItemid())
                                     .itemName(getItemName(record.getItemid()))
+                                    .itemIconUrl(gameIconService.iconUrl(GameIconService.CATEGORY_ITEM, record.getItemid()))
                                     .minimumQuantity(record.getMinimumQuantity())
                                     .maximumQuantity(record.getMaximumQuantity())
                                     .questId(record.getQuestid())
@@ -139,9 +190,14 @@ public class DropService {
                         .questid(data.getQuestId())
                         .chance(data.getChance())
                         .comments(data.getComments())
+                        .enabled(data.getEnabled() == null ? 1 : data.getEnabled())
                         .build();
                 dropDataGlobalMapper.insertOrUpdate(dropDataGlobalDO, true);
                 dropDataId = dropDataGlobalDO.getId();
+                // 保存后按默认版本补齐物品图标（已存在则跳过）
+                if (data.getItemId() != null && data.getItemId() > 0) {
+                    gameIconService.ensureIcon(GameIconService.CATEGORY_ITEM, data.getItemId());
+                }
             } else {
                 DropDataDO dropDataDO = DropDataDO.builder()
                         .id(data.getId())
@@ -154,10 +210,27 @@ public class DropService {
                         .build();
                 dropDataMapper.insertOrUpdate(dropDataDO, true);
                 dropDataId = dropDataDO.getId();
+                if (data.getDropperId() != null && data.getDropperId() > 0) {
+                    gameIconService.ensureIcon(GameIconService.CATEGORY_MOB, data.getDropperId());
+                }
+                if (data.getItemId() != null && data.getItemId() > 0) {
+                    gameIconService.ensureIcon(GameIconService.CATEGORY_ITEM, data.getItemId());
+                }
             }
         }
         MonsterInformationProvider.getInstance().clearDrops();
         return dropDataId;
+    }
+
+    public void toggleGlobalDropEnabled(Long id) {
+        DropDataGlobalDO existing = dropDataGlobalMapper.selectOneById(id);
+        if (existing == null) {
+            return;
+        }
+        int next = (existing.getEnabled() == null || existing.getEnabled() == 1) ? 0 : 1;
+        existing.setEnabled(next);
+        dropDataGlobalMapper.update(existing);
+        MonsterInformationProvider.getInstance().clearDrops();
     }
 
     private String getItemName(Integer itemId) {

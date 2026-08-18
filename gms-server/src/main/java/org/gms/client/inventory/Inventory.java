@@ -53,10 +53,10 @@ public class Inventory implements Iterable<Item> {
     protected final Lock lock = new ReentrantLock(true);
 
     protected Character owner;
-    protected byte slotLimit;
+    protected short slotLimit;
     protected boolean checked = false;
 
-    public Inventory(Character mc, InventoryType type, byte slotLimit) {
+    public Inventory(Character mc, InventoryType type, short slotLimit) {
         this.owner = mc;
         this.inventory = new LinkedHashMap<>();
         this.type = type;
@@ -71,7 +71,7 @@ public class Inventory implements Iterable<Item> {
         return type.equals(InventoryType.EQUIP) || type.equals(InventoryType.EQUIPPED);
     }
 
-    public byte getSlotLimit() {
+    public short getSlotLimit() {
         lock.lock();
         try {
             return slotLimit;
@@ -96,7 +96,7 @@ public class Inventory implements Iterable<Item> {
                 }
             }
 
-            slotLimit = (byte) newLimit;
+            slotLimit = (short) newLimit;
         } finally {
             lock.unlock();
         }
@@ -254,7 +254,12 @@ public class Inventory implements Iterable<Item> {
                 inventory.put(dSlot, source);
                 inventory.remove(sSlot);
             } else if (target.getItemId() == source.getItemId() && !ItemConstants.isRechargeable(source.getItemId()) && isSameOwner(source, target)) {
-                if (type.getType() == InventoryType.EQUIP.getType() || type.getType() == InventoryType.CASH.getType()) {
+                // Equip always swaps. Pets (cash) must not quantity-merge.
+                // Other Cash items (cubes etc.) must stack like USE/ETC — otherwise
+                // InventoryMergeHandler swaps forever when qty < slotMax and freezes the client.
+                final boolean cashPet = type.getType() == InventoryType.CASH.getType()
+                        && (ItemConstants.isPet(source.getItemId()) || source.getPet() != null || target.getPet() != null);
+                if (type.getType() == InventoryType.EQUIP.getType() || cashPet) {
                     swap(target, source);
                 } else if (source.getQuantity() + target.getQuantity() > slotMax) {
                     short rest = (short) ((source.getQuantity() + target.getQuantity()) - slotMax);

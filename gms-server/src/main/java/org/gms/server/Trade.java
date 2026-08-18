@@ -76,8 +76,8 @@ public class Trade {
     private Trade partner = null;
     private final List<Item> items = new ArrayList<>();
     private List<Item> exchangeItems;
-    private int meso = 0;
-    private int exchangeMeso;
+    private long meso = 0;
+    private long exchangeMeso;
     private final AtomicBoolean locked = new AtomicBoolean(false);
     private final Character chr;
     private final byte number;
@@ -125,6 +125,15 @@ public class Trade {
         meso = 0;
 
         for (Item item : exchangeItems) {
+            // 灵韵觉醒：交易到手清空灵韵，避免流通通胀
+            if (org.gms.spirit.SpiritAwakenConfig.CLEAR_SPIRIT_ON_TRADE
+                    && item instanceof org.gms.client.inventory.Equip equip) {
+                org.gms.spirit.SpiritAwakenService.clearSpirit(equip);
+            }
+            // 潜能/Hyper/附加/灵魂/星岩：CLEAR_ON_TRADE 时清空（官方体验：流通不清潜会通胀）
+            if (item instanceof org.gms.client.inventory.Equip potEquip) {
+                org.gms.potential.PotentialHyperService.clearOnTradeIfEnabled(potEquip);
+            }
             KarmaManipulator.toggleKarmaFlagToUntradeable(item);
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
@@ -134,9 +143,9 @@ public class Trade {
 
             chr.gainMeso(exchangeMeso - fee, show, true, show);
             if (fee > 0) {
-                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee",fee,GameConstants.numberWithCommas(exchangeMeso - fee)));
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee", fee, GameConstants.numberWithCommas((int) (exchangeMeso - fee))));
             } else {
-                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee",GameConstants.numberWithCommas(exchangeMeso)));
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee", GameConstants.numberWithCommas((int) exchangeMeso)));
             }
 
             result = TradeResult.NO_RESPONSE.getValue();
@@ -190,11 +199,11 @@ public class Trade {
         return locked.get();
     }
 
-    private int getMeso() {
+    private long getMeso() {
         return meso;
     }
 
-    public void setMeso(int meso) {
+    public void setMeso(long meso) {
         if (locked.get()) {
             throw new RuntimeException(I18nUtil.getLogMessage("Trade.info.setMeso.msg1"));
         }
@@ -257,7 +266,7 @@ public class Trade {
         return new LinkedList<>(items);
     }
 
-    public int getExchangeMesos() {
+    public long getExchangeMesos() {
         return exchangeMeso;
     }
 
@@ -380,7 +389,7 @@ public class Trade {
                     partner.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
                 } else {
-                    local.getChr().addMesosTraded(local.exchangeMeso);
+                    local.getChr().addMesosTraded((int) local.exchangeMeso);
                 }
             } else if (level != -1 && partner.getChr().getLevel() <= level) {
                 if (mesomax != -1 && partner.getChr().getMesosTraded() + partner.exchangeMeso > mesomax) {
@@ -389,7 +398,7 @@ public class Trade {
                     local.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
                 } else {
-                    partner.getChr().addMesosTraded(partner.exchangeMeso);
+                    partner.getChr().addMesosTraded((int) partner.exchangeMeso);
                 }
             }
 

@@ -49,6 +49,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -107,6 +108,9 @@ public class Expedition {
     private final int minSize;
     private final int maxSize;
     private final Lock pL = new ReentrantLock(true);
+
+    // 共享死亡次数。-1 = 关闭（默认）；armDeathCount(n>0) 后启用。
+    private final AtomicInteger deathCount = new AtomicInteger(-1);
 
     public Expedition(Character player, ExpeditionType met, boolean sil, int minPlayers, int maxPlayers) {
         leader = player;
@@ -328,6 +332,32 @@ public class Expedition {
 
     public ExpeditionType getType() {
         return type;
+    }
+
+    public void armDeathCount(int n) {
+        if (n > 0) {
+            deathCount.set(n);
+        }
+    }
+
+    public boolean isDeathCountEnabled() {
+        return deathCount.get() >= 0;
+    }
+
+    public int getDeathCount() {
+        return deathCount.get();
+    }
+
+    /** GM 覆盖。负数关闭本场计数。 */
+    public void setDeathCount(int n) {
+        deathCount.set(Math.max(-1, n));
+    }
+
+    /**
+     * 原子扣一次死亡。返回扣之前的值：&gt;0 已扣、0 已耗尽需团灭、-1 功能关闭。
+     */
+    public int consumeDeath() {
+        return deathCount.getAndUpdate(v -> v > 0 ? v - 1 : v);
     }
 
     public List<Character> getActiveMembers() {    // thanks MedicOP for figuring out an issue with broadcasting packets to offline members

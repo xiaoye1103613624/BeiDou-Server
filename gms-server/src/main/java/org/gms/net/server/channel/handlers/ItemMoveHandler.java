@@ -35,26 +35,44 @@ public final class ItemMoveHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {  //使用装备、物品、道具
         p.skip(4);
-        if (c.getPlayer().getAutoBanManager().getLastSpam(6) + 300 > currentServerTime()) {
-            c.sendPacket(PacketCreator.enableActions());
-            return;
-        }
 
         InventoryType type = InventoryType.getByType(p.readByte());
         short src = p.readShort();     //is there any reason to use byte instead of short in src and action?
         short action = p.readShort();
         short quantity = p.readShort();
 
-        if (src < 0 && action > 0) {
-            InventoryManipulator.unequip(c, src, action);   //脱下装备
-        } else if (action < 0) {
-            InventoryManipulator.equip(c, src, action);     //穿上装备
-        } else if (action == 0) {
-            InventoryManipulator.drop(c, type, src, quantity);
-        } else {
-            InventoryManipulator.move(c, type, src, action);
+        // Spam gate: ONLY floor-drops. Bag rearrange must never be 300ms-blocked
+        // (felt like "new equips can't move in bag"; sort+rapid moves also desynced).
+        // Wear/unequip stay exempt (ADDON_STATS_UNEQUIP).
+        final boolean wearOrUnequip = (src < 0 && action > 0) || action < 0;
+        final boolean bagMove = src > 0 && action > 0;
+        if (!wearOrUnequip && !bagMove && action == 0
+                && c.getPlayer().getAutoBanManager().getLastSpam(6) + 300 > currentServerTime()) {
+            c.sendPacket(PacketCreator.enableActions());
+            return;
         }
 
-        c.getPlayer().getAutoBanManager().spam(6);
+        try {
+            if (src < 0 && action > 0) {
+                InventoryManipulator.unequip(c, src, action);   //脱下装备
+            } else if (action < 0) {
+                InventoryManipulator.equip(c, src, action);     //穿上装备
+            } else if (action == 0) {
+                InventoryManipulator.drop(c, type, src, quantity);
+            } else {
+                InventoryManipulator.move(c, type, src, action);
+            }
+        } finally {
+            // Addon ghost-sync / early reject: mode-3 or missed unlock must not leave
+            // SendBusy (unequip hang → ALL_IDLE). Same class as InventorySortHandler.
+            if (wearOrUnequip) {
+                c.sendPacket(PacketCreator.enableActions());
+            }
+        }
+
+        // Only stamp spam on drops — bag moves/wear must stay free for rapid UI.
+        if (action == 0) {
+            c.getPlayer().getAutoBanManager().spam(6);
+        }
     }
 }

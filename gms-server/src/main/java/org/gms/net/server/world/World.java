@@ -256,7 +256,7 @@ public class World {
         mountsSchedule = tman.register(new MountTirednessTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
         merchantSchedule = tman.register(new HiredMerchantTask(this), 10 * MINUTES.toMillis(1), 10 * MINUTES.toMillis(1));
         timedMapObjectsSchedule = tman.register(new TimedMapObjectTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
-        charactersSchedule = tman.registerWithFixedDelay(new CharacterAutosaverTask(this), HOURS.toMillis(1), HOURS.toMillis(1));
+        charactersSchedule = tman.register(new CharacterAutosaverTask(this), HOURS.toMillis(1), HOURS.toMillis(1));
         marriagesSchedule = tman.register(new WeddingReservationTask(this), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")));
         mapOwnershipSchedule = tman.register(new MapOwnershipTask(this), SECONDS.toMillis(20), SECONDS.toMillis(20));
         fishingSchedule = tman.register(new FishingTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
@@ -983,6 +983,42 @@ public class World {
             default:
                 break;
         }
+
+        if (operation == PartyOperation.JOIN || operation == PartyOperation.LOG_ONOFF) {
+            syncPartyBuffSnapshots(partyMembers, target);
+        }
+    }
+
+    private void syncPartyBuffSnapshots(Collection<PartyCharacter> partyMembers, PartyCharacter target) {
+        List<Character> onlineMembers = new ArrayList<>();
+        for (PartyCharacter partychar : partyMembers) {
+            Character member = getPlayerStorage().getCharacterById(partychar.getId());
+            if (member != null && member.isLoggedInWorld()) {
+                onlineMembers.add(member);
+            }
+        }
+
+        for (Character recipient : onlineMembers) {
+            for (Character member : onlineMembers) {
+                recipient.sendPacket(PacketCreator.partyBuffSnapshot(member));
+                if (member.getId() != recipient.getId()) {
+                    byte[] countsPayload = member.getPartyBuffCountsPayload();
+                    if (countsPayload != null && countsPayload.length > 0) {
+                        recipient.sendPacket(PacketCreator.partyBuffCounts(
+                                member.getId(), member.getPartyBuffCountsCount(), countsPayload));
+                    }
+                }
+                if (recipient.isPartyTrackerVisible()) {
+                    recipient.sendPacket(PacketCreator.partyTrackerUpdate(member));
+                }
+            }
+        }
+
+        if (target != null && !target.isOnline()) {
+            for (Character recipient : onlineMembers) {
+                recipient.sendPacket(PacketCreator.emptyPartyBuffSnapshot(target.getId()));
+            }
+        }
     }
 
     public void updateParty(int partyid, PartyOperation operation, PartyCharacter target) {
@@ -1608,7 +1644,7 @@ public class World {
         }
     }
 
-    public boolean registerHiredMerchant(HiredMerchant hm) {
+    public void registerHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
             int initProc;
@@ -1618,35 +1654,16 @@ public class World {
                 initProc = 0;
             }
 
-            if (activeMerchants.containsKey(hm.getOwnerId())) {
-                return false;
-            }
             activeMerchants.put(hm.getOwnerId(), new Pair<>(hm, initProc));
-            return true;
         } finally {
             activeMerchantsLock.unlock();
         }
     }
 
-    public boolean unregisterHiredMerchant(HiredMerchant hm) {
+    public void unregisterHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
-            Pair<HiredMerchant, Integer> current = activeMerchants.get(hm.getOwnerId());
-            if (current == null || current.getLeft() != hm) {
-                return false;
-            }
             activeMerchants.remove(hm.getOwnerId());
-            return true;
-        } finally {
-            activeMerchantsLock.unlock();
-        }
-    }
-
-    public boolean isHiredMerchantRegistered(HiredMerchant hm) {
-        activeMerchantsLock.lock();
-        try {
-            Pair<HiredMerchant, Integer> current = activeMerchants.get(hm.getOwnerId());
-            return current != null && current.getLeft() == hm;
         } finally {
             activeMerchantsLock.unlock();
         }
@@ -1660,17 +1677,16 @@ public class World {
             deployedMerchants = new LinkedHashMap<>(activeMerchants);
 
             for (Map.Entry<Integer, Pair<HiredMerchant, Integer>> dm : deployedMerchants.entrySet()) {
-                try {
-                    int timeOn = dm.getValue().getRight();
-                    HiredMerchant hm = dm.getValue().getLeft();
+                int timeOn = dm.getValue().getRight();
+                HiredMerchant hm = dm.getValue().getLeft();
 
-                    if (timeOn <= 144) {   // 1440 minutes == 24hrs
-                        activeMerchants.put(hm.getOwnerId(), new Pair<>(dm.getValue().getLeft(), timeOn + 1));
-                    } else {
-                        hm.forceClose();
-                    }
-                } catch (Exception e) {
-                    log.error("Failed to close HiredMerchant ownerId={}", dm.getKey(), e);
+                if (timeOn <= 144) {   // 1440 minutes == 24hrs
+                    activeMerchants.put(hm.getOwnerId(), new Pair<>(dm.getValue().getLeft(), timeOn + 1));
+                } else {
+                    hm.forceClose();
+                    this.getChannel(hm.getChannel()).removeHiredMerchant(hm.getOwnerId());
+
+                    activeMerchants.remove(dm.getKey());
                 }
             }
         } finally {

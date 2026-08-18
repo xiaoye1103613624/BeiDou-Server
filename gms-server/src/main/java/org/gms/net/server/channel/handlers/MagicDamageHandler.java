@@ -76,11 +76,13 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             if (chr.skillIsCooling(attack.skill)) {
                 return;
             } else {
-                c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
-                chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
+                int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
+                c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
+                chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
             }
         }
-        applyAttack(attack, chr, effect.getAttackCount());
+        applyAttack(attack, chr, effect.getAttackCount()
+                + org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill));
         Skill eaterSkill = SkillFactory.getSkill((chr.getJob().getId() - (chr.getJob().getId() % 10)) * 10000);// MP Eater, works with right job
         int eaterLevel = chr.getSkillLevel(eaterSkill);
         if (eaterLevel > 0) {

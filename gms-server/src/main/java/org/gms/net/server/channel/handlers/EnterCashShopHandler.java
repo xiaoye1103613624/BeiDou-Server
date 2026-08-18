@@ -26,6 +26,7 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.server.cashshop.CashShopWindowPackets;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.PacketCreator;
 
@@ -33,6 +34,10 @@ import org.gms.util.PacketCreator;
  * @author Flav
  */
 public class EnterCashShopHandler extends AbstractPacketHandler {
+
+    /** true：打开窗口版商城（不切 Stage）；false：走原版进商城流程。 */
+    private static final boolean USE_STANDALONE_WINDOW = true;
+
     @Override
     public void handlePacket(InPacket p, Client c) {
         try {
@@ -62,8 +67,16 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
             for (int i = 0; i < 3; i++) {
                 int quantity = mc.getCashShop().getCash(i);
                 if (quantity < 0) {
-                    mc.getCashShop().gainCash(i,-quantity);
+                    mc.getCashShop().gainCash(i, -quantity);
                 }
+            }
+
+            if (USE_STANDALONE_WINDOW) {
+                // 不切 Stage：玩家留在地图，只弹窗口。enableActions 必须发，否则客户端会卡输入。
+                c.sendPacket(PacketCreator.enableActions());
+                c.sendPacket(CashShopWindowPackets.open(mc));
+                CashShopWindowHandler.sendCatalog(c, mc);
+                return;
             }
 
             mc.closePlayerInteractions();

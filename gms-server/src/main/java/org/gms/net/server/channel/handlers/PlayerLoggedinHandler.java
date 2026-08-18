@@ -248,7 +248,33 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
+            // PetSkill must be in the login inventory blob — forceUpdate after getCharInfo can miss
+            // (and Item.copy used to reload pets from DB with stale flag=0). Sync memory/DB first.
+            for (Pet pet : player.getPets()) {
+                if (pet != null) {
+                    player.syncPetSkillsFromEquips(player.getPetIndex(pet), false);
+                }
+            }
+
+            // 登录前迁移废弃扩展 cash 别名（−152/−153/−154/−155）；不得动真实戒位 −52/−53。
+            org.gms.client.inventory.manipulator.InventoryManipulator.migrateCashRingsOffExtendedSlots(player);
+            // Diagnose Addon desync (ghost unequip / blank aux): log seats CharInfo will wire.
+            {
+                var eq = player.getInventory(org.gms.client.inventory.InventoryType.EQUIPPED);
+                StringBuilder sb = new StringBuilder("login addon seats char=").append(player.getName());
+                for (short seat : new short[]{-52, -53, -54, -55, -56, -57, -58, -59, -60, -61, -62,
+                        -154, -155, -156, -157, -158, -159, -160, -161, -162, -10, -33}) {
+                    var it = eq.getItem(seat);
+                    if (it != null) {
+                        sb.append(' ').append(seat).append('=').append(it.getItemId());
+                    }
+                }
+                org.slf4j.LoggerFactory.getLogger(PlayerLoggedinHandler.class).info(sb.toString());
+            }
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
+            // Enable native second-pendant UI (CWvsContext flag → CUIEquip+0x5E8).
+            // Without this, hit-test can work via ijl15 overlay but the equip icon never draws.
+            c.sendPacket(PacketCreator.setExtraPendantSlot(true));
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);
@@ -261,6 +287,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendKeymap();
             player.sendQuickmap();
             player.sendMacros();
+            org.gms.reincarnation.ReincarnationSupport.onLogin(player);
 
             // pot bindings being passed through other characters on the account detected thanks to Croosade dev team
             KeyBinding autohpPot = player.getKeymap().get(91);
@@ -339,6 +366,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
             //展示服务信息
             org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(player);
+            try {
+                org.gms.service.MedalGrowthService.get().syncOnLogin(player);
+            } catch (Exception ignore) {
+            }
             noteService.show(player);
             //异常地图掉线信息提示
             c.getSysRescue().showMapChangeMessage(player);
@@ -376,13 +407,40 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.updateGender(player));
             player.checkMessenger();
             c.sendPacket(PacketCreator.enableReport());
+
+            // 伤害皮肤：登录时推送商店目录与已拥有列表
+            c.sendPacket(PacketCreator.damageSkinCatalog());
+            c.sendPacket(PacketCreator.damageSkinInventory(player));
+
+            player.refreshSetBonus();
+            // Shoulder −20 / ExtraRing blind: refreshSetBonus no-ops when combatStatsDirty=false
+            // (common on login after getCharInfo already recalc'd). Always push display-base
+            // 四维 so client jz-skip seats still show STR/DEX from STAT_CHANGED.
+            player.forceSyncClientDisplayStats();
+
+            // 七彩棱镜：登录下发本人染色列表（旧 EquipDye）+ weapontint snapshot
+            c.sendPacket(org.gms.server.coloring.ColoringPrismPackets.dyeList(
+                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(player.getId())));
+            c.sendPacket(org.gms.server.colorprism.ColorPrismPackets.snapshot(player));
+
+            // 每日签到：可领则自动弹窗
+            if (player.getLevel() >= org.gms.server.dailycheckin.DailyCheckinRewards.MIN_LEVEL) {
+                int checkinClaimable = player.refreshCheckin();
+                if (checkinClaimable >= 1) {
+                    c.sendPacket(PacketCreator.dailyCheckinSnapshot(
+                            checkinClaimable, player.getCheckinClaimed(), 0));
+                }
+            }
+
             player.changeSkillLevel(SkillFactory.getSkill(10000000 * player.getJobType() + 12), (byte) (player.getLinkedLevel() / 10), 20, -1);
             player.checkBerserk(player.isHidden());
 
             if (newcomer) {
                 for (Pet pet : player.getPets()) {
                     if (pet != null) {
-                        wserv.registerPetHunger(player, player.getPetIndex(pet));
+                        byte pIdx = player.getPetIndex(pet);
+                        // PetSkill already synced before getCharInfo; only register hunger here.
+                        wserv.registerPetHunger(player, pIdx);
                     }
                 }
 
@@ -392,6 +450,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
 
                 player.reloadQuestExpirations();
+
+                org.gms.reincarnation.ReincarnationSupport.onLogin(player);
 
                     /*
                     if (!c.hasVotedAlready()){

@@ -45,10 +45,13 @@ import java.util.List;
 
 public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
-    private final static ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
     {
         setDescription(I18nUtil.getMessage("DebugCommand.message1"));
+    }
+
+    private static ItemInformationProvider ii() {
+        return ItemInformationProvider.getInstance();
     }
 
     @Override
@@ -146,7 +149,7 @@ public class DebugCommand extends Command {
                 String s = I18nUtil.getMessage("DebugCommand.message18");
                 player.dropMessage(6, s);
                 for (Integer i : Server.getInstance().getActiveCoupons()) {
-                    s = ii.getName(i) + "  (" + i + ");";
+                    s = ii().getName(i) + "  (" + i + ");";
                     player.dropMessage(6, s);
                 }
                 break;
@@ -155,7 +158,7 @@ public class DebugCommand extends Command {
                 s = I18nUtil.getMessage("DebugCommand.message19");
                 player.dropMessage(6, s);
                 for (Integer i : player.getActiveCoupons()) {
-                    s = ii.getName(i) + "  (" + i + ");";
+                    s = ii().getName(i) + "  (" + i + ");";
                     player.dropMessage(6, s);
                 }
                 break;

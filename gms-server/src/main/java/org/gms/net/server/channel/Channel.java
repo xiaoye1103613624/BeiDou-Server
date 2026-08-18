@@ -25,6 +25,7 @@ import org.gms.client.Character;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.manager.ServerManager;
+import org.gms.provider.ContentRoot;
 import org.gms.net.netty.ChannelServer;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
@@ -235,25 +236,22 @@ public final class Channel {
     }
 
     private void closeAllMerchants() {
-        List<HiredMerchant> merchs;
-
-        merchWlock.lock();
         try {
-            merchs = new ArrayList<>(hiredMerchants.values());
-            hiredMerchants.clear();
-        } finally {
-            merchWlock.unlock();
-        }
+            List<HiredMerchant> merchs;
 
-        // 每个商店独立 try-catch：单店异常不中断后续商店保存，避免一个店挂掉导致
-        // 剩余店全部跳过 saveItems 而物品丢失。
-        for (HiredMerchant merch : merchs) {
+            merchWlock.lock();
             try {
-                merch.forceClose();
-            } catch (Exception e) {
-                log.error("Failed to forceClose HiredMerchant owner={}, world={}, channel={}",
-                        merch.getOwnerId(), world, channel, e);
+                merchs = new ArrayList<>(hiredMerchants.values());
+                hiredMerchants.clear();
+            } finally {
+                merchWlock.unlock();
             }
+
+            for (HiredMerchant merch : merchs) {
+                merch.forceClose();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -372,23 +370,19 @@ public final class Channel {
         }
     }
 
-    public boolean addHiredMerchant(int chrid, HiredMerchant hm) {
+    public void addHiredMerchant(int chrid, HiredMerchant hm) {
         merchWlock.lock();
         try {
-            if (hiredMerchants.containsKey(chrid)) {
-                return false;
-            }
             hiredMerchants.put(chrid, hm);
-            return true;
         } finally {
             merchWlock.unlock();
         }
     }
 
-    public boolean removeHiredMerchant(int chrid, HiredMerchant expected) {
+    public void removeHiredMerchant(int chrid) {
         merchWlock.lock();
         try {
-            return hiredMerchants.remove(chrid, expected);
+            hiredMerchants.remove(chrid);
         } finally {
             merchWlock.unlock();
         }
@@ -469,8 +463,8 @@ public final class Channel {
         String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
 
         // 默认目录保留英文原版事件，语言目录只保留已本地化的事件。
-        Path scriptPath = Path.of(scriptName, eventPath);
-        Path scriptLangPath = Path.of(scriptLangName, eventPath);
+        Path scriptPath = ContentRoot.resolve(scriptName, eventPath);
+        Path scriptLangPath = ContentRoot.resolve(scriptLangName, eventPath);
 
         // 先枚举默认事件，保证未翻译事件不会因为语言目录存在而丢失。
         List<String> events = new ArrayList<>();

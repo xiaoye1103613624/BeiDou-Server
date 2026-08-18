@@ -31,7 +31,6 @@ import org.gms.client.SkillFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
-import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
 import org.gms.constants.skills.Crusader;
 import org.gms.constants.skills.FPMage;
@@ -64,8 +63,6 @@ import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
-import org.gms.server.partyquest.Pyramid;
-import org.gms.server.quest.medal.SpecialChallengeMedal;
 import org.gms.server.quest.medal.VeteranHunterMedal;
 
 import java.awt.*;
@@ -82,7 +79,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -92,7 +88,7 @@ public class Monster extends AbstractLoadedLife {
 
     private ChangeableStats ostats = null;  //unused, v83 WZs offers no support for changeable stats.
     private MonsterStats stats;
-    private final AtomicInteger hp = new AtomicInteger(1);
+    private final AtomicLong hp = new AtomicLong(1);
     private final AtomicLong maxHpPlusHeal = new AtomicLong(1);
     private int mp;
     private WeakReference<Character> controller = new WeakReference<>(null);
@@ -237,23 +233,23 @@ public class Monster extends AbstractLoadedLife {
         return r;
     }
 
-    public int getHp() {
+    public long getHp() {
         return hp.get();
     }
 
-    public synchronized void addHp(int hp) {
+    public synchronized void addHp(long hp) {
         if (this.hp.get() <= 0) {
             return;
         }
         this.hp.addAndGet(hp);
     }
 
-    public synchronized void setStartingHp(int hp) {
+    public synchronized void setStartingHp(long hp) {
         stats.setHp(hp);    // refactored mob stats after non-static HP pool suggestion thanks to twigs
         this.hp.set(hp);
     }
 
-    public int getMaxHp() {
+    public long getMaxHp() {
         return stats.getHp();
     }
 
@@ -358,7 +354,7 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public synchronized Integer applyAndGetHpDamage(int delta, boolean stayAlive) {
-        int curHp = hp.get();
+        long curHp = hp.get();
         if (curHp <= 0) {       // this monster is already dead
             return null;
         }
@@ -367,17 +363,17 @@ public class Monster extends AbstractLoadedLife {
             if (stayAlive) {
                 curHp--;
             }
-            int trueDamage = Math.min(curHp, delta);
+            int trueDamage = (int) Math.min(curHp, delta);
 
             hp.addAndGet(-trueDamage);
             return trueDamage;
         } else {
             int trueHeal = -delta;
-            int hp2Heal = curHp + trueHeal;
-            int maxHp = getMaxHp();
+            long hp2Heal = curHp + trueHeal;
+            long maxHp = getMaxHp();
 
             if (hp2Heal > maxHp) {
-                trueHeal -= (hp2Heal - maxHp);
+                trueHeal -= (int) (hp2Heal - maxHp);
             }
 
             hp.addAndGet(trueHeal);
@@ -394,7 +390,7 @@ public class Monster extends AbstractLoadedLife {
             from.setPlayerAggro(this.hashCode());
             from.getMap().broadcastBossHpMessage(this, this.hashCode(), makeBossHPBarPacket(), getPosition());
         } else if (!isBoss()) {
-            int remainingHP = (int) Math.max(1, hp.get() * 100f / getMaxHp());
+            int remainingHP = (int) Math.max(1, hp.get() * 100.0 / getMaxHp());
             Packet packet = PacketCreator.showMonsterHP(getObjectId(), remainingHP);
             if (from.getParty() != null) {
                 for (PartyCharacter mpc : from.getParty().getMembers()) {
@@ -418,26 +414,34 @@ public class Monster extends AbstractLoadedLife {
                 return false;
             }
 
-            Pyramid pyramid = null;
-            if (attacker.getPartyQuest() instanceof Pyramid && MapId.isNettsPyramid(attacker.getMapId())) {
-                pyramid = (Pyramid) attacker.getPartyQuest();
+            /* pyramid not implemented
+            Pair<Integer, Integer> cool = this.getStats().getCool();
+            if (cool != null) {
+                Pyramid pq = (Pyramid) chr.getPartyQuest();
+                if (pq != null) {
+                    if (damage > 0) {
+                        if (damage >= cool.getLeft()) {
+                            if ((Math.random() * 100) < cool.getRight()) {
+                                pq.cool();
+                            } else {
+                                pq.kill();
+                            }
+                        } else {
+                            pq.kill();
+                        }
+                    } else {
+                        pq.miss();
+                    }
+                    killed = true;
+                }
             }
+            */
 
             if (damage > 0) {
                 this.applyDamage(attacker, damage, stayAlive, false);
                 if (!this.isAlive()) {  // monster just died
                     lastHit = true;
-                    if (pyramid != null) {
-                        Pair<Integer, Integer> cool = this.getStats().getCool();
-                        if (cool != null && damage >= cool.getLeft() && Randomizer.nextInt(100) < cool.getRight()) {
-                            pyramid.cool();
-                        } else {
-                            pyramid.kill();
-                        }
-                    }
                 }
-            } else if (pyramid != null) {
-                pyramid.miss();
             }
         } finally {
             this.unlockMonster();
@@ -768,8 +772,6 @@ public class Monster extends AbstractLoadedLife {
             attacker.increaseEquipExp(_personalExp);
             attacker.raiseQuestMobCount(getId());
             VeteranHunterMedal.onMonsterKilled(attacker, this);
-            // 特级挑战勋章复用怪物死亡事件，在角色已接任务时写入个人击杀进度。
-            SpecialChallengeMedal.onMonsterKilled(attacker, this);
         }
     }
 
@@ -1049,7 +1051,8 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public Packet makeBossHPBarPacket() {
-        return PacketCreator.showBossHP(getId(), getHp(), getMaxHp(), getTagColor(), getTagBgColor());
+        // Prefer override/changeable max (getMobMaxHp) so OverrideMonsterStats > INT_MAX reaches writeLong.
+        return PacketCreator.customShowBossHP((byte) 5, getId(), getHp(), getMobMaxHp(), getTagColor(), getTagBgColor());
     }
 
     public boolean hasBossHPBar() {
@@ -1275,7 +1278,7 @@ public class Monster extends AbstractLoadedLife {
             }
             /*
         } else if (status.getSkill().getId() == Hermit.SHADOW_WEB || status.getSkill().getId() == NightWalker.SHADOW_WEB) { //Shadow Web
-            int webDamage = (int) (getMaxHp() / 50.0 + 0.999);
+            int webDamage = Math.min(Short.MAX_VALUE, (int) (getMaxHp() / 50.0 + 0.999));
             status.setValue(MonsterStatus.SHADOW_WEB, Integer.valueOf(webDamage));
             animationTime = broadcastStatusEffect(status);
             
@@ -1642,7 +1645,7 @@ public class Monster extends AbstractLoadedLife {
 
         @Override
         public void run() {
-            int curHp = hp.get();
+            long curHp = hp.get();
             if (curHp <= 1) {
                 MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
                 service.interruptMobStatus(map.getId(), status);
@@ -1651,7 +1654,7 @@ public class Monster extends AbstractLoadedLife {
 
             int damage = dealDamage;
             if (damage >= curHp) {
-                damage = curHp - 1;
+                damage = (int) (curHp - 1);
                 if (type == 1 || type == 2) {
                     MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
                     service.interruptMobStatus(map.getId(), status);
@@ -1766,7 +1769,7 @@ public class Monster extends AbstractLoadedLife {
         return ostats;
     }
 
-    public final int getMobMaxHp() {
+    public final long getMobMaxHp() {
         if (ostats != null) {
             return ostats.hp;
         }
@@ -1859,7 +1862,7 @@ public class Monster extends AbstractLoadedLife {
         Character newControllerWithPuppet = null;
 
         for (Character chr : getMap().getAllPlayers()) {
-            if (!chr.isHidden() && chr.isLoggedInWorld()) {   // 过滤已断线/awayFromWorld 的幽灵玩家，避免被选为 controller 候选
+            if (!chr.isHidden()) {
                 int ctrlMonsSize = chr.getNumControlledMonsters();
 
                 if (isCharacterPuppetInVicinity(chr)) {

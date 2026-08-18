@@ -118,8 +118,10 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             if (attack.skill != 0) {
                 effect = attack.getAttackEffect(chr, null);
                 bulletCount = effect.getBulletCount();
+                bulletCount += (short) org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill);
                 if (effect.getCooldown() > 0) {
-                    c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
+                    c.sendPacket(PacketCreator.skillCooldown(attack.skill,
+                            chr.getEffectiveCooldownSeconds(effect.getCooldown())));
                 }
 
                 if (attack.skill == 4111004) {   // shadow meso
@@ -130,7 +132,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         int moneyMod = money / 2;
                         money += Randomizer.nextInt(moneyMod);
                         if (money > chr.getMeso()) {
-                            money = chr.getMeso();
+                            money = (int) Math.min(chr.getMeso(), Integer.MAX_VALUE);
                         }
                         chr.gainMeso(-money, false);
                     }
@@ -237,8 +239,9 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         if (chr.skillIsCooling(attack.skill)) {
                             return;
                         } else {
-                            c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
-                            chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
+                            int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
+                            c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
+                            chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
                         }
                     }
                 }

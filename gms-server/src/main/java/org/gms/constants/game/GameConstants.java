@@ -22,6 +22,13 @@ import java.util.*;
  */
 public class GameConstants {
     public static String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};
+    /**
+     * Teleport rock saved-map slots (vanilla GMS: 5 / VIP 10).
+     * Expanded with ijl15 MapTransferExpand — keep in sync with client MAP_TRANSFER_SIZE / MAP_TRANSFER_EX_SIZE.
+     * Gist notes the client array size can go past 127 (tested with 999).
+     */
+    public static final int TROCK_MAP_SIZE = 999;
+    public static final int VIP_TROCK_MAP_SIZE = 999;
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
     /**
      * 好友默认分组名。
@@ -485,7 +492,7 @@ public class GameConstants {
                 return 120;   // 3rd job
 
             default:
-                return (job.getId() / 1000 == 1) ? 120 : 200;   // 4th job: cygnus is 120, rest is 200
+                return ExpTable.MAX_LEVEL;   // 4th job (Cygnus included): uses ExpTable.MAX_LEVEL (300)
         }
     }
 

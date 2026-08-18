@@ -40,7 +40,7 @@ public class CharactersDO implements Serializable {
 
     private Integer level;
 
-    private Integer exp;
+    private Long exp;
 
     private Integer gachaexp;
 
@@ -64,7 +64,7 @@ public class CharactersDO implements Serializable {
 
     private Integer maxmp;
 
-    private Integer meso;
+    private Long meso;
 
     @Column("hpMpUsed")
     private Integer hpMpUsed;
@@ -137,7 +137,7 @@ public class CharactersDO implements Serializable {
 
     private Integer matchcardties;
 
-    private Integer merchantmesos;
+    private Long merchantmesos;
 
     private Boolean hasmerchant;
 
@@ -199,6 +199,37 @@ public class CharactersDO implements Serializable {
 
     @Column("partySearch")
     private Boolean partySearch;
+
+    @Column("activeDamageSkin")
+    private Integer activeDamageSkin;
+
+    @Column("checkinDay")
+    private Integer checkinDay;
+
+    @Column("checkinClaimed")
+    private Integer checkinClaimed;
+
+    @Column("checkinLastClaim")
+    private Long checkinLastClaim;
+
+    @Column("autoOreStorage")
+    private Integer autoOreStorage;
+
+    @Column("autoScrollStorage")
+    private Integer autoScrollStorage;
+
+    @Column("autoChairStorage")
+    private Integer autoChairStorage;
+
+    @Column("autoMountStorage")
+    private Integer autoMountStorage;
+
+    private Integer hairtinthue;
+    private Integer hairtintchroma;
+    private Integer hairtintbright;
+    private Integer facetinthue;
+    private Integer facetintchroma;
+    private Integer facetintbright;
 
     private Long jailexpire;
 

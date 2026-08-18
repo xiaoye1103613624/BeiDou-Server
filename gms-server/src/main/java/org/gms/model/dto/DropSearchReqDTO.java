@@ -18,4 +18,6 @@ public class DropSearchReqDTO extends BasePageDTO {
     private Integer itemId;
     private String itemName;
     private Integer questId;
+    /** 全局掉落：1启用 0停用；空=全部 */
+    private Integer enabled;
 }

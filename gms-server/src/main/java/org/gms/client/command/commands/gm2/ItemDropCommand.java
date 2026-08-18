@@ -53,7 +53,8 @@ public class ItemDropCommand extends Command {
         int itemId = Integer.parseInt(params[0]);
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-        if (ii.getName(itemId) == null) {
+        // 「不存在」以 WZ 装备/物品数据为准，不因 String 缺名阻断
+        if (!ii.itemExists(itemId)) {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }

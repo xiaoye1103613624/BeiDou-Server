@@ -67,7 +67,14 @@ public class XMLWZFile implements DataProvider {
     public synchronized Data getData(String path) {
         Path dataFile = root.resolve(path + ".xml");
         Path imageDataDir = root.resolve(path);
-        if (!Files.exists(dataFile)) {
+        try {
+            // Treat missing/empty as absent so LocalizedDataProvider can fall back to base wz.
+            // Empty files previously caused SAX "文件提前结束" and bricked static class init (LifeFactory).
+            if (!Files.exists(dataFile) || Files.size(dataFile) == 0) {
+                return null;
+            }
+        } catch (IOException e) {
+            log.warn("Cannot stat datafile {} under {}", path, root.toAbsolutePath(), e);
             return null;
         }
         final XMLDomMapleData domMapleData;

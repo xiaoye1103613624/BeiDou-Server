@@ -5,10 +5,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
+import org.gms.dao.entity.GameIconDO;
 import org.gms.model.dto.*;
 import org.gms.service.DropService;
+import org.gms.service.GameIconService;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/drop")
 public class DropController {
     private final DropService dropService;
+    private final GameIconService gameIconService;
+
+    @Tag(name = "/drop/" + ApiConstant.LATEST)
+    @Operation(summary = "按怪物分组分页列表")
+    @PostMapping("/" + ApiConstant.LATEST + "/getMobGroupList")
+    public ResultBody<Page<MobDropGroupDTO>> getMobGroupList(@RequestBody SubmitBody<DropSearchReqDTO> request) {
+        return ResultBody.success(request, dropService.getMobGroupList(request.getData()));
+    }
 
     @Tag(name = "/drop/" + ApiConstant.LATEST)
     @Operation(summary = "分页获取掉落列表")
@@ -79,5 +92,46 @@ public class DropController {
     public ResultBody<Object> deleteGlobalDropData(@PathVariable("id") Long id) {
         dropService.modifyDropData(DropSearchRtnDTO.builder().id(id).build(), true, true);
         return ResultBody.success(null);
+    }
+
+    @Tag(name = "/drop/" + ApiConstant.LATEST)
+    @Operation(summary = "初始化/批量同步图标（小册子版本，默认227）")
+    @PostMapping("/" + ApiConstant.LATEST + "/syncIcons")
+    public ResultBody<GameIconSyncRtnDTO> syncIcons(@RequestBody SubmitBody<GameIconSyncReqDTO> request) {
+        GameIconSyncReqDTO data = request.getData() == null ? new GameIconSyncReqDTO() : request.getData();
+        return ResultBody.success(request, gameIconService.sync(data));
+    }
+
+    @Tag(name = "/drop/" + ApiConstant.LATEST)
+    @Operation(summary = "切换全局掉落启用状态")
+    @PostMapping("/" + ApiConstant.LATEST + "/toggleGlobalDropEnabled/{id}")
+    public ResultBody<Object> toggleGlobalDropEnabled(@PathVariable("id") Long id) {
+        dropService.toggleGlobalDropEnabled(id);
+        return ResultBody.success(null);
+    }
+
+    @Tag(name = "/drop/" + ApiConstant.LATEST)
+    @Operation(summary = "读取已持久化图标（供 <img> 使用，无需鉴权）")
+    @GetMapping("/" + ApiConstant.LATEST + "/icon/{category}/{objectId}")
+    public ResponseEntity<byte[]> getIcon(@PathVariable("category") String category,
+                                          @PathVariable("objectId") Integer objectId) {
+        return gameIconService.findIcon(category, objectId)
+                .map(this::toIconResponse)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    private ResponseEntity<byte[]> toIconResponse(GameIconDO icon) {
+        MediaType mediaType = MediaType.IMAGE_PNG;
+        if (icon.getContentType() != null && !icon.getContentType().isBlank()) {
+            try {
+                mediaType = MediaType.parseMediaType(icon.getContentType());
+            } catch (Exception ignored) {
+                mediaType = MediaType.IMAGE_PNG;
+            }
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
+                .contentType(mediaType)
+                .body(icon.getIconData());
     }
 }

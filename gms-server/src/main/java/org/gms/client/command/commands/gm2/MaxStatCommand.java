@@ -23,6 +23,7 @@
 */
 package org.gms.client.command.commands.gm2;
 
+import org.gms.client.AbstractCharacterObject;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Stat;
@@ -38,8 +39,11 @@ public class MaxStatCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        // Level is int in Character + DB; STAT_CHANGED / char stats use writeShort (not byte).
+        // Never cast level to byte — (byte)300 == 44 and corrupts client display.
+        final int maxLv = 300;
         player.loseExp(player.getExp(), false, false);
-        player.setLevel(255);
+        player.setLevel(maxLv);
         player.resetPlayerRates();
         if (GameConfig.getServerBoolean("use_add_rates_by_level")) {
             player.setPlayerRates();
@@ -47,9 +51,15 @@ public class MaxStatCommand extends Command {
         player.setWorldRates();
         player.updateStrDexIntLuk(Short.MAX_VALUE);
         player.setFame(13337);
-        player.updateMaxHpMaxMp(30000, 30000);
-        player.updateSingleStat(Stat.LEVEL, 255);
+        player.updateMaxHpMaxMp(AbstractCharacterObject.MAX_CLIENT_HP_MP, AbstractCharacterObject.MAX_CLIENT_HP_MP);
+        player.updateSingleStat(Stat.LEVEL, maxLv);
         player.updateSingleStat(Stat.FAME, 13337);
-        player.yellowMessage(I18nUtil.getMessage("MaxStatCommand.message2"));
+        // Does NOT teach/wipe job skills — use !maxskill or 快速转职 init if skillbook empty.
+        int skillCnt = player.getSkills() != null ? player.getSkills().size() : 0;
+        player.yellowMessage(I18nUtil.getMessage("MaxStatCommand.message2")
+                + " (lv=" + player.getLevel() + ", skills=" + skillCnt + ")");
+        if (player.getJob() != null && player.getJob().getId() % 10 == 2 && skillCnt < 5) {
+            player.yellowMessage("Warning: 4th-job char has almost no skills — run !maxskill or restore DB skills, then relog.");
+        }
     }
 }

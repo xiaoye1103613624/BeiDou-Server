@@ -27,6 +27,7 @@ import org.gms.client.Disease;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.config.ChallengeFatigueManager;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
@@ -34,8 +35,11 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.StatEffect;
+import org.gms.service.ChallengeFatigueService;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
+
+import java.util.Map;
 
 /**
  * @author Matze
@@ -55,6 +59,12 @@ public final class UseItemHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
+            // 怪物卡片：双击收入怪物图鉴（不挂 card drop/meso buff）
+            if (ItemId.isMonsterCard(itemId)) {
+                remove(c, slot);
+                chr.getMonsterBook().addCard(c, itemId);
+                return;
+            }
             if (itemId == ItemId.ALL_CURE_POTION) {
                 chr.dispelDebuffs();
                 remove(c, slot);
@@ -94,6 +104,21 @@ public final class UseItemHandler extends AbstractPacketHandler {
                     remove(c, slot);
                 } else {
                     chr.dropMessage(5, I18nUtil.getMessage("UseItemHandler.message1"));
+                }
+                return;
+            } else if (itemId == ChallengeFatigueService.ITEM_NORMAL
+                    || itemId == ChallengeFatigueService.ITEM_ADVANCED
+                    || itemId == ChallengeFatigueService.ITEM_TEAM) {
+                // 挑战恢复剂：双击增加对应挑战种类剩余次数（可叠加）
+                Map<String, Object> restore = ChallengeFatigueManager.restoreByItem(
+                        chr.getId(), c.getAccID(), itemId);
+                if (Boolean.TRUE.equals(restore.get("success"))) {
+                    remove(c, slot);
+                    chr.dropMessage(5, String.valueOf(restore.get("message"))
+                            + "，当前剩余：" + restore.get("remaining"));
+                } else {
+                    chr.dropMessage(5, String.valueOf(restore.get("message")));
+                    c.sendPacket(PacketCreator.enableActions());
                 }
                 return;
             }

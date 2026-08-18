@@ -669,6 +669,7 @@ public class StatEffect {
                     statups.add(new Pair<>(BuffStat.DASH2, ret.x));
                     statups.add(new Pair<>(BuffStat.DASH, ret.y));
                     break;
+                case Corsair.SPEED_INFUSION:
                 case Buccaneer.SPEED_INFUSION:
                 case ThunderBreaker.SPEED_INFUSION:
                     statups.add(new Pair<>(BuffStat.SPEED_INFUSION, x));
@@ -1405,6 +1406,7 @@ public class StatEffect {
             //CancelEffectAction cancelAction = new CancelEffectAction(applyto, this, starttime);
             //ScheduledFuture<?> schedule = TimerManager.getInstance().schedule(cancelAction, localDuration);
             applyto.registerEffect(this, starttime, starttime + localDuration, false);
+            applyto.announcePartyBuffSnapshot();
             if (mbuff != null) {
                 applyto.getMap().broadcastMessage(applyto, mbuff, false);
             }
@@ -1440,7 +1442,8 @@ public class StatEffect {
         }
         if (primary) {
             if (hpCon != 0) {
-                hpchange -= hpCon;
+                int reducedHpCon = org.gms.talent.TalentService.reduceSkillHpCost(applyfrom, hpCon);
+                hpchange -= reducedHpCon;
             }
         }
         if (isChakra()) {
@@ -1486,6 +1489,12 @@ public class StatEffect {
                     mpchange = 0;
                 } else if (applyfrom.getBuffedValue(BuffStat.CONCENTRATE) != null) {
                     mpchange -= (int) (mpchange * (applyfrom.getBuffedValue(BuffStat.CONCENTRATE).doubleValue() / 100));
+                }
+                if (mpchange < 0) {
+                    int cost = -mpchange;
+                    int reduced = org.gms.talent.TalentService.reduceSkillMpCost(applyfrom, cost);
+                    reduced = applyfrom.reduceSkillMpCostByPotential(reduced);
+                    mpchange = -reduced;
                 }
             }
         }
@@ -1748,7 +1757,7 @@ public class StatEffect {
     }
 
     private boolean isInfusion() {
-        return skill && (sourceid == Buccaneer.SPEED_INFUSION || sourceid == Corsair.HEROS_WILL || sourceid == ThunderBreaker.SPEED_INFUSION);
+        return skill && (sourceid == Buccaneer.SPEED_INFUSION || sourceid == Corsair.SPEED_INFUSION || sourceid == ThunderBreaker.SPEED_INFUSION);
     }
 
     private boolean isCygnusFA() {
@@ -1953,5 +1962,122 @@ public class StatEffect {
 
     public Map<MonsterStatus, Integer> getMonsterStati() {
         return monsterStatus;
+    }
+
+    /**
+     * 技改：克隆本级效果并覆盖常用数值字段。
+     * 支持 key：damage/mpCon/hpCon/time/cooltime/attackCount/bulletCount/mobCount/x/y/prop/pad/mad/mastery/fixdamage
+     */
+    public StatEffect copyWithOverrides(Map<String, Integer> overrides) {
+        StatEffect c = shallowCopy();
+        if (overrides == null || overrides.isEmpty()) {
+            return c;
+        }
+        Integer v;
+        if ((v = overrides.get("damage")) != null) {
+            c.damage = v;
+        }
+        if ((v = overrides.get("mpCon")) != null) {
+            c.mpCon = v.shortValue();
+        }
+        if ((v = overrides.get("hpCon")) != null) {
+            c.hpCon = v.shortValue();
+        }
+        if ((v = overrides.get("time")) != null) {
+            c.duration = v * 1000;
+        }
+        if ((v = overrides.get("cooltime")) != null) {
+            c.cooldown = v;
+        }
+        if ((v = overrides.get("attackCount")) != null) {
+            c.attackCount = v;
+        }
+        if ((v = overrides.get("bulletCount")) != null) {
+            c.bulletCount = v.shortValue();
+        }
+        if ((v = overrides.get("mobCount")) != null) {
+            c.mobCount = v;
+        }
+        if ((v = overrides.get("x")) != null) {
+            c.x = v;
+        }
+        if ((v = overrides.get("y")) != null) {
+            c.y = v;
+        }
+        if ((v = overrides.get("prop")) != null) {
+            c.prop = v / 100.0;
+        }
+        if ((v = overrides.get("pad")) != null) {
+            c.watk = v.shortValue();
+        }
+        if ((v = overrides.get("mad")) != null) {
+            c.matk = v.shortValue();
+        }
+        if ((v = overrides.get("fixdamage")) != null) {
+            c.fixdamage = v;
+        }
+        return c;
+    }
+
+    private StatEffect shallowCopy() {
+        StatEffect c = new StatEffect();
+        c.watk = watk;
+        c.matk = matk;
+        c.wdef = wdef;
+        c.mdef = mdef;
+        c.acc = acc;
+        c.avoid = avoid;
+        c.speed = speed;
+        c.jump = jump;
+        c.hp = hp;
+        c.mp = mp;
+        c.hpR = hpR;
+        c.mpR = mpR;
+        c.mhpRRate = mhpRRate;
+        c.mmpRRate = mmpRRate;
+        c.mobSkill = mobSkill;
+        c.mobSkillLevel = mobSkillLevel;
+        c.mhpR = mhpR;
+        c.mmpR = mmpR;
+        c.mpCon = mpCon;
+        c.hpCon = hpCon;
+        c.duration = duration;
+        c.target = target;
+        c.barrier = barrier;
+        c.mob = mob;
+        c.overTime = overTime;
+        c.repeatEffect = repeatEffect;
+        c.sourceid = sourceid;
+        c.expbuff = expbuff;
+        c.moveTo = moveTo;
+        c.cp = cp;
+        c.nuffSkill = nuffSkill;
+        c.cureDebuffs = cureDebuffs;
+        c.skill = skill;
+        c.statups = statups;
+        c.monsterStatus = monsterStatus;
+        c.x = x;
+        c.y = y;
+        c.mobCount = mobCount;
+        c.moneyCon = moneyCon;
+        c.cooldown = cooldown;
+        c.morphId = morphId;
+        c.ghost = ghost;
+        c.fatigue = fatigue;
+        c.berserk = berserk;
+        c.booster = booster;
+        c.prop = prop;
+        c.itemCon = itemCon;
+        c.itemConNo = itemConNo;
+        c.damage = damage;
+        c.attackCount = attackCount;
+        c.fixdamage = fixdamage;
+        c.lt = lt;
+        c.rb = rb;
+        c.bulletCount = bulletCount;
+        c.bulletConsume = bulletConsume;
+        c.mapProtection = mapProtection;
+        c.cardStats = cardStats;
+        return c;
     }
 }

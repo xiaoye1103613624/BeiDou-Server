@@ -49,17 +49,31 @@ public class ItemCommand extends Command {
             return;
         }
 
-        int itemId = Integer.parseInt(params[0]);
+        int itemId;
+        try {
+            itemId = Integer.parseInt(params[0].trim());
+        } catch (NumberFormatException e) {
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
+            return;
+        }
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-        if (ii.getName(itemId) == null) {
+        // 「不存在」以 Character/Item WZ 为准；String 缺名不应阻断 GM 发放（Android 等高版本常见）
+        if (!ii.itemExists(itemId)) {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
 
         short quantity = 1;
+        Integer second = null;
         if (params.length >= 2) {
-            quantity = Short.parseShort(params[1]);
+            try {
+                second = Integer.parseInt(params[1].trim());
+            } catch (NumberFormatException e) {
+                player.yellowMessage(I18nUtil.getMessage("ItemCommand.message2"));
+                return;
+            }
+            quantity = second.shortValue();
         }
 
         if (GameConfig.getServerBoolean("block_generate_cash_item") && ii.isCash(itemId)) {
@@ -67,10 +81,26 @@ public class ItemCommand extends Command {
             return;
         }
 
+        // Cash 魔方 slotMax 有限且 Special 栏格数有上限；!item 9999 会拆成大量堆叠导致视觉溢出
+        if (org.gms.potential.PotentialHyperConfig.isCashCube(itemId)) {
+            short slotMax = ii.getSlotMax(c, itemId);
+            if (slotMax <= 0) {
+                slotMax = 999;
+            }
+            // 单次最多一叠，避免刷爆 Cash/Special 栏
+            short cap = slotMax;
+            if (quantity > cap) {
+                player.yellowMessage("魔方单次最多发放 " + cap + " 个（当前 slotMax=" + slotMax
+                        + "，避免 Special 栏堆满溢出）。原请求 " + quantity + " 已截断。测试请用: !item "
+                        + itemId + " 10");
+                quantity = cap;
+            }
+        }
+
         if (ItemConstants.isPet(itemId)) {
-            if (params.length >= 2) {   // thanks to istreety & TacoBell
+            if (second != null) {   // thanks to istreety & TacoBell；第二参数=天数
                 quantity = 1;
-                long days = Math.max(1, Integer.parseInt(params[1]));
+                long days = Math.max(1, second);
                 long expiration = System.currentTimeMillis() + DAYS.toMillis(days);
                 int petid = Pet.createPet(itemId);
 

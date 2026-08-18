@@ -182,7 +182,12 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 }
             }
         }
-        if (damagefrom != -1 && damagefrom != -2 && attacker != null) {
+        boolean talentDodged = damage > 0 && attacker != null && org.gms.talent.TalentService.tryDodge(chr);
+        if (talentDodged) {
+            damage = 0;
+            mpattack = 0;
+        }
+        if (damagefrom != -1 && damagefrom != -2 && attacker != null && !talentDodged) {
             MobAttackInfo attackInfo = MobAttackInfoFactory.getMobAttackInfo(attacker, damagefrom);
             if (attackInfo != null) {
                 if (attackInfo.isDeadlyAttack()) {
@@ -205,13 +210,32 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         Skill manaReflectSkill = SkillFactory.getSkill(id);
                         if (chr.isBuffFrom(BuffStat.MANA_REFLECTION, manaReflectSkill) && chr.getSkillLevel(manaReflectSkill) > 0 && manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).makeChanceResult()) {
                             int bouncedamage = (damage * manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).getX() / 100);
-                            if (bouncedamage > attacker.getMaxHp() / 5) {
-                                bouncedamage = attacker.getMaxHp() / 5;
+                            int reflectCap = (int) Math.min(Integer.MAX_VALUE, attacker.getMaxHp() / 5);
+                            if (bouncedamage > reflectCap) {
+                                bouncedamage = reflectCap;
                             }
                             map.damageMonster(chr, attacker, bouncedamage);
                             map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), true);
                             chr.sendPacket(PacketCreator.showOwnBuffEffect(id, 5));
                             map.broadcastMessage(chr, PacketCreator.showBuffEffect(chr.getId(), id, 5), false);
+                        }
+                    }
+                }
+                // Phase11：潜能 DAMreflect（prop 概率，反弹伤害%）
+                if (damage > 0 && !attacker.isBoss() && chr.getPotDamReflect() > 0) {
+                    int prop = chr.getPotDamReflectProp();
+                    if (prop <= 0) {
+                        prop = 100;
+                    }
+                    if (org.gms.util.Randomizer.nextInt(100) < prop) {
+                        int bouncedamage = damage * chr.getPotDamReflect() / 100;
+                        int reflectCap = (int) Math.min(Integer.MAX_VALUE, attacker.getMaxHp() / 5);
+                        if (bouncedamage > reflectCap) {
+                            bouncedamage = reflectCap;
+                        }
+                        if (bouncedamage > 0) {
+                            map.damageMonster(chr, attacker, bouncedamage);
+                            map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), true);
                         }
                     }
                 }
@@ -235,11 +259,16 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         if (damage > 0 && !chr.isHidden()) {
+            damage = org.gms.talent.TalentService.reduceDamageTaken(chr, attacker, damage);
+            if (damage > 0 && !is_deadly && damage >= chr.getHp()
+                    && org.gms.talent.TalentService.tryCheatDeath(chr)) {
+                damage = Math.max(0, chr.getHp() - 1);
+            }
             if (attacker != null) {
                 if (damagefrom == -1) {
                     if (chr.getBuffedValue(BuffStat.POWERGUARD) != null) { // PG works on bosses, but only at half of the rate.
                         int bouncedamage = (int) (damage * (chr.getBuffedValue(BuffStat.POWERGUARD).doubleValue() / (attacker.isBoss() ? 200 : 100)));
-                        bouncedamage = Math.min(bouncedamage, attacker.getMaxHp() / 10);
+                        bouncedamage = (int) Math.min(bouncedamage, Math.min(Integer.MAX_VALUE, attacker.getMaxHp() / 10));
                         damage -= bouncedamage;
                         map.damageMonster(chr, attacker, bouncedamage);
                         map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), false, true);
@@ -277,7 +306,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 Skill highDef = SkillFactory.getSkill(Aran.HIGH_DEFENSE);
                 int hdLevel = chr.getSkillLevel(highDef);
                 if (highDef != null && hdLevel > 0) {
-                    damage *= (highDef.getEffect(hdLevel).getX() / 1000.0);
+                    damage *= Math.ceil(highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
             }
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
@@ -307,6 +336,10 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     chr.decreaseBattleshipHp(damage);
                 }
                 chr.addMPHP(-damage, -mpattack);
+            }
+            if (attacker != null) {
+                org.gms.talent.TalentService.applyThorns(chr, attacker, map, oid, damage);
+                org.gms.talent.TalentService.painTrainingExp(chr, damage);
             }
         }
         if (!chr.isHidden()) {

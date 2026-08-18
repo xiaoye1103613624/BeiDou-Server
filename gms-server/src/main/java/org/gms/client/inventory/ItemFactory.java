@@ -46,7 +46,11 @@ public enum ItemFactory {
     MERCHANT(6, false),
     CASH_OVERALL(7, true),
     MARRIAGE_GIFTS(8, false),
-    DUEY(9, false);
+    DUEY(9, false),
+    OREBAG(10, false),
+    SCROLLBAG(11, false),
+    CHAIRBAG(12, false),
+    MOUNTBAG(13, false);
     private final int value;
     private final boolean account;
 
@@ -110,6 +114,11 @@ public enum ItemFactory {
         equip.setInt((short) rs.getInt("int"));
         equip.setJump((short) rs.getInt("jump"));
         equip.setVicious((short) rs.getInt("vicious"));
+        try {
+            equip.setPlatinum(rs.getByte("platinum"));
+        } catch (SQLException ignored) {
+            // V1.11.37 前兼容
+        }
         equip.setFlag((short) rs.getInt("flag"));
         equip.setLuk((short) rs.getInt("luk"));
         equip.setMatk((short) rs.getInt("matk"));
@@ -126,6 +135,115 @@ public enum ItemFactory {
         equip.setExpiration(rs.getLong("expiration"));
         equip.setGiftFrom(rs.getString("giftFrom"));
         equip.setRingId(rs.getInt("ringid"));
+        equip.setAnvilItemId(rs.getInt("anvilItemId"));
+        equip.setEquipSkillId(rs.getInt("equipSkillId"));
+        equip.setEquipSkillLevel(rs.getInt("equipSkillLevel"));
+        equip.setEquipSkillExpire(rs.getLong("equipSkillExpire"));
+        try {
+            equip.setPotential1(rs.getInt("potential1"));
+            equip.setPotential2(rs.getInt("potential2"));
+            equip.setPotential3(rs.getInt("potential3"));
+            equip.setPotentialGrade(rs.getByte("potentialGrade"));
+            equip.setEnhance(rs.getByte("enhance"));
+        } catch (SQLException ignored) {
+            // 迁移前兼容
+        }
+        try {
+            equip.setBonusPotential1(rs.getInt("bonusPotential1"));
+            equip.setBonusPotential2(rs.getInt("bonusPotential2"));
+            equip.setBonusPotential3(rs.getInt("bonusPotential3"));
+            equip.setBonusPotentialGrade(rs.getByte("bonusPotentialGrade"));
+            try {
+                equip.setSoulId(rs.getInt("soulId"));
+                equip.setSoulOption(rs.getInt("soulOption"));
+                equip.setSocket1(rs.getInt("socket1"));
+                try {
+                    equip.setSocket2(rs.getInt("socket2"));
+                } catch (SQLException ignored) {
+                    // V1.11.34 前兼容
+                }
+                try {
+                    equip.setSocket3(rs.getInt("socket3"));
+                } catch (SQLException ignored) {
+                    // V1.11.35 前兼容
+                }
+                try {
+                    equip.setReforge1(rs.getInt("reforge1"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setReforge2(rs.getInt("reforge2"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setReforge3(rs.getInt("reforge3"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setReforgeLock(rs.getByte("reforgeLock"));
+                } catch (SQLException ignored) {
+                    // V1.11.45 前兼容
+                }
+                try {
+                    equip.setInfusion(rs.getByte("infusion"));
+                } catch (SQLException ignored) {
+                    // V1.13.0 前兼容
+                }
+                try {
+                    equip.setGemInlay(rs.getByte("gemInlay"));
+                    equip.setGemTypes(rs.getInt("gemTypes"));
+                } catch (SQLException ignored) {
+                    // V1.15.0 前兼容
+                }
+                try {
+                    equip.setBreakthrough(rs.getByte("breakthrough"));
+                    equip.setBreakthroughPool(rs.getInt("breakthroughPool"));
+                } catch (SQLException ignored) {
+                    // V1.17.0 前兼容
+                }
+                try {
+                    equip.setTintHue(rs.getShort("tinthue"));
+                    equip.setTintChroma(rs.getByte("tintchroma"));
+                    equip.setTintBright(rs.getByte("tintbright"));
+                    equip.setTintFxHue(rs.getShort("tintfxhue"));
+                    equip.setTintFxChroma(rs.getByte("tintfxchroma"));
+                    equip.setTintFxBright(rs.getByte("tintfxbright"));
+                } catch (SQLException ignored) {
+                    // V1.19.3 前兼容
+                }
+                try {
+                    equip.setChaosStr(rs.getShort("chaosStr"));
+                    equip.setChaosDex(rs.getShort("chaosDex"));
+                    equip.setChaosInt(rs.getShort("chaosInt"));
+                    equip.setChaosLuk(rs.getShort("chaosLuk"));
+                    equip.setChaosHp(rs.getShort("chaosHp"));
+                    equip.setChaosMp(rs.getShort("chaosMp"));
+                    equip.setChaosWatk(rs.getShort("chaosWatk"));
+                    equip.setChaosMatk(rs.getShort("chaosMatk"));
+                    equip.setChaosWdef(rs.getShort("chaosWdef"));
+                    equip.setChaosMdef(rs.getShort("chaosMdef"));
+                    equip.setChaosAcc(rs.getShort("chaosAcc"));
+                    equip.setChaosAvoid(rs.getShort("chaosAvoid"));
+                    equip.setChaosSpeed(rs.getShort("chaosSpeed"));
+                    equip.setChaosJump(rs.getShort("chaosJump"));
+                } catch (SQLException ignored) {
+                    // V1.11.54 前兼容
+                }
+                try {
+                    equip.setExGradeOption(rs.getLong("exGradeOption"));
+                    org.gms.flame.FlameService.decodeToFlameStat(equip);
+                } catch (SQLException ignored) {
+                    // V1.11.59 前兼容
+                }
+            } catch (SQLException ignored) {
+                // 旧库未跑 Flyway 时兼容
+            }
+        } catch (SQLException ignored) {
+            // Phase3 附加潜能迁移前兼容
+        }
 
         return equip;
     }
@@ -206,100 +324,122 @@ public enum ItemFactory {
         Lock lock = locks[id % lockCount];
         lock.lock();
         try {
-            // 仅在调用方未开事务时自己管事务，避免 DELETE 已提交但 INSERT 失败导致物品丢失。
-            // Character.saveCharToDB 已 setAutoCommit(false)，此处不接管；其他调用方
-            // （如 HiredMerchant.saveItems）默认 autoCommit=true，此处包裹事务保证原子性。
-            boolean ownTransaction = con.getAutoCommit();
-            if (ownTransaction) {
-                con.setAutoCommit(false);
+            StringBuilder query = new StringBuilder();
+            query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
+            query.append(account ? "accountid" : "characterid").append("` = ?");
+
+            try (PreparedStatement ps = con.prepareStatement(query.toString())) {
+                ps.setInt(1, value);
+                ps.setInt(2, id);
+                ps.executeUpdate();
             }
-            try {
-                StringBuilder query = new StringBuilder();
-                query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
-                query.append(account ? "accountid" : "characterid").append("` = ?");
 
-                try (PreparedStatement ps = con.prepareStatement(query.toString())) {
-                    ps.setInt(1, value);
-                    ps.setInt(2, id);
-                    ps.executeUpdate();
-                }
+            try (PreparedStatement psItem = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                if (!items.isEmpty()) {
+                    for (Pair<Item, InventoryType> pair : items) {
+                        Item item = pair.getLeft();
+                        InventoryType mit = pair.getRight();
+                        psItem.setInt(1, value);
+                        psItem.setString(2, account ? null : String.valueOf(id));
+                        psItem.setString(3, account ? String.valueOf(id) : null);
+                        psItem.setInt(4, item.getItemId());
+                        psItem.setInt(5, mit.getType());
+                        psItem.setInt(6, item.getPosition());
+                        psItem.setInt(7, item.getQuantity());
+                        psItem.setString(8, item.getOwner());
+                        psItem.setInt(9, item.getPetId());      // thanks Daddy Egg for alerting a case of unique petid constraint breach getting raised
+                        psItem.setInt(10, item.getFlag());
+                        psItem.setLong(11, item.getExpiration());
+                        psItem.setString(12, item.getGiftFrom());
+                        psItem.executeUpdate();
 
-                try (PreparedStatement psItem = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                    if (!items.isEmpty()) {
-                        for (Pair<Item, InventoryType> pair : items) {
-                            Item item = pair.getLeft();
-                            InventoryType mit = pair.getRight();
-                            psItem.setInt(1, value);
-                            psItem.setString(2, account ? null : String.valueOf(id));
-                            psItem.setString(3, account ? String.valueOf(id) : null);
-                            psItem.setInt(4, item.getItemId());
-                            psItem.setInt(5, mit.getType());
-                            psItem.setInt(6, item.getPosition());
-                            psItem.setInt(7, item.getQuantity());
-                            psItem.setString(8, item.getOwner());
-                            psItem.setInt(9, item.getPetId());      // thanks Daddy Egg for alerting a case of unique petid constraint breach getting raised
-                            psItem.setInt(10, item.getFlag());
-                            psItem.setLong(11, item.getExpiration());
-                            psItem.setString(12, item.getGiftFrom());
-                            psItem.executeUpdate();
-
-                            if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                                try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                                    try (ResultSet rs = psItem.getGeneratedKeys()) {
-                                        if (!rs.next()) {
-                                            throw new RuntimeException("Inserting item failed.");
-                                        }
-
-                                        psEquip.setInt(1, rs.getInt(1));
+                        if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
+                            try (PreparedStatement psEquip = con.prepareStatement(
+                                    "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`,`chaosStr`,`chaosDex`,`chaosInt`,`chaosLuk`,`chaosHp`,`chaosMp`,`chaosWatk`,`chaosMatk`,`chaosWdef`,`chaosMdef`,`chaosAcc`,`chaosAvoid`,`chaosSpeed`,`chaosJump`,`exGradeOption`,`infusion`,`gemInlay`,`gemTypes`,`breakthrough`,`breakthroughPool`,`tinthue`,`tintchroma`,`tintbright`,`tintfxhue`,`tintfxchroma`,`tintfxbright`) "
+                                            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                                try (ResultSet rs = psItem.getGeneratedKeys()) {
+                                    if (!rs.next()) {
+                                        throw new RuntimeException("Inserting item failed.");
                                     }
 
-                                    Equip equip = (Equip) item;
-                                    psEquip.setInt(2, equip.getUpgradeSlots());
-                                    psEquip.setInt(3, equip.getLevel());
-                                    psEquip.setInt(4, equip.getStr());
-                                    psEquip.setInt(5, equip.getDex());
-                                    psEquip.setInt(6, equip.getInt());
-                                    psEquip.setInt(7, equip.getLuk());
-                                    psEquip.setInt(8, equip.getHp());
-                                    psEquip.setInt(9, equip.getMp());
-                                    psEquip.setInt(10, equip.getWatk());
-                                    psEquip.setInt(11, equip.getMatk());
-                                    psEquip.setInt(12, equip.getWdef());
-                                    psEquip.setInt(13, equip.getMdef());
-                                    psEquip.setInt(14, equip.getAcc());
-                                    psEquip.setInt(15, equip.getAvoid());
-                                    psEquip.setInt(16, equip.getHands());
-                                    psEquip.setInt(17, equip.getSpeed());
-                                    psEquip.setInt(18, equip.getJump());
-                                    psEquip.setInt(19, 0);
-                                    psEquip.setInt(20, equip.getVicious());
-                                    psEquip.setInt(21, equip.getItemLevel());
-                                    psEquip.setInt(22, equip.getItemExp());
-                                    psEquip.setInt(23, equip.getRingId());
-                                    psEquip.executeUpdate();
+                                    psEquip.setInt(1, rs.getInt(1));
                                 }
+
+                                Equip equip = (Equip) item;
+                                psEquip.setInt(2, equip.getUpgradeSlots());
+                                psEquip.setInt(3, equip.getLevel());
+                                psEquip.setInt(4, equip.getStr());
+                                psEquip.setInt(5, equip.getDex());
+                                psEquip.setInt(6, equip.getInt());
+                                psEquip.setInt(7, equip.getLuk());
+                                psEquip.setInt(8, equip.getHp());
+                                psEquip.setInt(9, equip.getMp());
+                                psEquip.setInt(10, equip.getWatk());
+                                psEquip.setInt(11, equip.getMatk());
+                                psEquip.setInt(12, equip.getWdef());
+                                psEquip.setInt(13, equip.getMdef());
+                                psEquip.setInt(14, equip.getAcc());
+                                psEquip.setInt(15, equip.getAvoid());
+                                psEquip.setInt(16, equip.getHands());
+                                psEquip.setInt(17, equip.getSpeed());
+                                psEquip.setInt(18, equip.getJump());
+                                psEquip.setInt(19, 0);
+                                psEquip.setInt(20, equip.getVicious());
+                                psEquip.setInt(21, equip.getPlatinum());
+                                psEquip.setInt(22, equip.getItemLevel());
+                                psEquip.setInt(23, equip.getItemExp());
+                                psEquip.setInt(24, equip.getRingId());
+                                psEquip.setInt(25, equip.getAnvilItemId());
+                                psEquip.setInt(26, equip.getEquipSkillId());
+                                psEquip.setInt(27, equip.getEquipSkillLevel());
+                                psEquip.setLong(28, equip.getEquipSkillExpire());
+                                psEquip.setInt(29, equip.getPotential1());
+                                psEquip.setInt(30, equip.getPotential2());
+                                psEquip.setInt(31, equip.getPotential3());
+                                psEquip.setInt(32, equip.getPotentialGrade());
+                                psEquip.setInt(33, equip.getEnhance());
+                                psEquip.setInt(34, equip.getBonusPotential1());
+                                psEquip.setInt(35, equip.getBonusPotential2());
+                                psEquip.setInt(36, equip.getBonusPotential3());
+                                psEquip.setInt(37, equip.getBonusPotentialGrade());
+                                psEquip.setInt(38, equip.getSoulId());
+                                psEquip.setInt(39, equip.getSoulOption());
+                                psEquip.setInt(40, equip.getSocket1());
+                                psEquip.setInt(41, equip.getSocket2());
+                                psEquip.setInt(42, equip.getSocket3());
+                                psEquip.setInt(43, equip.getReforge1());
+                                psEquip.setInt(44, equip.getReforge2());
+                                psEquip.setInt(45, equip.getReforge3());
+                                psEquip.setByte(46, equip.getReforgeLock());
+                                psEquip.setShort(47, equip.getChaosStr());
+                                psEquip.setShort(48, equip.getChaosDex());
+                                psEquip.setShort(49, equip.getChaosInt());
+                                psEquip.setShort(50, equip.getChaosLuk());
+                                psEquip.setShort(51, equip.getChaosHp());
+                                psEquip.setShort(52, equip.getChaosMp());
+                                psEquip.setShort(53, equip.getChaosWatk());
+                                psEquip.setShort(54, equip.getChaosMatk());
+                                psEquip.setShort(55, equip.getChaosWdef());
+                                psEquip.setShort(56, equip.getChaosMdef());
+                                psEquip.setShort(57, equip.getChaosAcc());
+                                psEquip.setShort(58, equip.getChaosAvoid());
+                                psEquip.setShort(59, equip.getChaosSpeed());
+                                psEquip.setShort(60, equip.getChaosJump());
+                                psEquip.setLong(61, equip.getExGradeOption());
+                                psEquip.setByte(62, equip.getInfusion());
+                                psEquip.setByte(63, equip.getGemInlay());
+                                psEquip.setInt(64, equip.getGemTypes());
+                                psEquip.setByte(65, equip.getBreakthrough());
+                                psEquip.setInt(66, equip.getBreakthroughPool());
+                                psEquip.setShort(67, equip.getTintHue());
+                                psEquip.setByte(68, equip.getTintChroma());
+                                psEquip.setByte(69, equip.getTintBright());
+                                psEquip.setShort(70, equip.getTintFxHue());
+                                psEquip.setByte(71, equip.getTintFxChroma());
+                                psEquip.setByte(72, equip.getTintFxBright());
+                                psEquip.executeUpdate();
                             }
                         }
-                    }
-                }
-                if (ownTransaction) {
-                    con.commit();
-                }
-            } catch (SQLException | RuntimeException e) {
-                if (ownTransaction) {
-                    try {
-                        con.rollback();
-                    } catch (SQLException re) {
-                        e.addSuppressed(re);
-                    }
-                }
-                throw e;
-            } finally {
-                if (ownTransaction) {
-                    try {
-                        con.setAutoCommit(true);
-                    } catch (SQLException se) {
-                        // ignore restore failure
                     }
                 }
             }
@@ -367,120 +507,142 @@ public enum ItemFactory {
         Lock lock = locks[id % lockCount];
         lock.lock();
         try {
-            // 仅在调用方未开事务时自己管事务，避免 DELETE 已提交但 INSERT 失败导致物品丢失。
-            // HiredMerchant.saveItems 默认 autoCommit=true，此处包裹事务保证
-            // inventorymerchant + inventoryitems + inventoryequipment 的 DELETE/INSERT 原子提交。
-            boolean ownTransaction = con.getAutoCommit();
-            if (ownTransaction) {
-                con.setAutoCommit(false);
+            try (PreparedStatement ps = con.prepareStatement("DELETE FROM `inventorymerchant` WHERE `characterid` = ?")) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
             }
-            try {
-                try (PreparedStatement ps = con.prepareStatement("DELETE FROM `inventorymerchant` WHERE `characterid` = ?")) {
-                    ps.setInt(1, id);
-                    ps.executeUpdate();
-                }
 
-                StringBuilder query = new StringBuilder();
-                query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
-                query.append(account ? "accountid" : "characterid").append("` = ?");
+            StringBuilder query = new StringBuilder();
+            query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
+            query.append(account ? "accountid" : "characterid").append("` = ?");
 
-                try (PreparedStatement ps = con.prepareStatement(query.toString())) {
+            try (PreparedStatement ps = con.prepareStatement(query.toString())) {
+                ps.setInt(1, value);
+                ps.setInt(2, id);
+                ps.executeUpdate();
+            }
+
+            int i = 0;
+            for (Pair<Item, InventoryType> pair : items) {
+                final Item item = pair.getLeft();
+                final Short bundles = bundlesList.get(i);
+                final InventoryType mit = pair.getRight();
+                i++;
+
+                final int genKey;
+                // Item
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, value);
+                    ps.setString(2, account ? null : String.valueOf(id));
+                    ps.setString(3, account ? String.valueOf(id) : null);
+                    ps.setInt(4, item.getItemId());
+                    ps.setInt(5, mit.getType());
+                    ps.setInt(6, item.getPosition());
+                    ps.setInt(7, item.getQuantity());
+                    ps.setString(8, item.getOwner());
+                    ps.setInt(9, item.getPetId());
+                    ps.setInt(10, item.getFlag());
+                    ps.setLong(11, item.getExpiration());
+                    ps.setString(12, item.getGiftFrom());
+                    ps.executeUpdate();
+
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (!rs.next()) {
+                            throw new RuntimeException("Inserting item failed.");
+                        }
+
+                        genKey = rs.getInt(1);
+                    }
+                }
+
+                // Merchant
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventorymerchant` VALUES (DEFAULT, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                    ps.setInt(1, genKey);
                     ps.setInt(2, id);
+                    ps.setInt(3, bundles);
                     ps.executeUpdate();
                 }
 
-                int i = 0;
-                for (Pair<Item, InventoryType> pair : items) {
-                    final Item item = pair.getLeft();
-                    final Short bundles = bundlesList.get(i);
-                    final InventoryType mit = pair.getRight();
-                    i++;
-
-                    final int genKey;
-                    // Item
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                        ps.setInt(1, value);
-                        ps.setString(2, account ? null : String.valueOf(id));
-                        ps.setString(3, account ? String.valueOf(id) : null);
-                        ps.setInt(4, item.getItemId());
-                        ps.setInt(5, mit.getType());
-                        ps.setInt(6, item.getPosition());
-                        ps.setInt(7, item.getQuantity());
-                        ps.setString(8, item.getOwner());
-                        ps.setInt(9, item.getPetId());
-                        ps.setInt(10, item.getFlag());
-                        ps.setLong(11, item.getExpiration());
-                        ps.setString(12, item.getGiftFrom());
-                        ps.executeUpdate();
-
-                        try (ResultSet rs = ps.getGeneratedKeys()) {
-                            if (!rs.next()) {
-                                throw new RuntimeException("Inserting item failed.");
-                            }
-
-                            genKey = rs.getInt(1);
-                        }
-                    }
-
-                    // Merchant
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventorymerchant` VALUES (DEFAULT, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                // Equipment
+                if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
+                    try (PreparedStatement ps = con.prepareStatement(
+                            "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,`vicious`,`platinum`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,`potential1`,`potential2`,`potential3`,`potentialGrade`,`enhance`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,`bonusPotentialGrade`,`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`,`chaosStr`,`chaosDex`,`chaosInt`,`chaosLuk`,`chaosHp`,`chaosMp`,`chaosWatk`,`chaosMatk`,`chaosWdef`,`chaosMdef`,`chaosAcc`,`chaosAvoid`,`chaosSpeed`,`chaosJump`,`exGradeOption`,`infusion`,`gemInlay`,`gemTypes`,`breakthrough`,`breakthroughPool`,`tinthue`,`tintchroma`,`tintbright`,`tintfxhue`,`tintfxchroma`,`tintfxbright`) "
+                                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                         ps.setInt(1, genKey);
-                        ps.setInt(2, id);
-                        ps.setInt(3, bundles);
+
+                        Equip equip = (Equip) item;
+                        ps.setInt(2, equip.getUpgradeSlots());
+                        ps.setInt(3, equip.getLevel());
+                        ps.setInt(4, equip.getStr());
+                        ps.setInt(5, equip.getDex());
+                        ps.setInt(6, equip.getInt());
+                        ps.setInt(7, equip.getLuk());
+                        ps.setInt(8, equip.getHp());
+                        ps.setInt(9, equip.getMp());
+                        ps.setInt(10, equip.getWatk());
+                        ps.setInt(11, equip.getMatk());
+                        ps.setInt(12, equip.getWdef());
+                        ps.setInt(13, equip.getMdef());
+                        ps.setInt(14, equip.getAcc());
+                        ps.setInt(15, equip.getAvoid());
+                        ps.setInt(16, equip.getHands());
+                        ps.setInt(17, equip.getSpeed());
+                        ps.setInt(18, equip.getJump());
+                        ps.setInt(19, 0);
+                        ps.setInt(20, equip.getVicious());
+                        ps.setInt(21, equip.getPlatinum());
+                        ps.setInt(22, equip.getItemLevel());
+                        ps.setInt(23, equip.getItemExp());
+                        ps.setInt(24, equip.getRingId());
+                        ps.setInt(25, equip.getAnvilItemId());
+                        ps.setInt(26, equip.getEquipSkillId());
+                        ps.setInt(27, equip.getEquipSkillLevel());
+                        ps.setLong(28, equip.getEquipSkillExpire());
+                        ps.setInt(29, equip.getPotential1());
+                        ps.setInt(30, equip.getPotential2());
+                        ps.setInt(31, equip.getPotential3());
+                        ps.setInt(32, equip.getPotentialGrade());
+                        ps.setInt(33, equip.getEnhance());
+                        ps.setInt(34, equip.getBonusPotential1());
+                        ps.setInt(35, equip.getBonusPotential2());
+                        ps.setInt(36, equip.getBonusPotential3());
+                        ps.setInt(37, equip.getBonusPotentialGrade());
+                        ps.setInt(38, equip.getSoulId());
+                        ps.setInt(39, equip.getSoulOption());
+                        ps.setInt(40, equip.getSocket1());
+                        ps.setInt(41, equip.getSocket2());
+                        ps.setInt(42, equip.getSocket3());
+                        ps.setInt(43, equip.getReforge1());
+                        ps.setInt(44, equip.getReforge2());
+                        ps.setInt(45, equip.getReforge3());
+                        ps.setByte(46, equip.getReforgeLock());
+                        ps.setShort(47, equip.getChaosStr());
+                        ps.setShort(48, equip.getChaosDex());
+                        ps.setShort(49, equip.getChaosInt());
+                        ps.setShort(50, equip.getChaosLuk());
+                        ps.setShort(51, equip.getChaosHp());
+                        ps.setShort(52, equip.getChaosMp());
+                        ps.setShort(53, equip.getChaosWatk());
+                        ps.setShort(54, equip.getChaosMatk());
+                        ps.setShort(55, equip.getChaosWdef());
+                        ps.setShort(56, equip.getChaosMdef());
+                        ps.setShort(57, equip.getChaosAcc());
+                        ps.setShort(58, equip.getChaosAvoid());
+                        ps.setShort(59, equip.getChaosSpeed());
+                        ps.setShort(60, equip.getChaosJump());
+                        ps.setLong(61, equip.getExGradeOption());
+                        ps.setByte(62, equip.getInfusion());
+                        ps.setByte(63, equip.getGemInlay());
+                        ps.setInt(64, equip.getGemTypes());
+                        ps.setByte(65, equip.getBreakthrough());
+                        ps.setInt(66, equip.getBreakthroughPool());
+                        ps.setShort(67, equip.getTintHue());
+                        ps.setByte(68, equip.getTintChroma());
+                        ps.setByte(69, equip.getTintBright());
+                        ps.setShort(70, equip.getTintFxHue());
+                        ps.setByte(71, equip.getTintFxChroma());
+                        ps.setByte(72, equip.getTintFxBright());
                         ps.executeUpdate();
-                    }
-
-                    // Equipment
-                    if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                        try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            ps.setInt(1, genKey);
-
-                            Equip equip = (Equip) item;
-                            ps.setInt(2, equip.getUpgradeSlots());
-                            ps.setInt(3, equip.getLevel());
-                            ps.setInt(4, equip.getStr());
-                            ps.setInt(5, equip.getDex());
-                            ps.setInt(6, equip.getInt());
-                            ps.setInt(7, equip.getLuk());
-                            ps.setInt(8, equip.getHp());
-                            ps.setInt(9, equip.getMp());
-                            ps.setInt(10, equip.getWatk());
-                            ps.setInt(11, equip.getMatk());
-                            ps.setInt(12, equip.getWdef());
-                            ps.setInt(13, equip.getMdef());
-                            ps.setInt(14, equip.getAcc());
-                            ps.setInt(15, equip.getAvoid());
-                            ps.setInt(16, equip.getHands());
-                            ps.setInt(17, equip.getSpeed());
-                            ps.setInt(18, equip.getJump());
-                            ps.setInt(19, 0);
-                            ps.setInt(20, equip.getVicious());
-                            ps.setInt(21, equip.getItemLevel());
-                            ps.setInt(22, equip.getItemExp());
-                            ps.setInt(23, equip.getRingId());
-                            ps.executeUpdate();
-                        }
-                    }
-                }
-                if (ownTransaction) {
-                    con.commit();
-                }
-            } catch (SQLException | RuntimeException e) {
-                if (ownTransaction) {
-                    try {
-                        con.rollback();
-                    } catch (SQLException re) {
-                        e.addSuppressed(re);
-                    }
-                }
-                throw e;
-            } finally {
-                if (ownTransaction) {
-                    try {
-                        con.setAutoCommit(true);
-                    } catch (SQLException se) {
-                        // ignore restore failure
                     }
                 }
             }

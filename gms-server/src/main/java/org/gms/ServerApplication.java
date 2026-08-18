@@ -2,13 +2,13 @@ package org.gms;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.gms.util.RequireUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -37,23 +37,38 @@ public class ServerApplication {
      * 无法解决在获取MybatisFlexProperties之后，在以上自动配置之前执行，进而手动解析yml来自动创建库
      */
     private static void initDb(String[] args) throws Exception {
-        InputStream resource = null;
+        // 读成 byte[] 再解析：避免 SnakeYAML 对 null/已关闭流抛出误导性的 "Stream closed"
+        byte[] yamlBytes = null;
+        String yamlSource = null;
 
         String location = getStartParam(args, "spring.config.location");
         if (location != null) {
             Path path = Path.of(location);
-            if (!Files.exists(path)) {
-                return;
+            if (Files.isRegularFile(path)) {
+                yamlBytes = Files.readAllBytes(path);
+                yamlSource = path.toAbsolutePath().toString();
+            } else {
+                log.warn("spring.config.location={} 不存在，回退到 classpath application.yml", location);
             }
-            resource = Files.newInputStream(path);
         }
-        if (resource == null) {
-            // 解析jar包自带的yml
-            resource = ServerApplication.class.getClassLoader().getResourceAsStream("application.yml");
+        if (yamlBytes == null) {
+            try (InputStream resource = ServerApplication.class.getClassLoader().getResourceAsStream("application.yml")) {
+                if (resource == null) {
+                    throw new IllegalStateException(
+                            "classpath 中找不到 application.yml（常见于 target/classes 未执行 process-resources）。"
+                                    + " 请先 mvn process-resources / Rebuild，或把 src/main/resources/application.yml 拷到运行 classpath。");
+                }
+                yamlBytes = resource.readAllBytes();
+                yamlSource = "classpath:application.yml";
+            }
         }
 
         Yaml yaml = new Yaml();
-        LinkedHashMap<String, Object> property = yaml.load(resource);
+        @SuppressWarnings("unchecked")
+        LinkedHashMap<String, Object> property = yaml.load(new String(yamlBytes, StandardCharsets.UTF_8));
+        if (property == null || property.get("mybatis-flex") == null) {
+            throw new IllegalStateException("配置缺少 mybatis-flex 节点，来源: " + yamlSource);
+        }
         JSONObject mybatisFlex = JSONObject.parse(JSONObject.toJSONString(property.get("mybatis-flex")));
         JSONObject datasource = mybatisFlex.getJSONObject("datasource").getJSONObject("mysql");
         String driver = getStartParam(args, "mybatis-flex.datasource.mysql.driver-class-name");

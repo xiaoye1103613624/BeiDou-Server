@@ -295,6 +295,10 @@ public final class InventorySortHandler extends AbstractPacketHandler {
         p.readInt();
         chr.getAutoBanManager().setTimestamp(3, Server.getInstance().getCurrentTimestamp(), 4);
 
+        // AUX wire-omit (GREEN_ENTER_OMIT_AUX62): flush ghost −62 before bag rearrange.
+        // When flag false: recover is no-op; replace −62→bag is normal equip path.
+        org.gms.client.inventory.manipulator.InventoryManipulator.recoverWireOmittedAuxToBag(c);
+
         if (!GameConfig.getServerBoolean("use_item_sort")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -306,6 +310,75 @@ public final class InventorySortHandler extends AbstractPacketHandler {
             return;
         }
 
+        try {
+            if (p.available() > 0) {
+                handleSlotLockSort(p, c, chr, invType);
+                return;
+            }
+
+            ArrayList<Item> itemarray = new ArrayList<>();
+            List<ModifyInventory> mods = new ArrayList<>();
+
+            Inventory inventory = chr.getInventory(InventoryType.getByType(invType));
+            inventory.lockInventory();
+            try {
+                for (short i = 1; i <= inventory.getSlotLimit(); i++) {
+                    Item item = inventory.getItem(i);
+                    if (item != null) {
+                        itemarray.add(item.copy());
+                    }
+                }
+
+                for (Item item : itemarray) {
+                    inventory.removeSlot(item.getPosition());
+                    mods.add(new ModifyInventory(3, item));
+                }
+
+                int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
+                int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
+                // size<2: PairedQuicksort no-op; avoid empty/1-elem edge paths
+                if (itemarray.size() >= 2) {
+                    new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
+                }
+
+                for (Item item : itemarray) {
+                    inventory.addItem(item);
+                    mods.add(new ModifyInventory(0, item.copy()));//to prevent crashes
+                }
+                itemarray.clear();
+            } finally {
+                inventory.unlockInventory();
+            }
+
+            // FORBIDDEN: empty modifyInventory([]) → Client_1 hang/AV (same family as
+            // getInventoryFull after Addon ghost unequip). Skip invent when nothing moved.
+            if (!mods.isEmpty()) {
+                // writeByte(size): keep each packet under 200 ops (safe <255).
+                final int chunk = 200;
+                for (int i = 0; i < mods.size(); i += chunk) {
+                    int to = Math.min(i + chunk, mods.size());
+                    c.sendPacket(PacketCreator.modifyInventory(true, mods.subList(i, to)));
+                }
+            }
+            c.sendPacket(PacketCreator.finishedSort2(invType));
+        } catch (Throwable t) {
+            // Addon desync / null name / bad slot must NEVER leave client SendBusy
+            // (organize hang). Always enableActions in outer finally.
+            org.slf4j.LoggerFactory.getLogger(InventorySortHandler.class)
+                    .error("inventory sort failed invType={} char={}", invType,
+                            chr != null ? chr.getName() : "?", t);
+        } finally {
+            c.sendPacket(PacketCreator.enableActions());
+        }
+    }
+
+    private void handleSlotLockSort(InPacket p, Client c, Character chr, byte invType) {
+        List<Integer> lockedSlots = new ArrayList<>();
+        final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
+        for (int i = 0; i < lockSize; i++) {
+            lockedSlots.add(Short.toUnsignedInt(p.readUnsignedByte()));
+        }
+
         ArrayList<Item> itemarray = new ArrayList<>();
         List<ModifyInventory> mods = new ArrayList<>();
 
@@ -313,6 +386,9 @@ public final class InventorySortHandler extends AbstractPacketHandler {
         inventory.lockInventory();
         try {
             for (short i = 1; i <= inventory.getSlotLimit(); i++) {
+                if (lockedSlots.contains((int) i)) {
+                    continue;
+                }
                 Item item = inventory.getItem(i);
                 if (item != null) {
                     itemarray.add(item.copy());
@@ -326,19 +402,35 @@ public final class InventorySortHandler extends AbstractPacketHandler {
 
             int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
             int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
-            PairedQuicksort pq = new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
+            new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
 
+            int slotCursor = 1;
             for (Item item : itemarray) {
-                inventory.addItem(item);
-                mods.add(new ModifyInventory(0, item.copy()));//to prevent crashes
+                while (slotCursor <= inventory.getSlotLimit()
+                        && (lockedSlots.contains(slotCursor)
+                        || inventory.getItem((short) slotCursor) != null)) {
+                    slotCursor++;
+                }
+                if (slotCursor > inventory.getSlotLimit()) {
+                    break;
+                }
+
+                item.setPosition((short) slotCursor);
+                inventory.addItemFromDB(item);
+                mods.add(new ModifyInventory(0, item.copy()));
+                slotCursor++;
             }
+
             itemarray.clear();
         } finally {
             inventory.unlockInventory();
         }
 
-        c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        // FORBIDDEN empty modifyInventory([]) — skip when nothing to rewrite.
+        if (!mods.isEmpty()) {
+            c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        }
         c.sendPacket(PacketCreator.finishedSort2(invType));
-        c.sendPacket(PacketCreator.enableActions());
+        // enableActions: outer handlePacket finally
     }
 }

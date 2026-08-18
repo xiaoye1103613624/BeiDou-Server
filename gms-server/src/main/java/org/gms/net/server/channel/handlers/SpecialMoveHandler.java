@@ -38,7 +38,6 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.StatEffect;
 import org.gms.server.life.Monster;
-import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -65,8 +64,26 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
 
         Point pos = null;
         int __skillLevel = p.readByte();
+        // Temporary cast probe (1121015 / LoginTest): proves whether UseSkill reached server.
+        if (skillid == 1121015 || "LoginTest".equals(chr.getName())) {
+            String msg = "[SPECIAL_MOVE] " + chr.getName() + " skill=" + skillid + " clientLv=" + __skillLevel;
+            System.out.println(msg);
+            chr.dropMessage(5, msg);
+        }
         Skill skill = SkillFactory.getSkill(skillid);
+        if (skill == null) {
+            chr.dropMessage(5, "技能施放失败: 未知技能 " + skillid + "（服务端未加载）");
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
         int skillLevel = chr.getSkillLevel(skill);
+
+        // 装备版轮回碑石：穿戴时劫持英雄之回声系（1005，非 PQ）为刷怪加成
+        // 注意：1009–1011/1020 是客户端 PQ 技能，普通地图会提示「该技能无法在当前地图使用」
+        if (org.gms.reincarnation.ReincarnationSupport.tryHandleSkill(c, chr, skillid)) {
+            return;
+        }
+
         if (skillid % 10000000 == 1010 || skillid % 10000000 == 1011) {
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
@@ -74,9 +91,16 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             skillLevel = 1;
             chr.setDojoEnergy(0);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
-            c.sendPacket(PacketCreator.serverNotice(5, I18nUtil.getMessage("Dojo.secretSkill.energyReset")));
+            c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         }
-        if (skillLevel == 0 || skillLevel != __skillLevel) {
+        if (skillLevel == 0) {
+            chr.dropMessage(5, "技能施放失败: " + skillid + " 等级为0（先 !skill " + skillid + " 1）");
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+        if (skillLevel != __skillLevel) {
+            chr.dropMessage(5, "技能施放失败: " + skillid + " 等级不一致 服务端=" + skillLevel + " 客户端=" + __skillLevel);
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
@@ -89,6 +113,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                 if (StatEffect.isHerosWill(skillid) && GameConfig.getServerBoolean("use_fast_reuse_hero_will")) {
                     cooldownTime /= 60;
                 }
+                cooldownTime = chr.getEffectiveCooldownSeconds(cooldownTime);
 
                 c.sendPacket(PacketCreator.skillCooldown(skillid, cooldownTime));
                 chr.addCooldown(skillid, currentServerTime(), SECONDS.toMillis(cooldownTime));

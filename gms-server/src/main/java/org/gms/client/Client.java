@@ -263,10 +263,9 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     private void closeMapleSession() {
-        if (type == Type.LOGIN) {
-            SessionCoordinator.getInstance().closeLoginSession(this);
-        } else if (type == Type.CHANNEL) {
-            SessionCoordinator.getInstance().closeSession(this, null);
+        switch (type) {
+            case LOGIN -> SessionCoordinator.getInstance().closeLoginSession(this);
+            case CHANNEL -> SessionCoordinator.getInstance().closeSession(this, null);
         }
 
         try {
@@ -711,25 +710,28 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);  //loginok == 4，但是会导致限制多开参数 deterred_multi_client == true 时密码错误一次返回REMOTE_REACHED_LIMIT，需要重开客户端
+            // loginok==4 (wrong password): still run attempt checks for flood control,
+            // but never let multi-client results override the "incorrect password" reply.
+            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
 
-            // if-else: avoid ECJ Client$1 switch-map (breaks when javac overwrites Client.class alone)
-            if (res == AntiMulticlientResult.SUCCESS) {
-                if (loginok == 0) {
-                    loginattempt = 0;
+            if (loginok == 4) {
+                if (res == AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS) {
+                    return 16;
                 }
-                return loginok;
-            } else if (res == AntiMulticlientResult.REMOTE_LOGGEDIN) {
-                return 17;
-            } else if (res == AntiMulticlientResult.REMOTE_REACHED_LIMIT) {
-                return 13;
-            } else if (res == AntiMulticlientResult.REMOTE_PROCESSING) {
-                return 10;
-            } else if (res == AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS) {
-                return 16;
-            } else {
-                return 8;
+                return 4;
             }
+
+            return switch (res) {
+                case SUCCESS -> {
+                    loginattempt = 0;
+                    yield 0;
+                }
+                case REMOTE_LOGGEDIN -> 17;
+                case REMOTE_REACHED_LIMIT -> 13;
+                case REMOTE_PROCESSING -> 10;
+                case MANY_ACCOUNT_ATTEMPTS -> 16;
+                default -> 8;
+            };
         } else {
             return loginok;
         }
@@ -958,13 +960,6 @@ public class Client extends ChannelInboundHandlerAdapter {
                 }
             }
 
-        } catch (final Throwable t) {
-            log.error("账号卡住 (玩家清理)", t);
-        }
-
-        // 地图移除必须独立保证执行：即便上面的清理抛异常，也要把玩家从地图摘除并触发怪物 controller 重分配，
-        // 否则会留下"PlayerStorage 已移除、MapleMap 仍持有"的幽灵玩家，导致该图怪物 controller 卡死、怪物不动。
-        try {
             if (player.getMap() != null) {
                 int mapId = player.getMapId();
                 player.getMap().removePlayer(player);
@@ -978,7 +973,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
         } catch (final Throwable t) {
-            log.error("账号卡住 (地图移除)", t);
+            log.error("账号卡住", t);
         }
     }
 
@@ -1405,7 +1400,8 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean canGainCharacterSlot() {
-        return characterSlots < 15;
+        // 角色槽上限 15 → 30（需客户端 charslots 插件同步）
+        return characterSlots < 30;
     }
 
     public synchronized boolean gainCharacterSlot() {

@@ -7,7 +7,6 @@ import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.AccountsDO;
 import org.gms.model.dto.*;
 import org.gms.service.AccountService;
-import org.gms.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +17,10 @@ import java.util.Map;
 @RequestMapping("/account")
 public class AccountController {
     private final AccountService accountService;
-    private final CharacterService characterService;
 
     @Autowired
-    public AccountController(AccountService accountService, CharacterService characterService) {
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
-        this.characterService = characterService;
     }
 
     @Tag(name = "/account/" + ApiConstant.LATEST)
@@ -76,7 +73,7 @@ public class AccountController {
     @Operation(summary = "删除账号")
     @DeleteMapping("/" + ApiConstant.LATEST + "/{id}")
     public ResultBody<Object> delete(@PathVariable("id") int id) {
-        characterService.deleteAccount(id);
+        accountService.deleteAccountByGM(id);
         return ResultBody.success();
     }
 

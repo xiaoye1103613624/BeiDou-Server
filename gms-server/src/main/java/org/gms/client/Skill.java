@@ -34,6 +34,8 @@ public class Skill {
     private int animationTime;
     private final int job;
     private boolean action;
+    /** 玩家手动加点上限（技改前原始最高等级）；战斗生效上限仍为 {@link #getMaxLevel()}。 */
+    private int spMaxLevel = -1;
 
     public Skill(int id) {
         this.id = id;
@@ -45,11 +47,55 @@ public class Skill {
     }
 
     public StatEffect getEffect(int level) {
-        return effects.get(level - 1);
+        int idx = Math.max(0, Math.min(level, effects.size()) - 1);
+        return effects.get(idx);
     }
 
     public int getMaxLevel() {
         return effects.size();
+    }
+
+    /**
+     * 手动 SP / 技能窗加点上限。未设置技改时等于 WZ 等级节点数。
+     */
+    public int getSpMaxLevel() {
+        if (spMaxLevel > 0) {
+            return Math.min(spMaxLevel, getMaxLevel() > 0 ? getMaxLevel() : spMaxLevel);
+        }
+        return getMaxLevel();
+    }
+
+    public void setSpMaxLevel(int spMaxLevel) {
+        this.spMaxLevel = spMaxLevel;
+    }
+
+    /**
+     * 将效果等级扩展到 targetMax（不足则克隆末级并套用覆盖属性）。
+     * @param levelOverrides key=等级(1-based)，value=属性覆盖（damage/mpCon/...）
+     */
+    public void applyTechExtension(int targetMax, java.util.Map<Integer, java.util.Map<String, Integer>> levelOverrides) {
+        if (targetMax <= 0) {
+            return;
+        }
+        while (effects.size() < targetMax) {
+            StatEffect base = effects.isEmpty() ? null : effects.get(effects.size() - 1);
+            int nextLv = effects.size() + 1;
+            java.util.Map<String, Integer> ov = levelOverrides != null ? levelOverrides.get(nextLv) : null;
+            if (base == null) {
+                break;
+            }
+            effects.add(base.copyWithOverrides(ov));
+        }
+        if (levelOverrides != null) {
+            for (java.util.Map.Entry<Integer, java.util.Map<String, Integer>> e : levelOverrides.entrySet()) {
+                int lv = e.getKey() == null ? 0 : e.getKey();
+                if (lv <= 0 || lv > effects.size() || e.getValue() == null || e.getValue().isEmpty()) {
+                    continue;
+                }
+                StatEffect cur = effects.get(lv - 1);
+                effects.set(lv - 1, cur.copyWithOverrides(e.getValue()));
+            }
+        }
     }
 
     public boolean isFourthJob() {

@@ -42,6 +42,7 @@ import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.Quest;
 import org.gms.exception.EventInstanceInProgressException;
+import java.util.Properties;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
@@ -372,6 +373,10 @@ public class EventManager {
      */
     public String getProperty(String key) {
         return props.getProperty(key);
+    }
+
+    public Properties getProperties() {
+        return props;
     }
 
     /**

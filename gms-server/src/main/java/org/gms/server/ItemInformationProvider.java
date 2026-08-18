@@ -35,6 +35,7 @@ import org.gms.client.inventory.WeaponType;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.EquipSlot;
+import org.gms.constants.inventory.ExtendedEquipRegistry;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.skills.Assassin;
 import org.gms.constants.skills.Gunslinger;
@@ -65,6 +66,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -212,7 +214,15 @@ public class ItemInformationProvider {
             theData = cashStringData;
         } else if (itemId >= 2000000 && itemId < 3000000) {
             theData = consumeStringData;
-        } else if ((itemId >= 1010000 && itemId < 1040000) || (itemId >= 1122000 && itemId < 1123000) || (itemId >= 1132000 && itemId < 1133000) || (itemId >= 1142000 && itemId < 1143000)) {
+        } else if ((itemId >= 1010000 && itemId < 1040000)
+                || (itemId >= 1122000 && itemId < 1123000)
+                || (itemId >= 1132000 && itemId < 1133000)
+                || (itemId >= 1142000 && itemId < 1143000)
+                || (itemId >= 1152000 && itemId < 1153000)
+                || (itemId >= 1162000 && itemId < 1163000)   // 口袋 Po
+                || (itemId >= 1182000 && itemId < 1190000)   // 徽章 Ba
+                || (itemId >= 1190000 && itemId < 1200000)   // 纹章 Em
+                || (itemId >= 1202000 && itemId < 1210000)) { // 图腾 To（String 挂在 Accessory 下）
             theData = eqpStringData;
             cat = "Eqp/Accessory";
         } else if (itemId >= 1000000 && itemId < 1010000) {
@@ -254,6 +264,12 @@ public class ItemInformationProvider {
         } else if (itemId >= 1900000 && itemId < 2000000) {
             theData = eqpStringData;
             cat = "Eqp/Taming";
+        } else if (itemId >= 1662000 && itemId < 1670000) {
+            theData = eqpStringData;
+            cat = "Eqp/Android"; // 机器人（高版本；083 可能缺 String，容错）
+        } else if (itemId >= 1672000 && itemId < 1680000) {
+            theData = eqpStringData;
+            cat = "Eqp/Heart"; // 心脏
         } else if (itemId >= 1300000 && itemId < 1800000) {
             theData = eqpStringData;
             cat = "Eqp/Weapon";
@@ -288,6 +304,97 @@ public class ItemInformationProvider {
         boolean blockMouse = DataTool.getIntConvert("info/noCancelMouse", item, 0) == 1;
         noCancelMouseCache.put(itemId, blockMouse);
         return blockMouse;
+    }
+
+    /** True when Item.wz (not just String.wz) has a node for this id. */
+    public boolean itemExists(int itemId) {
+        return getItemData(itemId) != null;
+    }
+
+    /**
+     * 扫描服务端 Character.wz：存在 {@code info/level} 且成长上限 &gt; 1 的装备 ID。
+     * 供管理端「从 WZ 导入」与套装 init 一样一键扫全量（不读客户端 Data）。
+     */
+    public List<Integer> listWzGrowthCapableItemIds() {
+        final List<Integer> out = new ArrayList<>();
+        final DataDirectoryEntry root = equipData.getRoot();
+        if (root == null) {
+            return out;
+        }
+        for (DataDirectoryEntry topDir : root.getSubdirectories()) {
+            for (DataFileEntry iFile : topDir.getFiles()) {
+                final String fileName = iFile.getName();
+                if (fileName == null || !fileName.endsWith(".img")) {
+                    continue;
+                }
+                final String idPart = fileName.substring(0, fileName.length() - 4);
+                final int itemId;
+                try {
+                    itemId = Integer.parseInt(idPart);
+                } catch (NumberFormatException nfe) {
+                    continue;
+                }
+                if (itemId <= 0) {
+                    continue;
+                }
+                try {
+                    if (getEquipLevel(itemId, true) > 1) {
+                        out.add(itemId);
+                    }
+                } catch (Throwable ignored) {
+                    // skip corrupt / unloadable nodes
+                }
+            }
+        }
+        out.sort(Integer::compareTo);
+        return out;
+    }
+
+    /**
+     * List item IDs inside one Item.wz pack (e.g. {@code Cash/0501.img}) by reading children once.
+     * Avoids brute-force {@code prefix*10000 .. +9999} × {@link #itemExists(int)}.
+     */
+    public List<Integer> listIdsInItemPack(String categoryDir, int packPrefix) {
+        if (categoryDir == null || categoryDir.isBlank() || packPrefix < 0) {
+            return List.of();
+        }
+        final String fileName = String.format(Locale.ROOT, "%04d.img", packPrefix);
+        final Data pack = itemData.getData(categoryDir + "/" + fileName);
+        if (pack == null) {
+            return List.of();
+        }
+        final List<Integer> ids = new ArrayList<>();
+        for (Data child : pack.getChildren()) {
+            if (child == null || child.getName() == null) {
+                continue;
+            }
+            try {
+                ids.add(Integer.parseInt(child.getName()));
+            } catch (NumberFormatException ignored) {
+                // skip non-numeric nodes
+            }
+        }
+        return ids;
+    }
+
+    /**
+     * Load Character/{folder}/{0#######}.img directly (O(1)), avoiding full equip directory scans.
+     */
+    public Data getEquipDataInFolder(String folder, int itemId) {
+        if (folder == null || folder.isBlank() || itemId <= 0) {
+            return null;
+        }
+        final String idStr = "0" + itemId;
+        return equipData.getData(folder + "/" + idStr + ".img");
+    }
+
+    /** Cash flag for an equip known to live under {@code Character/{folder}}. */
+    public boolean isCashEquipInFolder(String folder, int itemId) {
+        final Data item = getEquipDataInFolder(folder, itemId);
+        if (item == null) {
+            return false;
+        }
+        return DataTool.getIntConvert("info/cash", item, 0) > 0;
     }
 
     private Data getItemData(int itemId) {
@@ -379,6 +486,9 @@ public class ItemInformationProvider {
             } else {
                 ret = inventoryType.canChangeSlotMax() && itemSlotMax > 0 ? itemSlotMax : (short) DataTool.getInt(smEntry);
             }
+        }
+        if (ret <= 0) {
+            ret = 100; // never cache 0 — pickup loops treat slotMax as divisor/step
         }
 
         slotMaxCache.put(itemId, ret);
@@ -515,9 +625,29 @@ public class ItemInformationProvider {
         return ret;
     }
 
-    protected String getEquipmentSlot(int itemId) {
+    public String getEquipmentSlot(int itemId) {
         if (equipmentSlotCache.containsKey(itemId)) {
             return equipmentSlotCache.get(itemId);
+        }
+
+        // Prefix overrides: many WZ islots still wrong (119→Si, etc.).
+        // 109 = shield Si/−10 only. 134/135 = Addon Aw/−62 (never share −10).
+        final int prefix = itemId / 10000;
+        final String forced = switch (prefix) {
+            case 109 -> "Si";
+            case 115 -> "Sh"; // 护肩：WZ 偶发 Sd 等错误 islot，强制 −20 / BP20
+            case 134, 135 -> "Aw";
+            case 116 -> "Po";
+            case 118 -> "Ba";
+            case 119 -> "Em";
+            case 120 -> "To";
+            case 166 -> "Dr";
+            case 167 -> "Ht";
+            default -> null;
+        };
+        if (forced != null) {
+            equipmentSlotCache.put(itemId, forced);
+            return forced;
         }
 
         String ret = "";
@@ -570,9 +700,20 @@ public class ItemInformationProvider {
         ret.put("reqPOP", DataTool.getInt("reqPOP", info, 0));
         ret.put("cash", DataTool.getInt("cash", info, 0));
         ret.put("tuc", DataTool.getInt("tuc", info, 0));
-        ret.put("cursed", DataTool.getInt("cursed", info, 0));
-        ret.put("success", DataTool.getInt("success", info, 0));
+        // cursed/success：缺节点时不要塞默认 0（Hyper 缺 cursed 应对齐 095→100）
+        if (info.getChildByPath("cursed") != null) {
+            ret.put("cursed", DataTool.getInt("cursed", info, 0));
+        }
+        if (info.getChildByPath("success") != null) {
+            ret.put("success", DataTool.getInt("success", info, 0));
+        }
         ret.put("fs", DataTool.getInt("fs", info, 0));
+        if (info.getChildByPath("forceUpgrade") != null) {
+            ret.put("forceUpgrade", DataTool.getInt("forceUpgrade", info, 1));
+        }
+        if (DataTool.getInt("noCursed", info, 0) > 0) {
+            ret.put("noCursed", 1);
+        }
 
         equipStatsCache.put(itemId, ret);
         return ret;
@@ -640,118 +781,62 @@ public class ItemInformationProvider {
     }
 
     private static short chscrollRandomizedStat(int range) {
+        return chscrollRandomizedStat(range, false);
+    }
+
+    private static short chscrollRandomizedStat(int range, boolean positiveOnly) {
+        if (positiveOnly) {
+            return (short) Randomizer.rand(0, range);
+        }
         return (short) Randomizer.rand(-range, range);
     }
 
     public void scrollOptionEquipWithChaos(Equip nEquip, int range, boolean option) {
+        scrollOptionEquipWithChaos(nEquip, range, option, false);
+    }
+
+    public void scrollOptionEquipWithChaos(Equip nEquip, int range, boolean option, boolean positiveOnly) {
         // option: watk, matk, wdef, mdef, spd, jump, hp, mp
         //   stat: dex, luk, str, int, avoid, acc
+        final boolean enhanced = GameConfig.getServerBoolean("use_enhanced_chaos_scroll");
 
         if (!option) {
-            if (nEquip.getStr() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getDex() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getInt() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getLuk() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getAcc() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getAvoid() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range))));
-                }
-            }
+            chaosApply(nEquip, 0, nEquip.getStr(), range, positiveOnly, enhanced, nEquip::setStr);
+            chaosApply(nEquip, 1, nEquip.getDex(), range, positiveOnly, enhanced, nEquip::setDex);
+            chaosApply(nEquip, 2, nEquip.getInt(), range, positiveOnly, enhanced, nEquip::setInt);
+            chaosApply(nEquip, 3, nEquip.getLuk(), range, positiveOnly, enhanced, nEquip::setLuk);
+            chaosApply(nEquip, 10, nEquip.getAcc(), range, positiveOnly, enhanced, nEquip::setAcc);
+            chaosApply(nEquip, 11, nEquip.getAvoid(), range, positiveOnly, enhanced, nEquip::setAvoid);
         } else {
-            if (nEquip.getWatk() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getWdef() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getMatk() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getMdef() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range))));
-                }
-            }
-
-            if (nEquip.getSpeed() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getJump() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getHp() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range))));
-                }
-            }
-            if (nEquip.getMp() > 0) {
-                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range))));
-                } else {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range))));
-                }
-            }
+            chaosApply(nEquip, 6, nEquip.getWatk(), range, positiveOnly, enhanced, nEquip::setWatk);
+            chaosApply(nEquip, 8, nEquip.getWdef(), range, positiveOnly, enhanced, nEquip::setWdef);
+            chaosApply(nEquip, 7, nEquip.getMatk(), range, positiveOnly, enhanced, nEquip::setMatk);
+            chaosApply(nEquip, 9, nEquip.getMdef(), range, positiveOnly, enhanced, nEquip::setMdef);
+            chaosApply(nEquip, 13, nEquip.getSpeed(), range, positiveOnly, enhanced, nEquip::setSpeed);
+            chaosApply(nEquip, 14, nEquip.getJump(), range, positiveOnly, enhanced, nEquip::setJump);
+            chaosApply(nEquip, 4, nEquip.getHp(), range, positiveOnly, enhanced, nEquip::setHp);
+            chaosApply(nEquip, 5, nEquip.getMp(), range, positiveOnly, enhanced, nEquip::setMp);
         }
     }
 
+    private void chaosApply(Equip nEquip, int statIdx, short cur, int range, boolean positiveOnly,
+                            boolean enhanced, java.util.function.Consumer<Short> setter) {
+        if (cur <= 0) {
+            return;
+        }
+        short delta = chscrollRandomizedStat(range, positiveOnly);
+        short next = enhanced
+                ? getMaximumShortMaxIfOverflow(cur, (short) (cur + delta))
+                : getMaximumShortMaxIfOverflow((short) 0, (short) (cur + delta));
+        setter.accept(next);
+        nEquip.addChaosByStatIndex(statIdx, (short) (next - cur));
+    }
+
     private void scrollEquipWithChaos(Equip nEquip, int range) {
+        scrollEquipWithChaos(nEquip, range, false);
+    }
+
+    private void scrollEquipWithChaos(Equip nEquip, int range, boolean positiveOnly) {
         if (GameConfig.getServerInt("chaos_scroll_stat_rate") > 0) {
             int temp;
             short curStr, curDex, curInt, curLuk, curWatk, curWdef, curMatk, curMdef, curAcc, curAvoid, curSpeed, curJump, curHp, curMp;
@@ -791,9 +876,9 @@ public class ItemInformationProvider {
             for (int i = 0; i < GameConfig.getServerInt("chaos_scroll_stat_rate"); i++) {
                 if (nEquip.getStr() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curStr + chscrollRandomizedStat(range);
+                        temp = curStr + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getStr() + chscrollRandomizedStat(range);
+                        temp = nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curStr = getMaximumShortMaxIfOverflow(temp, curStr);
@@ -801,9 +886,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getDex() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curDex + chscrollRandomizedStat(range);
+                        temp = curDex + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getDex() + chscrollRandomizedStat(range);
+                        temp = nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curDex = getMaximumShortMaxIfOverflow(temp, curDex);
@@ -811,9 +896,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getInt() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curInt + chscrollRandomizedStat(range);
+                        temp = curInt + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getInt() + chscrollRandomizedStat(range);
+                        temp = nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curInt = getMaximumShortMaxIfOverflow(temp, curInt);
@@ -821,9 +906,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getLuk() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curLuk + chscrollRandomizedStat(range);
+                        temp = curLuk + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getLuk() + chscrollRandomizedStat(range);
+                        temp = nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curLuk = getMaximumShortMaxIfOverflow(temp, curLuk);
@@ -831,9 +916,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getWatk() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curWatk + chscrollRandomizedStat(range);
+                        temp = curWatk + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getWatk() + chscrollRandomizedStat(range);
+                        temp = nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curWatk = getMaximumShortMaxIfOverflow(temp, curWatk);
@@ -841,9 +926,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getWdef() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curWdef + chscrollRandomizedStat(range);
+                        temp = curWdef + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getWdef() + chscrollRandomizedStat(range);
+                        temp = nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curWdef = getMaximumShortMaxIfOverflow(temp, curWdef);
@@ -851,9 +936,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getMatk() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curMatk + chscrollRandomizedStat(range);
+                        temp = curMatk + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getMatk() + chscrollRandomizedStat(range);
+                        temp = nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curMatk = getMaximumShortMaxIfOverflow(temp, curMatk);
@@ -861,9 +946,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getMdef() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curMdef + chscrollRandomizedStat(range);
+                        temp = curMdef + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getMdef() + chscrollRandomizedStat(range);
+                        temp = nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curMdef = getMaximumShortMaxIfOverflow(temp, curMdef);
@@ -871,9 +956,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getAcc() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curAcc + chscrollRandomizedStat(range);
+                        temp = curAcc + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getAcc() + chscrollRandomizedStat(range);
+                        temp = nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curAcc = getMaximumShortMaxIfOverflow(temp, curAcc);
@@ -881,9 +966,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getAvoid() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curAvoid + chscrollRandomizedStat(range);
+                        temp = curAvoid + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getAvoid() + chscrollRandomizedStat(range);
+                        temp = nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curAvoid = getMaximumShortMaxIfOverflow(temp, curAvoid);
@@ -891,9 +976,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getSpeed() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curSpeed + chscrollRandomizedStat(range);
+                        temp = curSpeed + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getSpeed() + chscrollRandomizedStat(range);
+                        temp = nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curSpeed = getMaximumShortMaxIfOverflow(temp, curSpeed);
@@ -901,9 +986,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getJump() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curJump + chscrollRandomizedStat(range);
+                        temp = curJump + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getJump() + chscrollRandomizedStat(range);
+                        temp = nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curJump = getMaximumShortMaxIfOverflow(temp, curJump);
@@ -911,9 +996,9 @@ public class ItemInformationProvider {
 
                 if (nEquip.getHp() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curHp + chscrollRandomizedStat(range);
+                        temp = curHp + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getHp() + chscrollRandomizedStat(range);
+                        temp = nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curHp = getMaximumShortMaxIfOverflow(temp, curHp);
@@ -921,14 +1006,19 @@ public class ItemInformationProvider {
 
                 if (nEquip.getMp() > 0) {
                     if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                        temp = curMp + chscrollRandomizedStat(range);
+                        temp = curMp + chscrollRandomizedStat(range, positiveOnly);
                     } else {
-                        temp = nEquip.getMp() + chscrollRandomizedStat(range);
+                        temp = nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly);
                     }
 
                     curMp = getMaximumShortMaxIfOverflow(temp, curMp);
                 }
             }
+
+            short oStr = nEquip.getStr(), oDex = nEquip.getDex(), oInt = nEquip.getInt(), oLuk = nEquip.getLuk();
+            short oWatk = nEquip.getWatk(), oWdef = nEquip.getWdef(), oMatk = nEquip.getMatk(), oMdef = nEquip.getMdef();
+            short oAcc = nEquip.getAcc(), oAvoid = nEquip.getAvoid(), oSpeed = nEquip.getSpeed(), oJump = nEquip.getJump();
+            short oHp = nEquip.getHp(), oMp = nEquip.getMp();
 
             nEquip.setStr((short) Math.max(0, curStr));
             nEquip.setDex((short) Math.max(0, curDex));
@@ -944,103 +1034,118 @@ public class ItemInformationProvider {
             nEquip.setJump((short) Math.max(0, curJump));
             nEquip.setHp((short) Math.max(0, curHp));
             nEquip.setMp((short) Math.max(0, curMp));
+
+            nEquip.addChaosByStatIndex(0, (short) (nEquip.getStr() - oStr));
+            nEquip.addChaosByStatIndex(1, (short) (nEquip.getDex() - oDex));
+            nEquip.addChaosByStatIndex(2, (short) (nEquip.getInt() - oInt));
+            nEquip.addChaosByStatIndex(3, (short) (nEquip.getLuk() - oLuk));
+            nEquip.addChaosByStatIndex(6, (short) (nEquip.getWatk() - oWatk));
+            nEquip.addChaosByStatIndex(8, (short) (nEquip.getWdef() - oWdef));
+            nEquip.addChaosByStatIndex(7, (short) (nEquip.getMatk() - oMatk));
+            nEquip.addChaosByStatIndex(9, (short) (nEquip.getMdef() - oMdef));
+            nEquip.addChaosByStatIndex(10, (short) (nEquip.getAcc() - oAcc));
+            nEquip.addChaosByStatIndex(11, (short) (nEquip.getAvoid() - oAvoid));
+            nEquip.addChaosByStatIndex(13, (short) (nEquip.getSpeed() - oSpeed));
+            nEquip.addChaosByStatIndex(14, (short) (nEquip.getJump() - oJump));
+            nEquip.addChaosByStatIndex(4, (short) (nEquip.getHp() - oHp));
+            nEquip.addChaosByStatIndex(5, (short) (nEquip.getMp() - oMp));
         } else {
             if (nEquip.getStr() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range))));
+                    nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range))));
+                    nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getDex() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range))));
+                    nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range))));
+                    nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getInt() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range))));
+                    nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range))));
+                    nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getLuk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range))));
+                    nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range))));
+                    nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getWatk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range))));
+                    nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range))));
+                    nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getWdef() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range))));
+                    nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range))));
+                    nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMatk() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range))));
+                    nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range))));
+                    nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMdef() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range))));
+                    nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range))));
+                    nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getAcc() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range))));
+                    nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range))));
+                    nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getAvoid() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range))));
+                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range))));
+                    nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getSpeed() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range))));
+                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range))));
+                    nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getJump() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range))));
+                    nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range))));
+                    nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getHp() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range))));
+                    nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range))));
+                    nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
             if (nEquip.getMp() > 0) {
                 if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range))));
+                    nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly))));
                 } else {
-                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range))));
+                    nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range, positiveOnly))));
                 }
             }
         }
@@ -1066,16 +1171,20 @@ public class ItemInformationProvider {
         // 检查是否是游戏管理员且配置中启用了完美GM卷轴功能
         boolean assertGM = (isGM && GameConfig.getServerBoolean("use_perfect_gm_scroll"));
 
-        if (equip instanceof Equip nEquip) { // 检查装备是否为 Equip 类型
-            // 获取卷轴的相关统计数据（如成功率、诅咒率等）
+        if (equip instanceof Equip nEquip) {
+            // Soft095：特殊保护卷（幸运/防暴/安全/卷轴防护）不耗升级次数，直接涂 flag
+            if (ItemConstants.isProtectFamilyScroll(scrollId)) {
+                return applyProtectFamilyScroll(nEquip, scrollId);
+            }
+
             Map<String, Integer> stats = this.getEquipStats(scrollId);
+            if (stats == null) {
+                return equip;
+            }
 
-            // 检查装备是否有升级插槽或是否是清洁卷轴，或者当前玩家是GM
             if (((nEquip.getUpgradeSlots() > 0 || ItemConstants.isCleanSlate(scrollId))) || assertGM) {
-                // 获取卷轴的成功概率
-                double prop = (double) stats.get("success");
+                double prop = (double) stats.getOrDefault("success", 0);
 
-                // 根据不同的 VEGA 魔法卷轴调整成功概率
                 switch (vegaItemId) {
                     case ItemId.VEGAS_SPELL_10:
                         if (prop == 10.0f) {
@@ -1092,58 +1201,142 @@ public class ItemInformationProvider {
                         break;
                 }
 
-                // 判断是否成功应用卷轴效果（根据成功率和GM状态）
-                if (assertGM || rollSuccessChance(prop)) {
-                    short flag = nEquip.getFlag(); // 获取装备的标志位
+                // Soft095 LUCKS_KEY：成功率 +10%（相对成功率加成）
+                final boolean hadLucks = ItemConstants.hasFlag(nEquip.getFlag(), ItemConstants.LUCKS_KEY);
+                if (hadLucks) {
+                    prop = prop + prop * 10.0 / 100.0;
+                    nEquip.setFlag(ItemConstants.withoutFlag(nEquip.getFlag(), ItemConstants.LUCKS_KEY));
+                }
 
-                    // 根据卷轴ID应用不同的效果
+                if (assertGM || rollSuccessChance(prop)) {
+                    short flag = nEquip.getFlag();
+
                     switch (scrollId) {
                         case ItemId.SPIKES_SCROLL:
-                            flag |= ItemConstants.SPIKES; // 设置刺击标志位
-                            nEquip.setFlag((byte) flag);
+                            flag |= ItemConstants.SPIKES;
+                            nEquip.setFlag(flag);
                             break;
                         case ItemId.COLD_PROTECTION_SCROLl:
-                            flag |= ItemConstants.COLD; // 设置寒冷保护标志位
-                            nEquip.setFlag((byte) flag);
+                            flag |= ItemConstants.COLD;
+                            nEquip.setFlag(flag);
                             break;
                         case ItemId.CLEAN_SLATE_1:
                         case ItemId.CLEAN_SLATE_3:
                         case ItemId.CLEAN_SLATE_5:
                         case ItemId.CLEAN_SLATE_20:
                             if (canUseCleanSlate(nEquip)) {
-                                nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() + 1)); // 增加升级插槽数量
+                                nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() + 1));
                             }
                             break;
                         case ItemId.CHAOS_SCROll_60:
                         case ItemId.LIAR_TREE_SAP:
                         case ItemId.MAPLE_SYRUP:
-                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range")); // 使用混沌卷轴增加随机属性
+                        case ItemId.AMAZING_CHAOS_SCROLL:
+                        case ItemId.POSITIVE_CHAOS_SCROLL:
+                        case ItemId.JUSTICE_CHAOS_SCROLL:
+                        case ItemId.AMAZING_JUSTICE_CHAOS_20:
+                        case 2049137:
+                        case 2049138:
+                            int chaosRange = ItemConstants.chaosStatRange(
+                                    scrollId, GameConfig.getServerInt("chaos_scroll_stat_range"));
+                            scrollEquipWithChaos(nEquip, chaosRange,
+                                    ItemConstants.isPositiveChaosScroll(scrollId));
                             break;
 
                         default:
-                            improveEquipStats(nEquip, stats); // 默认情况下提高装备属性
+                            improveEquipStats(nEquip, stats);
                             break;
                     }
 
-                    // 如果不是清洁卷轴，则处理升级插槽和等级
                     if (!ItemConstants.isCleanSlate(scrollId)) {
-                        if (!assertGM && !ItemConstants.isModifierScroll(scrollId)) {   // 处理修饰卷轴不消耗插槽的问题
-                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1)); // 减少一个升级插槽
+                        // Soft095：成功也会消耗 SLOTS_PROTECT（防御效果消失）
+                        if (ItemConstants.hasFlag(nEquip.getFlag(), ItemConstants.SLOTS_PROTECT)) {
+                            nEquip.setFlag(ItemConstants.withoutFlag(nEquip.getFlag(), ItemConstants.SLOTS_PROTECT));
                         }
-                        nEquip.setLevel((byte) (nEquip.getLevel() + 1)); // 提升装备等级
+                        if (!assertGM && !ItemConstants.isModifierScroll(scrollId)) {
+                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
+                        }
+                        nEquip.setLevel((byte) (nEquip.getLevel() + 1));
                     }
                 } else {
-                    // 卷轴使用失败的情况
-                    if (!GameConfig.getServerBoolean("use_perfect_scrolling") && !usingWhiteScroll && !ItemConstants.isCleanSlate(scrollId) && !assertGM && !ItemConstants.isModifierScroll(scrollId)) {
-                        nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1)); // 减少一个升级插槽
+                    // 失败：SLOTS_PROTECT 防扣次数；否则白卷/完美砸卷等既有逻辑
+                    if (!GameConfig.getServerBoolean("use_perfect_scrolling")
+                            && !usingWhiteScroll
+                            && !ItemConstants.isCleanSlate(scrollId)
+                            && !assertGM
+                            && !ItemConstants.isModifierScroll(scrollId)) {
+                        if (ItemConstants.hasFlag(nEquip.getFlag(), ItemConstants.SLOTS_PROTECT)) {
+                            nEquip.setFlag(ItemConstants.withoutFlag(nEquip.getFlag(), ItemConstants.SLOTS_PROTECT));
+                            // 调用方（ScrollHandler）可据此提示「升级次数没有减少」
+                        } else {
+                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
+                        }
                     }
-                    if (Randomizer.nextInt(100) < stats.get("cursed")) {
-                        return null; // 卷轴诅咒装备，返回 null 表示装备被摧毁
+                    if (Randomizer.nextInt(100) < stats.getOrDefault("cursed", 0)) {
+                        return null;
                     }
                 }
             }
         }
-        return equip; // 返回处理后的装备
+        return equip;
+    }
+
+    /**
+     * Soft095 special-scroll 涂 flag：幸运 / 防暴 / 安全 / 卷轴防护。
+     * 不消耗 upgradeSlots；涂装失败（强化超限 / 宠物限定不符）则原样返回。
+     */
+    private Equip applyProtectFamilyScroll(Equip nEquip, int scrollId) {
+        if (ItemConstants.isPetOnlyProtectScroll(scrollId)) {
+            if (!ItemConstants.isPetEquip(nEquip.getItemId())) {
+                return nEquip;
+            }
+        } else if (ItemConstants.isPetEquip(nEquip.getItemId())
+                && (ItemConstants.isShieldWardScroll(scrollId)
+                || ItemConstants.isSlotsProtectScroll(scrollId)
+                || ItemConstants.isScrollProtectScroll(scrollId)
+                || ItemConstants.isLuckScroll(scrollId))) {
+            // Soft095：非宠物专用保护卷不对宠物装备生效（5068000/8100/8200/2530003/2532001 除外）
+            return nEquip;
+        }
+
+        short flag = nEquip.getFlag();
+        // Soft095：幸运卷先涂 LUCKS_KEY；5063100 兼 is防暴 时再涂 SHIELD_WARD
+        if (ItemConstants.isLuckScroll(scrollId)) {
+            flag = ItemConstants.withFlag(flag, ItemConstants.LUCKS_KEY);
+            nEquip.setFlag(flag);
+            if (!ItemConstants.isShieldWardScroll(scrollId)) {
+                return nEquip;
+            }
+        }
+        if (ItemConstants.isShieldWardScroll(scrollId)) {
+            Map<String, Integer> scrollStats = getEquipStats(scrollId);
+            int maxEqp = scrollStats != null && scrollStats.containsKey("maxSuperiorEqp")
+                    ? scrollStats.get("maxSuperiorEqp") : 12;
+            // Soft095 Cash 5064000：enhance>=8 不可用；5064003：maxSuperiorEqp=7
+            if (scrollId == 5064000 && nEquip.getEnhance() >= 8) {
+                return nEquip;
+            }
+            if (scrollId == 5064003 && nEquip.getEnhance() >= 7) {
+                return nEquip;
+            }
+            if (maxEqp <= nEquip.getEnhance()) {
+                return nEquip;
+            }
+            flag = ItemConstants.withFlag(nEquip.getFlag(), ItemConstants.SHIELD_WARD);
+            nEquip.setFlag(flag);
+            return nEquip;
+        }
+        if (ItemConstants.isSlotsProtectScroll(scrollId)) {
+            flag = ItemConstants.withFlag(nEquip.getFlag(), ItemConstants.SLOTS_PROTECT);
+            nEquip.setFlag(flag);
+            return nEquip;
+        }
+        if (ItemConstants.isScrollProtectScroll(scrollId)) {
+            flag = ItemConstants.withFlag(nEquip.getFlag(), ItemConstants.SCROLL_PROTECT);
+            nEquip.setFlag(flag);
+            return nEquip;
+        }
+        return nEquip;
     }
 
     public static void improveEquipStats(Equip nEquip, Map<String, Integer> stats) {
@@ -1593,7 +1786,9 @@ public class ItemInformationProvider {
         if (scriptedItemCache.containsKey(itemId)) {
             return scriptedItemCache.get(itemId);
         }
-        if ((itemId / 10000) != 243) {
+        // 243/246 段均可绑定 item 脚本（246 用于惊喜盲盒等自定义消耗品）
+        final int itemType = itemId / 10000;
+        if (itemType != 243 && itemType != 246) {
             return null;
         }
         Data itemInfo = getItemData(itemId);
@@ -1689,18 +1884,22 @@ public class ItemInformationProvider {
         }
         int totalprob = 0;
         List<RewardItem> rewards = new ArrayList<>();
-        for (Data child : getItemData(itemId).getChildByPath("reward").getChildren()) {
-            RewardItem reward = new RewardItem();
-            reward.itemid = DataTool.getInt("item", child, 0);
-            reward.prob = DataTool.getInt("prob", child, 0);
-            reward.quantity = (short) DataTool.getInt("count", child, 0);
-            reward.effect = DataTool.getString("Effect", child, "");
-            reward.worldmsg = DataTool.getString("worldMsg", child, null);
-            reward.period = DataTool.getInt("period", child, -1);
+        Data rewardRoot = getItemData(itemId).getChildByPath("reward");
+        if (rewardRoot != null) {
+            for (Data child : rewardRoot.getChildren()) {
+                RewardItem reward = new RewardItem();
+                reward.itemid = DataTool.getInt("item", child, 0);
+                // WZ probs can exceed 255 (e.g. 4500); casting via byte corrupts totalprob.
+                reward.prob = (short) DataTool.getInt("prob", child, 0);
+                reward.quantity = (short) DataTool.getInt("count", child, 0);
+                reward.effect = DataTool.getString("Effect", child, "");
+                reward.worldmsg = DataTool.getString("worldMsg", child, null);
+                reward.period = DataTool.getInt("period", child, -1);
 
-            totalprob += reward.prob;
+                totalprob += reward.prob;
 
-            rewards.add(reward);
+                rewards.add(reward);
+            }
         }
         Pair<Integer, List<RewardItem>> hmm = new Pair<>(totalprob, rewards);
         rewardCache.put(itemId, hmm);
@@ -1745,6 +1944,30 @@ public class ItemInformationProvider {
 
         Map<String, Integer> eqpStats = getEquipStats(itemId);
         return eqpStats != null && eqpStats.get("cash") == 1;
+    }
+
+    /** Pet skill WZ flag: info/pickupItem == 1 (e.g. 1812001). */
+    public boolean petCanPickupItem(int itemId) {
+        return petSkillFlagOn(itemId, "pickupItem");
+    }
+
+    /** Pet skill WZ flag: info/pickupMeso == 1 (e.g. 1812000). */
+    public boolean petCanPickupMeso(int itemId) {
+        return petSkillFlagOn(itemId, "pickupMeso");
+    }
+
+    /** Generic pet-equip / pet-skill WZ info flag (pickupItem, longRange, sweepForDrop, …). */
+    public boolean petSkillFlagOn(int itemId, String flag) {
+        Data item = getItemData(itemId);
+        if (item == null) {
+            return false;
+        }
+        Data info = item.getChildByPath("info");
+        if (info == null) {
+            return false;
+        }
+        // WZ often stores these as string "0"/"1".
+        return DataTool.getIntConvert(flag, info, 0) != 0;
     }
 
     public boolean isUpgradeable(int itemId) {
@@ -1849,7 +2072,32 @@ public class ItemInformationProvider {
         }
 
         String islot = getEquipmentSlot(id);
-        if (!EquipSlot.getFromTextSlot(islot).isAllowed(dst, isCash(id))) {
+        if (islot == null) {
+            equip.wear(false);
+            String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
+            chr.dropMessage(5, "无法装备 " + itemName + "：缺少装备数据。");
+            log.warn("Chr {} tried to equip {} with missing item WZ data", chr.getName(), itemName);
+            return false;
+        }
+        final int prefix = id / 10000;
+        final boolean cash = isCash(id);
+        // ADDON_POCKET_UNEQUIP_20260802 / Phase2 registry: prefix ALWAYS wins for
+        // Addon/pocket/Si. Do not trust islot alone — 119xxxx WZ often still says
+        // "Si", which would wrongly allow dst=−10 and unequip the real secondary.
+        boolean slotOk;
+        Boolean regOk = ExtendedEquipRegistry.isPrefixSlotAllowed(prefix, dst, cash);
+        if (regOk != null) {
+            slotOk = regOk;
+        } else {
+            slotOk = EquipSlot.getFromTextSlot(islot).isAllowed(dst, cash);
+            // 轮回碑石等：WZ 可能仍是 Po/Be，但客户端图腾 UI 发 −55/−155；放行腰带与图腾槽。
+            if (!slotOk && org.gms.reincarnation.ReincarnationSupport.isReincarnationEquip(id)) {
+                slotOk = dst == -50 || dst == -150
+                        || EquipSlot.TOTEM.isAllowed(dst, cash)
+                        || EquipSlot.BELT.isAllowed(dst, cash);
+            }
+        }
+        if (!slotOk) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
             Server.getInstance().broadcastGMMessage(chr.getWorld(), PacketCreator.sendYellowTip("[Warning]: " + chr.getName() + " tried to equip " + itemName + " into slot " + dst + "."));
@@ -1883,23 +2131,31 @@ public class ItemInformationProvider {
             reqLevel -= 5;
         }
         int i = 0; //lol xD
-        //Removed job check. Shouldn't really be needed.
-        if (reqLevel > chr.getLevel()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqDEX") > chr.getTotalDex()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqSTR") > chr.getTotalStr()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqLUK") > chr.getTotalLuk()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqINT") > chr.getTotalInt()) {
-            i++;
-        }
-        int reqPOP = getEquipStats(equip.getItemId()).get("reqPOP");
-        if (reqPOP > 0) {
-            if (getEquipStats(equip.getItemId()).get("reqPOP") > chr.getFame()) {
+        // Vanilla parity: reqJob bitmask (1=war 2=mage 4=bow 8=thief 16=pirate). 0 = all jobs.
+        // Applies to Addon seats the same as classic Equip — do not bypass for −54…−62.
+        Map<String, Integer> stats = getEquipStats(equip.getItemId());
+        Integer reqJobObj = stats != null ? stats.get("reqJob") : null;
+        int reqJob = reqJobObj != null ? reqJobObj : 0;
+        if (reqJob != 0) {
+            int niche = chr.getJob().getJobNiche(); // 0 beg, 1–5 war/mage/bow/thief/pirate
+            if (niche < 1 || niche > 5 || ((reqJob & (1 << (niche - 1))) == 0)) {
                 i++;
             }
+        }
+        if (reqLevel > chr.getLevel()) {
+            i++;
+        } else if (stats != null && stats.get("reqDEX") > chr.getTotalDex()) {
+            i++;
+        } else if (stats != null && stats.get("reqSTR") > chr.getTotalStr()) {
+            i++;
+        } else if (stats != null && stats.get("reqLUK") > chr.getTotalLuk()) {
+            i++;
+        } else if (stats != null && stats.get("reqINT") > chr.getTotalInt()) {
+            i++;
+        }
+        int reqPOP = stats != null && stats.get("reqPOP") != null ? stats.get("reqPOP") : 0;
+        if (reqPOP > 0 && reqPOP > chr.getFame()) {
+            i++;
         }
 
         if (i > 0) {
@@ -2015,6 +2271,35 @@ public class ItemInformationProvider {
             }
         }
 
+        return list;
+    }
+
+    /** Tip / 展示用：取成长节点 Min 值（不掷随机）。 */
+    public List<Pair<String, Integer>> getItemLevelupStatsMin(int itemId, int level) {
+        List<Pair<String, Integer>> list = new LinkedList<>();
+        Data data = getEquipLevelInfo(itemId);
+        if (data == null) {
+            return list;
+        }
+        Data data2 = data.getChildByPath(Integer.toString(level));
+        if (data2 == null) {
+            return list;
+        }
+        String[] stats = {
+                "incSTR", "incDEX", "incINT", "incLUK", "incMHP", "incMMP",
+                "incPAD", "incMAD", "incPDD", "incMDD", "incACC", "incEVA",
+                "incSpeed", "incJump"
+        };
+        for (String stat : stats) {
+            Data minNode = data2.getChildByPath(stat + "Min");
+            if (minNode == null) {
+                continue;
+            }
+            int min = DataTool.getInt(minNode, 0);
+            if (min != 0) {
+                list.add(new Pair<>(stat, min));
+            }
+        }
         return list;
     }
 
@@ -2353,8 +2638,8 @@ public class ItemInformationProvider {
 
     public static final class RewardItem {
 
-        public int itemid, period, prob;
-        public short quantity;
+        public int itemid, period;
+        public short prob, quantity;
         public String effect, worldmsg;
     }
 
@@ -2378,9 +2663,28 @@ public class ItemInformationProvider {
 
     public static ArrayList<Pair<Integer, String>> getItemsIDsFromName(String search) {
         ArrayList<Pair<Integer, String>> retItems = new ArrayList<>();
+        if (search == null) {
+            return retItems;
+        }
+        String keyword = search.trim();
+        if (keyword.isEmpty()) {
+            return retItems;
+        }
+        // 纯数字：按物品ID精确/前缀匹配（规避客户端 NPC 输入框偶发无法打中文）
+        boolean numeric = keyword.chars().allMatch(c -> c >= '0' && c <= '9');
         List<Pair<Integer, String>> allItems = getInstance().getAllItems();
         for (Pair<Integer, String> itemPair : allItems) {
-            if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+            String name = itemPair.getRight();
+            if (name == null) {
+                continue;
+            }
+            if (numeric) {
+                String idStr = String.valueOf(itemPair.getLeft());
+                if (idStr.equals(keyword) || idStr.contains(keyword)) {
+                    retItems.add(itemPair);
+                }
+            } else if (name.toLowerCase(java.util.Locale.ROOT).contains(keyword.toLowerCase(java.util.Locale.ROOT))
+                    || name.contains(keyword)) {
                 retItems.add(itemPair);
             }
         }
