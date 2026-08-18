@@ -17,4 +17,5 @@ export default {
   'button.upload': 'Upload',
   'button.download': 'Download',
   'button.save': 'Save',
+  'button.cancel': 'Cancel',
 };

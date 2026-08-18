@@ -1,0 +1,33 @@
+export default {
+  'equipGrowth.column.itemId': '物品ID',
+  'equipGrowth.column.itemName': '名称',
+  'equipGrowth.column.maxLevel': '成长上限',
+  'equipGrowth.column.levelCount': '等级段',
+  'equipGrowth.column.enabled': '启用',
+  'equipGrowth.column.source': '来源',
+  'equipGrowth.column.operate': '操作',
+  'equipGrowth.add': '新建',
+  'equipGrowth.edit': '编辑',
+  'equipGrowth.reload': '热重载',
+  'equipGrowth.import.wz': '从WZ导入',
+  'equipGrowth.import.confirm':
+    '从服务端 Character.wz 导入所有尚未入库的可成长装备？（与套装 WZ 导入相同数据源）',
+  'equipGrowth.import.success': '导入完成：新增 {imported}，跳过 {skipped}',
+  'equipGrowth.hint.maxVsSeg':
+    '成长上限=物品可达到的等级；等级段=效果段数。段 N 在物品等级达到 N+1 时生效，故正常应为「上限 = 段数 + 1」（由段自动推导）。',
+  'equipGrowth.hint.skillStack':
+    '技能写在各等级段内；穿戴后已达成的段会叠加技能等级（与属性段相同规则）。',
+  'equipGrowth.search': '搜索 ID/名称',
+  'equipGrowth.save.success': '保存成功',
+  'equipGrowth.reload.success': '热重载成功',
+  'equipGrowth.delete.confirm': '确认删除该成长配置？',
+  'equipGrowth.detail.title': '成长配置',
+  'equipGrowth.tab.levels': '等级属性/技能',
+  'equipGrowth.tab.preview': 'Tip预览',
+  'equipGrowth.level.add': '新增等级段',
+  'equipGrowth.level.n': '级效果',
+  'equipGrowth.level.skills': '本段技能等级',
+  'equipGrowth.skill.add': '添加技能',
+  'equipGrowth.skill.id': '技能ID',
+  'equipGrowth.skill.level': '加等级',
+};

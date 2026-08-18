@@ -61,6 +61,8 @@
             <img
               :src="getIconUrl('item', record.itemId)"
               :alt="record.itemId"
+              :data-item-id="record.itemId"
+              @error="onItemIconError"
             />
           </template>
         </a-table-column>
@@ -94,7 +96,7 @@
           align="center"
           :width="80"
         />
-        <a-table-column title="Bonus" data-index="bonus" align="center" />
+        <a-table-column title="奖励" data-index="bonus" align="center" />
         <a-table-column
           title="有效期"
           data-index="period"
@@ -141,10 +143,10 @@
             <a-tag v-else-if="record.clz === 3" color="blue">EVENT</a-tag>
           </template>
         </a-table-column>
-        <a-table-column title="Limit" data-index="limit" align="center" />
-        <a-table-column title="PbCash" data-index="pbCash" align="center" />
-        <a-table-column title="PbPoint" data-index="pbPoint" align="center" />
-        <a-table-column title="PbGift" data-index="pbGift" align="center" />
+        <a-table-column title="限购" data-index="limit" align="center" />
+        <a-table-column title="点券板" data-index="pbCash" align="center" />
+        <a-table-column title="抵用券板" data-index="pbPoint" align="center" />
+        <a-table-column title="礼物板" data-index="pbGift" align="center" />
         <a-table-column
           title="礼包合集"
           data-index="packageSn"
@@ -211,7 +213,7 @@
   } from '@/api/cashShop';
   import CashShopForm from '@/views/game/cashShop/form.vue';
   import { cashShopState } from '@/store/modules/cashShop/type';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import { Message, TableRowSelection } from '@arco-design/web-vue';
 
   const { loading, setLoading } = useLoading(false);

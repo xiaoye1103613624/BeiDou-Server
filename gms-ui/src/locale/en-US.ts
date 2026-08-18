@@ -1,6 +1,7 @@
 import config from '@/views/game/config/locale/en-US';
 import drop from '@/views/game/drop/locale/en-US';
 import cashShop from '@/views/game/cashShop/locale/en-US';
+import windowCashShop from '@/views/game/windowCashShop/locale/en-US';
 import npcShop from '@/views/game/npcShop/locale/en-US';
 import gachapon from '@/views/game/gachapon/locale/en-US';
 import commandInfo from '@/views/game/commandInfo/locale/en-US';
@@ -10,6 +11,18 @@ import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
+import setItem from '@/views/game/setItem/locale/en-US';
+import equipGrowth from '@/views/game/equipGrowth/locale/en-US';
+import enhanceRule from '@/views/game/enhanceRule/locale/en-US';
+import carryItemStat from '@/views/game/carryItemStat/locale/en-US';
+import alchemyRecipe from '@/views/game/alchemyRecipe/locale/en-US';
+import alchemistRecipe from '@/views/game/alchemistRecipe/locale/en-US';
+import forgeRecipe from '@/views/game/forgeRecipe/locale/en-US';
+import alchemyTier from '@/views/game/alchemyTier/locale/en-US';
+import petGrowth from '@/views/game/petGrowth/locale/en-US';
+import sponsor from '@/views/game/sponsor/locale/en-US';
+import skillTech from '@/views/game/skillTech/locale/en-US';
+import opLog from '@/views/game/opLog/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -20,6 +33,7 @@ export default {
   'menu.game.config': 'Config',
   'menu.game.npcShop': 'NPC Shop',
   'menu.game.cashShop': 'Cash Shop',
+  'menu.game.windowCashShop': 'Window Cash Shop',
   'menu.game.drop': 'Mob Drop',
   'menu.game.drop.global': 'Global Drop',
   'menu.game.inventory': 'Inventory',
@@ -27,12 +41,25 @@ export default {
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
   'menu.game.autoban': 'Autoban',
+  'menu.game.setItem': 'Set Item',
+  'menu.game.equipGrowth': 'Equip Growth',
+  'menu.game.enhanceRule': 'Enhance Rule',
+  'menu.game.carryItemStat': 'Carry Item Stat',
+  'menu.game.alchemyRecipe': 'Alchemy Recipe',
+  'menu.game.alchemistRecipe': 'Alchemist Recipe',
+  'menu.game.forgeRecipe': 'Forge Recipe',
+  'menu.game.alchemyTier': 'Alchemy Tier',
+  'menu.game.petGrowth': 'Pet Growth',
+  'menu.game.sponsor': 'Sponsor Tiers',
+  'menu.game.skillTech': 'Skill Tech',
+  'menu.game.opLog': 'Operation Log',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
   'menu.arco': 'UI Doc',
   'menu.beiDou': 'About BeiDou',
   'message.success': 'Success',
+  'message.error': 'Operation failed',
   'message.switch.success': 'Switch to English',
   'message.login.success': 'Welcome',
   'message.logout.success': 'Logout success',
@@ -51,6 +78,7 @@ export default {
   ...account,
   ...npcShop,
   ...cashShop,
+  ...windowCashShop,
   ...drop,
   ...gachapon,
   ...commandInfo,
@@ -58,4 +86,16 @@ export default {
   ...inventory,
   ...config,
   ...autoban,
+  ...setItem,
+  ...equipGrowth,
+  ...enhanceRule,
+  ...carryItemStat,
+  ...alchemyRecipe,
+  ...alchemistRecipe,
+  ...forgeRecipe,
+  ...alchemyTier,
+  ...petGrowth,
+  ...sponsor,
+  ...skillTech,
+  ...opLog,
 };

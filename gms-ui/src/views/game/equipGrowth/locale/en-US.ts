@@ -1,0 +1,33 @@
+export default {
+  'equipGrowth.column.itemId': 'Item ID',
+  'equipGrowth.column.itemName': 'Name',
+  'equipGrowth.column.maxLevel': 'Max Level',
+  'equipGrowth.column.levelCount': 'Segments',
+  'equipGrowth.column.enabled': 'Enabled',
+  'equipGrowth.column.source': 'Source',
+  'equipGrowth.column.operate': 'Actions',
+  'equipGrowth.add': 'New',
+  'equipGrowth.edit': 'Edit',
+  'equipGrowth.reload': 'Reload',
+  'equipGrowth.import.wz': 'Import from WZ',
+  'equipGrowth.import.confirm':
+    'Import all growth-capable equips from server Character.wz that are not yet in DB? (same WZ source as set-item import)',
+  'equipGrowth.import.success': 'Done: imported {imported}, skipped {skipped}',
+  'equipGrowth.hint.maxVsSeg':
+    'Max level = itemLevel cap; segments = effect tiers. Segment N unlocks at itemLevel N+1, so normally maxLevel = segmentCount + 1 (auto-derived).',
+  'equipGrowth.hint.skillStack':
+    'Skills belong to each segment; achieved segments stack skill-level bonuses (same unlock rule as stats).',
+  'equipGrowth.search': 'Search ID/Name',
+  'equipGrowth.save.success': 'Saved',
+  'equipGrowth.reload.success': 'Reloaded',
+  'equipGrowth.delete.confirm': 'Delete this growth config?',
+  'equipGrowth.detail.title': 'Growth Config',
+  'equipGrowth.tab.levels': 'Level Stats / Skills',
+  'equipGrowth.tab.preview': 'Tip Preview',
+  'equipGrowth.level.add': 'Add Segment',
+  'equipGrowth.level.n': ' Lv Effect',
+  'equipGrowth.level.skills': 'Segment skills',
+  'equipGrowth.skill.add': 'Add Skill',
+  'equipGrowth.skill.id': 'Skill ID',
+  'equipGrowth.skill.level': 'Add Level',
+};

@@ -14,7 +14,12 @@
         <a-form-item label="物品">
           <a-space>
             {{ formData.itemId }}
-            <img :src="getIconUrl('item', formData.itemId)" alt="" />
+            <img
+              :src="getIconUrl('item', formData.itemId)"
+              :data-item-id="formData.itemId"
+              alt=""
+              @error="onItemIconError"
+            />
           </a-space>
         </a-form-item>
         <a-form-item label="数量">
@@ -55,7 +60,7 @@
             wz默认值 {{ tempData.defaultOnSale ? '上架中' : '待售' }}
           </template>
         </a-form-item>
-        <a-form-item label="Bonus">
+        <a-form-item label="奖励">
           <a-input-number v-model="formData.bonus" />
           <template v-if="tempData.defaultBonus" #extra>
             wz默认值 {{ tempData.defaultBonus }}
@@ -73,7 +78,7 @@
             wz默认值 {{ tempData.defaultMeso }}
           </template>
         </a-form-item>
-        <a-form-item label="PremiumUser">
+        <a-form-item label="会员专属">
           <a-input-number v-model="formData.forPremiumUser" />
           <template v-if="tempData.defaultForPremiumUser" #extra>
             wz默认值 {{ tempData.defaultForPremiumUser }}
@@ -120,31 +125,31 @@
             }}
           </template>
         </a-form-item>
-        <a-form-item label="Limit">
+        <a-form-item label="限购">
           <a-input-number v-model="formData.limit" />
           <template v-if="tempData.defaultLimit" #extra>
             wz默认值 {{ tempData.defaultLimit }}
           </template>
         </a-form-item>
-        <a-form-item label="pbCash">
+        <a-form-item label="点券板">
           <a-input-number v-model="formData.pbCash" />
           <template v-if="tempData.defaultPBCash" #extra>
             wz默认值 {{ tempData.defaultPBCash }}
           </template>
         </a-form-item>
-        <a-form-item label="pbPoint">
+        <a-form-item label="抵用券板">
           <a-input-number v-model="formData.pbPoint" />
           <template v-if="tempData.defaultPBPoint" #extra>
             wz默认值 {{ tempData.defaultPBPoint }}
           </template>
         </a-form-item>
-        <a-form-item label="pbGift">
+        <a-form-item label="礼物板">
           <a-input-number v-model="formData.pbGift" />
           <template v-if="tempData.defaultPBGift" #extra>
             wz默认值 {{ tempData.defaultPBGift }}
           </template>
         </a-form-item>
-        <a-form-item label="packageSn">
+        <a-form-item label="礼包合集">
           <a-input-number v-model="formData.packageSn" />
           <template v-if="tempData.defaultPackageSn" #extra>
             wz默认值 {{ tempData.defaultPackageSn }}
@@ -161,7 +166,7 @@
   import { cashShopFormState, offSale, onSale } from '@/api/cashShop';
   import useLoading from '@/hooks/loading';
   import { Message } from '@arco-design/web-vue';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
 
   const { setLoading, loading } = useLoading(false);
   const visible = ref<boolean>(false);
