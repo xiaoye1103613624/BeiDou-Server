@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="01073167.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <string name="islot" value="So"/>
+    <string name="vslot" value="So"/>
+    <int name="reqLevel" value="200"/>
+    <int name="reqJob" value="16"/>
+    <int name="reqSTR" value="0"/>
+    <int name="reqDEX" value="0"/>
+    <int name="reqINT" value="0"/>
+    <int name="reqLUK" value="0"/>
+    <int name="price" value="1"/>
+    <int name="cash" value="0"/>
+    <int name="bossReward" value="1"/>
+    <int name="setItemID" value="621"/>
+    <int name="incDEX" value="80"/>
+    <int name="incINT" value="80"/>
+    <int name="incJump" value="7"/>
+    <int name="incLUK" value="80"/>
+    <int name="incMDD" value="150"/>
+    <int name="incPAD" value="7"/>
+    <int name="incPDD" value="150"/>
+    <int name="incSpeed" value="10"/>
+    <int name="incSTR" value="80"/>
+    <int name="tuc" value="2"/>
+    <int name="notSale" value="1"/>
+    <int name="equipTradeBlock" value="1"/>
+    <canvas name="icon" format="1" scale="0">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+    <canvas name="iconRaw" format="1" scale="0">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+  </imgdir>
   <imgdir name="alert">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -11,8 +43,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -20,8 +52,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -31,8 +63,8 @@
   </imgdir>
   <imgdir name="fly">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="1" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="2" y="-1"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -40,8 +72,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="-2" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="-1" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -60,27 +92,10 @@
       <uol name="shoes" value="../../swingO2/0/shoes"/>
     </imgdir>
   </imgdir>
-  <imgdir name="info">
-    <int name="cash" value="1"/>
-    <canvas name="icon" format="2" scale="0">
-      <vector name="origin" x="-4" y="32"/>
-    </canvas>
-    <canvas name="iconRaw" format="2" scale="0">
-      <vector name="origin" x="-4" y="32"/>
-    </canvas>
-    <string name="islot" value="So"/>
-    <int name="reqDEX" value="0"/>
-    <int name="reqINT" value="0"/>
-    <int name="reqJob" value="0"/>
-    <int name="reqLevel" value="0"/>
-    <int name="reqLUK" value="0"/>
-    <int name="reqSTR" value="0"/>
-    <string name="vslot" value="So"/>
-  </imgdir>
   <imgdir name="jump">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="17" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="21" y="-1"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -90,21 +105,21 @@
   </imgdir>
   <imgdir name="ladder">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="9" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="13" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
-        <string name="z" value="backShoesBelowPants"/>
+        <string name="z" value="backShoes"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="13" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
-        <string name="z" value="backShoesBelowPants"/>
+        <string name="z" value="backShoes"/>
       </canvas>
     </imgdir>
   </imgdir>
@@ -115,8 +130,8 @@
   </imgdir>
   <imgdir name="proneStab">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="-10" y="4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="-7" y="8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -129,28 +144,28 @@
   </imgdir>
   <imgdir name="rope">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="9" y="-12"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="11" y="-8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
-        <string name="z" value="backShoesBelowPants"/>
+        <string name="z" value="backShoes"/>
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="8" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="11" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
-        <string name="z" value="backShoesBelowPants"/>
+        <string name="z" value="backShoes"/>
       </canvas>
     </imgdir>
   </imgdir>
   <imgdir name="shoot1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -166,8 +181,8 @@
   </imgdir>
   <imgdir name="shoot2">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -189,8 +204,8 @@
   </imgdir>
   <imgdir name="shootF">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="16" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="19" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -198,8 +213,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="17" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="21" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -212,8 +227,8 @@
   </imgdir>
   <imgdir name="sit">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="17" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="21" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -223,8 +238,8 @@
   </imgdir>
   <imgdir name="stabO1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="20" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="24" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -232,8 +247,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -243,8 +258,8 @@
   </imgdir>
   <imgdir name="stabO2">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="14" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -252,8 +267,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -263,8 +278,8 @@
   </imgdir>
   <imgdir name="stabOF">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-3"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="0"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -272,8 +287,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="21" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="24" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -281,8 +296,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -292,8 +307,8 @@
   </imgdir>
   <imgdir name="stabT1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="16" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="20" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -301,8 +316,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="7" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="11" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -310,8 +325,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-1"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -321,8 +336,8 @@
   </imgdir>
   <imgdir name="stabT2">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -330,8 +345,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -339,8 +354,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="15" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="19" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -356,8 +371,8 @@
       <uol name="shoes" value="../../swingPF/1/shoes"/>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -370,8 +385,8 @@
   </imgdir>
   <imgdir name="stand1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="7" y="-11"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="11" y="-8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -379,8 +394,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="8" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="12" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -388,8 +403,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="9" y="-11"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="13" y="-8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -410,8 +425,8 @@
   </imgdir>
   <imgdir name="swingO1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -419,8 +434,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="4" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="7" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -428,8 +443,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="8" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="12" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -439,8 +454,8 @@
   </imgdir>
   <imgdir name="swingO2">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -448,8 +463,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -457,8 +472,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -468,8 +483,8 @@
   </imgdir>
   <imgdir name="swingO3">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="9" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="12" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -477,8 +492,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="3" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="6" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -486,8 +501,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="7" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="10" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -497,8 +512,8 @@
   </imgdir>
   <imgdir name="swingOF">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="14" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="19" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -506,8 +521,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -515,8 +530,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="-2" y="-3"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="0" y="1"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -524,8 +539,8 @@
       </canvas>
     </imgdir>
     <imgdir name="3">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="17" y="-2"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="20" y="2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -535,8 +550,8 @@
   </imgdir>
   <imgdir name="swingP1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -544,8 +559,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -553,8 +568,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -564,8 +579,8 @@
   </imgdir>
   <imgdir name="swingP2">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -573,8 +588,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -582,8 +597,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -593,8 +608,8 @@
   </imgdir>
   <imgdir name="swingPF">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-1"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -602,8 +617,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="0"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -611,8 +626,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -620,8 +635,8 @@
       </canvas>
     </imgdir>
     <imgdir name="3">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -631,8 +646,8 @@
   </imgdir>
   <imgdir name="swingT1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-11"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-8"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -640,8 +655,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -649,8 +664,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -660,8 +675,8 @@
   </imgdir>
   <imgdir name="swingT2">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="16" y="-4"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="19" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -669,8 +684,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -678,8 +693,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -689,8 +704,8 @@
   </imgdir>
   <imgdir name="swingT3">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="13" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="17" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -698,8 +713,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="5" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="8" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -707,8 +722,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="15" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -718,8 +733,8 @@
   </imgdir>
   <imgdir name="swingTF">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="3" y="-8"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="7" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -727,8 +742,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="8" y="-7"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="12" y="-4"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -736,8 +751,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="8" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="11" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -745,8 +760,8 @@
       </canvas>
     </imgdir>
     <imgdir name="3">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="12" y="-5"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="16" y="-3"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -756,8 +771,8 @@
   </imgdir>
   <imgdir name="walk1">
     <imgdir name="0">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="0" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="0" y="-5"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -765,8 +780,8 @@
       </canvas>
     </imgdir>
     <imgdir name="1">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="11" y="-9"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="14" y="-6"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -774,8 +789,8 @@
       </canvas>
     </imgdir>
     <imgdir name="2">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="3" y="-10"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="6" y="-7"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
@@ -783,8 +798,8 @@
       </canvas>
     </imgdir>
     <imgdir name="3">
-      <canvas name="shoes" format="2" scale="0">
-        <vector name="origin" x="10" y="-6"/>
+      <canvas name="shoes" format="1" scale="0">
+        <vector name="origin" x="13" y="-2"/>
         <imgdir name="map">
           <vector name="navel" x="0" y="0"/>
         </imgdir>
