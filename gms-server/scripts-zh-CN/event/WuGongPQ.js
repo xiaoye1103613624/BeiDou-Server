@@ -152,7 +152,6 @@ function setup(level, lobbyid) {
                 level = level <= 0 ? 1 : level; //最小难度为1
                 let stats = mob.getStats();
                 let HpMax = mob.getMaxHp() * level;
-                    HpMax = HpMax > 2147483647 ? 2147483647 : HpMax;
                 let MpMax = mob.getMaxMp() * level;
                     MpMax = MpMax > 2147483647 ? 2147483647 : MpMax;
                 mob.setStartingHp(HpMax);
