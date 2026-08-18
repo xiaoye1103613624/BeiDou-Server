@@ -1,78 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="01116009.img" indent="2" media="NONE">
-  <imgdir name="attack1">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="17" y="42"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="18" y="42"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="2" format="2" scale="0">
-      <vector name="origin" x="24" y="47"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <int name="delay" value="150"/>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="fly">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="23" y="44"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="23" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <imgdir name="applySpecialAction">
-      <string name="0" value="fly2"/>
-      <string name="1" value="manaWaveFloat"/>
-      <string name="2" value="fly2Move"/>
-      <string name="3" value="arrowTeleport2"/>
-      <string name="4" value="wingsAir"/>
-      <string name="5" value="FWflareBlink"/>
-      <string name="6" value="WBwindWalk_air"/>
-      <string name="7" value="demonFly"/>
-      <string name="8" value="KSPsychicMove"/>
-      <string name="9" value="demonFly2"/>
-    </imgdir>
-    <int name="delay" value="180"/>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="hang">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="14" y="61"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="14" y="62"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <int name="delay" value="150"/>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="hide">
-    <canvas name="0" format="1" scale="0">
-      <vector name="origin" x="0" y="0"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <imgdir name="applySpecialAction">
-      <string name="0" value="blink"/>
-    </imgdir>
-    <int name="z" value="2"/>
-  </imgdir>
   <imgdir name="info">
     <int name="cash" value="1"/>
-    <canvas name="icon" format="2" scale="0">
-      <vector name="origin" x="0" y="31"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="iconRaw" format="2" scale="0">
-      <vector name="origin" x="0" y="31"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <int name="illusionGrade" value="2"/>
+    <imgdir name="effect">
+      <string name="path" value="Effect/CharacterEff1.img/1116009"/>
+      <int name="z" value="-1"/>
+      <int name="pos" value="1"/>
+      <int name="fixed" value="1"/>
+      <int name="animate" value="1"/>
+    </imgdir>
+    <string name="vslot" value="Ri"/>
+    <int name="incDEX" value="0"/>
+    <int name="incINT" value="0"/>
+    <int name="incLUK" value="0"/>
+    <int name="incSTR" value="0"/>
     <string name="islot" value="Ri"/>
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
@@ -80,117 +21,11 @@
     <int name="reqLevel" value="0"/>
     <int name="reqLUK" value="0"/>
     <int name="reqSTR" value="0"/>
-    <string name="vslot" value="Ri"/>
-    <vector name="wildhunterRidingOffset" x="0" y="10"/>
-  </imgdir>
-  <imgdir name="jump">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="22" y="47"/>
-      <int name="z" value="0"/>
+    <canvas name="icon" format="2" scale="0">
+      <vector name="origin" x="3" y="35"/>
     </canvas>
-    <imgdir name="applySpecialAction">
-      <string name="0" value="cannonJump"/>
-      <string name="1" value="demonJumpUpward"/>
-      <string name="2" value="RWexplosionJumpUp"/>
-      <string name="3" value="RWexplosionJump"/>
-      <string name="4" value="VerticalshiningChase"/>
-      <string name="5" value="upperCharge"/>
-      <string name="6" value="upperCharge2"/>
-      <string name="7" value="upperCharge3"/>
-      <string name="8" value="AMupperJump"/>
-      <string name="9" value="retreatShot"/>
-    </imgdir>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="move">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="22" y="46"/>
-      <int name="z" value="0"/>
+    <canvas name="iconRaw" format="2" scale="0">
+      <vector name="origin" x="3" y="35"/>
     </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="22" y="44"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="2" format="2" scale="0">
-      <vector name="origin" x="23" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <int name="delay" value="150"/>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="prone">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="32" y="39"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <imgdir name="applySpecialAction">
-      <string name="0" value="5thTrueSniping"/>
-    </imgdir>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="sit">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="25" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="25" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="2" format="2" scale="0">
-      <vector name="origin" x="25" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <imgdir name="applySpecialAction">
-      <string name="0" value="ATCloudRiding"/>
-    </imgdir>
-    <int name="delay" value="150"/>
-    <int name="z" value="2"/>
-  </imgdir>
-  <imgdir name="stand1">
-    <canvas name="0" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="1" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="2" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="3" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="4" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="5" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="6" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="7" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <canvas name="8" format="2" scale="0">
-      <vector name="origin" x="22" y="45"/>
-      <int name="z" value="0"/>
-    </canvas>
-    <imgdir name="applySpecialAction">
-      <string name="0" value="stand1_floating"/>
-      <string name="1" value="stand2_floating"/>
-      <string name="2" value="stand1_floating2"/>
-      <string name="3" value="stand2_floating2"/>
-    </imgdir>
-    <int name="delay" value="150"/>
-    <int name="z" value="2"/>
   </imgdir>
 </imgdir>

@@ -12,21 +12,31 @@
     </imgdir>
   </imgdir>
   <imgdir name="backDefault">
-    <canvas name="default1" format="2" scale="0">
-      <vector name="origin" x="24" y="21"/>
-      <string name="z" value="capOverHair"/>
+    <canvas name="default1" format="1" scale="0">
+      <vector name="origin" x="23" y="42"/>
+      <string name="z" value="backCap"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>
       </imgdir>
+      <string name="_hash" value="503daf42b69780351654940aa78482bfcdb1461ebaf7babcf3b7bc1ebf6b33a3"/>
     </canvas>
   </imgdir>
   <imgdir name="default">
-    <canvas name="default" format="2" scale="0">
-      <vector name="origin" x="24" y="21"/>
-      <string name="z" value="capOverHair"/>
+    <canvas name="default" format="1" scale="0">
+      <vector name="origin" x="22" y="42"/>
+      <string name="z" value="cap"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>
       </imgdir>
+      <string name="_hash" value="ea4025d89aef3cf95d09edee86aeafe7c5ac6b437784c255a5a3a6be255175ae"/>
+    </canvas>
+    <canvas name="defaultAc" format="1" scale="0">
+      <vector name="origin" x="25" y="80"/>
+      <imgdir name="map">
+        <vector name="brow" x="-4" y="-42"/>
+      </imgdir>
+      <string name="z" value="capAccessoryBelowBody"/>
+      <string name="_hash" value="28814fe948071763a6003b4dcac9df553f01e29f3183b84fb45a6c8f8dcc5f23"/>
     </canvas>
   </imgdir>
   <imgdir name="fly">
@@ -49,21 +59,23 @@
     </imgdir>
   </imgdir>
   <imgdir name="info">
-    <int name="cash" value="1"/>
-    <canvas name="icon" format="2" scale="0">
-      <vector name="origin" x="0" y="26"/>
+    <canvas name="icon" format="1" scale="0">
+      <vector name="origin" x="0" y="32"/>
+      <string name="_hash" value="f741cbaed7c2650b15b4eb3154750732c8df751b974ed23fea03dbc733e2baf7"/>
     </canvas>
-    <canvas name="iconRaw" format="2" scale="0">
-      <vector name="origin" x="0" y="26"/>
+    <canvas name="iconRaw" format="1" scale="0">
+      <vector name="origin" x="0" y="32"/>
+      <string name="_hash" value="10b9d0590b709b584664bb06adafd6d3a52ce5135ed8126edb7b5966f520d0bd"/>
     </canvas>
     <string name="islot" value="Cp"/>
+    <string name="vslot" value="CpH1H5"/>
+    <int name="reqJob" value="0"/>
+    <int name="reqLevel" value="0"/>
+    <int name="reqSTR" value="0"/>
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
-    <int name="reqJob " value="0"/>
-    <int name="reqLevel " value="0"/>
     <int name="reqLUK" value="0"/>
-    <int name="reqSTR" value="0"/>
-    <string name="vslot" value="CpH1H5"/>
+    <int name="cash" value="1"/>
   </imgdir>
   <imgdir name="jump">
     <imgdir name="0">
@@ -266,7 +278,7 @@
       <uol name="default" value="../../default/default"/>
     </imgdir>
     <imgdir name="1">
-      <uol name="default" value="../../default/default"/>
+      <uol name="backDefault" value="../../backDefault/default1"/>
     </imgdir>
     <imgdir name="2">
       <uol name="default" value="../../default/default"/>
@@ -346,7 +358,7 @@
   </imgdir>
   <imgdir name="swingTF">
     <imgdir name="0">
-      <uol name="default" value="../../default/default"/>
+      <uol name="backDefault" value="../../backDefault/default1"/>
     </imgdir>
     <imgdir name="1">
       <uol name="default" value="../../default/default"/>

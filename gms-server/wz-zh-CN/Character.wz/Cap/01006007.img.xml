@@ -12,21 +12,23 @@
     </imgdir>
   </imgdir>
   <imgdir name="backDefault">
-    <canvas name="default1" format="2" scale="0">
-      <vector name="origin" x="23" y="42"/>
-      <string name="z" value="backCapOverHair"/>
+    <canvas name="default1" format="1" scale="0">
+      <vector name="origin" x="30" y="23"/>
       <imgdir name="map">
         <vector name="brow" x="0" y="0"/>
       </imgdir>
+      <string name="z" value="capOverHair"/>
+      <string name="_hash" value="4be0e43ac160b776fa12cd6ba6e51c6c01629deb7c7df5fdfe04c074d9febdbe"/>
     </canvas>
   </imgdir>
   <imgdir name="default">
-    <canvas name="default" format="2" scale="0">
-      <vector name="origin" x="-54" y="-34"/>
-      <string name="z" value="capOverHair"/>
+    <canvas name="default" format="1" scale="0">
+      <vector name="origin" x="10" y="28"/>
       <imgdir name="map">
-        <vector name="brow" x="76" y="76"/>
+        <vector name="brow" x="0" y="0"/>
       </imgdir>
+      <string name="z" value="capOverHair"/>
+      <string name="_hash" value="bce9eac7753f740aa85d244006148606d8bbd87b0d336d502c502350f6882cb9"/>
     </canvas>
   </imgdir>
   <imgdir name="fly">
@@ -49,24 +51,23 @@
     </imgdir>
   </imgdir>
   <imgdir name="info">
-    <int name="cash" value="1"/>
-    <int name="collabo" value="1"/>
-    <canvas name="icon" format="2" scale="0">
-      <vector name="origin" x="1" y="30"/>
-      <int name="z" value="0"/>
+    <canvas name="icon" format="1" scale="0">
+      <vector name="origin" x="1" y="33"/>
+      <string name="_hash" value="3d4adabab69e5321d70d800488f6294b03f185d60491ba1f4b97170540faceb8"/>
     </canvas>
-    <canvas name="iconRaw" format="2" scale="0">
-      <vector name="origin" x="1" y="30"/>
-      <int name="z" value="0"/>
+    <canvas name="iconRaw" format="1" scale="0">
+      <vector name="origin" x="1" y="33"/>
+      <string name="_hash" value="96de25d3df9d6cccc591e448b3734304fef0bca000c3a52492f10a2ef2b5575d"/>
     </canvas>
     <string name="islot" value="Cp"/>
+    <string name="vslot" value="Cp"/>
+    <int name="reqJob" value="0"/>
+    <int name="reqLevel" value="0"/>
+    <int name="reqSTR" value="0"/>
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
-    <int name="reqJob " value="0"/>
-    <int name="reqLevel " value="0"/>
     <int name="reqLUK" value="0"/>
-    <int name="reqSTR" value="0"/>
-    <string name="vslot" value="CpH1H3H4H5H6HfHbAe"/>
+    <int name="cash" value="1"/>
   </imgdir>
   <imgdir name="jump">
     <imgdir name="0">
@@ -269,7 +270,7 @@
       <uol name="default" value="../../default/default"/>
     </imgdir>
     <imgdir name="1">
-      <uol name="default" value="../../default/default"/>
+      <uol name="backDefault" value="../../backDefault/default1"/>
     </imgdir>
     <imgdir name="2">
       <uol name="default" value="../../default/default"/>
@@ -349,7 +350,7 @@
   </imgdir>
   <imgdir name="swingTF">
     <imgdir name="0">
-      <uol name="default" value="../../default/default"/>
+      <uol name="backDefault" value="../../backDefault/default1"/>
     </imgdir>
     <imgdir name="1">
       <uol name="default" value="../../default/default"/>
