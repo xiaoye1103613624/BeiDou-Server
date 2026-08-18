@@ -59,9 +59,35 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendSimple("嗨，我是#p1012117#，最迷人、最时尚的造型师。如果你正在寻找最漂亮的发型，那就不用再找了！\r\n#L0##i5150040##t5150040##l\r\n#L1##i5150044##t5150044##l");
+            cm.sendSimple("嗨，我是#p1012117#，最迷人、最时尚的造型师。如果你正在寻找最漂亮的发型，那就不用再找了！\r\n#L0##i5150040##t5150040##l\r\n#L1##i5150044##t5150044##l\r\n#L8#打开美容院（存档栏）#l\r\n#L7#七彩棱镜染色#l");
         } else if (status == 1) {
-            if (selection == 0) {
+            if (selection == 8) {
+                try {
+                    var BeautyPackets = Java.type("org.gms.server.beauty.BeautyPackets");
+                    try {
+                        BeautyPackets.openSalon(cm.getClient());
+                    } catch (ignored) {
+                        var BeautyStorage = Java.type("org.gms.server.beauty.BeautyStorage");
+                        var chrId = cm.getPlayer().getId();
+                        var unlocked = BeautyStorage.getUnlockedSlots(chrId);
+                        if (unlocked <= 0) {
+                            BeautyStorage.setUnlockedSlots(chrId, 6);
+                            unlocked = 6;
+                        }
+                        cm.getClient().sendPacket(BeautyPackets.beautyOpen());
+                        cm.getClient().sendPacket(BeautyPackets.beautyData(unlocked, BeautyStorage.loadAll(chrId)));
+                    }
+                    cm.getPlayer().dropMessage(5, "正在打开美容院…");
+                } catch (e) {
+                    cm.getPlayer().dropMessage(5, "美容院打开失败: " + e);
+                }
+                cm.dispose();
+            } else if (selection == 7) {
+                // 七彩棱镜染色入口
+                cm.dispose();
+                cm.getPlayer().getClient().sendPacket(
+                    Java.type('org.gms.server.coloring.ColoringPrismPackets').open());
+            } else if (selection == 0) {
                 beauty = 1;
                 cm.sendYesNo("如果你使用这张普通优惠券，你的头发可能会变成一个随机的新造型……你还想用 #b#t5150040##k 来做吗？我会帮你做。但别忘了，结果会是随机的！");
             } else {

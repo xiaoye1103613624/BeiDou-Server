@@ -247,13 +247,12 @@ function givePrize() {
                 cm.gainItem(4001009 + i, -1 * tickets[i]);
             }
         }
-        if(coins > 0){
+        if(hasCoin){
             cm.gainItem(coinId, -1 * coins);
         }
 
-        cm.gainItem(lvTarget[rnd], lvQty[rnd]);
 
-        cm.sendOk("恭喜！你获得了 #b#t" + lvTarget[rnd] + "##k x" + lvQty[rnd] + "！");
+        cm.gainItem(lvTarget[rnd], lvQty[rnd]);
     }
 }
 

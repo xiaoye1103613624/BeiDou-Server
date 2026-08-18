@@ -21,13 +21,16 @@
 */
 
 /**
- * @description 拍卖行中心脚本
+ * @description 拍卖行中心脚本（原版）
+ * 注意：EnterMTSHandler 已直接调用 xy_拍卖_v001.js 避开此跳板，
+ * 此脚本仅保留用于 NPC 直接点击触发时兼容（如地图上的 9900001）
  */
 var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
 function start() {
-    action(1, 0, 0)
+    cm.dispose();
+    cm.openNpc(9900001, 'xy_拍卖_v001');
 }
 
 function action(mode, type, selection) {
@@ -41,22 +44,22 @@ function action(mode, type, selection) {
     }
 
     if (status === 0) {
-		let text = OldTitle;
+        let text = OldTitle;
         text += "当前点券：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
         text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
         text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
-		text += "当前金币：" + cm.getPlayer().getMeso() + "\r\n";
+        text += "当前金币：" + cm.getPlayer().getMeso() + "\r\n";
         text += " \r\n\r\n";
-		text += "#L3#传送自由#l \t #L69#快速转职#l \t #L70#学习技能#l\r\n";
-		text += "#L71#超级传送#l \t #L4#爆率一览#l \t #L2#在线奖励#l\r\n";
+        text += "#L3#传送自由#l \t #L69#快速转职#l \t #L70#学习技能#l\r\n";
+        text += "#L71#超级传送#l \t #L4#爆率一览#l \t #L2#在线奖励#l\r\n";
         text += "#L0#新人福利#l \t #L1#每日签到#l  \t #L72#转世重生#l\r\n";
-		// text += "#L999#测试脚本>>>未上线#l \t \r\n";
+        // text += "#L999#测试脚本>>>未上线#l \t \r\n";
         if (cm.getPlayer().isGM()) {
             text += "\r\n\r\n";
             text += "\t\t\t\t#r=====以下内容仅GM可见=====\r\n";
             text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l\r\n\r\n";
-			text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n\r\n";
-			text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l";
+            text += "#L64#UI查询#l \t #L65#一键删除道具#l \t #L66#一键刷道具#l\r\n\r\n";
+            text += "#L67#有状态脚本示例#l \t #L68#NextLevel脚本示例#l";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -69,7 +72,7 @@ function action(mode, type, selection) {
 function doSelect(selection) {
     switch (selection) {
         // 非GM功能
-		case 999:
+        case 999:
             openNpc("测试脚本");
             break;
         case 69:
@@ -114,7 +117,7 @@ function doSelect(selection) {
             break;
         case 64:
             openNpc("UI查询");
-            break;	
+            break;
         case 65:
             openNpc("一键删除道具");
             break;
