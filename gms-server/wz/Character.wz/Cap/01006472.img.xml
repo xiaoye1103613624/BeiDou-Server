@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="01006472.img" indent="2" media="BASE64">
+  <imgdir name="alert">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="backDefault">
+    <canvas name="default1" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAAwAAAASCAYAAABvqT8MAAAA3ElEQVR4XoWQARWDMAxEawELs4AFLGChFmphFmoBC1jAAhZqIeMuaSkZY3nvXpP2fhIIwcUec5C8QmKqNfVlNkmLEyR8b8ZjKRRr5AZ74Oy87QriNJjANmfqAlRzsVVqjZUMSOW9yiGF0M1NwD2aVkBk3QVnA+r+Fh5QqCwE7ZEGl18nYC10ruuVcRITcv07uMA3AMpTUGjJssYBorFCDUBxmCEsSz0BbfQ2vDgFQv5rpV7t0eVq7uPGxFxy9NbAS2caJc7C8xfgTEkkIk9PQOIfUpNCfyd0pl59fACIIb23oJ7KEgAAAABJRU5ErkJggg==">
+      <vector name="origin" x="16" y="11"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="z" value="backCapAccessory"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="default">
+    <canvas name="default" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAAwAAAASCAYAAABvqT8MAAAA3klEQVR4XnWQARHDIAxFsVALs1ALtVALWMDCLGChFrBQC1jAQsb/EJZBl7t/ybb3SG5OYnJTpMdlH91SEyRaFUZWaUClEEJn6vePEgWF7ty2oE+brNAkhUs/rUsq3GcL141T7IZ+In4v7yQVDr+COUFPxFwhkZTZrUBJX9QZoJRrwBRQZT800sMzsIXdbjACweQ3ROSKhOPhFA5g/gvZMxBqBvN40r29FORsTx1lpLHtYf4KKIn+Cfp92RaEml38KeztAQqYl+pCEPEQwiwvNTYojI5/q32e8SHYWJnMB+80vS8FQ9eoAAAAAElFTkSuQmCC">
+      <vector name="origin" x="-11" y="9"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="z" value="capOverHair"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="fly">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="heal">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="info">
+    <int name="cash" value="1"/>
+    <int name="colorvar" value="1"/>
+    <canvas name="icon" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAACfklEQVR4XrWWAZXDIAyGa6EWaqEWsIAFLGChFrBQC1jAAhZqIZc/TTrGbbfdjst7/wKM8BFoodP0ge2JXupfrIc80lDrB1fNjfr/+iE+swfAhbWWTB5e63cTGGIdGBDHCrVShtc62v8VjAwBS8dBB7zW0T4OTCm3UCynq4V2QIkNHnW06/+fgwG7RARPkA76Vsa0n3rbephIrcYE+N0e50SR5etO7thpoVPzS7B1uHRmepI4pRqSeBG317gbHBm6wkCGeo6NqsBaDf7UFIhOmCkCFgEbrNQza/grc4HLO6xZBsKeF/klhaO9x91MwejkNAD+hBv00CVXuC657SVio0BhRcDI/C0wMg0SqEt1LXGbsS79sWHJ0yQej9XIjAWs1u6zlYtnn+tZt4n/eY81CIPqBG7l45gA5BfphN/H/+GpZh2ro1YMnMq8xBxmWWY5NeB5AoBbv36cH8GtcbBBrXy1AYonimchUJ6IQFmRdRf7a3sGBkTADIWSm07wvEyAjgLbAK0iQAAaFG19P7xeH4FhDfxb1siQwVfZDhE9ya6PgmEGCDKSpW3KCsLRaR8EY8Gadbv3UtZMvZw7J1w+BobZIzDeVdxIfEn4fLsWx2VMKVx7fAN7O608nyMeN5RCx4JZKxV+ldgzdCIXAPZ8LlfxfFoxfNxnjxkDI+EOYY96WdYrY/ia6tzHDLG6eXeksJXoHUQ5Ut22kGNeU0hLcGHhboC3+pVZEAYyrSqcDC5Hj9uC4K3tgSzGJvTUDGYAzwoqLK9p8+uSUnAZHvXu/1aIxTgY8yHcoAa8ICoAfpL1a/U2+FWmz2R9DWKy5X57qft9bdXuXas2rn/IvtkXIHehhinIgM4AAAAASUVORK5CYII=">
+      <vector name="origin" x="-2" y="32"/>
+    </canvas>
+    <canvas name="iconRaw" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABYAAAAdCAYAAACuc5z4AAACFElEQVR4XqWVAZnDIAyFa6EWaqEWagELWMDCWcBCLWABC1jAQi4vBMZYd6O7fN9bKC0/rymwZZmM09NHfRUj5Eq3YhysWjuN90bEdVwAN9YeAxlkvX6aYCoGMCAHy6ZEAVmv0f8vMBwC5nOmjKzX6J8Hkw89FK97pEgnoMSBjGv06/33YMCaiJAJ0kFTjukc4CNMpJGcB/ypxsGTY5l00pFP2qhoFTB+morTQmJLyXrJIu5P7qxwODwiAxlqeKxTWdYOOICYATOhYxNwhcVUXCM35wKXNawuLaHmUX5J4RvAuHloB3KBV2jWkihcS1JribFOoIgoYDgXMJxauaGv0krQO9bS5B+UxC+S8dnuOBawRl/n2o6Gc0jluhr7WGP9qhikEzzaOS8A8kIr8PLR6/g/VgUr7wf1YuAS180Fu0oZZFcg8wSA1+dGTgu+WaG13foAxRfjWQTKEwmU5VhPY1/iHRgQATMU8sdSwOu2ADoLrg/0cgABWKHoG5/D8rsEIzr4i2s4ZHBr102iO7Ed+tMBCBzJq3dtBWFr1wP/Hlhd97WXtjo1sq8KXA776bgCY63iRONDyITHsTnvmLxtNX6ATd1thveJwQmn0Htg1k6Rlxpnhi50WIANnwtJMu82hs//LSEU7AhnFDJfx21vjjWXLXwnmuMCRd4pOHwtcVqh34J7OdmByKe/PhvuxoX78ZGn+AX143xFbLnBXAAAAABJRU5ErkJggg==">
+      <vector name="origin" x="-5" y="32"/>
+    </canvas>
+    <string name="islot" value="Cp"/>
+    <int name="reqDEX" value="0"/>
+    <int name="reqINT" value="0"/>
+    <int name="reqJob" value="0"/>
+    <int name="reqLevel" value="0"/>
+    <int name="reqLUK" value="0"/>
+    <int name="reqSTR" value="0"/>
+    <string name="vslot" value="CpH5"/>
+  </imgdir>
+  <imgdir name="jump">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="ladder">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAA0AAAAPCAYAAAA/I0V3AAAAxUlEQVR4Xn2SCRHEIAxFawELWKgFLFRLtdRCLWBhLcRCLGT5gXKk0Mz8yUDzcpBuctP2pal1AS7JF1/vKcqgHkLgLsSn+kiOI78AC3kFYPCRPUdx1DSCr0qRA6skUJPv4TZTailXUOBIH09h+cFTPgMcIcyAlkoFBN7abfLljHutZl8IlwEVdL7HcsUGwSxUMq8rGQhC798zTSBkQwAyH5gxaS/zLqEK50DWVxX42a9lQQ3EKuS6yi6/obq/tvx6XpqBBv0BoYvbEZaE4r8AAAAASUVORK5CYII=">
+        <vector name="origin" x="-19" y="22"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAA0AAAAPCAYAAAA/I0V3AAAAwUlEQVR4Xn2SCw3DMAxEQyEUSiEURqEUxmkUSsEURiEUTMHzJW6+7k46RZH9enXdIFcO/+zKilF9qJOduJdaJmleITS+hOUqJ+40AxNoUCoAVMEkxBvQwC2J8qlAYpIjd0cP6jNVoPorb21KK9i/FMEckABAi6cmE84B7NAYjSISANiMZIkdglbInvyc5EB49wI+zuRADbT51Kx744iZ4SYHRIM2lkXD7S+ZtEH3KuQjtpICbhqAdYd+0qgBusF2/wGdE8tUppnCPQAAAABJRU5ErkJggg==">
+        <vector name="origin" x="-19" y="22"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAYAAADNo/U5AAAAtElEQVR4XoWSCxHEIAxEayEWauEs1FMtnIVaOAtoiQUs5PKBkFIoO7MDaXndhOm2seiHUw/VH2LD4NkU2tkHYT51tXoJycGTiFBXq/09JlJHCDRBABOWRKDUAAenSYnrlCEngjeozWTAh4EdzQI6HKHWqiUokJGOAD7mMvMMpSUFZMAevEH1S8UODpOqBpCCYb+E1NKqOcus2tFDPSQzqsPvNZQD8Ubp+lbwVbdbXSVVdZD7D+ubuLxeOHP+AAAAAElFTkSuQmCC">
+        <vector name="origin" x="-18" y="23"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAA0AAAAPCAYAAAA/I0V3AAAAwUlEQVR4Xn2SCw3DMAxEQyEUSiEURqEUxmkUSsEURiEUTMHzJW6+7k46RZH9enXdIFcO/+zKilF9qJOduJdaJmleITS+hOUqJ+40AxNoUCoAVMEkxBvQwC2J8qlAYpIjd0cP6jNVoPorb21KK9i/FMEckABAi6cmE84B7NAYjSISANiMZIkdglbInvyc5EB49wI+zuRADbT51Kx744iZ4SYHRIM2lkXD7S+ZtEH3KuQjtpICbhqAdYd+0qgBusF2/wGdE8tUppnCPQAAAABJRU5ErkJggg==">
+        <vector name="origin" x="-19" y="22"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+  </imgdir>
+  <imgdir name="prone">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="proneStab">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="rope">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABUAAAAUCAYAAABiS3YzAAAA1ElEQVR4XrWSgQ2EIAxFXYEVXIEV3OlWcAVXYAVXYAVWuBV6/VBJIeop6E9+mobw+NYOg8gtdOhm1aAuaA1gG7/SiFqfXVZ1EbDJe5pRpe+CIhlAcwgUUKXPiS9LQ5EQQGKh8hg+3dA3ksK3ZkqOdl00wZFZl2SdsBVq2CPbon659+4YtkmBcH9zPgBwIk9LrKmPZ5ehFO8WUBuBUAIjcfqUExXQO0nPpKCF9Ut5ptJ3Q3f970cdqgbIKhUr1SwFxMJbqRHcLAW1WAIBPwZ9POkjM/0BGEg1X6j3YvMAAAAASUVORK5CYII=">
+        <vector name="origin" x="22" y="15"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABYAAAATCAYAAACUef2IAAAA4klEQVR4XrWTAQ2DMBBFsYAFLMxCLaAFC7MwC7WAhVrAAhZu90obSjdgdOUnP5cj28vP8WmaIPuSUxcpAbTqh9qEyV4FDGyYJ3HMsFcBG6CiCnCSl4HFbm5ZLzFgPKlHK92oMHUfoIc3jv/NnT9o8ax2dgX+C+7URiZ5+rns6w93lANzMEmBDcKLYy47z38Hz9J/gkka2uDnkvwaOHHdxF/A+JYbR/tWYG3GphF7rThUBAOjZtph32WFdWc9PhTQJBkw45z/6vic2cvAKAUDpRwBXg98V2JuCiy6/MYoAe/6it5xNk3xDj0wRQAAAABJRU5ErkJggg==">
+        <vector name="origin" x="23" y="13"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAYAAABmvqYOAAABCklEQVR4XrWUjRGDIAyFXYEVXMEVnMUVOosrsAIrsIIrdIU0D4Ji/Ckq5u41B5ovTy60abKwI/3V7cgghtWyOslYV4MD2E+eRmRZV4N3ABOHNMAX3IeTpcaNs+o6Bxz6srwlgwau8MxTrdZmg2XIU8tNzGQX6AW4OYK3rJ7hQ8hxvXpnLxQYNaGBfgDghybGI8f17CQU7MQKTPwrDRY4H0VwDHAYE85YY78M/qrznBPfVQ82Z47pSSqEL0b0BmXTgpHU03I0MaeR3PH4hUuEGfeOBhtnfdXkcqRCuaEADnxDHbI0eA6HSzgGWP5bnHzB6S09jdyZOH3FeXAPYPUz32mi93RpeWjQE+gPZC6Y+3Mb3EoAAAAASUVORK5CYII=">
+        <vector name="origin" x="24" y="13"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABYAAAATCAYAAACUef2IAAAA4klEQVR4XrWTAQ2DMBBFsYAFLMxCLaAFC7MwC7WAhVrAAhZu90obSjdgdOUnP5cj28vP8WmaIPuSUxcpAbTqh9qEyV4FDGyYJ3HMsFcBG6CiCnCSl4HFbm5ZLzFgPKlHK92oMHUfoIc3jv/NnT9o8ax2dgX+C+7URiZ5+rns6w93lANzMEmBDcKLYy47z38Hz9J/gkka2uDnkvwaOHHdxF/A+JYbR/tWYG3GphF7rThUBAOjZtph32WFdWc9PhTQJBkw45z/6vic2cvAKAUDpRwBXg98V2JuCiy6/MYoAe/6it5xNk3xDj0wRQAAAABJRU5ErkJggg==">
+        <vector name="origin" x="23" y="13"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+    <imgdir name="4">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shootF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="sit">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabOF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabTF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO3">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingOF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default1" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingPF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT3">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingTF">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABUAAAAUCAYAAABiS3YzAAAA3ElEQVR4Xq2SgRWDIAxEXcEVXIEV2KkruIIrsIIrsAIrdIWUw9DGlFIQ7717EU2+JzJNnXIb/fRladAQVAOiZ7/TgqqfNUsNAma9pxWV10NQJANoDYECKq/fiZslofGzHwBSFConHoP+TUqOitYSULi+pxrWCE2Jd3ZwNJ9m+QI3s4vQrAz1sed59C/Rhmua/0CJtlZo7mGQJZ9mLa/7k0ICahIQOsBI3L6nUqKvmvTLNYm+8p72Kv8oHaI1UFHySAmfXtQtAcSBN1wT+LIE1OCnM/g26O1Ji3ua9QIlOzVfj7OdvgAAAABJRU5ErkJggg==">
+        <vector name="origin" x="-8" y="13"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABYAAAATCAYAAACUef2IAAAA30lEQVR4XrWUARGDMAxFsYCFWpiFWkALFmYBC7WAhVrAQi1k+Wk2ehlstOv+3b80B333r6QMQ4XCQl/dpAIwsm9srxV9FzBgc9ooomrfBewBJZbCkbwL+DQxBYVjceQjFWA543WhaUUN5Da71wIvgsUx0JjYtHvfb4GfwJB5z7E9bXSXmnsDTjRVgpEQsJnwIVFzL8ltgjowkup0SM3JO4D/lBg+P+Ma2alIe/L3qaiRmWMnM8xVx64NChVgx/Yxyq3DdUYvz34GA4phUPgL3KQriZtUgOWMC3f7H5/6qQdRqE3x2P4yfQAAAABJRU5ErkJggg==">
+        <vector name="origin" x="-8" y="11"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAYAAABmvqYOAAABDUlEQVR4Xq2UgRGDIAxFXYEVXIEVnMUVOosruAIrsIIrdIU0H6INkVZp+XdpLhZePlx0GBq0LnQZP0tBHMfI4SWj7gYHcNoiLchSd4N7gIklDXCCbvDCeeCaY0DQqhqgqEVNCp7unGEe4LiSe9b2KqBrgKfYMtRRpNHuTwwFLhbUZDfLnonhc8q5LuAZTPyrGtRkwFgH4IM2xiPn+m1QLWxzjquAY4DT2HBGna+ogO8NjrqmAt7g/BQ14TmmYg+6uvO7spOCkBH8PC13ZcCYcx8Dzfusb+pEzTJwvO4zv6EBWRoc/zdLu4ZjgOXbElDLaf6Gn5xL3cV5cg+gOAb4cN0DrpvYZ3brfVnQN+gLZOmY+wbE2ugAAAAASUVORK5CYII=">
+        <vector name="origin" x="-8" y="11"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <canvas name="effect" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABYAAAATCAYAAACUef2IAAAA30lEQVR4XrWUARGDMAxFsYCFWpiFWkALFmYBC7WAhVrAQi1k+Wk2ehlstOv+3b80B333r6QMQ4XCQl/dpAIwsm9srxV9FzBgc9ooomrfBewBJZbCkbwL+DQxBYVjceQjFWA543WhaUUN5Da71wIvgsUx0JjYtHvfb4GfwJB5z7E9bXSXmnsDTjRVgpEQsJnwIVFzL8ltgjowkup0SM3JO4D/lBg+P+Ma2alIe/L3qaiRmWMnM8xVx64NChVgx/Yxyq3DdUYvz34GA4phUPgL3KQriZtUgOWMC3f7H5/6qQdRqE3x2P4yfQAAAABJRU5ErkJggg==">
+        <vector name="origin" x="-8" y="11"/>
+        <imgdir name="map">
+          <vector name="brow" x="0" y="0"/>
+        </imgdir>
+        <string name="z" value="capOverHair"/>
+      </canvas>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/0/effect"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/1/effect"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/2/effect"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="effect" value="../../walk1/3/effect"/>
+    </imgdir>
+  </imgdir>
+</imgdir>

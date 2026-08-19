@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="01007000.img" indent="2" media="BASE64">
+  <imgdir name="info">
+    <canvas name="icon" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAACMAAAAfCAYAAABtYXSPAAAI2ElEQVR4Xu2XeVRU1x3HseE0p6Y9XaKnKjGJCyIgQWQb1lmYGWCYfWEGZpgdGAaGYRn2ZQJGiFHUaEyqMYvVUK3NcmwSY04asaJWjUvFJUpBqmjUWpPQxAWEb3/zYjhx0lpj2396+j3nnneZ997v93m/5d5LQMD/9b+qRV7v3KZyj6rMXuAqM9tbmksqWtatXi30f+6/qo62toy2huYPqkvKRquLyuCy2lBsNKI4Nw8ehxNue+HSMltheY3L8169u3ZlY1VjsL+Nf1terzfwyeqG1QvrvKgrrUKRsQA2nQXZYgVkPCGUXAHkbB5y07OQr9bDbXWi1ulBTUnVly3VLcue8Xin+Nu8L3lrvI/XuKq7G8saUGIpRqGhEAX6fJjVeVAJJVByCCaFB3kiG1IaMrYQepkOBbl2FNGz9cX1aKloOt/W2Cr2t/2dtLStbU6zp3Gw0U0gxmI4jUUMkFVrhS5TjWxBFlQUFTWbzwwFWwAFPwu5Uh1sOXZYss3Ik+egxORAvat6rLm8scrfxz2pc926ae3NLf317no4zU4GpLKwEhWOCuTKTchMkCI9mgNRXCqy4rkQJwgh54igTJdAk6VCntJA0BaYVAYGyJZtQU1xNcjeO95q7yP+/v6p1qxZ8+PFLYt2N1U0oMhUxIwqMlTnqkNhngseew5ebOCi1ZYMA4+Fcm0KFhenotHCg14qplqSIldGQARiIQizKg9GpZGZe/Ir4SmqOFflKuf6+/2WOl/s/PnS1iWHfSAOo4OcF6As340qJxWu2U2FacUn3XJgUAyck+GL42Lc6pUAZ8UY2i+FxyylWsqCTqxCDqXLpDYxaTVpTLBoLLCqLHDoCyndzpEKp9vq739cHR0dP+hY1PF2U3kTHHk+kEICKkJ5QTlKbW6qAyf2/EYL/DWLnGfSyCAo36D5RRFwQY7n6tWQcNKhEMhhkOfCoNDDojUzQL7IWDVW2LU2OAz58DgrUVtaXeLPwWj5M8vnV5dUDZtUZuqGAqZrfCkqsZRQO5egzmkD+lXA5zKKighjZwjkgpTglBjq4eLC/lRsaJdCTS0u4YqRI9ZRvegJiNJF9WPVWZmrPYdg9Haqw0JUOSqvtVS1sP1ZAtob2yMorKM6nxFlHkWCFjWTEy7qICddLdly6qpwrG0Nxc3TlKarclw5LEKp/nGYdRw4bArkGyTIFomQxc6EJkMDPUXGQMXsS5eZususMTPpKtDZka/LR4W9DJWOsk5/lgBvVX2MVqyGMEkAKU8KG4XW7YtKXj4Z0OO1V9aj53gfWluXwq4OxcVjmRCzp2LZs+sxMgpGRw4dgipTRDZ4kPIl0FOqjFTAPiBfh/mi5PtQ5irLg1VNBa4xHqJXJ9wBU+2uSNdK5FgQEo7U6CRavHKZBUwppC/lpaHvdO9XHkkrV61GxIxArFq5Cru6d+Hs2bPM75cuDFKxasBnsZHJ5lJnqQkkj6D00Iq1kPPlzJClyZihESmQI1Mf/BaMt7TmUVO2bpgXH4/5c8IRExaFluomPN36FL43IQBdXV3jMKdOnUJI6DwcO3Yc9Cqan/Qyv4+NjWHD2rXgJyRCwudDzOMz646KFklJmgTCRAG4MRywY1LAiUuCTCCAWav78A6Qr1XrctWpsrLO5KsT4c6Zhzdff4tx0tPTg9HR27kgnTkzgLi4RMb5nr17cOnSpfF717/4Ek0VNZDwBEiJjgaXlYR0Sj0/ng9ODBvJUbGIj3iCGcLkFGgypcX+HOOaPm16wwevCnH0HRGcxYXjTr6pd7e9jalTHkT37m7/W4w+OX+ZuopD9SAAOz4KrMhoxIWnUPrTwIlNQHx4JBIiopAcHXsiIyPjQX+GcU2e/PDCnRupdXsr4NJEYmH7Ugz9bXjcUdcfDoIVOx8LbWGIiw5H196PvoEB9PVfgNGix+blLAxsUaPruSxsXy3GpqdEWOhUQs7jgTVvAQTxiUhP4d59v5o5M6h2k24+eqQROKSMQItsFqymdBTYDFCk85Eb9Rg2K8Jx0M7Cq5JgqCOnw24yUFetQI3HA71qATbXPoHB2gT8URaKEzmRGH6L1qYTeuCADkWqOCTHpd6QpKW9vGPHjkB//3fIuCA0ezt7LvZz52BX0iz0l7Dw2UkD8pOmoHzWJFyu5QBLMjD6tBCjbQJ87EqEIehHcCuD8LstcbhxQoqB4hjsjJmJbs5c7EyYjYPZERjeqQEO6aDlz/5LfHzqvR28jJGR4du44TgsDMFuTgj2COYCfzLhtbIE/FYajc6scKzPCGPGy8K5eFcThV8khWPnqlRKkg4jR0TYS+/s5vreDcFePs3Zwbj5ugyD21SInD1tm7/PuymwnRXS/3F6GLrmP4bjJbG09+Sir0uK50UR6ClIxsmiJBrJ6CtNxXZ1DF4pjMHQKdoqzstw65QUH6nCsCs5mGCC0c2eg33CUGBXDp4tj8EDAQEif4d3VXBQkLE9LQxX1+owfMKBsbPZwGUVBn4vRmctCxsdsdhojcWGohh8uCYNo4M5tHEqgF6qjT41Lr6Qhu6UWeiKn81E99MX0nGOojJvxsPv+fu6J02aPnXD+2+YgZE24M/U4mfUtEMraZklMJ/zczqa5wJXaD5Ax4pe6sCTMowcUGJknxpXN4lwroOHG1sJ8LgZOYIZn5PZqf5+7lWBjwT9bGv3m7eBzhcQEIH0EVAfOR+gSAxQUQ5kY6xfjbHTUoweV2B4nxLXu5W4dYDu9eoxfFCDMvUc30ot9XfwXfX9n/zwoe1rl9BRYaiKjgsGipIOYwQw6ovUAJ1vBuhvgrx1kiJyhOrGB9FDUTuiRfdLaWBFTL5OdrT+hu9XvrVgsUkRfPPoDjpYXSGgoTw619D109vjM/1XKevR4vL7cmxdwaUzzaxr9C2/pHcj/Q3+JxQ6ceJPVyjEYUebK2OvvbSMgy1UvG+s4+NXz/PgLY+jI2fItUenTTpGEE30/Ex/A/9IQMCdO/Z9iE74gayAgIn0b+1DfJonBnwVgSD/B/+V8GvNA1RQE/4Obb/mbZzZ+/QAAAAASUVORK5CYII=">
+      <vector name="origin" x="2" y="32"/>
+      <string name="_hash" value="628d65d33276aea5f4abb369575a6a75223b04f0d9306bf30ff0c0d3effd7a36"/>
+    </canvas>
+    <canvas name="iconRaw" format="2" scale="0" basedata="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">
+      <vector name="origin" x="2" y="32"/>
+      <string name="_hash" value="53d523a698b2d2460e271ee4585545e6f3f7cca44e58de9b5e3a43472cfb9704"/>
+    </canvas>
+    <string name="islot" value="Cp"/>
+    <string name="vslot" value="CpH1H2H3H5HfHsAfAyAsAeHbH4H6"/>
+    <int name="reqJob" value="0"/>
+    <int name="reqLevel" value="0"/>
+    <int name="reqSTR" value="0"/>
+    <int name="reqDEX" value="0"/>
+    <int name="reqINT" value="0"/>
+    <int name="reqLUK" value="0"/>
+    <int name="cash" value="1"/>
+  </imgdir>
+  <imgdir name="default">
+    <canvas name="default" format="2" scale="0" basedata="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">
+      <vector name="origin" x="25" y="24"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="z" value="capOverHair"/>
+      <string name="_hash" value="3fc92f25a211533486e6471093fed99befde99b7fc905d31b7067472cc22a1a8"/>
+    </canvas>
+    <canvas name="default2" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAABQAAAAoCAYAAAD+MdrbAAAAGklEQVR4Xu3BMQEAAADCoPVPbQ0PoAAAAL4MDKgAAbn7tKIAAAAASUVORK5CYII=">
+      <vector name="origin" x="17" y="41"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="z" value="backCap"/>
+      <string name="_hash" value="33b02616c08a4b077c8baa8391a7a61c33c5d752d01767f08483d6d7f98aef55"/>
+    </canvas>
+    <canvas name="default_pron" format="2" scale="0" basedata="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">
+      <vector name="origin" x="24" y="25"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="z" value="capOverHair"/>
+      <string name="_hash" value="cd7735a0494a54ba7101a7f3feb4262fb9cf988dd1a57c71d225c8afeff8a5eb"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="backDefault">
+    <canvas name="default1" format="2" scale="0" basedata="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">
+      <vector name="origin" x="22" y="25"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+      <string name="z" value="backCap"/>
+      <string name="_hash" value="9bb3a71956167251bd2ebf3e9840e4e683bacc8e4b32c25715248d3bf6710ee3"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="walk1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="alert">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO3">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingOF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT3">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingTF">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingPF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabOF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabTF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="4">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shootF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="proneStab">
+    <imgdir name="0">
+      <uol name="default_pron" value="../../default/default_pron"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default_pron" value="../../default/default_pron"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="prone">
+    <imgdir name="0">
+      <uol name="default_pron" value="../../default/default_pron"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="heal">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="fly">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="jump">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="sit">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="default2" value="../../default/default2"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="ladder">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="rope">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+  </imgdir>
+</imgdir>

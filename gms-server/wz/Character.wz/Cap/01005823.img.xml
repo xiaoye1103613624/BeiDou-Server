@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="01005823.img" indent="2" media="BASE64">
+  <imgdir name="alert">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="backDefault">
+    <canvas name="default1" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAADQAAAAvCAYAAACsaemzAAADaElEQVR4Xs3XgXHqMBAEUFpIC26BFmiBFn4LtEALaYEWaCEtpAVa8OcEK1arO1sCB6yZHQejSPc42ySbzfJj7MxqRypwv9+Ph8MhxX6Ostvtxu12u0pYMwQIzTAMq4EVkGcwjCLYR0aFiUCGmQN9GtWMeQb0bpSLiUCtGAW9E1VBIkwPSDHvAjVDGKTFe1HMO1BdEGBeBf0lqip4Lq0gBWhsby3m1VEV25KlQEujUlFabEsWA319LYrKhfXA+HcUoKkAmgVBaUMubg6nc+z3L5fLuL0WpJAmkGGQF1F5Qy2yJ4Y5/fyM/47HEFUhItCLqGJTLZRj71vhiAFwDj8ziuelc1OohUDVp6gIDc9NlxgdMSfhrgXhmBOBFPMCqhuEcFcyYnvrEIr3LsEKsyCowvSAMJ8vOwYV3aH1K8wUqANVQXpAAFjsdXTJ5S4SqsLMgRpRFaQXg/n6cLCjXWY4p92qMAuAuiE85/EgeHwRA/P7vak6YufsNe6lDOgBzaAmId6Xpl5SeA2I3je5QwYjTAJdi/s+n/tRASiERBgUrV1lSHrfCr6/F91DKNwFPYmqCgZk7k8avlcYxSActWOYb50yTAiawwkoREQYBjGg6AR1JJ0fHpdY8R10PSYIjnOgiQAVQuZAVnDRpaH8bvG6lENIdMd+7gXxfhlkL6a6pBhG4RIKYUN9L1nwgCggjRhdywUhWnQULhyXGFDVfUUFAAKMFcidmepS0V0nLghRAAdF2+IMBNLrCIch2h3v4VBdqk5s3iSIw0VbsUABoJcZXusnjBSIa/Aa9xNgeHhkmFMbMAxqQqXYosPj/xnvE9PiZyOP37JDt3O6h7cPYypUtEjOUHdFN3g2eg+1rO1hMNwCK9AdpQvn8KfuRee3RNe4x2pWhA4XNRlnI9kwRd9L0bU0Or9eu2mkybMoZxPZLH+X2Vo4p3NzGtfHOlRv83gU0bgZNjz//o42gLHYsPNpPef3ptbnWqi+l0b5CTubMgYAgGy+DTu6KAfDe1IdfzJKHBVggzvCly1AIerNiGjkAtAR++I1CIpG0DlE379nNaMAWY6nExeZQQ54dSNjAAqKTfP478Jg3sdHBo2X26M6KDSDLqfb/2HBvI+PokMtoNV3yArj2DmddB8JhXlyn61qoLCWAnvmdo3/Uzsdwlof8HEAAAAASUVORK5CYII=">
+      <vector name="origin" x="18" y="24"/>
+      <imgdir name="map">
+        <vector name="brow" x="3" y="-6"/>
+      </imgdir>
+      <string name="z" value="backCap"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="default">
+    <canvas name="default" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAADMAAAApCAYAAACY7BHXAAAC70lEQVR4Xs2Wi23DMAxEvUJWyApeIStklqzQWbpCV+gKnSXtET6BOlGKJKeJDzgItvXhM2nJy/J83Qd8WFmA1+v1frvdQuMZfLlc7uu6HhKqgGDQakAQhD6fz4eAGoZQkArUy5VB9II8gnkH0BCIBh2ZIK8GKkBqML0gEcwrgEIQhRqBeBdMCOL19fOT/PH5WQRcs0L8N1ABQjEbAEALscx6oRRAjfU1oD3KvgtC8J4H0GsE+whKg1djfQ1oVlmgCIyK7jF4gjLgFpAGHxlxaGAzqmaEEOhDQ4SBPQRaXA/DnE5PASrKx5cWnm/OxsAE9fCEUqAiePUTYCwAntp84wLSUsqUz6Qvuy4ggNA7gDIQtFJWvUpAfBkE8N9QARHBTALZAoRBEGzxTDtDX6f4/iYDijYGAhUQ/wHDcmCG8Ew7A+T+/fdtBM+cEpB3MzsKMglU1HUTBEGi/Vi7gPymUM2OAkzCZCXAN4j72jEDYXtdhoGgDEiDj9wJlL2tWlZYWmwBwcyMABGG63DNIlMRZAdQBhOBUCwtX2IdIFTaELjLebCWPSDm0YmpBMLvpQUD+dIaAKHSWsySnkeP3AJKE6F9BEJNglAG5L8h/7fQY8wRTsoOvSDUJAhl60Xbtj+Tao6yMw3yJNm6zJD/n2O2FMIb47PJWFo73/IeFUC+BH0ZKpzPTvbBvxEGyoD8BhHZg2GsTeBB3gwDJSC/fSuAZgjjbDAubMBBYHj2eBiF0FLDOBuc0nkMGMiy4wNXoOo3w8zgEDwIkMF4gNpWrX8DdtOyczAYnxE9SFu/NQnmIEAGw8A9SPbzGYDYYA/TCbQudvh3GX17ZevyuEDAiE0haiBUL9AIROQamAWH9SAfdASz9W8q/RcFQPBeEG8PldaBbTPajFg8DPpu7pJ1jqC2ZxrUHqdswLbW37qaFfbbPKUMCsaCvL+UgY24gOBWHGRgGiBSmtSDufsaaOQsOM7BUoK0z/IC6YK9VunzqM+wfgE2Q9EJ2iFRdAAAAABJRU5ErkJggg==">
+      <vector name="origin" x="16" y="33"/>
+      <imgdir name="map">
+        <vector name="brow" x="4" y="-15"/>
+      </imgdir>
+      <string name="z" value="cap"/>
+    </canvas>
+    <canvas name="defaultAc" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAB0AAAAJCAYAAADO1CeCAAAAeElEQVR4XrWPgQmAMAwEu4LTuoIruEJX6CxdwRWiH3iJ0YraeBCk/fQPUzojYNy+dqacBZlfNuiOfweQ+WXLVyF5Le4VksfiKCHZxbMZK9ZDGZIOwk4h0Q70LflGyjBASKTU2v5TBlhiEIR2cnBuXgbD3kP35eVfrHs62p1yxxwPAAAAAElFTkSuQmCC">
+      <vector name="origin" x="11" y="-20"/>
+      <imgdir name="map">
+        <vector name="brow" x="-2" y="0"/>
+      </imgdir>
+      <string name="z" value="capBelowBody"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="fly">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="heal">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="info">
+    <int name="bossReward" value="1"/>
+    <int name="cash" value="0"/>
+    <int name="charmEXP" value="100"/>
+    <int name="exItem" value="1"/>
+    <canvas name="icon" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAACB0lEQVR4XrWVDZWDMBCEawELWIgFLGChFrCAhVqohVo4C9XSyyyZ3DJNcqQ/+948aLrZb3Yb6On0Wjwq+moYZFmWrHmeTSGEr5nYQQmcpskEsFfK/0gUOy1BoXEcTdinhXqjC+zh7xrIUI3b/f4EVfA7BqxDgtgxgvdYX6/X78A9FPc0wnV2TwMKfdXArmME1rz4PTvGvQKzhqEPvht5/BxEyIE4kaaBCD9qwIrl39cBb0PZBOFFAwncBdeOAX78LFUDnADPgoKPGNiBCTfwNgYzsArcT8Af0F4DVgDFd+DUsRnDNZpoGaAJHkg1gbwiGBs8PBtYQxPsDfApwcvJPxH+LKiB3LXCIaz9B1YDkBqgCQ/PXaO7EpwGdK0m1iQck6gZyF0T3gMqyTdUM5Dh7NrDS933iHV5+Pgk0EQR3hp9j/JE47vfw3XsTwY+Bedh0z8fDza4OWyM/hyf0TWMJtwrTMWagMFEDcywZH/wAPdQVc0EawHGK9aSqrFtTAYu4/C4RAik4JoJ7GenrJd0OGzDNRaGaKBlhHtEb4UWq4qdL6ftlKf1Iak7uHF7W9l1K46xYj1qStpeKC7HGQhJY6rXDCQgERusCJ8CAa+ibID5zsA5ak41qwYIRjdItgJmAO+BP/ClopzHSPmH4UjI8IKWigCANB/qHjvF38wL5nSNAC+emyL0F9SlcvlbS26yAAAAAElFTkSuQmCC">
+      <vector name="origin" x="-1" y="31"/>
+    </canvas>
+    <canvas name="iconRaw" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAB3UlEQVR4XrWVgdGCMAyFWYEVWIEVXMEV/hVYgRVcwRVc4V/BWbAv9OVCbCoVzN07sLb5XmJbu+67WAL9NAQyTZPqer2KxnH8mYkNlMDL5SIC2CrPPyWKlZag0DAMIqzziVqjCWzhRw0o1Mfj+XyDevARA1IhQawYwXeMz/f7b+AWinca4TirpwEP/dbApmIExqz4PSvGuweq+r4Nvml5+jw6YQ7EjlQNJPheA5JMf18DfPRlE4QXDWRwE9xXDPDyP4UG2AHuBQ/eY2ADJlzAaxvEwOzgtgN2g7YakARIvgHnisUYnslEzQBNcEN6E5hXBGOBhauBeayCrQGeElxO9kTYveANaNUeDmHsE9gbgLwBmrBwrRrVleA04MciMSfh6ERkQKsmvAVUki0oMqBwVm3hpepbxLzcfDwJNFGE11rfIu1ouvst3Lf9zcBZcG42/+djwQIXh5XW/6UzOo+DCO8e5sWcgMFEBGbIZLvxALdQr8gEcwHGJ8aywlgXZgO3oV9uCQJ5cGQC61kp82XtDllwT4khGqgZ4RqnQ+GThWLlU7fu8jx+ONbbSp5rcrQV43aOXChmzhkGJAlPQQBmqAHOP2pAEogB3AMxmKHzGBjzk/aG/qZGn8LPD9e8APMbYGGgV/NOAAAAAElFTkSuQmCC">
+      <vector name="origin" x="-1" y="31"/>
+    </canvas>
+    <int name="imdR" value="10"/>
+    <int name="incACC" value="280"/>
+    <int name="incDEX" value="45"/>
+    <int name="incEVA" value="140"/>
+    <int name="incPAD" value="3"/>
+    <int name="incPDD" value="400"/>
+    <int name="incSTR" value="45"/>
+    <string name="islot" value="Cp"/>
+    <int name="price" value="1"/>
+    <int name="reqDEX" value="480"/>
+    <int name="reqINT" value="0"/>
+    <int name="reqJob" value="4"/>
+    <int name="reqLevel" value="160"/>
+    <int name="reqLUK" value="0"/>
+    <int name="reqSTR" value="0"/>
+    <int name="setItemID" value="506"/>
+    <int name="tradeBlock" value="1"/>
+    <int name="tuc" value="11"/>
+    <string name="vslot" value="CpH1H5"/>
+  </imgdir>
+  <imgdir name="jump">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="ladder">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="prone">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="proneStab">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="rope">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="4">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shootF">
+    <imgdir name="0">
+      <uol name="defalutAc" value="../../default/defaultAc"/>
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="defalutAc" value="../../default/defaultAc"/>
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="defalutAc" value="../../default/defaultAc"/>
+      <uol name="default" value="../../default/default"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="sit">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabOF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabTF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO3">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingOF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingPF">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT3">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingTF">
+    <imgdir name="0">
+      <uol name="backDefault" value="../../backDefault/default1"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk1">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk2">
+    <imgdir name="0">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="default" value="../../default/default"/>
+      <uol name="defaultAc" value="../../default/defaultAc"/>
+    </imgdir>
+  </imgdir>
+</imgdir>

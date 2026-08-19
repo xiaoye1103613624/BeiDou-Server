@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="01006875.img" indent="2" media="BASE64">
+  <imgdir name="alert">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="backDefault">
+    <canvas name="backCap" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAD4AAAAwCAYAAABJy8k0AAAC9UlEQVR4XtXW63EiQQyFUadACqRACqRACiRJcHZpiuvSfFZ3qx8DWFW3dqFfOuLH7tfXuvpO5t/XDnS/31PhOZePrxB6u92KuV6vzejeZz6qdmDiMiG2FL2F999SU+AR/CcMYAnYh8BWrIdnXlbL0QpxmVg/bPCIGkKrycvlkg6BtVhfbHRlpdFsjKjZ8P6j8VU4G8mC7d5auL8Uh186gCKa2Aza7lN4zud8Pu/22mfepfg1d2a6QjgbbaHtHt1Vuo9nPEznozUfvuchPfWnSUJbaLtD9zDE9wyAYIbve1Smdg0SmkET24K38H4AxEYZGcAStJ0luIY+Aq8B6Aycf+q3QUJ70EoWnIX34KMzsP5WCh0158/OJLo7SgZfOgPzVlvzRPrYHuUIOJutxd4ktoT2ZzxYVYXb+uPx+FbZZ2UFOvtrK6VfnfuiM2m04P4BG4JlBbwXrbAnrkcZgvvPemwWnkVHQMG5txb+6mm4b2IFOgP3aI9XD734LrjwvhHCbQ9xUfydbIohuATnWi1d8OdmHi7+E0hstKcFJ4hRH/yeexj7Xvgq3NbVpMCWFqoVNsQQwXgE1xje2w33+Bm0v68UNh9F/fD7KN1wi/D6++l0mkJbCGXYeJQeuPbbn4Jv+BpEw3kemIYTGYVNR7E+1BfXonTDLbZHTdt/XuxRu4T7MiGSYcOl9MKVLrhvWvBRPKEMG42i92fhU3gNwMK9UQidQXOtFaKn4b0DIDiD5lur4FZTeN+cHuI53tECEzuDtpiRaKs0XI1HeN8wH86G0Fm09Wo+gn0N4VsDWBEDj6APgQvfGkAUwqLYfTNgSwatGsb7AXAI2fjzRIykB27VjecA/BBatRqr9KJVQ/hoABY2dXRG0aphfGkArxjELFq14WcGUBsCm56J7rSeiRit7bIVA4iGQEBvAF6G9rVsACvwrwCzpgdAeA/+HWDWbgC9gyC8hOcevYte3lK+mfQgStgK9GPApdo1SkgrPO/u/XdFSCuH1g/eo2pbjQcq1AAAAABJRU5ErkJggg==">
+      <vector name="origin" x="26" y="26"/>
+      <string name="z" value="backCap"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+    </canvas>
+  </imgdir>
+  <imgdir name="default">
+    <canvas name="backCap" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAEQAAAAjCAYAAAAt4qxQAAAChklEQVR4XuWXi3HCMBBE0wIt0AIt0AItUAstUAvFkVmPllmtT5Zt5F+yMzvYsnS6eznk8POzH70L/hfyot/3+z20zftzKhZ/u906X6/XzByHud5iHlIZCC0yskNxOIxnexxGo0HUgFwul868R2zfbM/qEj6dTu/z+dwresgOIoJCMGmfXesDgjAioxgHUYNxNCgZiCEYkb3oISuQraHogZb59XoV7cXX7AAirw2lVzDsr8rotRm1PqC4HEJkhzAEZCkoXcDH49ErOCp6jlmQy2HUwDiMJYB0IGAvYilrgTUwOJMchj5vDeX9fD7DRKfaix5jXV8Cw4NaYehXkVAQA/V4gVP1SQzXY80ExtghRHYwfiArFB0nGFy3AJLB0Ndm7RWK+SXXYDkMh8JO0DeV5qJnG6G06pIuEXw6hBKIMUY8dwlSDQrBKAydTyituuQToAWIkhETe9ARnBoUxPHnXIdn7JJvgUBdECbuxbS2whkC41CwVscZL7pP8WcrC7iWa2AcCKE4AI7xGvMYNy9zmnqbrGWCqUHBXOYYQdHzhG8exE2epd4ma1m7BffsiAiI5shrzuV5QlOMnZc7TptBgQkG1/pVIRB0gEPSucyd5xCfG5jJ2gUUGPcKZMg+hx3DWvA1SnFnqdeeazvqFp/j9jkKBbGSZ6sLsCWYKd2i54mO0SlOEx0CDHLjGJ/ruYLrFKOZMjBbwKmBiaDo+iWgQJ+ktoITgcHnmHwESnMw0KZw/L9df14yu0fyX0Srw+GP0ejH4xhAPGPSukUVwmkJSGG4uTfB1ACtBYXK/nrfAvLih+x7OyB1mrOJBgE5JC9yjhnL9zbvRp5YCOYbe3zxYeSJf+tR+gUg9Rg0tyiXDAAAAABJRU5ErkJggg==">
+      <vector name="origin" x="29" y="22"/>
+      <string name="z" value="backCap"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+    </canvas>
+    <canvas name="cap" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAAEQAAAAhCAYAAABgKg1bAAACEElEQVR4XuWVgbGDIBBEbSEtpIW0YAu2kFrSgrVYnD/nsJllPcD8r/kBd2ZnCOLBvRxn132P5oRPIU16vt/vrmVdc0omPwzD4r7vI2PejPclZpWKQHCSnhWKwkE82aMabQZRAnK73Rbjt8XWzb5Zy4Evl8t8vV5XSeesIDwoABP2+Wq9QACGZ0tGQZRg1AYlApGD4VmTzpmB/DcUbmiRp2lKWpMvWQF4/jSUVcJm/VR6n02v9A2KSiF4Vgg5IEdBWQI+Ho9Vwl7SvzESUimMEhiFcQSQBYRZkzjKnGAJjPUkhcHP94Yyj+PoHvRda9JbzO+nwKBRMwy+ioBiMSwfTfBdvQ5m463GAbZYIXhWMNqQGQrPA4yN9wCiMN7RChJcgqUwFAoqgb9U/Dnn3gYou1XJ8yDdM4hO/1WbIZWgAAzD4PWAsmeVfEpZOCUolqw+x3tcJTUBYRXBKBQAwTx6iPc7xK9SSTAKBFAUAOYwtnWIK3tVpSIUTtyDwv0EXx6LG1yllsPjX2ZAqerAGGvRT2AIsWW/ahRB4etiFaCQFCCqheEImCq1qhb+5z3rGlQMINk1CnGr1m5QLFZw9dpULdxPeA4OcZpSFgz3FTznvmLjEKM5JcF4UBhay1BMERi9IgwiAaVtMFoNOaN68K7Ea0avBL3r4hk9JrzXtCIwJUBngWLia7ECxA5rTqcIkLj7ATHWwuqqRUoyAAAAAElFTkSuQmCC">
+      <vector name="origin" x="29" y="22"/>
+      <string name="z" value="cap"/>
+      <imgdir name="map">
+        <vector name="brow" x="0" y="0"/>
+      </imgdir>
+    </canvas>
+  </imgdir>
+  <imgdir name="fly">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="heal">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="info">
+    <int name="cash" value="1"/>
+    <canvas name="icon" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAACQAAAAbCAYAAAAULC3gAAABnElEQVR4Xr2UgbGCMBBEaYEWaIEWaIEWaMEWfgvWQnHoMln+Zk1MwoA380aIl7tHOO2662LL8NM4Gi/LkkRybo+o8TzPEdM07fAa+V7gykhKpITGcdy5S2rr+34bhiEiJ3OXVHJOXIq4zBVSOoiHgDdY13VDuFBO7IzQxynUzIlGSkrvW6Q+nshxGRdTOQpg3niSXG8SwmeOGjl8h4aQAP4DwBqlQt1k7IWw+RvIIzVSAPv0tavUt1PKCvlMEOwhLudCFOEnaRZyiRR6cpwNCrEO1yjFa+6LVf4jKuKNS6iYCrE5UTkOe9iXjKOQN2xB6+j/l+fxVRelUptbQR1I+TrxV/gzKXxywLnOa54cwOtDvotoZI+6Fs4V71VEr5ETKMYxpGfFdNh1PVUz5FXFbWJK+L4pIrEzcioGfL7CenMcBVWuJKh/uoR1KBbuq6IPDMLYiRygGBs4LglEpEqGEmg+vZnfLIGH8BeIBBuoCspQxJs/CzBPwX48DOrhIdGjOpBcOpkczGVzglqoiQdtkmGk5sZhE0f3UYBk4wXJHqjXB87HCgAAAABJRU5ErkJggg==">
+      <vector name="origin" x="2" y="27"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="iconRaw" format="2" scale="0" basedata="iVBORw0KGgoAAAANSUhEUgAAACQAAAAYCAYAAACSuF9OAAABWklEQVR4Xr2UgbGDIBBE04It2IIt2IIt2KTF+Wcdlr9sjghGszNvVALHC17yet2XvcJPkzde1zVE5jyeYuNlWQrmeT7gPeZ7gTsTSkRC0zQdPCW1D8Owj+NYUJN5SirsE5ciLnOHlDZiFvANtm3bEReqiV0RejuFlj7RRFL63CP19o0cl3ExlaMA+o0nyfEuIVxrtMjhM2wICeA/AIxRKtUNcxTC4k9gHmmRAlinr12lPp1SVch7gmANcTkXogivpFvIJSL05NgbFGIdjlGK91xXqvynKOIbn6FiKsTNicqx2dO6MLmQb9iD1tH/L5/HV30qFS3uBXUg5ePEX+HPpHBlg3Oc9zw5gNeH+S6iqR51K+wrPquI3mNO4jS5Sa+KabPreFQzzWvKY2JK+rwrhdgVORUD3l9pvDu5oMqdCeqfLmEdiqXnr1J8Y4pxA8clgYh8LROlEOwg5w+iy4wFPf9oqAAAAABJRU5ErkJggg==">
+      <vector name="origin" x="2" y="27"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <string name="islot" value="Cp"/>
+    <int name="reqDEX" value="0"/>
+    <int name="reqINT" value="0"/>
+    <int name="reqJob" value="0"/>
+    <int name="reqLevel" value="0"/>
+    <int name="reqLUK" value="0"/>
+    <int name="reqSTR" value="0"/>
+    <string name="vslot" value="CpH1H3H4H5H6HfHbHcAe"/>
+  </imgdir>
+  <imgdir name="jump">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="ladder">
+    <imgdir name="0">
+      <uol name="backCap" value="../../backDefault/backCap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../backDefault/backCap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="prone">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="proneStab">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="rope">
+    <imgdir name="0">
+      <uol name="backCap" value="../../backDefault/backCap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../backDefault/backCap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shoot2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="4">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="shootF">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="sit">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabO2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabOF">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabT2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stabTF">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="stand2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingO3">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingOF">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../backDefault/backCap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingP2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingPF">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingT3">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="swingTF">
+    <imgdir name="0">
+      <uol name="backCap" value="../../backDefault/backCap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk1">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="walk2">
+    <imgdir name="0">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="1">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="2">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+    <imgdir name="3">
+      <uol name="backCap" value="../../default/backCap"/>
+      <uol name="cap" value="../../default/cap"/>
+    </imgdir>
+  </imgdir>
+</imgdir>
