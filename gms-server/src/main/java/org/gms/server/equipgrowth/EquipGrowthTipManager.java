@@ -355,7 +355,7 @@ public final class EquipGrowthTipManager {
     }
 
     /** 对齐套装 tip：攻魔/血魔相等合并；顺序 STR→Jump。 */
-    private static void appendTierStats(StringBuilder sb, Map<String, Integer> stats) {
+    static void appendTierStats(StringBuilder sb, Map<String, Integer> stats) {
         int str = stats.getOrDefault("incSTR", 0);
         int dex = stats.getOrDefault("incDEX", 0);
         int intel = stats.getOrDefault("incINT", 0);
@@ -377,7 +377,7 @@ public final class EquipGrowthTipManager {
             appendStatLine(sb, "攻击力/魔力", pad);
         } else {
             appendStatLine(sb, "攻击力", pad);
-            appendStatLine(sb, "魔法力", mad);
+            appendStatLine(sb, "魔力", mad);
         }
         if (MERGE_EQUAL && mhp != 0 && mhp == mmp) {
             appendStatLine(sb, "最大血量/最大魔量", mhp);

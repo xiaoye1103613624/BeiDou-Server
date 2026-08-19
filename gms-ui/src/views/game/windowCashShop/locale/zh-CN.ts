@@ -10,7 +10,7 @@ export default {
     '此路径供窗口商城、技改客户端同步等共用（game_config / -Dgms.client.data）。套装与装备成长 WZ 导入走服务端 wz 目录，不依赖此路径。',
   'windowCashShop.syncFromClient': '从客户端同步分类与商品',
   'windowCashShop.syncFromClient.confirm':
-    '扫描已保存的客户端 Data（须为 …\\Data 根目录），按游戏内 kCats（装备/消耗/设置/宠物/礼包）归类并 upsert 现金商品。空分类不创建；结束后自动热重载。首次可能需 1–3 分钟；图标仅填本地已有 PNG，其余请用「同步图标」。',
+    '扫描已保存的客户端 Data（须为 …\\Data 根目录），按游戏内 kCats（装备/消耗/设置/宠物/礼包）归类并 upsert 现金商品。会把误分到「帽子」的 170xxxx 现金武器改挂到「武器」。空分类不创建；结束后自动热重载。首次可能需 1–3 分钟；图标仅填本地已有 PNG，其余请用「同步图标」。',
   'windowCashShop.syncFromClient.offer':
     '路径已保存。是否立即从客户端同步分类与商品？',
   'windowCashShop.syncFromClient.loading':

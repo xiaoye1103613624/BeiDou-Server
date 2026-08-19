@@ -20,7 +20,7 @@ public class WindowCashShopClientSyncRtnDTO {
     private int skipped;
     /** Empty obsolete / client-sync SHOW_ITEMS categories removed. */
     private int categoriesPruned;
-    /** Stale links moved off invented / wrong kCats buckets. */
+    /** 误挂关联已改到正确 kCats（含 170xxxx 从帽子挪到武器）。 */
     private int linksMigrated;
     private boolean catalogReloaded;
     private String catalogSource;

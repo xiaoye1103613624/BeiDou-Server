@@ -142,8 +142,18 @@ public final class CashShopTaxonomy {
         };
     }
 
+    /**
+     * MapleStory 物品大类 = {@code itemId / 10000}（7 位 ID 的前 3 位）。
+     * <p>
+     * 易错：{@code 100xxxx}=帽子，{@code 170xxxx}=现金武器外观，<b>不是</b>同一桶。
+     * 禁止用 {@code type % 10} / 首位折叠把 170 收进 100（否则 170 和 110 披风都会进「帽子」）。
+     */
+    public static int itemTypePrefix(int itemId) {
+        return itemId / 10000;
+    }
+
     public static Bucket forItemId(int itemId) {
-        int type = itemId / 10000;
+        int type = itemTypePrefix(itemId);
         if (itemId >= 1000000 && itemId < 2000000) {
             return forItemType(type);
         }
@@ -165,6 +175,9 @@ public final class CashShopTaxonomy {
         };
     }
 
+    /**
+     * 装备前缀 → kCats。仅 {@code 100} 是帽子；{@code 170} 与 121–169 / 109 盾 一律进「武器」。
+     */
     public static Bucket forItemType(int type) {
         if (type == 100) {
             return CAP;
@@ -193,7 +206,7 @@ public final class CashShopTaxonomy {
         if (type == 110) {
             return CAPE;
         }
-        if (type == 109 || (type >= 130 && type <= 149) || type == 170) {
+        if (isWeaponItemType(type)) {
             return WEAPON;
         }
         if (type >= 180 && type <= 183) {
@@ -203,6 +216,48 @@ public final class CashShopTaxonomy {
             return RING;
         }
         return RING;
+    }
+
+    /**
+     * 109 盾、121–169 各职业武器、170 现金武器外观。不含 100 帽子、不含 171+（安卓等）。
+     */
+    public static boolean isWeaponItemType(int type) {
+        if (type == 109 || type == 170) {
+            return true;
+        }
+        return type >= 121 && type <= 169;
+    }
+
+    /** 分类名是否就是某个 kCats 展示名（帽子/武器/…），用于纠正误挂。 */
+    public static boolean isKCatsDisplayName(String name) {
+        if (name == null || name.isBlank()) {
+            return false;
+        }
+        String n = name.strip();
+        for (Bucket b : KCATS) {
+            if (b.name().equals(n)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 同步纠偏时，这类 SHOW_ITEMS 行上的错误关联可以挪走：
+     * 官方 kCats、已废弃自造名、client-sync、旧 tab 1、以及名叫「帽子」等 kCats 名的行。
+     */
+    public static boolean isRemappableAutoCategory(Integer tab, Integer cat, String name, String remark) {
+        if (isKCatsPair(tab, cat)) {
+            return true;
+        }
+        if (isObsoleteAutoName(name) || isKCatsDisplayName(name)) {
+            return true;
+        }
+        if ("client-sync".equals(remark) || "auto-tab".equals(remark)) {
+            return true;
+        }
+        // 旧版把装备写在 tab 1（客户端已删除 Special），必须纠偏
+        return tab != null && tab == 1;
     }
 
     public static Map<String, Bucket> defaultBuckets() {

@@ -44,7 +44,7 @@ public class EquipGrowthConfigManager {
             {"int", "incINT", "智力"},
             {"luk", "incLUK", "运气"},
             {"pad", "incPAD", "攻击力"},
-            {"mad", "incMAD", "魔法力"},
+            {"mad", "incMAD", "魔力"},
             {"mhp", "incMHP", "最大血量"},
             {"mmp", "incMMP", "最大魔量"},
             {"pdd", "incPDD", "防御力"},
@@ -307,7 +307,7 @@ public class EquipGrowthConfigManager {
                         v = stats.path(k[1]).asInt(0);
                     }
                     if (v != 0) {
-                        gained.put(k[2], v);
+                        gained.put(k[1], v);
                     }
                 }
                 JsonNode skills = lv.path("skills");
@@ -317,9 +317,7 @@ public class EquipGrowthConfigManager {
                 }
                 any = true;
                 sb.append(level).append("级效果\r\n");
-                for (Map.Entry<String, Integer> e : gained.entrySet()) {
-                    sb.append(e.getKey()).append(" : +").append(e.getValue()).append("\r\n");
-                }
+                EquipGrowthTipManager.appendTierStats(sb, gained);
                 if (hasSkills) {
                     for (JsonNode sk : skills) {
                         int sid = sk.path("id").asInt(sk.path("skillId").asInt(0));

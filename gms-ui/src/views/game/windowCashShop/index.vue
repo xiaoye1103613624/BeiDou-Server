@@ -169,7 +169,7 @@
               :loading="itemLoading"
               :data="linkedItems"
               column-resizable
-              :pagination="{ pageSize: 15 }"
+              :pagination="itemTablePagination"
               :bordered="{ cell: true }"
               row-key="rowKey"
               :row-selection="{ type: 'checkbox', showCheckedAll: true }"
@@ -590,7 +590,7 @@
         :data="batchRows"
         :loading="batchSearching"
         row-key="itemId"
-        :pagination="{ pageSize: 10 }"
+        :pagination="batchTablePagination"
         :row-selection="{ type: 'checkbox', showCheckedAll: true }"
       >
         <template #columns>
@@ -720,6 +720,22 @@
     maxId: undefined as number | undefined,
     keyword: '',
   });
+
+  const tablePageSizeOptions = [20, 50, 100, 200];
+  const itemTablePagination = {
+    pageSize: 50,
+    pageSizeOptions: tablePageSizeOptions,
+    showPageSize: true,
+    showTotal: true,
+    showJumper: true,
+  };
+  const batchTablePagination = {
+    pageSize: 50,
+    pageSizeOptions: tablePageSizeOptions,
+    showPageSize: true,
+    showTotal: true,
+    showJumper: true,
+  };
 
   const selectedCategory = computed(() =>
     categories.value.find((c) => c.id === selectedCategoryId.value)
@@ -867,6 +883,7 @@
             data?.categoriesUpdated ?? 0
           }`,
           `清理空分类 ${data?.categoriesPruned ?? 0}`,
+          `迁移关联 ${data?.linksMigrated ?? 0}`,
           `商品 ${data?.itemsUpserted ?? 0}`,
           `关联 ${data?.linksUpserted ?? 0}`,
           `热重载 ${data?.catalogSize ?? 0}`,

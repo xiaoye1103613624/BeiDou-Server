@@ -1038,7 +1038,7 @@ public class WindowCashShopService {
         }
         flushPendingBatches(pendingInsertItems, pendingUpdateItems, pendingLinks, true);
 
-        final int linksMigrated = migrateStaleAutoLinks(itemToCanonicalCat);
+        final int linksMigrated = migrateStaleAutoLinks(itemToCanonicalCat, bucketToCategoryId);
         final int categoriesPruned = pruneEmptyAutoCategories();
         final boolean catalogReloaded = loadFromDbIntoMemory();
 
@@ -1136,8 +1136,28 @@ public class WindowCashShopService {
         return info;
     }
 
-    /** Move client-sync items off invented / wrong-kCats SHOW_ITEMS rows. */
-    private int migrateStaleAutoLinks(Map<Integer, Integer> itemToCanonicalCat) {
+    /**
+     * 把误挂的 SHOW_ITEMS 关联挪到 {@link CashShopTaxonomy#forItemId} 的 kCats 桶。
+     * 覆盖本轮扫描 <b>以及</b> 库里已有商品（170xxxx 曾进「帽子」时，即使本轮没扫到该 img 也会改挂到「武器」）。
+     */
+    private int migrateStaleAutoLinks(Map<Integer, Integer> itemToCanonicalCat,
+                                      Map<String, Integer> bucketToCategoryId) {
+        for (XyCashShopItemDO item : itemMapper.selectAll()) {
+            if (item == null || item.getItemId() == null) {
+                continue;
+            }
+            if (itemToCanonicalCat.containsKey(item.getItemId())) {
+                continue;
+            }
+            final CashShopTaxonomy.Bucket bucket = CashShopTaxonomy.forItemId(item.getItemId());
+            Integer categoryId = bucketToCategoryId.get(bucket.key());
+            if (categoryId == null) {
+                final Map<String, Object> ensured = ensureKCatsCategory(bucket);
+                categoryId = (Integer) ensured.get("id");
+                bucketToCategoryId.put(bucket.key(), categoryId);
+            }
+            itemToCanonicalCat.put(item.getItemId(), categoryId);
+        }
         if (itemToCanonicalCat.isEmpty()) {
             return 0;
         }
@@ -1147,8 +1167,15 @@ public class WindowCashShopService {
                 cats.put(cat.getId(), cat);
             }
         }
-        int unlinked = 0;
-        for (XyCashShopCategoryItemDO link : categoryItemMapper.selectAll()) {
+        final Set<String> existingLinks = new HashSet<>();
+        final List<XyCashShopCategoryItemDO> allLinks = categoryItemMapper.selectAll();
+        for (XyCashShopCategoryItemDO link : allLinks) {
+            if (link != null && link.getCategoryId() != null && link.getItemId() != null) {
+                existingLinks.add(link.getCategoryId() + ":" + link.getItemId());
+            }
+        }
+        int moved = 0;
+        for (XyCashShopCategoryItemDO link : allLinks) {
             if (link == null || link.getItemId() == null || link.getCategoryId() == null) {
                 continue;
             }
@@ -1169,17 +1196,30 @@ public class WindowCashShopService {
             if (cat.getLegacyTab() != null && cat.getLegacyTab() == 9) {
                 continue;
             }
-            final boolean officialWrong = CashShopTaxonomy.isKCatsPair(cat.getLegacyTab(), cat.getLegacyCategory());
-            final boolean obsolete = CashShopTaxonomy.isObsoleteAutoName(cat.getName());
-            final boolean auto = "client-sync".equals(cat.getRemark());
-            if (!officialWrong && !obsolete && !auto) {
+            if (!CashShopTaxonomy.isRemappableAutoCategory(
+                    cat.getLegacyTab(), cat.getLegacyCategory(), cat.getName(), cat.getRemark())) {
                 continue;
+            }
+            final String newKey = canonical + ":" + link.getItemId();
+            if (!existingLinks.contains(newKey)) {
+                categoryItemMapper.insertSelective(XyCashShopCategoryItemDO.builder()
+                        .categoryId(canonical)
+                        .itemId(link.getItemId())
+                        .sort(link.getSort() == null ? 0 : link.getSort())
+                        .enabled(link.getEnabled() == null ? 1 : link.getEnabled())
+                        .updatedAt(new Date())
+                        .build());
+                existingLinks.add(newKey);
             }
             categoryItemMapper.deleteByQuery(
                     QueryWrapper.create().eq("category_id", link.getCategoryId()).eq("item_id", link.getItemId()));
-            unlinked++;
+            moved++;
+            if (moved <= 20 || moved % 200 == 0) {
+                log.info("[windowCashShop] remap item {} {} → categoryId={}",
+                        link.getItemId(), cat.getName(), canonical);
+            }
         }
-        return unlinked;
+        return moved;
     }
 
     /** Drop empty invented / client-sync SHOW_ITEMS categories (keep 热门 / OPEN_WINDOW / tab 9). */

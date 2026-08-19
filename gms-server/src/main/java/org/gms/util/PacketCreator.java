@@ -111,6 +111,7 @@ import org.gms.server.movement.LifeMovementFragment;
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
@@ -137,6 +138,9 @@ public class PacketCreator {
      */
     private final static boolean V83_VANILLA =
             Boolean.parseBoolean(System.getProperty("gms.packet.itemInfo.v83vanilla", "true"));
+
+    /** 客户端 Dotum 画布按 GBK/CP_ACP 解窄字节（与套装技能加成文案一致）。 */
+    private static final Charset CLIENT_GBK = Charset.forName("GBK");
 
     public static long getTime(long utcTimestamp) {
         if (utcTimestamp < 0 && utcTimestamp >= -3) {
@@ -8056,6 +8060,13 @@ public class PacketCreator {
         return p;
     }
 
+    /** Maple 短字符串：uint16 长度 + GBK 字节（插件 DrawText 走 CP_ACP）。 */
+    private static void writeGbkMapleString(OutPacket p, String value) {
+        byte[] bytes = (value != null ? value : "").getBytes(CLIENT_GBK);
+        p.writeShort(bytes.length);
+        p.writeBytes(bytes);
+    }
+
     /** 装备成长属性 tip (SendOpcode 0x17B) — 按需回复或变更点推送 */
     public static Packet equipGrowthTip(int itemId, boolean hasData, String text) {
         return equipGrowthTip(itemId, hasData, text, null);
@@ -8074,7 +8085,8 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.EQUIP_GROWTH_TIP);
         p.writeInt(itemId);
         p.writeByte(hasData ? 1 : 0);
-        p.writeString(hasData && text != null ? text : "");
+        // 显式 GBK：不依赖 ThreadLocal 语言（US-ASCII 会把中文变成 '?'）
+        writeGbkMapleString(p, hasData && text != null ? text : "");
         // 尾部：flag(1) + 15×short 成长增量（旧 DLL 读完 string 即停，兼容）
         if (growthBonusByStat != null && growthBonusByStat.length > 0) {
             p.writeByte(1);

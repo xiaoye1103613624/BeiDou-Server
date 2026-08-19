@@ -10,7 +10,7 @@ export default {
     'Shared by window cash-shop, skill-tech client sync, etc. (game_config / -Dgms.client.data). Set-item and equip-growth WZ import use server wz/, not this path.',
   'windowCashShop.syncFromClient': 'Sync Categories/Items from Client',
   'windowCashShop.syncFromClient.confirm':
-    'Scan saved Client Data root (…\\Data) and map cash items into in-game kCats (equip/consume/setup/pet/package). Empty categories are skipped; catalog memory reloads when done. First run may take 1–3 minutes; icons use local PNG only — use Sync Icons for the rest.',
+    'Scan saved Client Data root (…\\Data) and map cash items into in-game kCats (equip/consume/setup/pet/package). 170xxxx cash weapons previously filed under Cap/帽子 are remapped to 武器. Empty categories are skipped; catalog memory reloads when done. First run may take 1–3 minutes; icons use local PNG only — use Sync Icons for the rest.',
   'windowCashShop.syncFromClient.offer':
     'Path saved. Sync categories and items from client Data now?',
   'windowCashShop.syncFromClient.loading':
