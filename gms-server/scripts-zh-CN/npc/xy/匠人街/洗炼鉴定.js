@@ -28,16 +28,24 @@ function start() {
 
 function loadAffixes() {
     if (affixes != null) return;
+    // 优先用 ReforgeService 启动时预热的静态缓存（脚本无法 Java.type 到不存在的 GMSApplication）
     try {
-        // 通过Spring获取mapper（脚本上下文注入）
-        var ctx = Java.type("org.gms.GMSApplication").getApplicationContext();
-        if (ctx != null) {
-            var mapper = ctx.getBean(ReforgeAffixMapper.class);
-            var query = Java.type("com.mybatisflex.core.query.QueryWrapper").create().where("enabled = 1").orderBy("code", true);
-            affixes = mapper.selectListByQuery(query);
-        }
+        affixes = ReforgeService.cachedAffixes();
     } catch (e) {
-        // Spring不可用时fallback：使用静态方法
+        affixes = null;
+    }
+    if (affixes == null || affixes.isEmpty()) {
+        try {
+            var ServerManager = Java.type("org.gms.ServerManager");
+            var ctx = ServerManager.getApplicationContext();
+            if (ctx != null) {
+                var mapper = ctx.getBean(ReforgeAffixMapper);
+                var query = Java.type("com.mybatisflex.core.query.QueryWrapper").create().where("enabled = 1").orderBy("code", true);
+                affixes = mapper.selectListByQuery(query);
+            }
+        } catch (e2) {
+            affixes = null;
+        }
     }
     if (affixes == null || affixes.isEmpty()) {
         affixes = Java.type("java.util.ArrayList")();

@@ -1,0 +1,20 @@
+﻿REPLACE Quest/QuestInfo parseOk=True net=0 size=2348927 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\Quest.wz\QuestInfo.img.xml.bak_xmlfix
+REPLACE Quest/Act parseOk=True net=0 size=2024054 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\Quest.wz\Act.img.xml.bak_xmlfix
+REPLACE Quest/Check parseOk=True net=0 size=2657519 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\Quest.wz\Check.img.xml.bak_xmlfix
+REPLACE Quest/Say parseOk=True net=0 size=5029755 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\Quest.wz\Say.img.xml.bak_xmlfix
+QuestInfo merged 29580 from pre-repair backup
+TRUNCATE String/Etc recovered=105 dropped=0 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\String.wz\Etc.img.xml.bak_xmlfix
+TRUNCATE String/Npc recovered=84 dropped=0 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\String.wz\Npc.img.xml.bak_xmlfix
+TRUNCATE String/Map recovered=25 dropped=0 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\String.wz\Map.img.xml.bak_xmlfix
+String/Mob before net=13
+REPLACE String/Mob parseOk=True net=0 size=189104 bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\String.wz\Mob.img.xml.bak_xmlfix
+BasicEff inserted damageSkin parseOk=True bak=F:\MXD_dev\BeiDou-Server\gms-server\wz-zh-CN\Effect.wz\BasicEff.img.xml.bak_xmlfix
+QuestInfo.img.xml: net=0 parseOk=True size=2349329 
+Act.img.xml: net=0 parseOk=True size=2024054 
+Check.img.xml: net=0 parseOk=True size=2657519 
+Say.img.xml: net=0 parseOk=True size=5029755 
+Etc.img.xml: net=0 parseOk=True size=1234990 
+Npc.img.xml: net=0 parseOk=True size=3921371 
+Map.img.xml: net=0 parseOk=True size=1528704 
+Mob.img.xml: net=0 parseOk=True size=189104 
+BasicEff.img.xml: net=0 parseOk=True size=5291401 

@@ -1,0 +1,12 @@
+IN-PROGRESS node merge (orange-wz Cursor MCP session, 14 roots still loaded). Do NOT unload_all. Do NOT new HTTP session.
+
+QuestInfo: pasted 495/495. Working tree remapped to merged_img\QuestInfo.merged.img (~1,346,991 bytes). Live QuestInfo.img NOT rewritten. Remaining: copy staging->live after BeiDou.exe closed.
+
+Act: pasted 490/490. save_node LIVE succeeded (ok=true). save_as staging failed (FileNotFound after setFilePath). Working tree remapped to merged_img\Act.merged.img (file may be missing on disk). Live Act.img should have merge.
+
+Check: pasted b0-b2 (240/506). Dest still live Check.img. Remaining Check_b3..b6 (80+80+80+26) then Say/Etc/Npc/Map.
+
+Say/Etc/Npc/Map: not started.
+
+Next: Check batches 1-6, then Say all, Etc (paste nodePath=Etc), Npc, Map 25 IDs.
+Then save_node live FIRST, then save_as staging (save_as retargets rootPath).
