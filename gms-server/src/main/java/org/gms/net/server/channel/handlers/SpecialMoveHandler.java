@@ -26,6 +26,7 @@ import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.config.GameConfig;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.skills.Brawler;
 import org.gms.constants.skills.Corsair;
 import org.gms.constants.skills.DarkKnight;
@@ -93,12 +94,21 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         }
+        // Hyper buff skills (e.g. 3131007): same ijl15 / missed-teach path as attack skills
+        if (skillLevel == 0 && GameConstants.isHyperBookSkill(skillid)
+                && skill.getMaxLevel() > 0
+                && chr.getJob().getId() == skillid / 10000) {
+            skillLevel = 1;
+        }
         if (skillLevel == 0) {
             chr.dropMessage(5, "技能施放失败: " + skillid + " 等级为0（先 !skill " + skillid + " 1）");
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        if (skillLevel != __skillLevel) {
+        // Hyper books: client may send 0/1 (post-"not yet" nop / missed teach); server still applies at its own level.
+        // Forged client level > 1 is still rejected (cannot escalate).
+        if (skillLevel != __skillLevel
+                && !(GameConstants.isHyperBookSkill(skillid) && __skillLevel <= 1)) {
             chr.dropMessage(5, "技能施放失败: " + skillid + " 等级不一致 服务端=" + skillLevel + " 客户端=" + __skillLevel);
             c.sendPacket(PacketCreator.enableActions());
             return;

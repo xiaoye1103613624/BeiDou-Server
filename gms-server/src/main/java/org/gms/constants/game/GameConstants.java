@@ -338,10 +338,17 @@ public class GameConstants {
     }
 
     public static int getJobUpgradeLevelRange(int jobbranch) {
+        // hyper jobs (job%10==3) return branch 5; arrays only have 0-4 — clamp to 4th-job row.
+        if (jobbranch < 0 || jobbranch >= jobUpgradeBlob.length) {
+            return jobUpgradeBlob[jobUpgradeBlob.length - 1];
+        }
         return jobUpgradeBlob[jobbranch];
     }
 
     public static int getChangeJobSpUpgrade(int jobbranch) {
+        if (jobbranch < 0 || jobbranch >= jobUpgradeSpUp.length) {
+            return jobUpgradeSpUp[jobUpgradeSpUp.length - 1];
+        }
         return jobUpgradeSpUp[jobbranch];
     }
 
@@ -560,6 +567,42 @@ public class GameConstants {
 
     public static boolean isPqSkill(final int skill) {
         return (skill >= 20000014 && skill <= 20000018) || skill == 10000013 || skill == 20001013 || (skill % 10000000 >= 1009 && skill % 10000000 <= 1011) || skill % 10000000 == 1020;
+    }
+
+    /**
+     * Hyper / 5th-job book jobs: id ends in 3 (e.g. 313, 1113, 2113), plus
+     * Synth Master 710 and Super Beginner 700 (both job%10 != 3 but still
+     * "hyper" books that get the level-0 fallback / display>80 exemption).
+     */
+    public static boolean isHyperBookJob(final int job) {
+        return job % 10 == 3 || job == 710 || job == 700;
+    }
+
+    /**
+     * Hyper / 5th-job book skill IDs (e.g. 3131003, 13131003, 7101101, 7001000).
+     * Client ijl15 may nop "not yet learned"; server still needs a usable effect level.
+     */
+    public static boolean isHyperBookSkill(final int skillId) {
+        if (skillId <= 0) {
+            return false;
+        }
+        return isHyperBookJob(skillId / 10000);
+    }
+
+    /**
+     * Matches BeiDou-ijl15 {@code IsNoBulletSkill}: client fires without arrows.
+     * RangedAttackHandler must still apply HP without requiring a projectile.
+     */
+    public static boolean isNoBulletAttackSkill(final int skillId) {
+        return switch (skillId) {
+            case 14111002, 4111005, 5221016, 5221017, 3121015, 3221009, 3221010,
+                 3131003, 3231003, 13131003,
+                 3131056, 3231056, 13131056,
+                 3131012, 3231012, 13131012,
+                 4131042, 4231042, 14131042,
+                 5131074, 5231074, 15131074 -> true;
+            default -> false;
+        };
     }
 
     public static boolean bannedBindSkills(final int skill) {
