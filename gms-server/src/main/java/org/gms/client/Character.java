@@ -1258,6 +1258,8 @@ public class Character extends AbstractCharacterObject {
             skills = new int[]{5131033, 5131044, 5131074, 5131075};
         } else if (jobId == 523) {
             skills = new int[]{5231033, 5231044, 5231074, 5231075};
+        } else if (jobId == 700) {
+            skills = new int[]{7001000, 7001001, 7001002, 7001003, 7001004, 7001006};
         } else if (jobId == 710) {
             skills = new int[]{7101101, 7101102, 7101103, 7101104, 7101105, 7101106, 7101107, 7101108};
         } else if (jobId == 1113) {
@@ -2058,7 +2060,9 @@ public class Character extends AbstractCharacterObject {
             }
         } else {
             skills.remove(skill);
-            sendPacket(PacketCreator.updateSkill(skill.getId(), newLevel, newMasterlevel, -1)); //Shouldn't use expiration anymore :)
+            if (!GameConstants.isHiddenSkills(skill.getId())) {
+                sendPacket(PacketCreator.updateSkill(skill.getId(), newLevel, newMasterlevel, -1));
+            }
             characterService.removeSkill(SkillsDO.builder().skillid(skill.getId()).characterid(getId()).build());
         }
     }
@@ -3907,6 +3911,41 @@ public class Character extends AbstractCharacterObject {
             chrLock.unlock();
             effLock.unlock();
         }
+    }
+
+    /**
+     * Extend an existing item-backed buff without registering a second holder for the
+     * same source id (used by environmental weather debuff refresh ticks).
+     */
+    public boolean refreshTimedItemBuff(int sourceid, int durationMs) {
+        List<Pair<BuffStat, Integer>> visibleStatups = new ArrayList<>();
+        boolean active = false;
+
+        effLock.lock();
+        chrLock.lock();
+        try {
+            Map<BuffStat, BuffStatValueHolder> sourceStatups = buffEffects.get(sourceid);
+            if (sourceStatups == null || sourceStatups.isEmpty()) {
+                return false;
+            }
+
+            buffExpires.put(sourceid, Server.getInstance().getCurrentTime() + durationMs);
+            for (Entry<BuffStat, BuffStatValueHolder> entry : sourceStatups.entrySet()) {
+                BuffStatValueHolder holder = entry.getValue();
+                if (effects.get(entry.getKey()) == holder) {
+                    active = true;
+                    visibleStatups.add(new Pair<>(entry.getKey(), holder.value));
+                }
+            }
+        } finally {
+            chrLock.unlock();
+            effLock.unlock();
+        }
+
+        if (active && !visibleStatups.isEmpty()) {
+            sendPacket(PacketCreator.giveBuff(-sourceid, durationMs, visibleStatups));
+        }
+        return true;
     }
 
     public boolean hasActiveBuff(int sourceid) {
@@ -8846,6 +8885,9 @@ public class Character extends AbstractCharacterObject {
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)")) {
                         ps.setInt(1, id);
                         for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
+                            if (GameConstants.isClientUnsafeSkill(skill.getKey().getId())) {
+                                continue;
+                            }
                             ps.setInt(2, skill.getKey().getId());
                             ps.setInt(3, skill.getValue().skillLevel);
                             ps.setInt(4, skill.getValue().masterLevel);
@@ -9059,9 +9101,15 @@ public class Character extends AbstractCharacterObject {
 
                     Set<Entry<Integer, KeyBinding>> keybindingItems = Collections.unmodifiableSet(keymap.entrySet());
                     for (Entry<Integer, KeyBinding> keybinding : keybindingItems) {
+                        int type = keybinding.getValue().getType();
+                        int action = keybinding.getValue().getAction();
+                        if (type == 1 && GameConstants.isClientUnsafeSkill(action)) {
+                            type = 0;
+                            action = 0;
+                        }
                         psKey.setInt(2, keybinding.getKey());
-                        psKey.setInt(3, keybinding.getValue().getType());
-                        psKey.setInt(4, keybinding.getValue().getAction());
+                        psKey.setInt(3, type);
+                        psKey.setInt(4, action);
                         psKey.addBatch();
                     }
                     psKey.executeBatch();
@@ -9087,9 +9135,9 @@ public class Character extends AbstractCharacterObject {
                     for (int i = 0; i < 5; i++) {
                         SkillMacro macro = skillMacros[i];
                         if (macro != null) {
-                            psMacro.setInt(2, macro.getSkill1());
-                            psMacro.setInt(3, macro.getSkill2());
-                            psMacro.setInt(4, macro.getSkill3());
+                            psMacro.setInt(2, GameConstants.isClientUnsafeSkill(macro.getSkill1()) ? 0 : macro.getSkill1());
+                            psMacro.setInt(3, GameConstants.isClientUnsafeSkill(macro.getSkill2()) ? 0 : macro.getSkill2());
+                            psMacro.setInt(4, GameConstants.isClientUnsafeSkill(macro.getSkill3()) ? 0 : macro.getSkill3());
                             psMacro.setString(5, macro.getName());
                             psMacro.setInt(6, macro.getShout());
                             psMacro.setInt(7, i);
@@ -9113,6 +9161,9 @@ public class Character extends AbstractCharacterObject {
                 try (PreparedStatement psSkill = con.prepareStatement("REPLACE INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)")) {
                     psSkill.setInt(1, id);
                     for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
+                        if (GameConstants.isClientUnsafeSkill(skill.getKey().getId())) {
+                            continue;
+                        }
                         psSkill.setInt(2, skill.getKey().getId());
                         psSkill.setInt(3, skill.getValue().skillLevel);
                         psSkill.setInt(4, skill.getValue().masterLevel);
@@ -10165,6 +10216,13 @@ public class Character extends AbstractCharacterObject {
 
         sendPacket(PacketCreator.petStatUpdate(this));
         enableActions();
+    }
+
+    public SkillMacro getSkillMacro(int position) {
+        if (position < 0 || position >= skillMacros.length) {
+            return null;
+        }
+        return skillMacros[position];
     }
 
     public void updateMacros(int position, SkillMacro updateMacro) {

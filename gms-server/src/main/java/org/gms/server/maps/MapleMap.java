@@ -1344,6 +1344,11 @@ public class MapleMap {
     }
 
     public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
+        return damageMonster(chr, monster, damage, true);
+    }
+
+    public boolean damageMonster(final Character chr, final Monster monster, final int damage,
+            final boolean weatherScaled) {
         if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
                 Monster mons = chr.getMap().getMonsterByOid(object.getObjectId());
@@ -1355,7 +1360,10 @@ public class MapleMap {
             }
         }
         if (monster.isAlive()) {
-            boolean killed = monster.damage(chr, damage, false);
+            final int scaledDamage = weatherScaled
+                    ? org.gms.server.weather.WeatherCombat.scaleDamageToMonster(damage)
+                    : damage;
+            boolean killed = monster.damage(chr, scaledDamage, false);
 
             selfDestruction selfDestr = monster.getStats().selfDestruction();
             if (selfDestr != null && selfDestr.getHp() > -1) {// should work ;p
@@ -1401,7 +1409,9 @@ public class MapleMap {
                 return false;
             }
 
-            spawnedMonstersOnMap.decrementAndGet();
+            if (!monster.isNocturnal()) {
+                spawnedMonstersOnMap.decrementAndGet();
+            }
             removeMapObject(monster);
             monster.disposeMapObject();
             if (monster.hasBossHPBar()) {   // thanks resinate for noticing boss HPbar not clearing after mob defeat in certain scenarios   //感谢resinate注意到在某些情况下暴徒失败后老板HPbar没有清除
@@ -1932,7 +1942,9 @@ public class MapleMap {
         monster.aggroUpdateController();
         updateBossSpawn(monster);
 
-        spawnedMonstersOnMap.incrementAndGet();
+        if (!monster.isNocturnal()) {
+            spawnedMonstersOnMap.incrementAndGet();
+        }
         addSelfDestructive(monster);
         applyRemoveAfter(monster);
     }
@@ -2049,7 +2061,9 @@ public class MapleMap {
             }
         }
 
-        spawnedMonstersOnMap.incrementAndGet();
+        if (!monster.isNocturnal()) {
+            spawnedMonstersOnMap.incrementAndGet();
+        }
         addSelfDestructive(monster);
         applyRemoveAfter(monster);  // thanks LightRyuzaki for pointing issues with spawned CWKPQ mobs not applying this
     }
@@ -2667,6 +2681,7 @@ public class MapleMap {
 
         // 天气：进图立即同步昼夜/天空（snap，避免淡入）
         org.gms.server.weather.WeatherPackets.sendTo(chr);
+        org.gms.server.weather.NocturnalMobService.refreshMap(this);
     }
 
     /**
@@ -3769,7 +3784,21 @@ public class MapleMap {
     }
 
     private static double getCurrentSpawnRate(int numPlayers) {
-        return 0.70 + (0.05 * Math.min(6, numPlayers));
+        return (0.70 + (0.05 * Math.min(6, numPlayers)))
+                * org.gms.server.weather.WeatherCombat.spawnMultiplier();
+    }
+
+    /**
+     * Safe anchors for night-only ambient encounters (ordinary field spawns only).
+     */
+    public List<Point> getNocturnalSpawnPositions() {
+        List<Point> positions = new ArrayList<>();
+        for (SpawnPoint sp : getMonsterSpawn()) {
+            if (sp.getMobTime() == 0) {
+                positions.add(new Point(sp.getPosition()));
+            }
+        }
+        return positions;
     }
 
     private int getNumShouldSpawn(int numPlayers) {

@@ -100,6 +100,8 @@ public class Monster extends AbstractLoadedLife {
     private int VenomMultiplier = 0;
     private boolean fake = false;
     private boolean dropsDisabled = false;
+    // Night-only encounter layer; excluded from ordinary WZ spawn cap accounting.
+    private boolean nocturnal = false;
     private final Set<MobSkillId> usedSkills = new HashSet<>();
     private final Set<Integer> usedAttacks = new HashSet<>();
     private Set<Integer> calledMobOids = null;
@@ -164,6 +166,14 @@ public class Monster extends AbstractLoadedLife {
 
     public boolean dropsDisabled() {
         return dropsDisabled;
+    }
+
+    public void setNocturnal(boolean nocturnal) {
+        this.nocturnal = nocturnal;
+    }
+
+    public boolean isNocturnal() {
+        return nocturnal;
     }
 
     public void setMap(MapleMap map) {
@@ -644,7 +654,7 @@ public class Monster extends AbstractLoadedLife {
         }
 
         long totalDamage = maxHpPlusHeal.get();
-        int mobExp = getExp();
+        int mobExp = org.gms.server.weather.WeatherCombat.scaleExp(getExp());
         float expPerDmg = ((float) mobExp) / totalDamage;
 
         Map<Integer, Float> personalRatio = new HashMap<>();

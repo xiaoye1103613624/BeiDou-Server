@@ -85,15 +85,27 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 mySkill = SkillFactory.getSkill(skill);
             }
 
+            if (mySkill == null) {
+                return null;
+            }
             int skillLevel = chr.getSkillLevel(mySkill);
             if (skillLevel == 0 && GameConstants.isPqSkillMap(chr.getMapId()) && GameConstants.isPqSkill(mySkill.getId())) {
+                skillLevel = 1;
+            }
+            // Hyper books: client may cast via ijl15 "not yet" nop while server still at 0
+            // (missed teach / !job). Job match + loaded WZ effect → treat as level 1 so HP applies.
+            if (skillLevel == 0 && GameConstants.isHyperBookSkill(mySkill.getId())
+                    && mySkill.getMaxLevel() > 0
+                    && chr.getJob().getId() == mySkill.getId() / 10000) {
                 skillLevel = 1;
             }
 
             if (skillLevel == 0) {
                 return null;
             }
-            if (display > 80) { //Hmm
+            // Hyper WZ often has ball/hit but no action/ (e.g. 3131003/1056). Client still sends
+            // display>80 — do not reject or HP never applies while floats still show locally.
+            if (display > 80 && !GameConstants.isHyperBookSkill(mySkill.getId())) {
                 if (!mySkill.getAction()) {
                     AutobanFactory.FAST_ATTACK.autoban(chr, "WZ编辑；为技能添加动作：" + display);
                     return null;
@@ -572,7 +584,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
-                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 1777);
+                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 1777, false);
                         } else {
                             int HHDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Paladin.HEAVENS_HAMMER).getEffect(player.getSkillLevel(SkillFactory.getSkill(Paladin.HEAVENS_HAMMER))).getDamage() / 100));
                             int trackerDamage = (int) (Math.floor(Math.random() * (HHDmg / 5) + HHDmg * .8));
@@ -587,7 +599,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
-                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 0);
+                            damageMonsterWithSkill(player, map, monster, trackerDamage, attack.skill, 0, false);
                         } else {
                             int TmpDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Aran.COMBO_TEMPEST).getEffect(player.getSkillLevel(SkillFactory.getSkill(Aran.COMBO_TEMPEST))).getDamage() / 100));
                             int trackerDamage = (int) (Math.floor(Math.random() * (TmpDmg / 5) + TmpDmg * .8));
@@ -667,6 +679,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final int damage, int skillid, int fixedTime) {
+        damageMonsterWithSkill(attacker, map, monster, damage, skillid, fixedTime, true);
+    }
+
+    private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster,
+            final int damage, int skillid, int fixedTime, final boolean weatherScaled) {
         int animationTime;
 
         if (fixedTime == 0) {
@@ -678,11 +695,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         if (animationTime > 0) { // be sure to only use LIMITED ATTACKS with animation time here
             TimerManager.getInstance().schedule(() -> {
                 map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
-                map.damageMonster(attacker, monster, damage);
+                map.damageMonster(attacker, monster, damage, weatherScaled);
             }, animationTime);
         } else {
             map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
-            map.damageMonster(attacker, monster, damage);
+            map.damageMonster(attacker, monster, damage, weatherScaled);
         }
     }
 
@@ -706,6 +723,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         if (ret.skill > 0) {
             ret.skilllevel = chr.getSkillLevel(ret.skill);
             if (ret.skilllevel == 0 && GameConstants.isPqSkillMap(chr.getMapId()) && GameConstants.isPqSkill(ret.skill)) {
+                ret.skilllevel = 1;
+            }
+            if (ret.skilllevel == 0 && GameConstants.isHyperBookSkill(ret.skill)
+                    && chr.getJob().getId() == ret.skill / 10000) {
                 ret.skilllevel = 1;
             }
         }
@@ -790,9 +811,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         StatEffect effect = null;
         if (ret.skill != 0) {
             Skill skill = SkillFactory.getSkill(ret.skill);
-            effect = skill.getEffect(ret.skilllevel);
+            if (skill == null) {
+                effect = null;
+            } else {
+                effect = skill.getEffect(Math.max(1, ret.skilllevel));
+            }
 
-            if (magic) {
+            if (effect != null && magic) {
                 // Since the skill is magic based, use the magic formula
                 if (chr.getJob() == Job.IL_ARCHMAGE || chr.getJob() == Job.IL_MAGE) {
                     int skillLvl = chr.getSkillLevel(ILMage.ELEMENT_AMPLIFICATION);
@@ -824,11 +849,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                     ret.speed = 7;
                 }
-            } else if (ret.skill == Hermit.SHADOW_MESO) {
+            } else if (effect != null && ret.skill == Hermit.SHADOW_MESO) {
                 // Shadow Meso also has its own formula
                 calcDmgMax = effect.getMoneyCon() * 10;
                 calcDmgMax = (int) Math.floor(calcDmgMax * 1.5);
-            } else {
+            } else if (effect != null) {
                 // Normal damage formula for skills
                 calcDmgMax = calcDmgMax * effect.getDamage() / 100;
             }
@@ -906,9 +931,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         boolean shadowPartner = chr.getBuffEffect(BuffStat.SHADOWPARTNER) != null;
 
         if (ret.skill != 0) {
-            int fixed = ret.getAttackEffect(chr, SkillFactory.getSkill(ret.skill)).getFixDamage();
-            if (fixed > 0) {
-                calcDmgMax = fixed;
+            StatEffect fixedFx = ret.getAttackEffect(chr, SkillFactory.getSkill(ret.skill));
+            if (fixedFx != null) {
+                int fixed = fixedFx.getFixDamage();
+                if (fixed > 0) {
+                    calcDmgMax = fixed;
+                }
             }
         }
         for (int i = 0; i < ret.numAttacked; i++) {
