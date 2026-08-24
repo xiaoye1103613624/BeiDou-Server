@@ -360,7 +360,7 @@ public enum SendOpcode implements Opcode {
     DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果
     DAMAGE_SKIN_BROADCAST(0x173), // 伤害皮肤广播
     BEAUTY_RESULT(0x174), // 美容院结果
-    SET_ITEM_FINAL_DAMAGE(0x175), // 套装最终伤害% + 伤害皮肤 + COMBAT_STAT_SYNC 面板
+    SET_ITEM_FINAL_DAMAGE(0x175), // 套装最终伤害% + 伤害皮肤 + COMBAT_STAT_SYNC + 掉落%/减免%
     SET_ITEM_SKILL_BONUS(0x176), // 套装技能展示文字
     SET_SKILL_BONUS(0x179), // 套装技能加成数值
     /** Phase10：魔方结果窗（ijl15 MiracleCube / HyperMiracleCube）。0x17B 留给装备成长 tip。 */
@@ -372,7 +372,10 @@ public enum SendOpcode implements Opcode {
     BAG_WINDOW(0x3725), // 收纳背包窗口快照
     USER_INFO_EX(0x3727), // 他人装备详情回复
     EXPED_DEATH_COUNT(0x3728), // 远征死亡次数 HUD（ijl15 绘制）
+    MONSTER_BOOK_RESULT(0x372C), // 怪物图鉴查询回复
     CASHSHOP_WINDOW_SYNC(0x3731), // 窗口版现金商城同步
+    WEATHER_SYNC(0x373D), // 昼夜/天气同步（ijl15 weather）
+    LAMP_PREVIEW(0x373F), // GM !lamp 预览路灯
     CUSTOM_PACKET(0x3713), // 自定义封包（队伍Buff/Tracker等子命令）
     DPT_TRACKER(0x3714), // 个人伤害统计
 

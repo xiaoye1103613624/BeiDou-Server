@@ -110,7 +110,7 @@ public class MapleMap {
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
     private static final Map<Integer, Pair<Integer, Integer>> dropBoundsCache = new HashMap<>(100);
     /** 轮回石碑「轮回」怪物ID（客户端已有贴图）。 */
-    private static final int REINCARNATION_MOB_ID = 9990100;
+    private static final int REINCARNATION_MOB_ID = 9990026;
     /** 轮回石碑单次效果时长。 */
     private static final long REINCARNATION_DURATION_MS = HOURS.toMillis(1);
 
@@ -2664,6 +2664,9 @@ public class MapleMap {
         broadcastColoringPrism(chr);
         broadcastColoringPrismToNewer(chr);
         org.gms.server.colorprism.ColorPrismPackets.broadcastMapTable(this);
+
+        // 天气：进图立即同步昼夜/天空（snap，避免淡入）
+        org.gms.server.weather.WeatherPackets.sendTo(chr);
     }
 
     /**
@@ -3812,7 +3815,7 @@ public class MapleMap {
         int numShouldSpawn = getNumShouldSpawn(numPlayers);
         if (dbgActive) {
             // 轮回石碑生效：大幅提升刷怪数量，并强制刷新生成点冷却
-            numShouldSpawn = Math.max(numShouldSpawn, monsterSpawn.size()) * 5;
+            numShouldSpawn = Math.max(numShouldSpawn, monsterSpawn.size()) * 2;
         }
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = new ArrayList<>(getMonsterSpawn());

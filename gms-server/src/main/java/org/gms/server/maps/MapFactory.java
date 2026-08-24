@@ -351,6 +351,7 @@ public class MapFactory {
         }
 
         map.setBackgroundTypes(backTypes);
+        org.gms.server.weather.WeatherMapVisibility.register(mapid, mapData);
         map.generateMapDropRangeCache();
 
         return map;
