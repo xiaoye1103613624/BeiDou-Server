@@ -355,7 +355,6 @@ public enum SendOpcode implements Opcode {
     MAPLELIFE_ERROR(0x15E), // MapleLife错误
     VICIOUS_HAMMER(0x162), // 恶毒锤子
     VEGA_SCROLL(0x166), // VEGA卷轴
-    SHOP_BUYBACK_MODE(0x168), // NPC商店回购标签状态
     DAMAGE_SKIN_CATALOG(0x170), // 伤害皮肤商店目录
     DAMAGE_SKIN_INVENTORY(0x171), // 伤害皮肤背包
     DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果

@@ -81,7 +81,6 @@ import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildSummary;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
-import org.gms.server.buyback.SoldItemStorage;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
 import org.gms.server.*;
@@ -2725,44 +2724,6 @@ public class PacketCreator {
     // someone thought it was a good idea to handle floating point representation through packets ROFL
     private static int doubleToShortBits(double d) {
         return (int) (Double.doubleToLongBits(d) >> 48);
-    }
-
-    public static Packet shopBuybackMode(boolean listShown, boolean hasSoldItems) {
-        final OutPacket p = OutPacket.create(SendOpcode.SHOP_BUYBACK_MODE);
-        p.writeBool(listShown);
-        p.writeBool(hasSoldItems);
-        return p;
-    }
-
-    public static Packet getBuybackShop(Client c, int npcId, List<Item> items) {
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        final OutPacket p = OutPacket.create(SendOpcode.OPEN_NPC_SHOP);
-        p.writeInt(npcId);
-        p.writeShort(items.size());
-        for (Item item : items) {
-            final int buybackPrice = SoldItemStorage.buybackPriceFor(item);
-            short qty = item.getQuantity();
-            if (qty == (short) 0xFFFF || qty <= 0) {
-                qty = 1;
-            }
-            p.writeInt(item.getItemId());
-            p.writeInt(buybackPrice);
-            p.writeInt(0);
-            p.writeInt(0);
-            p.writeInt(0);
-            if (!ItemConstants.isRechargeable(item.getItemId())) {
-                // Same layout as getNPCShop: stack size then buyable count.
-                // Buyback sells the whole stored stack in one click.
-                p.writeShort(qty);
-                p.writeShort(1);
-            } else {
-                p.writeShort(0);
-                p.writeInt(0);
-                p.writeShort(0);
-                p.writeShort(qty > 0 ? qty : ii.getSlotMax(c, item.getItemId()));
-            }
-        }
-        return p;
     }
 
     public static Packet getNPCShop(Client c, int sid, List<ShopItem> items) {

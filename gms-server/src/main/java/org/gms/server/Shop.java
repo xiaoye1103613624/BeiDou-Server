@@ -33,7 +33,6 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.server.buyback.SoldItemStorage;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 
@@ -83,11 +82,7 @@ public class Shop {
     }
 
     public void sendShop(Client c) {
-        Character chr = c.getPlayer();
-        chr.setShop(this);
-        chr.setShopBuybackMode(false);
-        boolean hasSoldItems = !SoldItemStorage.getInstance().getSoldItems(chr.getId()).isEmpty();
-        c.sendPacket(PacketCreator.shopBuybackMode(false, hasSoldItems));
+        c.getPlayer().setShop(this);
         c.sendPacket(PacketCreator.getNPCShop(c, getNpcId(), items));
     }
 
@@ -189,9 +184,118 @@ public class Shop {
         return item instanceof Equip || type == InventoryType.EQUIP;
     }
 
-    private static boolean canSell(Item item, short quantity) {
+    /**
+     * Cash 装备 itemId 仍是 1xxxxxx，但实际在 CASH 栏；仅按 getInventoryType 会找错栏 → 0x5 数量不足。
+     * 另：整理 invent 截断会导致「客户端 slot 与服务端 slot 错位」——同一 slot 上 itemId 对不上。
+     * v083 extended-equip sell UI may send a garbage itemId whose /1000000 type is wrong;
+     * prefer (slot+itemId) across tabs, then findById, then slot occupancy (never trust a
+     * garbage-derived hinted tab that happens to have a different item at the same slot).
+     */
+    private static InventoryType resolveSellInventoryType(Character chr, InventoryType hinted,
+                                                          short slot, int expectedItemId) {
+        final InventoryType[] order = {
+                InventoryType.EQUIP, InventoryType.USE, InventoryType.SETUP,
+                InventoryType.ETC, InventoryType.CASH
+        };
+        if (expectedItemId != 0) {
+            for (InventoryType t : order) {
+                Item at = chr.getInventory(t).getItem(slot);
+                if (at != null && at.getItemId() == expectedItemId) {
+                    return t;
+                }
+            }
+            for (InventoryType t : order) {
+                if (chr.getInventory(t).findById(expectedItemId) != null) {
+                    return t;
+                }
+            }
+            if (ItemInformationProvider.getInstance().isCash(expectedItemId)) {
+                if (chr.getInventory(InventoryType.CASH).findById(expectedItemId) != null) {
+                    return InventoryType.CASH;
+                }
+            }
+            // Garbage / absent id: do not keep a wrong hinted tab just because that slot
+            // is occupied. Prefer the first tab that actually holds something at this slot.
+            if (hinted != null && hinted != InventoryType.UNDEFINED
+                    && chr.getInventory(hinted).getItem(slot) != null) {
+                Item atHint = chr.getInventory(hinted).getItem(slot);
+                // Only keep hinted when id was empty/unknown — if we got here expectedId
+                // was not found anywhere, so hinted is a last-resort when it alone has stock.
+                boolean onlyHinted = true;
+                for (InventoryType t : order) {
+                    if (t == hinted) {
+                        continue;
+                    }
+                    if (chr.getInventory(t).getItem(slot) != null) {
+                        onlyHinted = false;
+                        break;
+                    }
+                }
+                if (onlyHinted && atHint != null) {
+                    return hinted;
+                }
+            }
+            for (InventoryType t : order) {
+                if (chr.getInventory(t).getItem(slot) != null) {
+                    if (t != hinted) {
+                        log.info("shop sell type from slot occupancy: char={} slot={} packetId={} hinted={} -> {}",
+                                chr.getName(), slot, expectedItemId, hinted, t);
+                    }
+                    return t;
+                }
+            }
+        }
+        if (hinted != null && hinted != InventoryType.UNDEFINED) {
+            Item hintedItem = chr.getInventory(hinted).getItem(slot);
+            if (hintedItem != null) {
+                return hinted;
+            }
+        }
+        for (InventoryType t : order) {
+            if (chr.getInventory(t).getItem(slot) != null) {
+                return t;
+            }
+        }
+        return hinted != null && hinted != InventoryType.UNDEFINED ? hinted : InventoryType.EQUIP;
+    }
+
+    /**
+     * Packet slot is authoritative when occupied. After sort/invent desync the client may
+     * send a stale slot with a correct itemId — only then relocate by id within the tab.
+     * v083 extended-equip sell often sends garbage itemId; never relocate away from a
+     * filled packet slot just because findById hits a different row.
+     */
+    private static short resolveSellSlot(Inventory inventory, short packetSlot, int expectedItemId,
+                                         Character chr) {
+        Item atPacket = inventory.getItem(packetSlot);
+        if (atPacket != null && (expectedItemId == 0 || atPacket.getItemId() == expectedItemId)) {
+            return packetSlot;
+        }
+        if (atPacket != null) {
+            log.info("shop sell client itemId mismatch, using slot: char={} slot={} expectId={} actualId={}",
+                    chr.getName(), packetSlot, expectedItemId, atPacket.getItemId());
+            return packetSlot;
+        }
+        if (expectedItemId == 0) {
+            return -1;
+        }
+        Item byId = inventory.findById(expectedItemId);
+        if (byId != null) {
+            log.warn("shop sell slot desync: char={} packetSlot={} expectId={} atPacket=null -> actualSlot={}",
+                    chr.getName(), packetSlot, expectedItemId, byId.getPosition());
+            return byId.getPosition();
+        }
+        return -1;
+    }
+
+    private static boolean canSell(Item item, InventoryType type, short quantity) {
         if (item == null) { //Basic check
             return false;
+        }
+
+        // Equips are always qty 1 on the wire; DB/qty-0 / client garbage must not block sell.
+        if (isEquipLike(item, type)) {
+            return true;
         }
 
         short iQuant = normalizeQuantity(item.getQuantity());
@@ -223,79 +327,79 @@ public class Shop {
     }
 
     public void sell(Client c, InventoryType type, short slot, short quantity, int expectedItemId) {
+        final short clientQtyRaw = quantity;
         if (quantity == (short) 0xFFFF || quantity == 0) {
             quantity = 1;
         } else if (quantity < 0) {
             return;
         }
 
+        final InventoryType hintedType = type;
+        type = resolveSellInventoryType(c.getPlayer(), type, slot, expectedItemId);
         Inventory inventory = c.getPlayer().getInventory(type);
         inventory.lockInventory();
         try {
-            Item item = inventory.getItem(slot);
-            if (item == null || (expectedItemId != 0 && item.getItemId() != expectedItemId)) {
+            short resolvedSlot = resolveSellSlot(inventory, slot, expectedItemId, c.getPlayer());
+            if (resolvedSlot < 1) {
+                log.warn("shop sell reject(slot/id): char={} hintedType={} resolvedType={} slot={} expectId={} found={}",
+                        c.getPlayer().getName(), hintedType, type, slot, expectedItemId,
+                        inventory.getItem(slot) == null ? "null" : inventory.getItem(slot).getItemId());
                 c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
                 return;
             }
-
-            // Equips: ignore client qty (often garbage) before canSell.
-            if (isEquipLike(item, type)) {
-                quantity = 1;
+            slot = resolvedSlot;
+            Item item = inventory.getItem(slot);
+            if (item == null) {
+                log.warn("shop sell reject(empty slot): char={} type={} slot={} expectId={}",
+                        c.getPlayer().getName(), type, slot, expectedItemId);
+                c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
+                return;
+            }
+            // Soft mismatch only: log when packet id disagrees with the slot we will sell.
+            // Never reject here — garbage extended-equip ids used to break legitimate sells.
+            if (expectedItemId != 0 && item.getItemId() != expectedItemId) {
+                log.info("shop sell itemId soft-mismatch (selling slot item): char={} slot={} packetId={} actualId={}",
+                        c.getPlayer().getName(), slot, expectedItemId, item.getItemId());
             }
 
-            if (!canSell(item, quantity)) {
+            final short serverQty = item.getQuantity();
+            // Real anomaly: mob-pickup equips must be qty 1. Log so we can locate writers.
+            if (item instanceof Equip && serverQty != 1) {
+                log.error("shop sell EQUIP qty anomaly: char={} itemId={} slot={} serverQty={} clientQtyRaw={} — pickup path should have set 1",
+                        c.getPlayer().getName(), item.getItemId(), slot, serverQty, clientQtyRaw);
+            } else if (isEquipLike(item, type) && clientQtyRaw != 1 && clientQtyRaw != 0
+                    && clientQtyRaw != (short) 0xFFFF) {
+                // Inventory is in sync (server=1); sell packet field alone is garbage.
+                log.info("shop sell equip clientQty garbage (inventory OK): char={} itemId={} slot={} serverQty={} clientQtyRaw={}",
+                        c.getPlayer().getName(), item.getItemId(), slot, serverQty, clientQtyRaw);
+            }
+
+            // Equips: ignore client qty (often garbage) before canSell; heal qty-0 rows.
+            if (isEquipLike(item, type)) {
+                quantity = 1;
+                if (item instanceof Equip && item.getQuantity() != 1) {
+                    // Equip allows 0 or 1; force 1 so removeFromSlot actually clears the slot.
+                    item.setQuantity((short) 1);
+                }
+            }
+
+            if (!canSell(item, type, quantity)) {
+                log.warn("shop sell reject(canSell): char={} itemId={} slot={} type={} serverQty={} clientQtyRaw={} useQty={}",
+                        c.getPlayer().getName(), item.getItemId(), slot, type, serverQty, clientQtyRaw, quantity);
                 c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
                 return;
             }
 
             quantity = getSellingQuantity(item, type, quantity);
 
-            Item soldCopy = null;
-            short heldBefore = normalizeQuantity(item.getQuantity());
-            if (item.getPetId() < 0) {
-                soldCopy = item.copy();
-            }
-
             // Use short slot — (byte) truncates positions > 127 on extended inventories.
             InventoryManipulator.removeFromSlot(c, type, slot, quantity, false);
-
-            Item remaining = inventory.getItem(slot);
-            boolean stackGone = remaining == null || remaining.getItemId() != item.getItemId();
-
-            short removed = 0;
-            if (soldCopy != null) {
-                if (stackGone) {
-                    // Whole stack gone — trust the amount we asked to remove (heldBefore may
-                    // have been 0xFFFF / -1, which made heldBefore - heldAfter == 0).
-                    removed = quantity > 0 ? quantity : heldBefore;
-                } else {
-                    short heldAfter = normalizeQuantity(remaining.getQuantity());
-                    removed = (short) Math.max(0, heldBefore - heldAfter);
-                }
-                if (removed > 0) {
-                    if (soldCopy instanceof Equip) {
-                        soldCopy.setQuantity((short) 1);
-                    } else {
-                        soldCopy.setQuantity(removed);
-                    }
-                    SoldItemStorage.getInstance().addSoldItem(c.getPlayer().getId(), soldCopy);
-                } else if (quantity > 0) {
-                    SoldItemStorage.reportSellMismatch(c.getPlayer(), item.getItemId(), quantity, removed);
-                }
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
+            int recvMesos = ii.getPrice(item.getItemId(), quantity);
+            if (recvMesos > 0) {
+                c.getPlayer().gainMeso(recvMesos, false);
             }
-
-            // Mesos follow what actually left the inventory (pets have no buyback copy).
-            short paidQty = removed > 0 ? removed : (stackGone ? quantity : 0);
-            if (paidQty > 0) {
-                ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                int recvMesos = ii.getPrice(item.getItemId(), paidQty);
-                if (recvMesos > 0) {
-                    c.getPlayer().gainMeso(recvMesos, false);
-                }
-                c.sendPacket(PacketCreator.shopTransaction((byte) 0x8));
-            } else {
-                c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
-            }
+            c.sendPacket(PacketCreator.shopTransaction((byte) 0x8));
         } finally {
             inventory.unlockInventory();
         }
