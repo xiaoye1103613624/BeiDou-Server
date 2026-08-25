@@ -86,6 +86,7 @@ import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
+import org.gms.server.buyback.SoldItemStorage;
 import org.gms.service.*;
 import org.gms.util.*;
 import org.gms.util.packets.WeddingPackets;
@@ -416,6 +417,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private Shop shop = null;
+    private boolean shopBuybackMode = false;
     @Getter
     @Setter
     private SkinColor skinColor = SkinColor.NORMAL;
@@ -1058,6 +1060,8 @@ public class Character extends AbstractCharacterObject {
 
     public void newClient(Client c) {
         this.loggedIn = true;
+        SoldItemStorage.getInstance().clear(getId());
+        shopBuybackMode = false;
         c.setAccountName(this.client.getAccountName());//No null's for accountName
         this.setClient(c);
         this.map = c.getChannelServer().getMapFactory().getMap(getMapId());
@@ -5885,6 +5889,22 @@ public class Character extends AbstractCharacterObject {
     public void closeNpcShop() {
         setShop(null);
     }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
+        if (shop == null) {
+            shopBuybackMode = false;
+        }
+    }
+
+    public boolean isShopBuybackMode() {
+        return shopBuybackMode;
+    }
+
+    public void setShopBuybackMode(boolean shopBuybackMode) {
+        this.shopBuybackMode = shopBuybackMode;
+    }
+
 
     public void closeTrade() {
         Trade.cancelTrade(this, Trade.TradeResult.PARTNER_CANCEL);
@@ -11075,6 +11095,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void logOff() {
+        SoldItemStorage.getInstance().clear(getId());
+        shopBuybackMode = false;
         this.loggedIn = false;
         characterService.update(CharactersDO.builder()
                 .id(id)

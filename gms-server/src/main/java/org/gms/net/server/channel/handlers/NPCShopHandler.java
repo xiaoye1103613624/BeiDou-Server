@@ -21,11 +21,13 @@
 */
 package org.gms.net.server.channel.handlers;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.server.buyback.SoldItemStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,9 @@ import org.slf4j.LoggerFactory;
  */
 public final class NPCShopHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NPCShopHandler.class);
+
+    private static final byte MODE_SHOW_BUYBACK = 4;
+    private static final byte MODE_SHOW_SHOP = 5;
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -50,14 +55,20 @@ public final class NPCShopHandler extends AbstractPacketHandler {
                 c.disconnect(true, false);
                 return;
             }
-            c.getPlayer().getShop().buy(c, slot, itemId, quantity);
+            if (isBuybackMode(c)) {
+                SoldItemStorage.getInstance().buyBackFromShop(c, slot, itemId);
+            } else {
+                c.getPlayer().getShop().buy(c, slot, itemId, quantity);
+            }
             break;
         }
         case 1: { // sell ;)
             short slot = p.readShort();
             int itemId = p.readInt();
             short quantity = p.readShort();
-            c.getPlayer().getShop().sell(c, ItemConstants.getInventoryType(itemId), slot, quantity);
+            c.getPlayer().getShop().sell(c, ItemConstants.getInventoryType(itemId), slot, quantity, itemId);
+            SoldItemStorage.getInstance().refreshBuybackShop(c);
+            SoldItemStorage.getInstance().refreshBuybackTab(c);
             break;
         }
         case 2: { // recharge ;)
@@ -69,7 +80,22 @@ public final class NPCShopHandler extends AbstractPacketHandler {
         case 3: // leaving :(
             c.getPlayer().setShop(null);
             break;
+        case MODE_SHOW_BUYBACK:
+            if (c.getPlayer() != null && c.getPlayer().getShop() != null) {
+                SoldItemStorage.getInstance().sendBuybackShop(c);
+            }
+            break;
+        case MODE_SHOW_SHOP:
+            if (c.getPlayer() != null && c.getPlayer().getShop() != null) {
+                SoldItemStorage.getInstance().sendNormalShop(c);
+            }
+            break;
         }
 
+    }
+
+    private static boolean isBuybackMode(Client c) {
+        Character chr = c.getPlayer();
+        return chr != null && chr.isShopBuybackMode();
     }
 }

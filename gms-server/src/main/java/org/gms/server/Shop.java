@@ -23,6 +23,7 @@ package org.gms.server;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
@@ -32,6 +33,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.gms.server.buyback.SoldItemStorage;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 
@@ -81,7 +83,11 @@ public class Shop {
     }
 
     public void sendShop(Client c) {
-        c.getPlayer().setShop(this);
+        Character chr = c.getPlayer();
+        chr.setShop(this);
+        chr.setShopBuybackMode(false);
+        boolean hasSoldItems = !SoldItemStorage.getInstance().getSoldItems(chr.getId()).isEmpty();
+        c.sendPacket(PacketCreator.shopBuybackMode(false, hasSoldItems));
         c.sendPacket(PacketCreator.getNPCShop(c, getNpcId(), items));
     }
 
@@ -171,15 +177,25 @@ public class Shop {
 
     }
 
+    /** Maple often stores unique/rechargeable qty as 0xFFFF; as a Java short that is -1. */
+    private static short normalizeQuantity(short quantity) {
+        if (quantity == (short) 0xFFFF) {
+            return 1;
+        }
+        return quantity;
+    }
+
+    private static boolean isEquipLike(Item item, InventoryType type) {
+        return item instanceof Equip || type == InventoryType.EQUIP;
+    }
+
     private static boolean canSell(Item item, short quantity) {
         if (item == null) { //Basic check
             return false;
         }
 
-        short iQuant = item.getQuantity();
-        if (iQuant == 0xFFFF) {
-            iQuant = 1;
-        } else if (iQuant < 0) {
+        short iQuant = normalizeQuantity(item.getQuantity());
+        if (iQuant < 0) {
             return false;
         }
 
@@ -190,34 +206,89 @@ public class Shop {
         return true;
     }
 
-    private static short getSellingQuantity(Item item, short quantity) {
-        if (ItemConstants.isRechargeable(item.getItemId())) {
-            quantity = item.getQuantity();
-            if (quantity == 0xFFFF) {
-                quantity = 1;
-            }
+    private static short getSellingQuantity(Item item, InventoryType type, short quantity) {
+        if (isEquipLike(item, type)) {
+            // Client sell-struct +0x34 is unreliable for some equips (extended stats);
+            // equips are always a single unit on the server.
+            return 1;
         }
-
+        if (ItemConstants.isRechargeable(item.getItemId())) {
+            return normalizeQuantity(item.getQuantity());
+        }
         return quantity;
     }
 
     public void sell(Client c, InventoryType type, short slot, short quantity) {
-        if (quantity == 0xFFFF || quantity == 0) {
+        sell(c, type, slot, quantity, 0);
+    }
+
+    public void sell(Client c, InventoryType type, short slot, short quantity, int expectedItemId) {
+        if (quantity == (short) 0xFFFF || quantity == 0) {
             quantity = 1;
         } else if (quantity < 0) {
             return;
         }
 
         Inventory inventory = c.getPlayer().getInventory(type);
-        Item item = inventory.getItem(slot);
         inventory.lockInventory();
         try {
-            if (canSell(item, quantity)) {
-                quantity = getSellingQuantity(item, quantity);
-                InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+            Item item = inventory.getItem(slot);
+            if (item == null || (expectedItemId != 0 && item.getItemId() != expectedItemId)) {
+                c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
+                return;
+            }
 
+            // Equips: ignore client qty (often garbage) before canSell.
+            if (isEquipLike(item, type)) {
+                quantity = 1;
+            }
+
+            if (!canSell(item, quantity)) {
+                c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
+                return;
+            }
+
+            quantity = getSellingQuantity(item, type, quantity);
+
+            Item soldCopy = null;
+            short heldBefore = normalizeQuantity(item.getQuantity());
+            if (item.getPetId() < 0) {
+                soldCopy = item.copy();
+            }
+
+            // Use short slot — (byte) truncates positions > 127 on extended inventories.
+            InventoryManipulator.removeFromSlot(c, type, slot, quantity, false);
+
+            Item remaining = inventory.getItem(slot);
+            boolean stackGone = remaining == null || remaining.getItemId() != item.getItemId();
+
+            short removed = 0;
+            if (soldCopy != null) {
+                if (stackGone) {
+                    // Whole stack gone — trust the amount we asked to remove (heldBefore may
+                    // have been 0xFFFF / -1, which made heldBefore - heldAfter == 0).
+                    removed = quantity > 0 ? quantity : heldBefore;
+                } else {
+                    short heldAfter = normalizeQuantity(remaining.getQuantity());
+                    removed = (short) Math.max(0, heldBefore - heldAfter);
+                }
+                if (removed > 0) {
+                    if (soldCopy instanceof Equip) {
+                        soldCopy.setQuantity((short) 1);
+                    } else {
+                        soldCopy.setQuantity(removed);
+                    }
+                    SoldItemStorage.getInstance().addSoldItem(c.getPlayer().getId(), soldCopy);
+                } else if (quantity > 0) {
+                    SoldItemStorage.reportSellMismatch(c.getPlayer(), item.getItemId(), quantity, removed);
+                }
+            }
+
+            // Mesos follow what actually left the inventory (pets have no buyback copy).
+            short paidQty = removed > 0 ? removed : (stackGone ? quantity : 0);
+            if (paidQty > 0) {
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                int recvMesos = ii.getPrice(item.getItemId(), quantity);
+                int recvMesos = ii.getPrice(item.getItemId(), paidQty);
                 if (recvMesos > 0) {
                     c.getPlayer().gainMeso(recvMesos, false);
                 }
@@ -292,19 +363,29 @@ public class Shop {
                 ps.setInt(1, shopId);
 
                 try (ResultSet rs = ps.executeQuery()) {
+                    ItemInformationProvider ii = ItemInformationProvider.getInstance();
                     List<Integer> recharges = new ArrayList<>(rechargeableItems);
                     while (rs.next()) {
-                        if (ItemConstants.isRechargeable(rs.getInt("itemid"))) {
-                            ShopItem starItem = new ShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
+                        int itemId = rs.getInt("itemid");
+                        // 缺 Item.wz 节点 / 客户端无图标的道具会在开店时触发 E_POINTER（无效的指针）
+                        if (!ii.itemExists(itemId)) {
+                            log.warn("Shop {} skips missing item {}", shopId, itemId);
+                            continue;
+                        }
+                        if (ItemConstants.isRechargeable(itemId)) {
+                            ShopItem starItem = new ShopItem((short) 1, itemId, rs.getInt("price"), rs.getInt("pitch"));
                             ret.addItem(starItem);
                             if (rechargeableItems.contains(starItem.getItemId())) {
                                 recharges.remove(Integer.valueOf(starItem.getItemId()));
                             }
                         } else {
-                            ret.addItem(new ShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
+                            ret.addItem(new ShopItem((short) 1000, itemId, rs.getInt("price"), rs.getInt("pitch")));
                         }
                     }
                     for (Integer recharge : recharges) {
+                        if (!ii.itemExists(recharge)) {
+                            continue;
+                        }
                         ret.addItem(new ShopItem((short) 1000, recharge, 0, 0));
                     }
                 }
