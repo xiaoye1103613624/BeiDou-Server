@@ -31,6 +31,7 @@ import org.gms.client.Family;
 import org.gms.client.FamilyEntry;
 import org.gms.client.Mount;
 import org.gms.client.SkillFactory;
+import org.gms.client.Skill;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
@@ -271,6 +272,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
                 org.slf4j.LoggerFactory.getLogger(PlayerLoggedinHandler.class).info(sb.toString());
             }
+            // 轮回：先同步技能/键位/宏，再下发进图包，避免键位引用已剥离的 1005 或尚未授予的 1021。
+            org.gms.reincarnation.ReincarnationSupport.onLogin(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             // Enable native second-pendant UI (CWvsContext flag → CUIEquip+0x5E8).
             // Without this, hit-test can work via ijl15 overlay but the equip icon never draws.
@@ -287,7 +290,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendKeymap();
             player.sendQuickmap();
             player.sendMacros();
-            org.gms.reincarnation.ReincarnationSupport.onLogin(player);
+            org.gms.reincarnation.ReincarnationSupport.afterLoginPackets(player);
 
             // pot bindings being passed through other characters on the account detected thanks to Croosade dev team
             KeyBinding autohpPot = player.getKeymap().get(91);
@@ -433,6 +436,22 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             player.changeSkillLevel(SkillFactory.getSkill(10000000 * player.getJobType() + 12), (byte) (player.getLinkedLevel() / 10), 20, -1);
+            // MapleRoot-align: beginner purple bounce skills (1050 横向闪跃 / 1054 垂直闪跃).
+            // Job-scoped id = jobType*10_000_000 + 1050/1054 (explorer 1050, Cygnus 10001050, Aran 20001050).
+            {
+                final int bounceBase = 10000000 * player.getJobType();
+                final Skill bounceH = SkillFactory.getSkill(bounceBase + 1050);
+                final Skill bounceV = SkillFactory.getSkill(bounceBase + 1054);
+                if (bounceH != null) {
+                    player.changeSkillLevel(bounceH, (byte) 1, 1, -1);
+                }
+                if (bounceV != null) {
+                    player.changeSkillLevel(bounceV, (byte) 1, 1, -1);
+                }
+            }
+            // MapleRoot-align: teach hyper books on login so client skillLevel matches server
+            // (avoids gray icons / display>80 path). Fat Skill books + ResMan retain must stay on.
+            player.resyncHyperSkillsToClient();
             player.checkBerserk(player.isHidden());
 
             if (newcomer) {
@@ -450,8 +469,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
 
                 player.reloadQuestExpirations();
-
-                org.gms.reincarnation.ReincarnationSupport.onLogin(player);
 
                     /*
                     if (!c.hasVotedAlready()){

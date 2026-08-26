@@ -42,4 +42,8 @@ public class Beginner {
     public static final int YETI_MOUNT2 = 1018;
     public static final int WITCH_BROOMSTICK = 1019;
     public static final int BALROG_MOUNT = 1031;
+    /** MapleRoot beginner horizontal bounce (紫图标位移). */
+    public static final int NINJA_BOUNCE = 1050;
+    /** MapleRoot beginner vertical bounce (紫图标位移). */
+    public static final int VERTICAL_BOUNCE = 1054;
 }
