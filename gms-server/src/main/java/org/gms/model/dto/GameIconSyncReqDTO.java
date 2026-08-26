@@ -24,4 +24,8 @@ public class GameIconSyncReqDTO {
     private Integer dropperId;
     /** 直接指定物体 ID 列表（配合 categories） */
     private List<Integer> objectIds;
+    /** true=从抽奖奖池收集 itemId（可配 lotteryNpcId） */
+    private Boolean fromLottery;
+    /** 仅同步该抽奖机 NPC 的奖品图标；空=全部抽奖机 */
+    private Integer lotteryNpcId;
 }

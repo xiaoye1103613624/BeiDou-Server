@@ -311,6 +311,12 @@ public enum ItemFactory {
                             item.setExpiration(rs.getLong("expiration"));
                             item.setGiftFrom(rs.getString("giftFrom"));
                             item.setFlag((short) rs.getInt("flag"));
+                            try {
+                                item.setEffTint(rs.getInt("efftinthue"), rs.getInt("efftintchroma"),
+                                        rs.getInt("efftintbright"));
+                            } catch (SQLException ignored) {
+                                // V1.19.15 前兼容
+                            }
                             items.add(new Pair<>(item, mit));
                         }
                     }
@@ -334,7 +340,12 @@ public enum ItemFactory {
                 ps.executeUpdate();
             }
 
-            try (PreparedStatement psItem = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement psItem = con.prepareStatement(
+                    "INSERT INTO `inventoryitems` (`type`, `characterid`, `accountid`, `itemid`, `inventorytype`, "
+                            + "`position`, `quantity`, `owner`, `petid`, `flag`, `expiration`, `giftFrom`, "
+                            + "`efftinthue`, `efftintchroma`, `efftintbright`) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
                 if (!items.isEmpty()) {
                     for (Pair<Item, InventoryType> pair : items) {
                         Item item = pair.getLeft();
@@ -351,6 +362,9 @@ public enum ItemFactory {
                         psItem.setInt(10, item.getFlag());
                         psItem.setLong(11, item.getExpiration());
                         psItem.setString(12, item.getGiftFrom());
+                        psItem.setShort(13, item.getEffTintHue());
+                        psItem.setByte(14, item.getEffTintChroma());
+                        psItem.setByte(15, item.getEffTintBright());
                         psItem.executeUpdate();
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
@@ -493,6 +507,12 @@ public enum ItemFactory {
                                 item.setExpiration(rs.getLong("expiration"));
                                 item.setGiftFrom(rs.getString("giftFrom"));
                                 item.setFlag((short) rs.getInt("flag"));
+                                try {
+                                    item.setEffTint(rs.getInt("efftinthue"), rs.getInt("efftintchroma"),
+                                            rs.getInt("efftintbright"));
+                                } catch (SQLException ignored) {
+                                    // V1.19.15 前兼容
+                                }
                                 items.add(new Pair<>(item, mit));
                             }
                         }
@@ -531,7 +551,12 @@ public enum ItemFactory {
 
                 final int genKey;
                 // Item
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement(
+                        "INSERT INTO `inventoryitems` (`type`, `characterid`, `accountid`, `itemid`, `inventorytype`, "
+                                + "`position`, `quantity`, `owner`, `petid`, `flag`, `expiration`, `giftFrom`, "
+                                + "`efftinthue`, `efftintchroma`, `efftintbright`) "
+                                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, value);
                     ps.setString(2, account ? null : String.valueOf(id));
                     ps.setString(3, account ? String.valueOf(id) : null);
@@ -544,6 +569,9 @@ public enum ItemFactory {
                     ps.setInt(10, item.getFlag());
                     ps.setLong(11, item.getExpiration());
                     ps.setString(12, item.getGiftFrom());
+                    ps.setShort(13, item.getEffTintHue());
+                    ps.setByte(14, item.getEffTintChroma());
+                    ps.setByte(15, item.getEffTintBright());
                     ps.executeUpdate();
 
                     try (ResultSet rs = ps.getGeneratedKeys()) {

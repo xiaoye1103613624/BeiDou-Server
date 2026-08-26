@@ -59,9 +59,16 @@ public final class CashShopWindowPurchase {
             return null;
         }
 
-        if (r.period() > 0) {
+        // Catalog often stores period=0 for pets; WZ info/life and Commodity default
+        // are 90 days. Leaving expiration at -1 makes getDriedPets() treat them as
+        // dead dolls ( -1 < now ) and the client shows iconD.
+        int periodDays = r.period();
+        if (ItemConstants.isPet(itemId) && periodDays <= 0) {
+            periodDays = 90;
+        }
+        if (periodDays > 0) {
             final long now = Server.getInstance().getCurrentTime();
-            if (r.period() == 1) {
+            if (periodDays == 1) {
                 switch (itemId) {
                     case ItemId.DROP_COUPON_2X_4H, ItemId.EXP_COUPON_2X_4H ->
                             item.setExpiration(now + HOURS.toMillis(4));
@@ -70,7 +77,7 @@ public final class CashShopWindowPurchase {
                     default -> item.setExpiration(now + DAYS.toMillis(1));
                 }
             } else {
-                item.setExpiration(now + DAYS.toMillis(r.period()));
+                item.setExpiration(now + DAYS.toMillis(periodDays));
             }
         }
         item.setSN(r.itemId());

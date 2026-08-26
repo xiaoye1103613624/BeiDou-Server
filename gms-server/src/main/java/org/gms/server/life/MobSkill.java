@@ -251,7 +251,8 @@ public class MobSkill {
             case EVA -> stats.put(MonsterStatus.AVOID, x);
             case SPEED -> stats.put(MonsterStatus.SPEED, x);
             case SEAL_SKILL -> stats.put(MonsterStatus.SEAL_SKILL, x);
-            case SUMMON, SUMMON_BOMB, SUMMON_MULTI -> summonMonsters(monster);
+            case SUMMON, SUMMON_201, SUMMON_138,SUMMON_170, SUMMON_174, SUMMON_176, SUMMON_177, SUMMON_183, SUMMON_184, SUMMON_186,SUMMON_187, SUMMON_188, SUMMON_189, SUMMON_190, SUMMON_191, SUMMON_202, SUMMON_203 -> summonMonsters(monster);
+            default -> {}
         }
         if (stats.size() > 0) {
             applyMonsterBuffs(stats, skill, monster, reflection);

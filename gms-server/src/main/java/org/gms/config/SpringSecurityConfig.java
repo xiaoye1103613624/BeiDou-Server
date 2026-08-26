@@ -73,8 +73,11 @@ public class SpringSecurityConfig {
                         .requestMatchers("/", "/static/**", "/index.html", "/assets/**").permitAll()
                         // 物品图标（后台表格 <img> 无 Authorization）
                         .requestMatchers("/item-icons/**").permitAll()
+                        .requestMatchers("/icons/**").permitAll()
                         // 爆率页持久化图标（怪物/物品）
                         .requestMatchers("/drop/v1/icon/**").permitAll()
+                        // 共用图标懒加载（GET）；POST /icon/v1/sync 仍需登录
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/icon/v1/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

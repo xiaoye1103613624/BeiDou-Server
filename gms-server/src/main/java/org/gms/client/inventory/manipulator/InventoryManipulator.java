@@ -299,6 +299,7 @@ public class InventoryManipulator {
         if (show) {
             c.sendPacket(PacketCreator.getShowItemGain(itemid, item.getQuantity()));
         }
+        org.gms.reincarnation.ReincarnationSupport.onInventoryChanged(chr, itemid);
         return true;
     }
 
@@ -462,6 +463,7 @@ public class InventoryManipulator {
         }
         if (combatItemId > 0) {
             chr.onCarryCombatItemChanged(combatItemId);
+            org.gms.reincarnation.ReincarnationSupport.onInventoryChanged(chr, combatItemId);
         }
     }
 
@@ -625,6 +627,29 @@ public class InventoryManipulator {
                     return;
                 }
             }
+            // POCKET_BP33_FIX: pocket −33 reuses pet BP33 — client HT / pet path may
+            // SendChange fashion (e.g. 100xxxx hat) to −33. Re-resolve from prefix/islot.
+            if ((dst == -33 || dst == -133)
+                    && prefix != 116
+                    && !EquipSlot.POCKET.getName().equals(slotName)) {
+                short corrected = resolveMisroutedExtendedDst(ii, itemId, cashItem, slotName);
+                if (corrected != 0) {
+                    log.info("equip pocket-dst fix id={} {} -> {} char={}",
+                            itemId, dst, corrected, chr.getName());
+                    dst = corrected;
+                }
+            }
+            // AUX62_MISROUTE R31: fashion→−62 must REJECT (enableActions), never remap
+            // to −1. Remap turned aux dblclick misroute into "wear hat" and left −62
+            // looking cleared. Pocket −33 still remaps above (preserve POCKET_BP33_FIX).
+            if ((dst == -62 || dst == -162)
+                    && prefix != 134 && prefix != 135
+                    && !EquipSlot.AUX_WEAPON.getName().equals(slotName)) {
+                unstickClientInventory(c);
+                log.info("equip aux-dst reject id={} dst={} (no remap) char={}",
+                        itemId, dst, chr.getName());
+                return;
+            }
         }
         // VANILLA PARITY: occupied Addon seats REPLACE like classic −1…−11 (mode-2 swap
         // below). Hard occupy-reject left client blank (GetItem/sidecar desync) unable to
@@ -670,30 +695,18 @@ public class InventoryManipulator {
         // 六戒：拖拽到指定槽必须只换该槽（客户端 dst 原样落库）。空槽搜索 / 六满轮询只在
         // 客户端背包双击路径（empty-search + DblClick_RingFullRotate），服务端不得 preferEmpty/rotate。
         // FIX_RING_CRASH_20260727am：魂戒等 cash=1 戒必须以 *物品* isCash 判定，不能看 dst<=-100。
-        // FIX_ENTER_INVALID_20260727an：点装戒禁止落 −152/−153（am 客户端 remap 进图闪退）。
-        //   cash 只走经典点装戒槽 −112/−113/−115/−116；−52/−53 留给非点装扩展戒。
+        // R26: −52/−53 normal ExtraRing; −152/−153 fashion cash (separate slots, same UI).
         if (EquipSlot.RING.getName().equals(ii.getEquipmentSlot(source.getItemId()))) {
             final boolean cashRing = ii.isCash(source.getItemId());
             if (cashRing) {
-                // 点装戒：经典槽 −12→−112；扩展/其它普通负槽不落 −152/−153，归一到 −112。
                 if (dst == -12 || dst == -13 || dst == -15 || dst == -16) {
                     dst = (short) (dst - 100);
-                } else if (dst == -52 || dst == -53 || dst == -152 || dst == -153
-                        || (dst > -100 && dst < 0)) {
+                } else if (dst == -52 || dst == -53) {
+                    // normal ExtraRing — keep
+                } else if (dst == -152 || dst == -153) {
+                    // fashion ExtraRing — keep separate from −52/−53
+                } else if (dst > -100 && dst < 0) {
                     dst = -112;
-                }
-                // 仍停在废弃扩展 cash 槽时，改到第一个空经典 cash（非轮询、不改拖拽目标语义）。
-                if (dst == -152 || dst == -153) {
-                    final short[] cashSlots = {-112, -113, -115, -116};
-                    for (short s : cashSlots) {
-                        if (eqpdInv.getItem(s) == null) {
-                            dst = s;
-                            break;
-                        }
-                    }
-                    if (dst == -152 || dst == -153) {
-                        dst = -112;
-                    }
                 }
             }
             // 时装魂戒（1115201~34）整系 onlyEquip：先卸其它已穿魂戒，避免双 CharacterEff 进图闪退
@@ -786,6 +799,9 @@ public class InventoryManipulator {
                 removeFrom = occ;
             }
             dst = ExtendedEquipRegistry.toClientWireSlot(dst);
+        } else if (ExtendedEquipRegistry.isExtraRingWireSeat(dst)) {
+            // Fashion (−152/−153) and normal (−52/−53) share UI but not DB slot.
+            removeFrom = dst;
         } else {
             removeFrom = ExtendedEquipRegistry.resolveEquippedSlotAlias(eqpdInv, dst);
         }
@@ -1161,45 +1177,7 @@ public class InventoryManipulator {
         }
         Inventory eqpd = chr.getInventory(InventoryType.EQUIPPED);
         Inventory eqpBag = chr.getInventory(InventoryType.EQUIP);
-        final short[] classicCash = {-112, -113, -115, -116};
-        // Only abandoned cash-extended aliases — keep −52/−53 as ring seats.
-        final short[] badSlots = {-152, -153};
-        for (short bad : badSlots) {
-            Item it = eqpd.getItem(bad);
-            if (it == null) {
-                continue;
-            }
-            short dest = 0;
-            for (short s : classicCash) {
-                if (eqpd.getItem(s) == null) {
-                    dest = s;
-                    break;
-                }
-            }
-            // Prefer parking onto extended normal seats before classic cash / bag.
-            if (dest == 0 && eqpd.getItem((short) -52) == null) {
-                dest = -52;
-            } else if (dest == 0 && eqpd.getItem((short) -53) == null) {
-                dest = -53;
-            }
-            eqpd.removeSlot(bad);
-            if (dest != 0) {
-                it.setPosition(dest);
-                eqpd.addItemFromDB(it);
-                log.info("migrateCashRings: chr {} {} → {}", chr.getId(), bad, dest);
-            } else {
-                short bag = eqpBag.getNextFreeSlot();
-                if (bag > 0) {
-                    it.setPosition(bag);
-                    eqpBag.addItemFromDB(it);
-                    log.info("migrateCashRings: chr {} {} → bag {}", chr.getId(), bad, bag);
-                } else {
-                    it.setPosition(bad);
-                    eqpd.addItemFromDB(it);
-                    log.warn("migrateCashRings: chr {} stuck at {} (no classic cash / bag slot)", chr.getId(), bad);
-                }
-            }
-        }
+        // R26: −152/−153 are ExtraRing fashion-cash aliases of −52/−53 — do not migrate.
         migrateExtendedCashToNormal(eqpd, (short) -154, (short) -54);
         migrateExtendedCashToNormal(eqpd, (short) -155, (short) -55);
         migrateExtendedCashToNormal(eqpd, (short) -156, (short) -56);
@@ -1214,6 +1192,8 @@ public class InventoryManipulator {
         // One-way −154→−54 above is enough. (migrateCashTotemOrBadgeToCashSlot retired.)
         // ADDON_SLOTMAP_910: 166/167 曾误占宠物槽 −21/−22/−121/−122 → sidecar −60/−61/−160/−161
         migrateAndroidHeartOffPetSlots(eqpd, eqpBag);
+        // Character cash/fashion (100xxxx hats etc.) must never stay on pet storage seats.
+        migrateCharacterGearOffPetSlots(eqpd, eqpBag);
         // ADDON_AUX_SLOT62: 134/135 曾与盾共用 −10 → 独立 −62（可与 109 同穿）
         migrateAuxWeaponOffShieldSlot(eqpd, eqpBag);
     }
@@ -1345,6 +1325,42 @@ public class InventoryManipulator {
         migratePrefixSlot(eqpd, eqpBag, (short) -122, (short) -161, 167);
     }
 
+    /**
+     * Evict non-pet gear from pet storage seats (e.g. cash hat −101 wrongly on −121).
+     * Real pet equips (180–183) stay. Parks to equip bag.
+     */
+    private static void migrateCharacterGearOffPetSlots(Inventory eqpd, Inventory eqpBag) {
+        // Mirror EquipSlot.PET_BODY_PARTS: −bp and −(bp+100).
+        final int[] petBps = {
+                14,
+                21, 22, 23, 24, 25, 26, 27, 28, 29,
+                30, 31, 32, 33, 34, 35, 36, 37, 38,
+                39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+        };
+        for (int bp : petBps) {
+            parkNonPetFromSeat(eqpd, eqpBag, (short) -bp);
+            parkNonPetFromSeat(eqpd, eqpBag, (short) -(bp + 100));
+        }
+    }
+
+    private static void parkNonPetFromSeat(Inventory eqpd, Inventory eqpBag, short seat) {
+        Item it = eqpd.getItem(seat);
+        if (it == null) {
+            return;
+        }
+        final int itemId = it.getItemId();
+        final int prefix = itemId / 10000;
+        if (prefix >= 180 && prefix <= 183) {
+            return;
+        }
+        // Pocket 116 may legitimately use −33/−133 (shares BP33 with pet#2 pouch).
+        if (prefix == 116 && (seat == -33 || seat == -133)) {
+            return;
+        }
+        parkSeatToBag(eqpd, eqpBag, seat);
+        log.info("migrateCharOffPet: seat {} id={} (non-pet on pet seat)", seat, itemId);
+    }
+
     private static void migratePrefixSlot(Inventory eqpd, Inventory eqpBag, short from, short to,
                                           int expectPrefix) {
         Item it = eqpd.getItem(from);
@@ -1466,5 +1482,57 @@ public class InventoryManipulator {
         it.setPosition(to);
         eqpd.addItemFromDB(it);
         log.info("migrateExtCash: {} → {} (empty dest only)", from, to);
+    }
+
+    /**
+     * When client mis-routes to pocket −33/−133 (HT overlap / GetBodyPartFromPoint
+     * invent), map back to the item's canonical classic slot from WZ islot / registry
+     * prefix. Never returns Po/−33 or Aw/−62 for the misrouted item itself (caller
+     * already excluded those prefixes).
+     * Note: aux −62/−162 fashion misroute is REJECTED by equip() (R31) — not remapped.
+     */
+    private static short resolveMisroutedExtendedDst(ItemInformationProvider ii, int itemId,
+                                                     boolean cash, String slotName) {
+        if (itemId <= 0 || slotName == null) {
+            return 0;
+        }
+        if (EquipSlot.POCKET.getName().equals(slotName)
+                || EquipSlot.AUX_WEAPON.getName().equals(slotName)) {
+            return 0;
+        }
+        final int prefix = itemId / 10000;
+        short fixed = ExtendedEquipRegistry.resolveFixedDst(prefix, cash);
+        if (fixed != 0) {
+            // Never "correct" into the seat we are escaping (would no-op / loop).
+            if (fixed == -33 || fixed == -133 || fixed == -62 || fixed == -162) {
+                return 0;
+            }
+            return fixed;
+        }
+        EquipSlot slot = EquipSlot.getFromTextSlot(slotName);
+        if (slot == EquipSlot.PET_EQUIP) {
+            return 0;
+        }
+        return switch (slotName) {
+            case "Cp", "HrCp" -> (short) (cash ? -101 : -1);
+            case "Af" -> (short) (cash ? -102 : -2);
+            case "Ay" -> (short) (cash ? -103 : -3);
+            case "Ae" -> (short) (cash ? -104 : -4);
+            case "Ma", "MaPn" -> (short) (cash ? -105 : -5);
+            case "Pn" -> (short) (cash ? -106 : -6);
+            case "So" -> (short) (cash ? -107 : -7);
+            case "GlGw", "Gv" -> (short) (cash ? -108 : -8);
+            case "Sr" -> (short) (cash ? -109 : -9);
+            case "Si" -> (short) (cash ? -110 : -10);
+            case "Wp", "WpSi", "WpSp" -> (short) (cash ? -111 : -11);
+            case "Ri" -> (short) (cash ? -112 : -12);
+            case "Pe" -> (short) (cash ? -117 : -17);
+            case "Tm" -> -18;
+            case "Sd" -> -19;
+            case "Sh" -> -20;
+            case "Me" -> -49;
+            case "Be" -> (short) (cash ? -150 : -50);
+            default -> 0;
+        };
     }
 }

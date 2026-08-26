@@ -1140,15 +1140,22 @@ public class Equip extends Item {
     }
 
     public void setTint(int hue, int chroma, int bright) {
-        this.tintHue = (short) Math.floorMod(hue, 360);
+        this.tintHue = (short) normalizeTintHue(hue);
         this.tintChroma = (byte) Math.max(-100, Math.min(100, chroma));
         this.tintBright = (byte) Math.max(-100, Math.min(100, bright));
     }
 
     public void setFxTint(int hue, int chroma, int bright) {
-        this.tintFxHue = (short) Math.floorMod(hue, 360);
+        this.tintFxHue = (short) normalizeTintHue(hue);
         this.tintFxChroma = (byte) Math.max(-100, Math.min(100, chroma));
         this.tintFxBright = (byte) Math.max(-100, Math.min(100, bright));
+    }
+
+    protected static int normalizeTintHue(int hue) {
+        if (hue < 0) {
+            return hue < -360 ? -360 : hue;
+        }
+        return Math.floorMod(hue, 360);
     }
 
     public void clearTint() {

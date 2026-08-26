@@ -7,15 +7,16 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.client.Skill;
+import org.gms.client.SkillFactory;
 import org.gms.constants.id.ItemId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
-import org.gms.server.ItemInformationProvider;
 import org.gms.server.colorprism.ColorPrismPackets;
 
 /**
  * Handles {@code RecvOpcode.WEAPON_TINT_ACTION} (0x372E), emitted by the client DLL
- * ({@code DLL/src/weapontint.cpp}) for the Coloring Prism window.
+ * ({@code weapontint.cpp}) for the Coloring Prism window.
  * <ul>
  *   <li>{@code 0} request - resend every tint this character owns</li>
  *   <li>{@code 1} apply       - invType(1) invPos(2) itemId(4) hue(2) chroma(1) bright(1) prismPos(2) layer(1)</li>
@@ -23,13 +24,18 @@ import org.gms.server.colorprism.ColorPrismPackets;
  *   <li>{@code 3} applyLook   - kind(1) hue(2) chroma(1) bright(1) prismPos(2)</li>
  *   <li>{@code 4} restoreLook - kind(1) prismPos(2)</li>
  * </ul>
- * ONE item, {@link ItemId#COLORING_PRISM}, pays for all four of the window's tabs. Actions 1 and 2
- * dye an EQUIP -- {@code layer} picks its body or its effect sprites -- and name their target
- * explicitly. Actions 3 and 4 dye the character's own HAIR or FACE, which have no inventory address,
- * so they carry a kind instead and the server reads the look off the character. Everything the client sends is a HINT and is re-derived here: the
- * item at that position must still exist, must still be the id the client thinks it is, and must be
- * a Cash equip. The prism itself is validated the same way - by ownership rather than by the slot
- * it was double-clicked from - which is the rule {@link GachaponTicketHandler} follows.
+ * ONE item, {@link ItemId#COLORING_PRISM}, pays for all five of the window's tabs. Actions 1 and 2
+ * name their target by inventory address, and it can be either an EQUIP, cash or not, whose
+ * {@code layer} picks its body or its effect sprites, or a cash EFFECT item, which is a plain
+ * {@link Item} rather than an {@link Equip} and so carries its one colour in three columns of its
+ * own. Actions 3 and 4 dye the character's own HAIR, FACE or SKIN, which have no inventory address,
+ * so they carry a kind instead and the server reads the look off the character.
+ * <p>
+ * Everything the client sends is a HINT and is re-derived here: the item at that position must
+ * still exist and must still be the id the client thinks it is. There is deliberately no
+ * {@code isCash} test, and the client's drop gate matches. The prism itself is validated the same
+ * way - by ownership rather than by the slot it was double-clicked from - rather than trusting
+ * the position the click came from.
  */
 public final class WeaponTintHandler extends AbstractPacketHandler {
 
@@ -51,11 +57,17 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
                     return;
                 }
                 Target target = readTarget(p);
-                int hue = p.readShort() & 0xFFFF;
+                // SIGNED. The sign selects the semantic: positive rotates, negative is an
+                // absolute target encoded as -(degrees + 1). Masking to 0xFFFF turned every
+                // absolute value into a nonsense rotation of ~65000 degrees.
+                int hue = p.readShort();
                 int chroma = p.readByte();
                 int bright = p.readByte();
                 short prismPos = p.readShort();
                 int layer = p.readByte();
+                if (!isValidTint(hue, chroma, bright)) {
+                    return;                        // malformed or hostile; consume nothing
+                }
                 handleApply(c, player, target, hue, chroma, bright, prismPos, layer);
             }
             case ColorPrismPackets.ACTION_RESTORE -> {
@@ -75,10 +87,16 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
                     return;
                 }
                 int kind = p.readByte();
-                int hue = p.readShort() & 0xFFFF;
+                // SIGNED. The sign selects the semantic: positive rotates, negative is an
+                // absolute target encoded as -(degrees + 1). Masking to 0xFFFF turned every
+                // absolute value into a nonsense rotation of ~65000 degrees.
+                int hue = p.readShort();
                 int chroma = p.readByte();
                 int bright = p.readByte();
                 short prismPos = p.readShort();
+                if (!isValidTint(hue, chroma, bright)) {
+                    return;                        // malformed or hostile; consume nothing
+                }
                 handleApplyLook(c, player, kind, hue, chroma, bright, prismPos);
             }
             case ColorPrismPackets.ACTION_RESTORE_LOOK -> {
@@ -89,13 +107,97 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
                 short prismPos = p.readShort();
                 handleRestoreLook(c, player, kind, prismPos);
             }
+            // Skills. Named by SKILL ID: a skill has no inventory address, so unlike an equip
+            // there is nothing to re-derive it from. What IS verified is that the character
+            // actually knows the skill, which is what stops a client dyeing all 616.
+            case ColorPrismPackets.ACTION_APPLY_SKILL -> {
+                if (p.available() < 4 + 2 + 1 + 1 + 2) {
+                    return;
+                }
+                int skillId = p.readInt();
+                // SIGNED, for the same reason as every other hue on this opcode.
+                int hue = p.readShort();
+                int chroma = p.readByte();
+                int bright = p.readByte();
+                short prismPos = p.readShort();
+                if (!isValidTint(hue, chroma, bright)) {
+                    return;                        // malformed or hostile; consume nothing
+                }
+                handleApplySkill(c, player, skillId, hue, chroma, bright, prismPos);
+            }
+            case ColorPrismPackets.ACTION_RESTORE_SKILL -> {
+                if (p.available() < 4 + 2) {
+                    return;
+                }
+                int skillId = p.readInt();
+                short prismPos = p.readShort();
+                handleRestoreSkill(c, player, skillId, prismPos);
+            }
             default -> {
             }
         }
     }
 
+    /**
+     * Does this character know this skill?
+     * <p>
+     * The only validation available for a skill target. Every other action names its target by
+     * inventory position and the server re-reads the item that is actually there; a skill id is
+     * just four bytes on the wire with nothing behind it, so without this a client could write a
+     * row for every skill in the game.
+     */
+    private static boolean knowsSkill(Character player, int skillId) {
+        Skill skill = SkillFactory.getSkill(skillId);
+        return skill != null && player.getSkillLevel(skill) > 0;
+    }
+
+    private void handleApplySkill(Client c, Character player, int skillId, int hue, int chroma,
+                                  int bright, short prismPos) {
+        if (!knowsSkill(player, skillId)) {
+            fail(player, ColorPrismPackets.RESULT_FAILED, "You haven't learned that skill.");
+            return;
+        }
+        short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
+        if (slot == 0) {
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            return;
+        }
+        player.setSkillTint(skillId, hue, chroma, bright);
+        InventoryManipulator.removeFromSlot(c, InventoryType.CASH, slot, (short) 1, false);
+        // Forced now rather than left to logout, the same as every other apply path: a crash in
+        // between would otherwise cost the player a prism and give nothing back.
+        player.saveCharToDB();
+        succeed(player);
+    }
+
+    private void handleRestoreSkill(Client c, Character player, int skillId, short prismPos) {
+        if (!knowsSkill(player, skillId)) {
+            fail(player, ColorPrismPackets.RESULT_FAILED, "You haven't learned that skill.");
+            return;
+        }
+        if (!player.isSkillTinted(skillId)) {
+            // Nothing to undo. Refuse WITHOUT consuming the prism: this is the path Reset then
+            // Confirm takes on a skill that was never dyed, and burning the item for a no-op
+            // would be a trap.
+            fail(player, ColorPrismPackets.RESULT_NOT_TINTED,
+                    "That skill is already its original color.");
+            return;
+        }
+        short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
+        if (slot == 0) {
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            return;
+        }
+        player.clearSkillTint(skillId);
+        InventoryManipulator.removeFromSlot(c, InventoryType.CASH, slot, (short) 1, false);
+        player.saveCharToDB();
+        succeed(player);
+    }
+
     private static boolean isLookKind(int kind) {
-        return kind == ColorPrismPackets.TINT_KEY_HAIR || kind == ColorPrismPackets.TINT_KEY_FACE;
+        return kind == ColorPrismPackets.TINT_KEY_HAIR
+                || kind == ColorPrismPackets.TINT_KEY_FACE
+                || kind == ColorPrismPackets.TINT_KEY_SKIN;
     }
 
     private void handleApplyLook(Client c, Character player, int kind, int hue, int chroma, int bright,
@@ -111,6 +213,8 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
         }
         if (kind == ColorPrismPackets.TINT_KEY_HAIR) {
             player.setHairTint(hue, chroma, bright);
+        } else if (kind == ColorPrismPackets.TINT_KEY_SKIN) {
+            player.setSkinTint(hue, chroma, bright);
         } else {
             player.setFaceTint(hue, chroma, bright);
         }
@@ -124,8 +228,9 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
             fail(player, ColorPrismPackets.RESULT_FAILED, "That can't be dyed with a Coloring Prism.");
             return;
         }
-        final boolean tinted = (kind == ColorPrismPackets.TINT_KEY_HAIR)
-                ? player.isHairTinted() : player.isFaceTinted();
+        final boolean tinted = (kind == ColorPrismPackets.TINT_KEY_HAIR) ? player.isHairTinted()
+                : (kind == ColorPrismPackets.TINT_KEY_SKIN) ? player.isSkinTinted()
+                : player.isFaceTinted();
         if (!tinted) {
             // Nothing to undo. Refuse WITHOUT consuming the prism -- this is the path a player
             // takes by pressing Reset then Confirm on an already-vanilla colour, and burning
@@ -133,6 +238,8 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
             fail(player, ColorPrismPackets.RESULT_NOT_TINTED,
                     kind == ColorPrismPackets.TINT_KEY_HAIR
                             ? "Your hair is already its original color."
+                            : kind == ColorPrismPackets.TINT_KEY_SKIN
+                            ? "Your skin is already its original color."
                             : "Your eyes are already their original color.");
             return;
         }
@@ -143,6 +250,8 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
         }
         if (kind == ColorPrismPackets.TINT_KEY_HAIR) {
             player.clearHairTint();
+        } else if (kind == ColorPrismPackets.TINT_KEY_SKIN) {
+            player.clearSkinTint();
         } else {
             player.clearFaceTint();
         }
@@ -160,6 +269,21 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
 
     private void handleApply(Client c, Character player, Target target, int hue, int chroma, int bright,
                              short prismPos, int layer) {
+        // A cash EFFECT item is not an equip, so it takes the short path: one colour, its own
+        // three columns, and no body-versus-effect distinction to make.
+        Item cashEffect = resolveCashEffect(player, target);
+        if (cashEffect != null) {
+            short effSlot = findItem(player, ItemId.COLORING_PRISM, prismPos);
+            if (effSlot == 0) {
+                fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+                return;
+            }
+            cashEffect.setEffTint(hue, chroma, bright);
+            InventoryManipulator.removeFromSlot(c, InventoryType.CASH, effSlot, (short) 1, false);
+            player.saveCharToDB();
+            succeed(player);
+            return;
+        }
         Equip equip = resolve(player, target);
         if (equip == null) {
             fail(player, ColorPrismPackets.RESULT_NO_CASH_WEAPON,
@@ -187,6 +311,26 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
     }
 
     private void handleRestore(Client c, Character player, Target target, short prismPos, int layer) {
+        Item cashEffect = resolveCashEffect(player, target);
+        if (cashEffect != null) {
+            if (!cashEffect.isEffTinted()) {
+                // Nothing to undo. Refuse WITHOUT consuming the prism, the same as every other
+                // restore path: this is what Reset then Confirm on an undyed item hits.
+                fail(player, ColorPrismPackets.RESULT_NOT_TINTED,
+                        "That item is already its original color.");
+                return;
+            }
+            short effSlot = findItem(player, ItemId.COLORING_PRISM, prismPos);
+            if (effSlot == 0) {
+                fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+                return;
+            }
+            cashEffect.clearEffTint();
+            InventoryManipulator.removeFromSlot(c, InventoryType.CASH, effSlot, (short) 1, false);
+            player.saveCharToDB();
+            succeed(player);
+            return;
+        }
         Equip equip = resolve(player, target);
         if (equip == null) {
             fail(player, ColorPrismPackets.RESULT_NO_CASH_WEAPON,
@@ -228,6 +372,47 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
      * type byte for a negative position looks in EQUIP, finds nothing, and rejects every worn item -
      * which is every item a player actually wants to dye.
      */
+    /**
+     * Rejects colour values that are not in one of the two legal hue bands, or whose chroma
+     * or brightness is out of range. Everything here arrives from the client and is a hint,
+     * not a fact, so it is checked before a prism is consumed rather than after.
+     */
+    private static boolean isValidTint(int hue, int chroma, int bright) {
+        final boolean hueOk = (hue >= 0 && hue <= 359) || (hue >= -360 && hue <= -1);
+        return hueOk && chroma >= -100 && chroma <= 100 && bright >= -100 && bright <= 100;
+    }
+
+    /** True for the 5010000..5019999 group: cash EFFECT items, which are not equips. */
+    private static boolean isCashEffect(int itemId) {
+        return itemId >= 5010000 && itemId <= 5019999;
+    }
+
+    /**
+     * The cash EFFECT item at {@code target}, or null. Separate from {@link #resolve} because
+     * these are plain {@link Item}s in the CASH tab with no {@code inventoryequipment} row, so
+     * they carry their colour in their own three columns instead of the equip six.
+     */
+    private static Item resolveCashEffect(Character player, Target target) {
+        if (!isCashEffect(target.itemId())) {
+            return null;
+        }
+        InventoryType type = InventoryType.getByType(target.invType());
+        if (type == null) {
+            return null;
+        }
+        Inventory inv = player.getInventory(type);
+        inv.lockInventory();
+        try {
+            Item item = inv.getItem(target.invPos());
+            if (item == null || item instanceof Equip || item.getItemId() != target.itemId()) {
+                return null;
+            }
+            return item;
+        } finally {
+            inv.unlockInventory();
+        }
+    }
+
     private static Equip resolve(Character player, Target target) {
         InventoryType type = target.invPos() < 0
                 ? InventoryType.EQUIPPED
@@ -245,9 +430,11 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
             if (equip.getItemId() != target.itemId()) {
                 return null;
             }
-            if (!ItemInformationProvider.getInstance().isCash(equip.getItemId())) {
-                return null;
-            }
+            // No `isCash` gate. Ordinary equips dye exactly like Cash ones, and the client's
+            // drop gate was opened in step with this: if only one side is relaxed, a drop is
+            // accepted on the well and then refused a round trip later, which reads as the
+            // window being broken rather than as a rule.
+
             return equip;
         } finally {
             inv.unlockInventory();

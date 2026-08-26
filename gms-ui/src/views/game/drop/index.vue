@@ -90,7 +90,11 @@
                   {{ record.dropperName }}
                 </a-button>
                 <template #content>
-                  <img :src="getIconUrl('mob', record.dropperId)" alt="" />
+                  <img
+                    :src="getCachedIconUrl('mob', record.dropperId)"
+                    alt=""
+                    @error="onMobIconError"
+                  />
                 </template>
               </a-popover>
             </template>
@@ -124,7 +128,11 @@
                   {{ record.itemName }}
                 </a-button>
                 <template #content>
-                  <img :src="getIconUrl('item', record.itemId)" alt="" />
+                  <img
+                    :src="getCachedIconUrl('item', record.itemId)"
+                    alt=""
+                    @error="onItemIconError"
+                  />
                 </template>
               </a-popover>
             </template>
@@ -244,7 +252,11 @@
   } from '@/api/drop';
   import { DropState } from '@/store/modules/drop/type';
   import useLoading from '@/hooks/loading';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import {
+    getCachedIconUrl,
+    onItemIconError,
+    onMobIconError,
+  } from '@/utils/mapleStoryAPI';
   import { Message } from '@arco-design/web-vue';
 
   const { setLoading, loading } = useLoading(false);

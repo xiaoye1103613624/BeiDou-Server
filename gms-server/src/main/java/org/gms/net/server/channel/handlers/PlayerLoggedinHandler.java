@@ -449,9 +449,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     player.changeSkillLevel(bounceV, (byte) 1, 1, -1);
                 }
             }
-            // MapleRoot-align: teach hyper books on login so client skillLevel matches server
-            // (avoids gray icons / display>80 path). Fat Skill books + ResMan retain must stay on.
-            player.resyncHyperSkillsToClient();
             player.checkBerserk(player.isHidden());
 
             if (newcomer) {

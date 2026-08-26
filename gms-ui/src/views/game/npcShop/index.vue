@@ -34,6 +34,15 @@
               搜索
             </a-button>
             <a-button @click="resetClick">重置</a-button>
+            <a-divider style="height: 24px" direction="vertical" />
+            <a-input-number
+              v-model="newShopNpcId"
+              placeholder="新建商店 NPC ID"
+              :style="{ width: '160px' }"
+            />
+            <a-button type="primary" status="warning" @click="createShopClick">
+              新建商店
+            </a-button>
             <a-divider
               v-if="shopId > 0"
               style="height: 24px"
@@ -80,7 +89,10 @@
             align="center"
           >
             <template #cell="{ record }">
-              <img :src="getIconUrl('npc', record.npcId)" />
+              <img
+                :src="getCachedIconUrl('npc', record.npcId)"
+                @error="onItemIconError"
+              />
             </template>
           </a-table-column>
           <a-table-column
@@ -126,7 +138,10 @@
           />
           <a-table-column title="物品图片" align="center" :width="100">
             <template #cell="{ record }">
-              <img :src="getIconUrl('item', record.itemId)" />
+              <img
+                :src="getCachedIconUrl('item', record.itemId)"
+                @error="onItemIconError"
+              />
             </template>
           </a-table-column>
           <a-table-column title="物品ID" :width="100" align="center">
@@ -234,6 +249,7 @@
   import useLoading from '@/hooks/loading';
   import {
     addShopItem,
+    createShop,
     deleteShopItem,
     getShopFilter,
     getShopItemList,
@@ -242,9 +258,27 @@
   } from '@/api/npcShop';
   import { NpcShopItemState, NpcShopState } from '@/store/modules/npcShop/type';
   import { Message } from '@arco-design/web-vue';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getCachedIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
 
   const { loading, setLoading } = useLoading(false);
+  const newShopNpcId = ref<number | undefined>(undefined);
+
+  const createShopClick = async () => {
+    if (!newShopNpcId.value || newShopNpcId.value <= 0) {
+      Message.warning('请输入有效的 NPC ID');
+      return;
+    }
+    setLoading(true);
+    try {
+      await createShop(newShopNpcId.value);
+      Message.success('商店已创建，可搜索后维护商品');
+      shopFilter.value.npcId = newShopNpcId.value;
+      newShopNpcId.value = undefined;
+      await loadShopList();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const total = ref<number>(0);
   const pageChange = (data: number) => {

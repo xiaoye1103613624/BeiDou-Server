@@ -93,11 +93,31 @@ const GAME: AppRouteRecordRaw = {
       },
     },
     {
+      path: 'lottery',
+      name: 'lottery',
+      component: () => import('@/views/game/lottery/index.vue'),
+      meta: {
+        locale: 'menu.game.lottery',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
       path: 'commandInfo',
       name: 'commandInfo',
       component: () => import('@/views/game/commandInfo/index.vue'),
       meta: {
         locale: 'menu.game.command',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'weather',
+      name: 'weather',
+      component: () => import('@/views/game/weather/index.vue'),
+      meta: {
+        locale: 'menu.game.weather',
         requiresAuth: true,
         roles: ['admin'],
       },

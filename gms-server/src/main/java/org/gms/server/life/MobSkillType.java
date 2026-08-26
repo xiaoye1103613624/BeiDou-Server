@@ -45,10 +45,22 @@ public enum MobSkillType {
     SPEED(156),
     SEAL_SKILL(157),
     SUMMON(200),
-    // 高版本扩展技能 (186版新增, 占位待实现)
-    SUMMON_BOMB(201),
-    SUMMON_MULTI(202),
-    UNKNOWN_207(207);
+    SUMMON_201(201),
+    SUMMON_138(138),
+    SUMMON_170(170),
+    SUMMON_174(174),
+    SUMMON_176(176),
+    SUMMON_177(177),
+    SUMMON_183(183),
+    SUMMON_184(184),
+    SUMMON_186(186),
+    SUMMON_187(187),
+    SUMMON_188(188),
+    SUMMON_189(189),
+    SUMMON_190(190),
+    SUMMON_191(191),
+    SUMMON_202(202),
+    SUMMON_203(203);
 
     private final int id;
 
@@ -67,7 +79,7 @@ public enum MobSkillType {
     }
 
     private static boolean isOutOfIdRange(int id) {
-        return id < 100 || id > 210;
+        return id < 100 || id > 203;
     }
 
     public int getId() {

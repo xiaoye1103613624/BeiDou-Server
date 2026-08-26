@@ -138,13 +138,17 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             }
         }
         if (attack.numAttacked > 0 && attack.skill == DragonKnight.SACRIFICE) {
-            int totDamageToOneMonster = 0; // sacrifice attacks only 1 mob with 1 attack
-            final Iterator<List<Integer>> dmgIt = attack.allDamage.values().iterator();
+            long totDamageToOneMonster = 0;
+            final Iterator<List<Long>> dmgIt = attack.allDamage.values().iterator();
             if (dmgIt.hasNext()) {
-                totDamageToOneMonster = dmgIt.next().get(0);
+                List<Long> first = dmgIt.next();
+                if (!first.isEmpty()) {
+                    totDamageToOneMonster = first.get(0);
+                }
             }
 
-            chr.safeAddHP(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100);
+            chr.safeAddHP(-1 * AbstractDealDamageHandler.clampToInt(
+                    totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100));
         }
         if (attack.numAttacked > 0 && attack.skill == 1211002) {
             boolean advcharge_prob = false;
@@ -158,7 +162,12 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         }
         int attackCount = 1;
         if (attack.skill != 0) {
-            attackCount = attack.getAttackEffect(chr, null).getAttackCount();
+            StatEffect atkFx = attack.getAttackEffect(chr, null);
+            if (atkFx == null) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+            attackCount = atkFx.getAttackCount();
             attackCount += org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill);
         }
         if (numFinisherOrbs == 0 && GameConstants.isFinisherSkill(attack.skill)) {
@@ -174,14 +183,19 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         } else if (attack.skill > 0) {
             Skill skill = SkillFactory.getSkill(attack.skill);
-            StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
-            if (effect_.getCooldown() > 0) {
-                if (chr.skillIsCooling(attack.skill)) {
-                    return;
-                } else {
-                    int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
-                    c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
-                    chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
+            if (skill != null) {
+                int slv = chr.getSkillLevel(skill);
+                if (slv > 0) {
+                    StatEffect effect_ = skill.getEffect(slv);
+                    if (effect_.getCooldown() > 0) {
+                        if (chr.skillIsCooling(attack.skill)) {
+                            return;
+                        } else {
+                            int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
+                            c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
+                            chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
+                        }
+                    }
                 }
             }
         }

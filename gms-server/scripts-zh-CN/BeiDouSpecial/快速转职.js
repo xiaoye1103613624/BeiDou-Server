@@ -104,17 +104,13 @@ function action(mode, type, selection) {
                     cm.sendOk("你还没有满足转职条件！");
                 }
             } else if (jobid % 10 == 1) {
-                if (jobid / 1000 >= 1 && jobid / 1000 < 2) {
-                    cm.sendOk("骑士团共3转 已完成！");
-                } else if (cm.getChar().getLevel() >= 120) {
+                // 骑士团/战神等：%10==1 为三转后状态，可继续四转（如 1111→1112）
+                if (cm.getChar().getLevel() >= 120) {
                     cm.changeJobById(changeto);
                     cm.dropMessage(5,"【转职系统】玩家 [" + cm.getPlayer() + "] 快速四转");
-                    
-                    // 四转后自动初始化职业技能等级（使用四转后的职业ID）
                     initializeFourthJobSkills(changeto);
-                    
                 } else {
-                    cm.sendOk("你还没有满足转职条件！");
+                    cm.sendOk("你还没有满足转职条件！需要 120 级。");
                 }
             } else {
                 cm.sendOk("所有转职已经完成！");

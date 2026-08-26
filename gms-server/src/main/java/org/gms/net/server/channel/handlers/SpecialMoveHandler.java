@@ -79,8 +79,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         }
         int skillLevel = chr.getSkillLevel(skill);
 
-        // 装备版轮回碑石：穿戴时劫持英雄之回声系（1005，非 PQ）为刷怪加成
-        // 注意：1009–1011/1020 是客户端 PQ 技能，普通地图会提示「该技能无法在当前地图使用」
+        // 轮回碑石专用技能（1021 系）：拥有装备/消耗品即可施放，与英雄之回声（1005）分离
         if (org.gms.reincarnation.ReincarnationSupport.tryHandleSkill(c, chr, skillid)) {
             return;
         }
@@ -94,21 +93,12 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         }
-        // Hyper buff skills (e.g. 3131007): same ijl15 / missed-teach path as attack skills
-        if (skillLevel == 0 && GameConstants.isHyperBookSkill(skillid)
-                && skill.getMaxLevel() > 0
-                && chr.getJob().getId() == skillid / 10000) {
-            skillLevel = 1;
-        }
         if (skillLevel == 0) {
             chr.dropMessage(5, "技能施放失败: " + skillid + " 等级为0（先 !skill " + skillid + " 1）");
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        // Hyper books: client may send 0/1 (post-"not yet" nop / missed teach); server still applies at its own level.
-        // Forged client level > 1 is still rejected (cannot escalate).
-        if (skillLevel != __skillLevel
-                && !(GameConstants.isHyperBookSkill(skillid) && __skillLevel <= 1)) {
+        if (skillLevel != __skillLevel) {
             chr.dropMessage(5, "技能施放失败: " + skillid + " 等级不一致 服务端=" + skillLevel + " 客户端=" + __skillLevel);
             c.sendPacket(PacketCreator.enableActions());
             return;

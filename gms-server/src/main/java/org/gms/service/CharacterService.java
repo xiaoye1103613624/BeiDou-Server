@@ -22,6 +22,7 @@ import org.gms.net.server.world.Messenger;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.World;
+import org.gms.reincarnation.ReincarnationSupport;
 import org.gms.server.Storage;
 import org.gms.server.life.MobSkill;
 import org.gms.server.life.MobSkillFactory;
@@ -361,6 +362,20 @@ public class CharacterService {
             }
         });
 
+        try (java.sql.Connection con = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(
+                     "SELECT skillid, tinthue, tintchroma, tintbright FROM skilltints WHERE characterid = ?")) {
+            ps.setInt(1, cid);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    chr.setSkillTint(rs.getInt("skillid"), rs.getInt("tinthue"),
+                            rs.getInt("tintchroma"), rs.getInt("tintbright"));
+                }
+            }
+        } catch (java.sql.SQLException ignored) {
+            // V1.19.15 前兼容
+        }
+
         QueryWrapper cdQueryWrapper = QueryWrapper.create().where(COOLDOWNS_D_O.CHARID.eq(cid));
         List<CooldownsDO> cooldownsDOList = cooldownsMapper.selectListByQuery(cdQueryWrapper);
         cooldownsDOList.forEach(cooldownsDO -> {
@@ -396,6 +411,8 @@ public class CharacterService {
 
         List<KeymapDO> keymapDOList = keymapMapper.selectListByQuery(QueryWrapper.create().where(KEYMAP_D_O.CHARACTERID.eq(cid)));
         keymapDOList.forEach(keymapDO -> chr.getKeymap().put(keymapDO.getKey(), new KeyBinding(keymapDO.getType(), keymapDO.getAction())));
+
+        ReincarnationSupport.sanitizeOnCharacterLoad(chr);
 
         List<SavedlocationsDO> savedlocationsDOList = savedlocationsMapper.selectListByQuery(QueryWrapper.create().where(SAVEDLOCATIONS_D_O.CHARACTERID.eq(cid)));
         savedlocationsDOList.forEach(savedlocationsDO -> chr.getSavedLocations()[SavedLocationType.valueOf(savedlocationsDO.getLocationtype()).ordinal()]

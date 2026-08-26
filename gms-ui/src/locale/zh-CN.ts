@@ -4,6 +4,8 @@ import cashShop from '@/views/game/cashShop/locale/zh-CN';
 import windowCashShop from '@/views/game/windowCashShop/locale/zh-CN';
 import npcShop from '@/views/game/npcShop/locale/zh-CN';
 import gachapon from '@/views/game/gachapon/locale/zh-CN';
+import lottery from '@/views/game/lottery/locale/zh-CN';
+import weather from '@/views/game/weather/locale/zh-CN';
 import commandInfo from '@/views/game/commandInfo/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN';
@@ -39,6 +41,8 @@ export default {
   'menu.game.drop.global': '全局爆率',
   'menu.game.inventory': '背包管理',
   'menu.game.gachapon': '百宝箱',
+  'menu.game.lottery': '抽奖管理',
+  'menu.game.weather': '天气切换',
   'menu.game.command': 'GM指令',
   'menu.game.file': '文件管理',
   'menu.game.autoban': '自动封禁',
@@ -84,6 +88,8 @@ export default {
   ...windowCashShop,
   ...drop,
   ...gachapon,
+  ...lottery,
+  ...weather,
   ...commandInfo,
   ...informationSearch,
   ...inventory,

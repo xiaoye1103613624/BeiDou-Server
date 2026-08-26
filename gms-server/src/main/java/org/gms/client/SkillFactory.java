@@ -170,6 +170,11 @@ public class SkillFactory {
             ret.setAction(action);
             Data hit = data.getChildByPath("hit");
             Data ball = data.getChildByPath("ball");
+            // Attack skills (projectile / hit frames) always animate; hyper WZ often omits action/.
+            if (!action && (hit != null || ball != null)) {
+                action = true;
+                ret.setAction(true);
+            }
             isBuff = effect != null && hit == null && ball == null;
             isBuff |= action_ != null && DataTool.getString("0", action_, "").equals("alert2");
             switch (id) {

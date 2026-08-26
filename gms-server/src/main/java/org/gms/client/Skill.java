@@ -98,6 +98,13 @@ public class Skill {
         }
     }
 
+    /**
+     * Whether login / SET_FIELD skill blob writes a trailing masterLevel int.
+     * Must match vanilla client {@code sub_4E8F04} (job%10==2 only, plus Evan exceptions).
+     * Hyper books (job%10==3) stay false — Cosmic/MapleRoot same; writing masterLevel without
+     * a matching decode patch causes EOF-38. Hyper unlock is skillLevel via UPDATE_SKILLS /
+     * ijl15 CUISkill unlock, not SET_FIELD masterLevel.
+     */
     public boolean isFourthJob() {
         if (job == 2212) {
             return false;

@@ -4,6 +4,8 @@ import cashShop from '@/views/game/cashShop/locale/en-US';
 import windowCashShop from '@/views/game/windowCashShop/locale/en-US';
 import npcShop from '@/views/game/npcShop/locale/en-US';
 import gachapon from '@/views/game/gachapon/locale/en-US';
+import lottery from '@/views/game/lottery/locale/en-US';
+import weather from '@/views/game/weather/locale/en-US';
 import commandInfo from '@/views/game/commandInfo/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
 import informationSearch from '@/views/dashboard/informationSearch/locale/en-US';
@@ -38,6 +40,8 @@ export default {
   'menu.game.drop.global': 'Global Drop',
   'menu.game.inventory': 'Inventory',
   'menu.game.gachapon': 'Gachapon',
+  'menu.game.lottery': 'Lottery',
+  'menu.game.weather': 'Weather',
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
   'menu.game.autoban': 'Autoban',
@@ -81,6 +85,8 @@ export default {
   ...windowCashShop,
   ...drop,
   ...gachapon,
+  ...lottery,
+  ...weather,
   ...commandInfo,
   ...informationSearch,
   ...inventory,

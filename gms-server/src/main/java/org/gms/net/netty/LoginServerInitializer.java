@@ -13,6 +13,11 @@ public class LoginServerInitializer extends ServerChannelInitializer {
     private static final Logger log = LoggerFactory.getLogger(LoginServerInitializer.class);
 
     @Override
+    protected int idleTimeSeconds() {
+        return LOGIN_IDLE_TIME_SECONDS;
+    }
+
+    @Override
     public void initChannel(SocketChannel socketChannel) {
         final String clientIp = socketChannel.remoteAddress().getHostString();
         log.info(I18nUtil.getLogMessage("LoginServerInitializer.initChannel.info1"), clientIp);

@@ -155,6 +155,17 @@ public class Character extends AbstractCharacterObject {
     @Getter private short faceTintHue = 0;
     @Getter private byte faceTintChroma = 0;
     @Getter private byte faceTintBright = 0;
+    @Getter private short skinTintHue = 0;
+    @Getter private byte skinTintChroma = 0;
+    @Getter private byte skinTintBright = 0;
+    private final Map<Integer, int[]> skillTints = new LinkedHashMap<>();
+
+    protected static int normalizeTintHue(int hue) {
+        if (hue < 0) {
+            return hue < -360 ? -360 : hue;
+        }
+        return Math.floorMod(hue, 360);
+    }
 
     public boolean isHairTinted() {
         return hairTintHue != 0 || hairTintChroma != 0 || hairTintBright != 0;
@@ -164,16 +175,26 @@ public class Character extends AbstractCharacterObject {
         return faceTintHue != 0 || faceTintChroma != 0 || faceTintBright != 0;
     }
 
+    public boolean isSkinTinted() {
+        return skinTintHue != 0 || skinTintChroma != 0 || skinTintBright != 0;
+    }
+
     public void setHairTint(int hue, int chroma, int bright) {
-        this.hairTintHue = (short) Math.floorMod(hue, 360);
+        this.hairTintHue = (short) normalizeTintHue(hue);
         this.hairTintChroma = (byte) Math.max(-100, Math.min(100, chroma));
         this.hairTintBright = (byte) Math.max(-100, Math.min(100, bright));
     }
 
     public void setFaceTint(int hue, int chroma, int bright) {
-        this.faceTintHue = (short) Math.floorMod(hue, 360);
+        this.faceTintHue = (short) normalizeTintHue(hue);
         this.faceTintChroma = (byte) Math.max(-100, Math.min(100, chroma));
         this.faceTintBright = (byte) Math.max(-100, Math.min(100, bright));
+    }
+
+    public void setSkinTint(int hue, int chroma, int bright) {
+        this.skinTintHue = (short) normalizeTintHue(hue);
+        this.skinTintChroma = (byte) Math.max(-100, Math.min(100, chroma));
+        this.skinTintBright = (byte) Math.max(-100, Math.min(100, bright));
     }
 
     public void clearHairTint() {
@@ -188,23 +209,94 @@ public class Character extends AbstractCharacterObject {
         faceTintBright = 0;
     }
 
-    /** Persist Coloring Prism hair/face tint columns (not in the big UPDATE list). */
+    public void clearSkinTint() {
+        skinTintHue = 0;
+        skinTintChroma = 0;
+        skinTintBright = 0;
+    }
+
+    public Map<Integer, int[]> getSkillTints() {
+        return Collections.unmodifiableMap(skillTints);
+    }
+
+    public boolean isSkillTinted(int skillId) {
+        int[] t = skillTints.get(skillId);
+        return t != null && (t[0] != 0 || t[1] != 0 || t[2] != 0);
+    }
+
+    public void setSkillTint(int skillId, int hue, int chroma, int bright) {
+        int h = normalizeTintHue(hue);
+        int c = Math.max(-100, Math.min(100, chroma));
+        int b = Math.max(-100, Math.min(100, bright));
+        if (h == 0 && c == 0 && b == 0) {
+            skillTints.remove(skillId);
+        } else {
+            skillTints.put(skillId, new int[]{h, c, b});
+        }
+    }
+
+    public void clearSkillTint(int skillId) {
+        skillTints.remove(skillId);
+    }
+
+    public void syncWeaponTint() {
+        if (client != null) {
+            sendPacket(org.gms.server.colorprism.ColorPrismPackets.snapshot(this));
+            org.gms.server.colorprism.ColorPrismPackets.broadcastMapTable(getMap());
+        }
+    }
+
+    /** Persist Coloring Prism hair/face/skin tint columns (not in the big UPDATE list). */
     private void persistLookTints(java.sql.Connection con) throws java.sql.SQLException {
         try (java.sql.PreparedStatement ps = con.prepareStatement(
                 "UPDATE characters SET hairtinthue=?, hairtintchroma=?, hairtintbright=?, "
-                        + "facetinthue=?, facetintchroma=?, facetintbright=? WHERE id=?")) {
+                        + "facetinthue=?, facetintchroma=?, facetintbright=?, "
+                        + "skintinthue=?, skintintchroma=?, skintintbright=? WHERE id=?")) {
             ps.setInt(1, hairTintHue);
             ps.setInt(2, hairTintChroma);
             ps.setInt(3, hairTintBright);
             ps.setInt(4, faceTintHue);
             ps.setInt(5, faceTintChroma);
             ps.setInt(6, faceTintBright);
-            ps.setInt(7, id);
+            ps.setInt(7, skinTintHue);
+            ps.setInt(8, skinTintChroma);
+            ps.setInt(9, skinTintBright);
+            ps.setInt(10, id);
             ps.executeUpdate();
         } catch (java.sql.SQLException e) {
             if (e.getMessage() == null || !e.getMessage().toLowerCase().contains("unknown column")) {
                 throw e;
             }
+        }
+    }
+
+    private void persistSkillTints(java.sql.Connection con) throws java.sql.SQLException {
+        try (java.sql.PreparedStatement psDel = con.prepareStatement(
+                "DELETE FROM skilltints WHERE characterid = ?")) {
+            psDel.setInt(1, id);
+            psDel.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            if (e.getMessage() != null && e.getMessage().toLowerCase().contains("unknown table")) {
+                return;
+            }
+            throw e;
+        }
+        if (skillTints.isEmpty()) {
+            return;
+        }
+        try (java.sql.PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO skilltints (characterid, skillid, tinthue, tintchroma, tintbright) "
+                        + "VALUES (?, ?, ?, ?, ?)")) {
+            for (Entry<Integer, int[]> e : skillTints.entrySet()) {
+                int[] t = e.getValue();
+                ps.setInt(1, id);
+                ps.setInt(2, e.getKey());
+                ps.setInt(3, t[0]);
+                ps.setInt(4, t[1]);
+                ps.setInt(5, t[2]);
+                ps.addBatch();
+            }
+            ps.executeBatch();
         }
     }
 
@@ -414,7 +506,6 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private PlayerShop playerShop = null;
     @Getter
-    @Setter
     private Shop shop = null;
     @Getter
     @Setter
@@ -1229,51 +1320,10 @@ public class Character extends AbstractCharacterObject {
             skills[0] = Bowmaster.BOW_EXPERT;
             skills[1] = Bowmaster.HAMSTRING;
             skills[2] = Bowmaster.SHARP_EYES;
-        } else if (jobId == 113) {
-            skills = new int[]{1131074, 1131075, 1131105, 1131109};
-        } else if (jobId == 123) {
-            skills = new int[]{1231074, 1231075, 1231105, 1231109};
-        } else if (jobId == 133) {
-            skills = new int[]{1331074, 1331075, 1331105, 1331109};
-        } else if (jobId == 213) {
-            skills = new int[]{2131006, 2131067, 2131072, 2131079};
-        } else if (jobId == 223) {
-            skills = new int[]{2231006, 2231067, 2231072, 2231079};
-        } else if (jobId == 233) {
-            skills = new int[]{2331006, 2331067, 2331072, 2331079};
-        } else if (jobId == 313) {
-            // 锐眼超技能：转职脚本会 teach 1/1；!job / 漏教时这里补 master 解锁
-            skills = new int[]{3131003, 3131007, 3131012, 3131056};
         } else if (jobId == 322) {
             skills[0] = Marksman.MARKSMAN_BOOST;
             skills[1] = Marksman.BLIND;
             skills[2] = Marksman.SHARP_EYES;
-        } else if (jobId == 323) {
-            skills = new int[]{3231003, 3231007, 3231012, 3231056};
-        } else if (jobId == 413) {
-            skills = new int[]{4131031, 4131042, 4131073, 4131076};
-        } else if (jobId == 423) {
-            skills = new int[]{4231031, 4231042, 4231073, 4231076};
-        } else if (jobId == 513) {
-            skills = new int[]{5131033, 5131044, 5131074, 5131075};
-        } else if (jobId == 523) {
-            skills = new int[]{5231033, 5231044, 5231074, 5231075};
-        } else if (jobId == 700) {
-            skills = new int[]{7001000, 7001001, 7001002, 7001003, 7001004, 7001006};
-        } else if (jobId == 710) {
-            skills = new int[]{7101101, 7101102, 7101103, 7101104, 7101105, 7101106, 7101107, 7101108};
-        } else if (jobId == 1113) {
-            skills = new int[]{11131074, 11131075, 11131105, 11131109};
-        } else if (jobId == 1213) {
-            skills = new int[]{12131006, 12131067, 12131072, 12131079};
-        } else if (jobId == 1313) {
-            skills = new int[]{13131003, 13131007, 13131012, 13131056};
-        } else if (jobId == 1413) {
-            skills = new int[]{14131031, 14131042, 14131073, 14131076};
-        } else if (jobId == 1513) {
-            skills = new int[]{15131033, 15131044, 15131074, 15131075};
-        } else if (jobId == 2113) {
-            skills = new int[]{21131074, 21131075, 21131105, 21131109};
         } else if (jobId == 412) {
             skills[0] = NightLord.SHADOW_STARS;
             skills[1] = NightLord.SHADOW_SHIFTER;
@@ -1314,13 +1364,7 @@ public class Character extends AbstractCharacterObject {
                     continue;
                 }
 
-                // Hyper books (job%10==3): Cosmic/MapleRoot teach 1/max without login masterLevel bytes.
-                // Vanilla 4th-job mastery unlock stays level 0 / master 10 for SP allocation.
-                if ((skillId / 10000) % 10 == 3) {
-                    changeSkillLevel(skill, (byte) 1, Math.max(1, skill.getMaxLevel()), -1);
-                } else {
-                    changeSkillLevel(skill, (byte) 0, 10, -1);
-                }
+                changeSkillLevel(skill, (byte) 0, 10, -1);
             }
         }
     }
@@ -2064,34 +2108,6 @@ public class Character extends AbstractCharacterObject {
                 sendPacket(PacketCreator.updateSkill(skill.getId(), newLevel, newMasterlevel, -1));
             }
             characterService.removeSkill(SkillsDO.builder().skillid(skill.getId()).characterid(getId()).build());
-        }
-    }
-
-    /**
-     * Cosmic-compatible hyper recovery: SET_FIELD never writes masterLevel for job%10==3
-     * (client sub_4E8F04). UPDATE_SKILLS always includes level+masterLevel bytes and always
-     * applies skill level — re-push owned hyper books after login so the client cannot keep
-     * level 0 / gray icons if the bulk list was flaky.
-     */
-    public void resyncHyperSkillsToClient() {
-        if (!isHyperJob()) {
-            return;
-        }
-        for (Entry<Skill, SkillEntry> e : skills.entrySet()) {
-            Skill skill = e.getKey();
-            if (skill == null || GameConstants.isHiddenSkills(skill.getId())) {
-                continue;
-            }
-            final int book = skill.getId() / 10000;
-            // Hyper books: end in 3 (113/123/.../2113), plus SynthMaster 710 / Super Beginner 700.
-            if (!GameConstants.isHyperBookJob(book)) {
-                continue;
-            }
-            SkillEntry se = e.getValue();
-            if (se == null || se.skillLevel <= 0) {
-                continue;
-            }
-            sendPacket(PacketCreator.updateSkill(skill.getId(), se.skillLevel, Math.max(1, se.masterLevel), se.expiration));
         }
     }
 
@@ -2959,6 +2975,7 @@ public class Character extends AbstractCharacterObject {
         markCombatStatsDirty();
         refreshSetBonus();
         org.gms.soul.SoulWeaponService.syncItemEffect(this);
+        syncWeaponTint();
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
         }
@@ -5886,6 +5903,10 @@ public class Character extends AbstractCharacterObject {
         setShop(null);
     }
 
+    public void setShop(Shop shop) {
+        this.shop = shop;
+    }
+
     public void closeTrade() {
         Trade.cancelTrade(this, Trade.TradeResult.PARTNER_CANCEL);
     }
@@ -6825,19 +6846,12 @@ public class Character extends AbstractCharacterObject {
         return jn >= 8 && jn <= 9;
     }
 
-/** Cosmic isSuperBeginner-equivalent: jobs whose char-entry must skip the world-rank blob.
- *  Includes Aegis 2113 so it matches every other hyper job in addCharEntry. */
+    /**
+     * Super Beginner / Ultimate Beginner: skip world-rank blob in char entry.
+     */
     public boolean isSuperBeginner() {
         int id = job.getId();
-        return id == 700 || id == 710 || id == 113 || id == 123 || id == 133 || id == 1113 || id == 213
-                || id == 223 || id == 233 || id == 1213 || id == 313 || id == 323 || id == 1313
-                || id == 413 || id == 423 || id == 1413 || id == 513 || id == 523 || id == 1513
-                || id == 2113;
-    }
-
-    /** 5th / hyper jobs that own hyper skills (adds Aegis 2113 on top of isSuperBeginner). */
-    public boolean isHyperJob() {
-        return isSuperBeginner() || job.getId() == 2113;
+        return id == 700 || id == 710;
     }
 
     public boolean isCygnus() {
@@ -7606,6 +7620,11 @@ public class Character extends AbstractCharacterObject {
                     charactersDO.getFacetintchroma() != null ? charactersDO.getFacetintchroma() : 0,
                     charactersDO.getFacetintbright() != null ? charactersDO.getFacetintbright() : 0);
         }
+        if (charactersDO.getSkintinthue() != null) {
+            chr.setSkinTint(charactersDO.getSkintinthue(),
+                    charactersDO.getSkintintchroma() != null ? charactersDO.getSkintintchroma() : 0,
+                    charactersDO.getSkintintbright() != null ? charactersDO.getSkintintbright() : 0);
+        }
         chr.setAccountId(charactersDO.getAccountid());
         chr.setMapId(charactersDO.getMap());
         chr.setJailExpiration(charactersDO.getJailexpire());
@@ -7801,6 +7820,9 @@ public class Character extends AbstractCharacterObject {
         cdo.setFacetinthue((int) chr.getFaceTintHue());
         cdo.setFacetintchroma((int) chr.getFaceTintChroma());
         cdo.setFacetintbright((int) chr.getFaceTintBright());
+        cdo.setSkintinthue((int) chr.getSkinTintHue());
+        cdo.setSkintintchroma((int) chr.getSkinTintChroma());
+        cdo.setSkintintbright((int) chr.getSkinTintBright());
         if (chr.getMap() == null || (chr.getCashShop() != null && chr.getCashShop().isOpened())) {
             cdo.setMap(chr.getMapId());
         } else {
@@ -8948,6 +8970,7 @@ public class Character extends AbstractCharacterObject {
 
             try {
                 persistLookTints(con);
+                persistSkillTints(con);
                 try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ?, checkinDay = ?, checkinClaimed = ?, checkinLastClaim = ?, autoOreStorage = ?, autoScrollStorage = ?, autoChairStorage = ?, autoMountStorage = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);

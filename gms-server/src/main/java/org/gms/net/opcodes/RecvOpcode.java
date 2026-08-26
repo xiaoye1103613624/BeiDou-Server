@@ -215,6 +215,7 @@ public enum RecvOpcode implements Opcode {
     WEAPON_TINT_ACTION(0x372E), // Coloring Prism weapontint 操作
     BAG_WINDOW(0x3724), // 收纳背包窗口操作
     USER_INFO_EX(0x3726), // 查看他人装备详情
+    MONSTER_BOOK_QUERY(0x372B), // 怪物图鉴查询（掉落/物品搜索）
     CASHSHOP_WINDOW_ACTION(0x3730), // 窗口版现金商城操作
 
     WORLD_MAP_PLAYERS(0x115), // 世界地图 tooltip 玩家列表请求

@@ -32,6 +32,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.WeaponType;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
@@ -115,10 +116,20 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             short bulletCount = 1;
             short supplement = 0;   //用于补充平衡之怒的变量
             StatEffect effect = null;
+            final boolean noBulletSkill = GameConstants.isNoBulletAttackSkill(attack.skill);
             if (attack.skill != 0) {
                 effect = attack.getAttackEffect(chr, null);
-                bulletCount = effect.getBulletCount();
-                bulletCount += (short) org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill);
+                if (effect == null) {
+                    // Client can still play FX (hyper "not yet" nop); without effect, no server HP.
+                    c.sendPacket(PacketCreator.enableActions());
+                    return;
+                }
+                if (noBulletSkill) {
+                    bulletCount = 0;
+                } else {
+                    bulletCount = effect.getBulletCount();
+                    bulletCount += (short) org.gms.combat.provider.SkillModProvider.addAttackCount(chr, attack.skill);
+                }
                 if (effect.getCooldown() > 0) {
                     c.sendPacket(PacketCreator.skillCooldown(attack.skill,
                             chr.getEffectiveCooldownSeconds(effect.getCooldown())));
@@ -139,7 +150,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 }
             }
             boolean hasShadowPartner = chr.getBuffedValue(BuffStat.SHADOWPARTNER) != null;
-            if (hasShadowPartner) {
+            if (hasShadowPartner && !noBulletSkill) {
                 bulletCount *= 2;
             }
             Inventory inv = chr.getInventory(InventoryType.USE);
@@ -184,7 +195,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             boolean soulArrow = chr.getBuffedValue(BuffStat.SOULARROW) != null;
             boolean shadowClaw = chr.getBuffedValue(BuffStat.SHADOW_CLAW) != null;
             if (projectile != 0) {
-                if (!soulArrow && !shadowClaw && attack.skill != 11101004 && attack.skill != 15111007 && attack.skill != 14101006) {
+                if (!noBulletSkill && !soulArrow && !shadowClaw && attack.skill != 11101004 && attack.skill != 15111007 && attack.skill != 14101006) {
                     short bulletConsume = bulletCount;
 
                     if (effect != null && effect.getBulletConsume() != 0) {
@@ -201,7 +212,8 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 }
             }
 
-            if (projectile != 0 || soulArrow || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 4111004 || attack.skill == 13101005) {
+            // Hyper / MapleRoot no-bullet skills: client IsNoBulletSkill — must applyAttack without quiver.
+            if (projectile != 0 || soulArrow || noBulletSkill || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 4111004 || attack.skill == 13101005) {
                 int visProjectile = projectile; //visible projectile sent to players
                 if (ItemConstants.isThrowingStar(projectile)) {
                     Inventory cash = chr.getInventory(InventoryType.CASH);
@@ -214,7 +226,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                             }
                         }
                     }
-                } else if (soulArrow || attack.skill == 3111004 || attack.skill == 3211004 || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 13101005) {
+                } else if (soulArrow || noBulletSkill || attack.skill == 3111004 || attack.skill == 3211004 || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 13101005) {
                     visProjectile = 0;
                 }
 
@@ -234,14 +246,19 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
 
                 if (attack.skill != 0) {
                     Skill skill = SkillFactory.getSkill(attack.skill);
-                    StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
-                    if (effect_.getCooldown() > 0) {
-                        if (chr.skillIsCooling(attack.skill)) {
-                            return;
-                        } else {
-                            int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
-                            c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
-                            chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
+                    if (skill != null) {
+                        int slv = chr.getSkillLevel(skill);
+                        if (slv > 0) {
+                            StatEffect effect_ = skill.getEffect(slv);
+                            if (effect_.getCooldown() > 0) {
+                                if (chr.skillIsCooling(attack.skill)) {
+                                    return;
+                                } else {
+                                    int cd = chr.getEffectiveCooldownSeconds(effect_.getCooldown());
+                                    c.sendPacket(PacketCreator.skillCooldown(attack.skill, cd));
+                                    chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(cd));
+                                }
+                            }
                         }
                     }
                 }
@@ -254,7 +271,12 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     chr.cancelBuffStats(BuffStat.WIND_WALK);
                 }
 
-                applyAttack(attack, chr, bulletCount);
+                // no-bullet skills: attackCount for venom/etc must not stay 0
+                int applyCount = bulletCount;
+                if (noBulletSkill && effect != null) {
+                    applyCount = Math.max(1, effect.getAttackCount());
+                }
+                applyAttack(attack, chr, applyCount);
             }
         }
     }

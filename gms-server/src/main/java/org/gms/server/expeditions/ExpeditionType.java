@@ -41,6 +41,13 @@ public enum ExpeditionType {
     ARIANT1(2, 7, 20, 30, 5),
     ARIANT2(2, 7, 20, 30, 5),
     PINKBEAN(6, 30, 120, 255, 5),
+    VonLeon(6, 30, 175, 255, 5),//班雷昂
+    Cydnus(6, 30, 170, 255, 5),//[雍和 修改] 希纳斯
+    VONBON(6,30,125,255,5),//[雍和 修改] 半半
+    PIERRE(6,30,125,255,5),//[雍和 修改] 皮埃尔
+    CQ(6,30,125,255,5),//[雍和 修改] 血腥女王
+    VELLUM(6,30,125,255,5),//[雍和 修改] 贝伦
+    AKAYRUM(6,30,140,255,5),//阿卡伊勒
     CWKPQ(6, 30, 90, 255, 5);   // CWKPQ min-level 90, found thanks to Cato
 
     private final int minSize;

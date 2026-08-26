@@ -27,6 +27,14 @@ public final class ExpeditionDeathCount {
             case SHOWA -> GameConfig.getServerInt("showa_expedition_death_count");
             case CWKPQ -> GameConfig.getServerInt("cwkpq_expedition_death_count");
             case ARIANT, ARIANT1, ARIANT2 -> 0;
+            case VonLeon -> GameConfig.getServerInt("vonleon_expedition_death_count");
+            case Cydnus -> GameConfig.getServerInt("cydnus_expedition_death_count");
+            case VONBON -> GameConfig.getServerInt("vonbon_expedition_death_count");
+            case PIERRE -> GameConfig.getServerInt("pierre_expedition_death_count");
+            case CQ -> GameConfig.getServerInt("cq_expedition_death_count");
+            case VELLUM -> GameConfig.getServerInt("vellum_expedition_death_count");
+            case AKAYRUM -> GameConfig.getServerInt("akayrum_expedition_death_count");
+            default -> 0;
         };
         return Math.max(0, configured);
     }

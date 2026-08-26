@@ -2,11 +2,13 @@ package org.gms.service;
 
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.row.Db;
 import com.mybatisflex.core.row.Row;
 import lombok.AllArgsConstructor;
 import org.gms.dao.entity.ShopitemsDO;
 import org.gms.dao.mapper.ShopitemsMapper;
 import org.gms.dao.mapper.ShopsMapper;
+import org.gms.exception.BizException;
 import org.gms.model.dto.ShopItemSearchRtnDTO;
 import org.gms.model.dto.ShopSearchReqDTO;
 import org.gms.model.dto.ShopSearchRtnDTO;
@@ -30,6 +32,32 @@ import static org.gms.dao.entity.table.ShopsDOTableDef.SHOPS_D_O;
 public class ShopService {
     private final ShopsMapper shopsMapper;
     private final ShopitemsMapper shopitemsMapper;
+
+    /**
+     * 按 NPC ID 新建商店（shopid = npcid）。已存在则报错。
+     */
+    public ShopSearchRtnDTO createShop(Integer npcId) {
+        RequireUtil.requireNotNull(npcId, "npcId");
+        if (npcId <= 0) {
+            throw new BizException("npcId 无效");
+        }
+        long byNpc = shopsMapper.selectCountByQuery(QueryWrapper.create().where(SHOPS_D_O.NPCID.eq(npcId)));
+        if (byNpc > 0) {
+            throw new BizException("该 NPC 已绑定商店（npcId=" + npcId + "）");
+        }
+        long byShop = shopsMapper.selectCountByQuery(QueryWrapper.create().where(SHOPS_D_O.SHOPID.eq(npcId.longValue())));
+        if (byShop > 0) {
+            throw new BizException("商店 ID 已存在（shopId=" + npcId + "）");
+        }
+        Db.updateBySql("INSERT INTO shops (shopid, npcid) VALUES (?, ?)", npcId, npcId);
+        ShopFactory.getInstance().reloadShops();
+        String npcName = LifeFactory.getNPCName(npcId);
+        return ShopSearchRtnDTO.builder()
+                .shopId(npcId.longValue())
+                .npcId(npcId)
+                .npcName(RequireUtil.isEmpty(npcName) ? String.valueOf(npcId) : npcName)
+                .build();
+    }
 
     public Page<ShopSearchRtnDTO> getShopList(ShopSearchReqDTO data) {
         QueryWrapper queryWrapper = QueryWrapper.create().select().from(SHOPS_D_O)

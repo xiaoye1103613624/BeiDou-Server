@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * LP_WeaponTint (0x372F): tells the client which of a character's Cash equips have been dyed and to what,
- * so {@code DLL/src/weapontint.cpp} can recolour their sprites at render time. The v83 client has no
+ * so {@code weapontint.cpp} can recolour their sprites at render time. The v83 client has no
  * item-dye system at all, so every byte of this feature is a side channel; nothing is folded into the
  * item packet.
  * <p>
@@ -26,7 +26,7 @@ import java.util.List;
  * @see net.server.channel.handlers.WeaponTintHandler
  */
 public final class ColorPrismPackets {
-    /** Client -&gt; server actions. Must match {@code DLL/src/weapontint.cpp}. */
+    /** Client -&gt; server actions. Must match {@code weapontint.cpp}. */
     public static final byte ACTION_REQUEST_SNAPSHOT = 0;
     public static final byte ACTION_APPLY = 1;
     public static final byte ACTION_RESTORE = 2;
@@ -34,7 +34,11 @@ public final class ColorPrismPackets {
     public static final byte ACTION_APPLY_LOOK = 3;
     public static final byte ACTION_RESTORE_LOOK = 4;
 
-    /** Server -&gt; client subtypes. Must match {@code DLL/src/weapontint.cpp}. */
+    /** Skills tab. Named by SKILL ID rather than by inventory address: a skill has neither. */
+    public static final byte ACTION_APPLY_SKILL = 5;
+    public static final byte ACTION_RESTORE_SKILL = 6;
+
+    /** Server -&gt; client subtypes. Must match {@code weapontint.cpp}. */
     private static final byte RESP_SNAPSHOT = 1;
     private static final byte RESP_RESULT = 2;
     private static final byte RESP_REMOTE_TABLE = 3;
@@ -46,6 +50,15 @@ public final class ColorPrismPackets {
      * neither may exceed 255.
      */
     private static final int MAX_ENTRIES = 120;
+
+    /**
+     * Ceiling for the per-player entry count, which goes out as ONE BYTE. MAX_ENTRIES bounds the
+     * equip list and each equip contributes up to two entries, so the equips alone can reach 240
+     * and everything appended after them has to fit in what is left. Overflowing would not merely
+     * drop a colour: the count and the payload would disagree and the reader would take its next
+     * entry from the middle of this one.
+     */
+    private static final int MAX_TOTAL_ENTRIES = 255;
     private static final int MAX_PLAYERS = 200;
 
     /**
@@ -53,7 +66,7 @@ public final class ColorPrismPackets {
      * "itemId" is a KIND SENTINEL rather than a real id. 1 and 2 cannot collide with the equip
      * ids sharing the table, which are all 1xxxxxx, and the client's reader admits them
      * unchanged -- its only filter is {@code itemId > 0}. Must match {@code kTintKey_Hair} /
-     * {@code kTintKey_Face} in {@code DLL/src/weapontint.h}.
+     * {@code kTintKey_Face} in {@code weapontint.h}.
      * <p>
      * Keyed by KIND and not by the hair/face WZ id on purpose: the client already knows which
      * hair and face an avatar wears (it reads them off that avatar's own look, which for a
@@ -62,20 +75,29 @@ public final class ColorPrismPackets {
      */
     public static final int TINT_KEY_HAIR = 1;
     public static final int TINT_KEY_FACE = 2;
+    /** Skin: the body and arm canvases of Character/000020NN.img. */
+    public static final int TINT_KEY_SKIN = 3;
 
     /**
      * An item's EFFECT sprites carry a second tint of their own, so they need a second key per
      * item. Biasing the id keeps one table and one wire format: equip ids top out at 1999999, so
      * id + 10000000 collides with no real id, neither look sentinel, and no other item's effect
-     * key. Must match {@code kTintKey_EffectBias} in {@code DLL/src/weapontint.h}.
+     * key. Must match {@code kTintKey_EffectBias} in {@code weapontint.h}.
      */
     public static final int TINT_KEY_EFFECT_BIAS = 10000000;
+
+    /**
+     * Skill tint keys are the skill id plus this. Skill ids run to seven digits and effect keys
+     * are an item id plus ten million, so thirty million puts skills clear of both with no
+     * overlap to disambiguate. The client computes the same number in {@code SkillTintKeyFor}.
+     */
+    public static final int TINT_KEY_SKILL_BIAS = 30000000;
 
     /** Which half of an item a tint applies to. Matches {@code kTintLayer_*} in weapontint.h. */
     public static final int LAYER_BODY = 0;
     public static final int LAYER_EFFECTS = 1;
 
-    /** Result codes, mirrored by {@code WeaponTintResult} in {@code DLL/src/weapontint.h}. */
+    /** Result codes, mirrored by {@code WeaponTintResult} in {@code weapontint.h}. */
     public static final byte RESULT_OK = 1;
     public static final byte RESULT_NO_CASH_WEAPON = 2;
     public static final byte RESULT_NO_ITEM = 3;
@@ -95,7 +117,10 @@ public final class ColorPrismPackets {
         collectDyed(player, InventoryType.EQUIPPED, dyed);
         collectDyed(player, InventoryType.EQUIP, dyed);
 
+        final int equipEntries = countEntries(dyed);
         List<int[]> looks = looksOf(player);
+        appendCapped(looks, cashEffectsOf(player), equipEntries);
+        appendCapped(looks, skillTintsOf(player), equipEntries);
 
         OutPacket p = OutPacket.create(SendOpcode.WEAPON_TINT_SYNC);
         p.writeByte(RESP_SNAPSHOT);
@@ -103,18 +128,68 @@ public final class ColorPrismPackets {
         // equip list, and dropping a player's hair colour because they happen to own 120
         // dyed equips would be an odd way to enforce it. The count is a byte, so the
         // ceiling that actually matters is 255.
-        p.writeByte(countEntries(dyed) + looks.size());
+        p.writeByte(equipEntries + looks.size());
         writeEntries(p, dyed);
         writeLooks(p, looks);
         return p;
     }
 
     /**
+     * Appends what fits and stops. {@code used} is the entry count already committed to by the
+     * equip list, which is written before these and cannot be trimmed at this point.
+     */
+    private static void appendCapped(List<int[]> looks, List<int[]> extra, int used) {
+        for (int[] row : extra) {
+            if (used + looks.size() >= MAX_TOTAL_ENTRIES) {
+                return;
+            }
+            looks.add(row);
+        }
+    }
+
+    /**
      * This character's non-identity look tints as {kind, hue, chroma, bright} rows. Empty when
      * neither is tinted, which is the common case and costs nothing on the wire.
      */
+    /**
+     * Every DYED cash EFFECT item this character is carrying, as {key, hue, chroma, bright}
+     * rows under the EFFECT key, which is the same key the window's Effects tab writes for an
+     * equip's glow. The client keys its tint table on that number and does not care that this
+     * one came from the Cash tab rather than from an equip.
+     */
+    private static List<int[]> cashEffectsOf(Character player) {
+        List<int[]> out = new ArrayList<>();
+        Inventory inv = player.getInventory(InventoryType.CASH);
+        inv.lockInventory();
+        try {
+            for (Item it : inv.list()) {
+                if (it.isEffTinted()) {
+                    out.add(new int[]{it.getItemId() + TINT_KEY_EFFECT_BIAS, it.getEffTintHue(),
+                            it.getEffTintChroma(), it.getEffTintBright()});
+                }
+            }
+        } finally {
+            inv.unlockInventory();
+        }
+        return out;
+    }
+
+    /**
+     * Every DYED skill this character owns, as {key, hue, chroma, bright} rows under the skill
+     * key. Sent with the looks rather than the equips because, like a look, a skill tint has no
+     * inventory address and is therefore outside the equip list's entry cap.
+     */
+    private static List<int[]> skillTintsOf(Character player) {
+        List<int[]> out = new ArrayList<>();
+        for (var e : player.getSkillTints().entrySet()) {
+            int[] t = e.getValue();
+            out.add(new int[]{e.getKey() + TINT_KEY_SKILL_BIAS, t[0], t[1], t[2]});
+        }
+        return out;
+    }
+
     private static List<int[]> looksOf(Character player) {
-        List<int[]> out = new ArrayList<>(2);
+        List<int[]> out = new ArrayList<>(3);
         if (player.isHairTinted()) {
             out.add(new int[]{TINT_KEY_HAIR, player.getHairTintHue(),
                     player.getHairTintChroma(), player.getHairTintBright()});
@@ -122,6 +197,10 @@ public final class ColorPrismPackets {
         if (player.isFaceTinted()) {
             out.add(new int[]{TINT_KEY_FACE, player.getFaceTintHue(),
                     player.getFaceTintChroma(), player.getFaceTintBright()});
+        }
+        if (player.isSkinTinted()) {
+            out.add(new int[]{TINT_KEY_SKIN, player.getSkinTintHue(),
+                    player.getSkinTintChroma(), player.getSkinTintBright()});
         }
         return out;
     }
@@ -147,6 +226,10 @@ public final class ColorPrismPackets {
             List<Equip> dyed = new ArrayList<>();
             collectDyed(other, InventoryType.EQUIPPED, dyed);
             List<int[]> looks = looksOf(other);
+            // SKILLS BELONG HERE, not only in the snapshot. This table is what a remote avatar's
+            // tint scope reads, so without these rows a dyed skill would be recoloured for the
+            // caster alone and stay vanilla for everyone watching.
+            appendCapped(looks, skillTintsOf(other), countEntries(dyed));
             if (!dyed.isEmpty() || !looks.isEmpty()) {
                 perPlayerLooks.add(looks);
                 players.add(other);

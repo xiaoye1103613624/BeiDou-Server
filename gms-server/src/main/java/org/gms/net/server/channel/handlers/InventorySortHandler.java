@@ -106,6 +106,12 @@ class PairedQuicksort {
         } while (i <= j);
     }
 
+    /** Null-safe name for sort — missing String WZ must not NPE mid-整理. */
+    private String safeName(int itemId) {
+        String n = ii.getName(itemId);
+        return n != null ? n : "";
+    }
+
     private void PartitionByName(int Esq, int Dir, ArrayList<Item> A) {
         Item x, w;
 
@@ -114,10 +120,10 @@ class PairedQuicksort {
 
         x = A.get((i + j) / 2);
         do {
-            while (ii.getName(x.getItemId()).compareTo(ii.getName(A.get(i).getItemId())) > 0) {
+            while (safeName(x.getItemId()).compareTo(safeName(A.get(i).getItemId())) > 0) {
                 i++;
             }
-            while (ii.getName(x.getItemId()).compareTo(ii.getName(A.get(j).getItemId())) < 0) {
+            while (safeName(x.getItemId()).compareTo(safeName(A.get(j).getItemId())) < 0) {
                 j--;
             }
 
@@ -159,6 +165,14 @@ class PairedQuicksort {
     }
 
     private void PartitionByLevel(int Esq, int Dir, ArrayList<Item> A) {
+        // Equip tab can theoretically hold a non-Equip Item after desync; never ClassCast mid-sort.
+        for (int k = Esq; k <= Dir; k++) {
+            if (!(A.get(k) instanceof Equip)) {
+                PartitionByItemId(Esq, Dir, A);
+                return;
+            }
+        }
+
         Equip x, w;
 
         i = Esq;
@@ -289,31 +303,115 @@ class PairedQuicksort {
 }
 
 public final class InventorySortHandler extends AbstractPacketHandler {
+    /** Block double-click spam only — must stay below client invent busy window. */
+    private static final long SORT_DEBOUNCE_MS = 400L;
+    private static final java.util.concurrent.ConcurrentHashMap<Integer, Long> lastSortAt =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** True if sorted list order differs from pre-sort slot scan order. */
+    private static boolean sortOrderChanged(ArrayList<Item> before, ArrayList<Item> after) {
+        if (before.size() != after.size()) {
+            return true;
+        }
+        for (int i = 0; i < before.size(); i++) {
+            if (before.get(i).getItemId() != after.get(i).getItemId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** True if items are not already packed into slots 1..n with no gaps. */
+    private static boolean needsPackedReorder(ArrayList<Item> itemarray) {
+        for (int i = 0; i < itemarray.size(); i++) {
+            if (itemarray.get(i).getPosition() != (short) (i + 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void sendSortInventoryPackets(Client c, List<ModifyInventory> mods, byte invType) {
+        if (!mods.isEmpty()) {
+            final int chunk = 200;
+            for (int i = 0; i < mods.size(); i += chunk) {
+                int to = Math.min(i + chunk, mods.size());
+                // Only first chunk needs updateTick — keeps multi-chunk invent one logical batch.
+                c.sendPacket(PacketCreator.modifyInventory(i == 0, mods.subList(i, to)));
+            }
+        }
+        c.sendPacket(PacketCreator.finishedSort2(invType));
+    }
+
+    private static List<ModifyInventory> applyPackedSort(Inventory inventory,
+                                                         ArrayList<Item> itemarray) {
+        List<ModifyInventory> mods = new ArrayList<>();
+
+        for (Item item : itemarray) {
+            inventory.removeSlot(item.getPosition());
+            mods.add(new ModifyInventory(3, item));
+        }
+
+        short slotCursor = 1;
+        for (Item item : itemarray) {
+            if (slotCursor > inventory.getSlotLimit()) {
+                break;
+            }
+            item.setPosition(slotCursor);
+            inventory.addItemFromDB(item);
+            mods.add(new ModifyInventory(0, item.copy()));
+            slotCursor++;
+        }
+        return mods;
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         p.readInt();
         chr.getAutoBanManager().setTimestamp(3, Server.getInstance().getCurrentTimestamp(), 4);
 
-        // AUX wire-omit (GREEN_ENTER_OMIT_AUX62): flush ghost −62 before bag rearrange.
-        // When flag false: recover is no-op; replace −62→bag is normal equip path.
-        org.gms.client.inventory.manipulator.InventoryManipulator.recoverWireOmittedAuxToBag(c);
-
-        if (!GameConfig.getServerBoolean("use_item_sort")) {
-            c.sendPacket(PacketCreator.enableActions());
-            return;
-        }
-
-        byte invType = p.readByte();
+        byte invType = p.available() > 0 ? p.readByte() : 0;
         if (invType < 1 || invType > 5) {
             c.disconnect(false, false);
             return;
         }
 
+        final int cid = chr.getId();
+        final long now = System.currentTimeMillis();
+        final Long prev = lastSortAt.put(cid, now);
+        if (prev != null && now - prev < SORT_DEBOUNCE_MS) {
+            // Must still ack sort UI — client SlotLock latches invent-pending until
+            // finishedSort2; enableActions-only left 整理 permanently dead.
+            try {
+                c.sendPacket(PacketCreator.finishedSort2(invType));
+            } catch (Throwable ignored) {
+            }
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
+        // AUX wire-omit (GREEN_ENTER_OMIT_AUX62): flush ghost −62 before bag rearrange.
+        // When flag false: recover is no-op; replace −62→bag is normal equip path.
+        org.gms.client.inventory.manipulator.InventoryManipulator.recoverWireOmittedAuxToBag(c);
+
+        if (!GameConfig.getServerBoolean("use_item_sort")) {
+            try {
+                c.sendPacket(PacketCreator.finishedSort2(invType));
+            } catch (Throwable ignored) {
+            }
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
         try {
+            // Legacy slot-lock clients appended lock bytes after invType. Feature removed —
+            // discard any trailing payload and always pack into contiguous slots (no gaps).
             if (p.available() > 0) {
-                handleSlotLockSort(p, c, chr, invType);
-                return;
+                final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
+                for (int i = 0; i < lockSize && p.available() > 0; i++) {
+                    p.readUnsignedByte();
+                }
             }
 
             ArrayList<Item> itemarray = new ArrayList<>();
@@ -329,108 +427,40 @@ public final class InventorySortHandler extends AbstractPacketHandler {
                     }
                 }
 
+                final ArrayList<Item> beforeSort = new ArrayList<>();
                 for (Item item : itemarray) {
-                    inventory.removeSlot(item.getPosition());
-                    mods.add(new ModifyInventory(3, item));
+                    beforeSort.add(item.copy());
                 }
 
                 int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
                 int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
-                // size<2: PairedQuicksort no-op; avoid empty/1-elem edge paths
+                // Sort BEFORE remove — NPE/sort fail must not leave bag empty (整理报错/丢物).
                 if (itemarray.size() >= 2) {
                     new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
                 }
 
-                for (Item item : itemarray) {
-                    inventory.addItem(item);
-                    mods.add(new ModifyInventory(0, item.copy()));//to prevent crashes
+                if (sortOrderChanged(beforeSort, itemarray) || needsPackedReorder(itemarray)) {
+                    mods = applyPackedSort(inventory, itemarray);
                 }
                 itemarray.clear();
             } finally {
                 inventory.unlockInventory();
             }
 
-            // FORBIDDEN: empty modifyInventory([]) → Client_1 hang/AV (same family as
-            // getInventoryFull after Addon ghost unequip). Skip invent when nothing moved.
-            if (!mods.isEmpty()) {
-                // writeByte(size): keep each packet under 200 ops (safe <255).
-                final int chunk = 200;
-                for (int i = 0; i < mods.size(); i += chunk) {
-                    int to = Math.min(i + chunk, mods.size());
-                    c.sendPacket(PacketCreator.modifyInventory(true, mods.subList(i, to)));
-                }
-            }
-            c.sendPacket(PacketCreator.finishedSort2(invType));
+            sendSortInventoryPackets(c, mods, invType);
         } catch (Throwable t) {
             // Addon desync / null name / bad slot must NEVER leave client SendBusy
             // (organize hang). Always enableActions in outer finally.
             org.slf4j.LoggerFactory.getLogger(InventorySortHandler.class)
                     .error("inventory sort failed invType={} char={}", invType,
                             chr != null ? chr.getName() : "?", t);
+            // Still ack sort UI so client leaves busy (even if invent skipped).
+            try {
+                c.sendPacket(PacketCreator.finishedSort2(invType));
+            } catch (Throwable ignored) {
+            }
         } finally {
             c.sendPacket(PacketCreator.enableActions());
         }
-    }
-
-    private void handleSlotLockSort(InPacket p, Client c, Character chr, byte invType) {
-        List<Integer> lockedSlots = new ArrayList<>();
-        final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
-        for (int i = 0; i < lockSize; i++) {
-            lockedSlots.add(Short.toUnsignedInt(p.readUnsignedByte()));
-        }
-
-        ArrayList<Item> itemarray = new ArrayList<>();
-        List<ModifyInventory> mods = new ArrayList<>();
-
-        Inventory inventory = chr.getInventory(InventoryType.getByType(invType));
-        inventory.lockInventory();
-        try {
-            for (short i = 1; i <= inventory.getSlotLimit(); i++) {
-                if (lockedSlots.contains((int) i)) {
-                    continue;
-                }
-                Item item = inventory.getItem(i);
-                if (item != null) {
-                    itemarray.add(item.copy());
-                }
-            }
-
-            for (Item item : itemarray) {
-                inventory.removeSlot(item.getPosition());
-                mods.add(new ModifyInventory(3, item));
-            }
-
-            int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
-            int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
-            new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
-
-            int slotCursor = 1;
-            for (Item item : itemarray) {
-                while (slotCursor <= inventory.getSlotLimit()
-                        && (lockedSlots.contains(slotCursor)
-                        || inventory.getItem((short) slotCursor) != null)) {
-                    slotCursor++;
-                }
-                if (slotCursor > inventory.getSlotLimit()) {
-                    break;
-                }
-
-                item.setPosition((short) slotCursor);
-                inventory.addItemFromDB(item);
-                mods.add(new ModifyInventory(0, item.copy()));
-                slotCursor++;
-            }
-
-            itemarray.clear();
-        } finally {
-            inventory.unlockInventory();
-        }
-
-        // FORBIDDEN empty modifyInventory([]) — skip when nothing to rewrite.
-        if (!mods.isEmpty()) {
-            c.sendPacket(PacketCreator.modifyInventory(true, mods));
-        }
-        c.sendPacket(PacketCreator.finishedSort2(invType));
-        // enableActions: outer handlePacket finally
     }
 }

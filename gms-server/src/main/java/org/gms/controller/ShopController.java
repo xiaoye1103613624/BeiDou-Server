@@ -21,6 +21,15 @@ public class ShopController {
     private final ShopService shopService;
 
     @Tag(name = "/shop/" + ApiConstant.LATEST)
+    @Operation(summary = "按 NPC ID 新建商店（shopid=npcid）")
+    @PostMapping("/" + ApiConstant.LATEST + "/createShop")
+    public ResultBody<ShopSearchRtnDTO> createShop(@RequestBody SubmitBody<ShopSearchReqDTO> request) {
+        RequireUtil.requireNotNull(request.getData(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "data"));
+        RequireUtil.requireNotNull(request.getData().getNpcId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "npcId"));
+        return ResultBody.success(request, shopService.createShop(request.getData().getNpcId()));
+    }
+
+    @Tag(name = "/shop/" + ApiConstant.LATEST)
     @Operation(summary = "分页获取商店列表")
     @PostMapping("/" + ApiConstant.LATEST + "/getShopList")
     public ResultBody<Page<ShopSearchRtnDTO>> getShopList(@RequestBody SubmitBody<ShopSearchReqDTO> request) {

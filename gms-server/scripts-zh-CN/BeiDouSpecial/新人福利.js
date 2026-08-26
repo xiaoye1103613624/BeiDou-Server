@@ -44,14 +44,15 @@ function action(mode, type, selection)
 		}
 		else if (status == 1 )
 		{
-			//第二层对话
-			cm.saveOrUpdateCharacterExtendValue("新人福利礼包", "已领取");
-
-			// 给金币（注意：这里mesoQty是万为单位，所以需要乘以10000）
+			// 先发放，成功后再标记已领取，避免中途失败却无法再领
+			if (mesoQty == null || cashQty == null) {
+				cm.sendOk("会话已过期，请重新打开领取。");
+				cm.dispose();
+				return;
+			}
 			cm.gainMeso(mesoQty * 10000);
-
-			// 给点券
-			cm.getPlayer().getCashShop().gainCash(1, cashQty *10000);
+			cm.getPlayer().getCashShop().gainCash(1, cashQty * 10000);
+			cm.saveOrUpdateCharacterExtendValue("新人福利礼包", "已领取");
 
 			cm.sendOk("恭喜您获得：\n"
 				+ "#b" + mesoQty + "#k 万金币\n"

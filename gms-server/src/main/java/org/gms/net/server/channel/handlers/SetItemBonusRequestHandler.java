@@ -19,7 +19,9 @@ public final class SetItemBonusRequestHandler extends AbstractPacketHandler {
         String text = enabled ? SetItemManager.buildSetBonusText(chr, setId) : "";
 
         c.sendPacket(PacketCreator.setItemFinalDamageBonus(
-                chr.getSetFinalDamage(), chr.getSetDamageSkin(), chr.getCombatStatProfile()));
+                chr.getSetFinalDamage(), chr.getSetDamageSkin(), chr.getCombatStatProfile(),
+                chr.getPanelItemDropPropPercent(), chr.getPanelMesoDropPropPercent(),
+                chr.getPanelDamageReducePercent()));
         c.sendPacket(PacketCreator.setItemSkillBonusSingle(setId, enabled, text));
     }
 }

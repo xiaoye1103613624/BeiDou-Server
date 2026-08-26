@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
-import org.gms.dao.entity.GameIconDO;
 import org.gms.model.dto.*;
 import org.gms.service.DropService;
 import org.gms.service.GameIconService;
@@ -111,27 +110,15 @@ public class DropController {
     }
 
     @Tag(name = "/drop/" + ApiConstant.LATEST)
-    @Operation(summary = "读取已持久化图标（供 <img> 使用，无需鉴权）")
+    @Operation(summary = "读取已持久化图标（供 <img> 使用，无需鉴权；缺失时懒拉取）")
     @GetMapping("/" + ApiConstant.LATEST + "/icon/{category}/{objectId}")
     public ResponseEntity<byte[]> getIcon(@PathVariable("category") String category,
                                           @PathVariable("objectId") Integer objectId) {
-        return gameIconService.findIcon(category, objectId)
-                .map(this::toIconResponse)
+        return gameIconService.resolveIconBytes(category, objectId == null ? 0 : objectId, false)
+                .map(bytes -> ResponseEntity.ok()
+                        .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(bytes))
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    private ResponseEntity<byte[]> toIconResponse(GameIconDO icon) {
-        MediaType mediaType = MediaType.IMAGE_PNG;
-        if (icon.getContentType() != null && !icon.getContentType().isBlank()) {
-            try {
-                mediaType = MediaType.parseMediaType(icon.getContentType());
-            } catch (Exception ignored) {
-                mediaType = MediaType.IMAGE_PNG;
-            }
-        }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
-                .contentType(mediaType)
-                .body(icon.getIconData());
     }
 }

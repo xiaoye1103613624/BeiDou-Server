@@ -230,6 +230,9 @@ public class CharactersDO implements Serializable {
     private Integer facetinthue;
     private Integer facetintchroma;
     private Integer facetintbright;
+    private Integer skintinthue;
+    private Integer skintintchroma;
+    private Integer skintintbright;
 
     private Long jailexpire;
 

@@ -27,6 +27,7 @@ import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.config.GameConfig;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import org.gms.constants.skills.Bishop;
 import org.gms.constants.skills.Evan;
@@ -70,8 +71,13 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 
         chr.getMap().broadcastMessage(chr, packet, false, true);
         StatEffect effect = attack.getAttackEffect(chr, null);
+        if (effect == null) {
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
         Skill skill = SkillFactory.getSkill(attack.skill);
-        StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+        int slv = chr.getSkillLevel(skill);
+        StatEffect effect_ = skill != null && slv > 0 ? skill.getEffect(slv) : effect;
         if (effect_.getCooldown() > 0) {
             if (chr.skillIsCooling(attack.skill)) {
                 return;

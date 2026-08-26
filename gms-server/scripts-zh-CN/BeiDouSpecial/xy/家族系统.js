@@ -161,9 +161,9 @@ function handleCreateStep1() {
         return;
     }
 
-    player.gainMeso(-CREATE_COST_MESO, true);
+    // 先收名称，创建成功后再扣费，避免取消/失败时金币卡住
     pendingAction = "createName";
-    cm.sendGetText("请输入新家族的名称（3-12个字符，支持中文、英文、数字、下划线）：");
+    cm.sendGetText("请输入新家族的名称（3-12个字符，支持中文、英文、数字、下划线）：\r\n确认后将扣除 #r" + (CREATE_COST_MESO / 10000) + "W#k 金币。");
 }
 
 function handleCreateFinal() {
@@ -171,19 +171,25 @@ function handleCreateFinal() {
     var guildName = cm.getText();
 
     if (guildName == null || guildName.length < 3 || guildName.length > 12) {
-        player.gainMeso(CREATE_COST_MESO, true);
-        cm.sendOk("家族名称长度必须为 3-12 个字符！已退还 " + (CREATE_COST_MESO / 10000) + "W金币。");
+        cm.sendOk("家族名称长度必须为 3-12 个字符！");
+        cm.dispose();
+        return;
+    }
+
+    if (player.getMeso() < CREATE_COST_MESO) {
+        cm.sendOk("金币不足 #r" + (CREATE_COST_MESO / 10000) + "W#k，无法创建家族！");
         cm.dispose();
         return;
     }
 
     var guildId = Guild.createGuild(player.getId(), guildName);
     if (guildId == 0) {
-        player.gainMeso(CREATE_COST_MESO, true);
-        cm.sendOk("家族名称已被使用！已退还 " + (CREATE_COST_MESO / 10000) + "W金币。");
+        cm.sendOk("家族名称已被使用或创建失败，请更换名称后重试。");
         cm.dispose();
         return;
     }
+
+    player.gainMeso(-CREATE_COST_MESO, true);
 
     // 加载公会到内存
     Server.getInstance().getGuild(guildId, player.getWorld());

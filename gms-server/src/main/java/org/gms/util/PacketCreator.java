@@ -512,7 +512,7 @@ public class PacketCreator {
         if (!viewall) {
             p.writeByte(0);
         }
-        if (chr.isGM() || chr.isGmJob()) {  // thanks Daddy Egg (Ubaware), resinate for noticing GM jobs crashing on non-GM players account
+        if (chr.isGM() || chr.isGmJob() || chr.isSuperBeginner()) {  // hyper(5th) jobs: same as Cosmic isSuperBeginner — skip rank ints
             p.writeByte(0);
             return;
         }
@@ -859,6 +859,7 @@ public class PacketCreator {
             p.writeInt(skill.getKey().getId());
             p.writeInt(skill.getValue().skillLevel);
             addExpirationTime(p, skill.getValue().expiration);
+            // masterLevel int only when client sub_4E8F04 is true (4th job). Hyper job%10==3 must not write this.
             if (skill.getKey().isFourthJob()) {
                 p.writeInt(skill.getValue().masterLevel);
             }
@@ -2659,20 +2660,30 @@ public class PacketCreator {
         }
         */
 
-    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    private static int clampPacketDamage(long damage) {
+        if (damage > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        if (damage < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+        return (int) damage;
+    }
+
+    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Long>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.CLOSE_RANGE_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         return p;
     }
 
-    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Long>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.RANGED_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction, display);
         p.writeInt(0);
         return p;
     }
 
-    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
+    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Long>> damage, int charge, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.MAGIC_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         if (charge != -1) {
@@ -2681,7 +2692,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Long>> damage, int speed, int direction, int display) {
         p.writeInt(chr.getId());
         p.writeByte(numAttackedAndDamage);
         p.writeByte(0x5B);//?
@@ -2696,15 +2707,23 @@ public class PacketCreator {
         p.writeByte(0x0A);
         p.writeInt(projectile);
         for (Integer oned : damage.keySet()) {
-            List<Integer> onedList = damage.get(oned);
+            List<Long> onedList = damage.get(oned);
             if (onedList != null) {
                 p.writeInt(oned);
                 p.writeByte(0x0);
                 if (skill == 4211006) {
                     p.writeByte(onedList.size());
                 }
-                for (Integer eachd : onedList) {
-                    p.writeInt(eachd);
+                for (Long damageLine : onedList) {
+                    long line = damageLine != null ? damageLine : 0L;
+                    boolean crit = line < 0;
+                    long mag = Math.abs(line);
+                    int n = clampPacketDamage(mag);
+                    if (crit) {
+                        n |= Integer.MIN_VALUE;
+                    }
+                    p.writeInt(n);
+                    p.writeLong(mag);
                 }
             }
         }
@@ -3935,8 +3954,14 @@ public class PacketCreator {
         for (int x = 0; x < 90; x++) {
             KeyBinding binding = keybindings.get(x);
             if (binding != null) {
-                p.writeByte(binding.getType());
-                p.writeInt(binding.getAction());
+                int type = binding.getType();
+                int action = binding.getAction();
+                if (type == 1 && GameConstants.isClientUnsafeSkill(action)) {
+                    type = 0;
+                    action = 0;
+                }
+                p.writeByte(type);
+                p.writeInt(action);
             } else {
                 p.writeByte(0);
                 p.writeInt(0);
@@ -5002,6 +5027,10 @@ public class PacketCreator {
         return p;
     }
 
+    private static int sanitizeMacroSkillForClient(int skillId) {
+        return GameConstants.isClientUnsafeSkill(skillId) ? 0 : skillId;
+    }
+
     public static Packet getMacros(SkillMacro[] macros) {
         final OutPacket p = OutPacket.create(SendOpcode.MACRO_SYS_DATA_INIT);
         int count = 0;
@@ -5016,9 +5045,9 @@ public class PacketCreator {
             if (macro != null) {
                 p.writeString(macro.getName());
                 p.writeByte(macro.getShout());
-                p.writeInt(macro.getSkill1());
-                p.writeInt(macro.getSkill2());
-                p.writeInt(macro.getSkill3());
+                p.writeInt(sanitizeMacroSkillForClient(macro.getSkill1()));
+                p.writeInt(sanitizeMacroSkillForClient(macro.getSkill2()));
+                p.writeInt(sanitizeMacroSkillForClient(macro.getSkill3()));
             }
         }
         return p;
@@ -8004,9 +8033,17 @@ public class PacketCreator {
 
     /**
      * 0x175：兼容旧客户端（short fd% + int skin），其后追加 COMBAT_STAT_SYNC 面板字段。
+     * 尾部再追加：物品掉落% / 金币掉落% / 伤害减免%（各 short，旧客户端忽略多余字节）。
      */
     public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId,
                                                  org.gms.combat.stat.CombatStatProfile profile) {
+        return setItemFinalDamageBonus(finalDamagePercent, skinId, profile, 0, 0, 0);
+    }
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId,
+                                                 org.gms.combat.stat.CombatStatProfile profile,
+                                                 int itemDropPropPercent, int mesoDropPropPercent,
+                                                 int damageReducePercent) {
         OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_FINAL_DAMAGE);
         p.writeShort(finalDamagePercent);
         p.writeInt(skinId);
@@ -8027,7 +8064,17 @@ public class PacketCreator {
         for (int fd : sources) {
             p.writeShort(fd);
         }
+        p.writeShort(clampU16(itemDropPropPercent));
+        p.writeShort(clampU16(mesoDropPropPercent));
+        p.writeShort(clampU16(damageReducePercent));
         return p;
+    }
+
+    private static int clampU16(int v) {
+        if (v <= 0) {
+            return 0;
+        }
+        return Math.min(v, 65535);
     }
 
     public static Packet setItemSkillBonus(Map<Integer, String> entries) {
@@ -8161,6 +8208,44 @@ public class PacketCreator {
     public static Packet expeditionDeathCount(int value) {
         OutPacket p = OutPacket.create(SendOpcode.EXPED_DEATH_COUNT);
         p.writeInt(value);
+        return p;
+    }
+
+    /** 怪物图鉴掉落表 (SendOpcode 0x372C type 0) */
+    public static Packet monsterBookDropTable(int mobId, Map<Integer, Integer> chancesPpm) {
+        OutPacket p = OutPacket.create(SendOpcode.MONSTER_BOOK_RESULT);
+        p.writeByte(0);
+        p.writeInt(mobId);
+        p.writeShort(chancesPpm.size());
+        for (Map.Entry<Integer, Integer> drop : chancesPpm.entrySet()) {
+            p.writeInt(drop.getKey());
+            p.writeInt(drop.getValue());
+        }
+        return p;
+    }
+
+    /** 怪物图鉴物品搜索 (SendOpcode 0x372C type 1) */
+    public static Packet monsterBookItemHits(String query, int[] itemIds) {
+        OutPacket p = OutPacket.create(SendOpcode.MONSTER_BOOK_RESULT);
+        p.writeByte(1);
+        p.writeString(query);
+        p.writeShort(itemIds.length);
+        for (int itemId : itemIds) {
+            p.writeInt(itemId);
+        }
+        return p;
+    }
+
+    /** 怪物图鉴掉落者列表 (SendOpcode 0x372C type 2) */
+    public static Packet monsterBookItemDroppers(int itemId, Map<Integer, Integer> droppersPpm) {
+        OutPacket p = OutPacket.create(SendOpcode.MONSTER_BOOK_RESULT);
+        p.writeByte(2);
+        p.writeInt(itemId);
+        p.writeShort(droppersPpm.size());
+        for (Map.Entry<Integer, Integer> dropper : droppersPpm.entrySet()) {
+            p.writeInt(dropper.getKey());
+            p.writeInt(dropper.getValue());
+        }
         return p;
     }
 

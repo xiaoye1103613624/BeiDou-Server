@@ -284,6 +284,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.WEAPON_TINT_ACTION, new WeaponTintHandler());
         registerHandler(RecvOpcode.BAG_WINDOW, new BagWindowHandler());
         registerHandler(RecvOpcode.USER_INFO_EX, new UserInfoExHandler());
+        registerHandler(RecvOpcode.MONSTER_BOOK_QUERY, new MonsterBookQueryHandler());
         registerHandler(RecvOpcode.CASHSHOP_WINDOW_ACTION, new CashShopWindowHandler());
         registerHandler(RecvOpcode.SCRIPTED_ITEM, new ScriptedItemHandler());
         registerHandler(RecvOpcode.TOUCHING_REACTOR, new TouchReactorHandler());

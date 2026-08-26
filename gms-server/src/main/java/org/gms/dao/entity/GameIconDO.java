@@ -16,20 +16,22 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("xy_game_icon")
+@Table("xy_icon_cache")
 public class GameIconDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id(keyType = KeyType.Auto)
     private Long id;
-    /** mob / item / npc */
+    /** item / npc / mob */
     private String category;
     private Integer objectId;
-    /** 小册子 / maplestory.io 版本号 */
+    /** 来源版本号（小册子 / maplestory.io） */
     private Integer version;
     private String region;
     private byte[] iconData;
     private String contentType;
+    /** maplestory.io / dvg / local / legacy */
+    private String source;
     private Date updateTime;
 }

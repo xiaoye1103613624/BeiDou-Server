@@ -45,6 +45,7 @@ import org.gms.scripting.event.EventManager;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Marriage;
+import org.gms.server.TimerManager;
 import org.gms.server.expeditions.Expedition;
 import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.expeditions.ExpeditionType;
@@ -965,8 +966,49 @@ public class AbstractPlayerInteraction {
         c.sendPacket(PacketCreator.getItemMessage(id));//Useful shet :3
     }
 
+    /**
+     * Quiet buff apply for NPC buffers: giveBuff/TemporaryStat only — no item message,
+     * no showBuffEffect broadcast (those plus burst TempStat icons freeze the client).
+     */
+    public void useItemQuiet(int id) {
+        var effect = ItemInformationProvider.getInstance().getItemEffect(id);
+        if (effect != null) {
+            effect.applyToQuiet(c.getPlayer());
+        }
+    }
+
+    /**
+     * Apply many item buffs with spacing so TemporaryStat does not freeze the client.
+     * GraalJS-friendly: pass a JS array of item ids and delay in ms between applies.
+     * Uses quiet apply (no SHOW_STATUS_INFO / showBuffEffect). Minimum gap 250ms.
+     */
+    public void useItemsStaggered(List<Object> itemIds, long delayMs) {
+        if (itemIds == null || itemIds.isEmpty()) {
+            return;
+        }
+        long gap = Math.max(250L, delayMs);
+        for (int i = 0; i < itemIds.size(); i++) {
+            final int itemId = ((Number) itemIds.get(i)).intValue();
+            final long wait = gap * i;
+            TimerManager.getInstance().schedule(() -> {
+                if (c != null && c.getPlayer() != null && c.getPlayer().isLoggedInWorld()) {
+                    useItemQuiet(itemId);
+                }
+            }, wait);
+        }
+    }
+
     public void cancelItem(final int id) {
         getPlayer().cancelEffect(ItemInformationProvider.getInstance().getItemEffect(id), false, -1);
+    }
+
+    /** GraalJS-friendly overload (JS numbers are int/long, not byte). */
+    public void teachSkill(int skillid, int level, int masterLevel, long expiration) {
+        teachSkill(skillid, (byte) level, (byte) masterLevel, expiration, false);
+    }
+
+    public void teachSkill(int skillid, int level, int masterLevel, long expiration, boolean force) {
+        teachSkill(skillid, (byte) level, (byte) masterLevel, expiration, force);
     }
 
     public void teachSkill(int skillid, byte level, byte masterLevel, long expiration) {
@@ -975,6 +1017,10 @@ public class AbstractPlayerInteraction {
 
     public void teachSkill(int skillid, byte level, byte masterLevel, long expiration, boolean force) {
         Skill skill = SkillFactory.getSkill(skillid);
+        if (skill == null) {
+            log.warn("teachSkill: SkillFactory missing skillId={} (chr={})", skillid, getPlayer().getName());
+            return;
+        }
         SkillEntry skillEntry = getPlayer().getSkills().get(skill);
         if (skillEntry != null) {
             if (!force && level > -1) {
@@ -1224,7 +1270,10 @@ public class AbstractPlayerInteraction {
 
         long curTime = System.currentTimeMillis();
         for (Item it : getPlayer().getInventory(InventoryType.CASH).list()) {
-            if (ItemConstants.isPet(it.getItemId()) && it.getExpiration() < curTime) {
+            // expiration==-1 means never expires (not a dried doll). Only real
+            // past timestamps need Water of Life.
+            long exp = it.getExpiration();
+            if (ItemConstants.isPet(it.getItemId()) && exp > 0 && exp < curTime) {
                 Pet pet = it.getPet();
                 if (pet != null) {
                     list.add(pet);
@@ -1453,6 +1502,21 @@ public class AbstractPlayerInteraction {
      */
     public boolean spendSponsor(int amount) {
         return sponsorService().trySpend(getPlayer().getId(), amount);
+    }
+
+    /** 当前地图是否允许施放轮回。 */
+    public boolean isReincarnationMapAllowed() {
+        return org.gms.reincarnation.ReincarnationSupport.isMapAllowed(getMapId());
+    }
+
+    /** 施放轮回技能（装备/技能栏路径，不消耗道具）。 */
+    public boolean tryActivateReincarnation() {
+        return org.gms.reincarnation.ReincarnationSupport.tryActivate(getPlayer());
+    }
+
+    /** 使用轮回石碑消耗品：成功激活后扣 1 个道具。 */
+    public boolean tryActivateReincarnationConsume(int itemId) {
+        return org.gms.reincarnation.ReincarnationSupport.tryActivateConsume(getPlayer(), itemId);
     }
 
 }

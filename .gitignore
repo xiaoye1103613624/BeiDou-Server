@@ -47,3 +47,13 @@ gms-server/tools/_wz_xml_fix/from_client/
 gms-server/tools/_wz_xml_fix/from_bak/
 gms-server/tools/_wz_xml_fix/live_pre_deploy/
 *.bak_xmlfix
+
+# 构建产物与缓存
+gms-server/BeiDou.jar
+gms-server/tools/_icon_cache/
+
+# WZ 备份/损坏文件
+*.damaged
+*.truncated.bak
+*.bak_pre_*
+*.bak_2026*

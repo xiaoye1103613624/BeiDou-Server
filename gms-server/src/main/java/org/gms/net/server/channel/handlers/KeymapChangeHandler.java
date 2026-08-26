@@ -42,6 +42,10 @@ public final class KeymapChangeHandler extends AbstractPacketHandler {
                     int type = p.readByte();
                     int action = p.readInt();
 
+                    if (type == 1 && GameConstants.isClientUnsafeSkill(action)) {
+                        continue;
+                    }
+
                     if (type == 1) {
                         Skill skill = SkillFactory.getSkill(action);
                         boolean isBanndedSkill;

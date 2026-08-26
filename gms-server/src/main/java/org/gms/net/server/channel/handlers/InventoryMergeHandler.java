@@ -21,7 +21,9 @@
  */
 package org.gms.net.server.channel.handlers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.gms.client.Character;
@@ -61,9 +63,12 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         }
 
         try {
+            // Legacy slot-lock clients appended lock bytes — feature removed; discard and pack normally.
             if (p.available() > 0) {
-                handleSlotLockMerge(p, c, invType);
-                return;
+                final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
+                for (int i = 0; i < lockSize && p.available() > 0; i++) {
+                    p.readUnsignedByte();
+                }
             }
 
             InventoryType inventoryType = InventoryType.getByType(invType);
@@ -108,8 +113,17 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
 
                 inventory = c.getPlayer().getInventory(inventoryType);
                 boolean sorted = false;
+                // Move-noop / slot desync must not spin forever (client 整理未响应).
+                final int maxPackSteps = Math.max(64, inventory.getSlotLimit() * 2 + 8);
+                int packSteps = 0;
 
                 while (!sorted) {
+                    if (++packSteps > maxPackSteps) {
+                        org.slf4j.LoggerFactory.getLogger(InventoryMergeHandler.class)
+                                .warn("inventory merge pack aborted (possible move no-op) invType={} char={}",
+                                        invType, c.getPlayer().getName());
+                        break;
+                    }
                     short freeSlot = inventory.getNextFreeSlot();
 
                     if (freeSlot != -1) {
@@ -121,7 +135,15 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
                             }
                         }
                         if (itemSlot > 0) {
+                            short beforeFree = freeSlot;
                             InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                            // If move did not fill the hole, stop — avoid infinite loop.
+                            if (inventory.getItem(beforeFree) == null) {
+                                org.slf4j.LoggerFactory.getLogger(InventoryMergeHandler.class)
+                                        .warn("inventory merge move no-op free={} from={} invType={}",
+                                                beforeFree, itemSlot, invType);
+                                break;
+                            }
                         } else {
                             sorted = true;
                         }
@@ -137,89 +159,5 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         } finally {
             c.sendPacket(PacketCreator.enableActions());
         }
-    }
-
-    private void handleSlotLockMerge(InPacket p, Client c, byte invType) {
-        Set<Integer> lockedSlots = new HashSet<>();
-        final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
-        for (int i = 0; i < lockSize; i++) {
-            lockedSlots.add(Short.toUnsignedInt(p.readUnsignedByte()));
-        }
-
-        InventoryType inventoryType = InventoryType.getByType(invType);
-        Inventory inventory = c.getPlayer().getInventory(inventoryType);
-        inventory.lockInventory();
-        try {
-            ItemInformationProvider ii = ItemInformationProvider.getInstance();
-            Item srcItem, dstItem;
-
-            for (short dst = 1; dst <= inventory.getSlotLimit(); dst++) {
-                if (lockedSlots.contains((int) dst)) {
-                    continue;
-                }
-                dstItem = inventory.getItem(dst);
-                if (dstItem == null) {
-                    continue;
-                }
-
-                for (short src = (short) (dst + 1); src <= inventory.getSlotLimit(); src++) {
-                    if (lockedSlots.contains((int) src)) {
-                        continue;
-                    }
-                    srcItem = inventory.getItem(src);
-                    if (srcItem == null) {
-                        continue;
-                    }
-                    if (dstItem.getItemId() != srcItem.getItemId()) {
-                        continue;
-                    }
-                    if (dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) {
-                        break;
-                    }
-
-                    final short beforeQty = dstItem.getQuantity();
-                    InventoryManipulator.move(c, inventoryType, src, dst);
-                    dstItem = inventory.getItem(dst);
-                    if (dstItem == null || dstItem.getQuantity() <= beforeQty) {
-                        break;
-                    }
-                }
-            }
-
-            inventory = c.getPlayer().getInventory(inventoryType);
-            boolean sorted = false;
-
-            while (!sorted) {
-                short freeSlot = -1;
-                for (short i = 1; i <= inventory.getSlotLimit(); i++) {
-                    if (!lockedSlots.contains((int) i) && inventory.getItem(i) == null) {
-                        freeSlot = i;
-                        break;
-                    }
-                }
-
-                if (freeSlot != -1) {
-                    short itemSlot = -1;
-                    for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i++) {
-                        if (!lockedSlots.contains((int) i) && inventory.getItem(i) != null) {
-                            itemSlot = i;
-                            break;
-                        }
-                    }
-                    if (itemSlot > 0) {
-                        InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
-                    } else {
-                        sorted = true;
-                    }
-                } else {
-                    sorted = true;
-                }
-            }
-        } finally {
-            inventory.unlockInventory();
-        }
-
-        c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
-        // enableActions: outer handlePacket finally
     }
 }

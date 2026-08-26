@@ -364,8 +364,13 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public synchronized Integer applyAndGetHpDamage(int delta, boolean stayAlive) {
+        Long result = applyAndGetHpDamage((long) delta, stayAlive);
+        return result == null ? null : clampMonsterDamage(result);
+    }
+
+    public synchronized Long applyAndGetHpDamage(long delta, boolean stayAlive) {
         long curHp = hp.get();
-        if (curHp <= 0) {       // this monster is already dead
+        if (curHp <= 0) {
             return null;
         }
 
@@ -373,17 +378,17 @@ public class Monster extends AbstractLoadedLife {
             if (stayAlive) {
                 curHp--;
             }
-            int trueDamage = (int) Math.min(curHp, delta);
+            long trueDamage = Math.min(curHp, delta);
 
             hp.addAndGet(-trueDamage);
             return trueDamage;
         } else {
-            int trueHeal = -delta;
+            long trueHeal = -delta;
             long hp2Heal = curHp + trueHeal;
             long maxHp = getMaxHp();
 
             if (hp2Heal > maxHp) {
-                trueHeal -= (int) (hp2Heal - maxHp);
+                trueHeal -= (hp2Heal - maxHp);
             }
 
             hp.addAndGet(trueHeal);
@@ -416,6 +421,10 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public boolean damage(Character attacker, int damage, boolean stayAlive) {
+        return damage(attacker, (long) damage, stayAlive);
+    }
+
+    public boolean damage(Character attacker, long damage, boolean stayAlive) {
         boolean lastHit = false;
 
         this.lockMonster();
@@ -424,32 +433,9 @@ public class Monster extends AbstractLoadedLife {
                 return false;
             }
 
-            /* pyramid not implemented
-            Pair<Integer, Integer> cool = this.getStats().getCool();
-            if (cool != null) {
-                Pyramid pq = (Pyramid) chr.getPartyQuest();
-                if (pq != null) {
-                    if (damage > 0) {
-                        if (damage >= cool.getLeft()) {
-                            if ((Math.random() * 100) < cool.getRight()) {
-                                pq.cool();
-                            } else {
-                                pq.kill();
-                            }
-                        } else {
-                            pq.kill();
-                        }
-                    } else {
-                        pq.miss();
-                    }
-                    killed = true;
-                }
-            }
-            */
-
             if (damage > 0) {
                 this.applyDamage(attacker, damage, stayAlive, false);
-                if (!this.isAlive()) {  // monster just died
+                if (!this.isAlive()) {
                     lastHit = true;
                 }
             }
@@ -466,7 +452,11 @@ public class Monster extends AbstractLoadedLife {
      * @param stayAlive
      */
     private void applyDamage(Character from, int damage, boolean stayAlive, boolean fake) {
-        Integer trueDamage = applyAndGetHpDamage(damage, stayAlive);
+        applyDamage(from, (long) damage, stayAlive, fake);
+    }
+
+    private void applyDamage(Character from, long damage, boolean stayAlive, boolean fake) {
+        Long trueDamage = applyAndGetHpDamage(damage, stayAlive);
         if (trueDamage == null) {
             return;
         }
@@ -476,13 +466,12 @@ public class Monster extends AbstractLoadedLife {
         }
 
         if (!fake) {
-            dispatchMonsterDamaged(from, trueDamage);
+            dispatchMonsterDamaged(from, clampMonsterDamage(trueDamage));
         }
 
-        // ========== 通知事件实例记录伤害 ==========
         EventInstanceManager eim = getMap().getEventInstance();
         if (eim != null && !fake) {
-            eim.addDamage(from, trueDamage);
+            eim.addDamage(from, clampMonsterDamage(trueDamage));
         }
 
         if (!takenDamage.containsKey(from.getId())) {
@@ -492,6 +481,13 @@ public class Monster extends AbstractLoadedLife {
         }
 
         broadcastMobHpBar(from);
+    }
+
+    private static int clampMonsterDamage(long damage) {
+        if (damage > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) damage;
     }
 
     public void applyFakeDamage(Character from, int damage, boolean stayAlive) {

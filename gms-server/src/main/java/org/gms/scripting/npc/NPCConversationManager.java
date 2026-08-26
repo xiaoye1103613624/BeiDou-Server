@@ -400,7 +400,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void changeJobById(int a) {
-        getPlayer().changeJob(Job.getById(a));
+        // Must use exact lookup: getById(unknown) falls back to BEGINNER and would wipe the job.
+        Job job = Job.getExactById(a);
+        if (job == null) {
+            // Unknown/non-enum job id: silently no-op (Cosmic changeJob(null) behavior) rather than
+            // resetting to BEGINNER via getById fallback or crashing other scripts.
+            return;
+        }
+        getPlayer().changeJob(job);
     }
 
     public void changeJob(Job job) {
@@ -421,12 +428,27 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void openShopNPC(int id) {
         Shop shop = ShopFactory.getInstance().getShop(id);
+        if (shop == null) {
+            shop = ShopFactory.getInstance().getShopForNPC(id);
+        }
 
         if (shop != null) {
             shop.sendShop(c);
-        } else {    // check for missing shopids thanks to resinate
-            log.warn("Shop ID: {} is missing from database.", id);
-            ShopFactory.getInstance().getShop(11000).sendShop(c);
+            return;
+        }
+
+        // check for missing shopids thanks to resinate
+        log.warn("Shop ID/NPC: {} is missing from database.", id);
+        Shop fallback = ShopFactory.getInstance().getShop(11000);
+        if (fallback == null) {
+            fallback = ShopFactory.getInstance().getShopForNPC(11000);
+        }
+        if (fallback != null) {
+            fallback.sendShop(c);
+        } else {
+            log.error("Fallback shop 11000 also missing; cannot open shop for id={}", id);
+            getPlayer().dropMessage(5, "商店数据未配置（shopid=" + id + "），请联系管理员。");
+            getClient().sendPacket(PacketCreator.enableActions());
         }
     }
 
@@ -1582,5 +1604,45 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void setmoneyb(int delta) {
         getPlayer().setmoneyb(delta);
+    }
+
+    // ——— 独立抽奖 xy_lottery ———
+
+    private static org.gms.service.XyLotteryService xyLotteryService() {
+        return org.gms.manager.ServerManager.getApplicationContext()
+                .getBean(org.gms.service.XyLotteryService.class);
+    }
+
+    /** 当前 NPC 的抽奖机配置（无则 null） */
+    public org.gms.dao.entity.XyLotteryMachineDO xyLotteryMachine() {
+        return xyLotteryService().getCached(getNpc()) == null
+                ? null
+                : xyLotteryService().getCached(getNpc()).machine();
+    }
+
+    /** 已配置的几连抽列表，如 [1,10] */
+    public java.util.List<Integer> xyLotteryMultiDraws() {
+        var cached = xyLotteryService().getCached(getNpc());
+        return cached == null ? java.util.List.of() : cached.multiDraws();
+    }
+
+    /** 消耗说明（仅机器上已配置的那一种） */
+    public String xyLotteryCostLabel() {
+        var m = xyLotteryMachine();
+        return m == null ? "" : xyLotteryService().formatCostLabel(m);
+    }
+
+    /** 执行连抽，返回获得物品 ID 列表 */
+    public java.util.List<Integer> xyLotteryDraw(int times) {
+        return xyLotteryService().draw(getPlayer(), getNpc(), times);
+    }
+
+    /** 奖池预览分页文案 */
+    public String xyLotteryPoolPreview(int page, int pageSize) {
+        return xyLotteryService().buildPoolPreviewPage(getNpc(), page, pageSize);
+    }
+
+    public int xyLotteryPoolPageCount(int pageSize) {
+        return xyLotteryService().poolPageCount(getNpc(), pageSize);
     }
 }

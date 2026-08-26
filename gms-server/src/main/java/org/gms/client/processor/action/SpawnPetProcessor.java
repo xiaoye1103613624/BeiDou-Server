@@ -81,15 +81,22 @@ public class SpawnPetProcessor {
                     Point pos = chr.getPosition();
                     pos.y -= 12;
                     pet.setPos(pos);
-                    pet.setFh(chr.getMap().getFootholds().findBelow(pet.getPos()).getId());
+                    var fh = chr.getMap().getFootholds().findBelow(pet.getPos());
+                    if (fh == null) {
+                        // 无脚下平台时勿 NPE；仍允许召唤（FH=0），避免卡动作后客户端异常。
+                        pet.setFh(0);
+                    } else {
+                        pet.setFh(fh.getId());
+                    }
                     pet.setStance(0);
                     pet.setSummoned(true);
                     pet.saveToDb();
                     chr.addPet(pet);
                     // 登录时未召唤的宠物不会预加载过滤配置，这里补载后再同步给客户端。
                     chr.loadPetExcludedItems(pet.getUniqueId());
-                    chr.syncPetSkillsFromEquips(chr.getPetIndex(pet));
+                    // 先下发 SPAWN_PET，再同步技能位；避免 forceUpdateItem 与召唤封包交错导致客户端卡死。
                     chr.getMap().broadcastMessage(c.getPlayer(), PacketCreator.showPet(c.getPlayer(), pet, false, false), true);
+                    chr.syncPetSkillsFromEquips(chr.getPetIndex(pet));
                     c.sendPacket(PacketCreator.petStatUpdate(c.getPlayer()));
                     c.sendPacket(PacketCreator.enableActions());
 

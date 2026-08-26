@@ -1344,10 +1344,19 @@ public class MapleMap {
     }
 
     public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
+        return damageMonster(chr, monster, (long) damage, true);
+    }
+
+    public boolean damageMonster(final Character chr, final Monster monster, final long damage) {
         return damageMonster(chr, monster, damage, true);
     }
 
     public boolean damageMonster(final Character chr, final Monster monster, final int damage,
+            final boolean weatherScaled) {
+        return damageMonster(chr, monster, (long) damage, weatherScaled);
+    }
+
+    public boolean damageMonster(final Character chr, final Monster monster, final long damage,
             final boolean weatherScaled) {
         if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
@@ -1360,7 +1369,7 @@ public class MapleMap {
             }
         }
         if (monster.isAlive()) {
-            final int scaledDamage = weatherScaled
+            final long scaledDamage = weatherScaled
                     ? org.gms.server.weather.WeatherCombat.scaleDamageToMonster(damage)
                     : damage;
             boolean killed = monster.damage(chr, scaledDamage, false);

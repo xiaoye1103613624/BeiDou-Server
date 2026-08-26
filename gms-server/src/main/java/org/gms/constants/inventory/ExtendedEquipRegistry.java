@@ -64,9 +64,11 @@ public final class ExtendedEquipRegistry {
             new Seat(51, 112, "Pe", UiSeat.MAIN_EQUIP, StorageTier.NATIVE_APPLY_MAX_55,
                     false, DrawPolicy.REMAP_XY, WireWhen.POST_FIELD, new short[]{-51, -151}, "pendant2"),
             new Seat(52, 111, "Ri", UiSeat.MAIN_EQUIP, StorageTier.SHADOW_GET_SET,
-                    true, DrawPolicy.REMAP_XY, WireWhen.ALWAYS, new short[]{-52}, "ExtraRing red3"),
+                    true, DrawPolicy.REMAP_XY, WireWhen.ALWAYS, new short[]{-52, -152},
+                    "ExtraRing red3 (111 + fashion cash −152)"),
             new Seat(53, 111, "Ri", UiSeat.MAIN_EQUIP, StorageTier.SHADOW_GET_SET,
-                    true, DrawPolicy.REMAP_XY, WireWhen.ALWAYS, new short[]{-53}, "ExtraRing red4"),
+                    true, DrawPolicy.REMAP_XY, WireWhen.ALWAYS, new short[]{-53, -153},
+                    "ExtraRing red4 (111 + fashion cash −153)"),
             // Pocket −33 classic red9; 109 shield −10 vanilla; 134/135 aux −62 classic red10.
             new Seat(33, 116, "Po", UiSeat.MAIN_EQUIP, StorageTier.NATIVE_APPLY_MAX_55,
                     false, DrawPolicy.REMAP_XY, WireWhen.EQUIP_OPEN, new short[]{-33, -133}, "pocket classic red9"),
@@ -128,7 +130,7 @@ public final class ExtendedEquipRegistry {
             // UI BP20 remapped; inject via STAT_CHANGED like ExtraRing. Client must
             // keep the stock −20 skip (do NOT NOP 77F98C) or 四维 double-count.
             case -20 -> true;
-            case -52, -53 -> true;
+            case -52, -53, -152, -153 -> true;
             case -54, -55, -56, -57, -58, -59, -60, -61, -62 -> true;
             case -154, -155, -156, -157, -158, -159, -160, -161, -162 -> true;
             default -> false;
@@ -145,6 +147,7 @@ public final class ExtendedEquipRegistry {
             case 167 -> EquipSlot.HEART.isAllowed(dst, cash);
             case 116 -> EquipSlot.POCKET.isAllowed(dst, cash);
             case 109 -> EquipSlot.SHIELD.isAllowed(dst, cash);
+            case 110 -> EquipSlot.CAPE.isAllowed(dst, cash);
             case 134, 135 -> EquipSlot.AUX_WEAPON.isAllowed(dst, cash);
             default -> null;
         };
@@ -161,6 +164,7 @@ public final class ExtendedEquipRegistry {
     public static short resolveFixedDst(int prefix, boolean cashItem) {
         return switch (prefix) {
             case 116 -> (short) (cashItem ? -133 : -33);
+            case 110 -> (short) (cashItem ? -109 : -9);
             case 119 -> -59;
             case 118 -> -54;
             case 166 -> -60;
@@ -172,8 +176,8 @@ public final class ExtendedEquipRegistry {
     }
 
     /**
-     * Client invent wire slot for Addon alias seats. Live GetItem hook only sees
-     * −54…−62; map cash mirrors −154…−162 → normal so mode-2/mode-3 hit sidecar.
+     * Client invent wire slot for Addon cash mirrors (−154…−162 → −54…−62).
+     * ExtraRing fashion (−152/−153) stays separate from normal (−52/−53).
      */
     public static short toClientWireSlot(short pos) {
         if (pos <= -154 && pos >= -162) {
@@ -184,7 +188,7 @@ public final class ExtendedEquipRegistry {
 
     public static boolean isPrefixOwned(int prefix) {
         return switch (prefix) {
-            case 116, 118, 119, 120, 166, 167, 109, 134, 135 -> true;
+            case 110, 116, 118, 119, 120, 166, 167, 109, 134, 135 -> true;
             default -> false;
         };
     }
@@ -285,12 +289,27 @@ public final class ExtendedEquipRegistry {
     }
 
     /**
-     * Addon / cash mirror seats: −54…−62 ↔ −154…−162.
-     * Live green ijl15 ({@code 6D612F01}) GetItem aliases −156→−56 and may send the
-     * UI seat (−bp) while the item lives at cash −(bp+100) after login migrate.
+     * ExtraRing red3/red4 wire seats (normal + fashion cash are separate DB slots).
+     */
+    public static boolean isExtraRingWireSeat(short pos) {
+        return pos == -52 || pos == -53 || pos == -152 || pos == -153;
+    }
+
+    /**
+     * Addon / cash mirror seats: −54…−62 ↔ −154…−162 only.
      */
     public static boolean isAddonAliasPairSeat(short pos) {
         return (pos <= -54 && pos >= -62) || (pos <= -154 && pos >= -162);
+    }
+
+    /**
+     * Cash↔normal other half of a shared arena seat (−52↔−152 … −62↔−162).
+     */
+    public static short aliasPairOther(short pos) {
+        if (pos <= -100) {
+            return (short) (pos + 100);
+        }
+        return (short) (pos - 100);
     }
 
     /**
@@ -320,7 +339,7 @@ public final class ExtendedEquipRegistry {
         if (equipped.getItem(requested) != null) {
             return requested;
         }
-        short other = (short) (requested <= -154 ? requested + 100 : requested - 100);
+        short other = aliasPairOther(requested);
         if (isAddonAliasPairSeat(other) && equipped.getItem(other) != null) {
             return other;
         }
@@ -340,7 +359,7 @@ public final class ExtendedEquipRegistry {
         if (direct != null) {
             return requested;
         }
-        short other = (short) (requested <= -154 ? requested + 100 : requested - 100);
+        short other = aliasPairOther(requested);
         if (!isAddonAliasPairSeat(other)) {
             return requested;
         }

@@ -64,9 +64,9 @@ function buildMenuText() {
     text += generalSelect(41, 每日福利) + generalSelect(31, 师徒系统) + generalSelect(42, 赞助福利)+generalSelect(43, "CD_KEY");
     text += changeLine.repeat(2);
 
-    text += generalSelect(23, " 快速转职")+ "\t" + generalSelect(22, " 收集系统")+ "\t" + generalSelect(32, "家族系统") + "\t" + generalSelect(44, "银行系统");
+    text += generalSelect(23, " 快速转职")+ "\t" + generalSelect(22, " 收集系统")+ "\t" + generalSelect(32, "家族系统");
     text += changeLine.repeat(2);
-    text += generalSelect(33, "兑换中心");
+    text += generalSelect(25, " 从新开始") + "\t" + generalSelect(44, "银行系统") + "\t" + generalSelect(33, "兑换中心");
     text += changeLine.repeat(2);
 
     if (cm.getPlayer().isGM()) {
@@ -111,20 +111,22 @@ function doSelect(selection) {
     switch (selection) {
         case 1:
             cm.getPlayer().saveLocation("FREE_MARKET");
+            cm.dispose();
             cm.warp(910000000, "out00");
             break;
         case 2:
             cm.getPlayer().saveLocationOnWarp();
             cm.getPlayer().dropMessage(6, "[传送中心]：[" + cm.getPlayer().getName() + "玩家] [线路-" + cm.getPlayer().getClient().getChannel() + "] 传送至 匠人街");
-            cm.warp(910001000);
             cm.dispose();
+            cm.warp(910001000);
             break;
         case 11:
             openNpc("万能传送");
             break;
         case 12:
-            cm.dispose();
+            // 先开商店再 dispose（与 9310038 等正常商店脚本一致）
             cm.openShopNPC(9900001);
+            cm.dispose();
             break;
         case 13:
             openNpc("xy/仓库");
@@ -137,6 +139,9 @@ function doSelect(selection) {
             break;
         case 23:
             openNpc("快速转职");
+            break;
+        case 25:
+            openNpc("xy/从新开始");
             break;
         case 31:
             openNpc("xy/mentor/师徒系统");
@@ -160,8 +165,8 @@ function doSelect(selection) {
             openNpc("xy/other/银行系统");
             break;
         case 900:
-            cm.dispose();
             cm.openShopNPC(9900001);
+            cm.dispose();
             break;
         case 901:
             openNpc("一键刷道具");

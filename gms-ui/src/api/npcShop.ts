@@ -17,6 +17,10 @@ export function getShopList(data: getShopFilter) {
   return axios.post('/shop/v1/getShopList', data);
 }
 
+export function createShop(npcId: number) {
+  return axios.post('/shop/v1/createShop', { npcId });
+}
+
 export function getShopItemList(data: getShopFilter) {
   return axios.post('/shop/v1/getShopItemList', data);
 }

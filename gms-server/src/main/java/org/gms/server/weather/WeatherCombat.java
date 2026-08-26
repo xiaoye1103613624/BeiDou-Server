@@ -19,10 +19,15 @@ public final class WeatherCombat {
     }
 
     public static int scaleDamageToMonster(int damage) {
+        return (int) scaleDamageToMonster((long) damage);
+    }
+
+    public static long scaleDamageToMonster(long damage) {
         if (damage <= 0 || !isNight()) {
             return damage;
         }
-        return apply(damage, NIGHT_MOB_DEFENCE);
+        long scaled = Math.round(damage * NIGHT_MOB_DEFENCE);
+        return Math.max(1L, scaled);
     }
 
     public static int scaleDamageToPlayer(int damage) {
