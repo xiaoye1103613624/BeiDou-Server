@@ -249,6 +249,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
+            // 轮回：先同步技能/键位/宏，再下发进图包，避免键位引用已剥离的 1005 或尚未授予的 1021。
+            org.gms.reincarnation.ReincarnationSupport.onLogin(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
@@ -262,6 +264,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendKeymap();
             player.sendQuickmap();
             player.sendMacros();
+            org.gms.reincarnation.ReincarnationSupport.afterLoginPackets(player);
 
             // pot bindings being passed through other characters on the account detected thanks to Croosade dev team
             KeyBinding autohpPot = player.getKeymap().get(91);

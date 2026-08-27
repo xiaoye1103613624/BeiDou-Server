@@ -3561,8 +3561,14 @@ public class PacketCreator {
         for (int x = 0; x < 90; x++) {
             KeyBinding binding = keybindings.get(x);
             if (binding != null) {
-                p.writeByte(binding.getType());
-                p.writeInt(binding.getAction());
+                int type = binding.getType();
+                int action = binding.getAction();
+                if (type == 1 && GameConstants.isClientUnsafeSkill(action)) {
+                    type = 0;
+                    action = 0;
+                }
+                p.writeByte(type);
+                p.writeInt(action);
             } else {
                 p.writeByte(0);
                 p.writeInt(0);
@@ -4623,6 +4629,10 @@ public class PacketCreator {
         return p;
     }
 
+    private static int sanitizeMacroSkillForClient(int skillId) {
+        return GameConstants.isClientUnsafeSkill(skillId) ? 0 : skillId;
+    }
+
     public static Packet getMacros(SkillMacro[] macros) {
         final OutPacket p = OutPacket.create(SendOpcode.MACRO_SYS_DATA_INIT);
         int count = 0;
@@ -4637,9 +4647,9 @@ public class PacketCreator {
             if (macro != null) {
                 p.writeString(macro.getName());
                 p.writeByte(macro.getShout());
-                p.writeInt(macro.getSkill1());
-                p.writeInt(macro.getSkill2());
-                p.writeInt(macro.getSkill3());
+                p.writeInt(sanitizeMacroSkillForClient(macro.getSkill1()));
+                p.writeInt(sanitizeMacroSkillForClient(macro.getSkill2()));
+                p.writeInt(sanitizeMacroSkillForClient(macro.getSkill3()));
             }
         }
         return p;

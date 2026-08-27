@@ -1349,8 +1349,19 @@ public class AbstractPlayerInteraction {
         return getPlayer().getCurrentOnlineTime();
     }
 
+    /** 当前地图是否允许施放轮回。 */
+    public boolean isReincarnationMapAllowed() {
+        return org.gms.reincarnation.ReincarnationSupport.isMapAllowed(getMapId());
+    }
 
+    /** 施放轮回技能（装备/技能栏路径，不消耗道具）。 */
+    public boolean tryActivateReincarnation() {
+        return org.gms.reincarnation.ReincarnationSupport.tryActivate(getPlayer());
+    }
 
-
+    /** 使用轮回石碑消耗品：成功激活后扣 1 个道具。 */
+    public boolean tryActivateReincarnationConsume(int itemId) {
+        return org.gms.reincarnation.ReincarnationSupport.tryActivateConsume(getPlayer(), itemId);
+    }
 
 }

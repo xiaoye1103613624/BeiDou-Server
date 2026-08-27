@@ -25,10 +25,15 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.SkillMacro;
 import org.gms.client.autoban.AutobanFactory;
+import org.gms.constants.game.GameConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
 public final class SkillMacroHandler extends AbstractPacketHandler {
+
+    private static int sanitizeMacroSkill(int skillId) {
+        return GameConstants.isClientUnsafeSkill(skillId) ? 0 : skillId;
+    }
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
@@ -47,9 +52,9 @@ public final class SkillMacroHandler extends AbstractPacketHandler {
             }
 
             int shout = p.readByte();
-            int skill1 = p.readInt();
-            int skill2 = p.readInt();
-            int skill3 = p.readInt();
+            int skill1 = sanitizeMacroSkill(p.readInt());
+            int skill2 = sanitizeMacroSkill(p.readInt());
+            int skill3 = sanitizeMacroSkill(p.readInt());
             SkillMacro macro = new SkillMacro(skill1, skill2, skill3, name, shout, i);
             chr.updateMacros(i, macro);
         }

@@ -1849,7 +1849,15 @@ public class ItemInformationProvider {
         }
 
         String islot = getEquipmentSlot(id);
-        if (!EquipSlot.getFromTextSlot(islot).isAllowed(dst, isCash(id))) {
+        final boolean cash = isCash(id);
+        boolean slotOk = EquipSlot.getFromTextSlot(islot).isAllowed(dst, cash);
+        // 轮回碑石等：WZ 可能仍是 Po/Be，但客户端图腾 UI 发 −55/−155；放行腰带与图腾槽。
+        if (!slotOk && org.gms.reincarnation.ReincarnationSupport.isReincarnationEquip(id)) {
+            slotOk = dst == -50 || dst == -150
+                    || dst == -55 || dst == -155
+                    || EquipSlot.BELT.isAllowed(dst, cash);
+        }
+        if (!slotOk) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
             Server.getInstance().broadcastGMMessage(chr.getWorld(), PacketCreator.sendYellowTip("[Warning]: " + chr.getName() + " tried to equip " + itemName + " into slot " + dst + "."));

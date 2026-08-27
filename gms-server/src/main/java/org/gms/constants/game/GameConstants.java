@@ -5,6 +5,10 @@ import org.gms.client.Job;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.constants.skills.Aran;
+import org.gms.constants.skills.Beginner;
+import org.gms.constants.skills.Evan;
+import org.gms.constants.skills.Legend;
+import org.gms.constants.skills.Noblesse;
 import org.gms.provider.*;
 import org.gms.provider.wz.WZFiles;
 import org.gms.server.maps.FieldLimit;
@@ -503,7 +507,18 @@ public class GameConstants {
     }
 
     public static boolean isHiddenSkills(final int skill) {
-        return Aran.HIDDEN_FULL_DOUBLE == skill || Aran.HIDDEN_FULL_TRIPLE == skill || Aran.HIDDEN_OVER_DOUBLE == skill || Aran.HIDDEN_OVER_TRIPLE == skill;
+        return Aran.HIDDEN_FULL_DOUBLE == skill || Aran.HIDDEN_FULL_TRIPLE == skill || Aran.HIDDEN_OVER_DOUBLE == skill || Aran.HIDDEN_OVER_TRIPLE == skill
+                || org.gms.reincarnation.ReincarnationSkills.isReincarnationSkill(skill);
+    }
+
+    public static boolean isLegacyEchoSkill(final int skill) {
+        return skill == Beginner.ECHO_OF_HERO || skill == Noblesse.ECHO_OF_HERO
+                || skill == Legend.ECHO_OF_HERO || skill == Evan.ECHO_OF_HERO;
+    }
+
+    /** 不得出现在客户端键位/宏封包中的技能（隐藏技能 + 废弃回声）。 */
+    public static boolean isClientUnsafeSkill(final int skill) {
+        return isHiddenSkills(skill) || isLegacyEchoSkill(skill);
     }
 
     public static boolean isCygnus(final int job) {

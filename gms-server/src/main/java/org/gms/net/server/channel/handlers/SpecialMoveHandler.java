@@ -66,7 +66,18 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         Point pos = null;
         int __skillLevel = p.readByte();
         Skill skill = SkillFactory.getSkill(skillid);
+        if (skill == null) {
+            chr.dropMessage(5, "技能施放失败: 未知技能 " + skillid + "（服务端未加载）");
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
         int skillLevel = chr.getSkillLevel(skill);
+
+        // 轮回碑石专用技能（1021 系）：拥有装备/消耗品即可施放，与英雄之回声（1005）分离
+        if (org.gms.reincarnation.ReincarnationSupport.tryHandleSkill(c, chr, skillid)) {
+            return;
+        }
+
         if (skillid % 10000000 == 1010 || skillid % 10000000 == 1011) {
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
