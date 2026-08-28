@@ -3,6 +3,7 @@ import drop from '@/views/game/drop/locale/en-US';
 import cashShop from '@/views/game/cashShop/locale/en-US';
 import npcShop from '@/views/game/npcShop/locale/en-US';
 import gachapon from '@/views/game/gachapon/locale/en-US';
+import weather from '@/views/game/weather/locale/en-US';
 import commandInfo from '@/views/game/commandInfo/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
 import informationSearch from '@/views/dashboard/informationSearch/locale/en-US';
@@ -10,12 +11,16 @@ import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
+import setItem from '@/views/game/setItem/locale/en-US';
 import base from './en-US/base';
 
 export default {
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.workplace': 'Workplace',
   'menu.dashboard.informationSearch': 'Information Search',
+  'menu.daily': 'Daily',
+  'menu.growth': 'Growth',
+  'menu.member': 'Member Center',
   'menu.game': 'Game',
   'menu.game.config': 'Config',
   'menu.game.npcShop': 'NPC Shop',
@@ -24,9 +29,11 @@ export default {
   'menu.game.drop.global': 'Global Drop',
   'menu.game.inventory': 'Inventory',
   'menu.game.gachapon': 'Gachapon',
+  'menu.game.weather': 'Weather',
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
   'menu.game.autoban': 'Autoban',
+  'menu.game.setItem': 'Set Item',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -53,9 +60,11 @@ export default {
   ...cashShop,
   ...drop,
   ...gachapon,
+  ...weather,
   ...commandInfo,
   ...informationSearch,
   ...inventory,
   ...config,
   ...autoban,
+  ...setItem,
 };

@@ -3,6 +3,7 @@ import drop from '@/views/game/drop/locale/zh-CN';
 import cashShop from '@/views/game/cashShop/locale/zh-CN';
 import npcShop from '@/views/game/npcShop/locale/zh-CN';
 import gachapon from '@/views/game/gachapon/locale/zh-CN';
+import weather from '@/views/game/weather/locale/zh-CN';
 import commandInfo from '@/views/game/commandInfo/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN';
@@ -10,6 +11,7 @@ import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
 import inventory from '@/views/game/inventory/locale/zh-CN';
 import autoban from '@/views/game/autoban/locale/zh-CN';
+import setItem from '@/views/game/setItem/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -17,6 +19,9 @@ export default {
   'menu.dashboard': '仪表盘',
   'menu.dashboard.workplace': '工作台',
   'menu.dashboard.informationSearch': '资料查询',
+  'menu.daily': '日常系统',
+  'menu.growth': '成长系统',
+  'menu.member': '会员中心',
   'menu.game': '游戏管理',
   'menu.game.config': '参数管理',
   'menu.game.npcShop': 'NPC商店',
@@ -25,9 +30,11 @@ export default {
   'menu.game.drop.global': '全局爆率',
   'menu.game.inventory': '背包管理',
   'menu.game.gachapon': '百宝箱',
+  'menu.game.weather': '天气切换',
   'menu.game.command': 'GM指令',
   'menu.game.file': '文件管理',
   'menu.game.autoban': '自动封禁',
+  'menu.game.setItem': '套装管理',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -56,9 +63,11 @@ export default {
   ...cashShop,
   ...drop,
   ...gachapon,
+  ...weather,
   ...commandInfo,
   ...informationSearch,
   ...inventory,
   ...config,
   ...autoban,
+  ...setItem,
 };
