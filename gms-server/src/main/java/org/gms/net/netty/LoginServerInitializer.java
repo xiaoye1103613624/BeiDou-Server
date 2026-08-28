@@ -11,6 +11,16 @@ import org.slf4j.LoggerFactory;
 
 public class LoginServerInitializer extends ServerChannelInitializer {
     private static final Logger log = LoggerFactory.getLogger(LoginServerInitializer.class);
+    /**
+     * Login clients may sit on the login/char-select UI while WZ/UI modules finish loading.
+     * 30s channel idle + 15s ping grace is too aggressive and shows as "长时间断开连接".
+     */
+    private static final int LOGIN_IDLE_TIME_SECONDS = 180;
+
+    @Override
+    protected int getIdleTimeSeconds() {
+        return LOGIN_IDLE_TIME_SECONDS;
+    }
 
     @Override
     public void initChannel(SocketChannel socketChannel) {

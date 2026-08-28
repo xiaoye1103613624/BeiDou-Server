@@ -410,6 +410,20 @@ public class CharacterService {
             }
         });
 
+        try (java.sql.Connection con = org.gms.util.DatabaseConnection.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(
+                     "SELECT skillid, tinthue, tintchroma, tintbright FROM skilltints WHERE characterid = ?")) {
+            ps.setInt(1, cid);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    chr.setSkillTint(rs.getInt("skillid"), rs.getInt("tinthue"),
+                            rs.getInt("tintchroma"), rs.getInt("tintbright"));
+                }
+            }
+        } catch (java.sql.SQLException ignored) {
+            // V1.11.19 前兼容
+        }
+
         QueryWrapper cdQueryWrapper = QueryWrapper.create().where(COOLDOWNS_D_O.CHARID.eq(cid));
         List<CooldownsDO> cooldownsDOList = cooldownsMapper.selectListByQuery(cdQueryWrapper);
         cooldownsDOList.forEach(cooldownsDO -> {

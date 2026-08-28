@@ -78,7 +78,7 @@ public class FredrickProcessor {
             }
         }
 
-        int netMeso = chr.getMerchantNetMeso();
+        long netMeso = chr.getMerchantNetMeso();
         if (netMeso > 0) {
             if (!chr.canHoldMeso(netMeso)) {
                 return 0x1F;
@@ -276,18 +276,6 @@ public class FredrickProcessor {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();
-
-                // Dupe guard: while a hired merchant is open (or being set up), the listed items live both in the
-                // in-memory items list and in the DB (type=6). Allowing a retrieve here would delete the DB copy
-                // and return it to the inventory while the in-memory copy stays on the shelf, so the same item can
-                // be claimed twice (via takeItemBack / closeShop saveItems). The disconnect-recovery path
-                // (HiredMerchantRequest) closes the store first and sets hasMerchant=false, so it is unaffected.
-                HiredMerchant active = c.getWorldServer().getHiredMerchant(chr.getId());
-                if (chr.hasMerchant() || (active != null && active.isOwner(chr))) {
-                    chr.dropMessage(1, "Please close your hired merchant before retrieving stored items.");
-                    chr.sendPacket(PacketCreator.enableActions());
-                    return;
-                }
 
                 List<Pair<Item, InventoryType>> items;
                 try {

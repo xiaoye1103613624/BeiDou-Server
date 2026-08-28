@@ -210,7 +210,7 @@ public class PlayerShop extends AbstractMapObject {
 
     public boolean addItem(PlayerShopItem item) {
         synchronized (items) {
-            if (items.size() >= 16) {
+            if (items.size() >= 32) {
                 return false;
             }
 
@@ -260,21 +260,14 @@ public class PlayerShop extends AbstractMapObject {
     public boolean buy(Client c, int item, short quantity) {
         synchronized (items) {
             if (isVisitor(c.getPlayer())) {
-                if (quantity < 1 || item < 0 || item >= items.size()) {
-                    c.sendPacket(PacketCreator.enableActions());
-                    return false;
-                }
-
                 PlayerShopItem pItem = items.get(item);
-                if (!pItem.isExist() || pItem.getBundles() < quantity) {
-                    c.sendPacket(PacketCreator.enableActions());
-                    return false;
-                }
-
                 Item newItem = pItem.getItem().copy();
 
                 newItem.setQuantity((short) ((pItem.getItem().getQuantity() * quantity)));
-                if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
+                if (quantity < 1 || !pItem.isExist() || pItem.getBundles() < quantity) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    return false;
+                } else if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
                     c.sendPacket(PacketCreator.enableActions());
                     return false;
                 }

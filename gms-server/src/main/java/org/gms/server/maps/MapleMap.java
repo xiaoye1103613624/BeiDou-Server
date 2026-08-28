@@ -1355,6 +1355,20 @@ public class MapleMap {
     }
 
     public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
+        return damageMonster(chr, monster, (long) damage, true);
+    }
+
+    public boolean damageMonster(final Character chr, final Monster monster, final long damage) {
+        return damageMonster(chr, monster, damage, true);
+    }
+
+    public boolean damageMonster(final Character chr, final Monster monster, final int damage,
+            final boolean weatherScaled) {
+        return damageMonster(chr, monster, (long) damage, weatherScaled);
+    }
+
+    public boolean damageMonster(final Character chr, final Monster monster, final long damage,
+            final boolean weatherScaled) {
         if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
                 Monster mons = chr.getMap().getMonsterByOid(object.getObjectId());
@@ -1366,7 +1380,11 @@ public class MapleMap {
             }
         }
         if (monster.isAlive()) {
-            boolean killed = monster.damage(chr, damage, false);
+            final int scaledDamage = weatherScaled
+                    ? org.gms.server.weather.WeatherCombat.scaleDamageToMonster(
+                            (int) Math.min(Integer.MAX_VALUE, damage))
+                    : (int) Math.min(Integer.MAX_VALUE, damage);
+            boolean killed = monster.damage(chr, scaledDamage, false);
 
             selfDestruction selfDestr = monster.getStats().selfDestruction();
             if (selfDestr != null && selfDestr.getHp() > -1) {// should work ;p
@@ -1412,7 +1430,9 @@ public class MapleMap {
                 return false;
             }
 
-            spawnedMonstersOnMap.decrementAndGet();
+            if (!monster.isNocturnal()) {
+                spawnedMonstersOnMap.decrementAndGet();
+            }
             removeMapObject(monster);
             monster.disposeMapObject();
             if (monster.hasBossHPBar()) {   // thanks resinate for noticing boss HPbar not clearing after mob defeat in certain scenarios   //感谢resinate注意到在某些情况下暴徒失败后老板HPbar没有清除
@@ -1932,7 +1952,9 @@ public class MapleMap {
         monster.aggroUpdateController();
         updateBossSpawn(monster);
 
-        spawnedMonstersOnMap.incrementAndGet();
+        if (!monster.isNocturnal()) {
+            spawnedMonstersOnMap.incrementAndGet();
+        }
         addSelfDestructive(monster);
         applyRemoveAfter(monster);
     }
@@ -2049,7 +2071,9 @@ public class MapleMap {
             }
         }
 
-        spawnedMonstersOnMap.incrementAndGet();
+        if (!monster.isNocturnal()) {
+            spawnedMonstersOnMap.incrementAndGet();
+        }
         addSelfDestructive(monster);
         applyRemoveAfter(monster);  // thanks LightRyuzaki for pointing issues with spawned CWKPQ mobs not applying this
     }
@@ -2080,7 +2104,9 @@ public class MapleMap {
         monster.aggroUpdateController();
         updateBossSpawn(monster);
 
-        spawnedMonstersOnMap.incrementAndGet();
+        if (!monster.isNocturnal()) {
+            spawnedMonstersOnMap.incrementAndGet();
+        }
         addSelfDestructive(monster);
         applyRemoveAfter(monster);
     }
@@ -2090,7 +2116,9 @@ public class MapleMap {
         monster.setFake(true);
         spawnAndAddRangedMapObject(monster, c -> c.sendPacket(PacketCreator.spawnFakeMonster(monster, 0)));
 
-        spawnedMonstersOnMap.incrementAndGet();
+        if (!monster.isNocturnal()) {
+            spawnedMonstersOnMap.incrementAndGet();
+        }
         addSelfDestructive(monster);
     }
 
@@ -2647,10 +2675,43 @@ public class MapleMap {
 
         chr.receivePartyMemberHP();
         announcePlayerDiseases(chr.getClient());
+
+        broadcastColoringPrism(chr);
+        broadcastColoringPrismToNewer(chr);
+        org.gms.server.colorprism.ColorPrismPackets.broadcastMapTable(this);
+
+        // 天气：进图立即同步昼夜/天空（snap，避免淡入）
+        org.gms.server.weather.WeatherPackets.sendTo(chr);
+        org.gms.server.weather.NocturnalMobService.refreshMap(this);
     }
 
     private static void announcePlayerDiseases(final Client c) {
         Server.getInstance().registerAnnouncePlayerDiseases(c);
+    }
+
+    public void broadcastColoringPrism(Character entering) {
+        List<org.gms.server.coloring.ColoringPrismDye> dyes =
+                org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(entering.getId());
+        if (dyes.isEmpty()) {
+            return;
+        }
+        broadcastMessage(entering,
+                org.gms.server.coloring.ColoringPrismPackets.dyeMerge(entering.getId(), dyes), false);
+    }
+
+    public void broadcastColoringPrismToNewer(Character entering) {
+        for (Character other : getAllPlayers()) {
+            if (other == entering) {
+                continue;
+            }
+            List<org.gms.server.coloring.ColoringPrismDye> dyes =
+                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(other.getId());
+            if (dyes.isEmpty()) {
+                continue;
+            }
+            entering.sendPacket(
+                    org.gms.server.coloring.ColoringPrismPackets.dyeMerge(other.getId(), dyes));
+        }
     }
 
     public Portal getRandomPlayerSpawnpoint() {
@@ -3756,7 +3817,21 @@ public class MapleMap {
     }
 
     private static double getCurrentSpawnRate(int numPlayers) {
-        return 0.70 + (0.05 * Math.min(6, numPlayers));
+        return (0.70 + (0.05 * Math.min(6, numPlayers)))
+                * org.gms.server.weather.WeatherCombat.spawnMultiplier();
+    }
+
+    /**
+     * Safe anchors for night-only ambient encounters (ordinary field spawns only).
+     */
+    public List<Point> getNocturnalSpawnPositions() {
+        List<Point> positions = new ArrayList<>();
+        for (SpawnPoint sp : getMonsterSpawn()) {
+            if (sp.getMobTime() == 0) {
+                positions.add(new Point(sp.getPosition()));
+            }
+        }
+        return positions;
     }
 
     private int getNumShouldSpawn(int numPlayers) {

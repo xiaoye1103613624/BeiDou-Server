@@ -659,6 +659,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final int damage, int skillid, int fixedTime) {
+        damageMonsterWithSkill(attacker, map, monster, damage, skillid, fixedTime, true);
+    }
+
+    private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster,
+            final int damage, int skillid, int fixedTime, final boolean weatherScaled) {
         int animationTime;
 
         if (fixedTime == 0) {
@@ -670,11 +675,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         if (animationTime > 0) { // be sure to only use LIMITED ATTACKS with animation time here
             TimerManager.getInstance().schedule(() -> {
                 map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
-                map.damageMonster(attacker, monster, damage);
+                map.damageMonster(attacker, monster, damage, weatherScaled);
             }, animationTime);
         } else {
             map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
-            map.damageMonster(attacker, monster, damage);
+            map.damageMonster(attacker, monster, damage, weatherScaled);
         }
     }
 

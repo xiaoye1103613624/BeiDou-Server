@@ -34,6 +34,8 @@ public class GameConstants {
      * 不一致时落入 {@code changeGroup} 静默分支，导致"加别人不行"。</p>
      */
     public static final String DEFAULT_BUDDY_GROUP = "Default Group";
+    public static final int TROCK_MAP_SIZE = 999;
+    public static final int VIP_TROCK_MAP_SIZE = 999;
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
     // Ronan's rates upgrade system
@@ -516,7 +518,6 @@ public class GameConstants {
                 || skill == Legend.ECHO_OF_HERO || skill == Evan.ECHO_OF_HERO;
     }
 
-    /** 不得出现在客户端键位/宏封包中的技能（隐藏技能 + 废弃回声）。 */
     public static boolean isClientUnsafeSkill(final int skill) {
         return isHiddenSkills(skill) || isLegacyEchoSkill(skill);
     }

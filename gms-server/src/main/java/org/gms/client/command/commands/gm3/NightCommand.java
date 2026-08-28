@@ -26,17 +26,19 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.util.I18nUtil;
+import org.gms.server.weather.WeatherPackets;
+import org.gms.server.weather.WeatherService;
 
 public class NightCommand extends Command {
     {
-        setDescription(I18nUtil.getMessage("NightCommand.message1"));
+        setDescription("Freeze the world at night.");
     }
 
     @Override
     public void execute(Client c, String[] params) {
-        Character player = c.getPlayer();
-        player.getMap().broadcastNightEffect();
-        player.yellowMessage(I18nUtil.getMessage("NightCommand.message2"));
+        WeatherService.setBareSky(false);
+        WeatherService.setTime(WeatherService.TIME_NIGHT);
+        WeatherPackets.broadcast(c.getWorldServer(), false);
+        c.getPlayer().yellowMessage("World time set to night. Use !weather auto to resume it.");
     }
 }

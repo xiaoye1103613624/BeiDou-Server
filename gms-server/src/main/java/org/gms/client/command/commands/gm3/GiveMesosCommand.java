@@ -30,6 +30,8 @@ import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
 public class GiveMesosCommand extends Command {
+    private static final long GM_MESO_SOFT_MAX = 9_999_999_999_999L;
+
     {
         setDescription(I18nUtil.getMessage("GiveMesosCommand.message1"));
     }
@@ -55,16 +57,16 @@ public class GiveMesosCommand extends Command {
 
         try {
             mesos_ = Long.parseLong(value);
-            if (mesos_ > Integer.MAX_VALUE) {
-                mesos_ = Integer.MAX_VALUE;
-            } else if (mesos_ < Integer.MIN_VALUE) {
-                mesos_ = Integer.MIN_VALUE;
+            if (mesos_ > GM_MESO_SOFT_MAX) {
+                mesos_ = GM_MESO_SOFT_MAX;
+            } else if (mesos_ < -GM_MESO_SOFT_MAX) {
+                mesos_ = -GM_MESO_SOFT_MAX;
             }
         } catch (NumberFormatException nfe) {
             if (value.contentEquals("max")) {  // "max" descriptor suggestion thanks to Vcoc
-                mesos_ = Integer.MAX_VALUE;
+                mesos_ = GM_MESO_SOFT_MAX;
             } else if (value.contentEquals("min")) {
-                mesos_ = Integer.MIN_VALUE;
+                mesos_ = -GM_MESO_SOFT_MAX;
             }
         }
 
@@ -73,7 +75,7 @@ public class GiveMesosCommand extends Command {
             victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(recv));
         }
         if (victim != null) {
-            victim.gainMeso((int) mesos_, true);
+            victim.gainMeso(mesos_, true);
             player.message(I18nUtil.getMessage("GiveMesosCommand.message3"));
         } else {
             player.message(I18nUtil.getMessage("BombCommand.message3", recv));

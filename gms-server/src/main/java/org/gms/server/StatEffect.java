@@ -220,6 +220,23 @@ public class StatEffect {
         return loadFromData(source, itemid, false, false);
     }
 
+    /**
+     * Item-sourced timed buff without a Skill.wz entry (weather debuff icon/tooltip).
+     */
+    public static StatEffect createFamiliarEffect(int familiarItemId, int durationMs,
+            List<Pair<BuffStat, Integer>> stats) {
+        StatEffect ret = new StatEffect();
+        ret.sourceid = familiarItemId;
+        ret.skill = false;
+        ret.overTime = true;
+        ret.duration = Math.max(1, durationMs);
+        ret.moveTo = -1;
+        ret.statups = List.copyOf(stats == null ? Collections.emptyList() : stats);
+        ret.cureDebuffs = Collections.emptyList();
+        ret.monsterStatus = Collections.emptyMap();
+        return ret;
+    }
+
     private static void addBuffStatPairToListIfNotZero(List<Pair<BuffStat, Integer>> list, BuffStat buffstat, Integer val) {
         if (val != 0) {
             list.add(new Pair<>(buffstat, val));

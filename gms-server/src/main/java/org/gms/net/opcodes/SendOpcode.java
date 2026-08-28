@@ -357,8 +357,26 @@ public enum SendOpcode implements Opcode {
     VEGA_SCROLL(0x166), // VEGA卷轴
     DPT_TRACKER(0x3714), // 个人伤害统计
 
+    DAMAGE_SKIN_CATALOG(0x170), // 伤害皮肤商店目录
+    DAMAGE_SKIN_INVENTORY(0x171), // 伤害皮肤背包
+    DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果
+    DAMAGE_SKIN_BROADCAST(0x173), // 伤害皮肤广播
+    BEAUTY_RESULT(0x174), // 美容院结果
+    COLORING_PRISM(0x184), // 七彩棱镜：打开 UI / DYE_LIST / DYE_MERGE
+    WEAPON_TINT_SYNC(0x372F), // Coloring Prism weapontint 同步
+    DAILY_CHECKIN(0x17C), // 每日签到快照
+    BAG_WINDOW(0x3725), // 收纳背包窗口快照
+    USER_INFO_EX(0x3727), // 他人装备详情回复
+
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
+    CASHSHOP_WINDOW_SYNC(0x3731), // 窗口版现金商城同步
+    WEATHER_SYNC(0x373D), // 昼夜/天气同步（ijl15 weather）
+    LAMP_PREVIEW(0x373F), // GM !lamp 预览路灯
+    SET_ITEM_FINAL_DAMAGE(0x175), // 套装最终伤害% + 伤害皮肤 + COMBAT_STAT_SYNC
+    SET_ITEM_SKILL_BONUS(0x176), // 套装技能展示文字
+    SET_SKILL_BONUS(0x179), // 套装技能加成数值
+    CUSTOM_PACKET(0x3713), // 自定义封包（队伍Buff/Tracker等子命令）
     ;
     private int code = -2;
 

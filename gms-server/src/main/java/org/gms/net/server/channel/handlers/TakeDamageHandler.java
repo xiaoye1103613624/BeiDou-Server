@@ -71,6 +71,8 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         byte damagefrom = p.readByte();
         p.readByte(); //Element
         int damage = p.readInt();
+        int weatherScaleFrom = 0;
+        int weatherScaleTo = 0;
         int oid = 0, monsteridfrom = 0, pgmr = 0, direction = 0;
         int pos_x = 0, pos_y = 0, fake = 0;
         boolean is_pgmr = false, is_pg = true, is_deadly = false;
@@ -280,6 +282,10 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     damage *= (highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
             }
+            final int beforeNightScale = damage;
+            damage = org.gms.server.weather.WeatherCombat.scaleDamageToPlayer(damage);
+            weatherScaleFrom = beforeNightScale;
+            weatherScaleTo = damage;
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
                 int mploss = (int) (damage * (chr.getBuffedValue(BuffStat.MAGIC_GUARD).doubleValue() / 100.0));
@@ -309,10 +315,18 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 chr.addMPHP(-damage, -mpattack);
             }
         }
+        int shownDamage = damage;
+        if (damage > 0 && weatherScaleTo > 0 && weatherScaleFrom > 0
+                && weatherScaleTo != weatherScaleFrom) {
+            shownDamage = (int) Math.round((double) damage * weatherScaleFrom / weatherScaleTo);
+            if (shownDamage < 1) {
+                shownDamage = 1;
+            }
+        }
         if (!chr.isHidden()) {
-            map.broadcastMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
+            map.broadcastMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), shownDamage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         } else {
-            map.broadcastGMMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
+            map.broadcastGMMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), shownDamage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         }
         if (MapId.isDojo(map.getId())) {
             chr.setDojoEnergy(chr.getDojoEnergy() + GameConfig.getServerInt("dojo_energy_dmg"));

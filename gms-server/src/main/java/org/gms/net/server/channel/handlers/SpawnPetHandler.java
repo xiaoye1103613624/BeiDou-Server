@@ -31,7 +31,7 @@ public final class SpawnPetHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readInt();
-        byte slot = p.readByte();
+        short slot = p.readShort();
         p.readByte();
         boolean lead = p.readByte() == 1;
 

@@ -229,6 +229,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.SKILL_EFFECT, new SkillEffectHandler());
         registerHandler(RecvOpcode.MESSENGER, new MessengerHandler());
         registerHandler(RecvOpcode.NPC_ACTION, new NPCAnimationHandler());
+        registerHandler(RecvOpcode.SIDEBAR_TOOL, new SidebarToolHandler());
         registerHandler(RecvOpcode.CHECK_CASH, new TouchingCashShopHandler());
         registerHandler(RecvOpcode.CASHSHOP_OPERATION, new CashOperationHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.COUPON_CODE, new CouponCodeHandler());
@@ -272,6 +273,12 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.CHANGE_FAMILY_MESSAGE, new FamilyPreceptsHandler());
         registerHandler(RecvOpcode.FAMILY_SUMMON_RESPONSE, new FamilySummonResponseHandler());
         registerHandler(RecvOpcode.USE_HAMMER, new UseHammerHandler());
+        registerHandler(RecvOpcode.DAMAGE_SKIN_APPLY, new DamageSkinApplyHandler());
+        registerHandler(RecvOpcode.DAMAGE_SKIN_PURCHASE, new DamageSkinPurchaseHandler());
+        registerHandler(RecvOpcode.BEAUTY_ACTION, new BeautyHandler());
+        registerHandler(RecvOpcode.COLORING_PRISM_ACTION, new ColoringPrismHandler());
+        registerHandler(RecvOpcode.WEAPON_TINT_ACTION, new WeaponTintHandler());
+        registerHandler(RecvOpcode.DAILY_CHECKIN, new DailyCheckinHandler());
         registerHandler(RecvOpcode.SCRIPTED_ITEM, new ScriptedItemHandler());
         registerHandler(RecvOpcode.TOUCHING_REACTOR, new TouchReactorHandler());
         registerHandler(RecvOpcode.BEHOLDER, new BeholderHandler());
@@ -283,6 +290,8 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.USE_GACHA_EXP, new UseGachaExpHandler());
         registerHandler(RecvOpcode.NEW_YEAR_CARD_REQUEST, new NewYearCardHandler());
         registerHandler(RecvOpcode.CASHSHOP_SURPRISE, new CashShopSurpriseHandler());
+        registerHandler(RecvOpcode.CASHSHOP_WINDOW_ACTION, new CashShopWindowHandler());
+        registerHandler(RecvOpcode.BAG_WINDOW, new BagWindowHandler());
         registerHandler(RecvOpcode.USE_ITEM_REWARD, new ItemRewardHandler());
         registerHandler(RecvOpcode.USE_REMOTE, new RemoteGachaponHandler());
         registerHandler(RecvOpcode.ACCEPT_FAMILY, new AcceptFamilyHandler());
@@ -290,6 +299,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.USE_DEATHITEM, new UseDeathItemHandler());
         registerHandler(RecvOpcode.PLAYER_MAP_TRANSFER, new PlayerMapTransitionHandler());
         registerHandler(RecvOpcode.USE_MAPLELIFE, new UseMapleLifeHandler());
+        registerHandler(RecvOpcode.SET_ITEM_BONUS_REQUEST, new SetItemBonusRequestHandler());
         registerHandler(RecvOpcode.USE_CATCH_ITEM, new UseCatchItemHandler());
         registerHandler(RecvOpcode.FIELD_DAMAGE_MOB, new FieldDamageMobHandler());
         registerHandler(RecvOpcode.MOB_DAMAGE_MOB_FRIENDLY, new MobDamageMobFriendlyHandler());
@@ -316,5 +326,6 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.CHANGE_QUICKSLOT, new QuickslotKeyMappedModifiedHandler());
         registerHandler(RecvOpcode.SET_HPMPALERT, new SetHpMpAlertHandler());
         registerHandler(RecvOpcode.WORLD_MAP_PLAYERS, new WorldMapPlayersHandler());
+        registerHandler(RecvOpcode.USER_INFO_EX, new UserInfoExHandler());
     }
 }

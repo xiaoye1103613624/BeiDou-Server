@@ -77,6 +77,28 @@ public class Equip extends Item {
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
     private float itemExp;
     private int ringid = -1;
+    private int anvilItemId = 0;
+    private int equipSkillId = 0;
+    private int equipSkillLevel = 0;
+    private long equipSkillExpire = 0L;
+    private int potential1 = 0, potential2 = 0, potential3 = 0;
+    private byte potentialGrade = 0;
+    private byte enhance = 0;
+    private int bonusPotential1 = 0, bonusPotential2 = 0, bonusPotential3 = 0;
+    private byte bonusPotentialGrade = 0;
+    private int soulId = 0;
+    private int soulOption = 0;
+    private int socket1 = 0, socket2 = 0, socket3 = 0;
+    private byte infusion = 0;
+    private byte gemInlay = 0;
+    private byte breakthrough = 0;
+    private int breakthroughPool = 0;
+    private short tintHue = 0;
+    private byte tintChroma = 0;
+    private byte tintBright = 0;
+    private short tintFxHue = 0;
+    private byte tintFxChroma = 0;
+    private byte tintFxBright = 0;
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -123,6 +145,14 @@ public class Equip extends Item {
         ret.setQuantity(getQuantity());
         ret.setExpiration(getExpiration());
         ret.setGiftFrom(getGiftFrom());
+        ret.ringid = ringid;
+        ret.anvilItemId = anvilItemId;
+        ret.tintHue = tintHue;
+        ret.tintChroma = tintChroma;
+        ret.tintBright = tintBright;
+        ret.tintFxHue = tintFxHue;
+        ret.tintFxChroma = tintFxChroma;
+        ret.tintFxBright = tintFxBright;
         return ret;
     }
 
@@ -794,6 +824,245 @@ public class Equip extends Item {
 
     public void wear(boolean yes) {
         wear = yes;
+    }
+
+    public int getAnvilItemId() {
+        return anvilItemId;
+    }
+
+    public void setAnvilItemId(int anvilItemId) {
+        this.anvilItemId = anvilItemId;
+    }
+
+    public short getTintHue() {
+        return tintHue;
+    }
+
+    public byte getTintChroma() {
+        return tintChroma;
+    }
+
+    public byte getTintBright() {
+        return tintBright;
+    }
+
+    public short getTintFxHue() {
+        return tintFxHue;
+    }
+
+    public byte getTintFxChroma() {
+        return tintFxChroma;
+    }
+
+    public byte getTintFxBright() {
+        return tintFxBright;
+    }
+
+    public boolean isTinted() {
+        return tintHue != 0 || tintChroma != 0 || tintBright != 0;
+    }
+
+    public boolean isFxTinted() {
+        return tintFxHue != 0 || tintFxChroma != 0 || tintFxBright != 0;
+    }
+
+    public void setTint(int hue, int chroma, int bright) {
+        this.tintHue = (short) normalizeTintHue(hue);
+        this.tintChroma = (byte) Math.max(-100, Math.min(100, chroma));
+        this.tintBright = (byte) Math.max(-100, Math.min(100, bright));
+    }
+
+    public void setFxTint(int hue, int chroma, int bright) {
+        this.tintFxHue = (short) normalizeTintHue(hue);
+        this.tintFxChroma = (byte) Math.max(-100, Math.min(100, chroma));
+        this.tintFxBright = (byte) Math.max(-100, Math.min(100, bright));
+    }
+
+    protected static int normalizeTintHue(int hue) {
+        if (hue < 0) {
+            return hue < -360 ? -360 : hue;
+        }
+        return Math.floorMod(hue, 360);
+    }
+
+    public void clearTint() {
+        tintHue = 0;
+        tintChroma = 0;
+        tintBright = 0;
+    }
+
+    public void clearFxTint() {
+        tintFxHue = 0;
+        tintFxChroma = 0;
+        tintFxBright = 0;
+    }
+
+    public int getEquipSkillId() {
+        return equipSkillId;
+    }
+
+    public void setEquipSkillId(int equipSkillId) {
+        this.equipSkillId = equipSkillId;
+    }
+
+    public int getEquipSkillLevel() {
+        return equipSkillLevel;
+    }
+
+    public void setEquipSkillLevel(int equipSkillLevel) {
+        this.equipSkillLevel = equipSkillLevel;
+    }
+
+    public long getEquipSkillExpire() {
+        return equipSkillExpire;
+    }
+
+    public void setEquipSkillExpire(long equipSkillExpire) {
+        this.equipSkillExpire = equipSkillExpire;
+    }
+
+    public int getPotential1() {
+        return potential1;
+    }
+
+    public void setPotential1(int potential1) {
+        this.potential1 = potential1;
+    }
+
+    public int getPotential2() {
+        return potential2;
+    }
+
+    public void setPotential2(int potential2) {
+        this.potential2 = potential2;
+    }
+
+    public int getPotential3() {
+        return potential3;
+    }
+
+    public void setPotential3(int potential3) {
+        this.potential3 = potential3;
+    }
+
+    public byte getPotentialGrade() {
+        return potentialGrade;
+    }
+
+    public void setPotentialGrade(byte potentialGrade) {
+        this.potentialGrade = potentialGrade;
+    }
+
+    public byte getEnhance() {
+        return enhance;
+    }
+
+    public void setEnhance(byte enhance) {
+        this.enhance = enhance;
+    }
+
+    public int getBonusPotential1() {
+        return bonusPotential1;
+    }
+
+    public void setBonusPotential1(int bonusPotential1) {
+        this.bonusPotential1 = bonusPotential1;
+    }
+
+    public int getBonusPotential2() {
+        return bonusPotential2;
+    }
+
+    public void setBonusPotential2(int bonusPotential2) {
+        this.bonusPotential2 = bonusPotential2;
+    }
+
+    public int getBonusPotential3() {
+        return bonusPotential3;
+    }
+
+    public void setBonusPotential3(int bonusPotential3) {
+        this.bonusPotential3 = bonusPotential3;
+    }
+
+    public byte getBonusPotentialGrade() {
+        return bonusPotentialGrade;
+    }
+
+    public void setBonusPotentialGrade(byte bonusPotentialGrade) {
+        this.bonusPotentialGrade = bonusPotentialGrade;
+    }
+
+    public int getSoulId() {
+        return soulId;
+    }
+
+    public void setSoulId(int soulId) {
+        this.soulId = soulId;
+    }
+
+    public int getSoulOption() {
+        return soulOption;
+    }
+
+    public void setSoulOption(int soulOption) {
+        this.soulOption = soulOption;
+    }
+
+    public int getSocket1() {
+        return socket1;
+    }
+
+    public void setSocket1(int socket1) {
+        this.socket1 = socket1;
+    }
+
+    public int getSocket2() {
+        return socket2;
+    }
+
+    public void setSocket2(int socket2) {
+        this.socket2 = socket2;
+    }
+
+    public int getSocket3() {
+        return socket3;
+    }
+
+    public void setSocket3(int socket3) {
+        this.socket3 = socket3;
+    }
+
+    public byte getInfusion() {
+        return infusion;
+    }
+
+    public void setInfusion(byte infusion) {
+        this.infusion = infusion;
+    }
+
+    public byte getGemInlay() {
+        return gemInlay;
+    }
+
+    public void setGemInlay(byte gemInlay) {
+        this.gemInlay = gemInlay;
+    }
+
+    public byte getBreakthrough() {
+        return breakthrough;
+    }
+
+    public void setBreakthrough(byte breakthrough) {
+        this.breakthrough = breakthrough;
+    }
+
+    public int getBreakthroughPool() {
+        return breakthroughPool;
+    }
+
+    public void setBreakthroughPool(int breakthroughPool) {
+        this.breakthroughPool = breakthroughPool;
     }
 
 }

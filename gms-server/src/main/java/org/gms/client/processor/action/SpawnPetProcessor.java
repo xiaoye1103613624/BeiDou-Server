@@ -40,7 +40,7 @@ import java.awt.*;
 public class SpawnPetProcessor {
     private static final DataProvider dataRoot = DataProviderFactory.getDataProvider(WZFiles.ITEM);
 
-    public static void processSpawnPet(Client c, byte slot, boolean lead) {
+    public static void processSpawnPet(Client c, short slot, boolean lead) {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();

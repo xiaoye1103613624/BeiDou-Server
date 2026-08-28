@@ -306,7 +306,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return completeQuest(id, npc);
     }
 
-    public int getMeso() {
+    public long getMeso() {
         return getPlayer().getMeso();
     }
 
@@ -314,8 +314,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getPlayer().gainMeso(gain);
     }
 
+    public void gainMeso(long gain) {
+        getPlayer().gainMeso(gain);
+    }
+
     public void gainMeso(Double gain) {
-        getPlayer().gainMeso(gain.intValue());
+        getPlayer().gainMeso(gain.longValue());
     }
 
     public void gainExp(int gain) {

@@ -25,6 +25,8 @@ import org.gms.client.BuddylistEntry;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.DamageSkinCatalog;
+import org.gms.client.DamageSkinInventory;
 import org.gms.client.Disease;
 import org.gms.client.FamilyEntitlement;
 import org.gms.client.FamilyEntry;
@@ -68,6 +70,7 @@ import org.gms.net.packet.ByteBufOutPacket;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
+import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.net.server.PlayerCoolDownValueHolder;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
@@ -119,7 +122,7 @@ import java.util.stream.Collectors;
  */
 public class PacketCreator {
 
-    public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
+    public static final List<Pair<Stat, Long>> EMPTY_STATUPDATE = Collections.emptyList();
     private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
@@ -188,23 +191,24 @@ public class PacketCreator {
             }
         }
 
-        p.writeByte(chr.getLevel()); // level
+        // Level300 + MaxHpMp: must match ijl15 Decode2/Decode4/Decode8 caves on CHARLIST.
+        p.writeShort(Math.min(300, Math.max(1, chr.getLevel())));
         p.writeShort(chr.getJob().getId()); // job
         p.writeShort(chr.getStr()); // str
         p.writeShort(chr.getDex()); // dex
         p.writeShort(chr.getInt()); // int
         p.writeShort(chr.getLuk()); // luk
-        p.writeShort(chr.getHp()); // hp (?)
-        p.writeShort(chr.getClientMaxHp()); // maxhp
-        p.writeShort(chr.getMp()); // mp (?)
-        p.writeShort(chr.getClientMaxMp()); // maxmp
+        p.writeInt(chr.getHp());
+        p.writeInt(chr.getClientMaxHp());
+        p.writeInt(chr.getMp());
+        p.writeInt(chr.getClientMaxMp());
         p.writeShort(chr.getRemainingAp()); // remaining ap
         if (GameConstants.hasSPTable(chr.getJob())) {
             addRemainingSkillInfo(p, chr);
         } else {
             p.writeShort(chr.getRemainingSp()); // remaining sp
         }
-        p.writeInt(chr.getExp()); // current exp
+        p.writeLong(Math.max(0L, chr.getExp())); // current exp
         p.writeShort(chr.getFame()); // fame
         p.writeInt(chr.getGachaExp()); //Gacha Exp
         p.writeInt(chr.getMapId()); // current map id
@@ -234,7 +238,7 @@ public class PacketCreator {
             p.writeString(chr.getLinkedName());
         }
 
-        p.writeInt(chr.getMeso());
+        p.writeLong(chr.getMeso());
         addInventoryInfo(p, chr);
         addSkillInfo(p, chr);
         addQuestInfo(p, chr);
@@ -1021,14 +1025,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
+    public static Packet updatePlayerStats(List<Pair<Stat, Long>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<Stat, Integer> statupdate : stats) {
+        for (Pair<Stat, Long> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<Stat, Integer>> mystats = stats;
+        List<Pair<Stat, Long>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -1037,26 +1041,37 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<Stat, Integer> statupdate : mystats) {
+        for (Pair<Stat, Long> statupdate : mystats) {
             if (statupdate.getLeft().getValue() >= 1) {
-                if (statupdate.getLeft().getValue() == 0x1) {
-                    p.writeByte(statupdate.getRight().byteValue());
-                } else if (statupdate.getLeft().getValue() <= 0x4) {
-                    p.writeInt(statupdate.getRight());
-                } else if (statupdate.getLeft().getValue() < 0x20) {
-                    p.writeByte(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x8000) {
+                int mask = statupdate.getLeft().getValue();
+                long value = statupdate.getRight();
+                if (mask == 0x1) {
+                    p.writeByte((byte) value);
+                } else if (mask <= 0x4) {
+                    p.writeInt((int) value);
+                } else if (mask == Stat.LEVEL.getValue()) {
+                    p.writeShort((short) Math.min(300, Math.max(1, value)));
+                } else if (mask < 0x20) {
+                    p.writeByte((byte) value);
+                } else if (mask == Stat.HP.getValue() || mask == Stat.MAXHP.getValue()
+                        || mask == Stat.MP.getValue() || mask == Stat.MAXMP.getValue()) {
+                    p.writeInt((int) value);
+                } else if (mask == 0x8000) {
                     if (GameConstants.hasSPTable(chr.getJob())) {
                         addRemainingSkillInfo(p, chr);
                     } else {
-                        p.writeShort(statupdate.getRight().shortValue());
+                        p.writeShort((short) value);
                     }
-                } else if (statupdate.getLeft().getValue() < 0xFFFF) {
-                    p.writeShort(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x20000) {
-                    p.writeShort(statupdate.getRight().shortValue());
+                } else if (mask == Stat.EXP.getValue()) {
+                    p.writeLong(Math.max(0L, value));
+                } else if (mask == Stat.MESO.getValue()) {
+                    p.writeLong(Math.max(0L, value));
+                } else if (mask < 0xFFFF) {
+                    p.writeShort((short) value);
+                } else if (mask == 0x20000) {
+                    p.writeShort((short) value);
                 } else {
-                    p.writeInt(statupdate.getRight());
+                    p.writeInt((int) value);
                 }
             }
         }
@@ -3214,11 +3229,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeMesoSet(byte number, int meso) {
+    public static Packet getTradeMesoSet(byte number, long meso) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SET_MESO.getCode());
         p.writeByte(number);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -3604,7 +3619,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, int meso) {
+    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x16);
         p.writeInt(npcId);
@@ -3612,7 +3627,7 @@ public class PacketCreator {
         p.writeShort(0x7E);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         p.writeShort(0);
         p.writeByte((byte) items.size());
         for (Item item : items) {
@@ -3634,14 +3649,14 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet mesoStorage(byte slots, int meso) {
+    public static Packet mesoStorage(byte slots, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x13);
         p.writeByte(slots);
         p.writeShort(2);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -5038,7 +5053,7 @@ public class PacketCreator {
         p.writeInt(NpcId.FREDRICK);
         p.writeInt(32272); //id
         p.skip(5);
-        p.writeInt(chr.getMerchantNetMeso());
+        p.writeLong(chr.getMerchantNetMeso());
         p.writeByte(0);
         try {
             List<Pair<Item, InventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
@@ -5233,11 +5248,11 @@ public class PacketCreator {
                 p.writeInt(s.getMesos());
                 p.writeString(s.getBuyer());
             }
-            p.writeInt(chr.getMerchantMeso());//:D?
+            p.writeLong(chr.getMerchantMeso());//:D?
         }
         p.writeString(hm.getDescription());
         p.writeByte(0x10); //TODO SLOTS, which is 16 for most stores...slotMax
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         if (hm.getItems().isEmpty()) {
             p.writeByte(0);//Hmm??
@@ -5255,7 +5270,7 @@ public class PacketCreator {
     public static Packet updateHiredMerchant(HiredMerchant hm, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         for (PlayerShopItem item : hm.getItems()) {
             p.writeShort(item.getBundles());
@@ -7574,6 +7589,286 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
         p.writeByte(hp);
         p.writeByte(mp);
+        return p;
+    }
+
+    public static Packet damageSkinCatalog() {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_CATALOG);
+        var all = DamageSkinCatalog.getAll();
+        p.writeShort(all.size());
+        for (var e : all.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeLong(e.getValue());
+        }
+        return p;
+    }
+
+    public static Packet damageSkinInventory(Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_INVENTORY);
+        p.writeInt(chr.getActiveDamageSkin());
+        DamageSkinInventory inv = chr.getDamageSkinInventory();
+        var owned = inv.getOwnedIds();
+        int count = 0;
+        for (int id : owned) {
+            if (id != DamageSkinInventory.DEFAULT_SKIN_ID) {
+                count++;
+            }
+        }
+        p.writeShort(count);
+        for (int id : owned) {
+            if (id == DamageSkinInventory.DEFAULT_SKIN_ID) {
+                continue;
+            }
+            p.writeInt(id);
+        }
+        return p;
+    }
+
+    public static Packet damageSkinResult(int op, boolean ok, int skinId, int newMesos) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_RESULT);
+        p.writeByte(op);
+        p.writeByte(ok ? 1 : 0);
+        p.writeInt(skinId);
+        p.writeInt(newMesos);
+        return p;
+    }
+
+    public static Packet damageSkinBroadcast(int charId, int skinId) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN_BROADCAST);
+        p.writeInt(charId);
+        p.writeInt(skinId);
+        return p;
+    }
+
+    public static Packet bagWindowSnapshot(int bagKind, OreStorage storage, boolean auto) {
+        OutPacket p = OutPacket.create(SendOpcode.BAG_WINDOW);
+        p.writeByte(1);
+        p.writeByte(bagKind);
+        List<Item> items = storage.getItems();
+        p.writeShort(items.size());
+        for (Item item : items) {
+            p.writeShort(item.getPosition());
+            addItemInfo(p, item, true);
+        }
+        for (Item item : items) {
+            p.writeShort(item.getQuantity());
+        }
+        p.writeByte(auto ? 1 : 0);
+        return p;
+    }
+
+    public static Packet userInfoExEquip(int charId, Equip equip) {
+        OutPacket p = OutPacket.create(SendOpcode.USER_INFO_EX);
+        p.writeByte(1);
+        p.writeInt(charId);
+        p.writeInt(equip.getItemId());
+        p.writeInt(equip.getAnvilItemId());
+        p.writeInt(equip.getEquipSkillId());
+        p.writeInt(equip.getEquipSkillLevel());
+        long skillExpire = equip.getEquipSkillExpire();
+        p.writeLong(skillExpire > 0 ? getTime(skillExpire) : 0L);
+        org.gms.potential.PotentialHyperService.StatBonus pot =
+                org.gms.potential.PotentialHyperService.computeBonus(equip);
+        p.writeShort(clampEquipStatShort(equip.getStr() + pot.str));
+        p.writeShort(clampEquipStatShort(equip.getDex() + pot.dex));
+        p.writeShort(clampEquipStatShort(equip.getInt() + pot.inte));
+        p.writeShort(clampEquipStatShort(equip.getLuk() + pot.luk));
+        p.writeShort(clampEquipStatShort(equip.getHp() + pot.hp));
+        p.writeShort(clampEquipStatShort(equip.getMp() + pot.mp));
+        p.writeShort(clampEquipStatShort(equip.getWatk() + pot.watk));
+        p.writeShort(clampEquipStatShort(equip.getMatk() + pot.matk));
+        p.writeShort(clampEquipStatShort(equip.getWdef() + pot.wdef));
+        p.writeShort(clampEquipStatShort(equip.getMdef() + pot.mdef));
+        p.writeShort(clampEquipStatShort(equip.getAcc() + pot.acc));
+        p.writeShort(clampEquipStatShort(equip.getAvoid() + pot.avoid));
+        p.writeShort(equip.getHands());
+        p.writeShort(clampEquipStatShort(equip.getSpeed() + pot.speed));
+        p.writeShort(clampEquipStatShort(equip.getJump() + pot.jump));
+        p.writeByte(equip.getUpgradeSlots());
+        return p;
+    }
+
+    private static short clampEquipStatShort(int value) {
+        if (value > Short.MAX_VALUE) {
+            return Short.MAX_VALUE;
+        }
+        if (value < Short.MIN_VALUE) {
+            return Short.MIN_VALUE;
+        }
+        return (short) value;
+    }
+
+    // ------------------------------------------------------------------
+    // 套装封包
+    // ------------------------------------------------------------------
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId) {
+        return setItemFinalDamageBonus(finalDamagePercent, skinId, org.gms.combat.stat.CombatStatProfile.EMPTY);
+    }
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId,
+                                                 org.gms.combat.stat.CombatStatProfile profile) {
+        return setItemFinalDamageBonus(finalDamagePercent, skinId, profile, 0, 0, 0);
+    }
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId,
+                                                 org.gms.combat.stat.CombatStatProfile profile,
+                                                 int itemDropPropPercent, int mesoDropPropPercent,
+                                                 int damageReducePercent) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_FINAL_DAMAGE);
+        p.writeShort(finalDamagePercent);
+        p.writeInt(skinId);
+        if (profile == null) {
+            profile = org.gms.combat.stat.CombatStatProfile.EMPTY;
+        }
+        p.writeShort(profile.damR);
+        p.writeShort(profile.bossDamR);
+        p.writeShort(profile.normalDamR);
+        p.writeShort(profile.ignorePDR);
+        p.writeShort(profile.ignoreMDR);
+        p.writeShort(profile.critRate);
+        p.writeShort(profile.critDam);
+        p.writeShort(profile.padR);
+        p.writeShort(profile.madR);
+        var sources = profile.finalDamageSources;
+        p.writeShort(sources.size());
+        for (int fd : sources) {
+            p.writeShort(fd);
+        }
+        p.writeShort(clampU16(itemDropPropPercent));
+        p.writeShort(clampU16(mesoDropPropPercent));
+        p.writeShort(clampU16(damageReducePercent));
+        return p;
+    }
+
+    private static int clampU16(int v) {
+        if (v <= 0) {
+            return 0;
+        }
+        return Math.min(v, 65535);
+    }
+
+    public static Packet setItemSkillBonus(Map<Integer, String> entries) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_SKILL_BONUS);
+        p.writeShort(entries.size());
+        for (Map.Entry<Integer, String> e : entries.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeByte(1);
+            p.writeString(e.getValue() != null ? e.getValue() : "");
+        }
+        return p;
+    }
+
+    public static Packet setItemSkillBonusSingle(int setId, boolean enabled, String text) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_SKILL_BONUS);
+        p.writeShort(1);
+        p.writeInt(setId);
+        p.writeByte(enabled ? 1 : 0);
+        p.writeString(text != null ? text : "");
+        return p;
+    }
+
+    public static Packet sendSetSkillBonus(Map<Integer, Integer> skillBonuses) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_SKILL_BONUS);
+        p.writeShort(skillBonuses.size());
+        for (Map.Entry<Integer, Integer> e : skillBonuses.entrySet()) {
+            p.writeInt(e.getKey());
+            p.writeInt(e.getValue());
+        }
+        return p;
+    }
+
+    /** 每日签到窗口快照 (SendOpcode 0x17C) */
+    public static Packet dailyCheckinSnapshot(int currentDay, int claimedMask, int justClaimed) {
+        OutPacket p = OutPacket.create(SendOpcode.DAILY_CHECKIN);
+        p.writeByte(1);
+        p.writeByte(currentDay);
+        p.writeInt(claimedMask);
+        p.writeByte(justClaimed);
+        int n = org.gms.server.dailycheckin.DailyCheckinRewards.CYCLE_DAYS;
+        p.writeByte(n);
+        for (int d = 1; d <= n; d++) {
+            p.writeInt(org.gms.server.dailycheckin.DailyCheckinRewards.iconItemId(d));
+        }
+        for (int d = 1; d <= n; d++) {
+            p.writeString(org.gms.server.dailycheckin.DailyCheckinRewards.tooltip(d));
+        }
+        return p;
+    }
+
+    public static Packet partyBuffSnapshot(Character chr) {
+        List<PlayerBuffValueHolder> buffs = chr.getAllBuffs();
+        buffs.sort((left, right) -> {
+            int leftPriority = getPartyItemAttackPriority(left);
+            int rightPriority = getPartyItemAttackPriority(right);
+            if (leftPriority != rightPriority) {
+                return Integer.compare(rightPriority, leftPriority);
+            }
+            int leftTotal = getPartyItemTotalAttack(left);
+            int rightTotal = getPartyItemTotalAttack(right);
+            return Integer.compare(rightTotal, leftTotal);
+        });
+
+        OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xA9);
+        p.writeInt(chr.getId());
+        p.writeByte(Math.min(255, buffs.size()));
+
+        int written = 0;
+        for (PlayerBuffValueHolder buff : buffs) {
+            if (written >= 255) {
+                break;
+            }
+            int sourceId = buff.effect.getBuffSourceId();
+            int remainingMs = chr.getBuffRemainingTime(sourceId);
+            int totalMs = remainingMs > 0
+                    ? (int) Math.min(Integer.MAX_VALUE, (long) remainingMs + Math.max(0, buff.usedTime))
+                    : Math.max(0, buff.effect.getBuffLocalDuration());
+            p.writeInt(sourceId);
+            p.writeInt(remainingMs);
+            p.writeInt(totalMs);
+            written++;
+        }
+        return p;
+    }
+
+    private static int getPartyItemAttackPriority(PlayerBuffValueHolder buff) {
+        if (buff.effect.isSkill()) {
+            return 0;
+        }
+        return Math.max(buff.effect.getWatk(), buff.effect.getMatk());
+    }
+
+    private static int getPartyItemTotalAttack(PlayerBuffValueHolder buff) {
+        if (buff.effect.isSkill()) {
+            return 0;
+        }
+        return buff.effect.getWatk() + buff.effect.getMatk();
+    }
+
+    public static Packet partyHpPercent(Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAA);
+        p.writeInt(chr.getId());
+        int maxHp = Math.max(1, chr.getCurrentMaxHp());
+        p.writeByte(Math.max(0, Math.min(100, chr.getHp() * 100 / maxHp)));
+        return p;
+    }
+
+    public static Packet partyTrackerVisibility(boolean visible) {
+        OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAB);
+        p.writeByte(visible ? 1 : 0);
+        return p;
+    }
+
+    public static Packet partyTrackerUpdate(Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.CUSTOM_PACKET);
+        p.writeByte(0xAB);
+        p.writeByte(2);
+        p.writeInt(chr.getId());
+        p.writeLong(chr.getPartyTrackerExp());
+        p.writeLong(chr.getPartyTrackerMeso());
         return p;
     }
 

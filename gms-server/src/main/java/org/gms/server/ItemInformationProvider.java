@@ -35,6 +35,7 @@ import org.gms.client.inventory.WeaponType;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.EquipSlot;
+import org.gms.constants.inventory.ExtendedEquipRegistry;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.skills.Assassin;
 import org.gms.constants.skills.Gunslinger;
@@ -65,6 +66,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -288,6 +290,55 @@ public class ItemInformationProvider {
         boolean blockMouse = DataTool.getIntConvert("info/noCancelMouse", item, 0) == 1;
         noCancelMouseCache.put(itemId, blockMouse);
         return blockMouse;
+    }
+
+    /** True when Item.wz (not just String.wz) has a node for this id. */
+    public boolean itemExists(int itemId) {
+        return getItemData(itemId) != null;
+    }
+
+    /**
+     * List item IDs inside one Item.wz pack (e.g. {@code Cash/0501.img}) by reading children once.
+     */
+    public List<Integer> listIdsInItemPack(String categoryDir, int packPrefix) {
+        if (categoryDir == null || categoryDir.isBlank() || packPrefix < 0) {
+            return List.of();
+        }
+        final String fileName = String.format(Locale.ROOT, "%04d.img", packPrefix);
+        final Data pack = itemData.getData(categoryDir + "/" + fileName);
+        if (pack == null) {
+            return List.of();
+        }
+        final List<Integer> ids = new ArrayList<>();
+        for (Data child : pack.getChildren()) {
+            if (child == null || child.getName() == null) {
+                continue;
+            }
+            try {
+                ids.add(Integer.parseInt(child.getName()));
+            } catch (NumberFormatException ignored) {
+                // skip non-numeric nodes
+            }
+        }
+        return ids;
+    }
+
+    /** Load Character/{folder}/{0#######}.img directly (O(1)). */
+    public Data getEquipDataInFolder(String folder, int itemId) {
+        if (folder == null || folder.isBlank() || itemId <= 0) {
+            return null;
+        }
+        final String idStr = "0" + itemId;
+        return equipData.getData(folder + "/" + idStr + ".img");
+    }
+
+    /** Cash flag for an equip known to live under {@code Character/{folder}}. */
+    public boolean isCashEquipInFolder(String folder, int itemId) {
+        final Data item = getEquipDataInFolder(folder, itemId);
+        if (item == null) {
+            return false;
+        }
+        return DataTool.getIntConvert("info/cash", item, 0) > 0;
     }
 
     private Data getItemData(int itemId) {
@@ -515,9 +566,28 @@ public class ItemInformationProvider {
         return ret;
     }
 
-    protected String getEquipmentSlot(int itemId) {
+    public String getEquipmentSlot(int itemId) {
         if (equipmentSlotCache.containsKey(itemId)) {
             return equipmentSlotCache.get(itemId);
+        }
+
+        // Prefix overrides: many WZ islots still wrong (119→Si, etc.).
+        final int prefix = itemId / 10000;
+        final String forced = switch (prefix) {
+            case 109 -> "Si";
+            case 115 -> "Sh";
+            case 134, 135 -> "Aw";
+            case 116 -> "Po";
+            case 118 -> "Ba";
+            case 119 -> "Em";
+            case 120 -> "To";
+            case 166 -> "Dr";
+            case 167 -> "Ht";
+            default -> null;
+        };
+        if (forced != null) {
+            equipmentSlotCache.put(itemId, forced);
+            return forced;
         }
 
         String ret = "";
@@ -1849,13 +1919,27 @@ public class ItemInformationProvider {
         }
 
         String islot = getEquipmentSlot(id);
+        if (islot == null) {
+            equip.wear(false);
+            String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
+            chr.dropMessage(5, "无法装备 " + itemName + "：缺少装备数据。");
+            log.warn("Chr {} tried to equip {} with missing item WZ data", chr.getName(), itemName);
+            return false;
+        }
+        final int prefix = id / 10000;
         final boolean cash = isCash(id);
-        boolean slotOk = EquipSlot.getFromTextSlot(islot).isAllowed(dst, cash);
-        // 轮回碑石等：WZ 可能仍是 Po/Be，但客户端图腾 UI 发 −55/−155；放行腰带与图腾槽。
-        if (!slotOk && org.gms.reincarnation.ReincarnationSupport.isReincarnationEquip(id)) {
-            slotOk = dst == -50 || dst == -150
-                    || dst == -55 || dst == -155
-                    || EquipSlot.BELT.isAllowed(dst, cash);
+        boolean slotOk;
+        Boolean regOk = ExtendedEquipRegistry.isPrefixSlotAllowed(prefix, dst, cash);
+        if (regOk != null) {
+            slotOk = regOk;
+        } else {
+            slotOk = EquipSlot.getFromTextSlot(islot).isAllowed(dst, cash);
+            // 轮回碑石等：WZ 可能仍是 Po/Be，但客户端图腾 UI 发 −55/−155；放行腰带与图腾槽。
+            if (!slotOk && org.gms.reincarnation.ReincarnationSupport.isReincarnationEquip(id)) {
+                slotOk = dst == -50 || dst == -150
+                        || EquipSlot.TOTEM.isAllowed(dst, cash)
+                        || EquipSlot.BELT.isAllowed(dst, cash);
+            }
         }
         if (!slotOk) {
             equip.wear(false);
@@ -2393,5 +2477,17 @@ public class ItemInformationProvider {
             }
         }
         return retItems;
+    }
+
+    public boolean petCanPickupItem(int itemId) {
+        return petSkillFlagOn(itemId, "pickupItem");
+    }
+
+    public boolean petCanPickupMeso(int itemId) {
+        return petSkillFlagOn(itemId, "pickupMeso");
+    }
+
+    public boolean petSkillFlagOn(int itemId, String flag) {
+        return false;
     }
 }

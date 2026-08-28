@@ -36,6 +36,7 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
+import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
@@ -55,6 +56,7 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.server.dailycheckin.DailyCheckinRewards;
 import org.gms.server.quest.medal.OutstandingCitizenMedal;
 import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
@@ -249,6 +251,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
+            InventoryManipulator.migrateCashRingsOffExtendedSlots(player);
+
             // 轮回：先同步技能/键位/宏，再下发进图包，避免键位引用已剥离的 1005 或尚未授予的 1021。
             org.gms.reincarnation.ReincarnationSupport.onLogin(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
@@ -380,6 +384,21 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.updateGender(player));
             player.checkMessenger();
             c.sendPacket(PacketCreator.enableReport());
+            player.syncWeaponTint();
+
+            // 伤害皮肤：登录时推送商店目录与已拥有列表
+            c.sendPacket(PacketCreator.damageSkinCatalog());
+            c.sendPacket(PacketCreator.damageSkinInventory(player));
+
+            // 每日签到：可领则自动弹窗
+            if (player.getLevel() >= DailyCheckinRewards.MIN_LEVEL) {
+                int checkinClaimable = player.refreshCheckin();
+                if (checkinClaimable >= 1) {
+                    c.sendPacket(PacketCreator.dailyCheckinSnapshot(
+                            checkinClaimable, player.getCheckinClaimed(), 0));
+                }
+            }
+
             player.changeSkillLevel(SkillFactory.getSkill(10000000 * player.getJobType() + 12), (byte) (player.getLinkedLevel() / 10), 20, -1);
             player.checkBerserk(player.isHidden());
 

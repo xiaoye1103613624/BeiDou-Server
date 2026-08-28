@@ -190,6 +190,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
         this.remoteAddress = getRemoteAddress(channel);
         this.ioChannel = channel;
+        this.lastPong = System.currentTimeMillis();
     }
 
     private static String getRemoteAddress(io.netty.channel.Channel channel) {

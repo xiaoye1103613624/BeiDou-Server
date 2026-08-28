@@ -617,6 +617,51 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             remove(c, position, itemId); // 移除指定位置的物品
 
             player.dropMessage(5,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message15",ii.getName(equip.getItemId()),addDay));
+        } else if (itemType == 590) { // 融合外观锻造锤（5900000）
+            short skinPos = p.readShort();
+            short basePos = p.readShort();
+
+            Item baseItem = player.getInventory(
+                    basePos < 0 ? InventoryType.EQUIPPED : InventoryType.EQUIP).getItem(basePos);
+            Item skinItem = player.getInventory(
+                    skinPos < 0 ? InventoryType.EQUIPPED : InventoryType.EQUIP).getItem(skinPos);
+
+            if (!(baseItem instanceof Equip) || !(skinItem instanceof Equip)) {
+                player.dropMessage(1, "两件物品都必须是装备。");
+                c.enableActions();
+                return;
+            }
+            Equip baseEquip = (Equip) baseItem;
+            Equip skinEquip = (Equip) skinItem;
+
+            if (baseEquip.getItemId() == skinEquip.getItemId()) {
+                player.dropMessage(1, "两件装备不能相同。");
+                c.enableActions();
+                return;
+            }
+            if (baseEquip.getItemId() / 10000 != skinEquip.getItemId() / 10000) {
+                player.dropMessage(1, "两件装备必须是同类型。");
+                c.enableActions();
+                return;
+            }
+            if (skinPos < 0) {
+                player.dropMessage(1, "请先将外观源装备放入装备栏（不要穿戴）。");
+                c.enableActions();
+                return;
+            }
+
+            baseEquip.setAnvilItemId(skinEquip.getItemId());
+
+            List<ModifyInventory> mods = new ArrayList<>();
+            mods.add(new ModifyInventory(3, baseEquip));
+            mods.add(new ModifyInventory(0, baseEquip));
+            c.sendPacket(PacketCreator.modifyInventory(true, mods));
+            player.equipChanged();
+
+            InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, skinPos, (short) 1, false);
+            remove(c, position, itemId);
+            player.saveCharToDB(true);
+            c.enableActions();
         } else if (itemType == 552) {
             InventoryType type = InventoryType.getByType((byte) p.readInt());
             short slot = (short) p.readInt();

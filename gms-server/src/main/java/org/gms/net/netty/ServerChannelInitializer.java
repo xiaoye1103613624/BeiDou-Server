@@ -22,7 +22,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private static final Logger log = LoggerFactory.getLogger(ServerChannelInitializer.class);
-    private static final int IDLE_TIME_SECONDS = 30;
+    /** Channel server idle probe; login server overrides with a longer grace period. */
+    protected static final int CHANNEL_IDLE_TIME_SECONDS = 30;
     private static final ChannelHandler sendPacketLogger = new OutPacketLogger();
     private static final ChannelHandler receivePacketLogger = new InPacketLogger();
 
@@ -39,6 +40,11 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
         return remoteAddress;
     }
 
+    /** Idle probe interval before the server sends PING and waits for PONG. */
+    protected int getIdleTimeSeconds() {
+        return CHANNEL_IDLE_TIME_SECONDS;
+    }
+
     void initPipeline(SocketChannel socketChannel, Client client) {
         final InitializationVector sendIv = InitializationVector.generateSend();
         final InitializationVector recvIv = InitializationVector.generateReceive();
@@ -48,7 +54,7 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
     }
 
     private void setUpHandlers(ChannelPipeline pipeline, ProtocolFactory protocolFactory, Client client) {
-        pipeline.addLast("IdleStateHandler", new IdleStateHandler(0, 0, IDLE_TIME_SECONDS));
+        pipeline.addLast("IdleStateHandler", new IdleStateHandler(0, 0, getIdleTimeSeconds()));
         pipeline.addLast("PacketCodec", new PacketCodec(protocolFactory));
         pipeline.addLast("Client", client);
 

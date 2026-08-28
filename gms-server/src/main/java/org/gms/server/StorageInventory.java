@@ -33,11 +33,12 @@ import java.util.*;
 public class StorageInventory {
     private final Client c;
     private Map<Short, Item> inventory = new LinkedHashMap<>();
-    private final byte slotLimit;
+    // int, NOT byte: 收纳背包最多 200 格，>127 时 byte 溢出会导致整理清空
+    private final int slotLimit;
 
     public StorageInventory(Client c, List<Item> toSort) {
         this.inventory = new LinkedHashMap<>();
-        this.slotLimit = (byte) toSort.size();
+        this.slotLimit = toSort.size();
         this.c = c;
 
         for (Item item : toSort) {
@@ -45,7 +46,7 @@ public class StorageInventory {
         }
     }
 
-    private byte getSlotLimit() {
+    private int getSlotLimit() {
         return slotLimit;
     }
 

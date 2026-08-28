@@ -46,6 +46,9 @@ public class Item implements Comparable<Item> {
     private short flag;
     private long expiration = -1;
     private String giftFrom = "";
+    private short effTintHue = 0;
+    private byte effTintChroma = 0;
+    private byte effTintBright = 0;
 
     public Item(int id, short position, short quantity) {
         this.id = id;
@@ -76,6 +79,9 @@ public class Item implements Comparable<Item> {
         ret.owner = owner;
         ret.expiration = expiration;
         ret.itemLog = new LinkedList<>(itemLog);
+        ret.effTintHue = effTintHue;
+        ret.effTintChroma = effTintChroma;
+        ret.effTintBright = effTintBright;
         return ret;
     }
 
@@ -194,5 +200,40 @@ public class Item implements Comparable<Item> {
 
     public boolean isUntradeable() {
         return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (ItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !KarmaManipulator.hasKarmaFlag(this));
+    }
+
+    private static int normalizeTintHue(int hue) {
+        if (hue < 0) {
+            return hue < -360 ? -360 : hue;
+        }
+        return Math.floorMod(hue, 360);
+    }
+
+    public short getEffTintHue() {
+        return effTintHue;
+    }
+
+    public byte getEffTintChroma() {
+        return effTintChroma;
+    }
+
+    public byte getEffTintBright() {
+        return effTintBright;
+    }
+
+    public boolean isEffTinted() {
+        return effTintHue != 0 || effTintChroma != 0 || effTintBright != 0;
+    }
+
+    public void setEffTint(int hue, int chroma, int bright) {
+        this.effTintHue = (short) normalizeTintHue(hue);
+        this.effTintChroma = (byte) Math.max(-100, Math.min(100, chroma));
+        this.effTintBright = (byte) Math.max(-100, Math.min(100, bright));
+    }
+
+    public void clearEffTint() {
+        effTintHue = 0;
+        effTintChroma = 0;
+        effTintBright = 0;
     }
 }

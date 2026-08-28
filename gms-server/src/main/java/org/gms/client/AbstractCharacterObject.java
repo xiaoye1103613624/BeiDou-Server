@@ -38,6 +38,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author RonanLana
  */
 public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject {
+    public static final int MAX_CLIENT_HP_MP = 99999;
     @Setter
     @Getter
     protected MapleMap map;
