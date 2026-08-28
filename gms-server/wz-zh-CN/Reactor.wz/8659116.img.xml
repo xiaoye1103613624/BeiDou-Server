@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="8659116.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <string name="info" value="아틀리에 상자"/>
+  </imgdir>
+  <imgdir name="0">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="68" y="104"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="90"/>
+    </canvas>
+    <imgdir name="hit">
+      <canvas name="0" format="1" scale="0">
+        <vector name="origin" x="68" y="107"/>
+        <int name="z" value="0"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="event">
+      <imgdir name="0">
+        <int name="type" value="0"/>
+        <int name="state" value="1"/>
+      </imgdir>
+      <int name="delay" value="90"/>
+      <vector name="lt" x="-68" y="-103"/>
+      <vector name="rb" x="98" y="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <uol name="0" value="../0/0"/>
+    <imgdir name="event">
+      <imgdir name="0">
+        <int name="type" value="0"/>
+        <int name="state" value="2"/>
+      </imgdir>
+      <int name="delay" value="90"/>
+      <vector name="lt" x="-68" y="-103"/>
+      <vector name="rb" x="98" y="0"/>
+    </imgdir>
+    <imgdir name="hit">
+      <uol name="0" value="../../0/hit/0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="2">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="68" y="104"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="1" format="1" scale="0">
+      <vector name="origin" x="68" y="107"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="2" format="1" scale="0">
+      <vector name="origin" x="68" y="115"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="3" format="1" scale="0">
+      <vector name="origin" x="68" y="140"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="4" format="1" scale="0">
+      <vector name="origin" x="68" y="144"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="5" format="1" scale="0">
+      <vector name="origin" x="68" y="146"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+  <string name="action" value="PL_Beautyroid_Questbox"/>
+</imgdir>
