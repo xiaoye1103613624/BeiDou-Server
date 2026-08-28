@@ -42,6 +42,7 @@ public enum EquipType {
     PET_EQUIP_QUOTE(183),
     RING(111),
     SHIELD(109),
+    SHOULDER(115),
     SHOES(107),
     TAMING(190),
     TAMING_SADDLE(191),
