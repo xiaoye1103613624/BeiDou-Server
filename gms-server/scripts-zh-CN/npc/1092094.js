@@ -48,7 +48,7 @@ function action(mode, type, selection) {
         status++;
     }
     if (status == 0) {
-        cm.sendPrev("饥饿的小牛对空瓶子没有兴趣。");
+        cm.sendPrev("The hungry calf isn't interested in the empty bottle.");
     } else if (status == 1) {
         cm.dispose();
     }

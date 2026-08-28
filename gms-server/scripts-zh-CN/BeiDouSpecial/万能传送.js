@@ -161,31 +161,49 @@ function level3() {
 }
 
 //----------------------------------------------------------------------------------
-function levelBoss(selection) {
-	cm.gainMeso(-bossmaps[selection][1]);
+function tryWarpPaid(mapId, cost) {
+	if (cost > 0 && cm.getMeso() < cost) {
+		cm.sendOk("金币不足，需要 #r" + cost + "#k 金币。");
+		cm.dispose();
+		return;
+	}
+	if (cost > 0) {
+		cm.gainMeso(-cost);
+	}
 	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(bossmaps[selection][0]);
+	cm.warp(mapId);
 	cm.dispose();
+}
+
+function levelBoss(selection) {
+	if (selection < 0 || selection >= bossmaps.length) {
+		cm.dispose();
+		return;
+	}
+	tryWarpPaid(bossmaps[selection][0], bossmaps[selection][1]);
 }
 
 function levelLevelUp(selection) {
-	cm.gainMeso(-monstermaps[selection][1]);
-	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(monstermaps[selection][0]);
-	cm.dispose();
+	if (selection < 0 || selection >= monstermaps.length) {
+		cm.dispose();
+		return;
+	}
+	tryWarpPaid(monstermaps[selection][0], monstermaps[selection][1]);
 }
 
 function levelTown(selection) {
-	cm.gainMeso(-townmaps[selection][1]);
-	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(townmaps[selection][0]);
-	cm.dispose();
+	if (selection < 0 || selection >= townmaps.length) {
+		cm.dispose();
+		return;
+	}
+	tryWarpPaid(townmaps[selection][0], townmaps[selection][1]);
 }
 
 function levelFuben(selection) {
-	cm.gainMeso(-fubenmaps[selection][1]);
-	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(fubenmaps[selection][0]);
-	cm.dispose();
+	if (selection < 0 || selection >= fubenmaps.length) {
+		cm.dispose();
+		return;
+	}
+	tryWarpPaid(fubenmaps[selection][0], fubenmaps[selection][1]);
 }
 //----------------------------------------------------------------------------------

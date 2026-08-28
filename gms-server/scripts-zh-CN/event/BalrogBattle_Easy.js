@@ -86,15 +86,18 @@ function setEventExclusives(eim) {
 }
 
 function setEventRewards(eim) {
-    var itemSet, itemQty, evLevel, expStages;
+    var itemSet, itemQty, evLevel, expStages, mesoStages;
 
-    evLevel = 1;    //Rewards at clear PQ
-    itemSet = [];
-    itemQty = [];
+    evLevel = 1;
+    itemSet = [4000313, 4001126, 2040805];
+    itemQty = [2, 30, 1];
     eim.setEventRewards(evLevel, itemSet, itemQty);
 
-    expStages = [];    //bonus exp given on CLEAR stage signal
+    expStages = [1000000];
     eim.setEventClearStageExp(expStages);
+
+    mesoStages = [5000000];
+    eim.setEventClearStageMeso(mesoStages);
 }
 
 function getEligibleParty(party) {      //selects, from the given party, the team that is allowed to attempt this event
