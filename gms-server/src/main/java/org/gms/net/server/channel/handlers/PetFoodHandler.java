@@ -29,9 +29,11 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.manager.ServerManager;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.service.PetGrowthService;
 import org.gms.util.PacketCreator;
 
 public final class PetFoodHandler extends AbstractPacketHandler {
@@ -83,6 +85,14 @@ public final class PetFoodHandler extends AbstractPacketHandler {
 
                     pet.gainTamenessFullness(chr, (pet.getFullness() <= 75) ? 1 : 0, 30, 1);   // 25+ "emptyness" to get +1 tameness
                     InventoryManipulator.removeFromSlot(c, InventoryType.USE, pos, (short) 1, false);
+                    // 自定义成长：仅附加逻辑；异常不影响原版喂食
+                    try {
+                        var ctx = ServerManager.getApplicationContext();
+                        if (ctx != null) {
+                            ctx.getBean(PetGrowthService.class).onPetFed(chr, pet, itemId);
+                        }
+                    } catch (Exception ignored) {
+                    }
                 } finally {
                     useInv.unlockInventory();
                 }

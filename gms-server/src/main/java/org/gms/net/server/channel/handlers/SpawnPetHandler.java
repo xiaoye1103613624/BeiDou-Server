@@ -30,8 +30,10 @@ public final class SpawnPetHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
+        // v83 CP_SpawnPet: tick(int) + slot(byte) + pad(byte) + lead(byte) = 7 bytes.
+        // Do not use short for slot here — that over-reads and throws IndexOutOfBoundsException.
         p.readInt();
-        short slot = p.readShort();
+        byte slot = p.readByte();
         p.readByte();
         boolean lead = p.readByte() == 1;
 
