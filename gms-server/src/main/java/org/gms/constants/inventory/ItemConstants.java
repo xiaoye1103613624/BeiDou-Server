@@ -272,7 +272,8 @@ public final class ItemConstants {
     }
 
     public static boolean isMedal(int itemId) {
-        return itemId >= 1140000 && itemId < 1143000;
+        // 高版本勋章已超出 1142xxx（如 1143xxx），与 String.wz Eqp/Accessory 对齐到 114xxxx 整段
+        return itemId >= 1140000 && itemId < 1150000;
     }
 
     public static boolean isFace(int itemId) {
