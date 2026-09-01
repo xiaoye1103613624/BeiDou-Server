@@ -1,8 +1,8 @@
 export default {
   'weather.hint.axes':
-    'Time and sky are independent axes: exclusive within each group, combinable across groups (e.g. night + rain = !weather night rain).',
+    'Time and sky are independent axes: exclusive within each group, combinable across groups (e.g. night + rain = !weather night rain). Broadcasts to all online players; visible only on outdoor maps with sky (e.g. Lith Harbor, Henesys), not indoors/caves/instances. Prefer contrasting pairs like noon+clear vs night+storm so dusk/already-raining does not look like "no change".',
   'weather.hint.auto':
-    '"Resume auto" equals !weather auto. Overrides also expire after about one hour.',
+    '"Resume auto" equals !weather auto. Overrides also expire after about one hour. Keep "Snap" on; a yellow in-game tip confirms the packet arrived. Fully quit the client after updating ijl15.dll.',
   'weather.current': 'Current',
   'weather.clock': 'Game clock',
   'weather.wallClock': 'Wall clock',

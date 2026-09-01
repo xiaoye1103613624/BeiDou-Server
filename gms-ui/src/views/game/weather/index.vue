@@ -150,7 +150,8 @@
     time: 'keep',
     sky: 'keep',
     clock: '21:30',
-    snap: false,
+    // Admin apply defaults to snap: fade is easy to miss and matches map-entry packets.
+    snap: true,
   });
 
   const nightLevelText = computed(() => {

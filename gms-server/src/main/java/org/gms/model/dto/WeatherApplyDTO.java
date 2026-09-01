@@ -27,6 +27,6 @@ public class WeatherApplyDTO {
      */
     private String sky;
 
-    /** true=瞬间切换；false=淡入（与指令广播一致，默认 false） */
+    /** true=瞬间切换；false=淡入；null=Web 默认瞬间切换 */
     private Boolean snap;
 }

@@ -1,5 +1,6 @@
 package org.gms.service;
 
+import org.gms.client.Character;
 import org.gms.exception.BizException;
 import org.gms.model.dto.WeatherApplyDTO;
 import org.gms.model.dto.WeatherStatusDTO;
@@ -8,6 +9,7 @@ import org.gms.net.server.world.World;
 import org.gms.server.weather.WeatherPackets;
 import org.gms.server.weather.WeatherProfile;
 import org.gms.server.weather.WeatherService;
+import org.gms.util.I18nUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -78,7 +80,7 @@ public class WeatherAdminService {
         if (req.isAuto()) {
             WeatherService.clearTimeOverride();
             WeatherService.clearSkyOverride();
-            broadcastAll(false);
+            broadcastAll(false, true);
             return status();
         }
 
@@ -144,13 +146,18 @@ public class WeatherAdminService {
         }
 
         if (changed) {
-            boolean snap = Boolean.TRUE.equals(req.getSnap());
-            broadcastAll(snap);
+            // Web 默认瞬间切换：null/未传按 snap 处理，避免淡入被误判为「没有反应」。
+            boolean snap = req.getSnap() == null || Boolean.TRUE.equals(req.getSnap());
+            broadcastAll(snap, true);
         }
         return status();
     }
 
     private static void broadcastAll(boolean snap) {
+        broadcastAll(snap, false);
+    }
+
+    private static void broadcastAll(boolean snap, boolean notifyPlayers) {
         Server server = Server.getInstance();
         if (server == null || !server.isOnline()) {
             throw BizException.illegalArgument("游戏服务未在线，无法广播天气");
@@ -161,6 +168,29 @@ public class WeatherAdminService {
         }
         for (World world : worlds) {
             WeatherPackets.broadcast(world, snap);
+            if (notifyPlayers) {
+                notifyWorld(world);
+            }
+        }
+    }
+
+    /** 给在线玩家一条可见提示：Web 成功但画面无感时，可区分「包没到」与「仅室内/白名单外」。 */
+    private static void notifyWorld(World world) {
+        if (world == null || world.getPlayerStorage() == null) {
+            return;
+        }
+        String msg = I18nUtil.getMessage(
+                "WeatherAdmin.notify",
+                WeatherService.clockString(),
+                WeatherService.skyName(WeatherService.currentSky()));
+        for (Character chr : world.getPlayerStorage().getAllCharacters()) {
+            try {
+                if (chr != null && chr.isLoggedInWorld()) {
+                    chr.yellowMessage(msg);
+                }
+            } catch (Exception ignored) {
+                // 单人失败不阻断其余提示
+            }
         }
     }
 
