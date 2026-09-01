@@ -56,6 +56,42 @@ import java.util.List;
 public class InventoryManipulator {
     private static final Logger log = LoggerFactory.getLogger(InventoryManipulator.class);
 
+    /**
+     * 永恒火焰戒指 1114324/1114325 同属性双 ID：已同时穿戴时卸下一件，避免登录后仍 HP/MP +8000。
+     * 穿戴路径已在 {@link #equip} 互斥；此方法覆盖旧存档双穿。
+     */
+    public static void enforceEternalFlameExclusive(Client c) {
+        if (c == null || c.getPlayer() == null) {
+            return;
+        }
+        Character chr = c.getPlayer();
+        Inventory eqpd = chr.getInventory(InventoryType.EQUIPPED);
+        Inventory eqp = chr.getInventory(InventoryType.EQUIP);
+        Item flameA = null;
+        Item flameB = null;
+        for (Item worn : eqpd) {
+            if (worn == null) {
+                continue;
+            }
+            if (worn.getItemId() == 1114324) {
+                flameA = worn;
+            } else if (worn.getItemId() == 1114325) {
+                flameB = worn;
+            }
+        }
+        if (flameA == null || flameB == null) {
+            return;
+        }
+        short free = eqp.getNextFreeSlot();
+        if (free < 0) {
+            chr.dropMessage(5, I18nUtil.getMessage("InventoryManipulator.equip.onlyEquipFull"));
+            return;
+        }
+        // Keep permanent-looking slot (lower |position| among ring slots); unequip the other.
+        Item drop = Math.abs(flameA.getPosition()) <= Math.abs(flameB.getPosition()) ? flameB : flameA;
+        unequip(c, drop.getPosition(), free);
+    }
+
     public static boolean addById(Client c, int itemId, short quantity) {
         return addById(c, itemId, quantity, null, -1, -1);
     }
@@ -155,6 +191,11 @@ public class InventoryManipulator {
                 }
             }
         } else if (quantity == 1) {
+            if (!ii.itemExists(itemId)) {
+                log.warn("Refusing to spawn equip {} without WZ template for chr {}", itemId, chr.getName());
+                c.sendPacket(PacketCreator.showItemUnavailable());
+                return false;
+            }
             Item nEquip = ii.getEquipById(itemId);
             nEquip.setFlag(flag);
             nEquip.setExpiration(expiration);
@@ -720,6 +761,40 @@ public class InventoryManipulator {
                 }
             }
         }
+        // WZ onlyEquip=1：同 itemId 只能穿一件。六戒槽下未强制时会叠两件永恒火焰戒指 → HP/MP +8000。
+        if (ii.isOnlyEquip(source.getItemId())) {
+            final int onlyEquipId = source.getItemId();
+            List<Short> toUnequip = new ArrayList<>();
+            for (Item worn : eqpdInv) {
+                if (worn != null && worn.getItemId() == onlyEquipId && worn.getPosition() != dst) {
+                    toUnequip.add(worn.getPosition());
+                }
+            }
+            // 永恒火焰戒指永久/限时变体同名同属性，互斥（官方活动也禁止重复持有）
+            if (onlyEquipId == 1114324 || onlyEquipId == 1114325) {
+                final int otherFlame = onlyEquipId == 1114324 ? 1114325 : 1114324;
+                for (Item worn : eqpdInv) {
+                    if (worn != null && worn.getItemId() == otherFlame) {
+                        toUnequip.add(worn.getPosition());
+                    }
+                }
+            }
+            for (Short pos : toUnequip) {
+                short free = eqpInv.getNextFreeSlot();
+                if (free < 0) {
+                    c.sendPacket(PacketCreator.getInventoryFull());
+                    c.sendPacket(PacketCreator.enableActions());
+                    chr.dropMessage(5, I18nUtil.getMessage("InventoryManipulator.equip.onlyEquipFull"));
+                    return;
+                }
+                unequip(c, pos, free);
+            }
+            source = (Equip) eqpInv.getItem(src);
+            if (source == null) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+        }
         boolean itemChanged = false;
 
         if (ii.isUntradeableOnEquip(source.getItemId())) {
@@ -1035,19 +1110,27 @@ public class InventoryManipulator {
         Inventory inv = chr.getInventory(type);
         Item source = inv.getItem(src);
 
-        if (chr.isGM() && chr.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_drop")) {
-            chr.message("You cannot drop items at your GM level.");
-            log.info("GM %s tried to drop item id %d", chr.getName(), source.getItemId());
+        if (source == null) {
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
-        if (chr.getTrade() != null || chr.getMiniGame() != null || source == null) { //Only check needed would prob be merchants (to see if the player is in one)
+        if (chr.isGM() && chr.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_drop")) {
+            chr.message("You cannot drop items at your GM level.");
+            log.info("GM %s tried to drop item id %d", chr.getName(), source.getItemId());
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
+        if (chr.getTrade() != null || chr.getMiniGame() != null) { //Only check needed would prob be merchants (to see if the player is in one)
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         int itemId = source.getItemId();
 
         MapleMap map = chr.getMap();
         if ((!ItemConstants.isRechargeable(itemId) && source.getQuantity() < quantity) || quantity < 0) {
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
 

@@ -67,8 +67,8 @@ public enum ItemFactory {
             "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,"
                     + "`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,"
                     + "`vicious`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`tinthue`,`tintchroma`,`tintbright`,"
-                    + "`tintfxhue`,`tintfxchroma`,`tintfxbright`) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "`tintfxhue`,`tintfxchroma`,`tintfxbright`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     static {
         for (int i = 0; i < lockCount; i++) {
@@ -150,6 +150,14 @@ public enum ItemFactory {
         } catch (SQLException ignored) {
             // migration 前兼容
         }
+        try {
+            equip.setReforge1(rs.getInt("reforge1"));
+            equip.setReforge2(rs.getInt("reforge2"));
+            equip.setReforge3(rs.getInt("reforge3"));
+            equip.setReforgeLock(rs.getByte("reforgeLock"));
+        } catch (SQLException ignored) {
+            // migration 前兼容
+        }
 
         return equip;
     }
@@ -212,6 +220,10 @@ public enum ItemFactory {
         psEquip.setInt(28, equip.getTintFxHue());
         psEquip.setInt(29, equip.getTintFxChroma());
         psEquip.setInt(30, equip.getTintFxBright());
+        psEquip.setInt(31, equip.getReforge1());
+        psEquip.setInt(32, equip.getReforge2());
+        psEquip.setInt(33, equip.getReforge3());
+        psEquip.setByte(34, equip.getReforgeLock());
     }
 
     public static List<Pair<Item, Integer>> loadEquippedItems(int id, boolean isAccount, boolean login) throws SQLException {

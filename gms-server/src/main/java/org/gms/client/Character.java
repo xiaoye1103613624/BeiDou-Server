@@ -525,6 +525,12 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private int activeDamageSkin = 0;
 
+    /** 角色破功伤害上限；创角默认 199999，与客户端 ini 无关。 */
+    public static final long DEFAULT_LIMIT_BREAK = 199999L;
+    public static final long MAX_LIMIT_BREAK = 2_100_000_000L;
+    @Getter
+    private long limitBreak = DEFAULT_LIMIT_BREAK;
+
     @Getter
     @Setter
     private int checkinDay = 0;
@@ -854,6 +860,7 @@ public class Character extends AbstractCharacterObject {
             ret.viptrockmaps.add(MapId.NONE);
         }
 
+        ret.limitBreak = DEFAULT_LIMIT_BREAK;
         return ret;
     }
 
@@ -2959,6 +2966,103 @@ public class Character extends AbstractCharacterObject {
         sendPacket(PacketCreator.serverNotice(type, message));
     }
 
+    public void setLimitBreak(long value) {
+        long clamped = Math.max(0L, Math.min(value, MAX_LIMIT_BREAK));
+        this.limitBreak = clamped;
+        syncLimitBreak();
+    }
+
+    public void gainLimitBreak(long amount) {
+        setLimitBreak(limitBreak + amount);
+    }
+
+    /** 脚本兼容别名：破功伤害上限。 */
+    public long getDamage() {
+        return limitBreak;
+    }
+
+    /** 脚本兼容别名：破功伤害上限。 */
+    public long getPGSXDJ() {
+        return limitBreak;
+    }
+
+    public void gainPGSXDJ(long amount) {
+        gainLimitBreak(amount);
+    }
+
+    public void syncLimitBreak() {
+        if (client != null) {
+            sendPacket(PacketCreator.limitBreakSync(limitBreak));
+        }
+    }
+
+    /**
+     * 计算并广播当前战力（方案2），供客户端名字下方显示。
+     */
+    public long getCombatPower() {
+        return org.gms.combat.power.CombatPowerCalculator.computeOnline(this);
+    }
+
+    public void syncCombatPower() {
+        if (client == null) {
+            return;
+        }
+        long power = getCombatPower();
+        Packet packet = PacketCreator.combatPowerSync(getId(), power);
+        sendPacket(packet);
+        if (map != null) {
+            map.broadcastMessage(this, packet, false);
+        }
+    }
+
+    /** 向指定客户端发送本角色战力（进图时补齐周围玩家）。 */
+    public void sendCombatPowerTo(Client target) {
+        if (target == null) {
+            return;
+        }
+        target.sendPacket(PacketCreator.combatPowerSync(getId(), getCombatPower()));
+    }
+
+    /**
+     * 双击使用突破石（WZ info/incALB）。成功则提升破功并同步客户端；无论成败均消耗 1 个。
+     *
+     * @return true 表示已按突破石处理（含拒绝），调用方勿再走 reward/普通消耗逻辑
+     */
+    public boolean useLimitBreakStone(short slot, int itemId) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        int inc = ii.getIncALB(itemId);
+        if (inc <= 0) {
+            return false;
+        }
+
+        Item item = getInventory(InventoryType.USE).getItem(slot);
+        if (item == null || item.getItemId() != itemId || item.getQuantity() < 1) {
+            sendPacket(PacketCreator.enableActions());
+            return true;
+        }
+
+        if (limitBreak >= MAX_LIMIT_BREAK) {
+            dropMessage(5, I18nUtil.getMessage("Character.limitBreak.max"));
+            sendPacket(PacketCreator.enableActions());
+            return true;
+        }
+
+        int successRate = ii.getLimitBreakSuccess(itemId);
+        InventoryManipulator.removeFromSlot(client, InventoryType.USE, slot, (short) 1, false);
+
+        if (Randomizer.nextInt(100) < successRate) {
+            long before = limitBreak;
+            long after = Math.min(before + (long) inc, MAX_LIMIT_BREAK);
+            this.limitBreak = after;
+            syncLimitBreak();
+            dropMessage(5, I18nUtil.getMessage("Character.limitBreak.success", String.valueOf(before), String.valueOf(after), String.valueOf(after - before)));
+        } else {
+            dropMessage(5, I18nUtil.getMessage("Character.limitBreak.fail"));
+        }
+        sendPacket(PacketCreator.enableActions());
+        return true;
+    }
+
     public void enteredScript(String script, int mapid) {
         if (!entered.containsKey(mapid)) {
             entered.put(mapid, script);
@@ -3062,6 +3166,7 @@ public class Character extends AbstractCharacterObject {
             statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
             sendSetBonusPackets();
+            syncCombatPower();
         }
     }
 
@@ -7669,6 +7774,10 @@ public class Character extends AbstractCharacterObject {
         chr.setBookCover(charactersDO.getMonsterbookcover());
         chr.setMonsterBook(new MonsterBook(charactersDO.getId()));
         chr.setActiveDamageSkin(charactersDO.getActiveDamageSkin() != null ? charactersDO.getActiveDamageSkin() : 0);
+        {
+            long lb = charactersDO.getLimitBreak() != null ? charactersDO.getLimitBreak() : DEFAULT_LIMIT_BREAK;
+            chr.limitBreak = Math.max(0L, Math.min(lb, MAX_LIMIT_BREAK));
+        }
         chr.setCheckinDay(charactersDO.getCheckinDay() != null ? charactersDO.getCheckinDay() : 0);
         chr.setCheckinClaimed(charactersDO.getCheckinClaimed() != null ? charactersDO.getCheckinClaimed() : 0);
         chr.setCheckinLastClaim(charactersDO.getCheckinLastClaim() != null ? charactersDO.getCheckinLastClaim() : 0L);
@@ -7690,11 +7799,12 @@ public class Character extends AbstractCharacterObject {
         chr.setBuddylist(new BuddyList(charactersDO.getBuddyCapacity()));
         chr.setLastExpGainTime(charactersDO.getLastExpGainTime().getTime());
         chr.setCanRecvPartySearchInvite(charactersDO.getPartySearch());
-        chr.getInventory(InventoryType.EQUIP).setSlotLimit(Math.max(charactersDO.getEquipslots(), 192));
-        chr.getInventory(InventoryType.USE).setSlotLimit(Math.max(charactersDO.getUseslots(), 192));
-        chr.getInventory(InventoryType.SETUP).setSlotLimit(Math.max(charactersDO.getSetupslots(), 192));
-        chr.getInventory(InventoryType.ETC).setSlotLimit(Math.max(charactersDO.getEtcslots(), 192));
-        chr.getInventory(InventoryType.CASH).setSlotLimit(192); // ExpandItem client
+        // ExpandItem: UI/protocol cap is 192, but unlocked slots still come from DB (do not force-fill).
+        chr.getInventory(InventoryType.EQUIP).setSlotLimit(charactersDO.getEquipslots());
+        chr.getInventory(InventoryType.USE).setSlotLimit(charactersDO.getUseslots());
+        chr.getInventory(InventoryType.SETUP).setSlotLimit(charactersDO.getSetupslots());
+        chr.getInventory(InventoryType.ETC).setSlotLimit(charactersDO.getEtcslots());
+        chr.getInventory(InventoryType.CASH).setSlotLimit(192); // cash tab fixed capacity 96->192
         short sandboxCheck = 0x0;
         for (InventoryType inventoryType : InventoryType.values()) {
             List<InventorySearchRtnDTO> searchRtnDTOList = inventoryService.getInventoryList(InventorySearchReqDTO.builder()
@@ -7725,6 +7835,14 @@ public class Character extends AbstractCharacterObject {
                     chr.addPlayerRing(ring);
                 }
             }
+        }
+        // ExpandItem: CharInfo grows ZArray to slotLimit then skips any bag item with
+        // position > slotLimit (IDA sub_4E5E85 / sub_4E5FF8). If DB items sit past the
+        // saved unlock count (expand saved items but not equipslots, etc.), relog looks
+        // like missing/wrong backpack data. Raise limit to cover max position (≤192)
+        // and write *slots columns so the next load does not depend on in-memory only.
+        if (reconcileExpandItemSlotLimits(chr)) {
+            persistExpandItemSlotLimits(chr);
         }
         chr.commitExcludedItems();
         if ((sandboxCheck & ItemConstants.SANDBOX) == ItemConstants.SANDBOX) {
@@ -7890,10 +8008,12 @@ public class Character extends AbstractCharacterObject {
             cdo.setMountexp(chr.getMapleMount().getExp());
             cdo.setMounttiredness(chr.getMapleMount().getTiredness());
         }
-        cdo.setEquipslots((int) chr.getSlots(0));
-        cdo.setUseslots((int) chr.getSlots(1));
-        cdo.setSetupslots((int) chr.getSlots(2));
-        cdo.setEtcslots((int) chr.getSlots(3));
+        // InventoryType type bytes are 1..4 (EQUIP..ETC); getSlots indexes inventory[type].
+        // Using 0..3 wrote UNDEFINED→equipslots and shifted USE/SETUP/ETC one column left.
+        cdo.setEquipslots(chr.getSlots(InventoryType.EQUIP.getType()));
+        cdo.setUseslots(chr.getSlots(InventoryType.USE.getType()));
+        cdo.setSetupslots(chr.getSlots(InventoryType.SETUP.getType()));
+        cdo.setEtcslots(chr.getSlots(InventoryType.ETC.getType()));
         cdo.setCheckinDay(chr.getCheckinDay());
         cdo.setCheckinClaimed(chr.getCheckinClaimed());
         cdo.setCheckinLastClaim(chr.getCheckinLastClaim());
@@ -8997,7 +9117,7 @@ public class Character extends AbstractCharacterObject {
             try {
                 persistLookTints(con);
                 persistSkillTints(con);
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ?, checkinDay = ?, checkinClaimed = ?, checkinLastClaim = ?, autoOreStorage = ?, autoScrollStorage = ?, autoChairStorage = ?, autoMountStorage = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, activeDamageSkin = ?, limitBreak = ?, checkinDay = ?, checkinClaimed = ?, checkinLastClaim = ?, autoOreStorage = ?, autoScrollStorage = ?, autoChairStorage = ?, autoMountStorage = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -9112,14 +9232,15 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
                     ps.setInt(56, activeDamageSkin);
-                    ps.setInt(57, checkinDay);
-                    ps.setInt(58, checkinClaimed);
-                    ps.setLong(59, checkinLastClaim);
-                    ps.setInt(60, autoOreStorage ? 1 : 0);
-                    ps.setInt(61, autoScrollStorage ? 1 : 0);
-                    ps.setInt(62, autoChairStorage ? 1 : 0);
-                    ps.setInt(63, autoMountStorage ? 1 : 0);
-                    ps.setInt(64, id);
+                    ps.setLong(57, limitBreak);
+                    ps.setInt(58, checkinDay);
+                    ps.setInt(59, checkinClaimed);
+                    ps.setLong(60, checkinLastClaim);
+                    ps.setInt(61, autoOreStorage ? 1 : 0);
+                    ps.setInt(62, autoScrollStorage ? 1 : 0);
+                    ps.setInt(63, autoChairStorage ? 1 : 0);
+                    ps.setInt(64, autoMountStorage ? 1 : 0);
+                    ps.setInt(65, id);
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
@@ -9785,6 +9906,61 @@ public class Character extends AbstractCharacterObject {
     public boolean canGainSlots(int type, int slots) {
         slots += inventory[type].getSlotLimit();
         return slots <= 192; // ExpandItem UI supports 192 for all tabs
+    }
+
+    /**
+     * After DB load: ensure each bag tab's slotLimit covers every item position.
+     * Client CharInfo drops bag items past slotLimit even though addItemFromDB kept them.
+     *
+     * @return true if any tab's in-memory slotLimit was raised
+     */
+    private static boolean reconcileExpandItemSlotLimits(Character chr) {
+        final int cap = 192;
+        boolean changed = false;
+        InventoryType[] tabs = {
+                InventoryType.EQUIP, InventoryType.USE, InventoryType.SETUP,
+                InventoryType.ETC, InventoryType.CASH
+        };
+        for (InventoryType tab : tabs) {
+            Inventory inv = chr.getInventory(tab);
+            short limit = inv.getSlotLimit();
+            short maxPos = 0;
+            for (Item it : inv.list()) {
+                short pos = it.getPosition();
+                if (pos > maxPos) {
+                    maxPos = pos;
+                }
+            }
+            if (maxPos <= limit) {
+                continue;
+            }
+            short newLimit = (short) Math.min(cap, maxPos);
+            // Expand buys +4; keep unlock count on a 4-slot boundary when below cap.
+            if (newLimit < cap && (newLimit % 4) != 0) {
+                newLimit = (short) Math.min(cap, ((newLimit + 3) / 4) * 4);
+            }
+            log.warn("ExpandItem slotLimit reconcile char={} tab={} {} -> {} (maxPos={})",
+                    chr.getName(), tab.name(), limit, newLimit, maxPos);
+            inv.setSlotLimit(newLimit);
+            changed = true;
+        }
+        return changed;
+    }
+
+    /** Persist bag slot unlock counts after reconcile (load-time; character may not be logged in yet). */
+    private static void persistExpandItemSlotLimits(Character chr) {
+        final String sql = "UPDATE characters SET equipslots = ?, useslots = ?, setupslots = ?, etcslots = ? WHERE id = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, chr.getSlots(InventoryType.EQUIP.getType()));
+            ps.setInt(2, chr.getSlots(InventoryType.USE.getType()));
+            ps.setInt(3, chr.getSlots(InventoryType.SETUP.getType()));
+            ps.setInt(4, chr.getSlots(InventoryType.ETC.getType()));
+            ps.setInt(5, chr.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.error("ExpandItem slotLimit persist failed for char={}", chr.getName(), e);
+        }
     }
 
     public boolean gainSlots(int type, int slots) {
@@ -10546,6 +10722,7 @@ public class Character extends AbstractCharacterObject {
     public void sendSpawnData(Client client) {
         if (!this.isHidden() || client.getPlayer().gmLevel() > 1) {
             client.sendPacket(PacketCreator.spawnPlayerMapObject(client, this, false));
+            sendCombatPowerTo(client);
 
             if (buffEffects.containsKey(getJobMapChair(job))) { // mustn't effLock, chrLock sendSpawnData
                 client.sendPacket(PacketCreator.giveForeignChairSkillEffect(id));
@@ -11287,9 +11464,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getReborns() {
+        // 仅读取：功能关闭时返回 0，避免菜单/脚本展示转生次数时抛 NotEnabledException
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
-            throw new NotEnabledException();
+            return 0;
         }
 
         CharactersDO charactersDO = characterService.findById(id);

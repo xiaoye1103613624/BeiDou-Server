@@ -107,6 +107,7 @@ import org.gms.server.maps.PlayerShopItem;
 import org.gms.server.maps.Reactor;
 import org.gms.server.maps.Summon;
 import org.gms.server.movement.LifeMovementFragment;
+import org.gms.server.sidebar.SidebarTools;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -263,10 +264,10 @@ public class PacketCreator {
     private static void addTeleportInfo(OutPacket p, Character chr) {
         final List<Integer> tele = chr.getTrockMaps();
         final List<Integer> viptele = chr.getVipTrockMaps();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < GameConstants.TROCK_MAP_SIZE; i++) {
             p.writeInt(tele.get(i));
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < GameConstants.VIP_TROCK_MAP_SIZE; i++) {
             p.writeInt(viptele.get(i));
         }
     }
@@ -434,10 +435,17 @@ public class PacketCreator {
         }
         if (!zeroPosition) {
             if (equip != null) {
+                // Equipped cash slots are stored as -101.. and must be remapped to 1..
+                // for CharInfo. Bag slots are already 1..192 (ExpandItem) — never apply
+                // the cash -100 transform to positive positions, or items in 101..192 are
+                // written as 1..92, collide with low slots, and leave the high slots
+                // looking empty on the client while the server still treats them as full.
                 if (pos < 0) {
-                    pos *= -1;
+                    pos = (short) -pos;
+                    p.writeShort(pos > 100 ? pos - 100 : pos);
+                } else {
+                    p.writeShort(pos);
                 }
-                p.writeShort(pos > 100 ? pos - 100 : pos);
             } else {
                 p.writeByte(pos);
             }
@@ -514,8 +522,35 @@ public class PacketCreator {
 
     }
 
+    private static final org.slf4j.Logger inventoryLog =
+            org.slf4j.LoggerFactory.getLogger(PacketCreator.class);
+
+    /**
+     * Encode bag items for CharInfo. Client grows ZArray to slotLimit then only accepts
+     * positions in 1..slotLimit (ExpandItem up to 192). Sending past-limit positions wastes
+     * decode work and those items never appear after relog.
+     */
+    private static void writeBagItemsForCharInfo(OutPacket p, Inventory inv) {
+        short limit = inv.getSlotLimit();
+        List<Item> items = new ArrayList<>();
+        for (Item item : inv.list()) {
+            short pos = item.getPosition();
+            if (pos >= 1 && pos <= limit) {
+                items.add(item);
+            } else if (pos >= 1) {
+                inventoryLog.warn("CharInfo skip bag item beyond slotLimit type={} pos={} limit={} itemId={}",
+                        inv.getType(), pos, limit, item.getItemId());
+            }
+        }
+        items.sort(Comparator.comparingInt(Item::getPosition));
+        for (Item item : items) {
+            addItemInfo(p, item);
+        }
+    }
+
     private static void addInventoryInfo(OutPacket p, Character chr) {
         for (byte i = 1; i <= 5; i++) {
+            // ExpandItem: slotLimit is 1..192; write low 8 bits (client Decode1+movzx).
             p.writeByte(chr.getInventory(InventoryType.getByType(i)).getSlotLimit());
         }
         p.writeLong(getTime(-2));
@@ -524,7 +559,12 @@ public class PacketCreator {
         List<Item> equipped = new ArrayList<>(equippedC.size());
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
         for (Item item : equippedC) {
-            if (item.getPosition() <= -100) {
+            short eqPos = item.getPosition();
+            // Keep CharInfo aligned with EquipAddon login allow (omit while aux wire-omit on).
+            if (org.gms.constants.inventory.ExtendedEquipRegistry.isGreenEnterWireOmit(eqPos)) {
+                continue;
+            }
+            if (eqPos <= -100) {
                 equippedCash.add(item);
             } else {
                 equipped.add(item);
@@ -538,25 +578,15 @@ public class PacketCreator {
             addItemInfo(p, item);
         }
         p.writeShort(0); // start of equip inventory
-        for (Item item : chr.getInventory(InventoryType.EQUIP).list()) {
-            addItemInfo(p, item);
-        }
+        writeBagItemsForCharInfo(p, chr.getInventory(InventoryType.EQUIP));
         p.writeInt(0);
-        for (Item item : chr.getInventory(InventoryType.USE).list()) {
-            addItemInfo(p, item);
-        }
+        writeBagItemsForCharInfo(p, chr.getInventory(InventoryType.USE));
         p.writeByte(0);
-        for (Item item : chr.getInventory(InventoryType.SETUP).list()) {
-            addItemInfo(p, item);
-        }
+        writeBagItemsForCharInfo(p, chr.getInventory(InventoryType.SETUP));
         p.writeByte(0);
-        for (Item item : chr.getInventory(InventoryType.ETC).list()) {
-            addItemInfo(p, item);
-        }
+        writeBagItemsForCharInfo(p, chr.getInventory(InventoryType.ETC));
         p.writeByte(0);
-        for (Item item : chr.getInventory(InventoryType.CASH).list()) {
-            addItemInfo(p, item);
-        }
+        writeBagItemsForCharInfo(p, chr.getInventory(InventoryType.CASH));
     }
 
     private static void addSkillInfo(OutPacket p, Character chr) {
@@ -2489,7 +2519,9 @@ public class PacketCreator {
     public static Packet modifyInventory(boolean updateTick, final List<ModifyInventory> mods) {
         OutPacket p = OutPacket.create(SendOpcode.INVENTORY_OPERATION);
         p.writeBool(updateTick);
-        p.writeByte(mods.size());
+        // ExpandItemSort2 client patch (0xA1EC22) decodes op-count as short (Decode2).
+        // writeByte here desyncs sort/merge into CInPacket EOF ("已到文件结尾").
+        p.writeShort(mods.size());
         //p.writeByte(0); v104 :)
         int addMovement = -1;
         for (ModifyInventory mod : mods) {
@@ -5556,13 +5588,13 @@ public class PacketCreator {
         if (vip) {
             p.writeByte(1);
             List<Integer> map = chr.getVipTrockMaps();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < GameConstants.VIP_TROCK_MAP_SIZE; i++) {
                 p.writeInt(map.get(i));
             }
         } else {
             p.writeByte(0);
             List<Integer> map = chr.getTrockMaps();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < GameConstants.TROCK_MAP_SIZE; i++) {
                 p.writeInt(map.get(i));
             }
         }
@@ -7793,6 +7825,12 @@ public class PacketCreator {
         for (int d = 1; d <= n; d++) {
             p.writeString(org.gms.server.dailycheckin.DailyCheckinRewards.tooltip(d));
         }
+        // 领取成功提示（客户端优先展示；空串则回退本地文案）
+        if (justClaimed >= 1) {
+            p.writeString(org.gms.server.dailycheckin.DailyCheckinRewards.claimSuccessMessage(justClaimed));
+        } else {
+            p.writeString("");
+        }
         return p;
     }
 
@@ -7869,6 +7907,48 @@ public class PacketCreator {
         p.writeInt(chr.getId());
         p.writeLong(chr.getPartyTrackerExp());
         p.writeLong(chr.getPartyTrackerMeso());
+        return p;
+    }
+
+    /**
+     * 同步右边栏 ServerTool 可见性与 tip（ijl15 SideToolbar）。
+     * 布局：byte count + 每项(byte toolIndex, byte visible, string tipTitle, string tipDesc)。
+     */
+    public static Packet sidebarConfigSync(List<SidebarTools.ToolEntry> entries) {
+        OutPacket p = OutPacket.create(SendOpcode.SIDEBAR_CONFIG_SYNC);
+        int count = entries == null ? 0 : Math.min(255, entries.size());
+        p.writeByte(count);
+        if (entries != null) {
+            int written = 0;
+            for (SidebarTools.ToolEntry e : entries) {
+                if (written >= count || e == null) {
+                    break;
+                }
+                p.writeByte(e.toolIndex());
+                p.writeByte(e.visible() ? 1 : 0);
+                p.writeString(e.tipTitle() == null ? "" : e.tipTitle());
+                p.writeString(e.tipDesc() == null ? "" : e.tipDesc());
+                written++;
+            }
+        }
+        return p;
+    }
+
+    /** 同步角色破功伤害上限到客户端。 */
+    public static Packet limitBreakSync(long limitBreak) {
+        OutPacket p = OutPacket.create(SendOpcode.LIMIT_BREAK_SYNC);
+        p.writeLong(limitBreak);
+        return p;
+    }
+
+    /**
+     * 同步角色战力到客户端（名字下方「战力：xxxx」）。
+     * 布局：int characterId + long combatPower。
+     */
+    public static Packet combatPowerSync(int characterId, long combatPower) {
+        OutPacket p = OutPacket.create(SendOpcode.COMBAT_POWER_SYNC);
+        p.writeInt(characterId);
+        p.writeLong(combatPower);
         return p;
     }
 

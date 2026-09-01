@@ -89,6 +89,14 @@ public class Equip extends Item {
     private int soulId = 0;
     private int soulOption = 0;
     private int socket1 = 0, socket2 = 0, socket3 = 0;
+    /** 洗炼词条1：高16位=affixOrdinal 低16位=prefixLv ①~⑤ */
+    private int reforge1 = 0;
+    /** 洗炼词条2 */
+    private int reforge2 = 0;
+    /** 洗炼词条3 */
+    private int reforge3 = 0;
+    /** 洗炼锁定位掩码 bit0=slot0 bit1=slot1 bit2=slot2 */
+    private byte reforgeLock = 0;
     private byte infusion = 0;
     private byte gemInlay = 0;
     private byte breakthrough = 0;
@@ -153,6 +161,17 @@ public class Equip extends Item {
         ret.tintFxHue = tintFxHue;
         ret.tintFxChroma = tintFxChroma;
         ret.tintFxBright = tintFxBright;
+        ret.socket1 = socket1;
+        ret.socket2 = socket2;
+        ret.socket3 = socket3;
+        ret.reforge1 = reforge1;
+        ret.reforge2 = reforge2;
+        ret.reforge3 = reforge3;
+        ret.reforgeLock = reforgeLock;
+        ret.infusion = infusion;
+        ret.gemInlay = gemInlay;
+        ret.breakthrough = breakthrough;
+        ret.breakthroughPool = breakthroughPool;
         return ret;
     }
 
@@ -1031,6 +1050,38 @@ public class Equip extends Item {
 
     public void setSocket3(int socket3) {
         this.socket3 = socket3;
+    }
+
+    public int getReforge1() {
+        return reforge1;
+    }
+
+    public void setReforge1(int reforge1) {
+        this.reforge1 = reforge1;
+    }
+
+    public int getReforge2() {
+        return reforge2;
+    }
+
+    public void setReforge2(int reforge2) {
+        this.reforge2 = reforge2;
+    }
+
+    public int getReforge3() {
+        return reforge3;
+    }
+
+    public void setReforge3(int reforge3) {
+        this.reforge3 = reforge3;
+    }
+
+    public byte getReforgeLock() {
+        return reforgeLock;
+    }
+
+    public void setReforgeLock(byte reforgeLock) {
+        this.reforgeLock = reforgeLock;
     }
 
     public byte getInfusion() {
