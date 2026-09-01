@@ -38,6 +38,12 @@ public class ServerManager implements ApplicationContextAware, ApplicationRunner
         Server.getInstance().init();
         CashShopCatalog.load();
 
+        try {
+            applicationContext.getBean(org.gms.service.activity.ActivityAdminService.class).bootstrapScheduler();
+        } catch (Exception e) {
+            log.warn(I18nUtil.getLogMessage("ActivityAdmin.bootstrap.fail"), e);
+        }
+
         SpringDocConfigProperties springDocConfigProperties = applicationContext.getBean(SpringDocConfigProperties.class);
         SwaggerUiConfigProperties swaggerUiConfigProperties = applicationContext.getBean(SwaggerUiConfigProperties.class);
         Environment environment = applicationContext.getBean(Environment.class);

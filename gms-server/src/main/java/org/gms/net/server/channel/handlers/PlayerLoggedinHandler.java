@@ -30,6 +30,7 @@ import org.gms.client.Disease;
 import org.gms.client.Family;
 import org.gms.client.FamilyEntry;
 import org.gms.client.Mount;
+import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Inventory;
@@ -57,6 +58,7 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
 import org.gms.server.dailycheckin.DailyCheckinRewards;
+import org.gms.server.sidebar.SidebarTools;
 import org.gms.server.quest.medal.OutstandingCitizenMedal;
 import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
@@ -373,6 +375,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             } finally {
                 eqpInv.unlockInventory();
             }
+            // 旧存档可能同时穿 1114324+1114325（仅穿戴时互斥），登录时再清一次
+            InventoryManipulator.enforceEternalFlameExclusive(c);
 
             c.sendPacket(PacketCreator.updateBuddylist(player.getBuddylist().getBuddies()));
 
@@ -389,6 +393,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             // 伤害皮肤：登录时推送商店目录与已拥有列表
             c.sendPacket(PacketCreator.damageSkinCatalog());
             c.sendPacket(PacketCreator.damageSkinInventory(player));
+            c.sendPacket(PacketCreator.limitBreakSync(player.getLimitBreak()));
+            player.syncCombatPower();
+            c.sendPacket(PacketCreator.sidebarConfigSync(SidebarTools.list()));
 
             // 每日签到：可领则自动弹窗
             if (player.getLevel() >= DailyCheckinRewards.MIN_LEVEL) {
@@ -400,6 +407,19 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             player.changeSkillLevel(SkillFactory.getSkill(10000000 * player.getJobType() + 12), (byte) (player.getLinkedLevel() / 10), 20, -1);
+            // MapleRoot-align: beginner purple bounce (1050 横向闪跃 / 1054 垂直闪跃).
+            // Job-scoped id = jobType*10_000_000 + 1050/1054 (explorer 1050, Cygnus 10001050, Aran 20001050).
+            {
+                final int bounceBase = 10000000 * player.getJobType();
+                final Skill bounceH = SkillFactory.getSkill(bounceBase + 1050);
+                final Skill bounceV = SkillFactory.getSkill(bounceBase + 1054);
+                if (bounceH != null) {
+                    player.changeSkillLevel(bounceH, (byte) 1, 1, -1);
+                }
+                if (bounceV != null) {
+                    player.changeSkillLevel(bounceV, (byte) 1, 1, -1);
+                }
+            }
             player.checkBerserk(player.isHidden());
 
             if (newcomer) {

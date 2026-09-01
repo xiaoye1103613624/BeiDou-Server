@@ -53,6 +53,11 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
         }
 
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        if (ii.getIncALB(itemId) > 0) {
+            c.getPlayer().useLimitBreakStone(slot, itemId);
+            return;
+        }
+
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
         RewardItem selectedReward = null;
         int totalProb = rewards.getLeft();

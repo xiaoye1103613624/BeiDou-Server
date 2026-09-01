@@ -369,8 +369,11 @@ public enum SendOpcode implements Opcode {
     USER_INFO_EX(0x3727), // 他人装备详情回复
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复
+    LIMIT_BREAK_SYNC(0x3730), // 角色破功伤害上限同步
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
     CASHSHOP_WINDOW_SYNC(0x3731), // 窗口版现金商城同步
+    COMBAT_POWER_SYNC(0x3732), // 角色战力同步（名字下方显示）
+    SIDEBAR_CONFIG_SYNC(0x3733), // 右边栏 ServerTool 可见性 + tip 同步（ijl15 SideToolbar）
     WEATHER_SYNC(0x373D), // 昼夜/天气同步（ijl15 weather）
     LAMP_PREVIEW(0x373F), // GM !lamp 预览路灯
     SET_ITEM_FINAL_DAMAGE(0x175), // 套装最终伤害% + 伤害皮肤 + COMBAT_STAT_SYNC

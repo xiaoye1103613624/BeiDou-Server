@@ -42,6 +42,10 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         p.readInt();
         chr.getAutoBanManager().setTimestamp(2, Server.getInstance().getCurrentTimestamp(), 4);
 
+        // AUX wire-omit (GREEN_ENTER_OMIT_AUX62): flush ghost −62 before merge/sort.
+        // When flag false: recover is no-op.
+        InventoryManipulator.recoverWireOmittedAuxToBag(c);
+
         if (!GameConfig.getServerBoolean("use_item_sort")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -53,68 +57,111 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
             return;
         }
 
-        InventoryType inventoryType = InventoryType.getByType(invType);
-        Inventory inventory = c.getPlayer().getInventory(inventoryType);
-        inventory.lockInventory();
         try {
-            //------------------- RonanLana's SLOT MERGER -----------------
-
-            ItemInformationProvider ii = ItemInformationProvider.getInstance();
-            Item srcItem, dstItem;
-
-            for (short dst = 1; dst <= inventory.getSlotLimit(); dst++) {
-                dstItem = inventory.getItem(dst);
-                if (dstItem == null) {
-                    continue;
-                }
-
-                for (short src = (short) (dst + 1); src <= inventory.getSlotLimit(); src++) {
-                    srcItem = inventory.getItem(src);
-                    if (srcItem == null) {
-                        continue;
-                    }
-
-                    if (dstItem.getItemId() != srcItem.getItemId()) {
-                        continue;
-                    }
-                    if (dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) {
-                        break;
-                    }
-
-                    InventoryManipulator.move(c, inventoryType, src, dst);
+            // Legacy slot-lock clients appended lock bytes — feature removed; discard and pack normally.
+            if (p.available() > 0) {
+                final int lockSize = Short.toUnsignedInt(p.readUnsignedByte());
+                for (int i = 0; i < lockSize && p.available() > 0; i++) {
+                    p.readUnsignedByte();
                 }
             }
 
-            //------------------------------------------------------------
+            InventoryType inventoryType = InventoryType.getByType(invType);
+            Inventory inventory = c.getPlayer().getInventory(inventoryType);
+            inventory.lockInventory();
+            try {
+                //------------------- RonanLana's SLOT MERGER -----------------
 
-            inventory = c.getPlayer().getInventory(inventoryType);
-            boolean sorted = false;
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
+                Item srcItem, dstItem;
 
-            while (!sorted) {
-                short freeSlot = inventory.getNextFreeSlot();
+                for (short dst = 1; dst <= inventory.getSlotLimit(); dst++) {
+                    dstItem = inventory.getItem(dst);
+                    if (dstItem == null) {
+                        continue;
+                    }
 
-                if (freeSlot != -1) {
-                    short itemSlot = -1;
-                    for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i = (short) (i + 1)) {
-                        if (inventory.getItem(i) != null) {
-                            itemSlot = i;
+                    for (short src = (short) (dst + 1); src <= inventory.getSlotLimit(); src++) {
+                        srcItem = inventory.getItem(src);
+                        if (srcItem == null) {
+                            continue;
+                        }
+
+                        if (dstItem.getItemId() != srcItem.getItemId()) {
+                            continue;
+                        }
+                        if (dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) {
+                            break;
+                        }
+
+                        final short beforeQty = dstItem.getQuantity();
+                        InventoryManipulator.move(c, inventoryType, src, dst);
+                        dstItem = inventory.getItem(dst);
+                        // Guard: if move could not increase dst stack (e.g. pet/cash swap), stop.
+                        if (dstItem == null || dstItem.getQuantity() <= beforeQty) {
                             break;
                         }
                     }
-                    if (itemSlot > 0) {
-                        InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                }
+
+                //------------------------------------------------------------
+
+                inventory = c.getPlayer().getInventory(inventoryType);
+                boolean sorted = false;
+                // Move-noop / slot desync must not spin forever (client 整理未响应).
+                final int maxPackSteps = Math.max(64, inventory.getSlotLimit() * 2 + 8);
+                int packSteps = 0;
+                int packedMoves = 0;
+
+                while (!sorted) {
+                    if (++packSteps > maxPackSteps) {
+                        org.slf4j.LoggerFactory.getLogger(InventoryMergeHandler.class)
+                                .warn("inventory merge pack aborted (possible move no-op) invType={} char={} packed={}",
+                                        invType, c.getPlayer().getName(), packedMoves);
+                        break;
+                    }
+                    short freeSlot = inventory.getNextFreeSlot();
+
+                    if (freeSlot != -1) {
+                        short itemSlot = -1;
+                        for (short i = (short) (freeSlot + 1); i <= inventory.getSlotLimit(); i = (short) (i + 1)) {
+                            if (inventory.getItem(i) != null) {
+                                itemSlot = i;
+                                break;
+                            }
+                        }
+                        if (itemSlot > 0) {
+                            short beforeFree = freeSlot;
+                            InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                            // If move did not fill the hole, stop — avoid infinite loop.
+                            if (inventory.getItem(beforeFree) == null) {
+                                org.slf4j.LoggerFactory.getLogger(InventoryMergeHandler.class)
+                                        .warn("inventory merge move no-op free={} from={} invType={}",
+                                                beforeFree, itemSlot, invType);
+                                break;
+                            }
+                            packedMoves++;
+                        } else {
+                            sorted = true;
+                        }
                     } else {
                         sorted = true;
                     }
-                } else {
-                    sorted = true;
                 }
+            } finally {
+                inventory.unlockInventory();
+            }
+
+            c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
+            // Persist packed positions so relog does not revive gaps from stale DB.
+            try {
+                c.getPlayer().saveCharToDB();
+            } catch (Throwable t) {
+                org.slf4j.LoggerFactory.getLogger(InventoryMergeHandler.class)
+                        .warn("inventory merge saveCharToDB failed char={}", c.getPlayer().getName(), t);
             }
         } finally {
-            inventory.unlockInventory();
+            c.sendPacket(PacketCreator.enableActions());
         }
-
-        c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
-        c.sendPacket(PacketCreator.enableActions());
     }
 }
