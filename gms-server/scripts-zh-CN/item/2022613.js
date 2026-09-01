@@ -166,13 +166,13 @@ function action(mode, type, selection) {
 						return;
 					}
 					for(var i = 0; i < skill[type].length;i++){
-						var level = 1;
-						if(i == 2) {
-							level = 3;
-						}
-						im.teachSkill(skill[type][i], level);
-						im.teachSkill(1007,3,3);
+						im.teachSkill(skill[type][i], 1);
 					}
+					// 锻造已下线（制作窗闪退）
+					im.teachSkill(1007, -1, 0, -1, true);
+					im.teachSkill(10001007, -1, 0, -1, true);
+					im.teachSkill(20001007, -1, 0, -1, true);
+					im.teachSkill(20011007, -1, 0, -1, true);
 					im.刷新状态();
 					//im.used();//删除这个物品
 					im.getPlayer().setBossLog('新手礼包',1,1);

@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `xy_cashshop_category_item`
 INSERT INTO `game_config`(`config_type`, `config_sub_type`, `config_clazz`, `config_code`, `config_value`, `config_desc`,
                           `update_time`)
 SELECT 'server',
-       'Cash Shop',
+       'GM',
        'java.lang.String',
        'window_cashshop_client_data_path',
        '',

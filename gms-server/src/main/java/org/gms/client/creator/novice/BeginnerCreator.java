@@ -44,6 +44,10 @@ public class BeginnerCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
+        return createCharacter(c, name, face, hair, skin, top, bottom, shoes, weapon, gender, null);
+    }
+
+    public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender, AdventurerDiceStats diceStats) {
 
         int iMapID = MapId.MUSHROOM_TOWN;
         if (GameConfig.getServerBoolean("use_beidou_beginner_map"))
@@ -51,6 +55,10 @@ public class BeginnerCreator extends CharacterFactory {
             iMapID = MapId.BEIDOU_BEGINNER;
         }
 
-        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, iMapID, top, bottom, shoes, weapon));
+        CharacterFactoryRecipe recipe = createRecipe(Job.BEGINNER, 1, iMapID, top, bottom, shoes, weapon);
+        if (diceStats != null) {
+            diceStats.applyTo(recipe);
+        }
+        return createNewCharacter(c, name, face, hair, skin, gender, recipe);
     }
 }

@@ -25,7 +25,7 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0) {
-            cm.sendSimple ("\t\t"+彩虹+"  #e#d 技 能 学 院 #k#n  #r  "+彩虹+"#b#k#n\r\r\n"+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+"\r\n您好,尊敬的#k #h ##k 你是想学习技能？\t\t\t\t#r注意事项：#b学习1个技能需要费用:200万\r\n#r"+金币+"背包拥有金币："+cm.判断金币() +"#k#n\r\n#L2##s1004#骑兽学习\n      #L1##s8#群宠学习\r\n#L0##s1007#锻造学习\n      #L3##s1013#皇家骑宠\r\n");
+            cm.sendSimple ("\t\t"+彩虹+"  #e#d 技 能 学 院 #k#n  #r  "+彩虹+"#b#k#n\r\r\n"+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+中条猫+"\r\n您好,尊敬的#k #h ##k 你是想学习技能？\t\t\t\t#r注意事项：#b学习1个技能需要费用:200万\r\n#r"+金币+"背包拥有金币："+cm.判断金币() +"#k#n\r\n#L2##s1004#骑兽学习\n      #L1##s8#群宠学习\r\n#L3##s1013#皇家骑宠\r\n");
         } else if (status == 1) {
             switch(selection) {
         case 2:
@@ -62,22 +62,10 @@ function action(mode, type, selection) {
 		}
 		} 
             break;
-         case 0: 
-		if (cm.getBossLog('锻造技能') == 1) {
-		    cm.sendOk("每个账号只能学习一次技能哦！");
-		    cm.dispose();
-		 } else {
-		if (cm.getMeso() < 2000000) {
-		cm.sendOk("请检查是否有所需的冒险金币。");
+         case 0:
+		// 锻造已下线（制作窗闪退）
+		cm.sendOk("锻造技能暂已关闭。");
 		cm.dispose();
-	    } else {
-			cm.gainMeso(-2000000);
-            cm.teachSkill(1007,3,1);
-			cm.setBossLog('锻造技能');
-		    cm.sendOk("成功学习了锻造技能，赶紧去看看吧！");
-		    cm.dispose();
-		}
-		}
             break;
             case 3: 
         if (cm.getBossLog('皇家骑宠技能') == 1) {

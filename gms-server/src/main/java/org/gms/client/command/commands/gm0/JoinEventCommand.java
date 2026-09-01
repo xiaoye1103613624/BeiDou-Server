@@ -27,8 +27,10 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.id.MapId;
+import org.gms.manager.ServerManager;
 import org.gms.server.events.gm.Event;
 import org.gms.server.maps.FieldLimit;
+import org.gms.service.activity.ActivityAdminService;
 import org.gms.util.I18nUtil;
 
 public class JoinEventCommand extends Command {
@@ -39,6 +41,11 @@ public class JoinEventCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        ActivityAdminService activityAdminService =
+                ServerManager.getApplicationContext().getBean(ActivityAdminService.class);
+        if (activityAdminService.tryRegisterWithoutWarp(player)) {
+            return;
+        }
         if (!FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
             Event event = c.getChannelServer().getEvent();
             if (event != null) {

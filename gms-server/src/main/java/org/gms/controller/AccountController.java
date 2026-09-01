@@ -8,10 +8,12 @@ import org.gms.dao.entity.AccountsDO;
 import org.gms.model.dto.*;
 import org.gms.service.AccountService;
 import org.gms.service.CharacterService;
+import org.gms.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,11 +21,14 @@ import java.util.Map;
 public class AccountController {
     private final AccountService accountService;
     private final CharacterService characterService;
+    private final SysMenuService sysMenuService;
 
     @Autowired
-    public AccountController(AccountService accountService, CharacterService characterService) {
+    public AccountController(AccountService accountService, CharacterService characterService,
+                             SysMenuService sysMenuService) {
         this.accountService = accountService;
         this.characterService = characterService;
+        this.sysMenuService = sysMenuService;
     }
 
     @Tag(name = "/account/" + ApiConstant.LATEST)
@@ -31,6 +36,13 @@ public class AccountController {
     @GetMapping("/" + ApiConstant.LATEST + "/info")
     public ResultBody<AccountsDO> info() {
         return ResultBody.success(accountService.getCurrentUser());
+    }
+
+    @Tag(name = "/account/" + ApiConstant.LATEST)
+    @Operation(summary = "获取当前用户侧栏菜单")
+    @GetMapping("/" + ApiConstant.LATEST + "/menu")
+    public ResultBody<List<SysMenuRouteDTO>> menu() {
+        return ResultBody.success(sysMenuService.listSidebarRoutes());
     }
 
     @Tag(name = "/account/" + ApiConstant.LATEST)

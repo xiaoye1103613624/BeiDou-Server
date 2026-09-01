@@ -26,6 +26,8 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.manager.ServerManager;
+import org.gms.service.activity.ActivityAdminService;
 import org.gms.util.I18nUtil;
 
 public class LeaveEventCommand extends Command {
@@ -36,6 +38,11 @@ public class LeaveEventCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        ActivityAdminService activityAdminService =
+                ServerManager.getApplicationContext().getBean(ActivityAdminService.class);
+        if (activityAdminService.tryUnregister(player)) {
+            return;
+        }
         int returnMap = player.getSavedLocation("EVENT");
         if (returnMap != -1) {
             if (player.getOla() != null) {

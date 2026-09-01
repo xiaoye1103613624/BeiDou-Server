@@ -214,13 +214,22 @@ public class ItemInformationProvider {
             theData = cashStringData;
         } else if (itemId >= 2000000 && itemId < 3000000) {
             theData = consumeStringData;
-        } else if ((itemId >= 1010000 && itemId < 1040000) || (itemId >= 1122000 && itemId < 1123000) || (itemId >= 1132000 && itemId < 1133000) || (itemId >= 1142000 && itemId < 1143000)) {
+        // Accessory：含高版本勋章(1143xxx+)/肩饰/口袋/徽章/纹章/图腾；区间按 String.wz Eqp/Accessory 实测扩展
+        } else if ((itemId >= 1010000 && itemId < 1040000)
+                || (itemId >= 1122000 && itemId < 1130000)
+                || (itemId >= 1132000 && itemId < 1140000)
+                || (itemId >= 1140000 && itemId < 1150000)
+                || (itemId >= 1152000 && itemId < 1160000)
+                || (itemId >= 1162000 && itemId < 1170000)
+                || (itemId >= 1182000 && itemId < 1190000)
+                || (itemId >= 1190000 && itemId < 1200000)
+                || (itemId >= 1202000 && itemId < 1210000)) {
             theData = eqpStringData;
             cat = "Eqp/Accessory";
         } else if (itemId >= 1000000 && itemId < 1010000) {
             theData = eqpStringData;
             cat = "Eqp/Cap";
-        } else if (itemId >= 1102000 && itemId < 1103000) {
+        } else if (itemId >= 1102000 && itemId < 1110000) {
             theData = eqpStringData;
             cat = "Eqp/Cape";
         } else if (itemId >= 1040000 && itemId < 1050000) {
@@ -256,7 +265,13 @@ public class ItemInformationProvider {
         } else if (itemId >= 1900000 && itemId < 2000000) {
             theData = eqpStringData;
             cat = "Eqp/Taming";
-        } else if (itemId >= 1300000 && itemId < 1800000) {
+        } else if (itemId >= 1662000 && itemId < 1670000) {
+            theData = eqpStringData;
+            cat = "Eqp/Android";
+        } else if (itemId >= 1672000 && itemId < 1680000) {
+            theData = eqpStringData;
+            cat = "Eqp/Heart";
+        } else if (itemId >= 1210000 && itemId < 1800000) {
             theData = eqpStringData;
             cat = "Eqp/Weapon";
         } else if (itemId >= 4000000 && itemId < 5000000) {
@@ -365,6 +380,14 @@ public class ItemInformationProvider {
                 if (iFile.getName().equals(idStr + ".img")) {
                     return equipData.getData(topDir.getName() + "/" + iFile.getName());
                 }
+            }
+        }
+        // Language-only equips live under wz-<lang> and may be absent from the English
+        // file listing; probe constructed paths so LocalizedDataProvider can resolve them.
+        for (DataDirectoryEntry topDir : root.getSubdirectories()) {
+            Data data = equipData.getData(topDir.getName() + "/" + idStr + ".img");
+            if (data != null) {
+                return data;
             }
         }
         return ret;
@@ -643,9 +666,20 @@ public class ItemInformationProvider {
         ret.put("cursed", DataTool.getInt("cursed", info, 0));
         ret.put("success", DataTool.getInt("success", info, 0));
         ret.put("fs", DataTool.getInt("fs", info, 0));
+        // onlyEquip: at most one copy of this itemId may be worn (official WZ flag).
+        ret.put("onlyEquip", DataTool.getInt("onlyEquip", info, 0));
 
         equipStatsCache.put(itemId, ret);
         return ret;
+    }
+
+    /**
+     * Whether WZ {@code info/onlyEquip} forbids wearing more than one copy of this itemId.
+     * Distinct itemIds that share a display name (e.g. 1114324/1114325) are not grouped here.
+     */
+    public boolean isOnlyEquip(int itemId) {
+        Map<String, Integer> stats = getEquipStats(itemId);
+        return stats != null && stats.getOrDefault("onlyEquip", 0) == 1;
     }
 
     public Integer getEquipLevelReq(int itemId) {
@@ -1272,8 +1306,10 @@ public class ItemInformationProvider {
     }
 
     private Item getEquipById(int equipId, int ringId) {
-        Equip nEquip;
-        nEquip = new Equip(equipId, (byte) 0, ringId);
+        // Third ctor arg is upgrade slots, NOT ringId. Passing ringId=-1 left slots at -1
+        // (client shows 255) whenever getEquipStats missed WZ data and never overwrote tuc.
+        Equip nEquip = new Equip(equipId, (short) 0, 0);
+        nEquip.setRingId(ringId);
         nEquip.setQuantity((short) 1);
         Map<String, Integer> stats = this.getEquipStats(equipId);
         if (stats != null) {
@@ -1319,6 +1355,8 @@ public class ItemInformationProvider {
                     equipCache.put(equipId, nEquip);
                 }
             }
+        } else {
+            log.warn("getEquipById({}) missing Character/Item WZ template; spawning blank equip", equipId);
         }
         return nEquip.copy();
     }
@@ -1777,6 +1815,24 @@ public class ItemInformationProvider {
         return hmm;
     }
 
+    /** 突破石：每次成功提升的破功值（info/incALB）。 */
+    public int getIncALB(int itemId) {
+        Data data = getItemData(itemId);
+        if (data == null) {
+            return 0;
+        }
+        return DataTool.getIntConvert("info/incALB", data, 0);
+    }
+
+    /** 突破石成功率百分比（info/success），缺省 100。 */
+    public int getLimitBreakSuccess(int itemId) {
+        Data data = getItemData(itemId);
+        if (data == null) {
+            return 100;
+        }
+        return DataTool.getIntConvert("info/success", data, 100);
+    }
+
     public boolean isConsumeOnPickup(int itemId) {
         if (consumeOnPickupCache.containsKey(itemId)) {
             return consumeOnPickupCache.get(itemId);
@@ -1922,7 +1978,7 @@ public class ItemInformationProvider {
         if (islot == null) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
-            chr.dropMessage(5, "无法装备 " + itemName + "：缺少装备数据。");
+            chr.dropMessage(5, I18nUtil.getMessage("ItemInformationProvider.canWear.missingData", itemName));
             log.warn("Chr {} tried to equip {} with missing item WZ data", chr.getName(), itemName);
             return false;
         }
@@ -1974,28 +2030,25 @@ public class ItemInformationProvider {
         if (highfivestamp) {
             reqLevel -= 5;
         }
-        int i = 0; //lol xD
         //Removed job check. Shouldn't really be needed.
+        // Always tip the player — client plugin may force-OK bodypart for 115/111/112,
+        // so silent enableActions alone looked like "equip failed with no reason".
         if (reqLevel > chr.getLevel()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqDEX") > chr.getTotalDex()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqSTR") > chr.getTotalStr()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqLUK") > chr.getTotalLuk()) {
-            i++;
-        } else if (getEquipStats(equip.getItemId()).get("reqINT") > chr.getTotalInt()) {
-            i++;
+            equip.wear(false);
+            chr.dropMessage(1, I18nUtil.getMessage("ItemInformationProvider.canWear.reqLevel", reqLevel));
+            return false;
+        } else if (getEquipStats(equip.getItemId()).get("reqDEX") > chr.getTotalDex()
+                || getEquipStats(equip.getItemId()).get("reqSTR") > chr.getTotalStr()
+                || getEquipStats(equip.getItemId()).get("reqLUK") > chr.getTotalLuk()
+                || getEquipStats(equip.getItemId()).get("reqINT") > chr.getTotalInt()) {
+            equip.wear(false);
+            chr.dropMessage(1, I18nUtil.getMessage("ItemInformationProvider.canWear.reqStat"));
+            return false;
         }
         int reqPOP = getEquipStats(equip.getItemId()).get("reqPOP");
-        if (reqPOP > 0) {
-            if (getEquipStats(equip.getItemId()).get("reqPOP") > chr.getFame()) {
-                i++;
-            }
-        }
-
-        if (i > 0) {
+        if (reqPOP > 0 && getEquipStats(equip.getItemId()).get("reqPOP") > chr.getFame()) {
             equip.wear(false);
+            chr.dropMessage(1, I18nUtil.getMessage("ItemInformationProvider.canWear.reqStat"));
             return false;
         }
         equip.wear(true);

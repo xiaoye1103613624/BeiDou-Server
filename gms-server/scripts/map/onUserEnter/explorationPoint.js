@@ -42,6 +42,7 @@ function start(ms) {
     } else if (ms.getPlayer().getMapId() >= 240000000 && ms.getPlayer().getMapId() <= 240050000) {
         ms.explorerQuest(29011, "米纳尔森林探险家");//Minar Forest Explorer
     }
+    // Map/Effect.img/maplemap/enter/* verified complete (incl. PNG); restore enter banner.
     if (ms.getPlayer().getMapId() == 104000000) {
         ms.mapEffect("maplemap/enter/104000000");
     }

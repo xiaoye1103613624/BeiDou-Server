@@ -52,8 +52,7 @@ function end(mode, type, selection) {
         } else if (status == 2) {
             qm.forceCompleteQuest();
 
-            var skillid = Math.floor(qm.getPlayer().getJob().getId() / 1000) * 10000000 + 1007;
-            qm.teachSkill(skillid, 2, 3, -1);
+            // 锻造已下线（客户端制作窗闪退），不再授予 Maker 技能
             qm.gainExp(230000);
             qm.dispose();
         }

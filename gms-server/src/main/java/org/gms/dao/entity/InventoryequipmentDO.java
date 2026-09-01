@@ -78,4 +78,12 @@ public class InventoryequipmentDO implements Serializable  {
 
     private Integer ringid;
 
+    private Integer reforge1;
+
+    private Integer reforge2;
+
+    private Integer reforge3;
+
+    private Integer reforgeLock;
+
 }

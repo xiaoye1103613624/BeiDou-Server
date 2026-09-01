@@ -34,8 +34,14 @@ public class GameConstants {
      * 不一致时落入 {@code changeGroup} 静默分支，导致"加别人不行"。</p>
      */
     public static final String DEFAULT_BUDDY_GROUP = "Default Group";
-    public static final int TROCK_MAP_SIZE = 999;
-    public static final int VIP_TROCK_MAP_SIZE = 999;
+    /** 瞬移之石(5040000)可存地图数；须与客户端 MapTransfer 普通栏一致。原版 5；扩展 hook 未稳定前勿改。 */
+    public static final int TROCK_MAP_SIZE = 5;
+    /** 高级瞬移之石(5041000)可存地图数；须与客户端 MapTransferEx / VIP 栏一致。原版 10；扩展 hook 未稳定前勿改。 */
+    public static final int VIP_TROCK_MAP_SIZE = 10;
+    /** NPC 商店 / 玩家商店 / 雇佣商店：单次购买数量上限（对齐客户端 NumberDlg）。 */
+    public static final int SHOP_MAX_BUY_QUANTITY = 10000;
+    /** 玩家商店 / 雇佣商店：单格上架 perBundle × bundles 总量上限。 */
+    public static final int SHOP_MAX_LIST_ITEM_QUANTITY = 10000;
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
     // Ronan's rates upgrade system

@@ -57,6 +57,10 @@ public class ItemDropCommand extends Command {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
+        if (ItemConstants.isEquipment(itemId) && !ii.itemExists(itemId)) {
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message6", params[0]));
+            return;
+        }
 
         short quantity = 1;
         if (params.length >= 2) {

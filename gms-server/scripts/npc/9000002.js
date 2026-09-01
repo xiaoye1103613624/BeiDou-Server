@@ -38,21 +38,33 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendNext("Bam bam bam bam!! You have won the game from the \r\n#bEVENT#k. Congratulations on making it this far!");
-        } else if (status == 1) {
-            cm.sendNext("You'll be awarded the #bScroll of Secrets#k as the winning prize. On the scroll, it has secret information written in ancient characters.");
-        } else if (status == 2) {
-            cm.sendNext("The Scroll of Secrets can be deciphered by #rChun Ji#k or \r\n#rGeanie#k at Ludibrium. Bring it with you and something good's bound to happen.");
-        } else if (status == 3) {
-            if (cm.canHold(4031019)) {
-                cm.gainItem(4031019);
-                cm.warp(cm.getPlayer().getSavedLocation("EVENT"));
-                cm.dispose();
+            var pending = cm.countPendingActivityRewards();
+            if (pending > 0) {
+                cm.sendNext("Bam bam bam!! You won the EVENT!\r\nYou have #b" + pending + "#k pending activity reward(s).");
             } else {
-                cm.sendNext("I think your Etc window is full. Please make room, then talk to me.");
+                cm.sendNext("Bam bam bam bam!! You have won the game from the \r\n#bEVENT#k. Congratulations on making it this far!");
             }
-        } else if (status == 4) {
+        } else if (status == 1) {
+            var claimed = cm.claimActivityRewards();
+            if (claimed > 0) {
+                cm.sendNext("Granted #b" + claimed + "#k reward(s). If your inventory was full, clear space and talk again.");
+            } else if (cm.canHold(4031019)) {
+                cm.gainItem(4031019);
+                cm.sendNext("You'll be awarded the #bScroll of Secrets#k as the winning prize.");
+            } else {
+                cm.sendNext("Your inventory is full. Please make room, then talk to me.");
+                cm.dispose();
+            }
+        } else if (status == 2) {
+            var ret = cm.getPlayer().getSavedLocation("EVENT");
+            if (ret > 0) {
+                cm.warp(ret);
+            } else {
+                cm.warp(109050001);
+            }
+            cm.dispose();
+        } else {
             cm.dispose();
         }
     }
-}  
+}

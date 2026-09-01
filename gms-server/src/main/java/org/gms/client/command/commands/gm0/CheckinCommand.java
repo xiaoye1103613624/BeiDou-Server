@@ -4,6 +4,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.dailycheckin.DailyCheckinRewards;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -11,14 +12,14 @@ import org.gms.util.PacketCreator;
  */
 public class CheckinCommand extends Command {
     {
-        setDescription("打开每日签到窗口。");
+        setDescription(I18nUtil.getMessage("DailyCheckin.command.desc"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (player.getLevel() < DailyCheckinRewards.MIN_LEVEL) {
-            player.dropMessage(6, "每日签到在 " + DailyCheckinRewards.MIN_LEVEL + " 级解锁。");
+            player.dropMessage(6, I18nUtil.getMessage("DailyCheckin.command.locked", DailyCheckinRewards.MIN_LEVEL));
             return;
         }
         int claimable = player.refreshCheckin();
@@ -28,7 +29,7 @@ public class CheckinCommand extends Command {
             long secs = player.getCheckinCooldownSeconds();
             long h = secs / 3600;
             long m = (secs % 3600) / 60;
-            player.dropMessage(6, "每日签到：下次奖励将在 " + h + " 小时 " + m + " 分钟后解锁。");
+            player.dropMessage(6, I18nUtil.getMessage("DailyCheckin.command.cooldown", h, m));
         }
     }
 }

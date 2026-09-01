@@ -56,6 +56,11 @@ public class ItemCommand extends Command {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
+        // String.wz alone is not enough: missing Character XML yields blank equips (0 ATK / tuc=-1→255).
+        if (ItemConstants.isEquipment(itemId) && !ii.itemExists(itemId)) {
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message6", params[0]));
+            return;
+        }
 
         short quantity = 1;
         if (params.length >= 2) {

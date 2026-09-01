@@ -54,6 +54,10 @@ public class ProItemCommand extends Command {
             player.yellowMessage(I18nUtil.getMessage("ProItemCommand.message3", params[0]));
             return;
         }
+        if (!ii.itemExists(itemid)) {
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message6", params[0]));
+            return;
+        }
 
         short stat = (short) Math.max(0, Short.parseShort(params[1]));
         short spdjmp = params.length >= 3 ? (short) Math.max(0, Short.parseShort(params[2])) : 0;

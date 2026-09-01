@@ -83,11 +83,16 @@ BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端
 
 1. **import 规范**：生成代码时统一用 `import` 引入类型，**禁止**用「包名+类名」内联写法（如 `java.util.List<...>` 直接写在签名里）。**仅当存在两个同名类目冲突时**才允许用全限定名消歧，否则一律 import。
 2. **i18n 强制**：凡涉及日志打印、前端界面文本、异常信息等**面向人输出展示**的内容，必须走 i18n 资源文件（服务端 `I18nUtil`，前端 `vue-i18n` 的 `t()`），禁止偷懒硬编码字面量。后端日志用 `I18nUtil.getLogMessage(...)`，异常用 `BizExceptionEnum` + `I18nUtil.getExceptionMessage(...)`。
-3. Java 21、UTF-8。Lombok 全量使用（`@Data`/`@Builder`/`@AllArgsConstructor`/`@NoArgsConstructor`/`@Slf4j`）。
-4. JSON 用 fastjson2（`com.alibaba.fastjson2`）；HTTP 序列化用 Jackson。两者并存，按所在层选用。
-5. 日志框架 log4j2（spring-boot-starter-logging 已排除）。日志里不要拼字符串字面量做展示文案，见第 2 条。
-6. 遗留 OdinMS/Cosmic 代码改动时，匹配周边代码风格与注释密度，保留 AGPL 版权头。
-7. 提交信息：后端历史多为中文简述（如「修复雇佣商店重复实例与关闭竞态」「格式化代码」）或「合并拉取请求 #N」；前端 commitlint 强制 conventional（`feat:`/`fix:` 等）。
+3. **字符编码分层（禁止乱码）**：
+   - **源码 / i18n / REST / gms-ui**：UTF-8。
+   - **游戏 Netty 封包字符串**（`OutPacket.writeString` 等）：按客户端语言转编码；中文客户端为 **GBK**（见 `CharsetConstants`）。禁止 `getBytes()` 无 charset 或把 UTF-8 字节塞进封包。
+   - **发往插件且在客户端 UI 显示的中文**：要么经 `writeString` 出 GBK，要么协议约定 UTF-8 并在插件侧转 GBK 后再渲染。
+   - **ijl15 插件**：游戏内 narrow 文本一律 **GBK**；禁止 UTF-8 中文源字面量直出 UI，用 GBK `\xHH` 转义或 `Utf8ToGbk`。详见 `.cursor/rules/encoding-standards.mdc`。
+4. Java 21、UTF-8。Lombok 全量使用（`@Data`/`@Builder`/`@AllArgsConstructor`/`@NoArgsConstructor`/`@Slf4j`）。
+5. JSON 用 fastjson2（`com.alibaba.fastjson2`）；HTTP 序列化用 Jackson。两者并存，按所在层选用。
+6. 日志框架 log4j2（spring-boot-starter-logging 已排除）。日志里不要拼字符串字面量做展示文案，见第 2 条。
+7. 遗留 OdinMS/Cosmic 代码改动时，匹配周边代码风格与注释密度，保留 AGPL 版权头。
+8. 提交信息：后端历史多为中文简述（如「修复雇佣商店重复实例与关闭竞态」「格式化代码」）或「合并拉取请求 #N」；前端 commitlint 强制 conventional（`feat:`/`fix:` 等）。
 
 ## 非显而易见的实现细节
 

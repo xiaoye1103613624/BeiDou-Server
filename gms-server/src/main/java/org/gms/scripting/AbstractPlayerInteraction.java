@@ -26,6 +26,7 @@ import org.gms.client.*;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
+import org.gms.config.PetGrowthManager;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -567,6 +568,25 @@ public class AbstractPlayerInteraction {
         return evolved;
     }
 
+    /**
+     * 用宠物精华喂养召唤中的成长宠。
+     *
+     * @param foodItemId 4310337 初级 / 4310338 高级
+     * @param petSlot    召唤槽 0~2；传 -1 自动选择第一只可成长宠
+     * @return 空串成功，否则失败原因
+     */
+    public String feedPetEssence(int foodItemId, int petSlot) {
+        return PetGrowthManager.feedEssence(getPlayer(), foodItemId, petSlot);
+    }
+
+    public int getPetGrowthExp(int petUniqueId) {
+        return PetGrowthManager.getGrowthExp(petUniqueId);
+    }
+
+    public boolean isPetGrowthPet(int petItemId) {
+        return PetGrowthManager.getStageByPetId(petItemId) != null;
+    }
+
     public void gainItem(int id, short quantity) {
         gainItem(id, quantity, false, true);
     }
@@ -689,6 +709,31 @@ public class AbstractPlayerInteraction {
 
     public void dropMessage(int type, String message) {
         getPlayer().dropMessage(type, message);
+    }
+
+    public long getLimitBreak() {
+        return getPlayer().getLimitBreak();
+    }
+
+    /** 脚本兼容：破功伤害上限。 */
+    public long getDamage() {
+        return getPlayer().getLimitBreak();
+    }
+
+    public long getPGSXDJ() {
+        return getPlayer().getLimitBreak();
+    }
+
+    public void setLimitBreak(long value) {
+        getPlayer().setLimitBreak(value);
+    }
+
+    public void gainLimitBreak(long amount) {
+        getPlayer().gainLimitBreak(amount);
+    }
+
+    public void gainPGSXDJ(long amount) {
+        getPlayer().gainLimitBreak(amount);
     }
 
     public void mapMessage(int type, String message) {
@@ -1362,6 +1407,24 @@ public class AbstractPlayerInteraction {
     /** 使用轮回石碑消耗品：成功激活后扣 1 个道具。 */
     public boolean tryActivateReincarnationConsume(int itemId) {
         return org.gms.reincarnation.ReincarnationSupport.tryActivateConsume(getPlayer(), itemId);
+    }
+
+    /**
+     * 领取活动管理系统待发奖励（获奖处 NPC 调用）。
+     *
+     * @return 成功领取条数
+     */
+    public int claimActivityRewards() {
+        return org.gms.manager.ServerManager.getApplicationContext()
+                .getBean(org.gms.service.activity.ActivityRewardService.class)
+                .claimAll(getPlayer());
+    }
+
+    public int countPendingActivityRewards() {
+        return org.gms.manager.ServerManager.getApplicationContext()
+                .getBean(org.gms.service.activity.ActivityRewardService.class)
+                .listPendingClaims(getPlayer().getId())
+                .size();
     }
 
 }

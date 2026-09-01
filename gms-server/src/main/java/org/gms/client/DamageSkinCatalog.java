@@ -16,7 +16,7 @@ import java.util.TreeMap;
 
 @Slf4j
 public final class DamageSkinCatalog {
-    public static final long DEFAULT_PRICE_MESOS = 10_000_000L;
+    public static final long DEFAULT_PRICE_MESOS = 1_000_000_000L;
     private static final String[] REQUIRED_CHILDREN = {"NoRed0", "NoRed1", "NoCri0", "NoCri1"};
     private static final TreeMap<Integer, Long> prices = new TreeMap<>();
     private static boolean loaded = false;
