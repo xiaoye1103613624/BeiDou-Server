@@ -7,12 +7,14 @@ import org.gms.combat.provider.SetBonusStatProvider;
 import org.gms.combat.stat.CombatStatType;
 import org.gms.dao.entity.SetItemDO;
 import org.gms.dao.mapper.SetItemMapper;
+import org.gms.exception.BizException;
 import org.gms.model.dto.SetItemDTO;
 import org.gms.model.dto.SetItemDetailDTO;
 import org.gms.model.dto.SetItemPreviewDTO;
 import org.gms.model.dto.SetItemPreviewRequest;
 import org.gms.model.dto.SetItemWzImportRequest;
 import org.gms.server.setitem.SetBonus;
+import org.gms.server.setitem.SetBonusColor;
 import org.gms.server.setitem.SetDefinition;
 import org.gms.server.setitem.SetItemManager;
 import org.gms.server.setitem.SetTiersV2Parser;
@@ -190,6 +192,17 @@ public class SetItemService {
         return result;
     }
 
+    public Map<String, Map<String, String>> colorMeta() {
+        Map<String, Map<String, String>> result = new LinkedHashMap<>();
+        for (SetBonusColor color : SetBonusColor.values()) {
+            Map<String, String> entry = new LinkedHashMap<>();
+            entry.put("code", color.getCode());
+            entry.put("label", color.getLabel());
+            result.put(color.name(), entry);
+        }
+        return result;
+    }
+
     private static Map<String, String> field(String key, String label, String type) {
         Map<String, String> m = new LinkedHashMap<>();
         m.put("key", key);
@@ -201,7 +214,7 @@ public class SetItemService {
     @Transactional
     public void save(SetItemDTO dto) {
         if (dto == null || dto.getSetId() == null || dto.getSetId() <= 0) {
-            throw new IllegalArgumentException("setId is required");
+            throw BizException.illegalArgument();
         }
         SetItemDO entity = toEntity(dto);
         if (entity.getId() == null) {

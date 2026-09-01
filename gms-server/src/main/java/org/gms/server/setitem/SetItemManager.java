@@ -5,11 +5,13 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.client.SkillFactory;
+import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.combat.format.CombatStatFormatter;
 import org.gms.combat.stat.CombatStatProfile;
 import org.gms.combat.stat.CombatStatType;
+import org.gms.constants.inventory.ExtendedEquipRegistry;
 import org.gms.net.server.Server;
 import org.gms.provider.Data;
 import org.gms.provider.DataProvider;
@@ -290,6 +292,7 @@ public final class SetItemManager {
 
     /**
      * 低档累加：合并所有「已启用 && 穿戴件数 ≥ count」的档位。
+     * Off-by-one：档位 key=3（3件套）仅当 {@code equipCount >= 3} 时生效，未达标不合并。
      */
     public static SetBonus getBonusCumulative(int setId, int equipCount) {
         SetDefinition def = setDefinitions.get(setId);
@@ -301,7 +304,8 @@ public final class SetItemManager {
         List<Integer> counts = new ArrayList<>(def.tiers.keySet());
         counts.sort(Comparator.naturalOrder());
         for (int need : counts) {
-            if (need > equipCount) {
+            // Strict: unmet tiers (need > equipCount) must not apply.
+            if (equipCount < need) {
                 continue;
             }
             SetBonus tier = def.tiers.get(need);
@@ -470,13 +474,37 @@ public final class SetItemManager {
         return countEquippedSets(chr).keySet();
     }
 
+    /**
+     * 按套装统计已穿件数。去重规则：
+     * <ul>
+     *   <li>同一 setId 下同一 itemId 只计 1（避免重复实例虚增件数）</li>
+     *   <li>Addon 现金镜像座（−154…−162）在对应普通座（−54…−62）已有装时跳过，
+     *       避免 alias 双座把未达标档位提前生效</li>
+     * </ul>
+     */
     private static Map<Integer, Integer> countEquippedSets(Character chr) {
         Map<Integer, Integer> countMap = new HashMap<>();
-        for (Item item : chr.getInventory(InventoryType.EQUIPPED).list()) {
-            int setId = getSetId(item.getItemId());
-            if (setId != 0) {
-                countMap.put(setId, countMap.getOrDefault(setId, 0) + 1);
+        Map<Integer, Set<Integer>> countedIdsBySet = new HashMap<>();
+        Inventory equipped = chr.getInventory(InventoryType.EQUIPPED);
+        for (Item item : equipped.list()) {
+            short pos = item.getPosition();
+            // Prefer normal addon seat when cash alias mirror also present.
+            if (ExtendedEquipRegistry.isAddonAliasPairSeat(pos) && pos <= -154) {
+                short normal = ExtendedEquipRegistry.aliasPairOther(pos);
+                if (equipped.getItem(normal) != null) {
+                    continue;
+                }
             }
+            int itemId = item.getItemId();
+            int setId = getSetId(itemId);
+            if (setId == 0) {
+                continue;
+            }
+            Set<Integer> seen = countedIdsBySet.computeIfAbsent(setId, k -> new HashSet<>());
+            if (!seen.add(itemId)) {
+                continue;
+            }
+            countMap.put(setId, countMap.getOrDefault(setId, 0) + 1);
         }
         return countMap;
     }
