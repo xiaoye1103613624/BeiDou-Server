@@ -198,6 +198,12 @@ export function reloadCategory(categoryId: number) {
   );
 }
 
+export function importTsv(onlyIfEmpty = true) {
+  return axios.post<any, { data: Record<string, unknown> }>(
+    `/windowCashShop/v1/importTsv?onlyIfEmpty=${onlyIfEmpty}`
+  );
+}
+
 /** Stub — server will add soon */
 export function browseItems(query: BrowseItemsQuery) {
   return axios.post<any, { data: BrowseItemRow[] }>(

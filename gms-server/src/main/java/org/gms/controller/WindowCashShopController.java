@@ -150,6 +150,14 @@ public class WindowCashShopController {
     }
 
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
+    @Operation(summary = "从 catalog.tsv 导入 DB（引导用；运行时目录仍以 DB 为准）")
+    @PostMapping("/" + ApiConstant.LATEST + "/importTsv")
+    public ResultBody<Map<String, Object>> importTsv(
+            @RequestParam(value = "onlyIfEmpty", defaultValue = "true") boolean onlyIfEmpty) {
+        return ResultBody.success(windowCashShopService.importFromTsv(onlyIfEmpty));
+    }
+
+    @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
     @Operation(summary = "按 ID 范围浏览服务端存在的物品（WZ/ItemInfo）")
     @PostMapping("/" + ApiConstant.LATEST + "/browseItems")
     public ResultBody<List<Map<String, Object>>> browseItems(@RequestBody SubmitBody<Map<String, Object>> request) {
@@ -191,7 +199,7 @@ public class WindowCashShopController {
     }
 
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "种子：热卖榜 / 动漫皮肤 / 伤害皮肤入口；动漫自动灌入 1008900-1009999")
+    @Operation(summary = "种子：热卖榜 / 皮肤(阿尔泰) / XY玩法入口道具")
     @PostMapping("/" + ApiConstant.LATEST + "/seedDefaults")
     public ResultBody<Map<String, Object>> seedDefaults() {
         return ResultBody.success(windowCashShopService.seedDefaults());

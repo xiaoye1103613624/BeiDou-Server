@@ -2,6 +2,8 @@ package org.gms.server.cashshop;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.DamageSkinCatalog;
+import org.gms.client.DamageSkinInventory;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
@@ -12,6 +14,7 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.server.Server;
 import org.gms.server.CashShop;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +87,42 @@ public final class CashShopWindowPurchase {
         return item;
     }
 
+    private static boolean isInventorySlotCoupon(int itemId) {
+        return InventorySlotCashItems.isSlotCoupon(itemId);
+    }
+
+    private static boolean isVirtualCashSku(int itemId) {
+        return isInventorySlotCoupon(itemId) || DamageSkinCashItems.isCashSku(itemId);
+    }
+
+    /** InventoryType.getType(): 1=EQUIP … 4=ETC。 */
+    private static int inventorySlotCouponType(int itemId) {
+        final InventorySlotCashItems.Spec s = InventorySlotCashItems.get(itemId);
+        return s == null ? -1 : s.invType();
+    }
+
+    private static int inventorySlotCouponQty(int itemId) {
+        final InventorySlotCashItems.Spec s = InventorySlotCashItems.get(itemId);
+        return s == null ? 0 : s.qty();
+    }
+
+    private static boolean deliverDamageSkinUnlock(Character chr, int itemId) {
+        final int skinId = DamageSkinCashItems.toSkinId(itemId);
+        if (skinId <= 0 || !DamageSkinCatalog.contains(skinId)) {
+            return false;
+        }
+        final DamageSkinInventory inv = chr.getDamageSkinInventory();
+        if (inv.ownsSkin(skinId)) {
+            return false;
+        }
+        try {
+            return inv.addSkin(chr.getId(), skinId);
+        } catch (Exception e) {
+            log.error("Cash Shop: unlock damage skin {} for {} failed", skinId, chr.getName(), e);
+            return false;
+        }
+    }
+
     public static Result buy(Client c, Character chr, int[] sns) {
         if (sns == null || sns.length == 0 || sns.length > MAX_CART) {
             return new Result(CashShopWindowPackets.BUY_BAD_CART, 0, 0, 0);
@@ -95,16 +134,18 @@ public final class CashShopWindowPurchase {
             final ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
             final List<CashShopCatalog.Row> items = new ArrayList<>(sns.length);
-            final Set<Integer> seenSn = new HashSet<>();
+            final Set<Integer> damageSkinOnce = new HashSet<>();
             for (int itemId : sns) {
-                if (!seenSn.add(itemId)) {
-                    return new Result(CashShopWindowPackets.BUY_BAD_CART, itemId, 0, 0);
-                }
                 final CashShopCatalog.Row r = CashShopCatalog.byItemId(itemId);
                 if (r == null) {
-                    return new Result(CashShopWindowPackets.BUY_UNKNOWN_ITEM, itemId, 0, 0);
+                    return new Result(CashShopWindowPackets.BUY_BAD_CART, itemId, 0, 0);
                 }
-                if (ii.getSlotMax(c, r.itemId()) <= 0) {
+                // 伤害皮肤本体：同车不可重复（解锁一次即可）
+                if (DamageSkinCashItems.isCashSku(itemId) && !damageSkinOnce.add(itemId)) {
+                    return new Result(CashShopWindowPackets.BUY_BAD_CART, itemId, 0, 0);
+                }
+                // 扩展背包栏券 / 伤害皮肤本体均为虚拟 SKU，跳过 slotMax 校验
+                if (!isVirtualCashSku(r.itemId()) && ii.getSlotMax(c, r.itemId()) <= 0) {
                     return new Result(CashShopWindowPackets.BUY_UNKNOWN_ITEM, itemId, 0, 0);
                 }
                 items.add(r);
@@ -122,9 +163,29 @@ public final class CashShopWindowPurchase {
             final List<Pair<Item, InventoryType>> probes = new LinkedList<>();
             final List<Integer> uniques = new LinkedList<>();
             final Set<Integer> restricted = new HashSet<>();
+            final int[] slotNeed = new int[5]; // index by InventoryType.getType()
             int petLines = 0;
+            boolean unlocksDamageSkin = false;
             for (CashShopCatalog.Row r : items) {
                 final int itemId = r.itemId();
+                if (isInventorySlotCoupon(itemId)) {
+                    final int invType = inventorySlotCouponType(itemId);
+                    final int qty = inventorySlotCouponQty(itemId);
+                    if (invType < 0 || qty <= 0) {
+                        return new Result(CashShopWindowPackets.BUY_BAD_CART, itemId, 0, 0);
+                    }
+                    slotNeed[invType] += qty;
+                    continue;
+                }
+                if (DamageSkinCashItems.isCashSku(itemId)) {
+                    final int skinId = DamageSkinCashItems.toSkinId(itemId);
+                    if (skinId <= 0 || !DamageSkinCatalog.contains(skinId)
+                            || chr.getDamageSkinInventory().ownsSkin(skinId)) {
+                        return new Result(CashShopWindowPackets.BUY_BAD_CART, itemId, 0, 0);
+                    }
+                    unlocksDamageSkin = true;
+                    continue;
+                }
                 if (ii.isPickupRestricted(itemId) && !restricted.add(itemId)) {
                     return new Result(CashShopWindowPackets.BUY_BAD_CART, r.itemId(), 0, 0);
                 }
@@ -137,7 +198,12 @@ public final class CashShopWindowPurchase {
                 probes.add(new Pair<>(new Item(itemId, (short) 0, (short) r.count()),
                         ItemConstants.getInventoryType(itemId)));
             }
-            if (!chr.canHoldUniques(uniques)) {
+            for (int t = 1; t <= 4; t++) {
+                if (slotNeed[t] > 0 && !chr.canGainSlots(t, slotNeed[t])) {
+                    return new Result(CashShopWindowPackets.BUY_BAD_CART, 0, 0, 0);
+                }
+            }
+            if (!uniques.isEmpty() && !chr.canHoldUniques(uniques)) {
                 return new Result(CashShopWindowPackets.BUY_BAD_CART, 0, 0, 0);
             }
             if (!probes.isEmpty() && !Inventory.checkSpots(chr, probes)) {
@@ -159,6 +225,22 @@ public final class CashShopWindowPurchase {
 
             int delivered = 0;
             for (CashShopCatalog.Row r : items) {
+                if (isInventorySlotCoupon(r.itemId())) {
+                    final int invType = inventorySlotCouponType(r.itemId());
+                    final int qty = inventorySlotCouponQty(r.itemId());
+                    if (!chr.gainSlots(invType, qty, true)) {
+                        return new Result(CashShopWindowPackets.BUY_BAD_CART, r.itemId(), delivered, 0);
+                    }
+                    delivered++;
+                    continue;
+                }
+                if (DamageSkinCashItems.isCashSku(r.itemId())) {
+                    if (!deliverDamageSkinUnlock(chr, r.itemId())) {
+                        return new Result(CashShopWindowPackets.BUY_BAD_CART, r.itemId(), delivered, 0);
+                    }
+                    delivered++;
+                    continue;
+                }
                 final Item built = toItem(r);
                 if (built == null) {
                     log.error("Cash Shop cart: could not build item {} for {}",
@@ -174,6 +256,9 @@ public final class CashShopWindowPurchase {
             }
 
             cs.gainCash(CashShop.NX_CREDIT, (int) -total);
+            if (unlocksDamageSkin) {
+                c.sendPacket(PacketCreator.damageSkinInventory(chr));
+            }
 
             log.info("{} bought {} cash item(s) for {} NX from the Cash Shop window",
                     chr.getName(), delivered, total);
@@ -184,5 +269,53 @@ public final class CashShopWindowPurchase {
         } finally {
             c.releaseClient();
         }
+    }
+
+    /** 与 CashOperationHandler 0x06 mode0 同价同量：4000 点券 → +4 格。 */
+    public static final int EXPAND_SLOT_COST = 4000;
+    public static final int EXPAND_SLOT_QTY = 4;
+
+    public enum ExpandResult {
+        OK,
+        NO_NX,
+        FULL,
+        CASH_TAB,
+        BAD_TYPE,
+        FAILED
+    }
+
+    /**
+     * 频道侧背包扩容（不要求商城 Stage）。{@code invType} 为 {@link InventoryType#getType()}（1..4）。
+     * {@code cashType} 当前强制按 {@link CashShop#NX_CREDIT} 扣点（与背包扩充 UX 一致）。
+     */
+    public static ExpandResult expandInventorySlots(Character chr, int cashType, int invType) {
+        if (invType == InventoryType.CASH.getType()) {
+            return ExpandResult.CASH_TAB;
+        }
+        if (invType < InventoryType.EQUIP.getType() || invType > InventoryType.ETC.getType()) {
+            return ExpandResult.BAD_TYPE;
+        }
+        // UX: 4000 NX only（客户端可带 cashType，非点券时仍按 NX_CREDIT 扣）。
+        if (cashType != CashShop.NX_CREDIT) {
+            log.debug("expandSlots: cashType={} ignored; charging NX_CREDIT", cashType);
+        }
+        final int payType = CashShop.NX_CREDIT;
+        final CashShop cs = chr.getCashShop();
+        if (cs.getCash(payType) < EXPAND_SLOT_COST) {
+            return ExpandResult.NO_NX;
+        }
+        if (!chr.canGainSlots(invType, EXPAND_SLOT_QTY)) {
+            return ExpandResult.FULL;
+        }
+        cs.gainCash(payType, -EXPAND_SLOT_COST);
+        if (chr.gainSlots(invType, EXPAND_SLOT_QTY, true)) {
+            log.info("{} expanded invType={} by {} for {} NX (window expand)",
+                    chr.getName(), invType, EXPAND_SLOT_QTY, EXPAND_SLOT_COST);
+            return ExpandResult.OK;
+        }
+        cs.gainCash(payType, EXPAND_SLOT_COST);
+        log.warn("Could not expand invType={} for {} after NX deduct; rolled back",
+                invType, chr.getName());
+        return ExpandResult.FAILED;
     }
 }

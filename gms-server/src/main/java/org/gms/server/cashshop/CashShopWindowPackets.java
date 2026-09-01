@@ -21,6 +21,11 @@ public final class CashShopWindowPackets {
     public static final int ACTION_REQUEST_CATEGORY = 3;
     /** 非 SHOW_ITEMS 分类点击：+ categoryId(int) */
     public static final int ACTION_CLICK_CATEGORY = 4;
+    /**
+     * 背包 UI「扩充」：+ cashType(int) + invType(byte)。
+     * 与经典商城 0x06 mode0 同价同量（4000 NX → +4），不要求 cs.isOpened。
+     */
+    public static final int ACTION_EXPAND_SLOTS = 5;
 
     public static final int RESP_OPEN = 0;
     public static final int RESP_CATALOG = 1;

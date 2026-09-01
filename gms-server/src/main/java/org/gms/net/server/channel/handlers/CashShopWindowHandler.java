@@ -11,6 +11,7 @@ import org.gms.server.cashshop.CashShopClickType;
 import org.gms.server.cashshop.CashShopWindowPackets;
 import org.gms.server.cashshop.CashShopWindowPurchase;
 import org.gms.service.WindowCashShopService;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,7 @@ public final class CashShopWindowHandler extends AbstractPacketHandler {
             case CashShopWindowPackets.ACTION_BUY -> buy(c, chr, p);
             case CashShopWindowPackets.ACTION_BUY_CART -> buyCart(c, chr, p);
             case CashShopWindowPackets.ACTION_CLICK_CATEGORY -> clickCategory(c, chr, p);
+            case CashShopWindowPackets.ACTION_EXPAND_SLOTS -> expandSlots(c, chr, p);
             default -> log.warn("Cash Shop window: unhandled action {}", action);
         }
     }
@@ -127,6 +129,27 @@ public final class CashShopWindowHandler extends AbstractPacketHandler {
                 r.code(), r.failedSn(), r.delivered(), r.spent()));
         if (r.ok()) {
             c.sendPacket(CashShopWindowPackets.cash(chr));
+        }
+    }
+
+    /**
+     * 背包「扩充」：cashType(int) + invType(byte)。成功走 INVENTORY_GROW（gainSlots update）+ 刷新点券。
+     */
+    private void expandSlots(Client c, Character chr, InPacket p) {
+        if (p.available() < 5) {
+            return;
+        }
+        final int cashType = p.readInt();
+        final int invType = p.readByte() & 0xFF;
+        final CashShopWindowPurchase.ExpandResult r =
+                CashShopWindowPurchase.expandInventorySlots(chr, cashType, invType);
+        switch (r) {
+            case OK -> c.sendPacket(CashShopWindowPackets.cash(chr));
+            case NO_NX -> chr.dropMessage(1, I18nUtil.getMessage("CashShopWindow.expandSlots.noNx"));
+            case FULL -> chr.dropMessage(1, I18nUtil.getMessage("CashShopWindow.expandSlots.full"));
+            case CASH_TAB -> chr.dropMessage(1, I18nUtil.getMessage("CashShopWindow.expandSlots.cashTab"));
+            case BAD_TYPE -> chr.dropMessage(1, I18nUtil.getMessage("CashShopWindow.expandSlots.badType"));
+            case FAILED -> chr.dropMessage(1, I18nUtil.getMessage("CashShopWindow.expandSlots.failed"));
         }
     }
 }

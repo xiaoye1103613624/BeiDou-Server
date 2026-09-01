@@ -22,7 +22,10 @@ import org.gms.server.cashshop.CashShopItemNames;
 import org.gms.server.cashshop.CashShopTaxonomy;
 import org.gms.server.cashshop.CashShopWindowPackets;
 import org.gms.server.cashshop.ClientDataPath;
+import org.gms.server.cashshop.DamageSkinCashItems;
+import org.gms.server.cashshop.InventorySlotCashItems;
 import org.gms.server.cashshop.ItemIconFiles;
+import org.gms.server.cashshop.XyPlayCashItems;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,12 +201,18 @@ public class WindowCashShopService {
     @Transactional(rollbackFor = Exception.class)
     public XyCashShopItemDO saveItem(XyCashShopItemDO body, boolean requireClientAsset) {
         RequireUtil.requireNotNull(body.getItemId(), "itemId");
-        final CashShopAssetCheck.Result check = CashShopAssetCheck.check(body.getItemId());
-        if (!check.serverOk()) {
-            throw new BizException(String.join("; ", check.messages()));
-        }
-        if (requireClientAsset && !check.clientSkipped() && !check.clientOk()) {
-            throw new BizException("client asset check failed: " + String.join("; ", check.messages()));
+        final int itemId = body.getItemId();
+        // 扩展背包栏券 / 伤害皮肤本体无 WZ 实物，仅目录+购买时服务端直接履约
+        final boolean slotCoupon = InventorySlotCashItems.isSlotCoupon(itemId);
+        final boolean damageSkinSku = DamageSkinCashItems.isCashSku(itemId);
+        if (!slotCoupon && !damageSkinSku) {
+            final CashShopAssetCheck.Result check = CashShopAssetCheck.check(itemId);
+            if (!check.serverOk()) {
+                throw new BizException(String.join("; ", check.messages()));
+            }
+            if (requireClientAsset && !check.clientSkipped() && !check.clientOk()) {
+                throw new BizException("client asset check failed: " + String.join("; ", check.messages()));
+            }
         }
         if (body.getPrice() == null) {
             body.setPrice(0);
@@ -394,6 +403,132 @@ public class WindowCashShopService {
                     name));
         }
         return rows;
+    }
+
+    /**
+     * 用 WZ 名称覆盖 xy_cashshop_item.name（忽略 DB 中的旧英文名）。
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> importFromTsv(boolean onlyIfEmpty) {
+        if (onlyIfEmpty && categoryMapper.selectCountByQuery(QueryWrapper.create()) > 0) {
+            throw new BizException("categories not empty; pass onlyIfEmpty=false to backfill");
+        }
+        final Path path = Path.of("cashshop", "catalog.tsv");
+        if (!Files.isRegularFile(path)) {
+            throw new BizException("TSV not found: " + path.toAbsolutePath());
+        }
+        int cats = 0, items = 0, links = 0;
+        final Map<String, Integer> catKeyToId = new HashMap<>();
+        try {
+            for (String line : Files.readAllLines(path, java.nio.charset.StandardCharsets.UTF_8)) {
+                final String s = line.strip();
+                if (s.isEmpty() || s.charAt(0) == '#') {
+                    continue;
+                }
+                final String[] f = s.split("\t");
+                if (f.length < 7) {
+                    continue;
+                }
+                final int itemId = Integer.parseInt(f[0].strip());
+                final int price = Integer.parseInt(f[1].strip());
+                final int count = Integer.parseInt(f[2].strip());
+                final int tab = Integer.parseInt(f[3].strip());
+                final int cat = Integer.parseInt(f[4].strip());
+                final int period = Integer.parseInt(f[5].strip());
+                final int gender = Integer.parseInt(f[6].strip());
+                final String tsvName = f.length > 7 ? f[7].strip() : "";
+                final String name = CashShopItemNames.resolve(itemId, tsvName);
+                if (!StringUtils.hasText(name)) {
+                    continue;
+                }
+
+                final String key = tab + ":" + cat;
+                Integer categoryId = catKeyToId.get(key);
+                if (categoryId == null) {
+                    final String tabKey = "tab:" + tab;
+                    Integer parentId = catKeyToId.get(tabKey);
+                    if (parentId == null) {
+                        XyCashShopCategoryDO parent = categoryMapper.selectOneByQuery(
+                                QueryWrapper.create().eq("name", "Tab " + tab));
+                        if (parent == null) {
+                            parent = XyCashShopCategoryDO.builder()
+                                    .name("Tab " + tab)
+                                    .parentId(null)
+                                    .sort(tab)
+                                    .enabled(1)
+                                    .clickType(CashShopClickType.SHOW_ITEMS.name())
+                                    .isHot(0)
+                                    .legacyTab(tab)
+                                    .legacyCategory(0)
+                                    .remark("auto-tab")
+                                    .build();
+                            categoryMapper.insertSelective(parent);
+                            cats++;
+                        }
+                        parentId = parent.getId();
+                        catKeyToId.put(tabKey, parentId);
+                    }
+
+                    XyCashShopCategoryDO existing = categoryMapper.selectOneByQuery(
+                            QueryWrapper.create().eq("legacy_tab", tab).eq("legacy_category", cat));
+                    if (existing == null) {
+                        existing = XyCashShopCategoryDO.builder()
+                                .name("Cat " + tab + "-" + cat)
+                                .parentId(parentId)
+                                .sort(tab * 100 + cat)
+                                .enabled(1)
+                                .clickType(CashShopClickType.SHOW_ITEMS.name())
+                                .isHot(0)
+                                .legacyTab(tab)
+                                .legacyCategory(cat)
+                                .build();
+                        categoryMapper.insertSelective(existing);
+                        cats++;
+                    }
+                    categoryId = existing.getId();
+                    catKeyToId.put(key, categoryId);
+                }
+
+                if (itemMapper.selectOneById(itemId) == null) {
+                    itemMapper.insertSelective(XyCashShopItemDO.builder()
+                            .itemId(itemId)
+                            .price(price)
+                            .count(count)
+                            .period(period)
+                            .gender(gender)
+                            .name(name)
+                            .enabled(1)
+                            .build());
+                    items++;
+                }
+
+                final Integer finalCatId = categoryId;
+                final long linkCount = categoryItemMapper.selectCountByQuery(
+                        QueryWrapper.create().eq("category_id", finalCatId).eq("item_id", itemId));
+                if (linkCount == 0) {
+                    categoryItemMapper.insertSelective(XyCashShopCategoryItemDO.builder()
+                            .categoryId(finalCatId)
+                            .itemId(itemId)
+                            .sort(links)
+                            .enabled(1)
+                            .build());
+                    links++;
+                }
+            }
+        } catch (IOException e) {
+            throw new BizException("read TSV failed: " + e.getMessage());
+        }
+
+        final boolean reloaded = loadFromDbIntoMemory();
+        final Map<String, Object> m = new LinkedHashMap<>();
+        m.put("path", path.toAbsolutePath().toString());
+        m.put("categoriesCreated", cats);
+        m.put("itemsCreated", items);
+        m.put("linksCreated", links);
+        m.put("catalogReloaded", reloaded);
+        m.put("catalogSource", CashShopCatalog.source());
+        m.put("catalogSize", CashShopCatalog.size());
+        return m;
     }
 
     /**
@@ -592,16 +727,18 @@ public class WindowCashShopService {
     public Map<String, Object> seedDefaults() {
         final Map<String, Object> m = new LinkedHashMap<>();
         m.put("hot", ensureCategory("热门", null, 0, 1, CashShopClickType.SHOW_ITEMS.name(),
-                null, null, 1, 9, 0));
-        m.put("anime", ensureCategory("动漫皮肤", null, 10, 1, CashShopClickType.SHOW_ITEMS.name(),
-                null, null, 0, 9, 1));
-        m.put("damageSkin", ensureCategory("伤害皮肤", null, 20, 1, CashShopClickType.OPEN_WINDOW.name(),
-                "DAMAGESKIN", null, 0, 9, 2));
-        // auto-link anime range if empty
-        final Integer animeId = (Integer) ((Map<?, ?>) m.get("anime")).get("id");
-        if (animeId != null) {
+                null, null, 1, 8, 0));
+        // 皮肤大类：阿尔泰帽子 Cap 1008900-1009999，售价 10 万点券（客户端 kTabs id=9）
+        m.put("skin", ensureCategory("皮肤", null, 10, 1, CashShopClickType.SHOW_ITEMS.name(),
+                null, null, 0, 9, 0));
+        // XY玩法：自定义入口道具（伤害皮肤栏/幻化/棱镜/美容院/扩容）；不含皮肤本体虚拟 SKU
+        m.put("xyPlay", ensureCategory(XyPlayCashItems.CATEGORY_NAME, null, 20, 1,
+                CashShopClickType.SHOW_ITEMS.name(), null, null, 0,
+                XyPlayCashItems.TAB, XyPlayCashItems.CATEGORY));
+        final Integer skinId = (Integer) ((Map<?, ?>) m.get("skin")).get("id");
+        if (skinId != null) {
             final long cnt = categoryItemMapper.selectCountByQuery(
-                    QueryWrapper.create().eq("category_id", animeId));
+                    QueryWrapper.create().eq("category_id", skinId));
             if (cnt == 0) {
                 final List<Integer> ids = new ArrayList<>();
                 final ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -610,10 +747,83 @@ public class WindowCashShopService {
                         ids.add(id);
                     }
                 }
-                m.put("animeImport", importItems(animeId, ids, 5000, false));
+                m.put("skinImport", importItems(skinId, ids, 100000, false));
             }
         }
+        final Integer xyCatId = (Integer) ((Map<?, ?>) m.get("xyPlay")).get("id");
+        if (xyCatId != null) {
+            m.put("xyPlayItems", seedXyPlayItems(xyCatId));
+        }
+        m.put("catalogReloaded", loadFromDbIntoMemory());
         return m;
+    }
+
+    /**
+     * 上架 {@link XyPlayCashItems} 入口道具；卸下并禁用伤害皮肤本体虚拟 SKU。
+     */
+    private Map<String, Object> seedXyPlayItems(int categoryId) {
+        final Map<String, Object> out = new LinkedHashMap<>();
+        int saved = 0;
+        int linked = 0;
+        int unlinkedBodies = 0;
+        int disabledBodies = 0;
+
+        // 卸下本分类下的皮肤本体虚拟 SKU
+        final List<XyCashShopCategoryItemDO> links = categoryItemMapper.selectListByQuery(
+                QueryWrapper.create().eq("category_id", categoryId));
+        for (XyCashShopCategoryItemDO link : links) {
+            if (link.getItemId() != null && XyPlayCashItems.isDamageSkinBodySku(link.getItemId())) {
+                categoryItemMapper.deleteByQuery(QueryWrapper.create()
+                        .eq("category_id", categoryId)
+                        .eq("item_id", link.getItemId()));
+                unlinkedBodies++;
+            }
+        }
+        for (XyCashShopItemDO body : itemMapper.selectListByQuery(
+                QueryWrapper.create().gt("item_id", DamageSkinCashItems.BASE)
+                        .le("item_id", DamageSkinCashItems.MAX_ITEM_ID))) {
+            if (body.getEnabled() == null || body.getEnabled() != 0) {
+                body.setEnabled(0);
+                itemMapper.update(body);
+                disabledBodies++;
+            }
+        }
+
+        // 扩展券从「游戏」分类移除，避免重复
+        final XyCashShopCategoryDO gameCat = categoryMapper.selectOneByQuery(
+                QueryWrapper.create().eq("legacy_tab", 5).eq("legacy_category", 2));
+        if (gameCat != null && gameCat.getId() != null) {
+            for (InventorySlotCashItems.Spec s : InventorySlotCashItems.all()) {
+                categoryItemMapper.deleteByQuery(QueryWrapper.create()
+                        .eq("category_id", gameCat.getId())
+                        .eq("item_id", s.itemId()));
+            }
+        }
+
+        for (XyPlayCashItems.Entry e : XyPlayCashItems.ENTRIES) {
+            try {
+                saveItem(XyCashShopItemDO.builder()
+                        .itemId(e.itemId())
+                        .price(e.price())
+                        .count(1)
+                        .period(0)
+                        .gender(2)
+                        .name(e.name())
+                        .enabled(1)
+                        .remark(e.remark())
+                        .build(), false);
+                saved++;
+                linkItem(categoryId, e.itemId(), e.sort(), 1);
+                linked++;
+            } catch (Exception ex) {
+                log.warn("seed xy-play item {} skip: {}", e.itemId(), ex.toString());
+            }
+        }
+        out.put("saved", saved);
+        out.put("linked", linked);
+        out.put("unlinkedBodies", unlinkedBodies);
+        out.put("disabledBodies", disabledBodies);
+        return out;
     }
 
     private Map<String, Object> ensureCategory(String name, Integer parentId, int sort, int enabled,
@@ -626,6 +836,7 @@ public class WindowCashShopService {
                     QueryWrapper.create().eq("legacy_tab", legacyTab).eq("legacy_category", legacyCat));
         }
         boolean created = false;
+        boolean updated = false;
         if (existing == null) {
             existing = XyCashShopCategoryDO.builder()
                     .name(name)
@@ -642,10 +853,24 @@ public class WindowCashShopService {
                     .build();
             categoryMapper.insertSelective(existing);
             created = true;
+        } else if (!Objects.equals(existing.getName(), name)
+                || !Objects.equals(existing.getLegacyTab(), legacyTab)
+                || !Objects.equals(existing.getLegacyCategory(), legacyCat)
+                || !Objects.equals(existing.getSort(), sort)) {
+            existing.setName(name);
+            existing.setSort(sort);
+            existing.setEnabled(enabled);
+            existing.setClickType(clickType);
+            existing.setLegacyTab(legacyTab);
+            existing.setLegacyCategory(legacyCat);
+            existing.setUpdatedAt(new Date());
+            categoryMapper.update(existing);
+            updated = true;
         }
         final Map<String, Object> info = new LinkedHashMap<>();
         info.put("id", existing.getId());
         info.put("created", created);
+        info.put("updated", updated);
         info.put("name", existing.getName());
         return info;
     }
