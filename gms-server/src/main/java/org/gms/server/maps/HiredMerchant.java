@@ -298,14 +298,14 @@ public class HiredMerchant extends AbstractMapObject {
 
             KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
 
-            int price = (int) Math.min((float) pItem.getPrice() * quantity, Integer.MAX_VALUE);
+            long price = Math.min((long) pItem.getPrice() * (long) quantity, Integer.MAX_VALUE);
             if (c.getPlayer().getMeso() >= price) {
                 if (canBuy(c, newItem)) {
-                    c.getPlayer().gainMeso(-price, false);
-                    price -= Trade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
+                    c.getPlayer().gainMeso(-(int) price, false);
+                    int ownerMeso = (int) (price - Trade.getFee((int) price));  // thanks BHB for pointing out trade fees not applying here
 
                     synchronized (sold) {
-                        sold.add(new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), newItem.getQuantity(), price));
+                        sold.add(new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), newItem.getQuantity(), ownerMeso));
                     }
 
                     pItem.setBundles((short) (pItem.getBundles() - quantity));
@@ -314,12 +314,12 @@ public class HiredMerchant extends AbstractMapObject {
                     }
 
                     if (GameConfig.getServerBoolean("use_announce_shop_item_sold")) {   // idea thanks to Vcoc
-                        announceItemSold(newItem, price, getQuantityLeft(pItem.getItem().getItemId()));
+                        announceItemSold(newItem, ownerMeso, getQuantityLeft(pItem.getItem().getItemId()));
                     }
 
                     Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
                     if (owner != null) {
-                        owner.addMerchantMesos(price);
+                        owner.addMerchantMesos(ownerMeso);
                     } else {
                         try (Connection con = DatabaseConnection.getConnection()) {
                             long merchantMesos = 0;
@@ -331,7 +331,7 @@ public class HiredMerchant extends AbstractMapObject {
                                     }
                                 }
                             }
-                            merchantMesos += price;
+                            merchantMesos += ownerMeso;
 
                             try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
                                 ps.setLong(1, Math.min(merchantMesos, Long.MAX_VALUE));

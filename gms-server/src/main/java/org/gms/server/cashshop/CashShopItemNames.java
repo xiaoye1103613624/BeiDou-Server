@@ -20,6 +20,13 @@ public final class CashShopItemNames {
      * @return 可用显示名，或 {@code null} 若 WZ 与 fallback 均不可用
      */
     public static String resolve(int itemId, String fallbackName) {
+        if (DamageSkinCashItems.isCashSku(itemId)) {
+            final int skinId = DamageSkinCashItems.toSkinId(itemId);
+            if (StringUtils.hasText(fallbackName)) {
+                return truncate(fallbackName.strip());
+            }
+            return truncate(DamageSkinCashItems.defaultName(skinId));
+        }
         final String wz = ItemInformationProvider.getInstance().getName(itemId);
         if (isUsableWzName(wz)) {
             return truncate(wz);

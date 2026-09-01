@@ -73,12 +73,20 @@ public final class CashShopTaxonomy {
 
     public static final Bucket PACKAGE = new Bucket("7:0", "礼包", 500, 7, 0);
 
+    public static final Bucket SKIN = new Bucket("9:0", "皮肤", 600, 9, 0);
+    /** 自定义玩法入口（伤害皮肤栏/幻化/棱镜/美容院/扩容等）；非皮肤本体虚拟 SKU */
+    public static final Bucket XY_PLAY = new Bucket("10:0", "XY玩法", 610, 10, 0);
+    /** @deprecated 使用 {@link #XY_PLAY} */
+    @Deprecated
+    public static final Bucket DAMAGE_SKIN = XY_PLAY;
+
     private static final List<Bucket> KCATS = List.of(
             CAP, FACE, EYE, OVERALL, COAT, PANTS, SHOES, GLOVE, WEAPON, RING, CAPE,
             TELEPORT, WEATHER,
             BEAUTY, STORE, GAME, EMOTION, WEDDING, EFFECT, CHARACTER,
             PET, PET_EQ, PET_USE,
-            PACKAGE
+            PACKAGE,
+            SKIN, XY_PLAY
     );
 
     /** 旧版按 Cash ID 段发明的分类名（客户端 kCats 没有）。 */
@@ -169,6 +177,7 @@ public final class CashShopTaxonomy {
             case 516 -> EMOTION;
             case 517 -> CHARACTER;
             case 518, 519, 524, 546 -> PET_USE;
+            case 521 -> GAME; // 双倍经验等时段卡（勿挂美容）
             case 522, 549, 553 -> PACKAGE;
             case 525 -> WEDDING;
             default -> GAME;

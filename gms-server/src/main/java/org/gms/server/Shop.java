@@ -28,6 +28,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.slf4j.Logger;
@@ -102,7 +103,9 @@ public class Shop {
         inv.lockInventory();
         try {
             if (item.getPrice() > 0) {
-                int amount = (int) Math.min((float) item.getPrice() * quantity, Integer.MAX_VALUE);
+                // long multiply — float mantissa loses precision above ~16M (e.g. high price × 10000)
+                long cost = (long) item.getPrice() * (long) quantity;
+                int amount = cost > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) cost;
                 if (c.getPlayer().getMeso() >= amount) {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                         if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
@@ -123,7 +126,8 @@ public class Shop {
                 }
 
             } else if (item.getPitch() > 0) {
-                int amount = (int) Math.min((float) item.getPitch() * quantity, Integer.MAX_VALUE);
+                long pitchCost = (long) item.getPitch() * (long) quantity;
+                int amount = pitchCost > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) pitchCost;
 
                 if (c.getPlayer().getInventory(InventoryType.ETC).countById(ItemId.PERFECT_PITCH) >= amount) {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
@@ -301,11 +305,12 @@ public class Shop {
                                 recharges.remove(Integer.valueOf(starItem.getItemId()));
                             }
                         } else {
-                            ret.addItem(new ShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
+                            // Client CUINumberDlg max comes from buyable (OPEN_NPC_SHOP).
+                            ret.addItem(new ShopItem((short) GameConstants.SHOP_MAX_BUY_QUANTITY, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
                         }
                     }
                     for (Integer recharge : recharges) {
-                        ret.addItem(new ShopItem((short) 1000, recharge, 0, 0));
+                        ret.addItem(new ShopItem((short) GameConstants.SHOP_MAX_BUY_QUANTITY, recharge, 0, 0));
                     }
                 }
             }

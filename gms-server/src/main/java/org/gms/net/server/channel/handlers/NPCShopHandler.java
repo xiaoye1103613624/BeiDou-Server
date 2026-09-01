@@ -23,6 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -43,7 +44,8 @@ public final class NPCShopHandler extends AbstractPacketHandler {
             short slot = p.readShort();// slot
             int itemId = p.readInt();
             short quantity = p.readShort();
-            if (quantity < 1) {
+            // Align with shop buyable / client NumberDlg max.
+            if (quantity < 1 || quantity > GameConstants.SHOP_MAX_BUY_QUANTITY) {
                 AutobanFactory.PACKET_EDIT.alert(c.getPlayer(),
                         c.getPlayer().getName() + " tried to packet edit a npc shop.");
                 log.warn("Chr {} tried to buy quantity {} of itemid {}", c.getPlayer().getName(), quantity, itemId);

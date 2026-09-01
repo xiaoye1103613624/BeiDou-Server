@@ -48,10 +48,12 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.manager.ServerManager;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.out.SendNoteSuccessPacket;
 import org.gms.net.server.Server;
+import org.gms.service.PetGrowthService;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -452,6 +454,13 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                         isUse = true;
                         pet.gainTamenessFullness(player, pair.getLeft(), 100, 1, true);
                         remove(c, position, itemId);
+                        try {
+                            var ctx = ServerManager.getApplicationContext();
+                            if (ctx != null) {
+                                ctx.getBean(PetGrowthService.class).onPetFed(player, pet, itemId);
+                            }
+                        } catch (Exception ignored) {
+                        }
                         break;
                     }
                 } else {

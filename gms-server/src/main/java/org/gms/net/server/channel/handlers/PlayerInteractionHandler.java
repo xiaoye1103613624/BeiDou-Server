@@ -29,6 +29,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
+import org.gms.constants.game.GameConstants;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -608,7 +609,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 int price = p.readInt();
-                if (perBundle <= 0 || perBundle * bundles > 2000 || bundles <= 0 || price <= 0 || price > Integer.MAX_VALUE) {
+                if (perBundle <= 0 || perBundle * bundles > GameConstants.SHOP_MAX_LIST_ITEM_QUANTITY || bundles <= 0 || price <= 0 || price > Integer.MAX_VALUE) {
                     AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + I18nUtil.getMessage("PlayerInteractionHandler.message10"));
                     log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn5"),
                             chr.getName(), perBundle, perBundle * bundles, bundles, price);
@@ -772,7 +773,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                 int itemid = p.readByte();
                 short quantity = p.readShort();
-                if (quantity < 1) {
+                if (quantity < 1 || quantity > GameConstants.SHOP_MAX_BUY_QUANTITY) {
                     AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + I18nUtil.getMessage("PlayerInteractionHandler.message16"));
                     log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn7"), chr.getName(), itemid, quantity);
                     c.disconnect(true, false);
