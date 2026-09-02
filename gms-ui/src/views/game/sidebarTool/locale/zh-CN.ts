@@ -1,0 +1,23 @@
+export default {
+  'sidebarTool.reload': '热重载并同步',
+  'sidebarTool.saveAll': '保存全部',
+  'sidebarTool.saveRow': '保存',
+  'sidebarTool.hint':
+    '配置游戏内右边栏 ServerTool（序号 0–9）。脚本路径留空会自动关闭并隐藏图标；保存/重载后立即同步在线客户端 tip 与可见性。客户端纯 UI 按钮（签到/美容等）不在此表。',
+  'sidebarTool.column.index': '序号',
+  'sidebarTool.column.label': '名称',
+  'sidebarTool.column.script': '脚本路径',
+  'sidebarTool.column.tipTitle': 'Tip 标题',
+  'sidebarTool.column.tipDesc': 'Tip 描述',
+  'sidebarTool.column.enabled': '开启',
+  'sidebarTool.column.visible': '将显示',
+  'sidebarTool.column.operate': '操作',
+  'sidebarTool.visible.yes': '是',
+  'sidebarTool.visible.no': '隐藏',
+  'sidebarTool.save.success': '已保存并同步在线客户端',
+  'sidebarTool.reload.success': '已热重载并同步在线客户端',
+  'sidebarTool.script.placeholder': '搜索脚本名或路径，留空则隐藏',
+  'sidebarTool.script.search': '输入名称过滤目录树',
+  'sidebarTool.script.empty': '（不挂载 / 隐藏图标）',
+  'sidebarTool.script.loadFailed': '脚本目录加载失败',
+};

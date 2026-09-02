@@ -1,0 +1,23 @@
+export default {
+  'sidebarTool.reload': 'Reload & Sync',
+  'sidebarTool.saveAll': 'Save All',
+  'sidebarTool.saveRow': 'Save',
+  'sidebarTool.hint':
+    'Configure in-game SideToolbar ServerTools (index 0–9). Empty script path auto-disables and hides the icon. Save/reload syncs tips and visibility to online clients. Client-only UI buttons are not listed here.',
+  'sidebarTool.column.index': 'Index',
+  'sidebarTool.column.label': 'Label',
+  'sidebarTool.column.script': 'Script Path',
+  'sidebarTool.column.tipTitle': 'Tip Title',
+  'sidebarTool.column.tipDesc': 'Tip Desc',
+  'sidebarTool.column.enabled': 'Enabled',
+  'sidebarTool.column.visible': 'Visible',
+  'sidebarTool.column.operate': 'Action',
+  'sidebarTool.visible.yes': 'Yes',
+  'sidebarTool.visible.no': 'Hidden',
+  'sidebarTool.save.success': 'Saved and synced to online clients',
+  'sidebarTool.reload.success': 'Reloaded and synced to online clients',
+  'sidebarTool.script.placeholder': 'Search by name/path; clear to hide',
+  'sidebarTool.script.search': 'Filter tree by name',
+  'sidebarTool.script.empty': '(No script / hide icon)',
+  'sidebarTool.script.loadFailed': 'Failed to load script tree',
+};
