@@ -102,6 +102,7 @@
   });
   onMounted(() => {
     isInit.value = true;
+    appStore.fetchServerMenuConfig({ silent: true });
   });
 </script>
 

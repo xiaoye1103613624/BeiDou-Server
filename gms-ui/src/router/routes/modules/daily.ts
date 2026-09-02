@@ -53,6 +53,36 @@ const DAILY: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'dailyCheckin',
+      name: 'DailyCheckin',
+      component: () => import('@/views/game/dailyCheckin/index.vue'),
+      meta: {
+        locale: 'menu.game.dailyCheckin',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'activity',
+      name: 'DailyActivity',
+      component: () => import('@/views/game/activity/index.vue'),
+      meta: {
+        locale: 'menu.game.activity',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'sidebarTool',
+      name: 'DailySidebarTool',
+      component: () => import('@/views/game/sidebarTool/index.vue'),
+      meta: {
+        locale: 'menu.game.sidebarTool',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

@@ -53,6 +53,16 @@ const MEMBER: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'ranking',
+      name: 'MemberRanking',
+      component: () => import('@/views/game/ranking/index.vue'),
+      meta: {
+        locale: 'menu.member.ranking',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

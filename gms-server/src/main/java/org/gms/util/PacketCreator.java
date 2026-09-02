@@ -3319,7 +3319,7 @@ public class PacketCreator {
             for (PlayerShop.SoldItem s : sold) {
                 p.writeInt(s.getItemId());
                 p.writeShort(s.getQuantity());
-                p.writeInt(s.getMesos());
+                p.writeInt(GameConstants.mesoToPacketInt(s.getMesos()));
                 p.writeString(s.getBuyer());
             }
         } else {
@@ -5277,7 +5277,7 @@ public class PacketCreator {
             for (HiredMerchant.SoldItem s : sold) {
                 p.writeInt(s.getItemId());
                 p.writeShort(s.getQuantity());
-                p.writeInt(s.getMesos());
+                p.writeInt(GameConstants.mesoToPacketInt(s.getMesos()));
                 p.writeString(s.getBuyer());
             }
             p.writeLong(chr.getMerchantMeso());//:D?

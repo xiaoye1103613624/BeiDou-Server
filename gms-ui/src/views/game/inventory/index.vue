@@ -46,7 +46,7 @@
         <a-tab-pane
           v-for="data in typeList"
           :key="data.inventoryType"
-          :title="data.name"
+          :title="getInventoryTypeTitle(data.inventoryType)"
         >
           <inventory-list
             :character-id="currentCid"
@@ -88,11 +88,14 @@
   import { getInventoryTypeList } from '@/api/inventory';
   import { InventoryTypeState } from '@/store/modules/inventory/type';
   import { ref } from 'vue';
+  import { useI18n } from 'vue-i18n';
   import InventoryList from '@/views/game/inventory/table.vue';
   import CharacterSelector from '@/views/game/inventory/characterSelector.vue';
   import InventoryUI from '@/views/game/inventory/InventoryUI.vue';
 
-  const typeMap = {
+  const { t } = useI18n();
+
+  const typeMap: Record<number | string, string> = {
     0: 'inventory.type.undefined',
     1: 'inventory.type.equipment',
     2: 'inventory.type.consumable',
@@ -101,6 +104,11 @@
     5: 'inventory.type.cash',
     6: 'inventory.type.canPickup',
     '-1': 'inventory.type.equipped',
+  };
+
+  const getInventoryTypeTitle = (inventoryType: number) => {
+    const key = typeMap[inventoryType] ?? typeMap[String(inventoryType)];
+    return key ? t(key) : String(inventoryType);
   };
 
   const typeList = ref<InventoryTypeState[]>([]);

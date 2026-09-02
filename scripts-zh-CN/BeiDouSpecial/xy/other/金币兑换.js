@@ -60,7 +60,7 @@ function action(mode, type, selection) {
         } else {
             // 物品→金币：显示背包数量及可兑换金币
             var text = "\t\t#r#e< 物品 → 金币 >#k#n\r\n\r\n";
-            text += "#d将物品兑换为金币，请注意金币上限#k\r\n";
+            text += "#d将物品兑换为金币#k\r\n";
             text += "\t\t#b当前金币：#r" + formatNumber(cm.getMeso()) + "#k\r\n";
             text += "\t\t#b金币上限：#r无固定上限#k（服务端 BIGINT / mesouncap）\r\n\r\n";
             for (var i = 0; i < exchangeItems.length; i++) {

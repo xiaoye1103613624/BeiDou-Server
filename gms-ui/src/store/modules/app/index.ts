@@ -44,28 +44,37 @@ const useAppStore = defineStore('app', {
     toggleMenu(value: boolean) {
       this.hideMenu = value;
     },
-    async fetchServerMenuConfig() {
+    async fetchServerMenuConfig(options?: { silent?: boolean }) {
+      const silent = options?.silent === true;
       let notifyInstance: NotificationReturn | null = null;
       try {
-        notifyInstance = Notification.info({
-          id: 'menuNotice', // Keep the instance id the same
-          content: 'loading',
-          closable: true,
-        });
+        if (!silent) {
+          notifyInstance = Notification.info({
+            id: 'menuNotice',
+            content: 'loading',
+            closable: true,
+          });
+        }
         const { data } = await getMenuList();
-        this.serverMenu = data;
-        notifyInstance = Notification.success({
-          id: 'menuNotice',
-          content: 'success',
-          closable: true,
-        });
+        this.serverMenu = (data as unknown as RouteRecordNormalized[]) || [];
+        if (!silent) {
+          notifyInstance = Notification.success({
+            id: 'menuNotice',
+            content: 'success',
+            closable: true,
+          });
+        }
       } catch (error) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        notifyInstance = Notification.error({
-          id: 'menuNotice',
-          content: 'error',
-          closable: true,
-        });
+        // 服务端菜单拉取失败时保留本地路由侧栏，不阻断进入后台
+        this.serverMenu = [];
+        if (!silent) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          notifyInstance = Notification.error({
+            id: 'menuNotice',
+            content: 'error',
+            closable: true,
+          });
+        }
       }
     },
     clearServerMenu() {

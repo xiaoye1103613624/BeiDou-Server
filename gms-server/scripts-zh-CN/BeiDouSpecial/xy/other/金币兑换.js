@@ -13,7 +13,6 @@ var exchangeItems = [
     [4031039, "休咪的金币", 100*10000],
 ];
 
-var MAX_MESO = 2147483647;  // 金币上限（Integer.MAX_VALUE）
 var FEE_RATE = 0.05;        // 金币兑换物品的手续费率 5%
 
 var status = 0;
@@ -61,9 +60,9 @@ function action(mode, type, selection) {
         } else {
             // 物品→金币：显示背包数量及可兑换金币
             var text = "\t\t#r#e< 物品 → 金币 >#k#n\r\n\r\n";
-            text += "#d将物品兑换为金币，请注意金币上限#k\r\n";
+            text += "#d将物品兑换为金币#k\r\n";
             text += "\t\t#b当前金币：#r" + formatNumber(cm.getMeso()) + "#k\r\n";
-            text += "\t\t#b金币上限：#r" + formatNumber(MAX_MESO) + "#k\r\n\r\n";
+            text += "\t\t#b金币上限：#r无固定上限#k（服务端 BIGINT / mesouncap）\r\n\r\n";
             for (var i = 0; i < exchangeItems.length; i++) {
                 var item = exchangeItems[i];
                 var owned = cm.getItemQuantity(item[0]);
@@ -100,17 +99,15 @@ function action(mode, type, selection) {
                 cm.dispose();
                 return;
             }
-            // 计算金币上限允许的最大数量
-            var maxByMesoCap = Math.floor((MAX_MESO - cm.getMeso()) / item[2]);
-            var maxQty = Math.min(owned, maxByMesoCap, 999);
+            var maxQty = Math.min(owned, 999);
             if (maxQty <= 0) {
-                cm.sendOk("金币已达上限 #r" + formatNumber(MAX_MESO) + "#k ！\r\n无法再兑换更多金币，请先消耗金币后再来。");
+                cm.sendOk("背包中没有可兑换的 #b" + item[1] + "#k 。");
                 cm.dispose();
                 return;
             }
             cm.sendGetNumber("#i" + item[0] + "# #b" + item[1] + "#k\r\n"
                 + "拥有数量：#r" + owned + "个#k  单价：#r" + formatNumber(item[2]) + "金币#k\r\n"
-                + "金币上限：" + formatNumber(MAX_MESO) + "  当前金币：" + formatNumber(cm.getMeso()) + "\r\n\r\n"
+                + "金币上限：无固定上限  当前金币：" + formatNumber(cm.getMeso()) + "\r\n\r\n"
                 + "请输入兑换数量：", 1, 1, maxQty);
         }
     } else if (status == 3) {
@@ -161,16 +158,6 @@ function action(mode, type, selection) {
             var owned = cm.getItemQuantity(item[0]);
             if (owned < qty) {
                 cm.sendOk("物品不足！拥有 #r" + owned + "个#k，需要 #r" + qty + "个#k。");
-                cm.dispose();
-                return;
-            }
-            // 金币上限检查
-            if (cm.getMeso() + totalGold > MAX_MESO) {
-                cm.sendOk("兑换后金币将超过上限 #r" + formatNumber(MAX_MESO) + "#k ！\r\n"
-                    + "当前金币：" + formatNumber(cm.getMeso()) + "\r\n"
-                    + "兑换可得：" + formatNumber(totalGold) + "\r\n"
-                    + "合计：" + formatNumber(cm.getMeso() + totalGold) + "（超出上限！）\r\n"
-                    + "请减少兑换数量或先消耗金币后再来。");
                 cm.dispose();
                 return;
             }

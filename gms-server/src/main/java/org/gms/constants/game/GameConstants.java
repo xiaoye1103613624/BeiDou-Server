@@ -42,6 +42,10 @@ public class GameConstants {
     public static final int SHOP_MAX_BUY_QUANTITY = 10000;
     /** 玩家商店 / 雇佣商店：单格上架 perBundle × bundles 总量上限。 */
     public static final int SHOP_MAX_LIST_ITEM_QUANTITY = 10000;
+    /** 角色持有金币上限（对齐 characters.meso BIGINT + 客户端 mesouncap）。 */
+    public static final long MAX_MESO = Long.MAX_VALUE;
+    /** 玩家/雇佣商店单 bundle 标价上限（GMS 协议 int32）。 */
+    public static final int SHOP_MAX_LIST_PRICE = Integer.MAX_VALUE;
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
     // Ronan's rates upgrade system
@@ -664,6 +668,21 @@ public class GameConstants {
 
     public synchronized static String numberWithCommas(int i) {
         return NumberFormat.getNumberInstance(Locale.UK).format(i);
+    }
+
+    public synchronized static String numberWithCommas(long i) {
+        return NumberFormat.getNumberInstance(Locale.UK).format(i);
+    }
+
+    /** 将 long 金币饱和到 GMS int32 封包字段（售出记录等仍走 writeInt）。 */
+    public static int mesoToPacketInt(long meso) {
+        if (meso > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        if (meso < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+        return (int) meso;
     }
 
     public synchronized static Number parseNumber(String value) {

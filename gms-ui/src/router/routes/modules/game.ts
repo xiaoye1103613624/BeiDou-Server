@@ -33,6 +33,26 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'windowCashShop',
+      name: 'windowCashShop',
+      component: () => import('@/views/game/windowCashShop/index.vue'),
+      meta: {
+        locale: 'menu.game.windowCashShop',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'sysMenu',
+      name: 'SysMenu',
+      component: () => import('@/views/game/sysMenu/index.vue'),
+      meta: {
+        locale: 'menu.game.sysMenu',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
     // 旧路径兼容（菜单已迁移至 daily / growth / member）
     {
       path: 'weather',

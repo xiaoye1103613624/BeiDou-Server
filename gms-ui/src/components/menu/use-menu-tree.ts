@@ -9,7 +9,8 @@ export default function useMenuTree() {
   const permission = usePermission();
   const appStore = useAppStore();
   const appRoute = computed(() => {
-    if (appStore.menuFromServer) {
+    // 有服务端菜单时优先用于侧栏展示；失败/空则回退本地路由
+    if (appStore.serverMenu?.length) {
       return appStore.appAsyncMenus;
     }
     return appClientMenus;

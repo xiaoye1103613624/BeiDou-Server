@@ -53,6 +53,56 @@ const GROWTH: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'petGrowth',
+      name: 'GrowthPetGrowth',
+      component: () => import('@/views/game/petGrowth/index.vue'),
+      meta: {
+        locale: 'menu.game.petGrowth',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'alchemyRecipe',
+      name: 'GrowthAlchemyRecipe',
+      component: () => import('@/views/game/alchemyRecipe/index.vue'),
+      meta: {
+        locale: 'menu.game.alchemyRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'alchemistRecipe',
+      name: 'GrowthAlchemistRecipe',
+      component: () => import('@/views/game/alchemistRecipe/index.vue'),
+      meta: {
+        locale: 'menu.game.alchemistRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'forgeRecipe',
+      name: 'GrowthForgeRecipe',
+      component: () => import('@/views/game/forgeRecipe/index.vue'),
+      meta: {
+        locale: 'menu.game.forgeRecipe',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'alchemyTier',
+      name: 'GrowthAlchemyTier',
+      component: () => import('@/views/game/alchemyTier/index.vue'),
+      meta: {
+        locale: 'menu.game.alchemyTier',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

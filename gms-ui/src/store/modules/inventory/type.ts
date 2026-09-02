@@ -34,6 +34,7 @@ export interface InventoryState {
   id?: number;
   characterId?: number;
   itemId?: number;
+  itemName?: string;
   itemType?: number;
   inventoryType?: number;
   position?: number;

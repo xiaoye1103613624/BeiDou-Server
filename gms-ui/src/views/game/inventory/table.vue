@@ -35,24 +35,41 @@
       <!--      </a-table-column>-->
       <a-table-column
         :title="$t('inventoryList.column.itemId')"
-        data-index="itemId"
         align="center"
-        :width="130"
-      />
-      <a-table-column :title="$t('inventoryList.column.item')" align="center">
+        :width="260"
+      >
+        <template #cell="{ record }">
+          <span>{{ record.itemId }}</span>
+          <span v-if="displayItemName(record)" class="item-name">
+            {{ displayItemName(record) }}
+          </span>
+        </template>
+      </a-table-column>
+      <a-table-column
+        :title="$t('inventoryList.column.item')"
+        align="center"
+        :width="72"
+      >
         <template #cell="{ record }">
           <a-popover placement="top">
             <template #content>
-              <span>{{
-                record.itemId === 2430033 ? '北斗卫星指导书' : record.itemName
-              }}</span>
+              <span>{{ displayItemName(record) || record.itemId }}</span>
             </template>
             <img
               v-if="record.itemId === 2430033"
+              class="inv-item-icon"
               :src="beidouBook"
               alt="北斗卫星指导书"
             />
-            <img v-else :src="getIconUrl('item', record.itemId)" />
+            <img
+              v-else
+              class="inv-item-icon"
+              :src="getItemIconUrl(record.itemId)"
+              :data-item-id="record.itemId"
+              :alt="displayItemName(record) || String(record.itemId)"
+              @error="onItemIconError"
+              @load="onInventoryIconLoad"
+            />
           </a-popover>
         </template>
       </a-table-column>
@@ -166,13 +183,31 @@
   } from '@/api/inventory';
   import useLoading from '@/hooks/loading';
   import { InventoryState } from '@/store/modules/inventory/type';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { getItemIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
   import { timestampToChineseTime } from '@/utils/stringUtils';
   import beidouBook from '@/assets/2430033.png';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
+
+  const displayItemName = (record: InventoryState) => {
+    if (record.itemId === 2430033) {
+      return '北斗卫星指导书';
+    }
+    return record.itemName?.trim() || '';
+  };
+
+  /** CDN 在道具/NPC 同号时会返回 NPC 立绘（通常远大于 32px 道具图标） */
+  const onInventoryIconLoad = (event: Event) => {
+    const img = event.target as HTMLImageElement | null;
+    if (!img) return;
+    if (!/maplestory\.io/i.test(img.src)) return;
+    if (img.naturalWidth > 48 || img.naturalHeight > 48) {
+      img.style.visibility = 'hidden';
+      img.removeAttribute('src');
+    }
+  };
 
   const props = defineProps<{
     currentType: string | number;
@@ -237,4 +272,16 @@
   };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .item-name {
+    margin-left: 8px;
+    color: var(--color-text-2);
+  }
+
+  .inv-item-icon {
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: contain;
+    vertical-align: middle;
+  }
+</style>
