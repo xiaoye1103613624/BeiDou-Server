@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9063175.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <imgdir name="script">
+      <imgdir name="0">
+        <string name="script" value="npc_9063175"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="speak"/>
+    <int name="dcTop" value="-90"/>
+    <int name="dcRight" value="50"/>
+    <int name="dcBottom" value="0"/>
+    <int name="dcLeft" value="-45"/>
+    <imgdir name="illustration2">
+      <canvas name="base" format="1" scale="0"/>
+      <canvas name="0" format="1" scale="0">
+        <vector name="origin" x="-20" y="-107"/>
+        <int name="z" value="1"/>
+      </canvas>
+      <imgdir name="face">
+        <canvas name="0" format="1" scale="0">
+          <vector name="origin" x="90" y="213"/>
+          <int name="z" value="0"/>
+        </canvas>
+        <canvas name="1" format="1" scale="0">
+          <vector name="origin" x="90" y="213"/>
+          <int name="z" value="0"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <int name="noReflectMirror" value="1"/>
+    <int name="conditionDefault" value="1"/>
+  </imgdir>
+  <imgdir name="stand">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="42" y="87"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="210"/>
+    </canvas>
+    <vector name="head" x="30" y="-120"/>
+  </imgdir>
+  <imgdir name="say">
+    <vector name="head" x="30" y="-120"/>
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="42" y="87"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="210"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="eye">
+    <vector name="head" x="30" y="-120"/>
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="42" y="87"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="210"/>
+    </canvas>
+  </imgdir>
+</imgdir>
