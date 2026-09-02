@@ -2870,11 +2870,12 @@
       <int name="disable" value="1"/>
       <int name="invisible" value="1"/>
     </imgdir>
-    <!-- MapleRoot beginner purple bounce -->
+    <!-- MapleRoot beginner purple bounce (横向/垂直闪跃) -->
     <imgdir name="0001050">
       <imgdir name="level">
         <imgdir name="1">
           <string name="hs" value="h1"/>
+          <int name="mpCon" value="10"/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -2882,6 +2883,7 @@
       <imgdir name="level">
         <imgdir name="1">
           <string name="hs" value="h1"/>
+          <int name="mpCon" value="10"/>
         </imgdir>
       </imgdir>
     </imgdir>
