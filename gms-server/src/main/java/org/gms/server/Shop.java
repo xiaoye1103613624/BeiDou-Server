@@ -105,12 +105,11 @@ public class Shop {
             if (item.getPrice() > 0) {
                 // long multiply — float mantissa loses precision above ~16M (e.g. high price × 10000)
                 long cost = (long) item.getPrice() * (long) quantity;
-                int amount = cost > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) cost;
-                if (c.getPlayer().getMeso() >= amount) {
+                if (c.getPlayer().getMeso() >= cost) {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                         if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
                             InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                            c.getPlayer().gainMeso(-amount, false);
+                            c.getPlayer().gainMeso(-cost, false);
                         } else {
                             quantity = ii.getSlotMax(c, item.getItemId());
                             InventoryManipulator.addById(c, itemId, quantity, "", -1);
@@ -127,7 +126,11 @@ public class Shop {
 
             } else if (item.getPitch() > 0) {
                 long pitchCost = (long) item.getPitch() * (long) quantity;
-                int amount = pitchCost > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) pitchCost;
+                if (pitchCost > Integer.MAX_VALUE) {
+                    c.sendPacket(PacketCreator.shopTransaction((byte) 2));
+                    return;
+                }
+                int amount = (int) pitchCost;
 
                 if (c.getPlayer().getInventory(InventoryType.ETC).countById(ItemId.PERFECT_PITCH) >= amount) {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {

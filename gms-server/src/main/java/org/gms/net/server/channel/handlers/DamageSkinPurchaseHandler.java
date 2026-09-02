@@ -5,6 +5,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.DamageSkinCatalog;
 import org.gms.client.DamageSkinInventory;
+import org.gms.constants.game.GameConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
@@ -14,7 +15,7 @@ public final class DamageSkinPurchaseHandler extends AbstractPacketHandler {
     private static final int OP_PURCHASE = 2;
 
     private static int mesoPacket(long meso) {
-        return meso > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) meso;
+        return GameConstants.mesoToPacketInt(meso);
     }
 
     @Override

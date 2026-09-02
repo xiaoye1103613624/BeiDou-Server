@@ -276,18 +276,18 @@ public class PlayerShop extends AbstractMapObject {
 
                 visitorLock.lock();
                 try {
-                    long price = Math.min((long) pItem.getPrice() * (long) quantity, Integer.MAX_VALUE);
+                    long price = (long) pItem.getPrice() * (long) quantity;
 
                     if (c.getPlayer().getMeso() >= price) {
-                        if (!owner.canHoldMeso((int) price)) {    // thanks Rohenn for noticing owner hold check misplaced
+                        if (!owner.canHoldMeso(price)) {    // thanks Rohenn for noticing owner hold check misplaced
                             c.getPlayer().dropMessage(1, "Transaction failed since the shop owner can't hold any more mesos.");
                             c.sendPacket(PacketCreator.enableActions());
                             return false;
                         }
 
                         if (canBuy(c, newItem)) {
-                            c.getPlayer().gainMeso(-(int) price, false);
-                            int ownerMeso = (int) (price - Trade.getFee((int) price));  // thanks BHB for pointing out trade fees not applying here
+                            c.getPlayer().gainMeso(-price, false);
+                            long ownerMeso = price - Trade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
                             owner.gainMeso(ownerMeso, true);
 
                             SoldItem soldItem = new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), quantity, ownerMeso);
@@ -595,11 +595,12 @@ public class PlayerShop extends AbstractMapObject {
 
     public class SoldItem {
 
-        int itemid, mesos;
+        int itemid;
+        long mesos;
         short quantity;
         String buyer;
 
-        public SoldItem(String buyer, int itemid, short quantity, int mesos) {
+        public SoldItem(String buyer, int itemid, short quantity, long mesos) {
             this.buyer = buyer;
             this.itemid = itemid;
             this.quantity = quantity;
@@ -618,7 +619,7 @@ public class PlayerShop extends AbstractMapObject {
             return quantity;
         }
 
-        public int getMesos() {
+        public long getMesos() {
             return mesos;
         }
     }

@@ -298,11 +298,11 @@ public class HiredMerchant extends AbstractMapObject {
 
             KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
 
-            long price = Math.min((long) pItem.getPrice() * (long) quantity, Integer.MAX_VALUE);
+            long price = (long) pItem.getPrice() * (long) quantity;
             if (c.getPlayer().getMeso() >= price) {
                 if (canBuy(c, newItem)) {
-                    c.getPlayer().gainMeso(-(int) price, false);
-                    int ownerMeso = (int) (price - Trade.getFee((int) price));  // thanks BHB for pointing out trade fees not applying here
+                    c.getPlayer().gainMeso(-price, false);
+                    long ownerMeso = price - Trade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
 
                     synchronized (sold) {
                         sold.add(new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), newItem.getQuantity(), ownerMeso));
@@ -360,7 +360,7 @@ public class HiredMerchant extends AbstractMapObject {
         }
     }
 
-    private void announceItemSold(Item item, int mesos, int inStore) {
+    private void announceItemSold(Item item, long mesos, int inStore) {
         String qtyStr = (item.getQuantity() > 1) ? " x " + item.getQuantity() : "";
 
         Character player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
@@ -794,11 +794,12 @@ public class HiredMerchant extends AbstractMapObject {
 
     public class SoldItem {
 
-        int itemid, mesos;
+        int itemid;
+        long mesos;
         short quantity;
         String buyer;
 
-        public SoldItem(String buyer, int itemid, short quantity, int mesos) {
+        public SoldItem(String buyer, int itemid, short quantity, long mesos) {
             this.buyer = buyer;
             this.itemid = itemid;
             this.quantity = quantity;
@@ -817,7 +818,7 @@ public class HiredMerchant extends AbstractMapObject {
             return quantity;
         }
 
-        public int getMesos() {
+        public long getMesos() {
             return mesos;
         }
     }

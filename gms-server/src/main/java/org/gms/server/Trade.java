@@ -90,7 +90,7 @@ public class Trade {
     /*
     金币税率处理函数
      */
-    public static int getFee(long meso) {
+    public static long getFee(long meso) {
         long fee = 0;
         if (meso >= 100000000) {
             fee = (meso * 6) / 100;
@@ -105,7 +105,7 @@ public class Trade {
         } else if (meso >= 100000) {
             fee = (meso * 8) / 1000;
         }
-        return (int) fee;
+        return fee;
     }
 
     private void lockTrade() {
@@ -139,13 +139,13 @@ public class Trade {
         }
 
         if (exchangeMeso > 0) {//此处对金币交易进行扣税处理
-            int fee = getFee(exchangeMeso);
+            long fee = getFee(exchangeMeso);
 
             chr.gainMeso(exchangeMeso - fee, show, true, show);
             if (fee > 0) {
-                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee", fee, GameConstants.numberWithCommas((int) (exchangeMeso - fee))));
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee", fee, GameConstants.numberWithCommas(exchangeMeso - fee)));
             } else {
-                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee", GameConstants.numberWithCommas((int) exchangeMeso)));
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee", GameConstants.numberWithCommas(exchangeMeso)));
             }
 
             result = TradeResult.NO_RESPONSE.getValue();
