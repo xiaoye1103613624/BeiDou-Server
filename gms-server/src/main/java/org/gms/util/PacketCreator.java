@@ -299,16 +299,22 @@ public class PacketCreator {
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
             short pos = (short) (item.getPosition() * -1);  //修复其他角色无法看到现金勋章
+            // 融合外观（anvil）：外观优先——v83 原生包结构没有 anvil 字段，
+            // 直接把外观 ID 当 itemId 广播，客户端无需改协议即可显示幻化后的外形。
+            int visualId = item.getItemId();
+            if (item instanceof Equip anvilEquip && anvilEquip.getAnvilItemId() != 0) {
+                visualId = anvilEquip.getAnvilItemId();
+            }
             if (pos < 100 && myEquip.get(pos) == null) {
-                myEquip.put(pos, item.getItemId());
+                myEquip.put(pos, visualId);
             } else if (pos > 100 && pos != 111) { // don't ask. o.o
                 pos -= 100;
                 if (myEquip.get(pos) != null) {
                     maskedEquip.put(pos, myEquip.get(pos));
                 }
-                myEquip.put(pos, item.getItemId());
+                myEquip.put(pos, visualId);
             } else if (myEquip.get(pos) != null) {
-                maskedEquip.put(pos, item.getItemId());
+                maskedEquip.put(pos, visualId);
             }
         }
         for (Entry<Short, Integer> entry : myEquip.entrySet()) {
