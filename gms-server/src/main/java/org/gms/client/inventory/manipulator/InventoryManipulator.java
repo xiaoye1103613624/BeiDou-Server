@@ -467,8 +467,13 @@ public class InventoryManipulator {
         Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
         Item item = inv.getItem(slot);
-        int combatItemId = item != null ? item.getItemId() : 0;
-        boolean allowZero = consume && ItemConstants.isRechargeable(item.getItemId());
+        if (item == null) {
+            // 槽位 > 127 时若调用方曾强转 byte 会造成查空，此处兜底，避免空指针击穿整条链路
+            log.warn("removeFromSlot: no item found for char '{}' at inventory type {} slot {} (qty {})", chr.getName(), type.name(), slot, quantity);
+            return;
+        }
+        int combatItemId = item.getItemId();
+        boolean allowZero = consume && ItemConstants.isRechargeable(combatItemId);
 
         if (type == InventoryType.EQUIPPED) {
             inv.lockInventory();

@@ -221,7 +221,8 @@ public class Shop {
         try {
             if (canSell(item, quantity)) {
                 quantity = getSellingQuantity(item, quantity);
-                InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+                // 槽位可至 192（ExpandItem），强转 byte 会把 >127 的槽位截断成负数，导致 removeFromSlot 找不到物品而 NPE
+                InventoryManipulator.removeFromSlot(c, type, slot, quantity, false);
 
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 int recvMesos = ii.getPrice(item.getItemId(), quantity);

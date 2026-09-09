@@ -10101,7 +10101,7 @@ public class Character extends AbstractCharacterObject {
             short iQuant = item.getQuantity();
 
             if (quantity <= iQuant && iQuant > 0) {
-                InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+                InventoryManipulator.removeFromSlot(c, type, slot, quantity, false);
                 int recvMesos = ii.getPrice(itemid, quantity);
                 if (recvMesos > 0) {
                     gainMeso(recvMesos, false);
@@ -10266,7 +10266,7 @@ public class Character extends AbstractCharacterObject {
             statUps.put(s.getKey(), newVal);
         }
 
-        InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+        InventoryManipulator.removeFromSlot(c, type, slot, quantity, false);
     }
 
     public void setSlot(int slotid) {
