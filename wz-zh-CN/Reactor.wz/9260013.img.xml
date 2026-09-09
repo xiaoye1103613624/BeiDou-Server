@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9260013.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <string name="info" value="암호 찾기 : 주황 버섯"/>
+  </imgdir>
+  <imgdir name="0">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="0" y="0"/>
+      <int name="delay" value="1230"/>
+    </canvas>
+    <imgdir name="event">
+      <int name="timeOut" value="2000"/>
+      <imgdir name="0">
+        <int name="type" value="101"/>
+        <int name="state" value="1"/>
+        <imgdir name="hit">
+          <uol name="0" value="../../../0"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="0" y="0"/>
+      <int name="delay" value="1230"/>
+    </canvas>
+    <imgdir name="event">
+      <int name="timeOut" value="2000"/>
+      <imgdir name="0">
+        <int name="type" value="101"/>
+        <int name="state" value="1"/>
+        <imgdir name="hit">
+          <uol name="0" value="../../../../0/0"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <string name="action" value="poisonGenerator"/>
+</imgdir>

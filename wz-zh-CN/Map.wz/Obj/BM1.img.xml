@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="bm1.img" indent="2" media="NONE">
+  <imgdir name="1-2">
+    <imgdir name="cannon">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="300" y="288"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="cfce8ec0386e0bc6bf5084080e1be9c81143231f15feff3aeff0e038902851a4"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="300" y="250"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="364fa3a26c5016a6a1960c63d61071a9491a1d295efba96c9355d4bd7b9a5941"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="handrail">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="73"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="8fc17b7df918398a590f19e4097728785f99711325855d91cf24248b8f41051f"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="63"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="1cb8de2fb382069a833454ba78281f33a57b2ddeca248e882c055574c4fdc970"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="63"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="69bcc4b6e63422072dc51e5facdc42e649c8dc2d0082a9c1b2fb2f017e01718c"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="floor_noFoothold">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="225" y="100"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="foothold/1-2/0/0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="225" y="100"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="foothold/1-2/1/0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="450" y="100"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="foothold/1-2/7/0"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="compass">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="61" y="198"/>
+          <string name="_hash" value="26e10203bf0260778d04b570bc0d4fdc2f1785916fbc6b592ee09077bb3a10bd"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="61" y="198"/>
+          <string name="_hash" value="30ef2a26b74aa74417e32880b1aaf815f9d1874ed32e5c520e92303eaec6071a"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="14" y="14"/>
+          <string name="_inlink" value="1-1/compass/2/0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="3">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="14" y="14"/>
+          <string name="_inlink" value="1-1/compass/3/0"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="cockpit">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <int name="z" value="0"/>
+          <vector name="origin" x="908" y="411"/>
+          <imgdir name="foothold">
+            <extended name="0">
+              <vector name="0" x="-907" y="287"/>
+            </extended>
+            <extended name="1">
+              <vector name="1" x="-837" y="276"/>
+            </extended>
+            <extended name="2">
+              <vector name="2" x="-663" y="-291"/>
+            </extended>
+            <extended name="3">
+              <vector name="3" x="-615" y="44"/>
+            </extended>
+          </imgdir>
+          <string name="_hash" value="2bf793351403d5baf3c056e2bb59db7340e46832f312a3fa0a7d13c6484974dd"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="354" y="439"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="6e473ce53718d299ccc7c4fb2a0aa500c3c2ae8cda15485e228faf238ac6299a"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="144" y="301"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="ed60f42a2ccd2ba7b5f5d2f722ea4ddac9e35d1da5107f0538c576c7ad0698b8"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="common">
+    <imgdir name="obj">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="42" y="25"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="09a230ce10b91b8862b7be45b929b2e2609233d4430b54a659ba401e9fd707ee"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="56" y="60"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="7e5cd379f7eecb6cd87ba505f2d985255f4018b300ef213d3630caf53dda2a67"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="40" y="95"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="BMpre/obj/2/0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="3">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="112" y="112"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="9e620b94e8526aa65a9de5e335a04abc356b9fd400612cd349bfd2082b73ec45"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="4">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="60" y="53"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="BMpre/obj/6/0"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1-3">
+    <imgdir name="obj">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="155" y="75"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="4025540fb8aa6ebd496266352e6599e8ee854dcf5c3f72ff71097b06a3ce0793"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="92" y="74"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="f2487b70d02af9a7c506d261bc3ad4ec6826f1cf6d89d5a43195ca36cda55f5f"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="199" y="321"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="001ee5b5caedccfcc9f8feaeb648bbedaa2ca1309674020b1d57fd1d596e9d36"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="3">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="221" y="132"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="6bc916a76e3c9dff9260d0f34716f86c8150950eb46cd20d17452e2b3440ea7d"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="4">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="348" y="309"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="91764ca9cf8cde1ab833b4510d9e33336c0ab5a94f19afa210030f34595a3366"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="handrail">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="95"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="9a8f65aa679fe6c6e618d3869813f15f78b6fa31502e406e107bfddbbd033957"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="356" y="95"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="88133a562e93933d194f71f9c87bb4a27c7a965593bd1580c4808e0d303ccace"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1-1">
+    <imgdir name="cannon">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="300" y="288"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="8d96625831d6f3f772eaedaa7b53f75397fb55cd7ec304008c48e7591a518e54"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="300" y="250"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="6f6e9a6f11cb71d6fb475d43aa1071a8beee36628c4efc03f8f54c6f36242183"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="handrail">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="73"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="dd934bee7e2929e98d80beeef4357ffc5d30cf7e8c588aaa52d361447dcbb972"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="63"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="6121a97442de65f2921e6c0aa84300e95dab4eba9ee825103b892b623b6005d4"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="250" y="63"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="e8040e9b8afd4c78010c63a9119c59cc400e5efec17f461ed2304a93b405c39b"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="compass">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="61" y="198"/>
+          <string name="_hash" value="d3d12a74e0afcc7eb34f8eddc393dd1575860b47ea1a6ec80072b46c7eb2471a"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="61" y="198"/>
+          <string name="_hash" value="668cba12fed6660a1b46bc0c982c13d35c520f8989fd7f592788de1ea2dee631"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="14" y="14"/>
+          <string name="_hash" value="2dec2ef4a0b001e3c8fd6f99bc666c138bc9d0ad49e431d7b1f7bb140eeccff0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="3">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="14" y="14"/>
+          <string name="_hash" value="0a142c0e8a4ffa6a5b3476dfe28d521aa23ef6b2158bf9c493df358096dcc52e"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="floor_noFoothold">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="225" y="100"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="foothold/1-1/0/0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="225" y="100"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="foothold/1-1/1/0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="450" y="100"/>
+          <int name="z" value="0"/>
+          <string name="_inlink" value="foothold/1-1/7/0"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="cockpit">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <int name="z" value="0"/>
+          <vector name="origin" x="908" y="411"/>
+          <imgdir name="foothold">
+            <extended name="0">
+              <vector name="0" x="-907" y="287"/>
+            </extended>
+            <extended name="1">
+              <vector name="1" x="-837" y="276"/>
+            </extended>
+            <extended name="2">
+              <vector name="2" x="-663" y="-291"/>
+            </extended>
+            <extended name="3">
+              <vector name="3" x="-615" y="44"/>
+            </extended>
+          </imgdir>
+          <string name="_hash" value="5604017f25478554d5ccbc202e250a8d2795c0853619db41316deb1a6db4e434"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="354" y="439"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="4551c81bb2bd1f33e6136c732533d152344740731ea7d0a8430c0f29b4f4589e"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="2">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="144" y="301"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="decc168f546ec2c629076c3ce57d66b9ab3aebe97950244894d0322af5b38757"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="boss">
+    <imgdir name="spine">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="517" y="507"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="307048eb6bebdd2a1c3c4b6660e75938ff119884a00f7d1e6cd410ba9cf9d8ca"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="1">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="516" y="521"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="82141ce646d30e4bb65e9d859eb9160b50ac3b872bbf63ee583d33ee821d8253"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="foothold">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="750" y="130"/>
+          <int name="z" value="0"/>
+          <extended name="foothold">
+            <vector name="foothold" x="-750" y="28"/>
+          </extended>
+          <string name="_hash" value="1515d5f02a0a1dbb1a7dd0c77e0d4eb6ef4af18dc6754a0ed31618021375e436"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+    <imgdir name="obj">
+      <imgdir name="0">
+        <canvas name="0" format="2" scale="0">
+          <vector name="origin" x="259" y="270"/>
+          <int name="z" value="0"/>
+          <string name="_hash" value="f8eefc3792428b2308409a66ad2850ffe6e28b7c8560d5b837b0ce553e5d18fb"/>
+        </canvas>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>

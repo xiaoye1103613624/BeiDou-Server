@@ -95,7 +95,7 @@
               <a-divider>{{ $t('setItem.tier.basic') }}</a-divider>
               <a-row :gutter="8">
                 <a-col v-for="f in basicFields" :key="f.key" :span="6">
-                  <a-form-item :label="f.label">
+                  <a-form-item :label="$t(f.labelKey)">
                     <a-input-number
                       v-model="currentTier.stats![f.key]"
                       :min="0"
@@ -107,7 +107,7 @@
               <a-divider>{{ $t('setItem.tier.percent') }}</a-divider>
               <a-row :gutter="8">
                 <a-col v-for="f in percentFields" :key="f.key" :span="6">
-                  <a-form-item :label="f.label">
+                  <a-form-item :label="$t(f.labelKey)">
                     <a-input-number
                       v-model="currentTier.statsPercent![f.key]"
                       :min="0"
@@ -122,7 +122,7 @@
                   <a-form-item>
                     <template #label>
                       <a-tooltip :content="$t(f.hint)">
-                        <span>{{ f.label }}</span>
+                        <span>{{ $t(f.labelKey) }}</span>
                       </a-tooltip>
                     </template>
                     <a-input-number
@@ -222,17 +222,7 @@
         </a-tab-pane>
 
         <a-tab-pane key="preview" :title="$t('setItem.tab.preview')">
-          <a-form-item :label="$t('setItem.color')">
-            <a-select v-model="tooltipColor" style="width: 200px">
-              <a-option
-                v-for="(item, key) in colorOptions"
-                :key="String(key)"
-                :value="String(key)"
-              >
-                {{ item.label }} ({{ item.code }})
-              </a-option>
-            </a-select>
-          </a-form-item>
+          <div class="preview-hint">{{ $t('setItem.preview.tip') }}</div>
           <div class="preview-toolbar">
             <span class="preview-label">{{ $t('setItem.preview.count') }}</span>
             <a-slider
@@ -243,15 +233,44 @@
               :marks="previewMarks"
               show-ticks
               :format-tooltip="formatPreviewTooltip"
-              @change="runPreview"
             />
-            <a-button size="small" @click="runPreview">{{
-              $t('setItem.preview.refresh')
-            }}</a-button>
           </div>
-          <a-typography-paragraph>
-            <pre class="preview-box">{{ previewText }}</pre>
-          </a-typography-paragraph>
+          <div class="set-tip">
+            <div class="set-tip-title">{{ tipTitle }}</div>
+            <div
+              v-for="(row, idx) in tipItems"
+              :key="`item-${idx}-${row.itemId}`"
+              class="set-tip-item"
+              :class="row.state"
+            >
+              <span class="set-tip-item-name">{{ row.name }}</span>
+              <span v-if="row.slot" class="set-tip-item-slot"
+                >({{ row.slot }})</span
+              >
+            </div>
+            <template v-for="(tier, tidx) in tipTiers" :key="`tier-${tier.count}`">
+              <div class="set-tip-sep" />
+              <div
+                class="set-tip-tier-header"
+                :class="{ active: tier.active, inactive: !tier.active }"
+              >
+                {{ $t('setItem.preview.effect', { n: tier.count }) }}
+              </div>
+              <div
+                v-for="(line, lidx) in tier.lines"
+                :key="`tier-${tidx}-line-${lidx}`"
+                class="set-tip-stat"
+                :class="{
+                  active: tier.active,
+                  inactive: !tier.active,
+                  accent: line.accent,
+                }"
+              >
+                <span class="set-tip-stat-label">{{ line.label }} : </span>
+                <span class="set-tip-stat-value">+{{ line.value }}{{ line.suffix }}</span>
+              </div>
+            </template>
+          </div>
         </a-tab-pane>
       </a-tabs>
 
@@ -270,9 +289,7 @@
     SetItemDetail,
     SetItemTiersV2,
     SetTier,
-    getSetItemColors,
     parseTiersJson,
-    previewSetItem,
     reloadSetItem,
     saveSetItem,
     stringifyTiersJson,
@@ -291,9 +308,6 @@
   const saving = ref(false);
   const selectedTierIndex = ref(0);
   const previewCount = ref(0);
-  const previewText = ref('');
-  const tooltipColor = ref('SET_BONUS');
-  const colorOptions = ref<Record<string, { code: string; label: string }>>({});
 
   const form = reactive<SetItemDetail>({
     setId: 0,
@@ -308,49 +322,72 @@
   const tiersModel = reactive<SetItemTiersV2>({ schemaVersion: 2, tiers: [] });
 
   const basicFields = [
-    { key: 'str', label: 'STR' },
-    { key: 'dex', label: 'DEX' },
-    { key: 'int', label: 'INT' },
-    { key: 'luk', label: 'LUK' },
-    { key: 'pad', label: 'PAD' },
-    { key: 'mad', label: 'MAD' },
-    { key: 'pdd', label: 'PDD' },
-    { key: 'mdd', label: 'MDD' },
-    { key: 'acc', label: 'ACC' },
-    { key: 'eva', label: 'EVA' },
-    { key: 'mhp', label: 'HP' },
-    { key: 'mmp', label: 'MP' },
-    { key: 'allStat', label: '全属性' },
-    { key: 'speed', label: 'Speed' },
-    { key: 'jump', label: 'Jump' },
+    { key: 'str', labelKey: 'setItem.stat.str' },
+    { key: 'dex', labelKey: 'setItem.stat.dex' },
+    { key: 'int', labelKey: 'setItem.stat.int' },
+    { key: 'luk', labelKey: 'setItem.stat.luk' },
+    { key: 'pad', labelKey: 'setItem.stat.pad' },
+    { key: 'mad', labelKey: 'setItem.stat.mad' },
+    { key: 'pdd', labelKey: 'setItem.stat.pdd' },
+    { key: 'mdd', labelKey: 'setItem.stat.mdd' },
+    { key: 'acc', labelKey: 'setItem.stat.acc' },
+    { key: 'eva', labelKey: 'setItem.stat.eva' },
+    { key: 'mhp', labelKey: 'setItem.stat.mhp' },
+    { key: 'mmp', labelKey: 'setItem.stat.mmp' },
+    { key: 'allStat', labelKey: 'setItem.stat.allStat' },
+    { key: 'speed', labelKey: 'setItem.stat.speed' },
+    { key: 'jump', labelKey: 'setItem.stat.jump' },
   ] as const;
 
   const percentFields = [
-    { key: 'strR', label: 'STR%' },
-    { key: 'dexR', label: 'DEX%' },
-    { key: 'intR', label: 'INT%' },
-    { key: 'lukR', label: 'LUK%' },
-    { key: 'mhpR', label: 'HP%' },
-    { key: 'mmpR', label: 'MP%' },
+    { key: 'strR', labelKey: 'setItem.stat.strR' },
+    { key: 'dexR', labelKey: 'setItem.stat.dexR' },
+    { key: 'intR', labelKey: 'setItem.stat.intR' },
+    { key: 'lukR', labelKey: 'setItem.stat.lukR' },
+    { key: 'mhpR', labelKey: 'setItem.stat.mhpR' },
+    { key: 'mmpR', labelKey: 'setItem.stat.mmpR' },
   ] as const;
 
   const combatFields = [
-    { key: 'damR', label: '伤害%', hint: 'setItem.hint.additive' },
-    { key: 'bdR', label: 'Boss%', hint: 'setItem.hint.boss' },
-    { key: 'nbdR', label: '普通怪%', hint: 'setItem.hint.normal' },
-    { key: 'fdR', label: '最终伤害%', hint: 'setItem.hint.multi' },
-    { key: 'ignoreMobpdpR', label: '无视物防%', hint: 'setItem.hint.cap' },
-    { key: 'ignoreMobmdR', label: '无视魔防%', hint: 'setItem.hint.cap' },
-    { key: 'cr', label: '暴击率%', hint: 'setItem.hint.cap' },
-    { key: 'cd', label: '暴击伤害%', hint: 'setItem.hint.additive' },
+    {
+      key: 'damR',
+      labelKey: 'setItem.stat.damR',
+      hint: 'setItem.hint.additive',
+    },
+    { key: 'bdR', labelKey: 'setItem.stat.bdR', hint: 'setItem.hint.boss' },
+    {
+      key: 'nbdR',
+      labelKey: 'setItem.stat.nbdR',
+      hint: 'setItem.hint.normal',
+    },
+    { key: 'fdR', labelKey: 'setItem.stat.fdR', hint: 'setItem.hint.multi' },
+    {
+      key: 'ignoreMobpdpR',
+      labelKey: 'setItem.stat.ignoreMobpdpR',
+      hint: 'setItem.hint.cap',
+    },
+    {
+      key: 'ignoreMobmdR',
+      labelKey: 'setItem.stat.ignoreMobmdR',
+      hint: 'setItem.hint.cap',
+    },
+    { key: 'cr', labelKey: 'setItem.stat.cr', hint: 'setItem.hint.cap' },
+    { key: 'cd', labelKey: 'setItem.stat.cd', hint: 'setItem.hint.additive' },
   ] as const;
+
+  type TipStatLine = {
+    label: string;
+    value: number;
+    suffix: string;
+    accent?: boolean;
+  };
 
   const currentTier = computed(() => tiersModel.tiers[selectedTierIndex.value]);
   const maxTierCount = computed(() =>
     tiersModel.tiers.reduce((m, tier) => Math.max(m, tier.count || 0), 0)
   );
   const previewMax = computed(() =>
-    Math.max(form.completeCount || 0, maxTierCount.value, 1)
+    Math.max(form.completeCount || 0, maxTierCount.value, parsedItemIds.value.length, 1)
   );
   const previewMarks = computed(() => {
     const marks: Record<number, string> = { 0: '0' };
@@ -369,6 +406,180 @@
 
   const formatPreviewTooltip = (value: number) =>
     `${value} ${t('setItem.tier.piece')}`;
+
+  const getEquipSortKey = (itemId: number) => {
+    const cat = Math.floor(itemId / 10000);
+    if ((cat >= 130 && cat <= 149) || cat === 170) {
+      return 1000 + cat;
+    }
+    const order: Record<number, number> = {
+      100: 10,
+      101: 20,
+      102: 30,
+      103: 40,
+      104: 50,
+      105: 55,
+      106: 60,
+      107: 70,
+      108: 80,
+      109: 85,
+      110: 90,
+      113: 95,
+      115: 96,
+      112: 97,
+      111: 98,
+      114: 99,
+    };
+    return order[cat] ?? 200 + cat;
+  };
+
+  const getSlotLabel = (itemId: number) => {
+    const cat = Math.floor(itemId / 10000);
+    const key = `setItem.slot.${cat}`;
+    const translated = t(key);
+    if (translated !== key) {
+      return translated;
+    }
+    if (itemId >= 1300000 && itemId < 1500000) {
+      return t('setItem.slot.weapon');
+    }
+    if (cat === 170) {
+      return t('setItem.slot.weapon');
+    }
+    return '';
+  };
+
+  const parsedItemIds = computed(() => {
+    const raw = form.itemIds || '';
+    const ids = raw
+      .split(/[,，\s]+/)
+      .map((s) => Number(s.trim()))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    return [...new Set(ids)].sort(
+      (a, b) => getEquipSortKey(a) - getEquipSortKey(b)
+    );
+  });
+
+  const tipTitle = computed(
+    () => form.setName?.trim() || t('setItem.detail.title')
+  );
+
+  const tipItems = computed(() => {
+    const equipped = previewCount.value;
+    return parsedItemIds.value.map((itemId, idx) => {
+      const equippedRow = idx < equipped;
+      return {
+        itemId,
+        name: String(itemId),
+        slot: getSlotLabel(itemId),
+        state: equippedRow ? 'equipped' : 'missing',
+      };
+    });
+  });
+
+  const pushStat = (
+    lines: TipStatLine[],
+    label: string,
+    value: number | undefined,
+    suffix = '',
+    accent = false
+  ) => {
+    const v = Number(value) || 0;
+    if (!v) return;
+    lines.push({ label, value: v, suffix, accent });
+  };
+
+  const buildTierLines = (tier: SetTier): TipStatLine[] => {
+    const lines: TipStatLine[] = [];
+    const s = tier.stats || {};
+    const p = tier.statsPercent || {};
+    const c = tier.combatStats || {};
+
+    const str = Number(s.str) || 0;
+    const dex = Number(s.dex) || 0;
+    const int_ = Number(s.int) || 0;
+    const luk = Number(s.luk) || 0;
+    if (str && str === dex && str === int_ && str === luk) {
+      pushStat(lines, t('setItem.tip.allStat'), str);
+    } else {
+      pushStat(lines, t('setItem.stat.str'), str);
+      pushStat(lines, t('setItem.stat.dex'), dex);
+      pushStat(lines, t('setItem.stat.int'), int_);
+      pushStat(lines, t('setItem.stat.luk'), luk);
+    }
+
+    const pad = Number(s.pad) || 0;
+    const mad = Number(s.mad) || 0;
+    if (pad && pad === mad) {
+      pushStat(lines, t('setItem.tip.padMad'), pad, '', true);
+    } else {
+      pushStat(lines, t('setItem.stat.pad'), pad, '', true);
+      pushStat(lines, t('setItem.stat.mad'), mad, '', true);
+    }
+
+    const mhp = Number(s.mhp) || 0;
+    const mmp = Number(s.mmp) || 0;
+    if (mhp && mhp === mmp) {
+      pushStat(lines, t('setItem.tip.mhpMmp'), mhp);
+    } else {
+      pushStat(lines, t('setItem.stat.mhp'), mhp);
+      pushStat(lines, t('setItem.stat.mmp'), mmp);
+    }
+
+    pushStat(lines, t('setItem.stat.pdd'), s.pdd);
+    pushStat(lines, t('setItem.stat.mdd'), s.mdd);
+    pushStat(lines, t('setItem.stat.acc'), s.acc);
+    pushStat(lines, t('setItem.stat.eva'), s.eva);
+    pushStat(lines, t('setItem.stat.allStat'), s.allStat);
+    pushStat(lines, t('setItem.stat.speed'), s.speed);
+    pushStat(lines, t('setItem.stat.jump'), s.jump);
+
+    pushStat(lines, t('setItem.stat.str'), p.strR, '%');
+    pushStat(lines, t('setItem.stat.dex'), p.dexR, '%');
+    pushStat(lines, t('setItem.stat.int'), p.intR, '%');
+    pushStat(lines, t('setItem.stat.luk'), p.lukR, '%');
+    pushStat(lines, t('setItem.stat.mhp'), p.mhpR, '%');
+    pushStat(lines, t('setItem.stat.mmp'), p.mmpR, '%');
+
+    pushStat(lines, t('setItem.stat.damR').replace(/%$/, ''), c.damR, '%', true);
+    pushStat(lines, t('setItem.stat.bdR').replace(/%$/, ''), c.bdR, '%', true);
+    pushStat(lines, t('setItem.stat.nbdR').replace(/%$/, ''), c.nbdR, '%', true);
+    pushStat(
+      lines,
+      t('setItem.stat.ignoreMobpdpR').replace(/%$/, ''),
+      c.ignoreMobpdpR,
+      '%',
+      true
+    );
+    pushStat(
+      lines,
+      t('setItem.stat.ignoreMobmdR').replace(/%$/, ''),
+      c.ignoreMobmdR,
+      '%',
+      true
+    );
+    pushStat(lines, t('setItem.stat.fdR').replace(/%$/, ''), c.fdR, '%', true);
+    pushStat(lines, t('setItem.stat.cr').replace(/%$/, ''), c.cr, '%', true);
+    pushStat(lines, t('setItem.stat.cd').replace(/%$/, ''), c.cd, '%', true);
+
+    return lines;
+  };
+
+  const tipTiers = computed(() => {
+    const count = previewCount.value;
+    return [...tiersModel.tiers]
+      .filter((tier) => tier.enabled !== false)
+      .sort((a, b) => (a.count || 0) - (b.count || 0))
+      .map((tier) => {
+        const lines = buildTierLines(tier);
+        return {
+          count: tier.count || 0,
+          active: count >= (tier.count || 0),
+          lines,
+        };
+      })
+      .filter((tier) => tier.count > 0 && tier.lines.length > 0);
+  });
 
   const ensureTierShape = (tier: SetTier) => {
     tier.enabled = tier.enabled !== false;
@@ -401,7 +612,6 @@
       .map((tier) => tier.count || 0)
       .filter((count) => count > 0);
     previewCount.value = tierCounts.length ? Math.min(...tierCounts) : 0;
-    previewText.value = '';
   };
 
   watch(
@@ -409,6 +619,12 @@
     (rec) => loadRecord(rec),
     { immediate: true }
   );
+
+  watch(previewMax, (max) => {
+    if (previewCount.value > max) {
+      previewCount.value = max;
+    }
+  });
 
   const onTierSelect = (key: string) => {
     selectedTierIndex.value = Number(key);
@@ -492,17 +708,6 @@
     currentTier.value?.skillMods?.splice(idx, 1);
   };
 
-  const runPreview = async () => {
-    if (!form.setId) return;
-    form.tiersJson = stringifyTiersJson(tiersModel);
-    await saveSetItem(form);
-    const { data } = await previewSetItem({
-      setId: form.setId,
-      equippedCount: previewCount.value,
-    });
-    previewText.value = data?.tooltipText ?? '';
-  };
-
   const handleSave = async () => {
     saving.value = true;
     try {
@@ -518,22 +723,15 @@
   };
 
   const handleClose = () => emit('update:visible', false);
-
-  const loadColors = async () => {
-    try {
-      const { data } = await getSetItemColors();
-      colorOptions.value = data || {};
-    } catch {
-      colorOptions.value = {
-        SET_BONUS: { code: '#g', label: '绿色' },
-      };
-    }
-  };
-
-  loadColors();
 </script>
 
 <style scoped>
+  .preview-hint {
+    margin-bottom: 8px;
+    color: var(--color-text-3);
+    font-size: 12px;
+  }
+
   .preview-toolbar {
     display: flex;
     align-items: center;
@@ -551,11 +749,83 @@
     padding: 0 8px 20px;
   }
 
-  .preview-box {
-    white-space: pre-wrap;
-    background: var(--color-fill-2);
-    padding: 12px;
-    border-radius: 4px;
-    min-height: 120px;
+  .set-tip {
+    width: 280px;
+    max-width: 100%;
+    padding: 10px 12px 12px;
+    background: rgba(8, 16, 40, 0.92);
+    border: 1px solid rgba(220, 230, 255, 0.85);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.35;
+    font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+    user-select: none;
+  }
+
+  .set-tip-title {
+    text-align: center;
+    color: #ccff00;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .set-tip-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 2px 0;
+  }
+
+  .set-tip-item.equipped {
+    color: #ffcc00;
+  }
+
+  .set-tip-item.missing {
+    color: #9a9a9a;
+  }
+
+  .set-tip-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .set-tip-item-slot {
+    flex-shrink: 0;
+  }
+
+  .set-tip-sep {
+    height: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.75);
+    margin: 8px 0 6px;
+  }
+
+  .set-tip-tier-header {
+    margin-bottom: 2px;
+  }
+
+  .set-tip-tier-header.active {
+    color: #ffffff;
+  }
+
+  .set-tip-tier-header.inactive {
+    color: #9a9a9a;
+  }
+
+  .set-tip-stat {
+    padding-left: 1em;
+    margin: 1px 0;
+  }
+
+  .set-tip-stat.active {
+    color: #efefef;
+  }
+
+  .set-tip-stat.active.accent {
+    color: #ffcc00;
+  }
+
+  .set-tip-stat.inactive {
+    color: #9a9a9a;
   }
 </style>

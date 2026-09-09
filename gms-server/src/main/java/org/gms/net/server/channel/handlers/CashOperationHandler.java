@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
 import org.gms.server.CashShop.CashItemFactory;
+import org.gms.server.cashshop.InventorySlotCashItems;
 import org.gms.server.ItemInformationProvider;
 import org.gms.service.NoteService;
 import org.gms.util.PacketCreator;
@@ -186,22 +187,29 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     int cash = p.readInt();
                     byte mode = p.readByte();
                     if (mode == 0) {
-                        byte type = p.readByte();
+                        final byte clientType = p.readByte();
+                        if (clientType < 0 || clientType > 3) {
+                            c.enableCSActions();
+                            return;
+                        }
+                        final int invType = clientType + 1;
                         if (cs.getCash(cash) < 4000) {
                             c.enableCSActions();
                             return;
                         }
                         int qty = 4;
-                        if (!chr.canGainSlots(type, qty)) {
+                        if (!chr.canGainSlots(invType, qty)) {
                             c.enableCSActions();
                             return;
                         }
                         cs.gainCash(cash, -4000);
-                        if (chr.gainSlots(type, qty, false)) {
-                            c.sendPacket(PacketCreator.showBoughtInventorySlots(type, (short) chr.getSlots(type)));
+                        if (chr.gainSlots(invType, qty, false)) {
+                            c.sendPacket(PacketCreator.showBoughtInventorySlots(
+                                    clientType, (short) chr.getSlots(invType)));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            log.warn("Could not add {} slots of type {} for chr {}", qty, type, Character.makeMapleReadable(chr.getName()));
+                            log.warn("Could not add {} slots of invType {} for chr {}",
+                                    qty, invType, Character.makeMapleReadable(chr.getName()));
                         }
                     } else {
                         ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
@@ -209,22 +217,40 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         }
-                        int type = (cItem.getItemId() - 9110000) / 1000;
+                        final int itemId = cItem.getItemId();
+                        final InventorySlotCashItems.Spec slotSpec = InventorySlotCashItems.get(itemId);
+                        final int invType;
+                        final int clientType;
+                        final int qty;
+                        if (slotSpec != null) {
+                            invType = slotSpec.invType();
+                            clientType = invType - 1;
+                            qty = slotSpec.qty();
+                        } else {
+                            clientType = (itemId - 9110000) / 1000;
+                            if (clientType < 0 || clientType > 3) {
+                                c.enableCSActions();
+                                return;
+                            }
+                            invType = clientType + 1;
+                            qty = 8;
+                        }
                         if (!canBuy(chr, cItem, cs.getCash(cash))) {
                             c.enableCSActions();
                             return;
                         }
-                        int qty = 8;
-                        if (!chr.canGainSlots(type, qty)) {
+                        if (!chr.canGainSlots(invType, qty)) {
                             c.enableCSActions();
                             return;
                         }
                         cs.gainCash(cash, cItem, chr.getWorld());
-                        if (chr.gainSlots(type, qty, false)) {
-                            c.sendPacket(PacketCreator.showBoughtInventorySlots(type, (short) chr.getSlots(type)));
+                        if (chr.gainSlots(invType, qty, false)) {
+                            c.sendPacket(PacketCreator.showBoughtInventorySlots(
+                                    clientType, (short) chr.getSlots(invType)));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            log.warn("Could not add {} slots of type {} for chr {}", qty, type, Character.makeMapleReadable(chr.getName()));
+                            log.warn("Could not add {} slots of invType {} for chr {}",
+                                    qty, invType, Character.makeMapleReadable(chr.getName()));
                         }
                     }
                 } else if (action == 0x07) { // Increase Storage Slots

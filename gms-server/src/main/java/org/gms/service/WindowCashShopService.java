@@ -15,6 +15,7 @@ import org.gms.model.dto.WindowCashShopClientSyncRtnDTO;
 import org.gms.model.dto.WindowCashShopIconSyncReqDTO;
 import org.gms.model.dto.WindowCashShopIconSyncRtnDTO;
 import org.gms.server.ItemInformationProvider;
+import org.gms.server.cashshop.AltairSkinItems;
 import org.gms.server.cashshop.CashShopAssetCheck;
 import org.gms.server.cashshop.CashShopCatalog;
 import org.gms.server.cashshop.CashShopClickType;
@@ -740,13 +741,7 @@ public class WindowCashShopService {
             final long cnt = categoryItemMapper.selectCountByQuery(
                     QueryWrapper.create().eq("category_id", skinId));
             if (cnt == 0) {
-                final List<Integer> ids = new ArrayList<>();
-                final ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                for (int id = 1008900; id <= 1009999; id++) {
-                    if (ii.itemExists(id)) {
-                        ids.add(id);
-                    }
-                }
+                final List<Integer> ids = new ArrayList<>(AltairSkinItems.allIds());
                 m.put("skinImport", importItems(skinId, ids, 100000, false));
             }
         }

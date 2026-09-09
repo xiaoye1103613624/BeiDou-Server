@@ -11,15 +11,21 @@ SET `itemid` = `itemid` - 700000
 WHERE `itemid` BETWEEN 1708900 AND 1709999;
 
 -- ---------- 2. 窗口商城：先删 category_item 中 Weapon 段重复（Cap 段已存在） ----------
+-- MySQL 禁止 DELETE 目标表出现在子查询 FROM；weapon 行用派生表隔离
 DELETE ci
 FROM `xy_cashshop_category_item` ci
-WHERE ci.`item_id` BETWEEN 1708900 AND 1709999
-  AND EXISTS (
-    SELECT 1
-    FROM `xy_cashshop_category_item` cap
-    WHERE cap.`category_id` = ci.`category_id`
-      AND cap.`item_id` = ci.`item_id` - 700000
-);
+INNER JOIN (
+    SELECT w.`category_id`, w.`item_id`
+    FROM (
+        SELECT `category_id`, `item_id`
+        FROM `xy_cashshop_category_item`
+        WHERE `item_id` BETWEEN 1708900 AND 1709999
+    ) w
+    INNER JOIN `xy_cashshop_category_item` cap
+        ON cap.`category_id` = w.`category_id`
+       AND cap.`item_id` = w.`item_id` - 700000
+) dup ON dup.`category_id` = ci.`category_id`
+     AND dup.`item_id` = ci.`item_id`;
 
 UPDATE `xy_cashshop_category_item`
 SET `item_id` = `item_id` - 700000
@@ -33,10 +39,15 @@ WHERE ci.`item_id` BETWEEN 1708900 AND 1709999;
 -- ---------- 3. xy_cashshop_item：删 Weapon 段重复，余下迁回 Cap ----------
 DELETE w
 FROM `xy_cashshop_item` w
-WHERE w.`item_id` BETWEEN 1708900 AND 1709999
-  AND EXISTS (
-    SELECT 1 FROM `xy_cashshop_item` c WHERE c.`item_id` = w.`item_id` - 700000
-);
+INNER JOIN (
+    SELECT wi.`item_id`
+    FROM (
+        SELECT `item_id`
+        FROM `xy_cashshop_item`
+        WHERE `item_id` BETWEEN 1708900 AND 1709999
+    ) wi
+    INNER JOIN `xy_cashshop_item` c ON c.`item_id` = wi.`item_id` - 700000
+) dup ON dup.`item_id` = w.`item_id`;
 
 UPDATE `xy_cashshop_item`
 SET `item_id` = `item_id` - 700000,

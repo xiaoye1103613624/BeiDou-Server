@@ -112,7 +112,7 @@ public class ActivityController {
     @Tag(name = "/activity/" + ApiConstant.LATEST)
     @Operation(summary = "删除排期（query）")
     @PostMapping("/" + ApiConstant.LATEST + "/deleteScheduleById")
-    public ResultBody<Object> deleteScheduleById(@RequestParam Long id) {
+    public ResultBody<Object> deleteScheduleById(@RequestParam("id") Long id) {
         activityAdminService.deleteSchedule(id);
         return ResultBody.success();
     }
@@ -151,7 +151,7 @@ public class ActivityController {
     @Tag(name = "/activity/" + ApiConstant.LATEST)
     @Operation(summary = "场次领取单列表")
     @GetMapping("/" + ApiConstant.LATEST + "/sessionClaims")
-    public ResultBody<List<ActivityClaimDTO>> sessionClaims(@RequestParam Long sessionId) {
+    public ResultBody<List<ActivityClaimDTO>> sessionClaims(@RequestParam("sessionId") Long sessionId) {
         return ResultBody.success(activityRewardService.listSessionClaims(sessionId));
     }
 }

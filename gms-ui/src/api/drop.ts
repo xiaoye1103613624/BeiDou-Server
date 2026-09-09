@@ -14,6 +14,16 @@ export interface DropConditionState {
   notPage?: boolean;
 }
 
+export interface DropMobState {
+  dropperId?: number;
+  dropperName?: string;
+  dropCount?: number;
+}
+
+export function getDropMobList(data: DropConditionState) {
+  return axios.post('/drop/v1/getDropMobList', data);
+}
+
 export function getDrop(data: DropConditionState) {
   return axios.post('/drop/v1/getDropList', data);
 }

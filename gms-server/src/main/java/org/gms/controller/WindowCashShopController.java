@@ -113,7 +113,7 @@ public class WindowCashShopController {
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
     @Operation(summary = "校验物品在服务端/客户端资源是否存在")
     @GetMapping("/" + ApiConstant.LATEST + "/item/checkAsset/{itemId}")
-    public ResultBody<CashShopAssetCheck.Result> checkAsset(@PathVariable int itemId) {
+    public ResultBody<CashShopAssetCheck.Result> checkAsset(@PathVariable("itemId") int itemId) {
         return ResultBody.success(windowCashShopService.checkAsset(itemId));
     }
 

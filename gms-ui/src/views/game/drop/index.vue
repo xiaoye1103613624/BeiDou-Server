@@ -1,224 +1,137 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card
-      class="general-card"
-      :title="$t('menu.game.drop')"
-      style="overflow-x: auto"
-    >
-      <a-row>
-        <a-col>
+    <a-card class="general-card" :title="$t('menu.game.drop')">
+      <a-row :gutter="8" class="search-row">
+        <a-col :xs="24" :sm="8" :md="4">
           <a-input-number
             v-model="condition.dropperId"
-            placeholder="怪物ID"
+            :placeholder="$t('drop.search.mobId')"
             allow-clear
+            hide-button
+            style="width: 100%"
           />
+        </a-col>
+        <a-col :xs="24" :sm="8" :md="4">
           <a-input
             v-model="condition.dropperName"
-            placeholder="怪物名称"
+            :placeholder="$t('drop.search.mobName')"
             allow-clear
+            @keydown.enter="loadMobs"
           />
+        </a-col>
+        <a-col :xs="24" :sm="8" :md="4">
           <a-input-number
             v-model="condition.itemId"
-            placeholder="物品ID"
+            :placeholder="$t('drop.search.itemId')"
             allow-clear
-            @keydown.enter="loadData"
+            hide-button
+            style="width: 100%"
+            @keydown.enter="loadMobs"
           />
+        </a-col>
+        <a-col :xs="24" :sm="8" :md="4">
           <a-input
             v-model="condition.itemName"
-            placeholder="物品名称"
+            :placeholder="$t('drop.search.itemName')"
             allow-clear
-            @keydown.enter="loadData"
+            @keydown.enter="loadMobs"
           />
+        </a-col>
+        <a-col :xs="24" :sm="8" :md="4">
           <a-input-number
             v-model="condition.questId"
-            placeholder="任务ID"
+            :placeholder="$t('drop.search.questId')"
             allow-clear
-            @keydown.enter="loadData"
+            hide-button
+            style="width: 100%"
+            @keydown.enter="loadMobs"
           />
-          <a-space>
-            <a-button type="primary" @click="loadData">查询</a-button>
-            <a-button @click="resetClick">重置</a-button>
-            <a-button type="primary" status="success" @click="insertClick">
-              新增
+        </a-col>
+        <a-col :xs="24" :sm="16" :md="4">
+          <a-space wrap>
+            <a-button type="primary" @click="loadMobs">
+              {{ $t('drop.search.query') }}
+            </a-button>
+            <a-button @click="resetClick">{{
+              $t('drop.search.reset')
+            }}</a-button>
+            <a-button type="primary" status="success" @click="openNewMob">
+              {{ $t('drop.mob.add') }}
             </a-button>
           </a-space>
         </a-col>
       </a-row>
+
       <a-table
-        row-key="id"
+        row-key="dropperId"
+        class="mob-table"
         :loading="loading"
-        :data="tableData"
+        :data="mobRows"
         column-resizable
         :pagination="false"
         :bordered="{ cell: true }"
+        :row-class="rowClass"
+        @row-click="onRowClick"
       >
         <template #columns>
           <a-table-column
-            title="ID"
-            data-index="id"
-            :width="80"
+            :title="$t('drop.mob.column.icon')"
+            :width="72"
+            align="center"
+          >
+            <template #cell="{ record }">
+              <img
+                class="mob-icon"
+                :src="getIconUrl('mob', record.dropperId)"
+                alt=""
+                @error="onImgError"
+              />
+            </template>
+          </a-table-column>
+          <a-table-column
+            :title="$t('drop.mob.column.id')"
+            data-index="dropperId"
+            :width="110"
             align="center"
           />
           <a-table-column
-            title="怪物ID"
-            data-index="mobid"
-            :width="150"
-            align="center"
-          >
-            <template #cell="{ record }">
-              <a-input-number
-                v-if="editId === record.id"
-                v-model="record.dropperId"
-              />
-              <span v-else>{{ record.dropperId }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column
-            title="怪物"
-            :width="140"
+            :title="$t('drop.mob.column.name')"
             data-index="dropperName"
-            align="center"
+            :width="220"
           >
             <template #cell="{ record }">
-              <a-popover>
-                <a-button
-                  type="text"
-                  size="mini"
-                  @click="filterMobClick(record.dropperId, record.dropperName)"
-                >
-                  {{ record.dropperName }}
-                </a-button>
-                <template #content>
-                  <img :src="getIconUrl('mob', record.dropperId)" alt="" />
-                </template>
-              </a-popover>
-            </template>
-          </a-table-column>
-          <a-table-column title="物品ID" :width="150" align="center">
-            <template #cell="{ record }">
-              <a-input-number
-                v-if="editId === record.id"
-                v-model="record.itemId"
-              />
-              <span v-else>{{ record.itemId }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column title="物品" :width="230" align="center">
-            <template #cell="{ record }">
-              <a-button
-                v-if="record.itemId === 0"
-                type="text"
-                size="mini"
-                status="warning"
-                @click="filterItemClick(record.itemId, record.itemName)"
-              >
-                金币
-              </a-button>
-              <a-popover v-else>
-                <a-button
-                  type="text"
-                  size="mini"
-                  @click="filterItemClick(record.itemId, record.itemName)"
-                >
-                  {{ record.itemName }}
-                </a-button>
-                <template #content>
-                  <img :src="getIconUrl('item', record.itemId)" alt="" />
-                </template>
-              </a-popover>
-            </template>
-          </a-table-column>
-          <a-table-column title="最少" :width="100" align="center">
-            <template #cell="{ record }">
-              <a-input-number
-                v-if="editId === record.id"
-                v-model="record.minimumQuantity"
-              />
-              <span v-else>{{ record.minimumQuantity }}</span>
+              <span class="mob-name">{{ record.dropperName || '—' }}</span>
             </template>
           </a-table-column>
           <a-table-column
-            title="最多"
-            data-index="maximumQuantity"
+            :title="$t('drop.mob.column.count')"
+            data-index="dropCount"
             :width="100"
             align="center"
           >
             <template #cell="{ record }">
-              <a-input-number
-                v-if="editId === record.id"
-                v-model="record.maximumQuantity"
-              />
-              <span v-else>{{ record.maximumQuantity }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column title="爆率%" :width="120" align="right">
-            <template #cell="{ record }">
-              <a-input-number
-                v-if="editId === record.id"
-                v-model="record.chance"
-              />
-              <span v-else>{{ (record.chance / 10000).toFixed(4) }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column title="任务ID" :width="100" align="center">
-            <template #cell="{ record }">
-              <a-input-number
-                v-if="editId === record.id"
-                v-model="record.questId"
-              />
-              <span v-else> {{ record.questId }}</span>
+              <a-tag color="arcoblue" size="small">{{
+                record.dropCount ?? 0
+              }}</a-tag>
             </template>
           </a-table-column>
           <a-table-column
-            title="任务"
-            :width="200"
-            data-index="questName"
+            :title="$t('drop.mob.column.operate')"
+            :width="120"
             align="center"
-          />
-          <a-table-column :width="80" title="操作">
+          >
             <template #cell="{ record }">
-              <a-button
-                v-if="editId !== record.id"
-                type="text"
-                size="mini"
-                @click="editClick(record.id)"
-              >
-                编辑
+              <a-button type="text" size="mini" @click.stop="openMob(record)">
+                {{ $t('drop.mob.manage') }}
               </a-button>
-              <a-button
-                v-if="editId === record.id"
-                type="text"
-                size="mini"
-                @click="cancelEditClick"
-              >
-                取消
-              </a-button>
-              <a-button
-                v-if="editId === record.id"
-                type="text"
-                size="mini"
-                status="success"
-                @click="saveClick(record)"
-              >
-                保存
-              </a-button>
-              <a-popconfirm
-                v-if="editId === record.id"
-                content="确定要删除吗？"
-                position="left"
-                @ok="() => deleteClick(record)"
-              >
-                <a-button type="text" size="mini" status="danger">
-                  删除
-                </a-button>
-              </a-popconfirm>
             </template>
           </a-table-column>
         </template>
       </a-table>
+
       <a-pagination
-        style="margin-top: 20px"
+        style="margin-top: 16px"
         :total="total"
         :page-size="condition.pageSize"
         :current="condition.pageNo"
@@ -230,138 +143,98 @@
         @page-size-change="pageSizeChange"
       />
     </a-card>
+
+    <MobDropDrawer
+      v-model:visible="drawerVisible"
+      :dropper-id="editingMob?.dropperId"
+      :dropper-name="editingMob?.dropperName"
+      :locked-dropper="drawerLocked"
+      @changed="loadMobs"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import {
-    deleteDrop,
-    DropConditionState,
-    getDrop,
-    insertDrop,
-    updateDrop,
-  } from '@/api/drop';
-  import { DropState } from '@/store/modules/drop/type';
+  import type { TableData } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
+  import { DropConditionState, DropMobState, getDropMobList } from '@/api/drop';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
-  import { Message } from '@arco-design/web-vue';
+  import MobDropDrawer from './MobDropDrawer.vue';
 
   const { setLoading, loading } = useLoading(false);
   const condition = ref<DropConditionState>({
     dropperId: undefined,
-    continent: undefined,
+    dropperName: undefined,
     itemId: undefined,
+    itemName: undefined,
     questId: undefined,
     pageNo: 1,
     pageSize: 20,
-    onlyTotal: false,
-    notPage: false,
   });
-  const total = ref<number>(0);
-  const pageChange = (data: number) => {
-    condition.value.pageNo = data;
-    loadData();
-  };
+  const total = ref(0);
+  const mobRows = ref<DropMobState[]>([]);
+  const drawerVisible = ref(false);
+  const drawerLocked = ref(true);
+  const editingMob = ref<DropMobState | null>(null);
 
-  const pageSizeChange = (data: number) => {
-    condition.value.pageNo = 1;
-    condition.value.pageSize = data;
-    loadData();
-  };
-
-  const editId = ref<number>(0);
-
-  const tableData = ref<DropState[]>([]);
-  const loadData = async () => {
-    editId.value = 0;
+  const loadMobs = async () => {
     setLoading(true);
     try {
-      const { data } = await getDrop(condition.value);
-      tableData.value = data.records;
-      total.value = data.totalRow;
+      const { data } = await getDropMobList(condition.value);
+      mobRows.value = data.records || [];
+      total.value = data.totalRow || 0;
     } finally {
       setLoading(false);
     }
   };
-  loadData();
+  loadMobs();
+
+  const pageChange = (page: number) => {
+    condition.value.pageNo = page;
+    loadMobs();
+  };
+
+  const pageSizeChange = (size: number) => {
+    condition.value.pageNo = 1;
+    condition.value.pageSize = size;
+    loadMobs();
+  };
 
   const resetClick = () => {
-    condition.value.dropperId = undefined;
-    condition.value.dropperName = undefined;
-    condition.value.itemId = undefined;
-    condition.value.itemName = undefined;
-    condition.value.questId = undefined;
-    condition.value.pageNo = 1;
-    loadData();
-  };
-
-  const filterMobClick = (mobId: number, mobName: string) => {
-    condition.value.dropperId = mobId;
-    condition.value.pageNo = 1;
-    Message.success(`已按[怪物] ${mobName} (${mobId}) 查询，其他条件不变`);
-    loadData();
-  };
-
-  const filterItemClick = (itemId: number, itemName: string) => {
-    condition.value.itemId = itemId;
-    condition.value.pageNo = 1;
-    if (itemId === 0) itemName = '金币';
-    Message.success(`已按[物品] ${itemName} (${itemId}) 查询，其他条件不变`);
-    loadData();
-  };
-
-  const editClick = (id: number) => {
-    editId.value = id;
-  };
-
-  const cancelEditClick = () => {
-    editId.value = 0;
-  };
-
-  const saveClick = async (data: DropState) => {
-    setLoading(true);
-    try {
-      if (data.id === 0) {
-        await insertDrop(data);
-        Message.success('数据已创建');
-      } else {
-        await updateDrop(data);
-        Message.success('数据已更新');
-      }
-      await loadData();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteClick = async (data: DropState) => {
-    setLoading(true);
-    try {
-      await deleteDrop(data);
-      Message.success('数据已删除');
-      await loadData();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const insertClick = () => {
-    editId.value = 0;
-    tableData.value?.unshift({
-      id: 0,
-      dropperId: condition.value.dropperId,
+    condition.value = {
+      ...condition.value,
+      dropperId: undefined,
       dropperName: undefined,
-      continent: undefined,
-      itemId: condition.value.itemId,
+      itemId: undefined,
       itemName: undefined,
-      minimumQuantity: 1,
-      maximumQuantity: 1,
-      questId: condition.value.questId || 0,
-      questName: undefined,
-      chance: undefined,
-      comments: undefined,
-    });
+      questId: undefined,
+      pageNo: 1,
+    };
+    loadMobs();
+  };
+
+  const openMob = (record: DropMobState) => {
+    editingMob.value = record;
+    drawerLocked.value = true;
+    drawerVisible.value = true;
+  };
+
+  const openNewMob = () => {
+    editingMob.value = { dropperId: undefined, dropperName: undefined };
+    drawerLocked.value = false;
+    drawerVisible.value = true;
+  };
+
+  const onRowClick = (record: TableData) => {
+    openMob(record as DropMobState);
+  };
+
+  const rowClass = () => 'mob-row-clickable';
+
+  const onImgError = (e: Event) => {
+    const img = e.target as HTMLImageElement;
+    img.style.visibility = 'hidden';
   };
 </script>
 
@@ -372,18 +245,25 @@
 </script>
 
 <style lang="less" scoped>
-  :deep(.arco-card-body, .arco-row) {
-    width: 100%;
+  .search-row {
+    margin-bottom: 16px;
   }
-  .arco-card-body > .arco-row > .arco-col > .arco-input-wrapper {
-    margin-right: 0;
-    margin-bottom: 5px;
-    width: 100%;
+  .search-row :deep(.arco-col) {
+    margin-bottom: 8px;
   }
-  @media (min-width: 500px) {
-    .arco-card-body > .arco-row > .arco-col > .arco-input-wrapper {
-      margin-right: 8px;
-      width: 140px;
-    }
+  .mob-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    vertical-align: middle;
+  }
+  .mob-name {
+    font-weight: 500;
+  }
+  :deep(.mob-row-clickable) {
+    cursor: pointer;
+  }
+  :deep(.mob-row-clickable:hover) td {
+    background: var(--color-fill-1);
   }
 </style>

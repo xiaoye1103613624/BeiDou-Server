@@ -692,7 +692,6 @@
     reloadCategory,
     reloadWindowCashShop,
     refreshNamesFromWz,
-    reorderCategories,
     saveCategory,
     saveItem,
     seedDefaults,
@@ -809,7 +808,7 @@
   const categoryGroups = computed(() => {
     const order = [2, 3, 5, 6, 7, 8, 9, 10];
     const byTab = new Map<number | 'other', XyCashShopCategoryDO[]>();
-    for (const cat of categories.value) {
+    categories.value.forEach((cat) => {
       const tab =
         cat.legacyTab == null || Number.isNaN(cat.legacyTab)
           ? 'other'
@@ -817,42 +816,41 @@
       const list = byTab.get(tab) ?? [];
       list.push(cat);
       byTab.set(tab, list);
-    }
-    const groups: {
-      key: string;
-      tab: number | null;
-      label: string;
-      cats: XyCashShopCategoryDO[];
-    }[] = [];
-    for (const tab of order) {
-      const cats = byTab.get(tab);
-      if (!cats?.length) continue;
-      cats.sort(
+    });
+
+    const sortByLegacy = (cats: XyCashShopCategoryDO[]) =>
+      [...cats].sort(
         (a, b) =>
           (a.legacyCategory ?? 0) - (b.legacyCategory ?? 0) ||
           (a.sort ?? 0) - (b.sort ?? 0)
       );
-      groups.push({
-        key: `tab-${tab}`,
-        tab,
-        label: TAB_LABELS[tab] ?? `Tab ${tab}`,
-        cats,
+    const sortBySort = (cats: XyCashShopCategoryDO[]) =>
+      [...cats].sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
+
+    const orderedGroups = order
+      .filter((tab) => (byTab.get(tab)?.length ?? 0) > 0)
+      .map((tab) => {
+        const cats = byTab.get(tab) ?? [];
+        byTab.delete(tab);
+        return {
+          key: `tab-${tab}`,
+          tab,
+          label: TAB_LABELS[tab] ?? `Tab ${tab}`,
+          cats: sortByLegacy(cats),
+        };
       });
-      byTab.delete(tab);
-    }
-    for (const [tab, cats] of byTab) {
-      cats.sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
-      groups.push({
-        key: `tab-${tab}`,
-        tab: typeof tab === 'number' ? tab : null,
-        label:
-          typeof tab === 'number'
-            ? TAB_LABELS[tab] ?? `Tab ${tab}`
-            : t('windowCashShop.category.ungrouped'),
-        cats,
-      });
-    }
-    return groups;
+
+    const restGroups = Array.from(byTab.entries()).map(([tab, cats]) => ({
+      key: `tab-${tab}`,
+      tab: typeof tab === 'number' ? tab : null,
+      label:
+        typeof tab === 'number'
+          ? TAB_LABELS[tab] ?? `Tab ${tab}`
+          : t('windowCashShop.category.ungrouped'),
+      cats: sortBySort(cats),
+    }));
+
+    return [...orderedGroups, ...restGroups];
   });
 
   const pathAlertType = computed(() => {

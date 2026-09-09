@@ -1123,7 +1123,7 @@ public class PacketCreator {
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
-        p.writeShort(chr.getHp());
+        p.writeInt(chr.getHp());
         p.writeBool(chr.isChasing());
         if (chr.isChasing()) {
             chr.setChasing(false);
@@ -1141,7 +1141,7 @@ public class PacketCreator {
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
-        p.writeShort(chr.getHp());
+        p.writeInt(chr.getHp());
         p.writeBool(true);
         p.writeInt(spawnPosition.x);    // spawn position placement thanks to Arnah (Vertisy)
         p.writeInt(spawnPosition.y);
@@ -2511,7 +2511,8 @@ public class PacketCreator {
 
     public static Packet updateInventorySlotLimit(int type, int newLimit) {
         final OutPacket p = OutPacket.create(SendOpcode.INVENTORY_GROW);
-        p.writeByte(type);
+        // v83 client tab byte is 0-based (0=EQUIP .. 3=ETC); server gainSlots uses InventoryType 1..4.
+        p.writeByte(type - 1);
         p.writeByte(newLimit);
         return p;
     }

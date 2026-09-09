@@ -217,6 +217,14 @@ public class SetItemService {
             throw BizException.illegalArgument();
         }
         SetItemDO entity = toEntity(dto);
+        // Upsert by set_id: preview/toggle may omit primary key while the row already exists.
+        if (entity.getId() == null) {
+            QueryWrapper bySetId = QueryWrapper.create().where(SET_ITEM_D_O.SET_ID.eq(entity.getSetId()));
+            SetItemDO existing = setItemMapper.selectOneByQuery(bySetId);
+            if (existing != null) {
+                entity.setId(existing.getId());
+            }
+        }
         if (entity.getId() == null) {
             setItemMapper.insert(entity);
         } else {

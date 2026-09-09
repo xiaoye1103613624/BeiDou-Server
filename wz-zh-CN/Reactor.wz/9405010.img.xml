@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9405010.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <string name="info" value="Alliance Member Traces: Cygnus Clothes"/>
+    <int name="dcMark" value="1"/>
+  </imgdir>
+  <imgdir name="0">
+    <canvas name="0" format="1" scale="0"/>
+  </imgdir>
+  <imgdir name="1">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="36" y="71"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <imgdir name="hit">
+      <canvas name="0" format="1" scale="0">
+        <vector name="origin" x="30" y="24"/>
+        <int name="z" value="0"/>
+        <int name="delay" value="600"/>
+        <int name="a0" value="255"/>
+        <int name="a1" value="0"/>
+      </canvas>
+    </imgdir>
+    <imgdir name="event">
+      <imgdir name="0">
+        <int name="type" value="300"/>
+        <int name="state" value="2"/>
+        <vector name="lt" x="-27" y="-24"/>
+        <vector name="rb" x="42" y="20"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="2">
+    <uol name="0" value="../0/0"/>
+  </imgdir>
+  <string name="action" value="mazeMob2"/>
+</imgdir>

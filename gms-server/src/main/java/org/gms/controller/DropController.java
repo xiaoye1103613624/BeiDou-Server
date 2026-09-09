@@ -18,6 +18,13 @@ public class DropController {
     private final DropService dropService;
 
     @Tag(name = "/drop/" + ApiConstant.LATEST)
+    @Operation(summary = "分页获取有掉落的怪物列表（按怪物聚合）")
+    @PostMapping("/" + ApiConstant.LATEST + "/getDropMobList")
+    public ResultBody<Page<DropMobRtnDTO>> getDropMobList(@RequestBody SubmitBody<DropSearchReqDTO> request) {
+        return ResultBody.success(request, dropService.getDropMobList(request.getData()));
+    }
+
+    @Tag(name = "/drop/" + ApiConstant.LATEST)
     @Operation(summary = "分页获取掉落列表")
     @PostMapping("/" + ApiConstant.LATEST + "/getDropList")
     public ResultBody<Page<DropSearchRtnDTO>> getDropList(@RequestBody SubmitBody<DropSearchReqDTO> request) {

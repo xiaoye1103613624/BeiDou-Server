@@ -33,11 +33,11 @@
             data-index="setName"
             :width="180"
           />
-          <a-table-column
-            :title="$t('setItem.column.source')"
-            data-index="source"
-            :width="90"
-          />
+          <a-table-column :title="$t('setItem.column.source')" :width="110">
+            <template #cell="{ record }">
+              {{ formatSource(record.source) }}
+            </template>
+          </a-table-column>
           <a-table-column
             :title="$t('setItem.column.tierCount')"
             data-index="tierCount"
@@ -118,6 +118,21 @@
   const editing = ref<SetItemDetail | null>(null);
   const togglingSetId = ref<number | null>(null);
   const { loading, setLoading } = useLoading(false);
+
+  const formatSource = (source?: string) => {
+    switch ((source || '').toUpperCase()) {
+      case 'WZ':
+        return t('setItem.source.wz');
+      case 'DB':
+        return t('setItem.source.db');
+      case 'WZ+DB':
+        return t('setItem.source.wzdb');
+      case 'CUSTOM':
+        return t('setItem.source.custom');
+      default:
+        return source || '';
+    }
+  };
 
   const filteredRows = computed(() => {
     const k = keyword.value.trim().toLowerCase();

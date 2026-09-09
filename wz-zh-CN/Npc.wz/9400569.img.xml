@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9400569.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <int name="forceMove" value="1"/>
+    <imgdir name="script">
+      <imgdir name="0">
+        <string name="script" value="reactor_8659135"/>
+      </imgdir>
+    </imgdir>
+    <int name="dcLeft" value="-150"/>
+    <int name="dcTop" value="-222"/>
+    <int name="dcRight" value="-70"/>
+    <int name="dcBottom" value="10"/>
+  </imgdir>
+  <imgdir name="stand">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="127" y="48"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="state2">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="127" y="55"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <int name="special" value="1"/>
+  </imgdir>
+  <imgdir name="state3">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="127" y="65"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <int name="special" value="1"/>
+  </imgdir>
+  <imgdir name="hit">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="140" y="39"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <canvas name="1" format="1" scale="0">
+      <vector name="origin" x="139" y="43"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <canvas name="2" format="1" scale="0">
+      <vector name="origin" x="138" y="41"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <canvas name="3" format="1" scale="0">
+      <vector name="origin" x="137" y="40"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <canvas name="4" format="1" scale="0">
+      <vector name="origin" x="136" y="39"/>
+      <int name="z" value="0"/>
+      <int name="a0" value="255"/>
+      <int name="a1" value="0"/>
+      <int name="delay" value="1000"/>
+    </canvas>
+    <int name="special" value="1"/>
+  </imgdir>
+</imgdir>

@@ -154,7 +154,11 @@ public class NPCScriptManager extends AbstractScriptManager {
                     try {
                         iv.invokeFunction("start", chr);
                     } catch (final NoSuchMethodException nsma) {
+                        log.error("NPC script missing start(): npc={} script={} itemScript={}",
+                                npc, fileName, itemScript);
                         nsma.printStackTrace();
+                        dispose(c);
+                        return false;
                     }
                 }
             } else {

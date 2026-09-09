@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9260002.img" indent="2" media="NONE">
+  <imgdir name="info">
+    <string name="info" value="aquaris29_1"/>
+  </imgdir>
+  <imgdir name="0">
+    <canvas name="0" format="1" scale="0">
+      <vector name="origin" x="0" y="9"/>
+    </canvas>
+    <imgdir name="hit">
+      <uol name="0" value="../0"/>
+    </imgdir>
+    <imgdir name="event">
+      <imgdir name="0">
+        <int name="type" value="100"/>
+        <int name="state" value="1"/>
+        <vector name="lt" x="-100" y="-30"/>
+        <vector name="rb" x="150" y="10"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <uol name="0" value="../0/0"/>
+    <imgdir name="hit">
+      <uol name="0" value="../../0/0"/>
+    </imgdir>
+    <imgdir name="event">
+      <imgdir name="0">
+        <int name="type" value="100"/>
+        <int name="state" value="1"/>
+        <vector name="lt" x="-100" y="-30"/>
+        <vector name="rb" x="150" y="10"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <string name="action" value="aquaris29_1"/>
+</imgdir>

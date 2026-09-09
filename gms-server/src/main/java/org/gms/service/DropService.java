@@ -7,6 +7,7 @@ import org.gms.dao.entity.DropDataDO;
 import org.gms.dao.entity.DropDataGlobalDO;
 import org.gms.dao.mapper.DropDataGlobalMapper;
 import org.gms.dao.mapper.DropDataMapper;
+import org.gms.model.dto.DropMobRtnDTO;
 import org.gms.model.dto.DropSearchReqDTO;
 import org.gms.model.dto.DropSearchRtnDTO;
 import org.gms.server.ItemInformationProvider;
@@ -23,6 +24,53 @@ import java.util.List;
 public class DropService {
     private final DropDataMapper dropDataMapper;
     private final DropDataGlobalMapper dropDataGlobalMapper;
+
+    /**
+     * 按怪物聚合掉落：主列表只展示怪物，抽屉再查该怪全部爆物。
+     */
+    public Page<DropMobRtnDTO> getDropMobList(DropSearchReqDTO data) {
+        QueryWrapper queryWrapper = QueryWrapper.create().from(DropDataDO.class);
+
+        if (data.getDropperId() != null) {
+            queryWrapper.and(DropDataDO::getDropperid).eq(data.getDropperId());
+        }
+        if (data.getDropperName() != null && !data.getDropperName().isEmpty()) {
+            List<Integer> mobIds = MonsterInformationProvider.getMobsIDsFromName(data.getDropperName())
+                    .stream()
+                    .map(Pair::getLeft)
+                    .toList();
+            if (mobIds.isEmpty()) {
+                return new Page<>(Collections.emptyList(), data.getPageNo(), data.getPageSize(), 0);
+            }
+            queryWrapper.and(DropDataDO::getDropperid).in(mobIds);
+        }
+        if (data.getItemId() != null) {
+            queryWrapper.and(DropDataDO::getItemid).eq(data.getItemId());
+        }
+        if (data.getItemName() != null && !data.getItemName().isEmpty()) {
+            List<Integer> itemIds = ItemInformationProvider.getItemsIDsFromName(data.getItemName())
+                    .stream()
+                    .map(Pair::getLeft)
+                    .toList();
+            if (itemIds.isEmpty()) {
+                return new Page<>(Collections.emptyList(), data.getPageNo(), data.getPageSize(), 0);
+            }
+            queryWrapper.and(DropDataDO::getItemid).in(itemIds);
+        }
+        if (data.getQuestId() != null) {
+            queryWrapper.and(DropDataDO::getQuestid).eq(data.getQuestId());
+        }
+
+        queryWrapper
+                .select("dropperid AS dropperId", "COUNT(*) AS dropCount")
+                .groupBy("dropperid")
+                .orderBy("dropperid ASC");
+
+        Page<DropMobRtnDTO> page = dropDataMapper.paginateAs(
+                data.getPageNo(), data.getPageSize(), queryWrapper, DropMobRtnDTO.class);
+        page.getRecords().forEach(record -> record.setDropperName(getMobName(record.getDropperId())));
+        return page;
+    }
 
     public Page<DropSearchRtnDTO> getDropList(DropSearchReqDTO data, boolean isGlobal) {
         if (isGlobal) {
