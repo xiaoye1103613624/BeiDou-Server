@@ -525,6 +525,9 @@ public class PacketCreator {
         }
         p.writeLong(getTime(-2));
         p.writeInt(-1);
+        // 融合外观：与 F:\MXD_dev\扩展改动\融合外观 对齐——仅追加 anvilItemId（4B）。
+        // 插件 GW_ItemSlotBase::Decode 在原生解码后消费这一个 int。
+        p.writeInt(equip.getAnvilItemId());
 
     }
 
@@ -3348,7 +3351,7 @@ public class PacketCreator {
         p.writeByte(0xFF);
         p.writeString(shop.getDescription());
         List<PlayerShopItem> items = shop.getItems();
-        p.writeByte(0x10);  //TODO SLOTS, which is 16 for most stores...slotMax
+        p.writeByte(0x20);  // slotMax (32)
         p.writeByte(items.size());
         for (PlayerShopItem item : items) {
             p.writeShort(item.getBundles());
@@ -5252,7 +5255,7 @@ public class PacketCreator {
         p.writeByte(0x04);
         p.writeShort(hm.getVisitorSlotThreadsafe(chr) + 1);
         p.writeInt(hm.getItemId());
-        p.writeString("Hired Merchant");
+        p.writeString("雇用商人");
 
         Character[] visitors = hm.getVisitorCharacters();
         for (int i = 0; i < 3; i++) {
@@ -5290,7 +5293,7 @@ public class PacketCreator {
             p.writeLong(chr.getMerchantMeso());//:D?
         }
         p.writeString(hm.getDescription());
-        p.writeByte(0x10); //TODO SLOTS, which is 16 for most stores...slotMax
+        p.writeByte(0x20); // slotMax (32)
         p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         if (hm.getItems().isEmpty()) {

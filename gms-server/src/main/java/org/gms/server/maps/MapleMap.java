@@ -2115,6 +2115,9 @@ public class MapleMap {
         monster.setMap(this);
         monster.setFake(true);
         spawnAndAddRangedMapObject(monster, c -> c.sendPacket(PacketCreator.spawnFakeMonster(monster, 0)));
+        // 假身 Boss（如扎昆 8800000）也需立刻下发 FIELD_EFFECT 血条；
+        // 否则同图玩家要等切图走 sendSpawnData 才能看到，与真身 spawnMonster 不一致。
+        updateBossSpawn(monster);
 
         if (!monster.isNocturnal()) {
             spawnedMonstersOnMap.incrementAndGet();

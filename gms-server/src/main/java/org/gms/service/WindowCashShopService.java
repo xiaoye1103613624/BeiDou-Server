@@ -1287,7 +1287,9 @@ public class WindowCashShopService {
             if (CashShopClickType.from(cat.getClickType()) != CashShopClickType.SHOW_ITEMS) {
                 continue;
             }
-            if (cat.getLegacyTab() != null && cat.getLegacyTab() == 9) {
+            // 皮肤(9)与 XY玩法(10)为手工维护分类：阿尔泰皮肤/玩法入口都在此两类，
+            // 不能被 WZ 同步按道具 id 重新归类（否则皮肤会被挪进「帽子」、入口券被挪进「游戏」等，分类即被清空）
+            if (cat.getLegacyTab() != null && (cat.getLegacyTab() == 9 || cat.getLegacyTab() == XyPlayCashItems.TAB)) {
                 continue;
             }
             if (!CashShopTaxonomy.isRemappableAutoCategory(
@@ -1316,7 +1318,7 @@ public class WindowCashShopService {
         return moved;
     }
 
-    /** Drop empty invented / client-sync SHOW_ITEMS categories (keep 热门 / OPEN_WINDOW / tab 9). */
+    /** Drop empty invented / client-sync SHOW_ITEMS categories (keep 热门 / OPEN_WINDOW / tab 9 / tab 10 玩法). */
     private int pruneEmptyAutoCategories() {
         final Map<Integer, Long> counts = categoryItemMapper.selectAll().stream()
                 .filter(l -> l.getCategoryId() != null)
@@ -1332,7 +1334,8 @@ public class WindowCashShopService {
             if (cat.getIsHot() != null && cat.getIsHot() == 1) {
                 continue;
             }
-            if (cat.getLegacyTab() != null && cat.getLegacyTab() == 9) {
+            // 皮肤(9) / XY玩法(10) 为手工维护分类，空也不能被当作「自造空分类」删除
+            if (cat.getLegacyTab() != null && (cat.getLegacyTab() == 9 || cat.getLegacyTab() == XyPlayCashItems.TAB)) {
                 continue;
             }
             if (counts.getOrDefault(cat.getId(), 0L) > 0) {
