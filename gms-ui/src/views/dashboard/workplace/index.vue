@@ -1,70 +1,110 @@
 <template>
-  <div class="container" :loading="loading">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.dashboard.workplace')">
-      <a-card
-        class="status-card"
-        :title="$t('workplace.gameServer.status')"
-        :bordered="false"
-      >
-        <a-row>
-          <a-col>
-            {{ $t('workplace.gameServer.currently') }}
-            <a-tag v-if="serverStatus === 'running'" color="green" bordered>
+  <PageContainer
+    :title="$t('menu.dashboard.workplace')"
+    :description="$t('workplace.page.description')"
+  >
+    <div class="workplace">
+      <div class="workplace__hero">
+        <div class="workplace__hero-copy">
+          <div class="workplace__status-row">
+            <span class="workplace__status-label">
+              {{ $t('workplace.gameServer.status') }}
+            </span>
+            <a-tag
+              v-if="serverStatus === 'running'"
+              color="green"
+              bordered
+              size="large"
+            >
               {{ $t('workplace.running') }}
             </a-tag>
-            <a-tag v-else color="gray" bordered>
+            <a-tag v-else color="gray" bordered size="large">
               {{ $t('workplace.stopped') }}
             </a-tag>
-          </a-col>
-        </a-row>
-      </a-card>
-
-      <a-card
-        class="control-card"
-        :title="$t('workplace.gameServer.serverControl')"
-        :bordered="false"
-      >
-        <a-space class="button-group" :size="16">
+          </div>
+          <p class="workplace__hint">
+            {{ $t('workplace.gameServer.currently') }}
+            {{
+              serverStatus === 'running'
+                ? $t('workplace.running')
+                : $t('workplace.stopped')
+            }}
+          </p>
+        </div>
+        <a-space>
+          <a-select
+            v-model="autoRefresh"
+            :style="{ width: '140px' }"
+            :options="autoRefreshSelectOptions"
+          />
           <a-button
-            v-for="(btn, index) in serverControlButtons"
-            :key="index"
-            :loading="loading && btn.action !== 'stop'"
-            type="primary"
-            :disabled="btn.disabled(serverStatus)"
-            :status="btn.status"
-            @click="handleButtonClick(btn.action)"
+            type="outline"
+            :loading="loading || monitorLoading"
+            @click="handleRefreshAll"
           >
             <template #icon>
-              <component :is="btn.icon" />
+              <icon-refresh />
             </template>
-            {{ $t(`workplace.button.${btn.label}`) }}
+            {{ $t('button.refresh') }}
           </a-button>
         </a-space>
-      </a-card>
+      </div>
 
-      <a-card
-        class="reload-card"
-        :title="$t('workplace.dataReload')"
-        :bordered="false"
-      >
-        <a-space class="button-group" :size="16">
-          <a-button
-            v-for="(btn, index) in dataReloadButtons"
-            :key="index + 'reload'"
-            :loading="loading"
-            type="primary"
-            @click="handleButtonClick(btn.action)"
-          >
-            <template #icon>
-              <component :is="btn.icon" />
-            </template>
-            {{ $t(`workplace.button.${btn.label}`) }}
-          </a-button>
-        </a-space>
-      </a-card>
+      <ServerMonitorPanel :loading="monitorLoading" :info="serverInfo" />
 
-      <!-- 完全停服并退出BAT的确认框 -->
+      <MysqlMonitorPanel
+        :loading="monitorLoading"
+        :info="mysqlInfo"
+        :trend-points="trendPoints"
+      />
+
+      <a-row :gutter="16">
+        <a-col :xs="24" :lg="14">
+          <ProCard :title="$t('workplace.gameServer.serverControl')">
+            <div class="action-grid">
+              <button
+                v-for="(btn, index) in serverControlButtons"
+                :key="index"
+                class="action-tile"
+                :class="`action-tile--${btn.status}`"
+                :disabled="btn.disabled(serverStatus) || loading"
+                type="button"
+                @click="handleButtonClick(btn.action)"
+              >
+                <span class="action-tile__icon">
+                  <component :is="btn.icon" />
+                </span>
+                <span class="action-tile__label">
+                  {{ $t(`workplace.button.${btn.label}`) }}
+                </span>
+              </button>
+            </div>
+          </ProCard>
+        </a-col>
+        <a-col :xs="24" :lg="10">
+          <ProCard :title="$t('workplace.dataReload')">
+            <p class="workplace__reload-hint">
+              {{ $t('workplace.dataReload.hint') }}
+            </p>
+            <a-space direction="vertical" fill :size="12">
+              <a-button
+                v-for="(btn, index) in dataReloadButtons"
+                :key="index + 'reload'"
+                long
+                type="secondary"
+                :loading="loading"
+                @click="handleButtonClick(btn.action)"
+              >
+                <template #icon>
+                  <component :is="btn.icon" />
+                </template>
+                {{ $t(`workplace.button.${btn.label}`) }}
+              </a-button>
+            </a-space>
+          </ProCard>
+        </a-col>
+      </a-row>
+
       <a-modal
         v-model:visible="shutdownConfirmVisible"
         class="arco-modal-auto"
@@ -78,7 +118,6 @@
         <p>{{ $t('workplace.button.shutdown.confirm') }}</p>
       </a-modal>
 
-      <!-- 重启服务端的确认框 -->
       <a-modal
         v-model:visible="restartConfirmVisible"
         modal-class="arco-modal-auto"
@@ -92,7 +131,6 @@
         <p>{{ $t('workplace.button.restart.confirm') }}</p>
       </a-modal>
 
-      <!-- 停服倒计时配置框 -->
       <a-modal
         v-model:visible="stopConfigVisible"
         modal-class="arco-modal-auto"
@@ -104,42 +142,28 @@
           {{ $t('workplace.button.stop.config') }}
         </template>
         <a-form :model="stopConfigData" layout="vertical">
-          <a-card
-            :title="$t('workplace.stop.minutes')"
-            :bordered="false"
-            style="margin-bottom: 16px"
-          >
-            <a-row :gutter="[16, 16]">
-              <a-col :span="18">
-                <a-input-number v-model="stopConfigData.minutes" :min="0" />
-              </a-col>
-              <a-col :span="6">
-                <span style="line-height: 32px; text-align: right">{{
-                  $t('workplace.unit.minutes')
-                }}</span>
-              </a-col>
-            </a-row>
-          </a-card>
-
-          <a-card :bordered="false" style="margin-bottom: 16px">
-            <template #title>
-              <div style="display: flex; align-items: center">
-                <span>{{ $t('workplace.stop.shutdownMsg') }}</span>
-                <a-tooltip :content="$t('workplace.stop.shutdownMsgDefault')">
-                  <icon-info-circle style="margin-left: 8px" />
-                </a-tooltip>
-              </div>
+          <a-form-item :label="$t('workplace.stop.minutes')">
+            <a-input-number
+              v-model="stopConfigData.minutes"
+              :min="0"
+              style="width: 100%"
+            >
+              <template #suffix>
+                {{ $t('workplace.unit.minutes') }}
+              </template>
+            </a-input-number>
+          </a-form-item>
+          <a-form-item>
+            <template #label>
+              <span>{{ $t('workplace.stop.shutdownMsg') }}</span>
+              <a-tooltip :content="$t('workplace.stop.shutdownMsgDefault')">
+                <icon-info-circle style="margin-left: 8px" />
+              </a-tooltip>
             </template>
-
-            <a-row :gutter="[16, 16]">
-              <a-col :span="24">
-                <a-textarea v-model="stopConfigData.shutdownMsg" />
-              </a-col>
-            </a-row>
-          </a-card>
-
-          <a-card :title="$t('workplace.stop.messageTypes')" :bordered="false">
-            <a-space class="button-group" :size="16">
+            <a-textarea v-model="stopConfigData.shutdownMsg" />
+          </a-form-item>
+          <a-form-item :label="$t('workplace.stop.messageTypes')">
+            <a-space wrap>
               <a-checkbox v-model="stopConfigData.showServerMsg">
                 {{ $t('workplace.stop.showServerMsg') }}
               </a-checkbox>
@@ -150,15 +174,15 @@
                 {{ $t('workplace.stop.showChatMsg') }}
               </a-checkbox>
             </a-space>
-          </a-card>
+          </a-form-item>
         </a-form>
       </a-modal>
-    </a-card>
-  </div>
+    </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, reactive, ref } from 'vue';
+  import { computed, onMounted, reactive, ref } from 'vue';
   import {
     getServerStatus,
     restartServer,
@@ -169,18 +193,28 @@
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
   import {
+    reloadAllScriptsByGMCommand,
+    reloadDropsByGMCommand,
     reloadEventsByGMCommand,
+    reloadMapScriptsByGMCommand,
     reloadMapsByGMCommand,
+    reloadNpcScriptsByGMCommand,
     reloadPortalsByGMCommand,
+    reloadQuestScriptsByGMCommand,
+    reloadReactorScriptsByGMCommand,
+    reloadShopsByGMCommand,
   } from '@/api/command';
   import { useI18n } from 'vue-i18n';
+  import ServerMonitorPanel from './components/ServerMonitorPanel.vue';
+  import MysqlMonitorPanel from './components/MysqlMonitorPanel.vue';
+  import useMonitorRefresh from './hooks/useMonitorRefresh';
 
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const serverStatus = ref<'resting' | 'running'>('resting');
   const stopConfigVisible = ref(false);
-  const shutdownConfirmVisible = ref(false); // 新增用于确认关机的模态框可见性控制
-  const restartConfirmVisible = ref(false); // 新增用于确认重启的模态框可见性控制
+  const shutdownConfirmVisible = ref(false);
+  const restartConfirmVisible = ref(false);
   const stopConfigData = reactive({
     minutes: 0,
     shutdownMsg: '',
@@ -188,6 +222,22 @@
     showCenterMsg: false,
     showChatMsg: false,
   });
+
+  const {
+    loading: monitorLoading,
+    autoRefresh,
+    serverInfo,
+    mysqlInfo,
+    trendPoints,
+    refresh: refreshMonitor,
+  } = useMonitorRefresh();
+
+  const autoRefreshSelectOptions = computed(() => [
+    { label: t('workplace.monitor.refresh.off'), value: 0 },
+    { label: t('workplace.monitor.refresh.5s'), value: 5 },
+    { label: t('workplace.monitor.refresh.10s'), value: 10 },
+    { label: t('workplace.monitor.refresh.30s'), value: 30 },
+  ]);
 
   const serverControlButtons = [
     {
@@ -221,16 +271,51 @@
   ];
 
   const dataReloadButtons = [
+    {
+      label: 'dataReloadAllScripts',
+      action: 'reloadAllScripts',
+      icon: 'icon-sync',
+    },
     { label: 'dataReloadEvents', action: 'reloadEvents', icon: 'icon-compass' },
+    {
+      label: 'dataReloadPortals',
+      action: 'reloadPortals',
+      icon: 'icon-common',
+    },
+    {
+      label: 'dataReloadMapScripts',
+      action: 'reloadMapScripts',
+      icon: 'icon-code',
+    },
+    {
+      label: 'dataReloadQuestScripts',
+      action: 'reloadQuestScripts',
+      icon: 'icon-book',
+    },
+    {
+      label: 'dataReloadNpcScripts',
+      action: 'reloadNpcScripts',
+      icon: 'icon-user',
+    },
+    {
+      label: 'dataReloadReactorScripts',
+      action: 'reloadReactorScripts',
+      icon: 'icon-storage',
+    },
     {
       label: 'dataReloadMaps',
       action: 'reloadMaps',
       icon: 'icon-mind-mapping',
     },
     {
-      label: 'dataReloadPortals',
-      action: 'reloadPortals',
-      icon: 'icon-common',
+      label: 'dataReloadShops',
+      action: 'reloadShops',
+      icon: 'icon-gift',
+    },
+    {
+      label: 'dataReloadDrops',
+      action: 'reloadDrops',
+      icon: 'icon-trophy',
     },
   ];
 
@@ -242,6 +327,10 @@
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefreshAll = async () => {
+    await Promise.all([loadSeverStatus(), refreshMonitor()]);
   };
 
   onMounted(() => {
@@ -280,6 +369,27 @@
         case 'reloadPortals':
           await reloadPortalsByGMCommand();
           break;
+        case 'reloadAllScripts':
+          await reloadAllScriptsByGMCommand();
+          break;
+        case 'reloadMapScripts':
+          await reloadMapScriptsByGMCommand();
+          break;
+        case 'reloadQuestScripts':
+          await reloadQuestScriptsByGMCommand();
+          break;
+        case 'reloadNpcScripts':
+          await reloadNpcScriptsByGMCommand();
+          break;
+        case 'reloadReactorScripts':
+          await reloadReactorScriptsByGMCommand();
+          break;
+        case 'reloadShops':
+          await reloadShopsByGMCommand();
+          break;
+        case 'reloadDrops':
+          await reloadDropsByGMCommand();
+          break;
         default:
           break;
       }
@@ -299,7 +409,6 @@
       setLoading(true);
       await shutdown();
       Message.success(t('workplace.button.shutdown.success'));
-      // 立即尝试更新服务器状态
       await loadSeverStatus();
     } catch (err) {
       console.error(err);
@@ -345,13 +454,11 @@
       await stopServer(stopConfigParams);
       Message.success(t('workplace.stop.shutdownInProgress'));
 
-      // 如果设置了延迟时间，则启动一个定时器，在延迟时间结束后更新服务器状态
       if (stopConfigData.minutes > 0) {
         setTimeout(async () => {
           await loadSeverStatus();
         }, stopConfigData.minutes * 60 * 1000);
       } else {
-        // 如果没有设置延迟时间，立即更新服务器状态
         await loadSeverStatus();
       }
 
@@ -383,9 +490,135 @@
 </script>
 
 <style lang="less" scoped>
-  .button-group {
+  .workplace {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 16px;
+
+    &__hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px;
+      color: #e8eef5;
+      background: linear-gradient(
+        135deg,
+        #0f2744 0%,
+        #1b6b93 55%,
+        #2a8fb5 100%
+      );
+      border-radius: var(--bd-radius-lg);
+      box-shadow: var(--bd-shadow-md);
+    }
+
+    &__status-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    &__status-label {
+      font-weight: 600;
+      font-size: 16px;
+      font-family: var(--bd-font-display);
+    }
+
+    &__hint {
+      margin: 8px 0 0;
+      color: rgba(232, 238, 245, 0.78);
+      font-size: 13px;
+    }
+
+    &__reload-hint {
+      margin: 0 0 12px;
+      color: var(--color-text-3);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  }
+
+  .workplace :deep(.arco-col) {
+    margin-bottom: 16px;
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .action-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    min-height: 108px;
+    padding: 16px;
+    color: var(--bd-ink);
+    text-align: left;
+    background: var(--bd-surface-muted);
+    border: 1px solid transparent;
+    border-radius: var(--bd-radius-md);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease,
+      border-color 0.18s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(var(--primary-6), 0.25);
+      box-shadow: var(--bd-shadow-sm);
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    &__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: #fff;
+      font-size: 18px;
+      border-radius: 10px;
+    }
+
+    &__label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    &--success &__icon {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    &--warning &__icon {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    &--danger &__icon {
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .workplace__hero {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .action-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  body[arco-theme='dark'] {
+    .action-tile {
+      color: var(--color-text-1);
+      background: var(--color-fill-2);
+    }
   }
 </style>
