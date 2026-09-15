@@ -80,6 +80,7 @@
 
 - 后端：`mvn -pl gms-server -DskipTests compile`（JDK 21）——2026-09-15 **BUILD SUCCESS**
 - 前端：`cd gms-ui && yarn type:check`——2026-09-15 **通过**（vue-tsc --noEmit --skipLibCheck）
+- 前端：`eslint` 工作台监控相关文件——2026-09-15 **通过**（已修复 `useMonitorRefresh` prettier 换行）
 - 手工建议：登录工作台查看两块监控区与系统内存摘要；故意断后端观察失败提示；切换自动刷新观察趋势点增长；停服后在线柱图为空（本机未强制要求跑通手工项）
 
 ## 8. 预留、风险与回滚

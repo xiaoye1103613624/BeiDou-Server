@@ -112,7 +112,9 @@ export default function useMonitorRefresh() {
     clearTimer();
   });
 
-  const autoRefreshOptions = computed(() => [0, 5, 10, 30] as AutoRefreshSeconds[]);
+  const autoRefreshOptions = computed(
+    () => [0, 5, 10, 30] as AutoRefreshSeconds[]
+  );
 
   return {
     loading,
