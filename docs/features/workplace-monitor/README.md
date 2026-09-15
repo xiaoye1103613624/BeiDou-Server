@@ -4,7 +4,7 @@
 > 适用客户端/协议版本：无关（仅管理后台 + Spring REST）  
 > 项目名称：BeiDou-Server_s9  
 > 作者/日期：2026-09-15  
-> 相关提交：`1130a0c664`（✨ feat(workplace): 工作台增加服务器与 MySQL 监控图表）  
+> 相关提交：`1130a0c664`（✨ feat）、`4417390efe`（🐛 fix prettier）  
 > 产物目录：docs/features/workplace-monitor/
 
 ## 1. 背景与目标
