@@ -1,8 +1,14 @@
 <template>
-  <div class="content">
-    <a-result class="result" status="404" :subtitle="'not found'"> </a-result>
-    <div class="operation-row">
-      <a-button key="back" type="primary" @click="back"> back </a-button>
+  <div class="bd-not-found">
+    <a-result
+      class="bd-not-found__result"
+      status="404"
+      :subtitle="$t('notFound.subtitle')"
+    />
+    <div class="bd-not-found__actions">
+      <a-button type="primary" @click="back">
+        {{ $t('notFound.back') }}
+      </a-button>
     </div>
   </div>
 </template>
@@ -12,19 +18,26 @@
 
   const router = useRouter();
   const back = () => {
-    // warning： Go to the node that has the permission
     router.push({ name: 'Workplace' });
   };
 </script>
 
 <style scoped lang="less">
-  .content {
-    // padding-top: 100px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -95px;
-    margin-top: -121px;
+  .bd-not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--bd-navbar-height) - 80px);
+    padding: 40px 20px;
     text-align: center;
+  }
+
+  .bd-not-found__actions {
+    margin-top: 8px;
+  }
+
+  :deep(.arco-result-subtitle) {
+    color: var(--bd-ink-soft);
   }
 </style>

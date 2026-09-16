@@ -1,7 +1,10 @@
 import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
-/** 会员与玩家：账户、角色、商城、背包等 */
+/**
+ * 玩家：账户、角色、背包、排行
+ * 预留：在线玩家监控、封号审计等可挂此分组
+ */
 const MEMBER: AppRouteRecordRaw = {
   path: '/member',
   name: 'member',
@@ -10,7 +13,7 @@ const MEMBER: AppRouteRecordRaw = {
     locale: 'menu.member',
     requiresAuth: true,
     icon: 'icon-user-group',
-    order: 3,
+    order: 4,
   },
   children: [
     {
@@ -30,17 +33,7 @@ const MEMBER: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.account.player',
         requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    {
-      path: 'cashShop',
-      name: 'MemberCashShop',
-      component: () => import('@/views/game/cashShop/index.vue'),
-      meta: {
-        locale: 'menu.game.cashShop',
-        requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
     {
@@ -50,7 +43,7 @@ const MEMBER: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.game.inventory',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
     {
@@ -60,9 +53,15 @@ const MEMBER: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.member.ranking',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
+    // 旧路径兼容
+    {
+      path: 'cashShop',
+      redirect: '/gameplay/cashShop',
+      meta: { hideInMenu: true, requiresAuth: true },
+    } as AppRouteRecordRaw,
   ],
 };
 

@@ -1,20 +1,21 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.setItem')">
-      <a-space style="margin-bottom: 12px">
-        <a-button type="primary" @click="openCreate">{{
-          $t('setItem.add')
-        }}</a-button>
-        <a-button @click="importWz">{{ $t('setItem.import.wz') }}</a-button>
-        <a-button @click="reloadClick">{{ $t('setItem.reload') }}</a-button>
+  <PageContainer :title="$t('menu.game.setItem')">
+    <ProCard>
+      <div class="bd-page-toolbar set-item-toolbar">
+        <a-space>
+          <a-button type="primary" @click="openCreate">{{
+            $t('setItem.add')
+          }}</a-button>
+          <a-button @click="importWz">{{ $t('setItem.import.wz') }}</a-button>
+          <a-button @click="reloadClick">{{ $t('setItem.reload') }}</a-button>
+        </a-space>
         <a-input-search
           v-model="keyword"
           :placeholder="$t('setItem.search')"
-          style="width: 220px"
+          class="set-item-search"
           allow-clear
         />
-      </a-space>
+      </div>
       <a-table
         :loading="loading"
         :data="filteredRows"
@@ -28,11 +29,19 @@
             data-index="setId"
             :width="90"
           />
-          <a-table-column
-            :title="$t('setItem.column.setName')"
-            data-index="setName"
-            :width="180"
-          />
+          <a-table-column :title="$t('setItem.column.setName')" :width="220">
+            <template #cell="{ record }">
+              <div class="set-name-cell">
+                <div class="set-name-primary">{{ displayPrimary(record) }}</div>
+                <div v-if="displaySecondary(record)" class="set-name-secondary">
+                  {{ displaySecondary(record) }}
+                </div>
+                <div v-if="!record.setNameZh?.trim()" class="set-name-hint">
+                  {{ $t('setItem.column.setNameZhMissing') }}
+                </div>
+              </div>
+            </template>
+          </a-table-column>
           <a-table-column :title="$t('setItem.column.source')" :width="110">
             <template #cell="{ record }">
               {{ formatSource(record.source) }}
@@ -86,14 +95,15 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </ProCard>
 
     <SetItemDetailDrawer
       v-model:visible="drawerVisible"
       :record="editing"
+      :all-records="rows"
       @saved="loadRows"
     />
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -119,6 +129,24 @@
   const togglingSetId = ref<number | null>(null);
   const { loading, setLoading } = useLoading(false);
 
+  const displayPrimary = (record: SetItemDetail) =>
+    record.setNameZh?.trim() ||
+    record.setName?.trim() ||
+    record.setNameEn?.trim() ||
+    '';
+
+  const displaySecondary = (record: SetItemDetail) => {
+    const zh = record.setNameZh?.trim();
+    const en = record.setNameEn?.trim();
+    if (zh && en && zh !== en) {
+      return en;
+    }
+    if (!zh && en && record.setName?.trim() && record.setName.trim() !== en) {
+      return en;
+    }
+    return '';
+  };
+
   const formatSource = (source?: string) => {
     switch ((source || '').toUpperCase()) {
       case 'WZ':
@@ -140,7 +168,9 @@
     return rows.value.filter(
       (r) =>
         String(r.setId).includes(k) ||
-        (r.setName && r.setName.toLowerCase().includes(k))
+        (r.setName && r.setName.toLowerCase().includes(k)) ||
+        (r.setNameZh && r.setNameZh.toLowerCase().includes(k)) ||
+        (r.setNameEn && r.setNameEn.toLowerCase().includes(k))
     );
   });
 
@@ -158,6 +188,8 @@
     editing.value = {
       setId: 9001,
       setName: '',
+      setNameZh: '',
+      setNameEn: '',
       enabled: 1,
       completeCount: 0,
       itemIds: '',
@@ -178,6 +210,8 @@
         id: record.id,
         setId: record.setId,
         setName: record.setName,
+        setNameZh: record.setNameZh,
+        setNameEn: record.setNameEn,
         completeCount: record.completeCount,
         itemIds: record.itemIds,
         enabled: record.enabled,
@@ -204,8 +238,12 @@
     while (used.has(nextId)) {
       nextId += 1;
     }
+    const zh = record.setNameZh?.trim();
+    const en = record.setNameEn?.trim() || record.setName?.trim();
     await saveSetItem({
       setId: nextId,
+      setNameZh: zh ? `${zh}_副本` : undefined,
+      setNameEn: en ? `${en}_copy` : undefined,
       setName: `${record.setName || 'set'}_copy`,
       completeCount: record.completeCount,
       itemIds: record.itemIds,
@@ -254,7 +292,36 @@
 </script>
 
 <style scoped lang="less">
-  .container {
-    padding: 0 20px 20px;
+  .set-item-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .set-item-search {
+    width: 240px;
+  }
+
+  .set-name-cell {
+    line-height: 1.3;
+  }
+
+  .set-name-primary {
+    font-weight: 500;
+  }
+
+  .set-name-secondary {
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--color-text-3);
+  }
+
+  .set-name-hint {
+    margin-top: 2px;
+    font-size: 12px;
+    color: rgb(var(--orange-6));
   }
 </style>

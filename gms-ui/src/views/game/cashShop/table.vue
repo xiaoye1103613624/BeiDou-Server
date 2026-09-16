@@ -1,14 +1,14 @@
 <template>
-  <a-card class="general-card">
-    <a-space>
-      <a-space>
+  <ProCard>
+    <div class="bd-overlay-toolbar cash-shop-toolbar">
+      <a-space wrap>
         <a-button
           :disabled="condition.onSale === 1"
           type="primary"
           status="success"
           @click="changeOnSaleFilter(1)"
         >
-          上架中
+          {{ $t('cashShop.filter.onSale') }}
         </a-button>
         <a-button
           :disabled="condition.onSale === 0"
@@ -16,28 +16,31 @@
           status="danger"
           @click="changeOnSaleFilter(0)"
         >
-          待售
+          {{ $t('cashShop.filter.offSale') }}
         </a-button>
         <a-button
           :disabled="condition.onSale === undefined"
           type="primary"
           @click="changeOnSaleFilter(undefined)"
         >
-          全部
+          {{ $t('cashShop.filter.all') }}
         </a-button>
       </a-space>
-      <a-space class="a-input">
-        <a-input-number
-          v-model="condition.itemId"
-          placeholder="物品ID"
-          @keydown.enter="loadData"
-        />
-      </a-space>
+      <a-input-number
+        v-model="condition.itemId"
+        class="cash-shop-item-input"
+        :placeholder="$t('cashShop.placeholder.itemId')"
+        @keydown.enter="loadData"
+      />
       <a-space>
-        <a-button @click="loadData">搜索</a-button>
-        <a-button type="primary" @click="showBatchForm">批量编辑</a-button>
+        <a-button @click="loadData">
+          {{ $t('button.search') }}
+        </a-button>
+        <a-button type="primary" @click="showBatchForm">
+          {{ $t('cashShop.button.batchEdit') }}
+        </a-button>
       </a-space>
-    </a-space>
+    </div>
     <a-table
       v-model:selectedKeys="selectedKeys"
       row-key="sn"
@@ -56,84 +59,110 @@
           align="center"
           :width="100"
         />
-        <a-table-column title="物品图标" align="center" :width="70">
+        <a-table-column
+          :title="$t('cashShop.column.itemIcon')"
+          align="center"
+          :width="70"
+        >
           <template #cell="{ record }">
-            <img
-              :src="getIconUrl('item', record.itemId)"
-              :alt="record.itemId"
+            <ItemIcon
+              :id="record.itemId"
+              category="item"
+              :size="32"
+              :alt="String(record.itemId)"
             />
           </template>
         </a-table-column>
         <a-table-column
-          title="物品ID"
+          :title="$t('cashShop.column.itemId')"
           data-index="itemId"
           align="center"
           :width="100"
         />
         <a-table-column
-          title="物品名称"
+          :title="$t('cashShop.column.itemName')"
           data-index="itemName"
           align="center"
           :width="140"
         />
         <a-table-column
-          title="数量"
+          :title="$t('cashShop.column.count')"
           data-index="count"
           align="center"
           :width="70"
         />
         <a-table-column
-          title="优先级"
+          :title="$t('cashShop.column.priority')"
           data-index="priority"
           align="center"
           :width="80"
         />
         <a-table-column
-          title="售价"
+          :title="$t('cashShop.column.price')"
           data-index="price"
           align="center"
           :width="80"
         />
         <a-table-column title="Bonus" data-index="bonus" align="center" />
         <a-table-column
-          title="有效期"
+          :title="$t('cashShop.column.period')"
           data-index="period"
           align="center"
           :width="80"
         >
-          <template #cell="{ record }"> {{ record.period }} 天 </template>
+          <template #cell="{ record }">
+            {{ $t('cashShop.column.periodDays', { n: record.period }) }}
+          </template>
         </a-table-column>
-        <a-table-column title="抵用券" data-index="maplePoint" align="center" />
-        <a-table-column title="金币" data-index="meso" align="center" />
         <a-table-column
-          title="会员专属"
+          :title="$t('cashShop.column.maplePoint')"
+          data-index="maplePoint"
+          align="center"
+        />
+        <a-table-column
+          :title="$t('cashShop.column.meso')"
+          data-index="meso"
+          align="center"
+        />
+        <a-table-column
+          :title="$t('cashShop.column.forPremiumUser')"
           data-index="forPremiumUser"
           align="center"
         />
         <a-table-column
-          title="性别"
+          :title="$t('cashShop.column.gender')"
           data-index="gender"
           align="center"
           :width="80"
         >
           <template #cell="{ record }">
-            <a-tag v-if="record.gender === 0" color="blue"> 男 </a-tag>
-            <a-tag v-else-if="record.gender === 1" color="red"> 女 </a-tag>
-            <a-tag v-else-if="record.gender === 2" color="green"> 通用 </a-tag>
+            <a-tag v-if="record.gender === 0" color="blue">
+              {{ $t('cashShop.gender.male') }}
+            </a-tag>
+            <a-tag v-else-if="record.gender === 1" color="red">
+              {{ $t('cashShop.gender.female') }}
+            </a-tag>
+            <a-tag v-else-if="record.gender === 2" color="green">
+              {{ $t('cashShop.gender.both') }}
+            </a-tag>
           </template>
         </a-table-column>
         <a-table-column
-          title="上架"
+          :title="$t('cashShop.column.onSale')"
           data-index="onSale"
           align="center"
           :width="90"
         >
           <template #cell="{ record }">
-            <a-tag v-if="record.onSale" color="green">上架中</a-tag>
-            <a-tag v-else color="red">待售</a-tag>
+            <a-tag v-if="record.onSale" color="green">
+              {{ $t('cashShop.filter.onSale') }}
+            </a-tag>
+            <a-tag v-else color="red">
+              {{ $t('cashShop.filter.offSale') }}
+            </a-tag>
           </template>
         </a-table-column>
-        <a-table-column title="标签" align="center">
+        <a-table-column :title="$t('cashShop.column.clz')" align="center">
           <template #cell="{ record }">
             <a-tag v-if="record.clz === 0" color="gold">NEW</a-tag>
             <a-tag v-else-if="record.clz === 1" color="green">SALE</a-tag>
@@ -146,54 +175,56 @@
         <a-table-column title="PbPoint" data-index="pbPoint" align="center" />
         <a-table-column title="PbGift" data-index="pbGift" align="center" />
         <a-table-column
-          title="礼包合集"
+          :title="$t('cashShop.column.packageSn')"
           data-index="packageSn"
           align="center"
         />
-        <a-table-column title="操作">
+        <a-table-column :title="$t('operation')">
           <template #cell="{ record }">
             <a-button type="text" size="mini" @click="editClick(record)">
-              编辑
+              {{ $t('button.edit') }}
             </a-button>
           </template>
         </a-table-column>
       </template>
     </a-table>
     <a-pagination
-      style="margin-top: 20px"
+      class="cash-shop-pagination"
       :total="total"
       :current="condition.pageNo"
       show-total
       show-jumper
       @change="pageChange"
     />
-  </a-card>
+  </ProCard>
   <cash-shop-form ref="cashShopFormRef" @load-data="loadData" />
   <a-modal
     v-model:visible="batchFormVisible"
+    :width="480"
     :ok-loading="loading"
-    title="批量编辑"
+    :title="$t('cashShop.batch.title')"
+    unmount-on-close
     :on-before-ok="handleBatchFormBeforeOk"
   >
-    <a-form :model="batchFormData">
-      <a-form-item label="已选中SN">
+    <a-form class="bd-overlay-form" :model="batchFormData" auto-label-width>
+      <a-form-item :label="$t('cashShop.batch.selectedSn')">
         <a-space wrap>
           <a-tag v-for="sn in selectedKeys" :key="sn" color="blue">
             {{ sn }}
           </a-tag>
         </a-space>
       </a-form-item>
-      <a-form-item label="编辑类型">
+      <a-form-item :label="$t('cashShop.batch.type')">
         <a-select v-model="batchFormData.type">
           <a-option
             v-for="item of batchFormTypeOptions"
             :key="item.value"
             :value="item.value"
-            :label="item.value"
+            :label="$t(item.labelKey)"
           />
         </a-select>
       </a-form-item>
-      <a-form-item label="值">
+      <a-form-item :label="$t('cashShop.batch.value')">
         <a-input-number v-model="batchFormData.value" />
       </a-form-item>
     </a-form>
@@ -211,9 +242,11 @@
   } from '@/api/cashShop';
   import CashShopForm from '@/views/game/cashShop/form.vue';
   import { cashShopState } from '@/store/modules/cashShop/type';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { scheduleIconCacheBatch } from '@/utils/mapleStoryAPI';
   import { Message, TableRowSelection } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
 
   const props = defineProps<{
@@ -267,6 +300,12 @@
     cashShopFormRef.value.initForm(data);
   };
 
+  // Backend switch expects Chinese type strings (价格/数量/有效期)
+  const batchFormTypeOptions = [
+    { value: '价格', labelKey: 'cashShop.batch.type.price' },
+    { value: '数量', labelKey: 'cashShop.batch.type.count' },
+    { value: '有效期', labelKey: 'cashShop.batch.type.period' },
+  ];
   const batchFormVisible = ref<boolean>(false);
   const showBatchForm = () => {
     batchFormData.value = {
@@ -283,11 +322,6 @@
     });
     batchFormVisible.value = true;
   };
-  const batchFormTypeOptions = [
-    { value: '价格' },
-    { value: '数量' },
-    { value: '有效期' },
-  ];
   const batchFormData = ref<batchFormState>({
     data: [],
     type: '价格',
@@ -295,18 +329,18 @@
   });
   const handleBatchFormBeforeOk = async () => {
     if (batchFormData.value.data.length === 0) {
-      Message.error('你没有选中任何东西');
+      Message.error(t('cashShop.msg.noSelection'));
       return;
     }
     if (batchFormData.value.value === undefined) {
-      Message.error('更新值undefined');
+      Message.error(t('cashShop.msg.valueUndefined'));
       return;
     }
 
     setLoading(true);
     try {
       await batchOnSale(batchFormData.value);
-      Message.success('更新成功！');
+      Message.success(t('cashShop.msg.updateSuccess'));
       await loadData();
     } finally {
       setLoading(false);
@@ -321,22 +355,16 @@
 </script>
 
 <style scoped lang="less">
-  :deep(.arco-card-body .a-input .arco-space-item) {
-    width: 100%;
+  .cash-shop-toolbar {
+    margin-bottom: 16px;
   }
-  :deep(.arco-card-body .arco-space) {
-    flex-wrap: wrap;
+
+  .cash-shop-item-input {
     width: 100%;
+    max-width: 240px;
   }
-  :deep(.arco-card-body > .arco-space > .arco-space-item) {
-    margin-bottom: 5px;
-    margin-right: 0px;
-  }
-  :deep(.arco-card-body > .arco-space > .arco-space-item:nth-child(2)) {
-    width: 100%;
-    max-width: 400px;
-  }
-  :deep(.arco-card-body .arco-space .arco-space-item .arco-input-wrapper) {
-    width: 100%;
+
+  .cash-shop-pagination {
+    margin-top: 16px;
   }
 </style>

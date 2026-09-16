@@ -1,3 +1,6 @@
+@import './tokens.less';
+@import './theme.less';
+
 * {
   box-sizing: border-box;
 }
@@ -8,10 +11,27 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  color: var(--text-primary);
   font-size: 14px;
-  background-color: var(--color-bg-1);
+  font-family: var(--bd-font-sans);
+  background-color: var(--bg-page);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  height: 100%;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(4px);
 }
 
 .echarts-tooltip-diy {
@@ -22,56 +42,46 @@ body {
   ) !important;
   border: none !important;
   backdrop-filter: blur(10px) !important;
-  /* Note: backdrop-filter has minimal browser support */
-
   border-radius: 6px !important;
+
   .content-panel {
     display: flex;
     justify-content: space-between;
-    padding: 0 9px;
-    background: rgba(255, 255, 255, 0.8);
     width: 164px;
     height: 32px;
-    line-height: 32px;
-    box-shadow: 6px 0px 20px rgba(34, 87, 188, 0.1);
-    border-radius: 4px;
     margin-bottom: 4px;
+    line-height: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    box-shadow: 6px 0 20px rgba(34, 87, 188, 0.1);
+    padding: 0 9px;
   }
+
   .tooltip-title {
-    margin: 0 0 10px 0;
+    margin: 0 0 10px;
   }
+
   p {
     margin: 0;
   }
+
   .tooltip-title,
   .tooltip-value {
-    font-size: 13px;
-    line-height: 15px;
     display: flex;
     align-items: center;
-    text-align: right;
     color: #1d2129;
     font-weight: bold;
+    font-size: 13px;
+    line-height: 15px;
+    text-align: right;
   }
+
   .tooltip-item-icon {
     display: inline-block;
-    margin-right: 8px;
     width: 10px;
     height: 10px;
+    margin-right: 8px;
     border-radius: 50%;
-  }
-}
-
-.general-card {
-  border-radius: 4px;
-  border: none;
-  & > .arco-card-header {
-    height: auto;
-    padding: 20px;
-    border: none;
-  }
-  & > .arco-card-body {
-    padding: 0 20px 20px 20px;
   }
 }
 
@@ -82,11 +92,12 @@ body {
 .arco-table-cell {
   .circle {
     display: inline-block;
-    margin-right: 4px;
     width: 6px;
     height: 6px;
+    margin-right: 4px;
+    background-color: rgb(var(--primary-6));
     border-radius: 50%;
-    background-color: rgb(var(--blue-6));
+
     &.pass {
       background-color: rgb(var(--green-6));
     }
@@ -94,35 +105,233 @@ body {
 }
 
 .td-nowrap {
-  white-space: nowrap;//内容不换行
+  white-space: nowrap;
 }
 
-/* 仅针对 IOS 的Safari和其它浏览器的CSS，安卓没有此烦恼。 */
-@supports (-webkit-touch-callout: none) {
-  /* 针对表格的列被压缩宽度的优化 */
-  table, .arco-table, .arco-table-container, .arco-scrollbar, .arco-scrollbar-container, .arco-table-element {
-    white-space: nowrap;  //禁止换行，防止Safari对表格列进行压缩
+/* 企业级表格与表单微调 */
+.arco-btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: none;
+
+  &:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
   }
-  /* 保证表格里选择框最小宽度 */
+
+  &:active {
+    background: var(--primary-active);
+    border-color: var(--primary-active);
+  }
+}
+
+.arco-table {
+  color: var(--text-primary);
+}
+
+.arco-table-th {
+  color: var(--text-secondary) !important;
+  background: var(--bg-page) !important;
+  font-weight: 600;
+}
+
+.arco-table-td {
+  color: var(--text-primary);
+}
+
+.arco-table-th .arco-table-cell,
+.arco-table-td .arco-table-cell {
+  padding: 12px 14px;
+}
+
+.arco-table-tr:hover .arco-table-td {
+  background: var(--bg-hover);
+}
+
+body[arco-theme='dark'] .arco-table-th {
+  background: var(--bg-hover) !important;
+}
+
+.arco-form-item-label,
+.arco-form-item-label-col > .arco-form-item-label {
+  color: var(--text-primary) !important;
+  font-weight: 500;
+}
+
+.arco-empty-description {
+  color: var(--text-secondary) !important;
+}
+
+.arco-input-wrapper,
+.arco-select-view-single,
+.arco-textarea-wrapper,
+.arco-input-number {
+  background-color: var(--bg-card);
+  border-color: var(--border-strong) !important;
+  border-radius: var(--bd-radius-sm);
+  color: var(--text-primary);
+}
+
+.arco-input-wrapper:hover,
+.arco-select-view-single:hover,
+.arco-textarea-wrapper:hover,
+.arco-input-number:hover {
+  border-color: var(--text-tertiary) !important;
+}
+
+.arco-input-wrapper.arco-input-focus,
+.arco-select-view-single.arco-select-view-focus,
+.arco-textarea-wrapper.arco-textarea-focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(var(--bd-primary-rgb), 0.15);
+}
+
+.arco-typography,
+.arco-btn-secondary,
+.arco-btn-text {
+  color: var(--text-primary);
+}
+
+.arco-modal {
+  border-radius: var(--bd-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--bd-shadow-lg);
+
+  .arco-modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--bd-border);
+  }
+
+  .arco-modal-title {
+    color: var(--bd-ink);
+    font-weight: 600;
+    font-size: 15px;
+    font-family: var(--bd-font-display);
+  }
+
+  .arco-modal-body {
+    padding: 20px;
+  }
+
+  .arco-modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--bd-border);
+  }
+}
+
+.arco-drawer {
+  .arco-drawer-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--bd-border);
+  }
+
+  .arco-drawer-title {
+    color: var(--bd-ink);
+    font-weight: 600;
+    font-size: 15px;
+    font-family: var(--bd-font-display);
+  }
+
+  .arco-drawer-body {
+    padding: 20px;
+  }
+
+  .arco-drawer-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--bd-border);
+  }
+}
+
+body[arco-theme='dark'] {
+  .arco-modal-title,
+  .arco-drawer-title {
+    color: var(--color-text-1);
+  }
+
+  .arco-modal-header,
+  .arco-modal-footer,
+  .arco-drawer-header,
+  .arco-drawer-footer {
+    border-color: var(--color-border);
+  }
+}
+
+/* Vertical stack for alerts / toolbars inside ProCard */
+.bd-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bd-page-toolbar {
+  margin-bottom: 12px;
+}
+
+.bd-page-pagination {
+  margin-top: 16px;
+}
+
+/* Nested interaction surfaces (modals / drawers / selectors) */
+.bd-overlay-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.bd-overlay-form {
+  .arco-form-item {
+    margin-bottom: 20px;
+  }
+
+  .arco-input-number,
+  .arco-select,
+  .arco-picker,
+  .arco-input-wrapper {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .bd-overlay-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  table,
+  .arco-table,
+  .arco-table-container,
+  .arco-scrollbar,
+  .arco-scrollbar-container,
+  .arco-table-element {
+    white-space: nowrap;
+  }
+
   .arco-table-checkbox {
     min-width: 30px;
   }
-  /* 保证表格里输入框最小宽度 */
+
   td .arco-table-cell .arco-input {
     min-width: 80px;
   }
-  /* 允许表格里按钮列自动换行 */
+
   td:has(.arco-table-cell .arco-table-td-content .arco-btn) {
     white-space: normal;
   }
-  /* 禁止输入框缩放 */
-  input, textarea {
-    resize: none; /* 禁用右下角缩放手柄 */
-    font-size: 16px !important;  /* iOS 对小于 16px 的输入框触发自动缩放 */
-    touch-action: manipulation;  /* 禁用双指手势 */
+
+  input,
+  textarea {
+    resize: none;
+    font-size: 16px !important;
+    touch-action: manipulation;
   }
 }
-/* 针对所有移动端的a-modal模态框进行优化 */
+
 @media (max-width: @screen-sm) {
   .arco-modal {
     width: 90% !important;
@@ -143,6 +352,6 @@ body {
   }
 
   .arco-form .arco-form-item-label-col > .arco-form-item-label {
-    white-space: nowrap;//内容不换行
+    white-space: nowrap;
   }
 }

@@ -23,6 +23,8 @@ public class UpdateAccountByGmDTO implements Serializable {
     private Integer characterslots;
     private Integer gender;
     private Integer webadmin;
+    /** 后台角色编码：admin / operator */
+    private String roleCode;
     private String nick;
     private Integer mute;
     private String email;

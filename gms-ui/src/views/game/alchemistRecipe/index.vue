@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.alchemistRecipe')">
+  <PageContainer :title="$t('menu.game.alchemistRecipe')">
+    <ProCard>
       <!-- 查询条件 -->
       <a-form layout="inline" :model="query">
         <a-form-item :label="$t('alchemistRecipe.column.tierRequired')">
@@ -79,12 +78,11 @@
                 :width="70"
               >
                 <template #cell="{ record }">
-                  <img
+                  <ItemIcon
                     v-if="record.resultItemId"
-                    :src="getIconUrl('item', record.resultItemId)"
-                    :data-item-id="record.resultItemId"
-                    style="width: 32px; height: 32px"
-                    @error="onItemIconError"
+                    :id="record.resultItemId"
+                    category="item"
+                    :size="32"
                   />
                 </template>
               </a-table-column>
@@ -299,8 +297,8 @@
           </a-row>
         </a-form>
       </a-modal>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -317,7 +315,6 @@
   import { getTierList } from '@/api/alchemyTier';
   import type { AlchemistRecipeForm } from '@/api/alchemistRecipe';
   import { Message } from '@arco-design/web-vue';
-  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
 
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);

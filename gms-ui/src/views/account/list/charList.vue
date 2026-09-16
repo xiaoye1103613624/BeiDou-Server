@@ -6,14 +6,16 @@
     :mask-closable="false"
     :esc-to-close="false"
     :footer="false"
+    unmount-on-close
   >
     <a-table
+      class="char-list-table"
       row-key="id"
       :loading="loading"
       :data="tableData"
       :pagination="false"
       :bordered="{ cell: true }"
-      size="mini"
+      size="small"
     >
       <template #columns>
         <a-table-column
@@ -167,3 +169,10 @@
     name: 'AccountCharList',
   };
 </script>
+
+<style scoped lang="less">
+  .char-list-table {
+    border-radius: var(--bd-radius-md);
+    overflow: hidden;
+  }
+</style>

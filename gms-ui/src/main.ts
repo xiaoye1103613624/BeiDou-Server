@@ -3,6 +3,8 @@ import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
 import { loader } from '@guolao/vue-monaco-editor';
+import { initAppTheme } from '@/utils/theme';
+import defaultSettings from '@/config/settings.json';
 import router from './router';
 import store from './store';
 import i18n from './locale';
@@ -14,6 +16,11 @@ import App from './App.vue';
 // https://arco.design/docs/designlab/use-theme-package
 import '@/assets/style/global.less';
 import '@/api/interceptor';
+
+const savedTheme = localStorage.getItem('arco-theme');
+const savedColor =
+  localStorage.getItem('bd-theme-color') || defaultSettings.themeColor;
+initAppTheme(savedColor, savedTheme === 'dark');
 
 const app = createApp(App);
 

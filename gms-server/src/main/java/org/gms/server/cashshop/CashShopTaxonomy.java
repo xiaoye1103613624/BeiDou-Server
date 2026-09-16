@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 窗口商城分类 ↔ 客户端 {@code cashshopwnd.cpp} kTabs/kCats（Etc.wz/Category.img）
- * 以及 legacy (tab, category) 桶（与客户端 kTabs/kCats 对齐）。
+ * 窗口商城分类 ↔ legacy (tab, category) 桶，以及客户端 RESP_TAXONOMY 动态树。
  * <p>
- * 客户端目前硬编码 kTabs，不解析 RESP_TAXONOMY；因此自动同步必须写入
- * tab 2/3/5/6/7 下已有的 kCats，不能另造「特效/消息/现金包」等客户端没有的分类。
+ * 官方时装/宠物等仍对齐历史 kCats（tab 2/3/5/6/7）；坐骑等扩展桶（tab 11）
+ * 依赖客户端解析 {@code RESP_TAXONOMY} 的 parentId 二级树展示。
+ * 自动同步勿再发明客户端没有的杂项名（见 {@link #OBSOLETE_AUTO_NAMES}）。
  */
 public final class CashShopTaxonomy {
     private CashShopTaxonomy() {
@@ -40,7 +40,9 @@ public final class CashShopTaxonomy {
             new Bucket("Android", "戒指", 100, 2, 9),
             new Bucket("Face", "脸饰", 20, 2, 1),
             new Bucket("Eye", "眼饰", 30, 2, 2),
-            new Bucket("Ear", "戒指", 100, 2, 9)
+            new Bucket("Ear", "戒指", 100, 2, 9),
+            /** 骑宠本体/鞍具散目录；挂货以 {@link #forItemId} 的 11:1/11:2 为准 */
+            new Bucket("TamingMob", "坐骑", 700, 11, 1)
     );
 
     // kCats 展示桶（与 cashshopwnd.cpp 顺序一致）
@@ -80,13 +82,27 @@ public final class CashShopTaxonomy {
     @Deprecated
     public static final Bucket DAMAGE_SKIN = XY_PLAY;
 
+    /** 坐骑一级标注（无商品）；子类见 {@link #MOUNT}/{@link #MOUNT_EQ}/{@link #MOUNT_USE} */
+    public static final Bucket MOUNT_ROOT = new Bucket("11:0", "坐骑", 700, 11, 0);
+    /** 坐骑本体 190xxxx */
+    public static final Bucket MOUNT = new Bucket("11:1", "坐骑", 710, 11, 1);
+    /** 鞍具 191xxxx */
+    public static final Bucket MOUNT_EQ = new Bucket("11:2", "鞍具", 720, 11, 2);
+    /** 坐骑道具 226xxxx（如恢复疲劳补药） */
+    public static final Bucket MOUNT_USE = new Bucket("11:3", "坐骑道具", 730, 11, 3);
+
+    public static final int MOUNT_PRICE = 5000;
+    public static final int MOUNT_EQ_PRICE = 1000;
+    public static final int MOUNT_USE_PRICE = 500;
+
     private static final List<Bucket> KCATS = List.of(
             CAP, FACE, EYE, OVERALL, COAT, PANTS, SHOES, GLOVE, WEAPON, RING, CAPE,
             TELEPORT, WEATHER,
             BEAUTY, STORE, GAME, EMOTION, WEDDING, EFFECT, CHARACTER,
             PET, PET_EQ, PET_USE,
             PACKAGE,
-            SKIN, XY_PLAY
+            SKIN, XY_PLAY,
+            MOUNT_ROOT, MOUNT, MOUNT_EQ, MOUNT_USE
     );
 
     /** 旧版按 Cash ID 段发明的分类名（客户端 kCats 没有）。 */
@@ -146,6 +162,7 @@ public final class CashShopTaxonomy {
             case "cape" -> 110;
             case "ring" -> 111;
             case "weapon" -> 170;
+            case "tamingmob" -> 190;
             default -> 111;
         };
     }
@@ -180,6 +197,7 @@ public final class CashShopTaxonomy {
             case 521 -> GAME; // 双倍经验等时段卡（勿挂美容）
             case 522, 549, 553 -> PACKAGE;
             case 525 -> WEDDING;
+            case 226 -> MOUNT_USE;
             default -> GAME;
         };
     }
@@ -221,10 +239,36 @@ public final class CashShopTaxonomy {
         if (type >= 180 && type <= 183) {
             return PET_EQ;
         }
+        if (type == 190) {
+            return MOUNT;
+        }
+        if (type == 191) {
+            return MOUNT_EQ;
+        }
         if (type == 103 || (type >= 111 && type <= 115)) {
             return RING;
         }
         return RING;
+    }
+
+    /** 坐骑二级桶固定点券价（seed / 纠偏用）。 */
+    public static int mountDefaultPrice(int itemId) {
+        int type = itemTypePrefix(itemId);
+        if (type == 190) {
+            return MOUNT_PRICE;
+        }
+        if (type == 191) {
+            return MOUNT_EQ_PRICE;
+        }
+        if (type == 226) {
+            return MOUNT_USE_PRICE;
+        }
+        return MOUNT_PRICE;
+    }
+
+    public static boolean isMountCatalogItem(int itemId) {
+        int type = itemTypePrefix(itemId);
+        return type == 190 || type == 191 || type == 226;
     }
 
     /**
@@ -286,7 +330,10 @@ public final class CashShopTaxonomy {
         if (slash >= 0) {
             name = name.substring(slash + 1);
         }
-        if (name.toLowerCase(Locale.ROOT).endsWith(".img")) {
+        final String lower = name.toLowerCase(Locale.ROOT);
+        if (lower.endsWith(".img.xml")) {
+            name = name.substring(0, name.length() - 8);
+        } else if (lower.endsWith(".img")) {
             name = name.substring(0, name.length() - 4);
         }
         if (!name.matches("\\d{7,8}")) {

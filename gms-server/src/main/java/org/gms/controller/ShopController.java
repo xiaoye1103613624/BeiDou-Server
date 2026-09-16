@@ -65,4 +65,35 @@ public class ShopController {
         shopService.modifyShopItem(ShopItemSearchRtnDTO.builder().id(id).build(), true);
         return ResultBody.success(null);
     }
+
+    @Tag(name = "/shop/" + ApiConstant.LATEST)
+    @Operation(summary = "按物品反查所在 NPC 商店")
+    @PostMapping("/" + ApiConstant.LATEST + "/getItemShopList")
+    public ResultBody<Page<ShopItemSearchRtnDTO>> getItemShopList(@RequestBody SubmitBody<ShopSearchReqDTO> request) {
+        return ResultBody.success(request, shopService.getItemShopList(request.getData()));
+    }
+
+    @Tag(name = "/shop/" + ApiConstant.LATEST)
+    @Operation(summary = "新建商店并绑定 NPC，返回商店 id")
+    @PutMapping("/" + ApiConstant.LATEST + "/addShop")
+    public ResultBody<Long> addShop(@RequestBody SubmitBody<ShopSearchRtnDTO> request) {
+        return ResultBody.success(request, shopService.addShop(request.getData()));
+    }
+
+    @Tag(name = "/shop/" + ApiConstant.LATEST)
+    @Operation(summary = "更新商店绑定的 NPC")
+    @PostMapping("/" + ApiConstant.LATEST + "/updateShop")
+    public ResultBody<Object> updateShop(@RequestBody SubmitBody<ShopSearchRtnDTO> request) {
+        RequireUtil.requireNotNull(request.getData().getShopId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "shopId"));
+        shopService.updateShop(request.getData());
+        return ResultBody.success(request, null);
+    }
+
+    @Tag(name = "/shop/" + ApiConstant.LATEST)
+    @Operation(summary = "删除商店及其商品")
+    @DeleteMapping("/" + ApiConstant.LATEST + "/deleteShop/{shopId}")
+    public ResultBody<Object> deleteShop(@PathVariable("shopId") Long shopId) {
+        shopService.deleteShop(shopId);
+        return ResultBody.success(null);
+    }
 }

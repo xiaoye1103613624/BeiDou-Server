@@ -55,4 +55,41 @@ class CashShopTaxonomyTest {
         assertTrue(CashShopTaxonomy.isKCatsDisplayName("帽子"));
         assertTrue(CashShopTaxonomy.isKCatsDisplayName("武器"));
     }
+
+    @Test
+    void mountPrefixesMapToTab11Buckets() {
+        assertEquals(CashShopTaxonomy.MOUNT, CashShopTaxonomy.forItemId(1902000));
+        assertEquals(CashShopTaxonomy.MOUNT, CashShopTaxonomy.forItemId(1902350));
+        assertEquals(11, CashShopTaxonomy.forItemId(1902000).legacyTab());
+        assertEquals(1, CashShopTaxonomy.forItemId(1902000).legacyCategory());
+
+        assertEquals(CashShopTaxonomy.MOUNT_EQ, CashShopTaxonomy.forItemId(1912000));
+        assertEquals(CashShopTaxonomy.MOUNT_EQ, CashShopTaxonomy.forItemId(1912029));
+        assertEquals(11, CashShopTaxonomy.forItemId(1912000).legacyTab());
+        assertEquals(2, CashShopTaxonomy.forItemId(1912000).legacyCategory());
+
+        assertEquals(CashShopTaxonomy.MOUNT_USE, CashShopTaxonomy.forItemId(2260000));
+        assertEquals(11, CashShopTaxonomy.forItemId(2260000).legacyTab());
+        assertEquals(3, CashShopTaxonomy.forItemId(2260000).legacyCategory());
+
+        assertEquals(CashShopTaxonomy.MOUNT_PRICE, CashShopTaxonomy.mountDefaultPrice(1902000));
+        assertEquals(CashShopTaxonomy.MOUNT_EQ_PRICE, CashShopTaxonomy.mountDefaultPrice(1912000));
+        assertEquals(CashShopTaxonomy.MOUNT_USE_PRICE, CashShopTaxonomy.mountDefaultPrice(2260000));
+        assertTrue(CashShopTaxonomy.isMountCatalogItem(1902000));
+        assertFalse(CashShopTaxonomy.isMountCatalogItem(1000000));
+    }
+
+    @Test
+    void tamingMobFolderMapsToMount() {
+        assertEquals(CashShopTaxonomy.MOUNT, CashShopTaxonomy.forCharacterFolder("TamingMob"));
+        assertTrue(CashShopTaxonomy.characterFolders().stream()
+                .anyMatch(b -> "TamingMob".equals(b.key())));
+    }
+
+    @Test
+    void parseImgItemIdAcceptsImgXml() {
+        assertEquals(1902000, CashShopTaxonomy.parseImgItemId("01902000.img"));
+        assertEquals(1902000, CashShopTaxonomy.parseImgItemId("01902000.img.xml"));
+        assertEquals(1912000, CashShopTaxonomy.parseImgItemId("1912000.img.xml"));
+    }
 }

@@ -1,8 +1,7 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.petGrowth')">
-      <a-alert type="info" style="margin-bottom: 12px">
+  <PageContainer :title="$t('menu.game.petGrowth')">
+    <ProCard>
+      <a-alert type="info" class="bd-page-toolbar">
         {{ $t('petGrowth.tip.safe') }}
       </a-alert>
       <a-row>
@@ -29,7 +28,7 @@
         column-resizable
         :pagination="false"
         :bordered="{ cell: true }"
-        style="margin-top: 16px"
+        class="bd-page-toolbar"
       >
         <template #columns>
           <a-table-column
@@ -44,11 +43,11 @@
             align="center"
           >
             <template #cell="{ record }">
-              <img
+              <ItemIcon
                 v-if="record.petId"
-                :src="getIconUrl('item', record.petId)"
-                style="width: 32px; height: 32px"
-                @error="onItemIconError"
+                :id="record.petId"
+                category="item"
+                :size="32"
               />
             </template>
           </a-table-column>
@@ -157,7 +156,7 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </ProCard>
 
     <a-modal
       v-model:visible="modalVisible"
@@ -296,11 +295,11 @@
           <a-space wrap>
             <template v-for="(st, idx) in chain.stages" :key="st.id">
               <a-card size="small" style="width: 180px; text-align: center">
-                <img
+                <ItemIcon
                   v-if="st.petId"
-                  :src="getIconUrl('item', st.petId)"
-                  style="width: 40px; height: 40px"
-                  @error="onItemIconError"
+                  :id="st.petId"
+                  category="item"
+                  :size="40"
                 />
                 <div>{{ st.name }} (L{{ st.stage }})</div>
                 <div style="font-size: 12px; color: #86909c">
@@ -324,7 +323,7 @@
         </div>
       </a-spin>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -332,7 +331,6 @@
   import { useI18n } from 'vue-i18n';
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
-  import { getIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import {
     deleteStage,
     getPreview,
@@ -359,10 +357,10 @@
     stage: 1,
     name: '',
     petId: undefined,
-    nextPetId: null,
+    nextPetId: undefined,
     needExp: 100,
     expPerFeed: 10,
-    feedItemIds: null,
+    feedItemIds: undefined,
     expRate: 1.0,
     dropRate: 1.0,
     mesoRate: 1.0,
@@ -409,9 +407,12 @@
     setLoading(true);
     try {
       const { data } = await getStage(id);
+      const stage = data as unknown as PetGrowthStageForm;
       form.value = {
         ...emptyForm(),
-        ...(data as unknown as PetGrowthStageForm),
+        ...stage,
+        nextPetId: stage.nextPetId ?? undefined,
+        feedItemIds: stage.feedItemIds ?? undefined,
       };
       editingId.value = form.value.id ?? null;
       modalVisible.value = true;

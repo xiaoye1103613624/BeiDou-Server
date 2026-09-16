@@ -36,3 +36,14 @@ src/main/resources/static/
 CLAUDE.local.md
 _*
 */tools_out
+
+# Local tooling / secrets / temp outputs (do not commit)
+.tools/
+keys.dat
+compile_out.txt
+.tmp*
+*.tmp
+typecheck-*.txt
+/package-lock.json
+gms-ui/package-lock.json
+gms-ui/typecheck-*.txt

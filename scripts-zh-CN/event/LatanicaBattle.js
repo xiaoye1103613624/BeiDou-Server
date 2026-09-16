@@ -84,7 +84,7 @@ function setEventRewards(eim) {
     var itemSet, itemQty, evLevel, expStages, mesoStages;
 
     evLevel = 1;
-    itemSet = [4000314, 4001126, 2290096];
+    itemSet = [4000313, 4001126, 2290096];
     itemQty = [2, 30, 1];
     eim.setEventRewards(evLevel, itemSet, itemQty);
 

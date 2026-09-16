@@ -1048,7 +1048,17 @@ public class AbstractPlayerInteraction {
         return LifeFactory.getMonster(mid);
     }
 
+    /**
+     * 召唤新手引导精灵。当 {@code server.replace_overhead_icons} 开启时不生成头顶精灵
+     * （入口已迁到右边栏），避免与侧边栏功能重复。
+     */
     public void spawnGuide() {
+        // 缺省视为开启：头顶入口已迁侧边栏
+        if (GameConfig.getValueProp("server", "replace_overhead_icons") == null
+                || GameConfig.getServerBoolean("replace_overhead_icons")) {
+            log.info(I18nUtil.getLogMessage("OverheadIcons.spawnSuppressed"));
+            return;
+        }
         c.sendPacket(PacketCreator.spawnGuide(true));
     }
 

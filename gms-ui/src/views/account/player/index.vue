@@ -1,7 +1,6 @@
 <template>
-  <div class="container" :loading="true">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.account.player')">
+  <PageContainer :title="$t('menu.account.player')">
+    <ProCard>
       <a-form :model="filterForm" class="a-from-keyword">
         <a-row :gutter="16">
           <a-col :span="6">
@@ -42,7 +41,7 @@
         </a-button>
       </a-space>
       <a-divider />
-      <a-row style="margin-bottom: 16px">
+      <a-row class="bd-page-toolbar">
         <a-col>
           <a-space>
             <a-button type="primary" @click="refreshClick">
@@ -121,7 +120,7 @@
         </template>
       </a-table>
       <a-pagination
-        style="margin-top: 20px"
+        class="bd-page-pagination"
         :total="total"
         :page-size="size"
         :current="page"
@@ -132,7 +131,7 @@
         @change="pageChange"
         @page-size-change="pageSizeChange"
       />
-    </a-card>
+    </ProCard>
 
     <a-modal
       v-model:visible="giveFormVisible"
@@ -299,7 +298,7 @@
         </a-form-item>
       </a-form>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">

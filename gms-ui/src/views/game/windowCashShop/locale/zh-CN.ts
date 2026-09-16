@@ -1,32 +1,29 @@
 export default {
-  'windowCashShop.path': '客户端 Data 路径（全局共用）',
-  'windowCashShop.path.placeholder': '例如 F:\\MXD_dev\\BeiDou-Client\\Data',
-  'windowCashShop.path.browse': '浏览目录',
-  'windowCashShop.path.validate': '校验路径',
-  'windowCashShop.path.save': '保存路径',
-  'windowCashShop.path.clear': '清空路径',
-  'windowCashShop.path.status': '路径状态',
-  'windowCashShop.path.hint':
-    '此路径供窗口商城、技改客户端同步等共用（game_config / -Dgms.client.data）。套装与装备成长 WZ 导入走服务端 wz 目录，不依赖此路径。',
+  'windowCashShop.section.client': '客户端操作',
+  'windowCashShop.section.clientLink.title': '客户端文件操作已独立',
+  'windowCashShop.section.clientLink.hint':
+    '从客户端 Data 同步分类/商品请到「客户端 → 新商城客户端同步」。本页仅管理服务端库；上架时可勾选「校验客户端资源」（只读探测，使用共用 ClientDataPath）。图标补齐请到「客户端 → 游戏资源中心」。',
+  'windowCashShop.section.server': '服务端管理',
+  'windowCashShop.section.server.hint':
+    '热重载 / TSV / 中文名 / 种子分类写入服务端库，不修改客户端文件。从客户端同步请使用「新商城客户端同步」；图标统一走「游戏资源中心」。',
   'windowCashShop.syncFromClient': '从客户端同步分类与商品',
   'windowCashShop.syncFromClient.confirm':
-    '扫描已保存的客户端 Data（须为 …\\Data 根目录），按游戏内 kCats（装备/消耗/设置/宠物/礼包）归类并 upsert 现金商品。会把误分到「帽子」的 170xxxx 现金武器改挂到「武器」。空分类不创建；结束后自动热重载。首次可能需 1–3 分钟；图标仅填本地已有 PNG，其余请用「同步图标」。',
+    '扫描已保存的客户端 Data（须为 …\\Data 根目录），按游戏内 kCats（装备/消耗/设置/宠物/礼包）归类并 upsert 现金商品。会把误分到「帽子」的 170xxxx 现金武器改挂到「武器」。空分类不创建；结束后自动热重载。首次可能需 1–3 分钟；图标仅填本地已有 PNG，其余请到「游戏资源中心」补齐。',
   'windowCashShop.syncFromClient.offer':
     '路径已保存。是否立即从客户端同步分类与商品？',
   'windowCashShop.syncFromClient.loading':
     '正在从客户端同步分类与商品，请勿关闭页面…',
-  'windowCashShop.syncIconsEmpty': '同步图标(空)',
-  'windowCashShop.syncIconsEmpty.confirm':
-    '仅为空（或仍是 CDN）icon_url 的商品填充本地图标？有勾选则只处理勾选行，否则处理全部商品。',
-  'windowCashShop.syncIconsForce': '强制更新图标',
-  'windowCashShop.syncIconsForce.confirm':
-    '强制覆盖 icon_url 并尽量重拉 PNG？有勾选则只处理勾选行，否则处理全部商品。',
   'windowCashShop.reload': '热重载',
   'windowCashShop.reloadCategory': '重载本分类',
   'windowCashShop.importTsv': '导入 TSV',
   'windowCashShop.refreshNames': '刷新中文名',
   'windowCashShop.seedDefaults': '种子分类',
-  'windowCashShop.category': '分类（按游戏内一级 Tab）',
+  'windowCashShop.seedMount': '灌入坐骑商品',
+  'windowCashShop.msg.seedMountDone':
+    '坐骑灌货完成：坐骑 {mounts} · 鞍具 {saddles} · 道具 {use}',
+  'windowCashShop.category': '分类（按游戏内一级 Tab · 支持 parent 二级）',
+  'windowCashShop.category.root': '一级',
+  'windowCashShop.category.child': '二级',
   'windowCashShop.category.add': '新增分类',
   'windowCashShop.category.edit': '编辑分类',
   'windowCashShop.category.empty': '暂无分类',
@@ -41,6 +38,8 @@ export default {
   'windowCashShop.column.sort': '排序',
   'windowCashShop.column.enabled': '启用',
   'windowCashShop.column.clickType': '点击类型',
+  'windowCashShop.clickType.hint':
+    '仅展示已实现类型（SHOW_ITEMS / OPEN_WINDOW）',
   'windowCashShop.column.clickParam': '点击参数',
   'windowCashShop.column.gateItemId': '门槛物品',
   'windowCashShop.column.isHot': '热卖',
@@ -52,7 +51,7 @@ export default {
   'windowCashShop.column.count': '数量',
   'windowCashShop.column.period': '时效(天)',
   'windowCashShop.column.gender': '性别',
-  'windowCashShop.column.iconUrl': '图标URL',
+  'windowCashShop.column.iconUrl': '图标',
   'windowCashShop.column.linkSort': '关联排序',
   'windowCashShop.column.operate': '操作',
   'windowCashShop.item.add': '添加商品',
@@ -64,11 +63,6 @@ export default {
   'windowCashShop.item.assetOk': '资源校验通过',
   'windowCashShop.item.assetFail': '资源校验失败',
   'windowCashShop.item.nameAuto': '留空则自动取名',
-  'windowCashShop.browse.title': '浏览目录',
-  'windowCashShop.browse.current': '当前路径',
-  'windowCashShop.browse.parent': '上级',
-  'windowCashShop.browse.use': '使用此路径',
-  'windowCashShop.browse.empty': '无子目录',
   'windowCashShop.batch.title': '批量导入商品',
   'windowCashShop.batch.minId': '最小ID',
   'windowCashShop.batch.maxId': '最大ID',
@@ -76,8 +70,6 @@ export default {
   'windowCashShop.batch.search': '搜索',
   'windowCashShop.batch.import': '导入选中',
   'windowCashShop.batch.defaultPrice': '默认价格',
-  'windowCashShop.msg.pathSaved': '路径已保存',
-  'windowCashShop.msg.pathValidated': '校验完成',
   'windowCashShop.msg.reloaded': '热重载完成',
   'windowCashShop.msg.importDone': '导入完成',
   'windowCashShop.msg.seedDone': '种子分类已创建',
@@ -88,7 +80,11 @@ export default {
   'windowCashShop.msg.refreshNamesDone': '中文名刷新完成',
   'windowCashShop.msg.syncFromClientDone': '客户端同步完成',
   'windowCashShop.msg.syncFromClientFail': '客户端同步失败',
-  'windowCashShop.msg.syncIconsDone': '图标同步完成',
+  'windowCashShop.msg.syncFromClientTimeout':
+    '客户端同步失败：请求超时。请确认已保存正确 Data 路径后重试；服务端日志见 syncFromClientData。',
+  'windowCashShop.syncSummary':
+    '扫描 {scanned} · 分类+{categoriesCreated}/~{categoriesUpdated} · 清理空分类 {categoriesPruned} · 迁移关联 {linksMigrated} · 商品 {itemsUpserted} · 关联 {linksUpserted} · 热重载 {catalogSize} · 图标 {iconsFilled} · 跳过 {skipped}',
+  'windowCashShop.syncSummary.duration': ' · {seconds}s',
   'windowCashShop.importTsv.confirm':
     '仅在分类/商品为空时从 catalog.tsv 导入？',
   'windowCashShop.refreshNames.confirm':

@@ -2,13 +2,21 @@
   <a-modal
     v-model:visible="visible"
     :title="title"
+    :width="560"
     :ok-loading="loading"
     :mask-closable="false"
     :esc-to-close="false"
     :ok-text="$t('button.submit')"
+    unmount-on-close
     :on-before-ok="submitClick"
   >
-    <a-form ref="formRef" :rules="rules" :model="formData">
+    <a-form
+      ref="formRef"
+      class="bd-overlay-form"
+      :rules="rules"
+      :model="formData"
+      auto-label-width
+    >
       <a-form-item
         field="newPwd"
         :label="$t('account.list.updateForm.password')"

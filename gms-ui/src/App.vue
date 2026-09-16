@@ -6,13 +6,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, onMounted } from 'vue';
   import enUS from '@arco-design/web-vue/es/locale/lang/en-us';
   import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn';
   import GlobalSetting from '@/components/global-setting/index.vue';
   import useLocale from '@/hooks/locale';
+  import { useAppStore } from '@/store';
 
   const { currentLocale } = useLocale();
+  const appStore = useAppStore();
   const locale = computed(() => {
     switch (currentLocale.value) {
       case 'zh-CN':
@@ -23,22 +25,11 @@
         return enUS;
     }
   });
-</script>
 
-<style lang="less">
-  .container {
-    padding: 0 20px 20px 20px;
-  }
-
-  :deep(.arco-table-th) {
-    &:last-child {
-      .arco-table-th-item-title {
-        margin-left: 16px;
-      }
+  // 恢复本机持久化的色弱模式
+  onMounted(() => {
+    if (appStore.colorWeak) {
+      document.body.style.filter = 'invert(80%)';
     }
-  }
-
-  .arco-row {
-    margin-bottom: 10px;
-  }
-</style>
+  });
+</script>

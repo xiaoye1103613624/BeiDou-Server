@@ -21,7 +21,8 @@ public final class SetItemBonusRequestHandler extends AbstractPacketHandler {
         c.sendPacket(PacketCreator.setItemFinalDamageBonus(
                 chr.getSetFinalDamage(), chr.getSetDamageSkin(), chr.getCombatStatProfile(),
                 chr.getPanelItemDropPropPercent(), chr.getPanelMesoDropPropPercent(),
-                chr.getPanelDamageReducePercent()));
+                chr.getPanelDamageReducePercent(),
+                chr.getPanelAsrR(), chr.getPanelBuffTimeR(), chr.getPanelStanceProp()));
         c.sendPacket(PacketCreator.setItemSkillBonusSingle(setId, enabled, text));
     }
 }

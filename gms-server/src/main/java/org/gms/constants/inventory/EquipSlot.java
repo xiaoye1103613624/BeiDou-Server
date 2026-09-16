@@ -92,9 +92,9 @@ public enum EquipSlot {
 
     SHOULDER("Sh", -20),           // 肩饰（115xxx；客户端 BP20；勿用 Sd/−8，与手套冲突）
 
-    // 口袋 116xxxx：主栏红 9 (104,200) / BP33（经典装备栏，不走 Addon 第三行）
+    // 口袋 116xxxx：主栏红 9 / BP33；现金与普通共 −33（−133 专属 2 号宠拾取袋）
 
-    POCKET("Po", -33, -133),
+    POCKET("Po", -33),
 
     MEDAL("Me", -49),              // 勋章（任务/活动获得，索引在很后面）
 
@@ -108,7 +108,7 @@ public enum EquipSlot {
 
     // Top: Totem×4 BP55–58；Bot: Emblem59 / Android60 / Heart61 / Badge54
 
-    // 口袋 BP33/−33、辅助 −62 在经典装备栏；109 → −10；徽章/图腾/纹章永不进 −10。
+    // 口袋 BP33/−33（现金亦 −33；−133=2号宠袋）、辅助 −62 在经典装备栏；109 → −10；徽章/图腾/纹章永不进 −10。
 
     // 119→−59 only（WZ islot Si 不得走 SHIELD）。
 

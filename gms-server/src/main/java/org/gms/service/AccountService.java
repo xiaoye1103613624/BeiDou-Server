@@ -9,6 +9,7 @@ import org.gms.client.DefaultDates;
 import org.gms.config.GameConfig;
 import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
+import org.gms.model.dto.AccountInfoDTO;
 import org.gms.model.dto.AddAccountDTO;
 import org.gms.model.dto.UpdateAccountByGmDTO;
 import org.gms.model.dto.UpdateAccountByUserDTO;
@@ -41,6 +42,7 @@ public class AccountService {
     private final IpbansMapper ipbansMapper;
     private final MacbansMapper macbansMapper;
     private final QuickslotkeymappedMapper quickslotkeymappedMapper;
+    private final SysRoleService sysRoleService;
 
     public AccountsDO findByName(String name) {
         return accountsMapper.selectOneByName(name);
@@ -53,6 +55,10 @@ public class AccountService {
     public AccountsDO getCurrentUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findByName(userDetails.getUsername());
+    }
+
+    public AccountInfoDTO getCurrentAccountInfo() {
+        return sysRoleService.toAccountInfo(getCurrentUser());
     }
 
     public Page<AccountsDO> getAccountList(Integer page,
@@ -143,6 +149,7 @@ public class AccountService {
         account.setLanguage(submitData.getLanguage());
 
         accountsMapper.update(account);
+        sysRoleService.syncAccountRoleOnUpdate(id, submitData.getWebadmin(), submitData.getRoleCode());
     }
 
     public String encryptPassword(String password) throws NoSuchAlgorithmException {

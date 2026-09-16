@@ -35,6 +35,7 @@ import org.gms.util.PacketCreator;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -281,6 +282,29 @@ public class NPCScriptManager extends AbstractScriptManager {
 
     public NPCConversationManager getCM(Client c) {
         return cms.get(c);
+    }
+
+    /**
+     * 结束进行中的 NPC/物品脚本会话，并清除在线客户端上的 npc/item 脚本引擎缓存。
+     */
+    public void reloadNpcScripts() {
+        List<Client> activeClients = new ArrayList<>(cms.keySet());
+        for (Client client : activeClients) {
+            dispose(client, true);
+        }
+        cms.clear();
+        scripts.clear();
+        clearOnlineClientEngines("npc/", "item/");
+    }
+
+    /**
+     * 按相对脚本路径清除在线客户端引擎缓存（如 {@code npc/1002000.js}、{@code item/xxx.js}）。
+     */
+    public void clearCachedScript(String relativeScriptPath) {
+        if (relativeScriptPath == null || relativeScriptPath.isEmpty()) {
+            return;
+        }
+        clearOnlineClientEngines(relativeScriptPath);
     }
 
 }

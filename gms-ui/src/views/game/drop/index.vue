@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.drop')">
+  <PageContainer :title="$t('menu.game.drop')">
+    <ProCard>
       <a-row :gutter="8" class="search-row">
         <a-col :xs="24" :sm="8" :md="4">
           <a-input-number
@@ -81,11 +80,11 @@
             align="center"
           >
             <template #cell="{ record }">
-              <img
-                class="mob-icon"
-                :src="getIconUrl('mob', record.dropperId)"
-                alt=""
-                @error="onImgError"
+              <ItemIcon
+                :id="record.dropperId"
+                category="mob"
+                :size="32"
+                img-class="mob-icon"
               />
             </template>
           </a-table-column>
@@ -131,7 +130,7 @@
       </a-table>
 
       <a-pagination
-        style="margin-top: 16px"
+        class="bd-page-pagination"
         :total="total"
         :page-size="condition.pageSize"
         :current="condition.pageNo"
@@ -142,7 +141,7 @@
         @change="pageChange"
         @page-size-change="pageSizeChange"
       />
-    </a-card>
+    </ProCard>
 
     <MobDropDrawer
       v-model:visible="drawerVisible"
@@ -151,7 +150,7 @@
       :locked-dropper="drawerLocked"
       @changed="loadMobs"
     />
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -159,7 +158,6 @@
   import type { TableData } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
   import { DropConditionState, DropMobState, getDropMobList } from '@/api/drop';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
   import MobDropDrawer from './MobDropDrawer.vue';
 
   const { setLoading, loading } = useLoading(false);
@@ -231,11 +229,6 @@
   };
 
   const rowClass = () => 'mob-row-clickable';
-
-  const onImgError = (e: Event) => {
-    const img = e.target as HTMLImageElement;
-    img.style.visibility = 'hidden';
-  };
 </script>
 
 <script lang="ts">

@@ -32,7 +32,9 @@ import org.gms.server.quest.Quest;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -207,8 +209,23 @@ public class QuestScriptManager extends AbstractScriptManager {
     }
 
     public void reloadQuestScripts() {
+        List<Client> activeClients = new ArrayList<>(qms.keySet());
+        for (Client client : activeClients) {
+            dispose(client);
+        }
         scripts.clear();
         qms.clear();
+        clearOnlineClientEngines("quest/");
+    }
+
+    /**
+     * 按相对脚本路径清除在线客户端引擎缓存（如 {@code quest/1000.js}）。
+     */
+    public void clearCachedScript(String relativeScriptPath) {
+        if (relativeScriptPath == null || relativeScriptPath.isEmpty()) {
+            return;
+        }
+        clearOnlineClientEngines(relativeScriptPath);
     }
 
     public boolean checkFunctionExists(Client c, short questid, int npc, String functionName) {

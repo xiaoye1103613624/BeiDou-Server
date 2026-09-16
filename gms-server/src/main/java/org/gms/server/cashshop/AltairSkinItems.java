@@ -1,5 +1,12 @@
 package org.gms.server.cashshop;
 
+import org.gms.client.Character;
+import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.Inventory;
+import org.gms.client.inventory.InventoryType;
+import org.gms.client.inventory.Item;
+import org.gms.config.GameConfig;
+
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -7,8 +14,19 @@ import java.util.Set;
 /**
  * Canonical 111 Altair anime cap skins (1008900-1009999 sparse IDs).
  * Keep in sync with scripts-zh-CN/BeiDouSpecial/xy/阿尔泰动漫皮肤.js ComicList.
+ * <p>
+ * AvatarLook filter: when an Altair cash Cap is equipped, PacketCreator broadcasts
+ * Cap-only equips (no other gear / cash weapon). Face/hair keep real IDs so the client
+ * does not load Character/00000000.img; Cap art (z=characterStart) covers them.
+ * Stats and equipment UI remain on real EQUIPPED — do not ghost-hide body slots.
  */
 public final class AltairSkinItems {
+    /** Cash Cap slot (Inventory position -101 → AvatarLook slot 1). */
+    public static final short CASH_CAP_SLOT = -101;
+
+    /** AvatarLook equip slot for Cap after cash remap. */
+    public static final short LOOK_CAP_SLOT = 1;
+
     private AltairSkinItems() {
     }
 
@@ -43,5 +61,76 @@ public final class AltairSkinItems {
 
     public static boolean isAltairCapSkin(int itemId) {
         return ID_SET.contains(itemId);
+    }
+
+    /**
+     * Hot-reloadable switch; missing config defaults to ON so look filter works before Flyway seed.
+     * Accepts Boolean / string / number forms from game_config JSON.
+     */
+    public static boolean isLookFilterEnabled() {
+        Object raw = GameConfig.getServerObject("use_altair_skin_look_filter", Boolean.TRUE);
+        if (raw == null) {
+            return true;
+        }
+        if (raw instanceof Boolean bool) {
+            return bool;
+        }
+        if (raw instanceof Number number) {
+            return number.intValue() != 0;
+        }
+        String s = String.valueOf(raw).trim();
+        return !"false".equalsIgnoreCase(s) && !"0".equals(s) && !s.isEmpty();
+    }
+
+    /**
+     * @return visual Altair skin itemId if currently covering AvatarLook; otherwise {@code null}
+     */
+    public static Integer findEquippedAltairSkinId(Character chr) {
+        if (chr == null || !isLookFilterEnabled()) {
+            return null;
+        }
+        Inventory equipped = chr.getInventory(InventoryType.EQUIPPED);
+        if (equipped == null) {
+            return null;
+        }
+
+        Item cashCap = equipped.getItem(CASH_CAP_SLOT);
+        Integer fromCash = resolveAltairVisual(cashCap);
+        if (fromCash != null) {
+            return fromCash;
+        }
+
+        for (Item item : equipped.list()) {
+            Integer visual = resolveAltairVisual(item);
+            if (visual != null) {
+                return visual;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isAltairLookActive(Character chr) {
+        return findEquippedAltairSkinId(chr) != null;
+    }
+
+    /**
+     * Resolve AvatarLook visual id if this equip (or its anvil) is an Altair Cap skin.
+     */
+    public static Integer resolveAltairVisual(Item item) {
+        if (item == null) {
+            return null;
+        }
+        if (isAltairCapSkin(item.getItemId())) {
+            if (item instanceof Equip anvilEquip && anvilEquip.getAnvilItemId() != 0
+                    && isAltairCapSkin(anvilEquip.getAnvilItemId())) {
+                return anvilEquip.getAnvilItemId();
+            }
+            return item.getItemId();
+        }
+        if (item instanceof Equip anvilEquip && anvilEquip.getAnvilItemId() != 0
+                && isAltairCapSkin(anvilEquip.getAnvilItemId())) {
+            return anvilEquip.getAnvilItemId();
+        }
+        return null;
     }
 }

@@ -1,62 +1,44 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.windowCashShop')">
-      <a-space wrap style="margin-bottom: 12px">
-        <span>{{ $t('windowCashShop.path') }}</span>
-        <a-input
-          v-model="clientPath"
-          :placeholder="$t('windowCashShop.path.placeholder')"
-          style="width: 360px"
-          allow-clear
-        />
-        <a-button @click="openBrowse"
-          >{{ $t('windowCashShop.path.browse') }}
+  <PageContainer :title="$t('menu.game.windowCashShop')">
+    <ProCard soft class="wcs-client-link">
+      <a-alert type="info">
+        <template #title>{{
+          $t('windowCashShop.section.clientLink.title')
+        }}</template>
+        {{ $t('windowCashShop.section.clientLink.hint') }}
+        <template #action>
+          <a-space>
+            <a-button type="primary" size="small" @click="goClientSync">
+              {{ $t('menu.client.windowCashShopSync') }}
+            </a-button>
+            <a-button size="small" @click="goAssetHub">
+              {{ $t('menu.client.assetHub') }}
+            </a-button>
+          </a-space>
+        </template>
+      </a-alert>
+    </ProCard>
+
+    <ProCard :title="$t('windowCashShop.section.server')" class="wcs-server">
+      <a-space wrap class="bd-page-toolbar">
+        <a-button :loading="reloading" @click="reloadAll">
+          {{ $t('windowCashShop.reload') }}
         </a-button>
-        <a-button :loading="validating" @click="validatePath"
-          >{{ $t('windowCashShop.path.validate') }}
+        <a-button @click="importTsvClick">
+          {{ $t('windowCashShop.importTsv') }}
         </a-button>
-        <a-button type="primary" :loading="savingPath" @click="savePath"
-          >{{ $t('windowCashShop.path.save') }}
+        <a-button :loading="refreshingNames" @click="refreshNamesClick">
+          {{ $t('windowCashShop.refreshNames') }}
         </a-button>
-        <a-button @click="clearPath"
-          >{{ $t('windowCashShop.path.clear') }}
+        <a-button @click="seedDefaultsClick">
+          {{ $t('windowCashShop.seedDefaults') }}
         </a-button>
-        <a-button
-          type="outline"
-          :loading="syncingClient"
-          @click="() => syncFromClientClick()"
-          >{{ $t('windowCashShop.syncFromClient') }}
-        </a-button>
-        <a-button :loading="reloading" @click="reloadAll"
-          >{{ $t('windowCashShop.reload') }}
-        </a-button>
-        <a-button @click="importTsvClick"
-          >{{ $t('windowCashShop.importTsv') }}
-        </a-button>
-        <a-button :loading="refreshingNames" @click="refreshNamesClick"
-          >{{ $t('windowCashShop.refreshNames') }}
-        </a-button>
-        <a-button :loading="syncingIconsEmpty" @click="syncIconsEmptyClick"
-          >{{ $t('windowCashShop.syncIconsEmpty') }}
-        </a-button>
-        <a-button :loading="syncingIconsForce" @click="syncIconsForceClick"
-          >{{ $t('windowCashShop.syncIconsForce') }}
-        </a-button>
-        <a-button @click="seedDefaultsClick"
-          >{{ $t('windowCashShop.seedDefaults') }}
+        <a-button :loading="seedingMount" @click="seedMountClick">
+          {{ $t('windowCashShop.seedMount') }}
         </a-button>
       </a-space>
-      <a-alert
-        v-if="pathInfo"
-        style="margin-bottom: 12px"
-        :type="pathAlertType"
-        :title="$t('windowCashShop.path.status')"
-      >
-        {{ pathStatusText }}
-      </a-alert>
-      <a-alert type="info" style="margin-bottom: 12px">
-        {{ $t('windowCashShop.path.hint') }}
+      <a-alert type="info" class="bd-page-toolbar">
+        {{ $t('windowCashShop.section.server.hint') }}
       </a-alert>
 
       <a-row :gutter="12">
@@ -84,55 +66,76 @@
                   <span class="cat-group-meta">tab {{ group.tab ?? '—' }}</span>
                 </div>
                 <div
-                  v-for="cat in group.cats"
-                  :key="cat.id"
+                  v-for="row in group.rows"
+                  :key="row.cat.id"
                   class="cat-row"
-                  :class="{ active: selectedCategoryId === cat.id }"
-                  @click="selectCategory(cat.id!)"
+                  :class="{
+                    'active': selectedCategoryId === row.cat.id,
+                    'cat-row--child': row.depth > 0,
+                  }"
+                  :style="{ paddingLeft: `${12 + row.depth * 18}px` }"
+                  @click="selectCategory(row.cat.id!)"
                 >
                   <div class="cat-main">
                     <div class="cat-name">
-                      <a-tag v-if="cat.isHot" color="orangered" size="small"
+                      <a-tag v-if="row.cat.isHot" color="orangered" size="small"
                         >HOT
                       </a-tag>
-                      <span>{{ cat.name }}</span>
+                      <a-tag
+                        v-if="row.depth === 0 && row.hasChildren"
+                        size="small"
+                        color="arcoblue"
+                      >
+                        {{ $t('windowCashShop.category.root') }}
+                      </a-tag>
+                      <a-tag
+                        v-else-if="row.depth > 0"
+                        size="small"
+                        color="green"
+                      >
+                        {{ $t('windowCashShop.category.child') }}
+                      </a-tag>
+                      <span>{{ row.cat.name }}</span>
                       <a-tag size="small" color="gray">
-                        {{ cat.legacyTab ?? '?' }}:{{
-                          cat.legacyCategory ?? '?'
+                        {{ row.cat.legacyTab ?? '?' }}:{{
+                          row.cat.legacyCategory ?? '?'
                         }}
                       </a-tag>
                     </div>
                     <div class="cat-meta">
-                      #{{ cat.id }} · sort {{ cat.sort ?? 0 }} ·
-                      {{ cat.clickType || 'SHOW_ITEMS' }}
+                      #{{ row.cat.id }} · sort {{ row.cat.sort ?? 0 }} ·
+                      {{ row.cat.clickType || 'SHOW_ITEMS' }}
+                      <template v-if="row.cat.parentId">
+                        · parent #{{ row.cat.parentId }}
+                      </template>
                     </div>
                   </div>
                   <div class="cat-actions" @click.stop>
                     <a-switch
-                      v-model="cat.enabled"
+                      v-model="row.cat.enabled"
                       :checked-value="1"
                       :unchecked-value="0"
                       size="small"
-                      @change="() => quickSaveCategory(cat)"
+                      @change="() => quickSaveCategory(row.cat)"
                     />
                     <a-button
                       type="text"
                       size="mini"
-                      @click="moveCategory(cat, -1)"
+                      @click="moveCategory(row.cat, -1)"
                     >
                       {{ $t('windowCashShop.category.moveUp') }}
                     </a-button>
                     <a-button
                       type="text"
                       size="mini"
-                      @click="moveCategory(cat, 1)"
+                      @click="moveCategory(row.cat, 1)"
                     >
                       {{ $t('windowCashShop.category.moveDown') }}
                     </a-button>
                     <a-button
                       type="text"
                       size="mini"
-                      @click="openCategoryEdit(cat)"
+                      @click="openCategoryEdit(row.cat)"
                     >
                       {{ $t('button.edit') }}
                     </a-button>
@@ -140,7 +143,7 @@
                       type="text"
                       size="mini"
                       status="danger"
-                      @click="deleteCategoryClick(cat)"
+                      @click="deleteCategoryClick(row.cat)"
                     >
                       {{ $t('button.delete') }}
                     </a-button>
@@ -194,14 +197,13 @@
                   align="center"
                 >
                   <template #cell="{ record }">
-                    <img
+                    <ItemIcon
                       v-if="record.item?.itemId"
-                      class="shop-item-icon"
-                      :src="shopItemIconUrl(record)"
+                      :id="record.item.itemId"
+                      category="item"
+                      :size="32"
+                      img-class="shop-item-icon"
                       :alt="String(record.item.itemId)"
-                      :data-item-id="record.item.itemId"
-                      :data-skip-cdn="shopIconSkipCdn(record) ? '1' : undefined"
-                      @error="onItemIconError"
                     />
                   </template>
                 </a-table-column>
@@ -295,7 +297,7 @@
           </a-card>
         </a-col>
       </a-row>
-    </a-card>
+    </ProCard>
 
     <!-- Category drawer -->
     <a-drawer
@@ -323,7 +325,7 @@
           </a-button>
         </a-space>
       </template>
-      <a-form :model="categoryForm" layout="vertical">
+      <a-form class="bd-overlay-form" :model="categoryForm" layout="vertical">
         <a-form-item :label="$t('windowCashShop.column.name')" required>
           <a-input v-model="categoryForm.name" />
         </a-form-item>
@@ -359,6 +361,9 @@
               {{ ct }}
             </a-option>
           </a-select>
+          <template #extra>
+            {{ $t('windowCashShop.clickType.hint') }}
+          </template>
         </a-form-item>
         <a-form-item :label="$t('windowCashShop.column.clickParam')">
           <a-input v-model="categoryForm.clickParam" />
@@ -366,14 +371,11 @@
         <a-row :gutter="12">
           <a-col :span="12">
             <a-form-item :label="$t('windowCashShop.column.gateItemId')">
-              <a-input-number
-                :model-value="categoryForm.gateItemId ?? undefined"
-                :min="0"
-                style="width: 100%"
-                allow-clear
+              <ItemIdCell
+                :model-value="categoryForm.gateItemId ?? 0"
                 @update:model-value="
-                  (v: number | undefined) => {
-                    categoryForm.gateItemId = v ?? null;
+                  (v: number) => {
+                    categoryForm.gateItemId = v > 0 ? v : null;
                   }
                 "
               />
@@ -456,19 +458,22 @@
           </a-button>
         </a-space>
       </template>
-      <a-form :model="itemForm" layout="vertical">
+      <a-form class="bd-overlay-form" :model="itemForm" layout="vertical">
         <a-form-item :label="$t('windowCashShop.column.itemId')" required>
-          <a-input-number
-            v-model="itemForm.itemId"
-            :min="1"
-            style="width: 100%"
-            :disabled="itemEditMode"
-            @change="onItemIdChange"
+          <ItemIdCell
+            :model-value="itemForm.itemId ?? 0"
+            :editable="!itemEditMode"
+            @update:model-value="
+              (v: number) => {
+                itemForm.itemId = v;
+                onItemIdChange(v);
+              }
+            "
           />
         </a-form-item>
         <a-alert
           v-if="assetHint"
-          style="margin-bottom: 12px"
+          class="bd-page-toolbar"
           :type="assetOk ? 'success' : 'warning'"
         >
           {{ assetHint }}
@@ -538,59 +543,6 @@
       </a-form>
     </a-drawer>
 
-    <!-- Directory browse modal -->
-    <a-modal
-      v-model:visible="browseVisible"
-      :title="$t('windowCashShop.browse.title')"
-      :width="560"
-      unmount-on-close
-    >
-      <a-space direction="vertical" fill style="width: 100%">
-        <a-input-search
-          v-model="browsePath"
-          :placeholder="$t('windowCashShop.browse.current')"
-          search-button
-          @search="loadBrowseDirs"
-        />
-        <a-space>
-          <a-button size="small" @click="browseGoParent">
-            {{ $t('windowCashShop.browse.parent') }}
-          </a-button>
-          <a-button size="small" type="outline" @click="useBrowsePath">
-            {{ $t('windowCashShop.browse.use') }}
-          </a-button>
-        </a-space>
-        <a-spin :loading="browseLoading" style="width: 100%">
-          <a-list
-            v-if="browseDirs.length"
-            size="small"
-            :bordered="true"
-            style="max-height: 320px; overflow: auto"
-          >
-            <a-list-item
-              v-for="d in browseDirs"
-              :key="d.path"
-              class="dir-item"
-              @click="enterDir(d.path)"
-            >
-              {{ d.name }}
-            </a-list-item>
-          </a-list>
-          <a-empty v-else :description="$t('windowCashShop.browse.empty')" />
-        </a-spin>
-      </a-space>
-      <template #footer>
-        <a-space>
-          <a-button @click="browseVisible = false">
-            {{ $t('button.cancel') }}
-          </a-button>
-          <a-button type="primary" @click="useBrowsePath">
-            {{ $t('windowCashShop.browse.use') }}
-          </a-button>
-        </a-space>
-      </template>
-    </a-modal>
-
     <!-- Batch import drawer -->
     <a-drawer
       :visible="batchVisible"
@@ -614,7 +566,7 @@
           </a-button>
         </a-space>
       </template>
-      <a-form :model="batchQuery" layout="inline" style="margin-bottom: 12px">
+      <a-form :model="batchQuery" layout="inline" class="bd-page-toolbar">
         <a-form-item :label="$t('windowCashShop.batch.minId')">
           <a-input-number v-model="batchQuery.minId" :min="0" />
         </a-form-item>
@@ -658,7 +610,7 @@
         </template>
       </a-table>
     </a-drawer>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -667,14 +619,7 @@
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
   import {
-    getIconUrl,
-    isCdnIconUrl,
-    onItemIconError,
-  } from '@/utils/mapleStoryAPI';
-  import {
     BrowseItemRow,
-    ClientDataPathInfo,
-    DirectoryEntry,
     LinkedItemRow,
     XyCashShopCategoryDO,
     XyCashShopItemDO,
@@ -683,41 +628,39 @@
     deleteCategory,
     getCategories,
     getClickTypes,
-    getClientDataPath,
     getItemsGrouped,
     importItems,
     importTsv,
     linkItem,
-    listDirectories,
     reloadCategory,
     reloadWindowCashShop,
     refreshNamesFromWz,
     saveCategory,
     saveItem,
     seedDefaults,
-    setClientDataPath,
-    syncFromClientData,
-    syncIcons,
+    seedMountCatalog,
     unlinkItem,
-    validateClientDataPath,
   } from '@/api/windowCashShop';
+  import { useRouter } from 'vue-router';
 
   interface TableRow extends LinkedItemRow {
     rowKey: string;
   }
 
   const { t } = useI18n();
+  const router = useRouter();
 
-  const clientPath = ref('');
-  const pathInfo = ref<ClientDataPathInfo | null>(null);
-  const validating = ref(false);
-  const savingPath = ref(false);
+  const goClientSync = () => {
+    router.push({ name: 'ClientWindowCashShopSync' });
+  };
+
+  const goAssetHub = () => {
+    router.push({ name: 'ClientAssetHub' });
+  };
+
   const reloading = ref(false);
   const refreshingNames = ref(false);
   const reloadingCat = ref(false);
-  const syncingClient = ref(false);
-  const syncingIconsEmpty = ref(false);
-  const syncingIconsForce = ref(false);
   const itemSelectedKeys = ref<(string | number)[]>([]);
 
   const categories = ref<XyCashShopCategoryDO[]>([]);
@@ -755,11 +698,6 @@
     enabled: 1,
     remark: '',
   });
-
-  const browseVisible = ref(false);
-  const browsePath = ref('');
-  const browseDirs = ref<DirectoryEntry[]>([]);
-  const browseLoading = ref(false);
 
   const batchVisible = ref(false);
   const batchSearching = ref(false);
@@ -803,10 +741,52 @@
     8: '热门',
     9: '皮肤',
     10: 'XY玩法',
+    11: '坐骑',
+  };
+
+  type CatTreeRow = {
+    cat: XyCashShopCategoryDO;
+    depth: number;
+    hasChildren: boolean;
+  };
+
+  /** 按 parentId 展平成树行：根在前，子缩进；无父或父不在本组则当根。 */
+  const flattenByParent = (cats: XyCashShopCategoryDO[]): CatTreeRow[] => {
+    const idSet = new Set(
+      cats.map((c) => c.id).filter((id): id is number => id != null)
+    );
+    const children = new Map<number | null, XyCashShopCategoryDO[]>();
+    cats.forEach((cat) => {
+      const pid =
+        cat.parentId != null && idSet.has(cat.parentId) ? cat.parentId : null;
+      const list = children.get(pid) ?? [];
+      list.push(cat);
+      children.set(pid, list);
+    });
+    const sortPeers = (list: XyCashShopCategoryDO[]) =>
+      [...list].sort(
+        (a, b) =>
+          (a.legacyCategory ?? 0) - (b.legacyCategory ?? 0) ||
+          (a.sort ?? 0) - (b.sort ?? 0) ||
+          (a.id ?? 0) - (b.id ?? 0)
+      );
+    const out: CatTreeRow[] = [];
+    const walk = (parentKey: number | null, depth: number) => {
+      const peers = sortPeers(children.get(parentKey) ?? []);
+      peers.forEach((cat) => {
+        const kids = children.get(cat.id ?? -1) ?? [];
+        out.push({ cat, depth, hasChildren: kids.length > 0 });
+        if (cat.id != null) {
+          walk(cat.id, depth + 1);
+        }
+      });
+    };
+    walk(null, 0);
+    return out;
   };
 
   const categoryGroups = computed(() => {
-    const order = [2, 3, 5, 6, 7, 8, 9, 10];
+    const order = [2, 3, 5, 6, 7, 8, 9, 10, 11];
     const byTab = new Map<number | 'other', XyCashShopCategoryDO[]>();
     categories.value.forEach((cat) => {
       const tab =
@@ -818,15 +798,6 @@
       byTab.set(tab, list);
     });
 
-    const sortByLegacy = (cats: XyCashShopCategoryDO[]) =>
-      [...cats].sort(
-        (a, b) =>
-          (a.legacyCategory ?? 0) - (b.legacyCategory ?? 0) ||
-          (a.sort ?? 0) - (b.sort ?? 0)
-      );
-    const sortBySort = (cats: XyCashShopCategoryDO[]) =>
-      [...cats].sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
-
     const orderedGroups = order
       .filter((tab) => (byTab.get(tab)?.length ?? 0) > 0)
       .map((tab) => {
@@ -836,7 +807,7 @@
           key: `tab-${tab}`,
           tab,
           label: TAB_LABELS[tab] ?? `Tab ${tab}`,
-          cats: sortByLegacy(cats),
+          rows: flattenByParent(cats),
         };
       });
 
@@ -847,36 +818,11 @@
         typeof tab === 'number'
           ? TAB_LABELS[tab] ?? `Tab ${tab}`
           : t('windowCashShop.category.ungrouped'),
-      cats: sortBySort(cats),
+      rows: flattenByParent(cats),
     }));
 
     return [...orderedGroups, ...restGroups];
   });
-
-  const pathAlertType = computed(() => {
-    if (!pathInfo.value) return 'info';
-    if (pathInfo.value.skipped) return 'warning';
-    if (pathInfo.value.ok) return 'success';
-    return 'error';
-  });
-
-  const pathStatusText = computed(() => {
-    if (!pathInfo.value) return '';
-    const parts = [
-      pathInfo.value.message,
-      pathInfo.value.resolved ? `resolved=${pathInfo.value.resolved}` : '',
-      pathInfo.value.configured
-        ? `configured=${pathInfo.value.configured}`
-        : '',
-    ].filter(Boolean);
-    return parts.join(' · ');
-  });
-
-  const loadPathInfo = async () => {
-    const { data } = await getClientDataPath();
-    pathInfo.value = data;
-    clientPath.value = data.configured || data.resolved || '';
-  };
 
   const loadClickTypes = async () => {
     const { data } = await getClickTypes();
@@ -929,200 +875,6 @@
     selectedCategoryId.value = id;
     itemSelectedKeys.value = [];
     loadLinkedItems();
-  };
-
-  const validatePath = async () => {
-    validating.value = true;
-    try {
-      const { data } = await validateClientDataPath(clientPath.value || '');
-      Message.info(
-        `${t('windowCashShop.msg.pathValidated')}: ${data.message || ''}`
-      );
-    } finally {
-      validating.value = false;
-    }
-  };
-
-  const savePath = async () => {
-    savingPath.value = true;
-    try {
-      const { data } = await setClientDataPath(clientPath.value || '');
-      pathInfo.value = data;
-      Message.success(t('windowCashShop.msg.pathSaved'));
-      if (data?.ok && clientPath.value) {
-        Modal.confirm({
-          title: t('windowCashShop.syncFromClient.offer'),
-          content: t('windowCashShop.syncFromClient.offer'),
-          onOk: () => syncFromClientClick(true),
-        });
-      }
-    } finally {
-      savingPath.value = false;
-    }
-  };
-
-  const clearPath = async () => {
-    clientPath.value = '';
-    savingPath.value = true;
-    try {
-      const { data } = await setClientDataPath(' ');
-      pathInfo.value = data;
-      Message.success(t('windowCashShop.msg.pathSaved'));
-    } finally {
-      savingPath.value = false;
-    }
-  };
-
-  const syncFromClientClick = (skipConfirm = false) => {
-    const run = async () => {
-      syncingClient.value = true;
-      const loadingMsg = Message.loading({
-        content: t('windowCashShop.syncFromClient.loading'),
-        duration: 0,
-      });
-      try {
-        // fillIcons=true 仅绑本地已有 PNG，不会 CDN；图标补全请用「同步图标」
-        const { data } = await syncFromClientData({
-          fillIcons: true,
-          cashOnly: true,
-        });
-        const secs =
-          data?.durationMs != null
-            ? ` · ${(data.durationMs / 1000).toFixed(1)}s`
-            : '';
-        const summary = [
-          `扫描 ${data?.scanned ?? 0}`,
-          `分类+${data?.categoriesCreated ?? 0}/~${
-            data?.categoriesUpdated ?? 0
-          }`,
-          `清理空分类 ${data?.categoriesPruned ?? 0}`,
-          `迁移关联 ${data?.linksMigrated ?? 0}`,
-          `商品 ${data?.itemsUpserted ?? 0}`,
-          `关联 ${data?.linksUpserted ?? 0}`,
-          `热重载 ${data?.catalogSize ?? 0}`,
-          `图标 ${data?.iconsFilled ?? 0}`,
-          `跳过 ${data?.skipped ?? 0}`,
-        ].join(' · ');
-        const hint = data?.emptyReason ? ` — ${data.emptyReason}` : '';
-        Message.success({
-          content: `${t(
-            'windowCashShop.msg.syncFromClientDone'
-          )}: ${summary}${secs}${hint}`,
-          duration: 12_000,
-        });
-        await loadCategories();
-        await loadLinkedItems();
-      } catch (e: unknown) {
-        let raw = '';
-        if (e instanceof Error) {
-          raw = e.message;
-        } else if (typeof e === 'string') {
-          raw = e;
-        }
-        const isTimeout =
-          /timeout/i.test(raw) ||
-          /exceeded/i.test(raw) ||
-          raw === 'ECONNABORTED';
-        // interceptor already toasts most errors; clarify timeout in Chinese
-        if (isTimeout) {
-          Message.error({
-            content: `${t(
-              'windowCashShop.msg.syncFromClientFail'
-            )}: 请求超时。请确认已保存正确 Data 路径后重试；服务端日志见 syncFromClientData。`,
-            duration: 10_000,
-          });
-        }
-      } finally {
-        loadingMsg.close();
-        syncingClient.value = false;
-      }
-    };
-    if (skipConfirm) {
-      return run();
-    }
-    Modal.confirm({
-      title: t('windowCashShop.syncFromClient.confirm'),
-      content: t('windowCashShop.syncFromClient.confirm'),
-      onOk: run,
-    });
-    return undefined;
-  };
-
-  const selectedItemIds = (): number[] => {
-    const keys = new Set(itemSelectedKeys.value.map(String));
-    return linkedItems.value
-      .filter((row) => keys.has(row.rowKey))
-      .map((row) => row.item?.itemId)
-      .filter((id): id is number => typeof id === 'number' && id > 0);
-  };
-
-  const shopItemIconUrl = (record: TableRow) => {
-    const id = record.item?.itemId;
-    if (!id) return '';
-    return getIconUrl('item', id, record.item?.iconUrl);
-  };
-
-  const shopIconSkipCdn = (record: TableRow) => {
-    const url = record.item?.iconUrl;
-    return !!url && !isCdnIconUrl(url);
-  };
-
-  const syncIconsEmptyClick = () => {
-    Modal.confirm({
-      title: t('windowCashShop.syncIconsEmpty.confirm'),
-      content: t('windowCashShop.syncIconsEmpty.confirm'),
-      onOk: async () => {
-        syncingIconsEmpty.value = true;
-        try {
-          const payload: {
-            mode: 'fillEmpty';
-            itemIds?: number[];
-          } = { mode: 'fillEmpty' };
-          const ids = selectedItemIds();
-          if (ids.length) {
-            payload.itemIds = ids;
-          }
-          const { data } = await syncIcons(payload);
-          Message.success(
-            `${t('windowCashShop.msg.syncIconsDone')}: ${
-              data?.message || JSON.stringify(data)
-            }`
-          );
-          await loadLinkedItems();
-        } finally {
-          syncingIconsEmpty.value = false;
-        }
-      },
-    });
-  };
-
-  const syncIconsForceClick = () => {
-    Modal.confirm({
-      title: t('windowCashShop.syncIconsForce.confirm'),
-      content: t('windowCashShop.syncIconsForce.confirm'),
-      onOk: async () => {
-        syncingIconsForce.value = true;
-        try {
-          const payload: {
-            mode: 'force';
-            itemIds?: number[];
-          } = { mode: 'force' };
-          const ids = selectedItemIds();
-          if (ids.length) {
-            payload.itemIds = ids;
-          }
-          const { data } = await syncIcons(payload);
-          Message.success(
-            `${t('windowCashShop.msg.syncIconsDone')}: ${
-              data?.message || JSON.stringify(data)
-            }`
-          );
-          await loadLinkedItems();
-        } finally {
-          syncingIconsForce.value = false;
-        }
-      },
-    });
   };
 
   const reloadAll = async () => {
@@ -1192,6 +944,26 @@
     await loadCategories();
   };
 
+  const seedingMount = ref(false);
+  const seedMountClick = async () => {
+    seedingMount.value = true;
+    try {
+      const { data } = await seedMountCatalog();
+      const mounts = (data as any)?.mountIds ?? '?';
+      const saddles = (data as any)?.saddleIds ?? '?';
+      const use = (data as any)?.useIds ?? '?';
+      Message.success(
+        t('windowCashShop.msg.seedMountDone', { mounts, saddles, use })
+      );
+      await loadCategories();
+      if (selectedCategoryId.value != null) {
+        await loadLinkedItems();
+      }
+    } finally {
+      seedingMount.value = false;
+    }
+  };
+
   const emptyCategoryForm = (): XyCashShopCategoryDO => ({
     name: '',
     parentId: undefined,
@@ -1257,7 +1029,11 @@
 
   const moveCategory = async (cat: XyCashShopCategoryDO, delta: number) => {
     const peers = categories.value
-      .filter((c) => (c.legacyTab ?? null) === (cat.legacyTab ?? null))
+      .filter(
+        (c) =>
+          (c.legacyTab ?? null) === (cat.legacyTab ?? null) &&
+          (c.parentId ?? null) === (cat.parentId ?? null)
+      )
       .slice()
       .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
     const idx = peers.findIndex((c) => c.id === cat.id);
@@ -1395,44 +1171,6 @@
     });
   };
 
-  const openBrowse = () => {
-    browsePath.value = clientPath.value || 'F:\\MXD_dev\\BeiDou-Client' || '';
-    browseVisible.value = true;
-    loadBrowseDirs();
-  };
-
-  const loadBrowseDirs = async () => {
-    if (!browsePath.value?.trim()) return;
-    browseLoading.value = true;
-    try {
-      const { data } = await listDirectories(browsePath.value.trim());
-      browseDirs.value = data || [];
-    } catch {
-      browseDirs.value = [];
-    } finally {
-      browseLoading.value = false;
-    }
-  };
-
-  const enterDir = (path: string) => {
-    browsePath.value = path;
-    loadBrowseDirs();
-  };
-
-  const browseGoParent = () => {
-    const p = browsePath.value.replace(/[\\/]+$/, '');
-    const idx = Math.max(p.lastIndexOf('\\'), p.lastIndexOf('/'));
-    if (idx > 2) {
-      browsePath.value = p.slice(0, idx);
-      loadBrowseDirs();
-    }
-  };
-
-  const useBrowsePath = () => {
-    clientPath.value = browsePath.value;
-    browseVisible.value = false;
-  };
-
   const openBatchImport = () => {
     batchRows.value = [];
     batchSelected.value = [];
@@ -1474,7 +1212,7 @@
   };
 
   const init = async () => {
-    await Promise.all([loadPathInfo(), loadClickTypes(), loadCategories()]);
+    await Promise.all([loadClickTypes(), loadCategories()]);
   };
 
   init();
@@ -1487,6 +1225,14 @@
 </script>
 
 <style lang="less" scoped>
+  .wcs-client-link {
+    margin-bottom: 0;
+  }
+
+  .wcs-server {
+    margin-top: 12px;
+  }
+
   .cat-group {
     margin-bottom: 10px;
   }
@@ -1527,6 +1273,11 @@
     &.active {
       border-color: rgb(var(--primary-6));
       background: var(--color-primary-light-1);
+    }
+
+    &.cat-row--child {
+      border-left: 3px solid rgb(var(--primary-6));
+      background: var(--color-fill-1);
     }
   }
 

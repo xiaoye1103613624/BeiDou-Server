@@ -25,6 +25,8 @@ public class SetItemDO implements Serializable {
     private Long id;
     private Integer setId;
     private String setName;
+    private String setNameZh;
+    private String setNameEn;
     private Integer completeCount;
     private String itemIds;
     private Integer enabled;

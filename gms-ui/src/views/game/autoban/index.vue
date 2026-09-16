@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.autoban')">
+  <PageContainer :title="$t('menu.game.autoban')">
+    <ProCard>
       <a-table
         :loading="loading"
         :data="configList"
@@ -111,8 +110,8 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">

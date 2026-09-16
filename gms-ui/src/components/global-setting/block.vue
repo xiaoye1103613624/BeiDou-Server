@@ -2,7 +2,7 @@
   <div class="block">
     <h5 class="title">{{ title }}</h5>
     <div v-for="option in options" :key="option.name" class="switch-wrapper">
-      <span>{{ option.name }}</span>
+      <span>{{ $t(option.name) }}</span>
       <form-wrapper
         :type="option.type || 'switch'"
         :name="option.key"
@@ -53,9 +53,12 @@
     if (key === 'topMenu') {
       appStore.updateSettings({
         menuCollapse: false,
+        menu: true,
+        topMenu: Boolean(value),
       });
+      return;
     }
-    appStore.updateSettings({ [key]: value });
+    appStore.updateSettings({ [key]: value as never });
   };
 </script>
 
@@ -65,15 +68,31 @@
   }
 
   .title {
-    margin: 10px 0;
+    margin: 0 0 12px;
     padding: 0;
+    color: var(--bd-ink);
+    font-weight: 600;
     font-size: 14px;
+    font-family: var(--bd-font-display);
   }
 
   .switch-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 32px;
+    gap: 12px;
+    min-height: 36px;
+    color: var(--bd-ink-soft);
+    font-size: 13px;
+  }
+
+  body[arco-theme='dark'] {
+    .title {
+      color: var(--color-text-1);
+    }
+
+    .switch-wrapper {
+      color: var(--color-text-2);
+    }
   }
 </style>

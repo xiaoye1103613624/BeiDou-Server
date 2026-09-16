@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">{{ $t('title') }}</div>
-    <div class="login-form-sub-title">{{ $t('form.login.title') }}</div>
+    <div class="login-form-title">{{ $t('form.login.title') }}</div>
+    <div class="login-form-sub-title">{{ $t('form.login.subtitle') }}</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -18,6 +18,7 @@
       >
         <a-input
           v-model="userInfo.username"
+          size="large"
           :placeholder="$t('form.login.user.placeholder')"
           @keydown.enter="focusToPassword"
         >
@@ -33,34 +34,37 @@
         hide-label
       >
         <a-input-password
+          ref="passwordInputRef"
           v-model="userInfo.password"
+          size="large"
           :placeholder="$t('form.login.password.placeholder')"
           allow-clear
-          @keydown.enter="handleSubmit"
+          @keydown.enter.prevent="
+            () => handleSubmit({ errors: undefined, values: userInfo })
+          "
         >
           <template #prefix>
             <icon-lock />
           </template>
         </a-input-password>
       </a-form-item>
-      <a-space :size="16" direction="vertical">
+      <a-space :size="16" direction="vertical" fill>
         <div class="login-form-password-actions">
           <a-checkbox
-            checked="rememberPassword"
             :model-value="loginConfig.rememberPassword"
             @change="setRememberPassword as any"
           >
             {{ $t('form.login.rememberPassword') }}
           </a-checkbox>
-          <a-link>
-            {{ $t('form.login.forgetPassword') }}
-          </a-link>
         </div>
-        <a-button type="primary" html-type="submit" long :loading="loading">
+        <a-button
+          type="primary"
+          html-type="submit"
+          long
+          size="large"
+          :loading="loading"
+        >
           {{ $t('form.login.login') }}
-        </a-button>
-        <a-button type="text" long class="login-form-register-btn">
-          {{ $t('form.login.register') }}
         </a-button>
       </a-space>
     </a-form>
@@ -86,23 +90,19 @@
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
-    username: 'admin', // 演示默认值
-    password: 'admin', // demo default value
+    username: 'admin',
+    password: 'admin',
   });
   const userInfo = reactive({
     username: loginConfig.value.username,
     password: loginConfig.value.password,
   });
 
-  // 添加对密码输入框的引用
   const passwordInputRef = ref();
 
-  // 跳转到密码输入框
   const focusToPassword = () => {
     nextTick(() => {
-      if (passwordInputRef.value) {
-        passwordInputRef.value.focus();
-      }
+      passwordInputRef.value?.focus?.();
     });
   };
 
@@ -128,14 +128,13 @@
         Message.success(t('message.login.success'));
         const { rememberPassword } = loginConfig.value;
         const { username, password } = values;
-        // 实际生产环境需要进行加密存储。
-        // The actual production environment requires encrypted storage.
         loginConfig.value.username = rememberPassword ? username : '';
         loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
-        if ((err as Error).name === 'TypeError')
-          errorMessage.value = '错误的请求';
+        if ((err as Error).name === 'TypeError') {
+          errorMessage.value = t('form.login.requestError');
+        }
       } finally {
         setLoading(false);
       }
@@ -149,35 +148,58 @@
 <style lang="less" scoped>
   .login-form {
     &-wrapper {
-      width: 320px;
+      width: 100%;
     }
 
     &-title {
-      color: var(--color-text-1);
-      font-weight: 500;
-      font-size: 24px;
-      line-height: 32px;
+      color: var(--bd-ink);
+      font-weight: 700;
+      font-size: 26px;
+      font-family: var(--bd-font-display);
+      line-height: 1.3;
+      letter-spacing: -0.03em;
     }
 
     &-sub-title {
-      color: var(--color-text-3);
-      font-size: 16px;
-      line-height: 24px;
+      margin-top: 8px;
+      color: var(--bd-ink-soft);
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     &-error-msg {
-      height: 32px;
+      min-height: 28px;
+      margin-top: 8px;
       color: rgb(var(--red-6));
-      line-height: 32px;
+      font-size: 13px;
+      line-height: 28px;
     }
 
     &-password-actions {
       display: flex;
       justify-content: space-between;
+      width: 100%;
     }
 
-    &-register-btn {
-      color: var(--color-text-3) !important;
+    :deep(.arco-input-wrapper),
+    :deep(.arco-input-password) {
+      border-radius: var(--bd-radius-md);
+    }
+
+    :deep(.arco-btn-primary) {
+      height: 42px;
+      border-radius: var(--bd-radius-md);
+      font-weight: 600;
+    }
+  }
+
+  body[arco-theme='dark'] {
+    .login-form-title {
+      color: var(--color-text-1);
+    }
+
+    .login-form-sub-title {
+      color: var(--color-text-3);
     }
   }
 </style>

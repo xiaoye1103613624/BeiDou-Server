@@ -151,6 +151,29 @@ public class EventScriptManager extends AbstractScriptManager {
     }
 
     /**
+     * 热重载单个事件脚本（按事件名，对应 event/Name.js）。
+     * 仅当该事件已在本频道注册时生效；未注册的新事件需全量 reloadEvents。
+     */
+    public synchronized void reloadEvent(String scriptName) {
+        if (scriptName == null || scriptName.isEmpty()) {
+            return;
+        }
+        EventEntry old = events.get(scriptName);
+        if (old == null) {
+            return;
+        }
+        Channel channel = old.em.getChannelServer();
+        old.em.cancel();
+        EventEntry neu = initializeEventEntry(scriptName, channel);
+        events.put(scriptName, neu);
+        try {
+            neu.iv.invokeFunction("init", (Object) null);
+        } catch (Exception ex) {
+            log.error("Error on script（事件脚本初始化出错）: {}", scriptName, ex);
+        }
+    }
+
+    /**
      * 取消所有事件执行
      */
     public void cancel() {

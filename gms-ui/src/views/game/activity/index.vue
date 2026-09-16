@@ -1,11 +1,10 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.activity')">
-      <a-alert type="info" style="margin-bottom: 12px">
+  <PageContainer :title="$t('menu.game.activity')">
+    <ProCard>
+      <a-alert type="info" class="bd-page-toolbar">
         {{ $t('activity.hint') }}
       </a-alert>
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-button :loading="loading" @click="refresh">
           {{ $t('activity.refresh') }}
         </a-button>
@@ -55,7 +54,10 @@
             <template #cell="{ record }">
               <a-switch
                 :model-value="!!record.enabled"
-                @change="(v: boolean) => onToggleEnabled(record, v)"
+                @change="
+                  (v: string | number | boolean) =>
+                    onToggleEnabled(record, !!v)
+                "
               />
             </template>
           </a-table-column>
@@ -184,14 +186,14 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </ProCard>
 
     <a-modal
       v-model:visible="openVisible"
       :title="$t('activity.openReg')"
       @ok="confirmOpen"
     >
-      <a-form :model="openForm" layout="vertical">
+      <a-form class="bd-overlay-form" :model="openForm" layout="vertical">
         <a-form-item :label="$t('activity.form.world')">
           <a-input-number v-model="openForm.worldId" :min="0" />
         </a-form-item>
@@ -218,7 +220,7 @@
       width="920px"
       @open="loadSchedules"
     >
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-button type="primary" size="small" @click="beginEditSchedule()">
           {{ $t('activity.schedule.add') }}
         </a-button>
@@ -275,7 +277,7 @@
       </a-table>
 
       <a-divider />
-      <a-form :model="scheduleForm" layout="vertical">
+      <a-form class="bd-overlay-form" :model="scheduleForm" layout="vertical">
         <a-row :gutter="12">
           <a-col :span="8">
             <a-form-item :label="$t('activity.column.activity')">
@@ -359,10 +361,10 @@
       :footer="false"
       width="980px"
     >
-      <a-alert type="info" style="margin-bottom: 12px">
+      <a-alert type="info" class="bd-page-toolbar">
         {{ $t('activity.reward.hint') }}
       </a-alert>
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-select
           v-model="rewardFilterCode"
           allow-search
@@ -412,6 +414,11 @@
             data-index="grantMode"
             :width="110"
           />
+          <a-table-column :title="$t('activity.reward.item')" :width="160">
+            <template #cell="{ record }">
+              <ItemIdCell :model-value="record.itemId" :editable="false" />
+            </template>
+          </a-table-column>
           <a-table-column
             :title="$t('activity.reward.match')"
             data-index="matchJson"
@@ -436,7 +443,7 @@
         </template>
       </a-table>
       <a-divider />
-      <a-form :model="rewardForm" layout="vertical">
+      <a-form class="bd-overlay-form" :model="rewardForm" layout="vertical">
         <a-row :gutter="12">
           <a-col :span="6">
             <a-form-item :label="$t('activity.reward.tierCode')">
@@ -484,7 +491,7 @@
           </a-col>
           <a-col :span="4">
             <a-form-item :label="$t('activity.reward.item')">
-              <a-input-number v-model="rewardForm.itemId" :min="0" />
+              <ItemIdCell v-model="rewardForm.itemId" />
             </a-form-item>
           </a-col>
           <a-col :span="3">
@@ -508,7 +515,7 @@
         </a-button>
       </a-form>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

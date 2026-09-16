@@ -69,6 +69,7 @@ import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.scripting.item.ItemScriptManager;
 import org.gms.server.*;
+import org.gms.server.cashshop.AltairSkinItems;
 import org.gms.server.setitem.SetBonus;
 import org.gms.server.setitem.SetItemManager;
 import org.gms.server.ExpLogger.ExpLogRecord;
@@ -3071,6 +3072,10 @@ public class Character extends AbstractCharacterObject {
 
     public void equipChanged() {
         getMap().broadcastUpdateCharLookMessage(this, this);
+        // 过滤开关开启时同步自身 AvatarLook；进图后本地可能被 CharInfo 背包覆盖，故立即+延迟再发一次。
+        if (AltairSkinItems.isLookFilterEnabled() && client != null) {
+            syncAltairSkinSelfLook();
+        }
         equipchanged = true;
         markCombatStatsDirty();
         refreshSetBonus();
@@ -3079,6 +3084,31 @@ public class Character extends AbstractCharacterObject {
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
         }
+    }
+
+    /**
+     * 向自己推送过滤后的 AvatarLook（立即 + 250ms）。
+     * 不改客户端装备栏：身体装备仍完整显示，外观靠 AvatarLook 过滤 + Cap vslot。
+     */
+    public void syncAltairSkinSelfLook() {
+        if (client == null || !AltairSkinItems.isLookFilterEnabled()) {
+            return;
+        }
+        Integer skinId = AltairSkinItems.findEquippedAltairSkinId(this);
+        client.sendPacket(PacketCreator.updateCharLook(client, this));
+        if (skinId == null) {
+            return;
+        }
+        log.info(I18nUtil.getLogMessage("AltairSkinItems.lookFilter.active"), getName(), skinId);
+        final int cid = getId();
+        TimerManager.getInstance().schedule(() -> {
+            if (client == null || getId() != cid) {
+                return;
+            }
+            if (AltairSkinItems.isAltairLookActive(this)) {
+                client.sendPacket(PacketCreator.updateCharLook(client, this));
+            }
+        }, 250);
     }
 
     public void resetSetSkillBonusCache() {
@@ -3290,7 +3320,8 @@ public class Character extends AbstractCharacterObject {
         sendPacket(PacketCreator.setItemFinalDamageBonus(
                 setFinalDamage, setDamageSkin, getCombatStatProfile(),
                 getPanelItemDropPropPercent(), getPanelMesoDropPropPercent(),
-                getPanelDamageReducePercent()));
+                getPanelDamageReducePercent(),
+                getPanelAsrR(), getPanelBuffTimeR(), getPanelStanceProp()));
         if (getMap() != null && getMap().getId() != 0) {
             sendPacket(PacketCreator.setItemSkillBonus(SetItemManager.buildAllSetBonusTexts(this)));
             for (int setId : SetItemManager.listEquippedSetIds(this)) {
@@ -3315,6 +3346,21 @@ public class Character extends AbstractCharacterObject {
 
     /** 详情面板：天赋伤害减免（%）。S9 无天赋系统时恒为 0。 */
     public int getPanelDamageReducePercent() {
+        return 0;
+    }
+
+    /** 详情面板 backgrnd4：状态异常抗性（%）。暂无来源时恒为 0。 */
+    public int getPanelAsrR() {
+        return 0;
+    }
+
+    /** 详情面板 backgrnd4：增益持续时间（%）。暂无来源时恒为 0。 */
+    public int getPanelBuffTimeR() {
+        return 0;
+    }
+
+    /** 详情面板 backgrnd4：稳如泰山（%）。暂无来源时恒为 0。 */
+    public int getPanelStanceProp() {
         return 0;
     }
 
@@ -6210,8 +6256,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * Original Cosmic/HeavenMS gate: pouch/magnet slot occupied.
-     * Cash pet skills (1812000/1812001 cash=1) land on base slot or base-100 — both are vanilla.
+     * Gate auto-loot by real magnet/pouch item ids (not mere seat occupancy).
+     * Pet1 pouch −133 shares storage with pocket cash historically — a 116xxxx
+     * left on −133 must not enable pet#2 item pickup.
      */
     private boolean isEquippedPetSkillSlot(byte petIndex, boolean mesoMagnet) {
         if (!ItemConstants.isValidPetIndex(petIndex)) {
@@ -6221,7 +6268,20 @@ public class Character extends AbstractCharacterObject {
         short base = mesoMagnet
                 ? ItemConstants.PET_EQUIP_SLOTS.get(petIndex).mesoMagnet()
                 : ItemConstants.PET_EQUIP_SLOTS.get(petIndex).itemPouch();
-        return eq.getItem(base) != null || eq.getItem((short) (base - 100)) != null;
+        return isPetLootSkillItem(eq.getItem(base), mesoMagnet)
+                || isPetLootSkillItem(eq.getItem((short) (base - 100)), mesoMagnet);
+    }
+
+    private static boolean isPetLootSkillItem(Item item, boolean mesoMagnet) {
+        if (item == null) {
+            return false;
+        }
+        int id = item.getItemId();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        if (mesoMagnet) {
+            return id == ItemId.MESO_MAGNET || ii.petCanPickupMeso(id);
+        }
+        return id == ItemId.ITEM_POUCH || ii.petCanPickupItem(id);
     }
 
     /**
@@ -7834,6 +7894,13 @@ public class Character extends AbstractCharacterObject {
                     }
                     chr.addPlayerRing(ring);
                 }
+            }
+        }
+        // Equip inventory is fully loaded (EQUIPPED is last enum) — merge pouch/magnet
+        // PetSkill bits for already-summoned pets before CharInfo/login packets.
+        for (byte i = 0; i < 3; i++) {
+            if (chr.getPet(i) != null) {
+                chr.syncPetSkillsFromEquips(i, false);
             }
         }
         // ExpandItem: CharInfo grows ZArray to slotLimit then skips any bag item with

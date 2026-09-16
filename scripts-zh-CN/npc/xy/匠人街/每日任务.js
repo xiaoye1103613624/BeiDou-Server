@@ -25,8 +25,8 @@ var COLLECT_TASKS = [
 ];
 
 var BOSS_TASKS = [
-    {name: "扎昆讨伐", desc: "击败 #b1次#k 扎昆", bossId: 8800000, count: 1, rewardMaple: 500, rewardExp: 200000, rewardItem: 4000314, rewardItemQty: 1},
-    {name: "黑龙讨伐", desc: "击败 #b1次#k 黑龙", bossId: 8810018, count: 1, rewardMaple: 800, rewardExp: 300000, rewardItem: 4000314, rewardItemQty: 2},
+    {name: "扎昆讨伐", desc: "击败 #b1次#k 扎昆", bossId: 8800000, count: 1, rewardMaple: 500, rewardExp: 200000, rewardItem: 4000313, rewardItemQty: 1},
+    {name: "黑龙讨伐", desc: "击败 #b1次#k 黑龙", bossId: 8810018, count: 1, rewardMaple: 800, rewardExp: 300000, rewardItem: 4000313, rewardItemQty: 2},
     {name: "品克缤讨伐", desc: "击败 #b1次#k 品克缤", bossId: 8820001, count: 1, rewardMaple: 1000, rewardExp: 500000, rewardItem: 4021017, rewardItemQty: 1}
 ];
 

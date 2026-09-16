@@ -7,8 +7,32 @@ import {
 } from '@/api/user';
 import { setToken, clearToken } from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
-import { UserState } from './types';
+import { RoleType, UserState } from './types';
 import useAppStore from '../app';
+
+function isWebAdmin(webadmin: UserState['webadmin']): boolean {
+  return webadmin === true || webadmin === 1;
+}
+
+function normalizeRoles(partial: Partial<UserState>): {
+  role: RoleType;
+  roles: RoleType[];
+} {
+  const fromList = (partial.roles || [])
+    .map((r) => String(r || '').trim())
+    .filter(Boolean) as RoleType[];
+  const fromPrimary = partial.role
+    ? ([String(partial.role).trim()] as RoleType[])
+    : [];
+  const merged = (fromList.length ? fromList : fromPrimary).filter(Boolean);
+  if (merged.length) {
+    return { role: merged[0], roles: merged };
+  }
+  if (isWebAdmin(partial.webadmin)) {
+    return { role: 'admin', roles: ['admin'] };
+  }
+  return { role: 'user', roles: [] };
+}
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
@@ -42,6 +66,7 @@ const useUserStore = defineStore('user', {
     hwid: undefined,
     language: undefined,
     role: '',
+    roles: [],
     avatar: undefined,
   }),
 
@@ -55,13 +80,18 @@ const useUserStore = defineStore('user', {
     switchRoles() {
       return new Promise((resolve) => {
         this.role = this.role === 'user' ? 'admin' : 'user';
+        this.roles = this.role ? [this.role] : [];
         resolve(this.role);
       });
     },
-    // Set user's information
+    // Set user's information（优先 AccountInfoDTO.role / roles）
     setInfo(partial: Partial<UserState>) {
-      partial.role = partial.webadmin ? 'admin' : 'user';
-      this.$patch(partial);
+      const { role, roles } = normalizeRoles(partial);
+      this.$patch({
+        ...partial,
+        role,
+        roles,
+      });
     },
 
     // Reset user's information

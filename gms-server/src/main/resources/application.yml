@@ -47,6 +47,21 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
 
 gms:
+  # 技能 Web 编辑器（写 XML / reloadSkills）；生产请保持 false。也可在 game_config 开 allow_skill_editor_write。
+  dev:
+    skill-editor:
+      enabled: false
+  # Admin UI icon cache: local game-assets → client PNG dirs → CDN → booklet
+  assets:
+    http-timeout-seconds: 15
+    cdn:
+      enabled: true
+      location: GMS
+      version: "83"
+    booklet:
+      enabled: true
+      # {category} / {id}; item-only mirrors typically use category=item
+      icon-url-template: "https://static.mapleartale.com/images/{category}/{id}.png"
   service:
     # zh-CN en-US
     language: zh-CN

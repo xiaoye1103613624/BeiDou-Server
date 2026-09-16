@@ -121,7 +121,7 @@ public class ActivityController {
     @Operation(summary = "奖励档位列表")
     @GetMapping("/" + ApiConstant.LATEST + "/rewardTiers")
     public ResultBody<List<ActivityRewardTierDTO>> rewardTiers(
-            @RequestParam(required = false) String activityCode) {
+            @RequestParam(name = "activityCode", required = false) String activityCode) {
         return ResultBody.success(activityRewardService.listTiers(activityCode));
     }
 

@@ -9,12 +9,12 @@
   >
     <template #title>
       <div class="drawer-title">
-        <img
+        <ItemIcon
           v-if="dropperId"
-          class="mob-icon"
-          :src="getIconUrl('mob', dropperId)"
-          alt=""
-          @error="onImgError"
+          :id="dropperId"
+          category="mob"
+          :size="32"
+          img-class="mob-icon"
         />
         <div class="drawer-title-text">
           <div class="drawer-title-main">
@@ -42,7 +42,7 @@
       </a-button>
     </div>
 
-    <a-space style="margin-bottom: 12px">
+    <div class="bd-overlay-toolbar">
       <a-button
         type="primary"
         status="success"
@@ -61,7 +61,7 @@
       <a-typography-text type="secondary">
         {{ $t('drop.column.chanceHint') }}
       </a-typography-text>
-    </a-space>
+    </div>
 
     <a-empty
       v-if="!loading && activeDropperId && dropRows.length === 0"
@@ -100,12 +100,12 @@
         >
           <template #cell="{ record }">
             <div class="item-cell">
-              <img
+              <ItemIcon
                 v-if="record.itemId"
-                class="item-icon"
-                :src="getIconUrl('item', record.itemId)"
-                alt=""
-                @error="onImgError"
+                :id="record.itemId"
+                category="item"
+                :size="28"
+                img-class="item-icon"
               />
               <a-tag v-if="record.itemId === 0" color="orangered" size="small">
                 {{ $t('drop.item.meso') }}
@@ -158,6 +158,7 @@
               <span class="chance-bar-wrap">
                 <span
                   class="chance-bar"
+                  :class="chanceBarClass(record.chance)"
                   :style="{ width: chanceBarWidth(record.chance) }"
                 />
               </span>
@@ -242,7 +243,6 @@
   import useLoading from '@/hooks/loading';
   import { deleteDrop, getDrop, insertDrop, updateDrop } from '@/api/drop';
   import { DropState } from '@/store/modules/drop/type';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
 
   type DropRow = DropState & { rowKey: string };
 
@@ -275,13 +275,19 @@
 
   const chanceBarWidth = (chance?: number) => {
     if (!chance || chance <= 0) return '0%';
-    const pct = Math.min(100, (chance / 10000) * 5);
+    const pct = Math.min(100, chance / 10000);
     return `${pct}%`;
   };
 
-  const onImgError = (e: Event) => {
-    const img = e.target as HTMLImageElement;
-    img.style.visibility = 'hidden';
+  /** 按显示爆率%分档着色：≥50绿 / ≥10蓝 / ≥1橙 / ≥0.1紫 / <0.1灰 */
+  const chanceBarClass = (chance?: number) => {
+    if (!chance || chance <= 0) return 'chance-bar--ultra';
+    const pct = chance / 10000;
+    if (pct >= 50) return 'chance-bar--high';
+    if (pct >= 10) return 'chance-bar--mid';
+    if (pct >= 1) return 'chance-bar--low';
+    if (pct >= 0.1) return 'chance-bar--rare';
+    return 'chance-bar--ultra';
   };
 
   const toRow = (r: DropState, idx: number): DropRow => ({
@@ -417,64 +423,115 @@
     align-items: center;
     gap: 12px;
   }
+
   .mob-icon {
     width: 48px;
     height: 48px;
     object-fit: contain;
-    background: var(--color-fill-2);
-    border-radius: 8px;
+    background: var(--bd-surface-muted);
+    border: 1px solid var(--bd-border);
+    border-radius: var(--bd-radius-md);
   }
+
   .drawer-title-main {
+    color: var(--bd-ink);
     font-weight: 600;
+    font-family: var(--bd-font-display);
     line-height: 1.3;
   }
+
   .drawer-title-id {
     margin-left: 6px;
-    color: var(--color-text-3);
+    color: var(--bd-ink-soft);
     font-weight: 400;
     font-size: 13px;
   }
+
   .drawer-title-sub {
-    color: var(--color-text-3);
-    font-size: 12px;
     margin-top: 2px;
+    color: var(--bd-ink-soft);
+    font-size: 12px;
   }
+
   .drawer-mob-pick {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
+
   .item-cell {
     display: flex;
     align-items: center;
     gap: 8px;
   }
+
   .item-icon {
     width: 28px;
     height: 28px;
     object-fit: contain;
     flex-shrink: 0;
+    border-radius: var(--bd-radius-sm);
   }
+
   .chance-cell {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 4px;
   }
+
   .chance-pct {
     font-variant-numeric: tabular-nums;
   }
+
   .chance-bar-wrap {
     width: 72px;
     height: 4px;
-    background: var(--color-fill-3);
-    border-radius: 2px;
     overflow: hidden;
+    background: var(--bd-surface-muted);
+    border-radius: 2px;
   }
+
   .chance-bar {
     display: block;
     height: 100%;
-    background: rgb(var(--primary-6));
     border-radius: 2px;
+
+    &--high {
+      background: #00b42a;
+    }
+
+    &--mid {
+      background: #3491fa;
+    }
+
+    &--low {
+      background: #ff7d00;
+    }
+
+    &--rare {
+      background: #722ed1;
+    }
+
+    &--ultra {
+      background: #86909c;
+    }
+  }
+
+  body[arco-theme='dark'] {
+    .drawer-title-main {
+      color: var(--color-text-1);
+    }
+
+    .drawer-title-id,
+    .drawer-title-sub {
+      color: var(--color-text-3);
+    }
+
+    .mob-icon,
+    .chance-bar-wrap {
+      background: var(--color-fill-2);
+    }
   }
 </style>

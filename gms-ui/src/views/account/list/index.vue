@@ -1,7 +1,6 @@
 <template>
-  <div class="container" :loading="true">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.account.list')">
+  <PageContainer :title="$t('menu.account.list')">
+    <ProCard>
       <a-form :model="filterForm" class="a-from-keyword">
         <a-form-item :label="$t('account.list.filter.id')">
           <a-input-number v-model="filterForm.id" @keydown.enter="loadData" />
@@ -49,7 +48,7 @@
         </a-button>
       </a-space>
       <a-divider />
-      <a-row style="margin-bottom: 16px">
+      <a-row class="bd-page-toolbar">
         <a-col>
           <a-space>
             <a-button type="primary" @click="addClick">
@@ -202,7 +201,7 @@
         </template>
       </a-table>
       <a-pagination
-        style="margin-top: 20px"
+        class="bd-page-pagination"
         :total="total"
         :page-size="size"
         :current="page"
@@ -213,7 +212,7 @@
         @change="pageChange"
         @page-size-change="pageSizeChange"
       />
-    </a-card>
+    </ProCard>
     <account-add-form ref="accountAddFormRef" @reload="loadData" />
     <account-update-form ref="accountUpdateFormRef" @reload="loadData" />
     <account-char-list ref="accountCharListRef" />
@@ -235,7 +234,7 @@
         </a-form-item>
       </a-form>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">

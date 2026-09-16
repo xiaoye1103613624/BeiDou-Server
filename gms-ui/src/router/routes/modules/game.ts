@@ -1,7 +1,10 @@
 import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
-/** 服务端基础配置与 NPC 商店 */
+/**
+ * 游戏管理：服务端参数、商店、爆率、天气、客户端右边栏等
+ * 预留：地图/NPC/任务数据管理可挂此分组
+ */
 const GAME: AppRouteRecordRaw = {
   path: '/game',
   name: 'game',
@@ -10,7 +13,7 @@ const GAME: AppRouteRecordRaw = {
     locale: 'menu.game',
     requiresAuth: true,
     icon: 'icon-dice',
-    order: 4,
+    order: 2,
   },
   children: [
     {
@@ -30,7 +33,7 @@ const GAME: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.game.npcShop',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
     {
@@ -40,63 +43,104 @@ const GAME: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.game.windowCashShop',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
+    // 旧「客户端操作」入口：迁至 /client/windowCashShopSync
     {
-      path: 'sysMenu',
-      name: 'SysMenu',
-      component: () => import('@/views/game/sysMenu/index.vue'),
-      meta: {
-        locale: 'menu.game.sysMenu',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    // 旧路径兼容（菜单已迁移至 daily / growth / member）
+      path: 'windowCashShop/clientSync',
+      redirect: '/client/windowCashShopSync',
+      meta: { hideInMenu: true, requiresAuth: true },
+    } as AppRouteRecordRaw,
     {
       path: 'weather',
-      redirect: '/daily/weather',
+      name: 'DailyWeather',
+      component: () => import('@/views/game/weather/index.vue'),
+      meta: {
+        locale: 'menu.game.weather',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
+    {
+      path: 'drop',
+      name: 'GrowthDrop',
+      component: () => import('@/views/game/drop/index.vue'),
+      meta: {
+        locale: 'menu.game.drop',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
+    {
+      path: 'drop/global',
+      name: 'GrowthGlobalDrop',
+      component: () => import('@/views/game/drop/global.vue'),
+      meta: {
+        locale: 'menu.game.drop.global',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
+    {
+      path: 'quest',
+      name: 'GameQuest',
+      component: () => import('@/views/game/quest/index.vue'),
+      meta: {
+        locale: 'menu.game.quest',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
+    {
+      path: 'sidebarTool',
+      name: 'DailySidebarTool',
+      component: () => import('@/views/game/sidebarTool/index.vue'),
+      meta: {
+        locale: 'menu.game.sidebarTool',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
+    // 旧路径兼容（菜单已迁移至 system / activity / enhance / gameplay / member）
+    {
+      path: 'sysRole',
+      redirect: '/system/sysRole',
+      meta: { hideInMenu: true, requiresAuth: true },
+    } as AppRouteRecordRaw,
+    {
+      path: 'sysMenu',
+      redirect: '/system/sysMenu',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {
       path: 'commandInfo',
-      redirect: '/daily/commandInfo',
+      redirect: '/system/commandInfo',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {
       path: 'autoban',
-      redirect: '/daily/autoban',
+      redirect: '/system/autoban',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {
       path: 'file',
-      redirect: '/daily/file',
+      redirect: '/system/file',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {
       path: 'setItem',
-      redirect: '/growth/setItem',
-      meta: { hideInMenu: true, requiresAuth: true },
-    } as AppRouteRecordRaw,
-    {
-      path: 'drop',
-      redirect: '/growth/drop',
-      meta: { hideInMenu: true, requiresAuth: true },
-    } as AppRouteRecordRaw,
-    {
-      path: 'drop/global',
-      redirect: '/growth/drop/global',
+      redirect: '/enhance/setItem',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {
       path: 'gachapon',
-      redirect: '/growth/gachapon',
+      redirect: '/gameplay/gachapon',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {
       path: 'cashShop',
-      redirect: '/member/cashShop',
+      redirect: '/gameplay/cashShop',
       meta: { hideInMenu: true, requiresAuth: true },
     } as AppRouteRecordRaw,
     {

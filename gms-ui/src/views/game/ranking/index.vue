@@ -1,11 +1,10 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.member.ranking')">
-      <a-alert type="info" style="margin-bottom: 12px">
+  <PageContainer :title="$t('menu.member.ranking')">
+    <ProCard>
+      <a-alert type="info" class="bd-page-toolbar">
         {{ $t('ranking.hint') }}
       </a-alert>
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-button type="primary" :loading="refreshing" @click="onRefresh">
           <template #icon>
             <icon-refresh />
@@ -15,11 +14,7 @@
       </a-space>
       <a-tabs v-model:active-key="activeTab" @change="onTabChange">
         <a-tab-pane key="combat" :title="$t('ranking.tab.combat')">
-          <a-form
-            :model="combatForm"
-            layout="inline"
-            style="margin-bottom: 12px"
-          >
+          <a-form :model="combatForm" layout="inline" class="bd-page-toolbar">
             <a-form-item :label="$t('ranking.filter')">
               <a-select
                 v-model="combatForm.filter"
@@ -91,11 +86,7 @@
           </a-table>
         </a-tab-pane>
         <a-tab-pane key="equip" :title="$t('ranking.tab.equip')">
-          <a-form
-            :model="equipForm"
-            layout="inline"
-            style="margin-bottom: 12px"
-          >
+          <a-form :model="equipForm" layout="inline" class="bd-page-toolbar">
             <a-form-item :label="$t('ranking.filter')">
               <a-select
                 v-model="equipForm.filter"
@@ -174,11 +165,12 @@
                       </div>
                     </template>
                     <a-space>
-                      <img
+                      <ItemIcon
                         v-if="record.itemId"
-                        class="equip-icon"
-                        :src="getIconUrl('item', record.itemId)"
-                        alt=""
+                        :id="record.itemId"
+                        category="item"
+                        :size="28"
+                        img-class="equip-icon"
                       />
                       <span>{{ record.itemName || record.itemId }}</span>
                     </a-space>
@@ -226,8 +218,8 @@
           </a-table>
         </a-tab-pane>
       </a-tabs>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -244,7 +236,6 @@
     fetchSlotCategoryOptions,
     refreshRanking,
   } from '@/api/ranking';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
 
   const { t } = useI18n();
   const activeTab = ref('combat');

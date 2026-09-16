@@ -168,7 +168,7 @@ function handleScoreShop(selection) {
         spendScore(cost);
         switch (selection) {
             case 1: cm.gainItem(4021017, 1); break;
-            case 2: cm.gainItem(4000314, 5); break;
+            case 2: cm.gainItem(4000313, 5); break;
             case 3: cm.gainItem(4001126, 100); break;
             case 4: cm.getPlayer().getCashShop().gainCash(1, 5000); break;
             case 5: cm.getPlayer().gainExp(1000000, true, true); break;

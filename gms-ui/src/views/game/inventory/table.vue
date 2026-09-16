@@ -61,14 +61,13 @@
               :src="beidouBook"
               alt="北斗卫星指导书"
             />
-            <img
+            <ItemIcon
               v-else
-              class="inv-item-icon"
-              :src="getItemIconUrl(record.itemId)"
-              :data-item-id="record.itemId"
+              :id="record.itemId"
+              category="item"
+              :size="32"
+              img-class="inv-item-icon"
               :alt="displayItemName(record) || String(record.itemId)"
-              @error="onItemIconError"
-              @load="onInventoryIconLoad"
             />
           </a-popover>
         </template>
@@ -183,7 +182,6 @@
   } from '@/api/inventory';
   import useLoading from '@/hooks/loading';
   import { InventoryState } from '@/store/modules/inventory/type';
-  import { getItemIconUrl, onItemIconError } from '@/utils/mapleStoryAPI';
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
   import { timestampToChineseTime } from '@/utils/stringUtils';
   import beidouBook from '@/assets/2430033.png';
@@ -196,17 +194,6 @@
       return '北斗卫星指导书';
     }
     return record.itemName?.trim() || '';
-  };
-
-  /** CDN 在道具/NPC 同号时会返回 NPC 立绘（通常远大于 32px 道具图标） */
-  const onInventoryIconLoad = (event: Event) => {
-    const img = event.target as HTMLImageElement | null;
-    if (!img) return;
-    if (!/maplestory\.io/i.test(img.src)) return;
-    if (img.naturalWidth > 48 || img.naturalHeight > 48) {
-      img.style.visibility = 'hidden';
-      img.removeAttribute('src');
-    }
   };
 
   const props = defineProps<{

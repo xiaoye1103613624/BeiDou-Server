@@ -19,7 +19,7 @@ const DASHBOARD: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.dashboard.workplace',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
     {
@@ -29,7 +29,7 @@ const DASHBOARD: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.dashboard.informationSearch',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['admin', 'operator'],
       },
     },
   ],

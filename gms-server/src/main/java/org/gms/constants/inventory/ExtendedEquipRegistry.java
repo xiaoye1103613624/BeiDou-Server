@@ -69,9 +69,9 @@ public final class ExtendedEquipRegistry {
             new Seat(53, 111, "Ri", UiSeat.MAIN_EQUIP, StorageTier.SHADOW_GET_SET,
                     true, DrawPolicy.REMAP_XY, WireWhen.ALWAYS, new short[]{-53, -153},
                     "ExtraRing red4 (111 + fashion cash −153)"),
-            // Pocket −33 classic red9; 109 shield −10 vanilla; 134/135 aux −62 classic red10.
+            // Pocket −33 classic red9; −133 reserved for Pet1ItemPouch (do not dual-band 116).
             new Seat(33, 116, "Po", UiSeat.MAIN_EQUIP, StorageTier.NATIVE_APPLY_MAX_55,
-                    false, DrawPolicy.REMAP_XY, WireWhen.EQUIP_OPEN, new short[]{-33, -133}, "pocket classic red9"),
+                    false, DrawPolicy.REMAP_XY, WireWhen.EQUIP_OPEN, new short[]{-33}, "pocket classic red9"),
             new Seat(10, 109, "Si", UiSeat.MAIN_EQUIP, StorageTier.NATIVE_APPLY_MAX_55,
                     false, DrawPolicy.VANILLA, WireWhen.ALWAYS, new short[]{-10, -110}, "109 shield only"),
             new Seat(62, 134, "Aw", UiSeat.MAIN_EQUIP, StorageTier.SIDECAR_ZREF,
@@ -145,7 +145,7 @@ public final class ExtendedEquipRegistry {
             case 120 -> EquipSlot.TOTEM.isAllowed(dst, cash);
             case 166 -> EquipSlot.ANDROID.isAllowed(dst, cash);
             case 167 -> EquipSlot.HEART.isAllowed(dst, cash);
-            case 116 -> EquipSlot.POCKET.isAllowed(dst, cash);
+            case 116 -> dst == -33; // cash+normal share −33; −133 is Pet1ItemPouch only
             case 109 -> EquipSlot.SHIELD.isAllowed(dst, cash);
             case 110 -> EquipSlot.CAPE.isAllowed(dst, cash);
             case 134, 135 -> EquipSlot.AUX_WEAPON.isAllowed(dst, cash);
@@ -159,11 +159,12 @@ public final class ExtendedEquipRegistry {
      * <p>
      * Sidecar Addon (118/119/120/166/167/134/135): <b>always</b> normal −bp — cash and
      * non-cash share one arena seat (matches ijl15 GetItem normal-only + SetItem alias).
-     * Native dual-band kept only for pocket −33/−133 and shield −10/−110.
+     * Pocket 116 also shares −33 only (−133 reserved for Pet1ItemPouch / BP33 pet tab「2」).
+     * Shield keeps dual-band −10/−110.
      */
     public static short resolveFixedDst(int prefix, boolean cashItem) {
         return switch (prefix) {
-            case 116 -> (short) (cashItem ? -133 : -33);
+            case 116 -> -33;
             case 110 -> (short) (cashItem ? -109 : -9);
             case 119 -> -59;
             case 118 -> -54;

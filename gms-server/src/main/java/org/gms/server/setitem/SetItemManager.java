@@ -20,6 +20,7 @@ import org.gms.provider.DataTool;
 import org.gms.provider.wz.DataType;
 import org.gms.provider.wz.WZFiles;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,7 +39,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public final class SetItemManager {
-    private static final Map<Integer, Integer> itemToSet = new HashMap<>();
+    /** itemId → 所属套装集合（2A：一件装备可属多套） */
+    private static final Map<Integer, Set<Integer>> itemToSets = new HashMap<>();
     private static final Map<Integer, SetDefinition> setDefinitions = new HashMap<>();
     private static final Set<Integer> validWzSetIds = new HashSet<>();
     private static boolean loaded = false;
@@ -51,16 +53,22 @@ public final class SetItemManager {
         }
         try {
             loadFromWz();
+            // 客户端中文名：WZ 之后、DB 之前写入空缺；DB 有中文则保留
+            applyZhNamesFromCatalog();
             loadFromDb();
+            applyZhNamesFromCatalog();
+            backfillZhNamesToDb();
+            rebuildItemIndex();
             loaded = true;
-            log.info("SetItemManager: {} sets, {} item mappings", setDefinitions.size(), itemToSet.size());
+            log.info("SetItemManager: {} sets, {} item mappings", setDefinitions.size(), itemToSets.size());
         } catch (Exception e) {
             log.error("SetItemManager load failed", e);
         }
     }
 
     public static synchronized void reload() {
-        itemToSet.clear();
+        SetItemZhNameCatalog.clearCache();
+        itemToSets.clear();
         setDefinitions.clear();
         validWzSetIds.clear();
         loaded = false;
@@ -107,9 +115,6 @@ public final class SetItemManager {
                 SetDefinition def = parseSetDefinition(setId, setNode);
                 setDefinitions.put(setId, def);
                 validWzSetIds.add(setId);
-                for (int itemId : def.itemIds) {
-                    itemToSet.put(itemId, setId);
-                }
             } catch (Exception e) {
                 log.warn("SetItemManager: skip set {} due to {}", setId, e.getMessage());
             }
@@ -145,7 +150,13 @@ public final class SetItemManager {
     private static SetDefinition parseSetDefinition(int setId, Data setNode) {
         SetDefinition def = new SetDefinition();
         def.setId = setId;
-        def.setName = DataTool.getString("setItemName", setNode, "Set " + setId);
+        // WZ setItemName：英文进 setNameEn；中文（客户端追加套）进 setNameZh
+        String wzName = DataTool.getString("setItemName", setNode, "Set " + setId);
+        if (containsCjk(wzName)) {
+            def.setNameZh = wzName;
+        } else {
+            def.setNameEn = wzName;
+        }
         def.completeCount = DataTool.getInt("completeCount", setNode, 0);
         def.enabled = true;
         def.fromWz = true;
@@ -169,6 +180,7 @@ public final class SetItemManager {
                 def.tiers.put(tierCount, bonus);
             }
         }
+        def.syncDisplayName();
         return def;
     }
 
@@ -226,21 +238,33 @@ public final class SetItemManager {
     private static void loadFromDb() throws SQLException {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                     "SELECT set_id, set_name, complete_count, item_ids, enabled, tiers_json FROM xy_set_item");
+                     "SELECT set_id, set_name, set_name_zh, set_name_en, complete_count, item_ids, enabled, tiers_json FROM xy_set_item");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 int setId = rs.getInt("set_id");
                 SetDefinition def = setDefinitions.getOrDefault(setId, new SetDefinition());
                 def.setId = setId;
                 def.fromDb = true;
-                if (def.setName == null || def.setName.isBlank()) {
-                    def.setName = "Set " + setId;
-                }
 
+                String nameZh = rs.getString("set_name_zh");
+                String nameEn = rs.getString("set_name_en");
                 String name = rs.getString("set_name");
-                if (name != null && !name.isBlank()) {
-                    def.setName = name;
+                // DB 中文不覆盖：有值才写入；英文同理。WZ 已写入的 setNameEn 仅在 DB 有值时被替换。
+                if (nameZh != null && !nameZh.isBlank()) {
+                    def.setNameZh = nameZh.trim();
                 }
+                if (nameEn != null && !nameEn.isBlank()) {
+                    def.setNameEn = nameEn.trim();
+                } else if ((def.setNameEn == null || def.setNameEn.isBlank())
+                        && name != null && !name.isBlank() && !containsCjk(name)) {
+                    def.setNameEn = name.trim();
+                }
+                if ((def.setNameZh == null || def.setNameZh.isBlank())
+                        && name != null && !name.isBlank() && containsCjk(name)) {
+                    def.setNameZh = name.trim();
+                }
+                def.syncDisplayName();
+
                 int completeCount = rs.getInt("complete_count");
                 if (completeCount > 0) {
                     def.completeCount = completeCount;
@@ -268,21 +292,126 @@ public final class SetItemManager {
                 }
 
                 setDefinitions.put(setId, def);
-                if (def.enabled && !def.itemIds.isEmpty()) {
-                    reindexItemsForSet(setId, def);
-                }
             }
         }
     }
 
-    private static void reindexItemsForSet(int setId, SetDefinition def) {
-        for (int itemId : def.itemIds) {
-            itemToSet.put(itemId, setId);
+    /** 从全部定义重建 item→sets 索引（支持一装多套，并避免 DB 改清单后残留旧映射）。 */
+    private static void rebuildItemIndex() {
+        itemToSets.clear();
+        for (SetDefinition def : setDefinitions.values()) {
+            if (!def.enabled || def.itemIds.isEmpty()) {
+                continue;
+            }
+            for (int itemId : def.itemIds) {
+                itemToSets.computeIfAbsent(itemId, k -> new HashSet<>()).add(def.setId);
+            }
         }
     }
 
+    /**
+     * 用客户端导出的中文名填充空缺的 setNameZh（已有中文不覆盖）。
+     */
+    private static void applyZhNamesFromCatalog() {
+        Map<Integer, String> catalog = SetItemZhNameCatalog.getAll();
+        if (catalog.isEmpty()) {
+            return;
+        }
+        int applied = 0;
+        for (Map.Entry<Integer, String> e : catalog.entrySet()) {
+            SetDefinition def = setDefinitions.get(e.getKey());
+            if (def == null) {
+                continue;
+            }
+            if (def.setNameZh != null && !def.setNameZh.isBlank()) {
+                continue;
+            }
+            def.setNameZh = e.getValue();
+            def.syncDisplayName();
+            applied++;
+        }
+        if (applied > 0) {
+            log.info(I18nUtil.getLogMessage("SetItemManager.info.zhApplied", applied));
+        }
+    }
+
+    /**
+     * 将空缺的中文名写回 xy_set_item（仅更新已有行，不覆盖手工填写）。
+     */
+    private static void backfillZhNamesToDb() {
+        Map<Integer, String> catalog = SetItemZhNameCatalog.getAll();
+        if (catalog.isEmpty()) {
+            return;
+        }
+        int updated = 0;
+        int skipped = 0;
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "UPDATE xy_set_item SET set_name_zh = ?, set_name = ? "
+                             + "WHERE set_id = ? AND (set_name_zh IS NULL OR set_name_zh = '')")) {
+            for (Map.Entry<Integer, String> e : catalog.entrySet()) {
+                int setId = e.getKey();
+                String zh = e.getValue();
+                SetDefinition def = setDefinitions.get(setId);
+                String display = zh;
+                if (def != null) {
+                    if (def.setNameZh == null || def.setNameZh.isBlank()) {
+                        def.setNameZh = zh;
+                    }
+                    def.syncDisplayName();
+                    display = def.displayName();
+                }
+                ps.setString(1, zh);
+                ps.setString(2, display);
+                ps.setInt(3, setId);
+                int n = ps.executeUpdate();
+                if (n > 0) {
+                    updated += n;
+                } else {
+                    skipped++;
+                }
+            }
+            log.info(I18nUtil.getLogMessage("SetItemManager.info.zhDbBackfill", updated, skipped));
+        } catch (SQLException e) {
+            // 列尚未迁移时不阻断启动
+            log.warn(I18nUtil.getLogMessage("SetItemManager.warn.zhDbBackfill", e.getMessage()));
+        }
+    }
+
+    private static boolean containsCjk(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < text.length(); ) {
+            int cp = text.codePointAt(i);
+            // 须写全限定名：本类已 import org.gms.client.Character，会遮蔽 java.lang.Character
+            if (java.lang.Character.UnicodeScript.of(cp) == java.lang.Character.UnicodeScript.HAN) {
+                return true;
+            }
+            i += java.lang.Character.charCount(cp);
+        }
+        return false;
+    }
+
+    /** 一件装备所属的全部套装（只读视图）。 */
+    public static Set<Integer> getSetIds(int itemId) {
+        Set<Integer> sets = itemToSets.get(itemId);
+        if (sets == null || sets.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return Collections.unmodifiableSet(sets);
+    }
+
+    /**
+     * 兼容旧调用：返回任意一个所属 setId（多套时不保证顺序）。
+     * 新逻辑请使用 {@link #getSetIds(int)}。
+     */
     public static int getSetId(int itemId) {
-        return itemToSet.getOrDefault(itemId, 0);
+        Set<Integer> sets = itemToSets.get(itemId);
+        if (sets == null || sets.isEmpty()) {
+            return 0;
+        }
+        return sets.iterator().next();
     }
 
     public static boolean isSetEnabled(int setId) {
@@ -496,15 +625,14 @@ public final class SetItemManager {
                 }
             }
             int itemId = item.getItemId();
-            int setId = getSetId(itemId);
-            if (setId == 0) {
-                continue;
+            // 2A：同一装备计入其所属的每一个套装
+            for (int setId : getSetIds(itemId)) {
+                Set<Integer> seen = countedIdsBySet.computeIfAbsent(setId, k -> new HashSet<>());
+                if (!seen.add(itemId)) {
+                    continue;
+                }
+                countMap.merge(setId, 1, Integer::sum);
             }
-            Set<Integer> seen = countedIdsBySet.computeIfAbsent(setId, k -> new HashSet<>());
-            if (!seen.add(itemId)) {
-                continue;
-            }
-            countMap.put(setId, countMap.getOrDefault(setId, 0) + 1);
         }
         return countMap;
     }
@@ -521,7 +649,7 @@ public final class SetItemManager {
         int count = countMap.getOrDefault(setId, 0);
         SetBonus bonus = getSetBonusForSet(chr, setId);
         StringBuilder sb = new StringBuilder();
-        sb.append(def.setName).append(" (").append(count).append("/")
+        sb.append(def.displayName()).append(" (").append(count).append("/")
                 .append(def.completeCount > 0 ? def.completeCount : def.itemIds.size()).append(")\r\n");
         CombatStatFormatter.appendSetBonusLines(sb, bonus);
         return sb.toString().trim();

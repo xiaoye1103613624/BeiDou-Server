@@ -1,13 +1,12 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.sysMenu')">
+  <PageContainer :title="$t('menu.game.sysMenu')">
+    <ProCard>
       <a-alert
-        style="margin-bottom: 12px"
+        class="bd-page-toolbar"
         type="info"
         :content="$t('sysMenu.hint')"
       />
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-button type="primary" @click="openCreate()">{{
           $t('sysMenu.addRoot')
         }}</a-button>
@@ -66,7 +65,10 @@
                 :model-value="record.enabled"
                 :checked-value="1"
                 :unchecked-value="0"
-                @change="(v: number) => toggleEnabled(record, v)"
+                @change="
+                  (v: string | number | boolean) =>
+                    toggleEnabled(record, Number(v))
+                "
               />
             </template>
           </a-table-column>
@@ -76,7 +78,10 @@
                 :model-value="record.hideInMenu"
                 :checked-value="1"
                 :unchecked-value="0"
-                @change="(v: number) => toggleHide(record, v)"
+                @change="
+                  (v: string | number | boolean) =>
+                    toggleHide(record, Number(v))
+                "
               />
             </template>
           </a-table-column>
@@ -112,7 +117,7 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </ProCard>
 
     <a-modal
       v-model:visible="modalVisible"
@@ -182,7 +187,7 @@
         </a-form-item>
       </a-form>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -418,9 +423,3 @@
 
   onMounted(loadTree);
 </script>
-
-<style scoped lang="less">
-  .container {
-    padding: 0 20px 20px;
-  }
-</style>

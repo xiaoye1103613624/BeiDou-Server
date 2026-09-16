@@ -36,7 +36,7 @@
     return tabBarStore.getTabList;
   });
   const offsetTop = computed(() => {
-    return appStore.navbar ? 60 : 0;
+    return appStore.navbar ? 56 : 0;
   });
 
   watch(
@@ -62,18 +62,21 @@
 <style scoped lang="less">
   .tab-bar-container {
     position: relative;
-    background-color: var(--color-bg-2);
+    background-color: transparent;
     .tab-bar-box {
       display: flex;
-      padding: 0 0 0 20px;
-      background-color: var(--color-bg-2);
-      border-bottom: 1px solid var(--color-border);
+      margin: 12px 20px 0;
+      padding: 0 4px 0 8px;
+      background-color: var(--bd-surface-elevated);
+      border: 1px solid var(--bd-border);
+      border-radius: var(--bd-radius-md);
+      box-shadow: var(--bd-shadow-sm);
       .tab-bar-scroll {
-        height: 32px;
+        height: 40px;
         flex: 1;
         overflow: hidden;
         .tags-wrap {
-          padding: 4px 0;
+          padding: 6px 0;
           height: 48px;
           white-space: nowrap;
           overflow-x: auto;
@@ -82,6 +85,7 @@
             display: inline-flex;
             align-items: center;
             margin-right: 6px;
+            border-radius: 999px;
             cursor: pointer;
             &:first-child {
               .arco-tag-close-btn {
@@ -94,8 +98,13 @@
     }
 
     .tag-bar-operation {
-      width: 100px;
-      height: 32px;
+      width: 48px;
+      height: 40px;
     }
+  }
+
+  body[arco-theme='dark'] .tab-bar-box {
+    background-color: var(--color-bg-2);
+    border-color: var(--color-border);
   }
 </style>

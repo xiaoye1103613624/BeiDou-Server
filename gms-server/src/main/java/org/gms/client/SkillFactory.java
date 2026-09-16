@@ -93,6 +93,11 @@ public class SkillFactory {
         return skills.get(id);
     }
 
+    /** 当前内存中已加载的技能数量（管理端 reload 后回显）。 */
+    public static int getLoadedSkillCount() {
+        return skills.size();
+    }
+
     public static void loadAllSkills() {
         final Map<Integer, Skill> loadedSkills = new HashMap<>();
         final DataDirectoryEntry root = datasource.getRoot();

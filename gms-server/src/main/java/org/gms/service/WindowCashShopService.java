@@ -25,8 +25,8 @@ import org.gms.server.cashshop.CashShopWindowPackets;
 import org.gms.server.cashshop.ClientDataPath;
 import org.gms.server.cashshop.DamageSkinCashItems;
 import org.gms.server.cashshop.InventorySlotCashItems;
-import org.gms.server.cashshop.ItemIconFiles;
 import org.gms.server.cashshop.XyPlayCashItems;
+import org.gms.server.icon.SharedIconFiles;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,71 +58,31 @@ public class WindowCashShopService {
     private final XyCashShopCategoryMapper categoryMapper;
     private final XyCashShopItemMapper itemMapper;
     private final XyCashShopCategoryItemMapper categoryItemMapper;
-    private final GameIconService gameIconService;
+    private final AssetService assetService;
+    private final ClientPathService clientPathService;
 
+    /** @deprecated 请用 {@link ClientPathService#getInfo()} */
+    @Deprecated
     public Map<String, Object> getClientDataPathInfo() {
-        final Map<String, Object> m = new LinkedHashMap<>();
-        m.put("configured", ClientDataPath.configuredRaw());
-        m.put("resolved", ClientDataPath.resolve().map(Path::toString).orElse(""));
-        m.put("jvmProperty", ClientDataPath.SYS_PROP);
-        m.put("configCode", ClientDataPath.CONFIG_CODE);
-        final var v = ClientDataPath.validateConfigured();
-        m.put("ok", v.ok());
-        m.put("skipped", v.skipped());
-        m.put("warning", v.warning());
-        m.put("message", v.message());
-        return m;
+        return clientPathService.getInfo();
     }
 
+    /** @deprecated 请用 {@link ClientPathService#setPath(String)} */
+    @Deprecated
     public Map<String, Object> setClientDataPath(String absolutePath) {
-        if (StringUtils.hasText(absolutePath)) {
-            final Path p = Path.of(absolutePath.trim()).toAbsolutePath().normalize();
-            final var v = ClientDataPath.validate(p);
-            if (!v.ok()) {
-                throw new BizException(v.message());
-            }
-            ClientDataPath.saveToGameConfig(p.toString());
-        } else {
-            ClientDataPath.saveToGameConfig("");
-        }
-        return getClientDataPathInfo();
+        return clientPathService.setPath(absolutePath);
     }
 
+    /** @deprecated 请用 {@link ClientPathService#validate(String)} */
+    @Deprecated
     public Map<String, Object> validateClientDataPath(String absolutePath) {
-        final Path p = StringUtils.hasText(absolutePath)
-                ? Path.of(absolutePath.trim()).toAbsolutePath().normalize()
-                : ClientDataPath.resolve().orElse(null);
-        final var v = p == null
-                ? ClientDataPath.ValidationResult.skip("path empty")
-                : ClientDataPath.validate(p);
-        final Map<String, Object> m = new LinkedHashMap<>();
-        m.put("ok", v.ok());
-        m.put("skipped", v.skipped());
-        m.put("warning", v.warning());
-        m.put("path", v.path());
-        m.put("message", v.message());
-        return m;
+        return clientPathService.validate(absolutePath);
     }
 
+    /** @deprecated 请用 {@link ClientPathService#listDirectories(String)} */
+    @Deprecated
     public List<Map<String, Object>> listDirectories(String absolutePath) {
-        RequireUtil.requireNotEmpty(absolutePath, "path");
-        final Path root = Path.of(absolutePath.trim()).toAbsolutePath().normalize();
-        if (!Files.isDirectory(root)) {
-            throw new BizException("not a directory: " + root);
-        }
-        try (var stream = Files.list(root)) {
-            return stream.filter(Files::isDirectory)
-                    .sorted()
-                    .map(p -> {
-                        final Map<String, Object> n = new LinkedHashMap<>();
-                        n.put("name", p.getFileName() != null ? p.getFileName().toString() : p.toString());
-                        n.put("path", p.toString());
-                        return n;
-                    })
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new BizException("listDirectories failed: " + e.getMessage());
-        }
+        return clientPathService.listDirectories(absolutePath);
     }
 
     public List<XyCashShopCategoryDO> listCategories() {
@@ -749,8 +709,269 @@ public class WindowCashShopService {
         if (xyCatId != null) {
             m.put("xyPlayItems", seedXyPlayItems(xyCatId));
         }
+        m.put("mountTree", ensureMountCategoryTree());
+        m.put("mountCatalog", seedMountCatalog());
         m.put("catalogReloaded", loadFromDbIntoMemory());
         return m;
+    }
+
+    /**
+     * 确保坐骑一级标注 + 二级（坐骑/鞍具/坐骑道具）。按 legacy 定位，避免 L1/L2 同名「坐骑」互相覆盖。
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> ensureMountCategoryTree() {
+        final Map<String, Object> out = new LinkedHashMap<>();
+        final XyCashShopCategoryDO root = ensureLegacyCategory(
+                CashShopTaxonomy.MOUNT_ROOT, null, "mount-root");
+        out.put("root", root.getId());
+        out.put("body", ensureLegacyCategory(CashShopTaxonomy.MOUNT, root.getId(), "mount-body").getId());
+        out.put("eq", ensureLegacyCategory(CashShopTaxonomy.MOUNT_EQ, root.getId(), "mount-eq").getId());
+        out.put("use", ensureLegacyCategory(CashShopTaxonomy.MOUNT_USE, root.getId(), "mount-use").getId());
+        return out;
+    }
+
+    /**
+     * 扫描服务端/客户端 TamingMob 与 Consume/226，灌入二级坐骑分类（固定点券价）。
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> seedMountCatalog() {
+        final Map<String, Object> tree = ensureMountCategoryTree();
+        final int bodyCatId = (Integer) tree.get("body");
+        final int eqCatId = (Integer) tree.get("eq");
+        final int useCatId = (Integer) tree.get("use");
+
+        final Set<Integer> mountIds = new LinkedHashSet<>();
+        final Set<Integer> saddleIds = new LinkedHashSet<>();
+        final Set<Integer> useIds = new LinkedHashSet<>();
+
+        for (Integer id : collectTamingMobItemIds()) {
+            final int type = CashShopTaxonomy.itemTypePrefix(id);
+            if (type == 190) {
+                mountIds.add(id);
+            } else if (type == 191) {
+                saddleIds.add(id);
+            }
+        }
+        useIds.addAll(collectMountUseItemIds());
+
+        int saved = 0;
+        int linked = 0;
+        int skipped = 0;
+        int unlinkedWrong = 0;
+
+        unlinkedWrong += unlinkMountIdsFromForeignCategories(mountIds, bodyCatId);
+        unlinkedWrong += unlinkMountIdsFromForeignCategories(saddleIds, eqCatId);
+        unlinkedWrong += unlinkMountIdsFromForeignCategories(useIds, useCatId);
+
+        for (Integer itemId : mountIds) {
+            final int[] r = upsertMountItem(itemId, bodyCatId, linked);
+            saved += r[0];
+            linked += r[1];
+            skipped += r[2];
+        }
+        for (Integer itemId : saddleIds) {
+            final int[] r = upsertMountItem(itemId, eqCatId, linked);
+            saved += r[0];
+            linked += r[1];
+            skipped += r[2];
+        }
+        for (Integer itemId : useIds) {
+            final int[] r = upsertMountItem(itemId, useCatId, linked);
+            saved += r[0];
+            linked += r[1];
+            skipped += r[2];
+        }
+
+        final boolean catalogReloaded = loadFromDbIntoMemory();
+        final Map<String, Object> out = new LinkedHashMap<>();
+        out.put("mountIds", mountIds.size());
+        out.put("saddleIds", saddleIds.size());
+        out.put("useIds", useIds.size());
+        out.put("saved", saved);
+        out.put("linked", linked);
+        out.put("skipped", skipped);
+        out.put("unlinkedWrong", unlinkedWrong);
+        out.put("catalogReloaded", catalogReloaded);
+        log.info("[windowCashShop] seedMountCatalog mounts={} saddles={} use={} saved={} linked={} skipped={}",
+                mountIds.size(), saddleIds.size(), useIds.size(), saved, linked, skipped);
+        return out;
+    }
+
+    private int[] upsertMountItem(int itemId, int categoryId, int linkSort) {
+        try {
+            saveItem(XyCashShopItemDO.builder()
+                    .itemId(itemId)
+                    .price(CashShopTaxonomy.mountDefaultPrice(itemId))
+                    .count(1)
+                    .period(0)
+                    .gender(2)
+                    .enabled(1)
+                    .remark("mount-seed")
+                    .build(), false);
+            linkItem(categoryId, itemId, linkSort, 1);
+            return new int[]{1, 1, 0};
+        } catch (Exception e) {
+            log.warn("[windowCashShop] seedMount item {} skip: {}", itemId, e.toString());
+            return new int[]{0, 0, 1};
+        }
+    }
+
+    private int unlinkMountIdsFromForeignCategories(Set<Integer> itemIds, int keepCategoryId) {
+        if (itemIds == null || itemIds.isEmpty()) {
+            return 0;
+        }
+        int removed = 0;
+        for (Integer itemId : itemIds) {
+            final List<XyCashShopCategoryItemDO> links = categoryItemMapper.selectListByQuery(
+                    QueryWrapper.create().eq("item_id", itemId));
+            for (XyCashShopCategoryItemDO link : links) {
+                if (link.getCategoryId() != null && !link.getCategoryId().equals(keepCategoryId)) {
+                    categoryItemMapper.deleteByQuery(QueryWrapper.create()
+                            .eq("category_id", link.getCategoryId())
+                            .eq("item_id", itemId));
+                    removed++;
+                }
+            }
+        }
+        return removed;
+    }
+
+    private XyCashShopCategoryDO ensureLegacyCategory(CashShopTaxonomy.Bucket bucket,
+                                                      Integer parentId, String remark) {
+        XyCashShopCategoryDO existing = categoryMapper.selectOneByQuery(
+                QueryWrapper.create()
+                        .eq("legacy_tab", bucket.legacyTab())
+                        .eq("legacy_category", bucket.legacyCategory()));
+        // L1：优先复用已有顶级「坐骑」标注行
+        if (existing == null && parentId == null && "坐骑".equals(bucket.name())) {
+            existing = categoryMapper.selectOneByQuery(
+                    QueryWrapper.create().eq("name", "坐骑").isNull("parent_id"));
+        }
+        if (existing == null) {
+            existing = XyCashShopCategoryDO.builder()
+                    .name(bucket.name())
+                    .parentId(parentId)
+                    .sort(bucket.sort())
+                    .enabled(1)
+                    .clickType(CashShopClickType.SHOW_ITEMS.name())
+                    .isHot(0)
+                    .legacyTab(bucket.legacyTab())
+                    .legacyCategory(bucket.legacyCategory())
+                    .remark(remark)
+                    .updatedAt(new Date())
+                    .build();
+            categoryMapper.insertSelective(existing);
+            return existing;
+        }
+        boolean dirty = false;
+        if (!Objects.equals(existing.getName(), bucket.name())) {
+            existing.setName(bucket.name());
+            dirty = true;
+        }
+        if (!Objects.equals(existing.getParentId(), parentId)) {
+            existing.setParentId(parentId);
+            dirty = true;
+        }
+        if (!Objects.equals(existing.getLegacyTab(), bucket.legacyTab())
+                || !Objects.equals(existing.getLegacyCategory(), bucket.legacyCategory())) {
+            existing.setLegacyTab(bucket.legacyTab());
+            existing.setLegacyCategory(bucket.legacyCategory());
+            dirty = true;
+        }
+        if (!Objects.equals(existing.getSort(), bucket.sort())) {
+            existing.setSort(bucket.sort());
+            dirty = true;
+        }
+        if (existing.getEnabled() == null || existing.getEnabled() != 1) {
+            existing.setEnabled(1);
+            dirty = true;
+        }
+        if (!CashShopClickType.SHOW_ITEMS.name().equals(existing.getClickType())) {
+            existing.setClickType(CashShopClickType.SHOW_ITEMS.name());
+            dirty = true;
+        }
+        if (!Objects.equals(existing.getRemark(), remark)) {
+            existing.setRemark(remark);
+            dirty = true;
+        }
+        if (dirty) {
+            existing.setUpdatedAt(new Date());
+            categoryMapper.update(existing);
+        }
+        return existing;
+    }
+
+    /** 收集 190/191：客户端 Data/Character/TamingMob + 服务端 wz(-zh-CN)/Character.wz/TamingMob */
+    private Set<Integer> collectTamingMobItemIds() {
+        final Set<Integer> ids = new LinkedHashSet<>();
+        ClientDataPath.resolve().ifPresent(root ->
+                ids.addAll(scanTamingMobDir(root.resolve("Character").resolve("TamingMob"), "*.img")));
+        for (Path wzRoot : serverWzRoots()) {
+            ids.addAll(scanTamingMobDir(
+                    wzRoot.resolve("Character.wz").resolve("TamingMob"), "*.img.xml"));
+            ids.addAll(scanTamingMobDir(
+                    wzRoot.resolve("Character").resolve("TamingMob"), "*.img"));
+        }
+        return ids;
+    }
+
+    private Set<Integer> collectMountUseItemIds() {
+        final Set<Integer> ids = new LinkedHashSet<>();
+        try {
+            final ItemInformationProvider ii = ItemInformationProvider.getInstance();
+            for (Integer id : ii.listIdsInItemPack("Consume", 226)) {
+                if (id != null && CashShopTaxonomy.itemTypePrefix(id) == 226) {
+                    ids.add(id);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("[windowCashShop] list Consume/226 failed: {}", e.toString());
+        }
+        if (ids.isEmpty()) {
+            ids.add(2260000);
+        }
+        return ids;
+    }
+
+    private List<Path> serverWzRoots() {
+        final List<Path> roots = new ArrayList<>();
+        final Path cwd = Path.of(System.getProperty("user.dir", ".")).toAbsolutePath().normalize();
+        // IDE/jar 工作目录可能是仓库根或 gms-server
+        final Path[] bases = new Path[]{cwd, cwd.resolve("gms-server")};
+        for (Path base : bases) {
+            for (String name : new String[]{"wz-zh-CN", "wz"}) {
+                final Path p = base.resolve(name);
+                if (Files.isDirectory(p) && !roots.contains(p)) {
+                    roots.add(p);
+                }
+            }
+        }
+        return roots;
+    }
+
+    private Set<Integer> scanTamingMobDir(Path dir, String glob) {
+        final Set<Integer> ids = new LinkedHashSet<>();
+        if (dir == null || !Files.isDirectory(dir)) {
+            return ids;
+        }
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, glob)) {
+            for (Path file : stream) {
+                final Integer id = parseTamingMobFileId(
+                        file.getFileName() != null ? file.getFileName().toString() : null);
+                if (id != null && CashShopTaxonomy.isMountCatalogItem(id)
+                        && CashShopTaxonomy.itemTypePrefix(id) != 226) {
+                    ids.add(id);
+                }
+            }
+        } catch (IOException e) {
+            log.warn("[windowCashShop] scan TamingMob {} failed: {}", dir, e.toString());
+        }
+        return ids;
+    }
+
+    /** 支持 {@code 01902000.img} / {@code 1902000.img.xml} 等文件名。 */
+    static Integer parseTamingMobFileId(String fileName) {
+        return CashShopTaxonomy.parseImgItemId(fileName);
     }
 
     /**
@@ -881,7 +1102,8 @@ public class WindowCashShopService {
             throw new BizException("mode must be fillEmpty or force");
         }
         final String mode = force ? "force" : "fillEmpty";
-        final Path iconDir = ItemIconFiles.resolveOrCreateIconDir();
+        // Canonical disk root is game-assets; legacy item-icons is promote-only.
+        final Path iconDir = SharedIconFiles.resolveOrCreateRoot();
         final List<XyCashShopItemDO> targets = resolveIconSyncTargets(body);
 
         int updated = 0;
@@ -902,7 +1124,7 @@ public class WindowCashShopService {
                 if (ensureLocalItemPng(item.getItemId(), force)) {
                     filesWritten++;
                 }
-                final String url = ItemIconFiles.webUrl(item.getItemId());
+                final String url = SharedIconFiles.webUrl("item", item.getItemId());
                 if (!force && Objects.equals(url, item.getIconUrl())) {
                     skipped++;
                     continue;
@@ -965,23 +1187,18 @@ public class WindowCashShopService {
     }
 
     /**
-     * Ensure {@code item-icons/{id}.png} exists: reuse local/legacy cache, else CDN ? {@code xy_game_icon} ? disk.
-     * Client Data path is checked for asset presence only (no WZ?PNG extract in-process).
+     * Ensure {@code game-assets/item/{id}.png} exists via {@link AssetService} chain.
      */
     private boolean ensureLocalItemPng(int itemId, boolean force) {
-        final Path dir = ItemIconFiles.resolveOrCreateIconDir();
-        final Path png = ItemIconFiles.pngPath(dir, itemId);
-        if (!force && Files.isRegularFile(png)) {
+        if (!force && SharedIconFiles.pngExists("item", itemId)) {
             return false;
         }
-        if (ItemIconFiles.copyFromLegacyCacheIfPresent(itemId) && Files.isRegularFile(png) && !force) {
+        SharedIconFiles.promoteLegacyIfPresent("item", itemId);
+        if (!force && SharedIconFiles.pngExists("item", itemId)) {
             return true;
         }
-        final Optional<byte[]> bytes = gameIconService.ensureItemIconBytes(itemId, force);
-        if (bytes.isPresent() && ItemIconFiles.writePng(itemId, bytes.get())) {
-            return true;
-        }
-        return ItemIconFiles.copyFromLegacyCacheIfPresent(itemId);
+        final Optional<byte[]> bytes = assetService.ensureItemIconBytes(itemId, force);
+        return bytes.isPresent() && SharedIconFiles.pngExists("item", itemId);
     }
 
     /**
@@ -1009,6 +1226,8 @@ public class WindowCashShopService {
 
         log.info("[windowCashShop] syncFromClientData start path={} cashOnly={} fillIcons={}",
                 root, cashOnly, fillIcons);
+        // 坐骑二级树先就位，避免 client-sync 把 11:1 建成无父分类
+        ensureMountCategoryTree();
         final Set<Integer> scannedIds = scanClientItemIds(root, cashOnly);
         log.info("[windowCashShop] scan done: {} candidate ids", scannedIds.size());
 
@@ -1040,7 +1259,7 @@ public class WindowCashShopService {
         final List<XyCashShopItemDO> pendingInsertItems = new ArrayList<>();
         final List<XyCashShopItemDO> pendingUpdateItems = new ArrayList<>();
         final List<XyCashShopCategoryItemDO> pendingLinks = new ArrayList<>();
-        final Path iconDir = fillIcons ? ItemIconFiles.resolveOrCreateIconDir() : null;
+        final Path iconDir = fillIcons ? SharedIconFiles.resolveOrCreateRoot() : null;
         int processed = 0;
 
         for (Integer itemId : scannedIds) {
@@ -1083,15 +1302,18 @@ public class WindowCashShopService {
 
             XyCashShopItemDO existing = existingItems.get(itemId);
             if (existing == null) {
+                final int price = CashShopTaxonomy.isMountCatalogItem(itemId)
+                        ? CashShopTaxonomy.mountDefaultPrice(itemId)
+                        : defaultPrice;
                 existing = XyCashShopItemDO.builder()
                         .itemId(itemId)
-                        .price(defaultPrice)
+                        .price(price)
                         .count(1)
                         .period(0)
-                        .gender(0)
+                        .gender(CashShopTaxonomy.isMountCatalogItem(itemId) ? 2 : 0)
                         .name(name)
                         .enabled(1)
-                        .remark("client-sync")
+                        .remark(CashShopTaxonomy.isMountCatalogItem(itemId) ? "mount-seed" : "client-sync")
                         .build();
                 if (fillIcons && tryFillLocalIconOnly(itemId, iconDir, existing)) {
                     iconsFilled++;
@@ -1181,6 +1403,13 @@ public class WindowCashShopService {
      * so "宠物" at the wrong tab is not reused for 脸饰.
      */
     private Map<String, Object> ensureKCatsCategory(CashShopTaxonomy.Bucket bucket) {
+        // 坐骑二级桶必须挂在 11:0 下，避免 client-sync 建成无父扁平节点
+        Integer preferredParent = null;
+        if (bucket.legacyTab() == CashShopTaxonomy.MOUNT.legacyTab()
+                && bucket.legacyCategory() > 0) {
+            preferredParent = ensureLegacyCategory(
+                    CashShopTaxonomy.MOUNT_ROOT, null, "mount-root").getId();
+        }
         XyCashShopCategoryDO existing = categoryMapper.selectOneByQuery(
                 QueryWrapper.create()
                         .eq("legacy_tab", bucket.legacyTab())
@@ -1190,14 +1419,14 @@ public class WindowCashShopService {
         if (existing == null) {
             existing = XyCashShopCategoryDO.builder()
                     .name(bucket.name())
-                    .parentId(null)
+                    .parentId(preferredParent)
                     .sort(bucket.sort())
                     .enabled(1)
                     .clickType(CashShopClickType.SHOW_ITEMS.name())
                     .isHot(0)
                     .legacyTab(bucket.legacyTab())
                     .legacyCategory(bucket.legacyCategory())
-                    .remark("client-sync")
+                    .remark(preferredParent != null ? "mount-seed" : "client-sync")
                     .updatedAt(new Date())
                     .build();
             categoryMapper.insertSelective(existing);
@@ -1214,6 +1443,10 @@ public class WindowCashShopService {
             }
             if (!StringUtils.hasText(existing.getClickType())) {
                 existing.setClickType(CashShopClickType.SHOW_ITEMS.name());
+                dirty = true;
+            }
+            if (preferredParent != null && !Objects.equals(existing.getParentId(), preferredParent)) {
+                existing.setParentId(preferredParent);
                 dirty = true;
             }
             if (dirty) {
@@ -1363,14 +1596,14 @@ public class WindowCashShopService {
         return !StringUtils.hasText(url) || isCdnIconUrl(url);
     }
 
-    /** Local/legacy PNG only — never hit CDN during bulk client sync. */
+    /** Local PNG only (game-assets + legacy promote) — never hit CDN during bulk client sync. */
     private boolean tryFillLocalIconOnly(int itemId, Path iconDir, XyCashShopItemDO target) {
         if (target == null || iconDir == null) {
             return false;
         }
-        if (Files.isRegularFile(ItemIconFiles.pngPath(iconDir, itemId))
-                || ItemIconFiles.copyFromLegacyCacheIfPresent(itemId)) {
-            target.setIconUrl(ItemIconFiles.webUrl(itemId));
+        SharedIconFiles.promoteLegacyIfPresent("item", itemId);
+        if (SharedIconFiles.pngExists("item", itemId)) {
+            target.setIconUrl(SharedIconFiles.webUrl("item", itemId));
             return true;
         }
         return false;
@@ -1450,9 +1683,17 @@ public class WindowCashShopService {
                         if (id == null) {
                             continue;
                         }
-                        if (cashOnly) {
+                        if (cashOnly && !"TamingMob".equalsIgnoreCase(bucket.key())) {
                             // O(1) path load + cash flag — skip non-cash equips early
+                            // 坐骑多数无 cash 标记，cashOnly 时仍纳入扫描
                             if (!ii.isCashEquipInFolder(bucket.key(), id)) {
+                                continue;
+                            }
+                        }
+                        // TamingMob：仅收 190/191，排除目录内 193/198/199 等非卖资源
+                        if ("TamingMob".equalsIgnoreCase(bucket.key())) {
+                            final int type = CashShopTaxonomy.itemTypePrefix(id);
+                            if (type != 190 && type != 191) {
                                 continue;
                             }
                         }
@@ -1521,6 +1762,8 @@ public class WindowCashShopService {
             }
             log.info("[windowCashShop] Item/{} pack children added={}", sub, packExpanded);
         }
+        // cashOnly 会跳过 Consume：仍并入坐骑道具 226*
+        ids.addAll(collectMountUseItemIds());
         return ids;
     }
 }

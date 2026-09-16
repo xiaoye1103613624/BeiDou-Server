@@ -38,30 +38,6 @@ export interface XyCashShopCategoryItemDO {
   updatedAt?: string;
 }
 
-export interface ClientDataPathInfo {
-  configured?: string;
-  resolved?: string;
-  jvmProperty?: string;
-  configCode?: string;
-  ok?: boolean;
-  skipped?: boolean;
-  warning?: boolean;
-  message?: string;
-}
-
-export interface PathValidateResult {
-  ok?: boolean;
-  skipped?: boolean;
-  warning?: boolean;
-  path?: string;
-  message?: string;
-}
-
-export interface DirectoryEntry {
-  name: string;
-  path: string;
-}
-
 export interface LinkedItemRow {
   link: XyCashShopCategoryItemDO;
   item: XyCashShopItemDO;
@@ -97,34 +73,18 @@ export interface ImportItemsBody {
   requireClient?: boolean;
 }
 
-/** POST body is wrapped by axios interceptor as `{ data }`. Empty string clears path. */
-export function getClientDataPath() {
-  return axios.get<any, { data: ClientDataPathInfo }>(
-    '/windowCashShop/v1/clientDataPath'
-  );
-}
+export type {
+  ClientDataPathInfo,
+  DirectoryEntry,
+  PathValidateResult,
+} from '@/api/clientPath';
 
-export function setClientDataPath(path: string) {
-  // interceptor skips falsy body; whitespace-only clears on server (hasText)
-  return axios.post<any, { data: ClientDataPathInfo }>(
-    '/windowCashShop/v1/clientDataPath',
-    path === '' ? ' ' : path
-  );
-}
-
-export function validateClientDataPath(path: string) {
-  return axios.post<any, { data: PathValidateResult }>(
-    '/windowCashShop/v1/clientDataPath/validate',
-    path === '' ? ' ' : path
-  );
-}
-
-export function listDirectories(absolutePath: string) {
-  return axios.post<any, { data: DirectoryEntry[] }>(
-    '/windowCashShop/v1/listDirectories',
-    absolutePath
-  );
-}
+export {
+  getClientDataPath,
+  setClientDataPath,
+  validateClientDataPath,
+  listDirectories,
+} from '@/api/clientPath';
 
 export function getClickTypes() {
   return axios.get<any, { data: string[] }>('/windowCashShop/v1/clickTypes');
@@ -204,7 +164,7 @@ export function importTsv(onlyIfEmpty = true) {
   );
 }
 
-/** Stub — server will add soon */
+/** Browse WZ/catalog items for batch import */
 export function browseItems(query: BrowseItemsQuery) {
   return axios.post<any, { data: BrowseItemRow[] }>(
     '/windowCashShop/v1/browseItems',
@@ -212,19 +172,24 @@ export function browseItems(query: BrowseItemsQuery) {
   );
 }
 
-/** Stub — server will add soon */
+/** Import selected item IDs into a category */
 export function importItems(body: ImportItemsBody) {
   return axios.post('/windowCashShop/v1/importItems', body);
 }
 
-/** Stub — server will add soon; data = category ids in display order */
+/** Reorder categories; data = category ids in display order */
 export function reorderCategories(categoryIds: number[]) {
   return axios.post('/windowCashShop/v1/reorderCategories', categoryIds);
 }
 
-/** Stub — server will add soon */
+/** Seed default categories (hot / skin / XY play / mount) */
 export function seedDefaults() {
   return axios.post('/windowCashShop/v1/seedDefaults');
+}
+
+/** Ensure mount tree + import all 190/191/226 into L2 buckets */
+export function seedMountCatalog() {
+  return axios.post('/windowCashShop/v1/seedMountCatalog');
 }
 
 export interface RefreshNamesResult {
@@ -283,7 +248,7 @@ export interface ClientSyncResult {
   message?: string;
 }
 
-/** fillEmpty=仅空 icon_url；force=覆盖。可选 itemIds / categoryId */
+/** @deprecated Prefer POST /asset/v1/ensure via Game Asset Hub. Kept for API compatibility. */
 export function syncIcons(body: IconSyncReq) {
   return axios.post<any, { data: IconSyncResult }>(
     '/windowCashShop/v1/syncIcons',

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public final class SidebarTools {
 
-    public static final int TOOL_COUNT = 10;
+    public static final int TOOL_COUNT = 11;
 
     public record ToolEntry(
             int toolIndex,
@@ -37,16 +37,19 @@ public final class SidebarTools {
             "xy/portal/收集系统",
             "xy/portal/GM工具",
             "在线奖励_nextlevel",
+            "xy/portal/任务提醒",
     };
 
     private static final String[] DEFAULT_LABELS = {
             "便民工具", "装备中心", "兑换中心", "VIP会员", "成长系统",
             "每日任务", "社交系统", "收集系统", "GM工具", "在线奖励",
+            "任务提醒",
     };
 
     private static final String[] DEFAULT_TIP_TITLES = {
             "便民工具", "装备中心", "兑换中心", "VIP 会员", "成长系统",
             "每日任务", "社交系统", "收集系统", "GM工具", "在线奖励",
+            "任务提醒",
     };
 
     private static final String[] DEFAULT_TIP_DESCS = {
@@ -60,6 +63,7 @@ public final class SidebarTools {
             "卡片、勋章、钓鱼、戒指",
             "管理员专用（长按会员分类亦可）",
             "在线累计时长，领取阶段奖励",
+            "可接·进行中·可交付任务",
     };
 
     private static volatile ToolEntry[] ENTRIES = buildDefaults();

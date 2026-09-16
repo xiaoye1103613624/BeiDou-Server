@@ -224,7 +224,21 @@ function clearPQ(eim) {
 
 function isZakum(mob) {
     var mobid = mob.getId();
-    return (mobid == 8800002);
+    return (mobid == 8800002 || mobid == 8800102);
+}
+
+function giveExpeditionClearReward(eim) {
+    var iter = eim.getPlayers().iterator();
+    while (iter.hasNext()) {
+        var p = iter.next();
+        if (p == null) {
+            continue;
+        }
+        p.gainMeso(3000000, true, true);
+        p.gainItem(4021017, 1);
+        p.gainItem(4000313, 2);
+        p.dropMessage(6, "【远征】混沌扎昆讨伐成功！奖励已发放。");
+    }
 }
 
 function monsterKilled(mob, eim) {
@@ -232,6 +246,7 @@ function monsterKilled(mob, eim) {
         eim.setIntProperty("defeatedBoss", 1);
         eim.showClearEffect(mob.getMap().getId());
         eim.broadcastDamageRanking();
+        giveExpeditionClearReward(eim);
         eim.clearPQ();
 
         mob.getMap().broadcastZakumVictory();

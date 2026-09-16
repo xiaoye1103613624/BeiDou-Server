@@ -7,10 +7,10 @@ export interface PetGrowthStageForm {
   stage?: number;
   name?: string;
   petId?: number;
-  nextPetId?: number | null;
+  nextPetId?: number;
   needExp?: number;
   expPerFeed?: number;
-  feedItemIds?: string | null;
+  feedItemIds?: string;
   expRate?: number;
   dropRate?: number;
   mesoRate?: number;

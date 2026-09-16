@@ -1,11 +1,10 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.dailyCheckin')">
-      <a-alert type="info" style="margin-bottom: 12px">
+  <PageContainer :title="$t('menu.game.dailyCheckin')">
+    <ProCard>
+      <a-alert type="info" class="bd-page-toolbar">
         {{ $t('dailyCheckin.hint') }}
       </a-alert>
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-button type="primary" :loading="savingAll" @click="saveAllClick">
           {{ $t('dailyCheckin.saveAll') }}
         </a-button>
@@ -19,7 +18,7 @@
         :data="rows"
         column-resizable
         :pagination="false"
-        :scroll="{ x: 1600 }"
+        :scroll="{ x: 1480 }"
         :bordered="{ cell: true }"
       >
         <template #columns>
@@ -30,30 +29,11 @@
             align="center"
           />
           <a-table-column
-            :title="$t('dailyCheckin.column.icon')"
-            :width="64"
-            align="center"
-          >
-            <template #cell="{ record }">
-              <img
-                v-if="record.iconItemId"
-                :src="getIconUrl('item', record.iconItemId)"
-                alt=""
-                style="width: 32px; height: 32px"
-              />
-            </template>
-          </a-table-column>
-          <a-table-column
             :title="$t('dailyCheckin.column.iconItemId')"
-            :width="120"
+            :width="160"
           >
             <template #cell="{ record }">
-              <a-input-number
-                v-model="record.iconItemId"
-                :min="0"
-                hide-button
-                style="width: 100%"
-              />
+              <ItemIdCell v-model="record.iconItemId" />
             </template>
           </a-table-column>
           <a-table-column :title="$t('dailyCheckin.column.mesos')" :width="110">
@@ -68,15 +48,10 @@
           </a-table-column>
           <a-table-column
             :title="$t('dailyCheckin.column.itemId')"
-            :width="120"
+            :width="160"
           >
             <template #cell="{ record }">
-              <a-input-number
-                v-model="record.itemId"
-                :min="0"
-                hide-button
-                style="width: 100%"
-              />
+              <ItemIdCell v-model="record.itemId" />
             </template>
           </a-table-column>
           <a-table-column
@@ -107,15 +82,10 @@
           </a-table-column>
           <a-table-column
             :title="$t('dailyCheckin.column.item2Id')"
-            :width="120"
+            :width="160"
           >
             <template #cell="{ record }">
-              <a-input-number
-                v-model="record.item2Id"
-                :min="0"
-                hide-button
-                style="width: 100%"
-              />
+              <ItemIdCell v-model="record.item2Id" />
             </template>
           </a-table-column>
           <a-table-column
@@ -196,8 +166,8 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -211,7 +181,6 @@
     saveAllDailyCheckin,
     saveDailyCheckin,
   } from '@/api/dailyCheckin';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
 
   const { t } = useI18n();
   const loading = ref(false);

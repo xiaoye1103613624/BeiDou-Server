@@ -1456,6 +1456,36 @@ public class EventInstanceManager {
         }
     }
 
+    /** 世界 Boss 等玩法：不依赖全局开关，强制开启伤害统计。 */
+    public void forceStartDamageRecording() {
+        recordDamage = true;
+    }
+
+    /**
+     * 按伤害降序返回排名列表，供事件脚本发奖。
+     * 每项：rank, characterId, name, damage, contribution(0~1)
+     */
+    public synchronized List<Map<String, Object>> getDamageRankingList() {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (playerDamage.isEmpty()) {
+            return result;
+        }
+        List<Map.Entry<Integer, Long>> sorted = new ArrayList<>(playerDamage.entrySet());
+        sorted.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+        long totalDamage = sorted.stream().mapToLong(Map.Entry::getValue).sum();
+        int rank = 1;
+        for (Map.Entry<Integer, Long> entry : sorted) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("rank", rank++);
+            row.put("characterId", entry.getKey());
+            row.put("name", playerNames.getOrDefault(entry.getKey(), "未知玩家"));
+            row.put("damage", entry.getValue());
+            row.put("contribution", totalDamage > 0 ? (double) entry.getValue() / totalDamage : 0.0);
+            result.add(row);
+        }
+        return result;
+    }
+
     public void addDamage(Character chr, int damage) {
         if (!recordDamage || chr == null || damage <= 0) return;
 

@@ -13,7 +13,7 @@
           :collapsed="collapsed"
           :collapsible="true"
           :width="menuWidth"
-          :style="{ paddingTop: navbar ? '60px' : '' }"
+          :style="{ paddingTop: navbar ? 'var(--bd-navbar-height)' : '' }"
           :hide-trigger="true"
           @collapse="setCollapsed"
         >
@@ -34,7 +34,7 @@
         </a-drawer>
         <a-layout class="layout-content" :style="paddingStyle">
           <TabBar v-if="appStore.tabBar" />
-          <a-layout-content>
+          <a-layout-content class="layout-content-main">
             <PageLayout />
           </a-layout-content>
           <Footer v-if="footer" />
@@ -63,7 +63,7 @@
   const route = useRoute();
   const permission = usePermission();
   useResponsive(true);
-  const navbarHeight = `60px`;
+  const navbarHeight = `var(--bd-navbar-height)`;
   const navbar = computed(() => appStore.navbar);
   const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
@@ -83,7 +83,7 @@
     return { ...paddingLeft, ...paddingTop };
   });
   const setCollapsed = (val: boolean) => {
-    if (!isInit.value) return; // for page initialization menu state problem
+    if (!isInit.value) return;
     appStore.updateSettings({ menuCollapse: val });
   };
   watch(
@@ -107,9 +107,6 @@
 </script>
 
 <style scoped lang="less">
-  @nav-size-height: 60px;
-  @layout-max-width: 1100px;
-
   .layout {
     width: 100%;
     height: 100%;
@@ -121,7 +118,7 @@
     left: 0;
     z-index: 100;
     width: 100%;
-    height: @nav-size-height;
+    height: var(--bd-navbar-height);
   }
 
   .layout-sider {
@@ -130,20 +127,58 @@
     left: 0;
     z-index: 99;
     height: 100%;
+    background: var(--bd-sidebar) !important;
+    border-right: 1px solid var(--border);
+    box-shadow: none;
     transition: all 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+
     &::after {
-      position: absolute;
-      top: 0;
-      right: -1px;
-      display: block;
-      width: 1px;
-      height: 100%;
-      background-color: var(--color-border);
-      content: '';
+      display: none;
     }
 
     > :deep(.arco-layout-sider-children) {
       overflow-y: hidden;
+      background: transparent;
+    }
+
+    :deep(.arco-menu) {
+      background: transparent;
+    }
+
+    :deep(.arco-menu-item),
+    :deep(.arco-menu-inline-header),
+    :deep(.arco-menu-pop-header) {
+      color: var(--text-secondary);
+      border-radius: 8px;
+      margin: 2px 8px;
+      width: auto;
+    }
+
+    :deep(.arco-menu-item:hover),
+    :deep(.arco-menu-inline-header:hover) {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+
+    :deep(.arco-menu-selected) {
+      color: var(--primary) !important;
+      background: var(--primary-light) !important;
+      font-weight: 600;
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+
+    :deep(.arco-menu-selected::before) {
+      display: none;
+    }
+
+    :deep(.arco-menu-inline-header.arco-menu-selected) {
+      color: var(--primary);
+    }
+
+    :deep(.arco-menu-collapse-button) {
+      color: var(--text-secondary);
+      background: var(--bg-hover);
+      border: none;
     }
   }
 
@@ -151,21 +186,19 @@
     height: 100%;
     overflow: auto;
     overflow-x: hidden;
+    padding: 8px 0 16px;
+
     :deep(.arco-menu) {
       ::-webkit-scrollbar {
-        width: 12px;
+        width: 8px;
         height: 4px;
       }
 
       ::-webkit-scrollbar-thumb {
-        border: 4px solid transparent;
+        border: 2px solid transparent;
         background-clip: padding-box;
         border-radius: 7px;
-        background-color: var(--color-text-4);
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--color-text-3);
+        background-color: var(--border-strong);
       }
     }
   }
@@ -173,7 +206,11 @@
   .layout-content {
     min-height: 100vh;
     overflow-y: hidden;
-    background-color: var(--color-fill-2);
+    background: var(--bd-surface);
     transition: padding 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+  }
+
+  .layout-content-main {
+    min-height: calc(100vh - var(--bd-navbar-height) - 40px);
   }
 </style>

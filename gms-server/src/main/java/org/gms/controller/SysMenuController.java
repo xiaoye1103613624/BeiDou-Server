@@ -10,6 +10,7 @@ import org.gms.model.dto.SysMenuDTO;
 import org.gms.model.dto.SysMenuReorderDTO;
 import org.gms.model.dto.SysMenuRouteDTO;
 import org.gms.service.SysMenuService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,7 @@ public class SysMenuController {
     @Tag(name = "/sysMenu/" + ApiConstant.LATEST)
     @Operation(summary = "新增或更新菜单")
     @PostMapping("/" + ApiConstant.LATEST + "/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResultBody<SysMenuDTO> save(@RequestBody SubmitBody<SysMenuDTO> request) {
         return ResultBody.success(request, sysMenuService.save(request.getData()));
     }
@@ -51,6 +53,7 @@ public class SysMenuController {
     @Tag(name = "/sysMenu/" + ApiConstant.LATEST)
     @Operation(summary = "删除菜单（含子节点）")
     @PostMapping("/" + ApiConstant.LATEST + "/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResultBody<Object> delete(@RequestBody SubmitBody<Long> request) {
         sysMenuService.delete(request.getData());
         return ResultBody.success(request, null);
@@ -59,6 +62,7 @@ public class SysMenuController {
     @Tag(name = "/sysMenu/" + ApiConstant.LATEST)
     @Operation(summary = "批量调整父级与排序")
     @PostMapping("/" + ApiConstant.LATEST + "/reorder")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResultBody<Object> reorder(@RequestBody SubmitBody<SysMenuReorderDTO> request) {
         sysMenuService.reorder(request.getData());
         return ResultBody.success(request, null);

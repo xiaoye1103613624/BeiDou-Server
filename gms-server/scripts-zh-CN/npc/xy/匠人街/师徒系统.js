@@ -313,7 +313,7 @@ function handleCoinShop(selection) {
             null,
             { id: 4032171, qty: 10 },
             { id: 4021017, qty: 1 },
-            { id: 4000314, qty: 3 },
+            { id: 4000313, qty: 3 },
             { id: 4001126, qty: 100 },
             null
         ];

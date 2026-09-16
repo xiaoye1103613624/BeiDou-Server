@@ -46,6 +46,16 @@ public class MapScriptManager extends AbstractScriptManager {
         scripts.clear();
     }
 
+    /**
+     * 清除单个地图脚本缓存；mapScriptPath 形如 {@code onUserEnter/xxx}（无 map/ 前缀与 .js）。
+     */
+    public void removeMapScript(String mapScriptPath) {
+        if (mapScriptPath == null || mapScriptPath.isEmpty()) {
+            return;
+        }
+        scripts.remove(mapScriptPath);
+    }
+
     public boolean runMapScript(Client c, String mapScriptPath, boolean firstUser) {
         if (firstUser) {
             Character chr = c.getPlayer();

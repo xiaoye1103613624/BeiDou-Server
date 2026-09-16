@@ -4,6 +4,8 @@ export interface SetItemRecord {
   id?: number;
   setId: number;
   setName?: string;
+  setNameZh?: string;
+  setNameEn?: string;
   completeCount?: number;
   itemIds?: string;
   enabled?: number;

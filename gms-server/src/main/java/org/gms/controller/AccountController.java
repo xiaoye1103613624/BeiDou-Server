@@ -34,8 +34,8 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "获取我的信息")
     @GetMapping("/" + ApiConstant.LATEST + "/info")
-    public ResultBody<AccountsDO> info() {
-        return ResultBody.success(accountService.getCurrentUser());
+    public ResultBody<AccountInfoDTO> info() {
+        return ResultBody.success(accountService.getCurrentAccountInfo());
     }
 
     @Tag(name = "/account/" + ApiConstant.LATEST)

@@ -1,109 +1,67 @@
 import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
-/** 成长与养成：套装、爆率、百宝箱等 */
-const GROWTH: AppRouteRecordRaw = {
+/** 旧 /growth 路径 → 强化 / 游戏管理 / 玩法 */
+const GROWTH_LEGACY: AppRouteRecordRaw = {
   path: '/growth',
   name: 'growth',
   component: DEFAULT_LAYOUT,
   meta: {
-    locale: 'menu.growth',
     requiresAuth: true,
-    icon: 'icon-rise',
-    order: 2,
+    hideInMenu: true,
   },
   children: [
     {
+      path: '',
+      redirect: '/enhance/setItem',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
+    {
       path: 'setItem',
-      name: 'GrowthSetItem',
-      component: () => import('@/views/game/setItem/index.vue'),
-      meta: {
-        locale: 'menu.game.setItem',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/enhance/setItem',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'drop',
-      name: 'GrowthDrop',
-      component: () => import('@/views/game/drop/index.vue'),
-      meta: {
-        locale: 'menu.game.drop',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/game/drop',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'drop/global',
-      name: 'GrowthGlobalDrop',
-      component: () => import('@/views/game/drop/global.vue'),
-      meta: {
-        locale: 'menu.game.drop.global',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/game/drop/global',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'gachapon',
-      name: 'GrowthGachapon',
-      component: () => import('@/views/game/gachapon/index.vue'),
-      meta: {
-        locale: 'menu.game.gachapon',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/gameplay/gachapon',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'petGrowth',
-      name: 'GrowthPetGrowth',
-      component: () => import('@/views/game/petGrowth/index.vue'),
-      meta: {
-        locale: 'menu.game.petGrowth',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/enhance/petGrowth',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'alchemyRecipe',
-      name: 'GrowthAlchemyRecipe',
-      component: () => import('@/views/game/alchemyRecipe/index.vue'),
-      meta: {
-        locale: 'menu.game.alchemyRecipe',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/enhance/alchemyRecipe',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'alchemistRecipe',
-      name: 'GrowthAlchemistRecipe',
-      component: () => import('@/views/game/alchemistRecipe/index.vue'),
-      meta: {
-        locale: 'menu.game.alchemistRecipe',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/enhance/alchemistRecipe',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'forgeRecipe',
-      name: 'GrowthForgeRecipe',
-      component: () => import('@/views/game/forgeRecipe/index.vue'),
-      meta: {
-        locale: 'menu.game.forgeRecipe',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/enhance/forgeRecipe',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'alchemyTier',
-      name: 'GrowthAlchemyTier',
-      component: () => import('@/views/game/alchemyTier/index.vue'),
-      meta: {
-        locale: 'menu.game.alchemyTier',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/enhance/alchemyTier',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
   ],
 };
 
-export default GROWTH;
+export default GROWTH_LEGACY;

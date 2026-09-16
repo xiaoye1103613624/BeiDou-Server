@@ -1225,6 +1225,17 @@ public class Client extends ChannelInboundHandlerAdapter {
         engines.remove(name);
     }
 
+    public void clearScriptEngines() {
+        engines.clear();
+    }
+
+    public void clearScriptEnginesWithPrefix(String prefix) {
+        if (prefix == null || prefix.isEmpty()) {
+            return;
+        }
+        engines.keySet().removeIf(name -> name != null && name.startsWith(prefix));
+    }
+
     public NPCConversationManager getCM() {
         return NPCScriptManager.getInstance().getCM(this);
     }

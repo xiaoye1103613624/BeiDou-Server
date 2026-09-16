@@ -19,7 +19,8 @@ var MENUS = [
     { id: 6,  name: "每日任务",   desc: "日常/副本/Boss/跑环",      script: "xy/portal/每日任务" },
     { id: 7,  name: "社交系统",   desc: "师徒/组队/公会/好友",      script: "xy/portal/社交系统" },
     { id: 8,  name: "收集系统",   desc: "卡片/玩具/成就",           script: "xy/portal/收集系统" },
-    { id: 9,  name: "GM工具",     desc: "管理员专用工具箱",         script: "xy/portal/GM工具" }
+    { id: 9,  name: "GM工具",     desc: "管理员专用工具箱",         script: "xy/portal/GM工具" },
+    { id: 10, name: "任务提醒",   desc: "可接/进行中/可交付",       script: "xy/portal/任务提醒" }
 ];
 
 var status = 0;

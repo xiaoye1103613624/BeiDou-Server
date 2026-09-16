@@ -72,7 +72,10 @@ public class SpringSecurityConfig {
                         // 允许访问前端web
                         .requestMatchers("/", "/static/**", "/index.html", "/assets/**").permitAll()
                         // 道具图标静态资源（<img> 无法带 JWT）
-                        .requestMatchers("/item-icons/**", "/icons/**").permitAll()
+                        .requestMatchers("/item-icons/**", "/icons/**", "/game-assets/**").permitAll()
+                        // 图标解析只读（返回 URL JSON，不含写缓存）
+                        .requestMatchers("/icon/v1/resolve", "/icon/v1/resolve/**", "/icon/v1/info").permitAll()
+                        .requestMatchers("/asset/v1/resolve", "/asset/v1/resolve/**", "/asset/v1/info").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

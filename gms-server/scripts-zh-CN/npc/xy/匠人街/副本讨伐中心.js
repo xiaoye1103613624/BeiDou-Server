@@ -22,6 +22,7 @@ function action(mode, type, selection) {
         t += "#L5##r👑 世界Boss#k - 全服讨伐·排名奖励#l\r\n";
         t += "#L6##b📅 每日任务#k - 讨伐/收集/Boss 3任务#l\r\n";
         t += "#L7##b📖 掉落查询#k#l\r\n";
+        t += "#L8##b🛡 北斗守城战#k - 周常防守三波入侵#l\r\n";
         t += "\r\n#L0#离开#l";
         cm.sendSimple(t);
     } else if (status === 1) {
@@ -35,6 +36,7 @@ function action(mode, type, selection) {
             case 5: cm.openNpc(9031000, "xy/匠人街/世界Boss"); break;
             case 6: cm.openNpc(9031000, "xy/匠人街/每日任务"); break;
             case 7: cm.openNpc(9031000, "xy/匠人街/挑战掉落查询"); break;
+            case 8: cm.openNpc(9031000, "xy/匠人街/守城战"); break;
         }
     }
 }

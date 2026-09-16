@@ -106,6 +106,25 @@ public class ReactorScriptManager extends AbstractScriptManager {
         drops.clear();
     }
 
+    /**
+     * 清除反应堆掉落缓存与在线客户端上的 reactor 脚本引擎，下次触发时重新读盘。
+     * 注意：已生成在地图上的反应堆 WZ 状态（ReactorFactory）不会因此刷新，需配合重载地图或重启 JVM。
+     */
+    public void reloadReactorScripts() {
+        clearDrops();
+        clearOnlineClientEngines("reactor/");
+    }
+
+    /**
+     * 按相对脚本路径清除在线客户端引擎缓存（如 {@code reactor/2000.js}）。
+     */
+    public void clearCachedScript(String relativeScriptPath) {
+        if (relativeScriptPath == null || relativeScriptPath.isEmpty()) {
+            return;
+        }
+        clearOnlineClientEngines(relativeScriptPath);
+    }
+
     public void touch(Client c, Reactor reactor) {
         touching(c, reactor, true);
     }

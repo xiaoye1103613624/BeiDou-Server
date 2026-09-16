@@ -195,7 +195,10 @@
     if (!totalPhysicalMemory || totalPhysicalMemory <= 0) {
       return t('workplace.monitor.na');
     }
-    const used = Math.max(totalPhysicalMemory - Math.max(freePhysicalMemory, 0), 0);
+    const used = Math.max(
+      totalPhysicalMemory - Math.max(freePhysicalMemory, 0),
+      0
+    );
     return `${formatBytes(used)} / ${formatBytes(totalPhysicalMemory)}`;
   });
 

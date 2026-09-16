@@ -1,10 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card
-      class="general-card"
-      :title="$t('menu.dashboard.informationSearch')"
-    >
+  <PageContainer :title="$t('menu.dashboard.informationSearch')">
+    <ProCard>
       <a-row>
         <a-select
           v-model="condition.types"
@@ -85,6 +81,21 @@
             align="center"
           />
           <a-table-column
+            :title="$t('informationSearch.column.photo')"
+            align="center"
+            :width="72"
+          >
+            <template #cell="{ record }">
+              <ItemIcon
+                v-if="canShowIcon(record.type)"
+                :id="record.id"
+                :category="iconCategory(record.type)"
+                :size="36"
+                :alt="record.name"
+              />
+            </template>
+          </a-table-column>
+          <a-table-column
             :title="$t('informationSearch.column.name')"
             data-index="name"
             align="center"
@@ -95,7 +106,13 @@
                   {{ record.name }}
                 </a-button>
                 <template #content>
-                  <img :src="getImg(record.type, record.id)" alt="" />
+                  <ItemIcon
+                    v-if="canShowIcon(record.type)"
+                    :id="record.id"
+                    :category="iconCategory(record.type)"
+                    :size="64"
+                    :alt="record.name"
+                  />
                 </template>
               </a-popover>
             </template>
@@ -125,7 +142,7 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </ProCard>
 
     <!-- 选择玩家弹窗 -->
     <a-modal
@@ -134,7 +151,11 @@
       :width="750"
       :footer="false"
     >
-      <a-form :model="selectorCondition">
+      <a-form
+        class="bd-overlay-form"
+        :model="selectorCondition"
+        layout="vertical"
+      >
         <a-form-item
           :label="$t('informationSearch.characterSelector.column.id')"
         >
@@ -145,11 +166,11 @@
         >
           <a-input v-model="selectorCondition.name" allow-clear />
         </a-form-item>
-        <a-space class="a-form-item-btn">
+        <div class="bd-overlay-toolbar" style="justify-content: flex-end">
           <a-button type="primary" @click="searchCharacter">
             {{ $t('informationSearch.characterSelector.searchButton') }}
           </a-button>
-        </a-space>
+        </div>
       </a-form>
       <a-table :data="characterList" row-key="id" :pagination="false">
         <template #columns>
@@ -288,7 +309,7 @@
         </a-form-item>
       </a-form>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -296,7 +317,10 @@
   import { useI18n } from 'vue-i18n';
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import {
+    normalizeIconCategory,
+    scheduleIconCacheBatch,
+  } from '@/utils/mapleStoryAPI';
   import {
     InformationSearch,
     InformationResult,
@@ -317,13 +341,22 @@
     filter: '',
   });
 
-  const getImg = (type: string, id: number) => {
-    let imgType = type.toLowerCase();
-    if (['cash', 'consume', 'eqp', 'etc', 'ins', 'pet'].includes(type)) {
-      imgType = 'item';
-    }
-    return getIconUrl(imgType, id);
-  };
+  const ICON_TYPES = new Set([
+    'cash',
+    'consume',
+    'eqp',
+    'etc',
+    'ins',
+    'pet',
+    'mob',
+    'npc',
+    'skill',
+    'map',
+  ]);
+
+  const canShowIcon = (type: string) => ICON_TYPES.has(String(type || ''));
+
+  const iconCategory = (type: string) => normalizeIconCategory(type);
 
   const searchData = async () => {
     if (!condition.value.filter) {
@@ -337,6 +370,14 @@
     try {
       const { data } = await informationSearch(condition.value);
       informationList.value = data;
+      scheduleIconCacheBatch(
+        (data || [])
+          .filter((row: InformationResult) => canShowIcon(row.type))
+          .map((row: InformationResult) => ({
+            category: iconCategory(row.type),
+            id: row.id,
+          }))
+      );
     } finally {
       setLoading(false);
     }

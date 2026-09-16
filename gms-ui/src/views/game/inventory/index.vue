@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.inventory')">
+  <PageContainer :title="$t('menu.game.inventory')">
+    <ProCard>
       <div class="button-group">
         <a-space>
           <character-selector @use-character="useCharacter" />
@@ -54,7 +53,7 @@
           />
         </a-tab-pane>
       </a-tabs>
-    </a-card>
+    </ProCard>
 
     <!-- 模态框 -->
     <a-modal
@@ -75,13 +74,13 @@
         :character-id="currentCid || 0"
         :inventory-type="Number(currentType) || 1"
       />
-      <div style="display: flex; justify-content: flex-end; margin-top: 16px">
+      <div class="bd-overlay-toolbar" style="justify-content: flex-end">
         <a-button type="primary" @click="handleOk"
           >{{ $t('inventory.placeholder.confirm') }}
         </a-button>
       </div>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

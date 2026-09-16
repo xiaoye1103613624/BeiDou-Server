@@ -38,4 +38,14 @@ export default {
   'drop.msg.needMob': '请填写怪物ID',
   'drop.msg.needItem': '请填写物品ID（金币填 0）',
   'drop.msg.needChance': '请填写爆率',
+  'drop.global.filter.continent': '大区ID',
+  'drop.global.column.id': 'ID',
+  'drop.global.column.continent': '大区ID',
+  'drop.global.column.comments': '备注',
+  'drop.global.confirm.delete': '确定要删除吗？',
+  'drop.global.msg.filterItem':
+    '已按[物品] {itemName} ({itemId}) 查询，其他条件不变',
+  'drop.global.msg.created': '数据已创建',
+  'drop.global.msg.updated': '数据已更新',
+  'drop.global.msg.deleted': '数据已删除',
 };

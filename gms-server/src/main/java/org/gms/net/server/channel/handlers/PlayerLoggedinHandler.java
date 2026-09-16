@@ -258,6 +258,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             // 轮回：先同步技能/键位/宏，再下发进图包，避免键位引用已剥离的 1005 或尚未授予的 1021。
             org.gms.reincarnation.ReincarnationSupport.onLogin(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
+            // 穿阿尔泰时刷新自身 AvatarLook（不改装备栏内容）。
+            player.syncAltairSkinSelfLook();
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);
@@ -396,6 +398,13 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.limitBreakSync(player.getLimitBreak()));
             player.syncCombatPower();
             c.sendPacket(PacketCreator.sidebarConfigSync(SidebarTools.list()));
+
+            // 头顶入口迁侧边栏：登录时清掉残留引导精灵（缺省开启）
+            if (GameConfig.getValueProp("server", "replace_overhead_icons") == null
+                    || GameConfig.getServerBoolean("replace_overhead_icons")) {
+                c.sendPacket(PacketCreator.spawnGuide(false));
+                log.info(I18nUtil.getLogMessage("OverheadIcons.loginClearedGuide"), player.getId());
+            }
 
             // 每日签到：可领则自动弹窗
             if (player.getLevel() >= DailyCheckinRewards.MIN_LEVEL) {

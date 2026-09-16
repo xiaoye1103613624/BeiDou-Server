@@ -14,6 +14,7 @@ import org.gms.model.dto.WindowCashShopIconSyncReqDTO;
 import org.gms.model.dto.WindowCashShopIconSyncRtnDTO;
 import org.gms.server.cashshop.CashShopAssetCheck;
 import org.gms.server.cashshop.CashShopClickType;
+import org.gms.service.ClientPathService;
 import org.gms.service.WindowCashShopService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,40 +30,52 @@ import java.util.Map;
 @RequestMapping("/windowCashShop")
 public class WindowCashShopController {
     private final WindowCashShopService windowCashShopService;
+    private final ClientPathService clientPathService;
 
+    /** @deprecated 请用 {@code GET /clientPath/v1} */
+    @Deprecated
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "客户端 Data 路径信息（可配置，不写死）")
+    @Operation(summary = "【已迁移】客户端 Data 路径信息 → GET /clientPath/v1")
     @GetMapping("/" + ApiConstant.LATEST + "/clientDataPath")
     public ResultBody<Map<String, Object>> clientDataPath() {
-        return ResultBody.success(windowCashShopService.getClientDataPathInfo());
+        return ResultBody.success(clientPathService.getInfo());
     }
 
+    /** @deprecated 请用 {@code POST /clientPath/v1} */
+    @Deprecated
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "设置客户端 Data 绝对路径（空字符串=清空并跳过客户端校验）")
+    @Operation(summary = "【已迁移】设置客户端 Data 路径 → POST /clientPath/v1")
     @PostMapping("/" + ApiConstant.LATEST + "/clientDataPath")
     public ResultBody<Map<String, Object>> setClientDataPath(@RequestBody SubmitBody<String> request) {
-        return ResultBody.success(windowCashShopService.setClientDataPath(request.getData()));
+        return ResultBody.success(clientPathService.setPath(request.getData()));
     }
 
+    /** @deprecated 请用 {@code POST /clientPath/v1/validate} */
+    @Deprecated
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "校验某路径是否像客户端 Data 根目录")
+    @Operation(summary = "【已迁移】校验客户端 Data 路径 → POST /clientPath/v1/validate")
     @PostMapping("/" + ApiConstant.LATEST + "/clientDataPath/validate")
     public ResultBody<Map<String, Object>> validateClientDataPath(@RequestBody SubmitBody<String> request) {
-        return ResultBody.success(windowCashShopService.validateClientDataPath(request.getData()));
+        return ResultBody.success(clientPathService.validate(request.getData()));
     }
 
+    /** @deprecated 请用 {@code POST /clientPath/v1/listDirectories} */
+    @Deprecated
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "列出目录下的子文件夹（用于选择客户端路径）")
+    @Operation(summary = "【已迁移】列出子目录 → POST /clientPath/v1/listDirectories")
     @PostMapping("/" + ApiConstant.LATEST + "/listDirectories")
     public ResultBody<List<Map<String, Object>>> listDirectories(@RequestBody SubmitBody<String> request) {
-        return ResultBody.success(windowCashShopService.listDirectories(request.getData()));
+        return ResultBody.success(clientPathService.listDirectories(request.getData()));
     }
 
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "分类点击类型枚举（含预留）")
+    @Operation(summary = "分类点击类型（仅已实现，未接线类型不返回）")
     @GetMapping("/" + ApiConstant.LATEST + "/clickTypes")
     public ResultBody<List<String>> clickTypes() {
-        return ResultBody.success(Arrays.stream(CashShopClickType.values()).map(Enum::name).toList());
+        return ResultBody.success(Arrays.stream(CashShopClickType.values())
+                .filter(CashShopClickType::implemented)
+                .map(Enum::name)
+                .toList());
     }
 
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
@@ -199,14 +212,21 @@ public class WindowCashShopController {
     }
 
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "种子：热卖榜 / 皮肤(阿尔泰) / XY玩法入口道具")
+    @Operation(summary = "种子：热卖榜 / 皮肤(阿尔泰) / XY玩法入口道具 / 坐骑二级灌货")
     @PostMapping("/" + ApiConstant.LATEST + "/seedDefaults")
     public ResultBody<Map<String, Object>> seedDefaults() {
         return ResultBody.success(windowCashShopService.seedDefaults());
     }
 
     @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
-    @Operation(summary = "同步商品图标：fillEmpty 仅填空 icon_url；force 覆盖。可写 item-icons/{id}.png")
+    @Operation(summary = "坐骑分类树 ensure + 全量灌货（190/191/226 → 11:1/2/3）")
+    @PostMapping("/" + ApiConstant.LATEST + "/seedMountCatalog")
+    public ResultBody<Map<String, Object>> seedMountCatalog() {
+        return ResultBody.success(windowCashShopService.seedMountCatalog());
+    }
+
+    @Tag(name = "/windowCashShop/" + ApiConstant.LATEST)
+    @Operation(summary = "【已收敛】同步商品图标 → 请用 POST /asset/v1/ensure；本接口仅更新新商城 icon_url")
     @PostMapping("/" + ApiConstant.LATEST + "/syncIcons")
     public ResultBody<WindowCashShopIconSyncRtnDTO> syncIcons(
             @RequestBody SubmitBody<WindowCashShopIconSyncReqDTO> request) {

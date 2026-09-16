@@ -57,5 +57,69 @@ public class CommandController {
         return ResultBody.success();
     }
 
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "热重载地图脚本缓存")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadMapScriptsByGMCommand")
+    public ResultBody reloadMapScriptsByGMCommand() {
+        commandService.reloadMapScriptsByGMCommand();
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "热重载任务脚本缓存")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadQuestScriptsByGMCommand")
+    public ResultBody reloadQuestScriptsByGMCommand() {
+        commandService.reloadQuestScriptsByGMCommand();
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "热重载NPC与物品脚本缓存")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadNpcScriptsByGMCommand")
+    public ResultBody reloadNpcScriptsByGMCommand() {
+        commandService.reloadNpcScriptsByGMCommand();
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "热重载反应堆脚本与掉落缓存")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadReactorScriptsByGMCommand")
+    public ResultBody reloadReactorScriptsByGMCommand() {
+        commandService.reloadReactorScriptsByGMCommand();
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "热重载全部脚本（事件/传送点/地图脚本/任务/NPC·物品/反应堆）")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadAllScriptsByGMCommand")
+    public ResultBody reloadAllScriptsByGMCommand() {
+        commandService.reloadAllScriptsByGMCommand();
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "按路径列表热重载脚本缓存（不含 WZ）")
+    @PostMapping("/" + ApiConstant.LATEST + "/reloadScriptsByPaths")
+    public ResultBody<ReloadScriptsByPathsResultDTO> reloadScriptsByPaths(
+            @RequestBody SubmitBody<ReloadScriptsByPathsDTO> submitBody) {
+        return ResultBody.success(submitBody, commandService.reloadScriptsByPaths(submitBody.getData()));
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "复用GM命令代码重载商店")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadShopsByGMCommand")
+    public ResultBody reloadShopsByGMCommand() {
+        commandService.reloadShopsByGMCommand();
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "复用GM命令代码重载怪物掉落")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadDropsByGMCommand")
+    public ResultBody reloadDropsByGMCommand() {
+        commandService.reloadDropsByGMCommand();
+        return ResultBody.success();
+    }
+
 
 }

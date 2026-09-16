@@ -21,6 +21,8 @@ public class AuthService {
         AccountsDO account = accountService.findByName(name);
         RequireUtil.requireFalse(account == null || !accountService.checkPassword(password, account),
                 I18nUtil.getExceptionMessage("AuthService.account.or.password.error"));
+        RequireUtil.requireTrue(account.getWebadmin() != null && account.getWebadmin() == 1,
+                I18nUtil.getExceptionMessage("AuthService.account.not.webadmin"));
 
         HashMap<String, String> result = new HashMap<>();
         result.put("token", jwtUtils.generateJwtToken(account.getName()));

@@ -1,0 +1,70 @@
+/**
+ * Arco Design 主题映射 — 对齐企业级中性骨架 + 可切换主色
+ */
+
+body:not([arco-theme='dark']) {
+  --color-bg-1: var(--bg-page);
+  --color-bg-2: var(--bg-card);
+  --color-bg-3: var(--bg-hover);
+  --color-bg-4: var(--bg-hover);
+  --color-bg-5: var(--border);
+  --color-fill-1: var(--bg-page);
+  --color-fill-2: var(--bg-hover);
+  --color-fill-3: var(--border);
+  --color-fill-4: var(--border-strong);
+  --color-text-1: var(--text-primary);
+  --color-text-2: var(--text-secondary);
+  --color-text-3: var(--text-secondary);
+  --color-text-4: var(--text-tertiary);
+  --color-border: var(--border);
+  --color-border-2: var(--border-strong);
+  --color-neutral-2: var(--bg-hover);
+  --color-neutral-3: var(--border);
+
+  /* 默认主色 #3B6EA5 — 运行时可由 applyThemeColor 覆盖 */
+  --primary-1: 232, 240, 249;
+  --primary-2: 209, 224, 240;
+  --primary-3: 168, 196, 227;
+  --primary-4: 123, 165, 211;
+  --primary-5: 91, 139, 192;
+  --primary-6: 59, 110, 165;
+  --primary-7: 42, 85, 128;
+  --primary-8: 34, 68, 102;
+  --primary-9: 26, 52, 78;
+  --primary-10: 18, 36, 54;
+  --link-6: 59, 110, 165;
+  --link-7: 42, 85, 128;
+}
+
+body[arco-theme='dark'] {
+  --color-bg-1: var(--bg-page);
+  --color-bg-2: var(--bg-card);
+  --color-bg-3: var(--bg-hover);
+  --color-bg-4: var(--border);
+  --color-bg-5: var(--border-strong);
+  --color-fill-1: rgba(230, 237, 243, 0.04);
+  --color-fill-2: rgba(230, 237, 243, 0.06);
+  --color-fill-3: rgba(230, 237, 243, 0.1);
+  --color-fill-4: rgba(230, 237, 243, 0.14);
+  --color-text-1: var(--text-primary);
+  --color-text-2: var(--text-secondary);
+  --color-text-3: var(--text-tertiary);
+  --color-text-4: var(--text-disabled);
+  --color-border: var(--border);
+  --color-border-2: var(--border-strong);
+  --color-neutral-2: var(--bg-hover);
+  --color-neutral-3: var(--border);
+
+  --primary-1: 20, 32, 48;
+  --primary-2: 28, 48, 72;
+  --primary-3: 40, 72, 108;
+  --primary-4: 56, 100, 148;
+  --primary-5: 74, 122, 173;
+  --primary-6: 91, 139, 192;
+  --primary-7: 111, 155, 203;
+  --primary-8: 140, 176, 214;
+  --primary-9: 180, 204, 228;
+  --primary-10: 220, 232, 244;
+  --link-6: 91, 139, 192;
+  --link-7: 111, 155, 203;
+}

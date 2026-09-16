@@ -9,6 +9,9 @@ import org.gms.model.dto.SysMenuDTO;
 import org.gms.model.dto.SysMenuReorderDTO;
 import org.gms.model.dto.SysMenuRouteDTO;
 import org.gms.util.I18nUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -19,6 +22,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
 public class SysMenuService {
 
     private final SysAdminMenuMapper sysAdminMenuMapper;
+    private final SysRoleService sysRoleService;
 
     public List<SysMenuDTO> listTree(boolean includeDisabled) {
         List<SysAdminMenuDO> rows = sysAdminMenuMapper.selectListByQuery(
@@ -40,13 +45,55 @@ public class SysMenuService {
     }
 
     public List<SysMenuRouteDTO> listSidebarRoutes() {
+        List<String> roleCodes = currentUserRoleCodes();
+        return listSidebarRoutesForRoles(roleCodes);
+    }
+
+    /**
+     * @param roleCodes 非空时按角色-菜单绑定过滤；空则返回全部启用菜单（管理侧栏预览）
+     */
+    public List<SysMenuRouteDTO> listSidebarRoutesForRoles(List<String> roleCodes) {
         List<SysAdminMenuDO> rows = sysAdminMenuMapper.selectListByQuery(
                 QueryWrapper.create()
                         .eq("enabled", 1)
                         .eq("hide_in_menu", 0)
                         .orderBy("sort_order", true)
                         .orderBy("id", true));
+        if (roleCodes != null && !roleCodes.isEmpty()) {
+            Set<Long> allowed = sysRoleService.listMenuIdsByRoleCodes(roleCodes);
+            Map<Long, SysAdminMenuDO> byId = rows.stream()
+                    .collect(Collectors.toMap(SysAdminMenuDO::getId, r -> r, (a, b) -> a));
+            Set<Long> keep = new HashSet<>(allowed);
+            for (Long id : allowed) {
+                Long cursor = id;
+                while (cursor != null && cursor > 0) {
+                    SysAdminMenuDO node = byId.get(cursor);
+                    if (node == null) {
+                        break;
+                    }
+                    keep.add(node.getId());
+                    Long parentId = node.getParentId();
+                    cursor = (parentId == null || parentId <= 0) ? null : parentId;
+                }
+            }
+            rows = rows.stream().filter(r -> keep.contains(r.getId())).toList();
+        }
         return buildRouteTree(rows);
+    }
+
+    private List<String> currentUserRoleCodes() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getAuthorities() == null) {
+            return List.of();
+        }
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(Objects::nonNull)
+                .map(a -> a.startsWith("ROLE_") ? a.substring(5) : a)
+                .map(a -> a.trim().toLowerCase(Locale.ROOT))
+                .filter(StringUtils::hasText)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.cashShop')">
+  <PageContainer :title="$t('menu.game.cashShop')">
+    <ProCard>
       <a-tabs
         lazy-load
         destroy-on-hide
@@ -33,8 +32,8 @@
           </a-tabs>
         </a-tab-pane>
       </a-tabs>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

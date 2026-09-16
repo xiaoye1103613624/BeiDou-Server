@@ -38,4 +38,14 @@ export default {
   'drop.msg.needMob': 'Mob ID is required',
   'drop.msg.needItem': 'Item ID is required (0 for mesos)',
   'drop.msg.needChance': 'Chance is required',
+  'drop.global.filter.continent': 'Continent ID',
+  'drop.global.column.id': 'ID',
+  'drop.global.column.continent': 'Continent ID',
+  'drop.global.column.comments': 'Comments',
+  'drop.global.confirm.delete': 'Are you sure you want to delete?',
+  'drop.global.msg.filterItem':
+    'Filtered by [Item] {itemName} ({itemId}); other filters unchanged',
+  'drop.global.msg.created': 'Data created',
+  'drop.global.msg.updated': 'Data updated',
+  'drop.global.msg.deleted': 'Data deleted',
 };

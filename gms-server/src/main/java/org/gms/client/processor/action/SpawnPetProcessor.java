@@ -88,6 +88,12 @@ public class SpawnPetProcessor {
                     chr.addPet(pet);
                     // 登录时未召唤的宠物不会预加载过滤配置，这里补载后再同步给客户端。
                     chr.loadPetExcludedItems(pet.getUniqueId());
+                    // Push equip-derived PetSkill (pouch/magnet) so client PET_LOOT works
+                    // even when −133 pouch is hidden from character Equip UI (BP33 disambig).
+                    byte petIndex = chr.getPetIndex(pet);
+                    if (petIndex >= 0) {
+                        chr.syncPetSkillsFromEquips(petIndex);
+                    }
                     chr.getMap().broadcastMessage(c.getPlayer(), PacketCreator.showPet(c.getPlayer(), pet, false, false), true);
                     c.sendPacket(PacketCreator.petStatUpdate(c.getPlayer()));
                     c.sendPacket(PacketCreator.enableActions());

@@ -1280,6 +1280,8 @@ public class InventoryManipulator {
         // One-way −154→−54 above is enough. (migrateCashTotemOrBadgeToCashSlot retired.)
         // ADDON_SLOTMAP_910: 166/167 曾误占宠物槽 −21/−22/−121/−122 → sidecar −60/−61/−160/−161
         migrateAndroidHeartOffPetSlots(eqpd, eqpBag);
+        // Pocket 116 cash historically used −133 — same seat as Pet1ItemPouch; coalesce to −33 first.
+        migratePocketCashOffPet1Pouch(eqpd, eqpBag);
         // Character cash/fashion (100xxxx hats etc.) must never stay on pet storage seats.
         migrateCharacterGearOffPetSlots(eqpd, eqpBag);
         // ADDON_AUX_SLOT62: 134/135 曾与盾共用 −10 → 独立 −62（可与 109 同穿）
@@ -1441,12 +1443,25 @@ public class InventoryManipulator {
         if (prefix >= 180 && prefix <= 183) {
             return;
         }
-        // Pocket 116 may legitimately use −33/−133 (shares BP33 with pet#2 pouch).
-        if (prefix == 116 && (seat == -33 || seat == -133)) {
+        // Pocket 116 lives on −33 (classic red9). −133 is Pet1ItemPouch only —
+        // any leftover 116 there was already coalesced by migratePocketCashOffPet1Pouch.
+        if (prefix == 116 && seat == -33) {
             return;
         }
         parkSeatToBag(eqpd, eqpBag, seat);
         log.info("migrateCharOffPet: seat {} id={} (non-pet on pet seat)", seat, itemId);
+    }
+
+    /**
+     * Coalesce legacy pocket-cash 116 from −133 onto −33 so Pet1ItemPouch owns −133 alone.
+     * If −33 occupied, park the −133 pocket to bag.
+     */
+    private static void migratePocketCashOffPet1Pouch(Inventory eqpd, Inventory eqpBag) {
+        Item cashPocket = eqpd.getItem((short) -133);
+        if (cashPocket == null || cashPocket.getItemId() / 10000 != 116) {
+            return;
+        }
+        migratePrefixSlot(eqpd, eqpBag, (short) -133, (short) -33, 116);
     }
 
     private static void migratePrefixSlot(Inventory eqpd, Inventory eqpBag, short from, short to,

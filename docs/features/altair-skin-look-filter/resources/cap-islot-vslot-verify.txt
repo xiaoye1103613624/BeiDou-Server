@@ -1,0 +1,16 @@
+# Altair Cap pure appearance mask — client Cap islot/vslot verify
+# Date: 2026-09-16
+# Client: E:\MXD\BeiDou-Client_S9\Data\Character\Cap
+# Tool: orange.wz.BatchAltairVslot / DumpIslot
+#
+# Expected:
+#   islot = Cp
+#   vslot = CpH1H2H3H4H5H6HfHbHxHsAfAyAsAeMaPnSoGlGwSrSiWpWoWc
+#
+# BatchAltairVslot: DONE ok=0 skip=111 fail=0 bakAfter=0
+# DumpIslot full audit: VERIFY ok=111 bad=0
+#
+# Server XML sample (wz/Character.wz/Cap/01008900.img.xml):
+#   islot=Cp
+#   vslot=CpH1H2H3H4H5H6HfHbHxHsAfAyAsAeMaPnSoGlGwSrSiWpWoWc
+# No remaining HrCp islot in server Cap XML for Altair IDs.

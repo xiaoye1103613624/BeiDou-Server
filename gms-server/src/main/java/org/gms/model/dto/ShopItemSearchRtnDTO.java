@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class ShopItemSearchRtnDTO {
     private Long id;
     private Long shopId;
+    private Integer npcId;
+    private String npcName;
     private Integer itemId;
     private Integer price;
     private Integer pitch;

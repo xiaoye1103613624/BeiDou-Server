@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.weather')">
+  <PageContainer :title="$t('menu.game.weather')">
+    <ProCard>
       <a-space direction="vertical" fill :size="16">
         <a-alert type="info">
           {{ $t('weather.hint.axes') }}
@@ -123,8 +122,8 @@
           </div>
         </a-card>
       </a-space>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -266,9 +265,3 @@
 
   onMounted(refresh);
 </script>
-
-<style scoped lang="less">
-  .container {
-    padding: 0 20px 20px;
-  }
-</style>

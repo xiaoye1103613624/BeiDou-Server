@@ -9,10 +9,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.file.Path;
 
 /**
- * 将本地道具图标目录映射到管理后台可访问的静态路径。
+ * Maps local icon directories to admin-UI static paths.
  * <ul>
- *   <li>{@code /item-icons/**} → {@link ItemIconFiles} 缓存目录</li>
- *   <li>{@code /icons/**} → {@link SharedIconFiles} 共用缓存</li>
+ *   <li>{@code /game-assets/**} → unified {@link SharedIconFiles} cache</li>
+ *   <li>{@code /icons/**} → same root (legacy alias)</li>
+ *   <li>{@code /item-icons/**} → {@link ItemIconFiles} item-only cache</li>
  * </ul>
  */
 @Configuration
@@ -20,14 +21,20 @@ public class IconStaticConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        Path sharedRoot = SharedIconFiles.resolveOrCreateRoot();
+        String sharedLocation = sharedRoot.toUri().toString();
+
+        registry.addResourceHandler("/game-assets/**")
+                .addResourceLocations(sharedLocation)
+                .setCachePeriod(3600);
+
+        registry.addResourceHandler("/icons/**")
+                .addResourceLocations(sharedLocation)
+                .setCachePeriod(3600);
+
         Path itemIconDir = ItemIconFiles.resolveOrCreateIconDir();
         registry.addResourceHandler("/item-icons/**")
                 .addResourceLocations(itemIconDir.toUri().toString())
-                .setCachePeriod(3600);
-
-        Path sharedRoot = SharedIconFiles.resolveOrCreateRoot();
-        registry.addResourceHandler("/icons/**")
-                .addResourceLocations(sharedRoot.toUri().toString())
                 .setCachePeriod(3600);
     }
 }

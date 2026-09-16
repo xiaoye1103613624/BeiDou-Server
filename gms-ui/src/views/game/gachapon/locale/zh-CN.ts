@@ -11,6 +11,13 @@ export default {
   'gachapon.list.column.endTime': '结束时间',
   'gachapon.list.column.notification': '全服广播',
   'gachapon.list.column.comment': '备注',
+  'gachapon.list.column.weight': '权重',
+  'gachapon.list.column.realProb': '真实概率',
+  'gachapon.list.column.poolId': '奖池ID',
+  'gachapon.list.column.itemId': '物品ID',
+  'gachapon.list.column.itemName': '物品名称',
+  'gachapon.list.column.itemIcon': '物品图标',
+  'gachapon.list.column.quantity': '数量',
 
   'gachapon.isPublic.true.desc': '公共池',
   'gachapon.isPublic.false.desc': '非公共池',
@@ -22,4 +29,24 @@ export default {
   'gachapon.button.detail': '奖品',
   'gachapon.button.operate': '操作',
   'gachapon.button.deleteTips': '你确定要删除这个奖池吗？',
+  'gachapon.button.deleteRewardTips': '你确定要删除这个奖品吗？',
+  'gachapon.button.cancel': '取消',
+
+  'gachapon.form.title.create': '创建奖池',
+  'gachapon.form.title.edit': '编辑奖池',
+  'gachapon.form.poolId': '奖池ID',
+  'gachapon.form.name': '奖池名称',
+  'gachapon.form.prob': '概率',
+  'gachapon.form.fixedProb': '固定中奖率',
+  'gachapon.form.probPlaceholder': '万分之',
+  'gachapon.form.notification': '全服通知',
+  'gachapon.form.weightTooltip': '权重: {weight} 概率 {prob} %',
+
+  'gachapon.reward.title': '奖品列表',
+  'gachapon.reward.titleNamed': '[{name}] 奖品列表',
+
+  'gachapon.msg.poolDeleted': '奖池已删除',
+  'gachapon.msg.poolSaved': '奖池已保存',
+  'gachapon.msg.rewardSaved': '奖品已保存',
+  'gachapon.msg.rewardDeleted': '奖品已删除',
 };

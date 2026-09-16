@@ -5,24 +5,30 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
-import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.client.command.CommandsExecutor;
 
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
 import org.gms.model.dto.CommandReqDTO;
-import org.gms.net.server.PlayerStorage;
+import org.gms.model.dto.ReloadScriptsByPathsDTO;
+import org.gms.model.dto.ReloadScriptsByPathsResultDTO;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
-import org.gms.net.server.world.World;
+import org.gms.scripting.map.MapScriptManager;
+import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.portal.PortalScriptManager;
+import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.scripting.reactor.ReactorScriptManager;
+import org.gms.server.ShopFactory;
+import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -249,8 +255,159 @@ public class CommandService {
             });
         });
         log.info(I18nUtil.getMessage("ReloadMapCommand.message1"));
-        }
-
     }
 
+    public void reloadMapScriptsByGMCommand() {
+        MapScriptManager.getInstance().reloadScripts();
+        log.info(I18nUtil.getMessage("ReloadMapScriptsCommand.message2"));
+    }
 
+    public void reloadQuestScriptsByGMCommand() {
+        QuestScriptManager.getInstance().reloadQuestScripts();
+        log.info(I18nUtil.getMessage("ReloadQuestScriptsCommand.message2"));
+    }
+
+    public void reloadNpcScriptsByGMCommand() {
+        NPCScriptManager.getInstance().reloadNpcScripts();
+        log.info(I18nUtil.getMessage("ReloadNpcScriptsCommand.message2"));
+    }
+
+    public void reloadReactorScriptsByGMCommand() {
+        ReactorScriptManager.getInstance().reloadReactorScripts();
+        log.info(I18nUtil.getMessage("ReloadReactorScriptsCommand.message2"));
+    }
+
+    /**
+     * 热重载全部脚本缓存（事件 / 传送点 / 地图脚本 / 任务 / NPC·物品 / 反应堆）。
+     * 不含地图实例重置；也不含 WZ 静态数据。
+     */
+    public void reloadAllScriptsByGMCommand() {
+        reloadEventsByGMCommand();
+        reloadPortalsByGMCommand();
+        reloadMapScriptsByGMCommand();
+        reloadQuestScriptsByGMCommand();
+        reloadNpcScriptsByGMCommand();
+        reloadReactorScriptsByGMCommand();
+        log.info(I18nUtil.getMessage("ReloadAllScriptsCommand.message2"));
+    }
+
+    /**
+     * 按相对路径列表精确清理脚本缓存。WZ 路径跳过；仅处理 scripts* 下已识别类型的 .js。
+     */
+    public ReloadScriptsByPathsResultDTO reloadScriptsByPaths(ReloadScriptsByPathsDTO request) {
+        ReloadScriptsByPathsResultDTO result = ReloadScriptsByPathsResultDTO.builder().build();
+        List<String> paths = request == null || request.getPaths() == null
+                ? Collections.emptyList()
+                : request.getPaths();
+
+        for (String raw : paths) {
+            if (!StringUtils.hasText(raw)) {
+                result.getSkipped().add(skipped(raw, "INVALID_PATH"));
+                continue;
+            }
+            String normalized = raw.replace('\\', '/').replaceAll("^/+", "");
+            if (isWzPath(normalized)) {
+                result.getSkipped().add(skipped(normalized, "WZ_NOT_SUPPORTED"));
+                continue;
+            }
+            String relative = toScriptRelativePath(normalized);
+            if (relative == null) {
+                result.getSkipped().add(skipped(normalized, "INVALID_PATH"));
+                continue;
+            }
+            if (!relative.endsWith(".js")) {
+                result.getSkipped().add(skipped(normalized, "NOT_SCRIPT"));
+                continue;
+            }
+            if (!reloadOneScriptPath(relative)) {
+                result.getSkipped().add(skipped(normalized, "UNKNOWN_TYPE"));
+                continue;
+            }
+            result.getReloaded().add(normalized);
+        }
+
+        log.info(I18nUtil.getMessage("ReloadScriptsByPathsCommand.message2"),
+                result.getReloaded().size(), result.getSkipped().size());
+        return result;
+    }
+
+    private static ReloadScriptsByPathsResultDTO.SkippedPathDTO skipped(String path, String reason) {
+        return ReloadScriptsByPathsResultDTO.SkippedPathDTO.builder()
+                .path(path == null ? "" : path)
+                .reason(reason)
+                .build();
+    }
+
+    private static boolean isWzPath(String path) {
+        return path.equals("wz")
+                || path.startsWith("wz/")
+                || path.startsWith("wz-");
+    }
+
+    /**
+     * {@code scripts/npc/x.js} / {@code scripts-zh-CN/npc/x.js} → {@code npc/x.js}；非 scripts* 返回 null。
+     */
+    private static String toScriptRelativePath(String path) {
+        if (path.equals("scripts") || path.startsWith("scripts/")) {
+            return path.equals("scripts") ? "" : path.substring("scripts/".length());
+        }
+        if (path.startsWith("scripts-")) {
+            int slash = path.indexOf('/');
+            if (slash < 0) {
+                return "";
+            }
+            return path.substring(slash + 1);
+        }
+        return null;
+    }
+
+    /**
+     * @param relative 相对 scripts 根的路径，如 {@code npc/1002000.js}
+     * @return 是否识别并处理了该类型
+     */
+    private boolean reloadOneScriptPath(String relative) {
+        if (relative.startsWith("npc/")
+                || relative.startsWith("item/")
+                || relative.startsWith("BeiDouSpecial/")) {
+            NPCScriptManager.getInstance().clearCachedScript(relative);
+            return true;
+        }
+        if (relative.startsWith("quest/")) {
+            QuestScriptManager.getInstance().clearCachedScript(relative);
+            return true;
+        }
+        if (relative.startsWith("reactor/")) {
+            ReactorScriptManager.getInstance().clearCachedScript(relative);
+            return true;
+        }
+        if (relative.startsWith("portal/") && relative.endsWith(".js")) {
+            String name = relative.substring("portal/".length(), relative.length() - 3);
+            PortalScriptManager.getInstance().removePortalScript(name);
+            return true;
+        }
+        if (relative.startsWith("map/") && relative.endsWith(".js")) {
+            String mapScriptPath = relative.substring("map/".length(), relative.length() - 3);
+            MapScriptManager.getInstance().removeMapScript(mapScriptPath);
+            return true;
+        }
+        if (relative.startsWith("event/") && relative.endsWith(".js")) {
+            String eventName = relative.substring("event/".length(), relative.length() - 3);
+            for (Channel ch : Server.getInstance().getAllChannels()) {
+                ch.reloadEvent(eventName);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void reloadShopsByGMCommand() {
+        ShopFactory.getInstance().reloadShops();
+        log.info(I18nUtil.getMessage("ReloadShopsCommand.message2"));
+    }
+
+    public void reloadDropsByGMCommand() {
+        MonsterInformationProvider.getInstance().clearDrops();
+        log.info(I18nUtil.getMessage("ReloadDropsCommand.message2"));
+    }
+
+}

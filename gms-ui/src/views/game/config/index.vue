@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.config')">
+  <PageContainer :title="$t('menu.game.config')">
+    <ProCard>
       <a-space direction="vertical" align="start">
         <a-form-item :label="$t('config.search.type.label')">
           <a-radio-group
@@ -150,7 +149,7 @@
         </template>
       </a-table>
       <a-pagination
-        style="margin-top: 20px"
+        class="bd-page-pagination"
         :total="total"
         :page-size="condition.pageSize"
         :current="condition.pageNo"
@@ -283,8 +282,8 @@
           @success="uploadSuccess"
         />
       </a-modal>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">

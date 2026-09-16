@@ -27,25 +27,34 @@
 <script lang="ts">
   import { defineComponent, ref, watch, onMounted } from 'vue';
   import { getInventoryList } from '@/api/inventory';
-  import axios from 'axios';
   import invImage from '@/assets/inv_full.png';
   import beidouBook from '@/assets/2430033.png';
   import { useI18n } from 'vue-i18n';
+  import {
+    getCdnIconUrl,
+    getLocalIconUrl,
+    scheduleIconCache,
+  } from '@/utils/mapleStoryAPI';
 
-  const maplestoryioAPI = axios.create({
-    baseURL: 'https://maplestory.io/api',
-  });
-
-  async function getFromCacheOrDownload(itemId: number): Promise<string> {
-    try {
-      const response = await maplestoryioAPI.get(
-        `/GMS/83/item/${itemId}/icon?resize=4`,
-        { responseType: 'blob' }
-      );
-      return URL.createObjectURL(response.data);
-    } catch (error) {
-      return '';
+  /**
+   * Canvas cannot host ItemIcon; same resolve order as ItemIcon:
+   * local /game-assets → CDN (trigger server cache to game-assets).
+   */
+  function loadItemIcon(itemId: number): Promise<string> {
+    if (itemId === 2430033) {
+      return Promise.resolve(beidouBook);
     }
+    const local = getLocalIconUrl('item', itemId);
+    return new Promise((resolve) => {
+      const probe = new Image();
+      probe.onload = () => resolve(local);
+      probe.onerror = () => {
+        const cdn = getCdnIconUrl('item', itemId);
+        scheduleIconCache('item', itemId);
+        resolve(cdn);
+      };
+      probe.src = local;
+    });
   }
 
   function calculatePositionOffsets() {
@@ -176,7 +185,7 @@
               if (itemId === 2430033) {
                 itemImgSrc = beidouBook;
               } else {
-                itemImgSrc = await getFromCacheOrDownload(itemId);
+                itemImgSrc = await loadItemIcon(itemId);
               }
               const itemImg = new Image();
               return new Promise<void>((resolve) => {

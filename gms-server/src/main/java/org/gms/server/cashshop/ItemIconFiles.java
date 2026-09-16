@@ -6,15 +6,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.Optional;
 
 /**
- * Admin UI item icons under {@code /item-icons/{itemId}.png}.
- * <p>
- * Resolves an existing cache directory (MXD tools, legacy E: tree) or creates
- * {@code gms-server/tools/_full_icon_sync/web_png} so sync can write PNGs.
+ * Admin UI item icons — legacy tree under {@code /item-icons/{itemId}.png}.
+ * New writes go to unified {@code game-assets} via {@link org.gms.server.icon.SharedIconFiles}.
+ * This class is read/promote only for new code paths.
  */
 @Slf4j
 public final class ItemIconFiles {
@@ -44,13 +42,12 @@ public final class ItemIconFiles {
     }
 
     public static Optional<Path> resolveExistingIconDir() {
+        // Relative / cwd only — no host-absolute paths (those break portability).
         String[] candidates = {
                 "tools/_full_icon_sync/web_png",
                 "gms-server/tools/_full_icon_sync/web_png",
                 System.getProperty("user.dir") + "/tools/_full_icon_sync/web_png",
-                System.getProperty("user.dir") + "/gms-server/tools/_full_icon_sync/web_png",
-                "F:/MXD_dev/BeiDou-Server/gms-server/tools/_full_icon_sync/web_png",
-                "E:/pro/BeiDou-Server_xy/gms-server/tools/_full_icon_sync/web_png"
+                System.getProperty("user.dir") + "/gms-server/tools/_full_icon_sync/web_png"
         };
         for (String candidate : candidates) {
             Path path = Paths.get(candidate);
@@ -70,48 +67,19 @@ public final class ItemIconFiles {
         return Files.isRegularFile(pngPath(dir, itemId));
     }
 
+    /**
+     * New writes go to unified game-assets only. Legacy {@code /item-icons} is read/promote.
+     */
     public static boolean writePng(int itemId, byte[] png) {
-        if (png == null || png.length < 8) {
-            return false;
-        }
-        if (png[0] != (byte) 0x89 || png[1] != 0x50) {
-            return false;
-        }
-        Path dir = resolveOrCreateIconDir();
-        try {
-            Files.createDirectories(dir);
-            Files.write(pngPath(dir, itemId), png);
-            return true;
-        } catch (IOException e) {
-            log.warn("write item icon {} failed: {}", itemId, e.toString());
-            return false;
-        }
+        return org.gms.server.icon.SharedIconFiles.writePng("item", itemId, png);
     }
 
     /**
-     * Copy from another known cache root if present (legacy offline sync).
+     * Legacy helper retained for call sites; host-absolute copies removed.
+     * Prefer {@link org.gms.server.icon.SharedIconFiles#promoteLegacyIfPresent}.
      */
     public static boolean copyFromLegacyCacheIfPresent(int itemId) {
-        if (pngExists(itemId)) {
-            return true;
-        }
-        Path targetDir = resolveOrCreateIconDir();
-        Path legacy = Paths.get("E:/pro/BeiDou-Server_xy/gms-server/tools/_full_icon_sync/web_png");
-        if (!Files.isDirectory(legacy) || legacy.toAbsolutePath().normalize().equals(targetDir)) {
-            return false;
-        }
-        Path src = pngPath(legacy, itemId);
-        if (!Files.isRegularFile(src)) {
-            return false;
-        }
-        try {
-            Files.createDirectories(targetDir);
-            Files.copy(src, pngPath(targetDir, itemId), StandardCopyOption.REPLACE_EXISTING);
-            return true;
-        } catch (IOException e) {
-            log.warn("copy legacy icon {} failed: {}", itemId, e.toString());
-            return false;
-        }
+        return pngExists(itemId);
     }
 
     public static String describeIconDir() {

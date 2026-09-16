@@ -21,9 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.scripting;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.gms.manager.ServerManager;
+import org.gms.net.server.Server;
+import org.gms.net.server.channel.Channel;
 import org.gms.property.ServiceProperty;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
@@ -113,5 +116,45 @@ public abstract class AbstractScriptManager {
     protected void resetContext(String path, Client c) {
         // 重置时使用同一个缓存 key，确保能清掉上面 setScriptEngine 写入的脚本引擎。
         c.removeScriptEngine(SCRIPT_DIRECTORY + "/" + path);
+    }
+
+    /**
+     * 清除在线玩家客户端上、指定脚本目录前缀的缓存引擎，使下次调用重新从磁盘加载 .js。
+     * 缓存 key 形如 {@code scripts/npc/xxx.js}。
+     */
+    protected static void clearOnlineClientEngines(String... relativeDirPrefixes) {
+        if (relativeDirPrefixes == null || relativeDirPrefixes.length == 0) {
+            return;
+        }
+        String[] keys = new String[relativeDirPrefixes.length];
+        for (int i = 0; i < relativeDirPrefixes.length; i++) {
+            String prefix = relativeDirPrefixes[i];
+            keys[i] = prefix.startsWith(SCRIPT_DIRECTORY + "/")
+                    ? prefix
+                    : SCRIPT_DIRECTORY + "/" + prefix;
+        }
+        clearOnlineClientEngineKeys(keys);
+    }
+
+    /**
+     * 按完整缓存 key（或前缀）清除在线客户端脚本引擎。
+     */
+    protected static void clearOnlineClientEngineKeys(String... cacheKeys) {
+        if (cacheKeys == null || cacheKeys.length == 0) {
+            return;
+        }
+        for (Channel channel : Server.getInstance().getAllChannels()) {
+            for (Character chr : channel.getPlayerStorage().getAllCharacters()) {
+                if (chr == null || chr.getClient() == null) {
+                    continue;
+                }
+                Client client = chr.getClient();
+                for (String key : cacheKeys) {
+                    if (key != null && !key.isEmpty()) {
+                        client.clearScriptEnginesWithPrefix(key);
+                    }
+                }
+            }
+        }
     }
 }

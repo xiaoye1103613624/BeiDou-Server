@@ -102,7 +102,18 @@ public class SetItemService {
             }
             SetItemDO entity = existing != null ? existing : new SetItemDO();
             entity.setSetId(setId);
-            entity.setSetName(def.setName);
+            // WZ 英文 → setNameEn；已有中文名绝不覆盖
+            String wzEn = blankToNull(def.setNameEn);
+            if (wzEn == null) {
+                wzEn = blankToNull(def.setName);
+            }
+            if (wzEn != null) {
+                entity.setSetNameEn(wzEn);
+            }
+            if (existing != null && blankToNull(existing.getSetNameZh()) != null) {
+                entity.setSetNameZh(existing.getSetNameZh());
+            }
+            entity.setSetName(resolveDisplayName(entity.getSetNameZh(), entity.getSetNameEn(), def.displayName()));
             entity.setCompleteCount(def.completeCount);
             entity.setItemIds(SetItemManager.itemIdsToCsv(def));
             if (entity.getEnabled() == null) {
@@ -138,7 +149,7 @@ public class SetItemService {
         SetBonus bonus = SetItemManager.previewBonus(setId, count, jobId);
         StringBuilder sb = new StringBuilder();
         if (def != null) {
-            sb.append(def.setName).append(" (").append(count).append("/")
+            sb.append(def.displayName()).append(" (").append(count).append("/")
                     .append(def.completeCount > 0 ? def.completeCount : def.itemIds.size()).append(")\r\n");
         }
         CombatStatFormatter.appendSetBonusLines(sb, bonus);
@@ -223,8 +234,16 @@ public class SetItemService {
             SetItemDO existing = setItemMapper.selectOneByQuery(bySetId);
             if (existing != null) {
                 entity.setId(existing.getId());
+                // 启停等局部保存：未传的双语字段保留库中值
+                if (blankToNull(entity.getSetNameZh()) == null) {
+                    entity.setSetNameZh(existing.getSetNameZh());
+                }
+                if (blankToNull(entity.getSetNameEn()) == null) {
+                    entity.setSetNameEn(existing.getSetNameEn());
+                }
             }
         }
+        entity.setSetName(resolveDisplayName(entity.getSetNameZh(), entity.getSetNameEn(), entity.getSetName()));
         if (entity.getId() == null) {
             setItemMapper.insert(entity);
         } else {
@@ -247,7 +266,9 @@ public class SetItemService {
         return SetItemDTO.builder()
                 .id(entity.getId())
                 .setId(entity.getSetId())
-                .setName(entity.getSetName())
+                .setName(resolveDisplayName(entity.getSetNameZh(), entity.getSetNameEn(), entity.getSetName()))
+                .setNameZh(entity.getSetNameZh())
+                .setNameEn(entity.getSetNameEn())
                 .completeCount(entity.getCompleteCount())
                 .itemIds(entity.getItemIds())
                 .enabled(entity.getEnabled())
@@ -258,10 +279,16 @@ public class SetItemService {
     }
 
     private SetItemDetailDTO toDetail(SetDefinition def, SetItemDO db) {
+        String zh = db != null && blankToNull(db.getSetNameZh()) != null
+                ? db.getSetNameZh() : blankToNull(def.setNameZh);
+        String en = db != null && blankToNull(db.getSetNameEn()) != null
+                ? db.getSetNameEn() : blankToNull(def.setNameEn);
         return SetItemDetailDTO.builder()
                 .id(db != null ? db.getId() : null)
                 .setId(def.setId)
-                .setName(def.setName)
+                .setName(def.displayName())
+                .setNameZh(zh)
+                .setNameEn(en)
                 .completeCount(def.completeCount)
                 .itemIds(db != null && db.getItemIds() != null && !db.getItemIds().isBlank()
                         ? db.getItemIds() : SetItemManager.itemIdsToCsv(def))
@@ -279,10 +306,23 @@ public class SetItemService {
     }
 
     private SetItemDO toEntity(SetItemDTO dto) {
+        String zh = blankToNull(dto.getSetNameZh());
+        String en = blankToNull(dto.getSetNameEn());
+        // 兼容旧客户端只传 setName：有中文则当 zh，否则当 en
+        if (zh == null && en == null && blankToNull(dto.getSetName()) != null) {
+            String legacy = dto.getSetName().trim();
+            if (containsCjk(legacy)) {
+                zh = legacy;
+            } else {
+                en = legacy;
+            }
+        }
         return SetItemDO.builder()
                 .id(dto.getId())
                 .setId(dto.getSetId())
-                .setName(dto.getSetName())
+                .setNameZh(zh)
+                .setNameEn(en)
+                .setName(resolveDisplayName(zh, en, dto.getSetName()))
                 .completeCount(dto.getCompleteCount())
                 .itemIds(dto.getItemIds())
                 .enabled(dto.getEnabled() == null ? 1 : dto.getEnabled())
@@ -290,5 +330,36 @@ public class SetItemService {
                 .remark(dto.getRemark())
                 .tiersJson(dto.getTiersJson())
                 .build();
+    }
+
+    static String resolveDisplayName(String zh, String en, String fallback) {
+        if (blankToNull(zh) != null) {
+            return zh.trim();
+        }
+        if (blankToNull(en) != null) {
+            return en.trim();
+        }
+        if (blankToNull(fallback) != null) {
+            return fallback.trim();
+        }
+        return "";
+    }
+
+    private static String blankToNull(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value;
+    }
+
+    private static boolean containsCjk(String text) {
+        for (int i = 0; i < text.length(); ) {
+            int cp = text.codePointAt(i);
+            if (Character.UnicodeScript.of(cp) == Character.UnicodeScript.HAN) {
+                return true;
+            }
+            i += Character.charCount(cp);
+        }
+        return false;
     }
 }

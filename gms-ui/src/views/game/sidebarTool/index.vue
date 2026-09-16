@@ -1,11 +1,10 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.sidebarTool')">
-      <a-alert type="info" style="margin-bottom: 12px">
+  <PageContainer :title="$t('menu.game.sidebarTool')">
+    <ProCard>
+      <a-alert type="info" class="bd-page-toolbar">
         {{ $t('sidebarTool.hint') }}
       </a-alert>
-      <a-space style="margin-bottom: 12px">
+      <a-space class="bd-page-toolbar">
         <a-button type="primary" :loading="savingAll" @click="saveAllClick">
           {{ $t('sidebarTool.saveAll') }}
         </a-button>
@@ -52,7 +51,7 @@
                 :loading="scriptTreeLoading"
                 :dropdown-style="{ maxHeight: '360px', overflow: 'auto' }"
                 style="width: 100%"
-                @change="(v: string | undefined) => onScriptSelect(record, v)"
+                @change="(v) => onScriptSelect(record, v)"
               />
             </template>
           </a-table-column>
@@ -119,8 +118,8 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
-  </div>
+    </ProCard>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -158,12 +157,20 @@
     }
   }
 
-  function onScriptSelect(row: SidebarToolConfig, value?: string) {
+  function onScriptSelect(row: SidebarToolConfig, value: unknown) {
     // 目录节点 key 以 dir: 开头，不可选；若异常落到此则忽略
-    if (value && String(value).startsWith('dir:')) {
+    let raw: unknown = value;
+    if (Array.isArray(value)) {
+      const [first] = value;
+      raw = first;
+    }
+    if (raw && typeof raw === 'object' && 'value' in (raw as object)) {
+      raw = (raw as { value: unknown }).value;
+    }
+    if (raw != null && String(raw).startsWith('dir:')) {
       return;
     }
-    row.scriptPath = value ? String(value) : '';
+    row.scriptPath = raw != null && raw !== '' ? String(raw) : '';
     onScriptChange(row);
   }
 

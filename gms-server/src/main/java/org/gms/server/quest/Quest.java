@@ -113,10 +113,11 @@ public class Quest {
     private boolean autoPreComplete, autoComplete;
     private boolean repeatable = false;
     private String name = "", parent = "";
-    private final static DataProvider questData = DataProviderFactory.getDataProvider(WZFiles.QUEST);
-    private final static Data questInfo = questData.getData("QuestInfo.img");
-    private final static Data questAct = questData.getData("Act.img");
-    private final static Data questReq = questData.getData("Check.img");
+    private static final DataProvider questData = DataProviderFactory.getDataProvider(WZFiles.QUEST);
+    /** 非 final：publish/热重载时需重新 getData，否则 clearCache 后仍读旧 DOM。 */
+    private static volatile Data questInfo = questData.getData("QuestInfo.img");
+    private static volatile Data questAct = questData.getData("Act.img");
+    private static volatile Data questReq = questData.getData("Check.img");
 
     private Quest(int id) {
         this.id = (short) id;
@@ -507,6 +508,23 @@ public class Quest {
 
     public static void clearCache() {
         quests.clear();
+    }
+
+    /**
+     * 从磁盘重新加载 QuestInfo/Act/Check，并重建内存任务表。
+     * XMLWZFile#getData 每次读盘，但本类曾缓存 static Data，管理端改 WZ 后必须走此方法。
+     */
+    public static synchronized void reloadFromWz() {
+        medals.clear();
+        questInfo = questData.getData("QuestInfo.img");
+        questAct = questData.getData("Act.img");
+        questReq = questData.getData("Check.img");
+        loadAllQuests();
+        log.info("Quest WZ reloaded, count={}", quests.size());
+    }
+
+    public static Collection<Quest> getLoadedQuests() {
+        return List.copyOf(quests.values());
     }
 
     private AbstractQuestRequirement getRequirement(QuestRequirementType type, Data data) {

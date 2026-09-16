@@ -24,14 +24,11 @@ public class I18nUtil {
         // 如果当前存在客户端请求，则以客户端的语言为准。如果当前非客户端请求，是服务端主动发给客户端的，则以服务端语言为准
         Locale clientLang = CharsetConstants.getLanguageLocale(ThreadLocalUtil.getClientLang());
         // 确保所有参数转为字符串，包括数字类型（避免千分符问题）
-        String[] stringArgs = Arrays.stream(args)
-                .map(String::valueOf)
-                .toArray(String[]::new);
-        return messageSource.getMessage(code, stringArgs, clientLang);
+        return messageSource.getMessage(code, toStringArgs(args), clientLang);
     }
 
     public static String getMessage(Locale locale, String code, Object... args) {
-        return messageSource.getMessage(code, args, locale);
+        return messageSource.getMessage(code, toStringArgs(args), locale);
     }
 
     /**
@@ -58,10 +55,18 @@ public class I18nUtil {
     }
 
     public static String getExceptionMessage(String code, Object... args) {
-        return exceptionSource.getMessage(code, args, LANGUAGE);
+        // 数字参数必须转成字符串，否则 MessageFormat 会按 Locale 加千分位（如 1001 → 1,001）
+        return exceptionSource.getMessage(code, toStringArgs(args), LANGUAGE);
     }
 
     public static String getExceptionMessage(Locale locale, String code, Object... args) {
-        return exceptionSource.getMessage(code, args, locale);
+        return exceptionSource.getMessage(code, toStringArgs(args), locale);
+    }
+
+    private static String[] toStringArgs(Object... args) {
+        if (args == null || args.length == 0) {
+            return new String[0];
+        }
+        return Arrays.stream(args).map(String::valueOf).toArray(String[]::new);
     }
 }

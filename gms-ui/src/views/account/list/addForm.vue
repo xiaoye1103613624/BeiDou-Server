@@ -2,13 +2,21 @@
   <a-modal
     v-model:visible="visible"
     :title="$t('account.list.addForm.title')"
+    :width="480"
     :ok-loading="loading"
     :mask-closable="false"
     :esc-to-close="false"
     :ok-text="$t('button.submit')"
+    unmount-on-close
     :on-before-ok="submitClick"
   >
-    <a-form ref="formRef" :model="formData" :rules="rules">
+    <a-form
+      ref="formRef"
+      class="bd-overlay-form"
+      :model="formData"
+      :rules="rules"
+      auto-label-width
+    >
       <a-form-item field="name" :label="$t('account.list.addForm.name')">
         <a-input v-model="formData.name" />
       </a-form-item>

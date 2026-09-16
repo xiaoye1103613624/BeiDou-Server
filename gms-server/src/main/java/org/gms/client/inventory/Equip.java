@@ -994,6 +994,15 @@ public class Equip extends Item {
         this.enhance = enhance;
     }
 
+    /** 北斗装备强化脚本使用的星级字段（与 enhance 字节同义）。 */
+    public int getEnhanceLevel() {
+        return enhance & 0xFF;
+    }
+
+    public void setEnhanceLevel(int level) {
+        setEnhance((byte) (level & 0xFF));
+    }
+
     public int getBonusPotential1() {
         return bonusPotential1;
     }

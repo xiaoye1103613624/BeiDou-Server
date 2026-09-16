@@ -1,0 +1,98 @@
+/**
+ * BeiDou Admin Design Tokens
+ * 可切换企业级配色：中性骨架 + 品牌主色预设 + 语义色
+ */
+
+:root {
+  /* —— 用户方案变量 —— */
+  --bg-page: #f7f8fa;
+  --bg-card: #fff;
+  --bg-hover: #f2f3f5;
+  --border: #eaecef;
+  --border-strong: #d1d5db;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-disabled: #d1d5db;
+  --primary: #3b6ea5;
+  --primary-hover: #5b8bc0;
+  --primary-active: #2a5580;
+  --primary-light: #e8f0f9;
+  --success: #4e9a6a;
+  --success-light: #eaf5ee;
+  --success-border: #b8dcc5;
+  --warning: #c9922e;
+  --warning-light: #fbf3e3;
+  --warning-border: #ebd9a8;
+  --danger: #c05a5a;
+  --danger-light: #faecec;
+  --danger-border: #e8bfbf;
+  --info: #4a7fb5;
+  --info-light: #eaf1f9;
+  --info-border: #b8cfe5;
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 4%);
+  --shadow-md: 0 2px 8px rgb(16 24 40 / 6%);
+  --shadow-lg: 0 8px 24px rgb(16 24 40 / 8%);
+
+  /* —— 兼容别名（现有组件） —— */
+  --bd-primary: var(--primary);
+  --bd-primary-rgb: 59, 110, 165;
+  --bd-accent: #c9a84c;
+  --bd-ink: var(--text-primary);
+  --bd-ink-soft: var(--text-secondary);
+  --bd-surface: var(--bg-page);
+  --bd-surface-elevated: var(--bg-card);
+  --bd-surface-muted: var(--bg-hover);
+  --bd-sidebar: var(--bg-card);
+  --bd-sidebar-hover: var(--bg-hover);
+  --bd-sidebar-active: var(--primary-light);
+  --bd-sidebar-accent: var(--primary);
+  --bd-border: var(--border);
+  --bd-border-strong: var(--border-strong);
+  --bd-shadow-sm: var(--shadow-sm);
+  --bd-shadow-md: var(--shadow-md);
+  --bd-shadow-lg: var(--shadow-lg);
+  --bd-radius-sm: 6px;
+  --bd-radius-md: 10px;
+  --bd-radius-lg: 14px;
+  --bd-radius-xl: 20px;
+  --bd-navbar-height: 56px;
+  --bd-content-gap: 16px;
+  --bd-font-sans: 'Sora', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei',
+    system-ui, -apple-system, sans-serif;
+  --bd-font-display: 'Sora', 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+body[arco-theme='dark'],
+[data-theme='dark'] {
+  --bg-page: #0f1115;
+  --bg-card: #171a21;
+  --bg-hover: #1f242d;
+  --border: #2a3038;
+  --border-strong: #3a424d;
+  --text-primary: #e6edf3;
+  --text-secondary: #9ba3ae;
+  --text-tertiary: #6b7280;
+  --text-disabled: #4b5563;
+  --primary: #5b8bc0;
+  --primary-hover: #6f9bcb;
+  --primary-active: #4a7aad;
+  --primary-light: rgb(59 110 165 / 15%);
+  --success: #5fb37a;
+  --success-light: rgb(95 179 122 / 12%);
+  --success-border: rgb(95 179 122 / 30%);
+  --warning: #d9a83e;
+  --warning-light: rgb(217 168 62 / 12%);
+  --warning-border: rgb(217 168 62 / 30%);
+  --danger: #d96a6a;
+  --danger-light: rgb(217 106 106 / 12%);
+  --danger-border: rgb(217 106 106 / 30%);
+  --info: #5b92cc;
+  --info-light: rgb(91 146 204 / 12%);
+  --info-border: rgb(91 146 204 / 30%);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
+  --shadow-md: 0 2px 8px rgb(0 0 0 / 40%);
+  --shadow-lg: 0 8px 24px rgb(0 0 0 / 50%);
+  --bd-sidebar: #171a21;
+  --bd-primary-rgb: 91, 139, 192;
+}

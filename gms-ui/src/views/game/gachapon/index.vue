@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.gachapon')">
+  <PageContainer :title="$t('menu.game.gachapon')">
+    <ProCard>
       <a-row
         ><a-col>
           <a-space>
@@ -73,7 +72,7 @@
             :width="120"
           >
             <template #cell="{ record }">
-              <img :src="getIconUrl('npc', record.gachaponId)" />
+              <ItemIcon :id="record.gachaponId" category="npc" :size="32" />
             </template>
           </a-table-column>
           <!--          <a-table-column-->
@@ -97,7 +96,7 @@
             </template>
           </a-table-column>
           <a-table-column
-            :title="$t('gachapon.list.column.isPublic')"
+            :title="$t('gachapon.list.column.gachaponRate')"
             align="center"
             :width="80"
           >
@@ -204,7 +203,7 @@
         </template>
       </a-table>
       <a-pagination
-        style="margin-top: 20px"
+        class="bd-page-pagination"
         :total="total"
         :page-size="condition.pageSize"
         :current="condition.pageNo"
@@ -215,10 +214,10 @@
         @change="pageChange"
         @page-size-change="pageSizeChange"
       />
-    </a-card>
+    </ProCard>
     <GachaponForm ref="gachaponForm" @load-data="loadData" />
     <GachaponRewardForm ref="gachaponRewardForm" />
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
@@ -232,10 +231,11 @@
   import { GachaponPoolState } from '@/store/modules/gachapon/type';
   import { timestampToChineseTime } from '@/utils/stringUtils';
   import GachaponForm from '@/views/game/gachapon/form.vue';
-  import { getIconUrl } from '@/utils/mapleStoryAPI';
   import GachaponRewardForm from '@/views/game/gachapon/reward.vue';
   import { Message } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const tableData = ref<GachaponPoolState[]>([]);
   const condition = ref<GachaponPoolSearchCondition>({
@@ -292,7 +292,7 @@
     setLoading(true);
     try {
       await deletePool(record);
-      Message.success('奖池已删除');
+      Message.success(t('gachapon.msg.poolDeleted'));
       await loadData();
     } finally {
       setLoading(false);

@@ -184,6 +184,16 @@ public final class Channel {
         eventSM = new EventScriptManager(this, getEvents());
     }
 
+    /**
+     * 热重载本频道单个事件脚本。
+     */
+    public synchronized void reloadEvent(String scriptName) {
+        if (finishedShutdown || eventSM == null) {
+            return;
+        }
+        eventSM.reloadEvent(scriptName);
+    }
+
     public synchronized void shutdown() {
         try {
             if (finishedShutdown) {

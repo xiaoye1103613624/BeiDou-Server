@@ -1,89 +1,57 @@
 import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
-/** 日常运营：天气、指令、封禁、文件等 */
-const DAILY: AppRouteRecordRaw = {
+/** 旧 /daily 路径 → 系统管理 / 活动 / 游戏管理 */
+const DAILY_LEGACY: AppRouteRecordRaw = {
   path: '/daily',
   name: 'daily',
   component: DEFAULT_LAYOUT,
   meta: {
-    locale: 'menu.daily',
     requiresAuth: true,
-    icon: 'icon-calendar',
-    order: 1,
+    hideInMenu: true,
   },
   children: [
     {
+      path: '',
+      redirect: '/system/file',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
+    {
       path: 'weather',
-      name: 'DailyWeather',
-      component: () => import('@/views/game/weather/index.vue'),
-      meta: {
-        locale: 'menu.game.weather',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/game/weather',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'commandInfo',
-      name: 'DailyCommandInfo',
-      component: () => import('@/views/game/commandInfo/index.vue'),
-      meta: {
-        locale: 'menu.game.command',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/system/commandInfo',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'autoban',
-      name: 'DailyAutoban',
-      component: () => import('@/views/game/autoban/index.vue'),
-      meta: {
-        locale: 'menu.game.autoban',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/system/autoban',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'file',
-      name: 'DailyFile',
-      component: () => import('@/views/game/file/index.vue'),
-      meta: {
-        locale: 'menu.game.file',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/system/file',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'dailyCheckin',
-      name: 'DailyCheckin',
-      component: () => import('@/views/game/dailyCheckin/index.vue'),
-      meta: {
-        locale: 'menu.game.dailyCheckin',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/activity/dailyCheckin',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'activity',
-      name: 'DailyActivity',
-      component: () => import('@/views/game/activity/index.vue'),
-      meta: {
-        locale: 'menu.game.activity',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/activity/activity',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
     {
       path: 'sidebarTool',
-      name: 'DailySidebarTool',
-      component: () => import('@/views/game/sidebarTool/index.vue'),
-      meta: {
-        locale: 'menu.game.sidebarTool',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+      redirect: '/game/sidebarTool',
+      meta: { requiresAuth: true, hideInMenu: true },
+    } as AppRouteRecordRaw,
   ],
 };
 
-export default DAILY;
+export default DAILY_LEGACY;

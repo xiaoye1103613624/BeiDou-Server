@@ -1,12 +1,11 @@
 <template>
-  <div class="container">
-    <Breadcrumb />
-    <a-card class="general-card" :title="t('menu.game.alchemyTier')">
+  <PageContainer :title="t('menu.game.alchemyTier')">
+    <ProCard>
       <a-alert
         :message="t('alchemyTier.tip')"
         type="info"
         :closable="false"
-        style="margin-bottom: 16px"
+        class="bd-page-toolbar"
       />
 
       <!-- 查询条件 -->
@@ -21,7 +20,7 @@
       </a-form>
 
       <!-- 操作栏 -->
-      <a-row style="margin-top: 16px">
+      <a-row class="bd-page-toolbar">
         <a-col>
           <a-space>
             <a-button type="primary" status="success" @click="addTierClick">
@@ -42,7 +41,7 @@
         column-resizable
         :pagination="false"
         :bordered="{ cell: true }"
-        style="margin-top: 16px"
+        class="bd-page-toolbar"
       >
         <template #columns>
           <a-table-column
@@ -130,7 +129,7 @@
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </ProCard>
 
     <!-- 编辑/新增弹窗 -->
     <a-modal
@@ -200,7 +199,7 @@
         </a-row>
       </a-form>
     </a-modal>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { NpcShopItemState } from '@/store/modules/npcShop/type';
+import { NpcShopItemState, NpcShopState } from '@/store/modules/npcShop/type';
 
 export interface getShopFilter {
   pageNo?: number;
@@ -21,6 +21,10 @@ export function getShopItemList(data: getShopFilter) {
   return axios.post('/shop/v1/getShopItemList', data);
 }
 
+export function getItemShopList(data: getShopFilter) {
+  return axios.post('/shop/v1/getItemShopList', data);
+}
+
 export function deleteShopItem(id: number) {
   return axios.delete(`/shop/v1/deleteShopItem/${id}`);
 }
@@ -31,4 +35,16 @@ export function addShopItem(data: NpcShopItemState) {
 
 export function updateShopItem(data: NpcShopItemState) {
   return axios.post(`/shop/v1/updateShopItem`, data);
+}
+
+export function addShop(data: NpcShopState) {
+  return axios.put(`/shop/v1/addShop`, data);
+}
+
+export function updateShop(data: NpcShopState) {
+  return axios.post(`/shop/v1/updateShop`, data);
+}
+
+export function deleteShop(shopId: number) {
+  return axios.delete(`/shop/v1/deleteShop/${shopId}`);
 }

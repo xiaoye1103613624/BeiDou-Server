@@ -47,6 +47,7 @@
 <template>
   <a-space>
     <a-input-search
+      class="character-selector-trigger"
       :placeholder="
         ccId === undefined && ccName === undefined
           ? t('characterSelector.placeholder')
@@ -63,20 +64,35 @@
     :title="t('characterSelector.title')"
     :width="750"
     :footer="false"
+    unmount-on-close
   >
-    <a-form :model="condition">
-      <a-form-item :label="t('characterSelector.column.id')">
-        <a-input-number v-model="condition.characterId" allow-clear />
-      </a-form-item>
-      <a-form-item :label="t('characterSelector.column.name')">
-        <a-input v-model="condition.characterName" allow-clear />
-      </a-form-item>
-      <a-space class="a-form-item-btn">
-        <a-button type="primary" @click="searchClick">
-          {{ t('characterSelector.searchButton') }}
-        </a-button>
-      </a-space>
-    </a-form>
+    <div class="bd-overlay-toolbar character-selector-filter">
+      <a-form
+        :model="condition"
+        layout="inline"
+        class="character-selector-form"
+      >
+        <a-form-item :label="t('characterSelector.column.id')">
+          <a-input-number
+            v-model="condition.characterId"
+            allow-clear
+            style="width: 140px"
+          />
+        </a-form-item>
+        <a-form-item :label="t('characterSelector.column.name')">
+          <a-input
+            v-model="condition.characterName"
+            allow-clear
+            style="width: 160px"
+          />
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" @click="searchClick">
+            {{ t('characterSelector.searchButton') }}
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </div>
     <a-table :data="tableData" row-key="characterId" :pagination="false">
       <template #columns>
         <a-table-column
@@ -95,11 +111,11 @@
           align="center"
         >
           <template #cell="{ record }">
-            <a-tag v-if="record.onlineStatus" color="green"
-              >{{ $t('inventoryList.column.online') }}
+            <a-tag v-if="record.onlineStatus" color="green">
+              {{ $t('inventoryList.column.online') }}
             </a-tag>
-            <a-tag v-else color="gray"
-              >{{ $t('inventoryList.column.offline') }}
+            <a-tag v-else color="gray">
+              {{ $t('inventoryList.column.offline') }}
             </a-tag>
           </template>
         </a-table-column>
@@ -126,42 +142,16 @@
 </template>
 
 <style scoped lang="less">
-  .arco-form .arco-row {
-    display: flex;
-    width: 100%;
-    :deep(.arco-form-item-content-wrapper) {
-      max-width: 100%;
-    }
+  .character-selector-trigger {
+    min-width: 240px;
   }
-  .a-form-item-btn {
-    margin-left: 0px;
-    margin-bottom: 15px;
-    width: 100%;
-    display: flex;
-    /* 水平居中 */
-    justify-content: right;
-    /* 垂直居中 */
-    align-items: center;
+
+  .character-selector-filter {
+    margin-bottom: 16px;
   }
-  /* 最小宽度超过一定阈值 */
-  @media (min-width: @screen-xs) {
-    .arco-modal-body .arco-form {
-      display: flex;
-      flex-direction: initial;
-      width: 100%;
-      :deep(.arco-form-item-content-wrapper) {
-        max-width: 200px;
-      }
-    }
-    .a-form-item-btn {
-      margin-left: 10px;
-      margin-bottom: 0px;
-      width: auto;
-      display: flex;
-      /* 水平居中 */
-      justify-content: center;
-      /* 垂直居中 */
-      align-items: start;
-    }
+
+  .character-selector-form {
+    flex-wrap: wrap;
+    row-gap: 8px;
   }
 </style>

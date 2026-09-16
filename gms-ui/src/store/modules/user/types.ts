@@ -1,4 +1,4 @@
-export type RoleType = '' | '*' | 'admin' | 'user';
+export type RoleType = '' | '*' | 'admin' | 'operator' | 'user';
 export interface UserState {
   id?: number;
   name?: string;
@@ -20,7 +20,8 @@ export interface UserState {
   greason?: string;
   tos?: boolean;
   sitelogged?: string;
-  webadmin?: boolean;
+  /** 后端可能返回 0/1 或 boolean */
+  webadmin?: boolean | number;
   nick?: string;
   mute?: boolean;
   email?: string;
@@ -29,6 +30,9 @@ export interface UserState {
   votepoints?: number;
   hwid?: string;
   language?: number;
+  /** 主角色编码（AccountInfoDTO.role） */
   role: RoleType;
+  /** 角色列表（AccountInfoDTO.roles） */
+  roles: RoleType[];
   avatar: undefined;
 }

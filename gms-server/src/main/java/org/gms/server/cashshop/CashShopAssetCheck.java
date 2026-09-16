@@ -99,6 +99,7 @@ public final class CashShopAssetCheck {
             case 110 -> "Cape";
             case 111, 112, 113, 114, 115 -> "Accessory";
             case 130, 131, 132, 133, 134, 137, 138, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149 -> "Weapon";
+            case 190, 191 -> "TamingMob";
             default -> type == 100 ? "Cap" : "Cap";
         };
     }

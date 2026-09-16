@@ -48,11 +48,8 @@ function action(mode, type, selection) {
             var claimed = cm.claimActivityRewards();
             if (claimed > 0) {
                 cm.sendNext("已为你发放 #b" + claimed + "#k 份活动奖励。若背包已满，请清理后再次对话。");
-            } else if (cm.canHold(4031019)) {
-                cm.gainItem(4031019);
-                cm.sendNext("你将获得#b#t4031019##k作为胜利纪念。卷轴上写有古代文字的秘密信息。");
             } else {
-                cm.sendNext("背包空间不足。请清理后再来领取奖励。");
+                cm.sendNext("当前没有待领取的活动奖励。\r\n请确认已完成活动并在结算后前来。");
                 cm.dispose();
             }
         } else if (status == 2) {

@@ -1,0 +1,47 @@
+export default {
+  'file.toolbar.refreshTree': 'Refresh Tree',
+  'file.toolbar.dirtyCount': 'Pending {count}',
+  'file.toolbar.reloadModified': 'Reload Modified',
+  'file.toolbar.reloadAllScripts': 'Reload All Scripts',
+  'file.toolbar.reloadEvents': 'Reload Events',
+  'file.toolbar.reloadPortals': 'Reload Portals',
+  'file.toolbar.reloadMapScripts': 'Reload Map Scripts',
+  'file.toolbar.reloadQuestScripts': 'Reload Quest Scripts',
+  'file.toolbar.reloadNpcScripts': 'Reload NPC/Item',
+  'file.toolbar.reloadReactorScripts': 'Reload Reactor',
+  'file.toolbar.scriptHint':
+    'Hot-reload is available under scripts*; WZ per-file reload is not supported yet (restart JVM).',
+
+  'file.ctx.newFile': 'New File',
+  'file.ctx.newFolder': 'New Folder',
+  'file.ctx.rename': 'Rename',
+  'file.ctx.copy': 'Copy',
+  'file.ctx.delete': 'Delete',
+  'file.ctx.reloadThis': 'Reload This Script',
+  'file.ctx.refresh': 'Refresh',
+
+  'file.modal.newFileTitle': 'New File',
+  'file.modal.newFolderTitle': 'New Folder',
+  'file.modal.renameTitle': 'Rename',
+  'file.modal.nameLabel': 'Name',
+  'file.modal.namePlaceholder': 'Enter a name',
+  'file.modal.deleteConfirm': 'Delete "{name}"? This cannot be undone.',
+  'file.modal.ok': 'OK',
+  'file.modal.cancel': 'Cancel',
+
+  'file.msg.createOk': 'Created',
+  'file.msg.renameOk': 'Renamed',
+  'file.msg.copyOk': 'Copied',
+  'file.msg.moveOk': 'Moved',
+  'file.msg.deleteOk': 'Deleted',
+  'file.msg.reloadOk': 'Reloaded',
+  'file.msg.reloadPartial': 'Reload done: ok {ok}, skipped {skip}',
+  'file.msg.wzNotSupported':
+    'WZ hot-reload is not available yet; restart the JVM to apply changes.',
+  'file.msg.noDirty': 'No modified scripts pending reload',
+  'file.msg.invalidName': 'Invalid name',
+  'file.msg.cannotModifyRoot': 'Cannot modify whitelist root',
+  'file.msg.moveInvalid': 'Cannot move to that location',
+
+  'file.dirty.badge': 'dirty',
+};

@@ -89,4 +89,14 @@ public class PortalScriptManager extends AbstractScriptManager {
     public void reloadPortalScripts() {
         scripts.clear();
     }
+
+    /**
+     * 清除单个传送点脚本缓存；scriptName 不含路径与扩展名，如 {@code enterMarket}。
+     */
+    public void removePortalScript(String scriptName) {
+        if (scriptName == null || scriptName.isEmpty()) {
+            return;
+        }
+        scripts.remove("portal/" + scriptName + ".js");
+    }
 }

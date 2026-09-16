@@ -107,6 +107,7 @@ import org.gms.server.maps.PlayerShopItem;
 import org.gms.server.maps.Reactor;
 import org.gms.server.maps.Summon;
 import org.gms.server.movement.LifeMovementFragment;
+import org.gms.server.cashshop.AltairSkinItems;
 import org.gms.server.sidebar.SidebarTools;
 
 import java.awt.*;
@@ -218,6 +219,8 @@ public class PacketCreator {
     }
 
     protected static void addCharLook(final OutPacket p, Character chr, boolean mega) {
+        // 阿尔泰全覆盖：仍下发真实 face/hair（写 0 会加载 Character/00000000.img 导致选频道闪退）。
+        // 其它装备由 addCharEquips 过滤；皮肤 Cap 立绘 z=characterStart 盖住脸/发与身体。
         p.writeByte(chr.getGender());
         p.writeByte(chr.getSkinColor().getId()); // skin color
         p.writeInt(chr.getFace()); // face
@@ -294,6 +297,23 @@ public class PacketCreator {
 
     private static void addCharEquips(final OutPacket p, Character chr) {
         Inventory equip = chr.getInventory(InventoryType.EQUIPPED);
+        Integer altairSkinId = AltairSkinItems.findEquippedAltairSkinId(chr);
+        // 穿戴阿尔泰皮肤时：AvatarLook 只下发皮肤 Cap，其它装备/现金武器不进外观包。
+        if (altairSkinId != null) {
+            p.writeByte(AltairSkinItems.LOOK_CAP_SLOT);
+            p.writeInt(altairSkinId);
+            p.writeByte(0xFF);
+            p.writeByte(0xFF);
+            p.writeInt(0); // cash weapon hidden
+            for (int i = 0; i < 3; i++) {
+                if (chr.getPet(i) != null) {
+                    p.writeInt(chr.getPet(i).getItemId());
+                } else {
+                    p.writeInt(0);
+                }
+            }
+            return;
+        }
         Collection<Item> ii = ItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
@@ -471,7 +491,7 @@ public class PacketCreator {
             p.writeByte(pet.getFullness());
             addExpirationTime(p, item.getExpiration());
             p.writeShort(pet.getPetAttribute()); // PetAttribute noticed by lrenex & Spoon
-            p.writeShort(0); // PetSkill
+            p.writeShort(pet.getPetSkills()); // PetSkill — client walks-to-loot when ITEM_PICKUP set
             p.writeInt(18000); // RemainLife
             p.writeShort(0); // attribute
             return;
@@ -525,8 +545,11 @@ public class PacketCreator {
         }
         p.writeLong(getTime(-2));
         p.writeInt(-1);
-        // 融合外观：与 F:\MXD_dev\扩展改动\融合外观 对齐——仅追加 anvilItemId（4B）。
-        // 插件 GW_ItemSlotBase::Decode 在原生解码后消费这一个 int。
+        // 融合外观：必须在 writeInt(-1) 后追加 anvilItemId（可无幻化为 0）。
+        // 当前 ijl15 GW_ItemSlotBase::Decode_hook 在「包内仍剩 >=4 字节」时总会 Decode4；
+        // 停写会导致钩子偷读下一字段（下一件装备/分隔符），CharInfo 错位后
+        // CharacterData::Decode @0x4E4EAD 空读闪退（0xC0000005，无 WZ 弹窗）。
+        // 与插件 wire 约定对齐；外观广播仍可由 addCharEquips 替换 itemId。
         p.writeInt(equip.getAnvilItemId());
 
     }
@@ -7757,6 +7780,15 @@ public class PacketCreator {
                                                  org.gms.combat.stat.CombatStatProfile profile,
                                                  int itemDropPropPercent, int mesoDropPropPercent,
                                                  int damageReducePercent) {
+        return setItemFinalDamageBonus(finalDamagePercent, skinId, profile,
+                itemDropPropPercent, mesoDropPropPercent, damageReducePercent, 0, 0, 0);
+    }
+
+    public static Packet setItemFinalDamageBonus(int finalDamagePercent, int skinId,
+                                                 org.gms.combat.stat.CombatStatProfile profile,
+                                                 int itemDropPropPercent, int mesoDropPropPercent,
+                                                 int damageReducePercent,
+                                                 int asrR, int buffTimeR, int stanceProp) {
         OutPacket p = OutPacket.create(SendOpcode.SET_ITEM_FINAL_DAMAGE);
         p.writeShort(finalDamagePercent);
         p.writeInt(skinId);
@@ -7780,6 +7812,10 @@ public class PacketCreator {
         p.writeShort(clampU16(itemDropPropPercent));
         p.writeShort(clampU16(mesoDropPropPercent));
         p.writeShort(clampU16(damageReducePercent));
+        // Stat 详情页 backgrnd4：状态异常抗性 / 增益持续时间 / 稳如泰山（暂无来源时为 0）
+        p.writeShort(clampU16(asrR));
+        p.writeShort(clampU16(buffTimeR));
+        p.writeShort(clampU16(stanceProp));
         return p;
     }
 
