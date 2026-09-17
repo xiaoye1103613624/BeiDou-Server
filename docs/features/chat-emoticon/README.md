@@ -4,7 +4,7 @@
 > 适用客户端/协议版本：MapleStory GMS083（`E:\MXD\BeiDou-Client_S9\BeiDou.exe`，ImageBase `0x00400000`）
 > 项目名称：BeiDou-Server_s9（GMS083 服务端）
 > 作者/日期：2026-09-18
-> 相关提交：（待提交，见第 8 节）
+> 相关提交：07666ad86b（`✨ feat(server): 新增 Kaentake 头顶动态聊天表情（0x11C/0x17F）`）
 > 产物目录：`docs/features/chat-emoticon/`
 
 ## 1. 背景与目标
