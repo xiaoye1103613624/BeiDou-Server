@@ -209,8 +209,8 @@ public enum RecvOpcode implements Opcode {
     DAMAGE_SKIN_APPLY(0x110), // 装备伤害皮肤
     DAMAGE_SKIN_PURCHASE(0x111), // 购买伤害皮肤
     DAILY_CHECKIN(0x11A), // 每日签到
+    CHAT_EMOTICON(0x11C), // Kaentake 头顶动态聊天表情（客户端 0x11C 上行，需与 Kaentake DLL 版本一致）
     BEAUTY_ACTION(0x174), // 美容院操作
-    COLORING_PRISM_ACTION(0x11D), // 七彩棱镜（旧 EquipDye）：请求列表 / 确认 / 清除
     WEAPON_TINT_ACTION(0x372E), // Coloring Prism weapontint 操作
 
     WORLD_MAP_PLAYERS(0x115), // 世界地图 tooltip 玩家列表请求

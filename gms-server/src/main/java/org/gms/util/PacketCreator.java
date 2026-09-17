@@ -201,9 +201,9 @@ public class PacketCreator {
         p.writeShort(chr.getInt()); // int
         p.writeShort(chr.getLuk()); // luk
         p.writeInt(chr.getHp());
-        p.writeInt(chr.getClientMaxHp());
+        p.writeInt(chr.getClientDisplayMaxHp());
         p.writeInt(chr.getMp());
-        p.writeInt(chr.getClientMaxMp());
+        p.writeInt(chr.getClientDisplayMaxMp());
         p.writeShort(chr.getRemainingAp()); // remaining ap
         if (GameConstants.hasSPTable(chr.getJob())) {
             addRemainingSkillInfo(p, chr);
@@ -7877,6 +7877,21 @@ public class PacketCreator {
         } else {
             p.writeString("");
         }
+        return p;
+    }
+
+    /**
+     * Kaentake 头顶动态聊天表情广播 (SendOpcode 0x17F)。
+     * 结构：int 角色ID + int 表情ID；客户端读取
+     * {@code Effect/ChatEmoticon.img/Dynamic{分类}/{表情ID}/effect} 播放头顶气泡与动画。
+     *
+     * @param characterId 触发表情的角色ID（客户端据此从 CUserPool 取对象挂动画层）
+     * @param emoticonId  表情ID，取值见 ChatEmoticonHandler 白名单
+     */
+    public static Packet chatEmoticon(int characterId, int emoticonId) {
+        OutPacket p = OutPacket.create(SendOpcode.CHAT_EMOTICON);
+        p.writeInt(characterId);
+        p.writeInt(emoticonId);
         return p;
     }
 

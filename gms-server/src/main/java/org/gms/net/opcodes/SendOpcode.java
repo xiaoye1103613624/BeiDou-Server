@@ -362,9 +362,9 @@ public enum SendOpcode implements Opcode {
     DAMAGE_SKIN_RESULT(0x172), // 伤害皮肤操作结果
     DAMAGE_SKIN_BROADCAST(0x173), // 伤害皮肤广播
     BEAUTY_RESULT(0x174), // 美容院结果
-    COLORING_PRISM(0x184), // 七彩棱镜：打开 UI / DYE_LIST / DYE_MERGE
     WEAPON_TINT_SYNC(0x372F), // Coloring Prism weapontint 同步
     DAILY_CHECKIN(0x17C), // 每日签到快照
+    CHAT_EMOTICON(0x17F), // Kaentake 头顶动态聊天表情广播（cid + emoticonId）
     BAG_WINDOW(0x3725), // 收纳背包窗口快照
     USER_INFO_EX(0x3727), // 他人装备详情回复
 

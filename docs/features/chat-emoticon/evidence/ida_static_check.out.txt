@@ -1,0 +1,84 @@
+target: E:\MXD\BeiDou-Client_S9\BeiDou.exe
+imageBase=0x00400000 sections=6
+  .text    rva=0x00001000 vsize=0x6EF000 raw=0x00001000 rawsize=0x6EF000
+  .rdata   rva=0x006F0000 vsize=0x0E7000 raw=0x006F0000 rawsize=0x0E7000
+  .data    rva=0x007D7000 vsize=0x022000 raw=0x007D7000 rawsize=0x011000
+  .rsrc    rva=0x007F9000 vsize=0x17A000 raw=0x007F9000 rawsize=0x01F4D0
+  .export  rva=0x00973000 vsize=0x11F000 raw=0x00819000 rawsize=0x001000
+  .import  rva=0x00A92000 vsize=0x002000 raw=0x0081A000 rawsize=0x002000
+
+== 1. 收包分发 hook 点特征码校验 (0x004965F1)
+  expected: B8 B0 12 A8 00 E8 9D A5
+  actual  : B8 B0 12 A8 00 E8 9D A5
+  match   : True
+
+== 2. 函数入口反汇编（前 8 条指令）
+  -- kClientSocketSendPacket @ 0x0049637B
+     0x0049637B  B86C12A800             mov eax, 0xa8126c
+     0x00496380  E813A85C00             call 0xa60b98
+     0x00496385  51                     push ecx
+     0x00496386  56                     push esi
+     0x00496387  57                     push edi
+     0x00496388  8BF9                   mov edi, ecx
+     0x0049638A  8D777C                 lea esi, [edi + 0x7c]
+     0x0049638D  8BCE                   mov ecx, esi
+  -- kClientSocketProcessPacket @ 0x004965F1
+     0x004965F1  B8B012A800             mov eax, 0xa812b0
+     0x004965F6  E89DA55C00             call 0xa60b98
+     0x004965FB  51                     push ecx
+     0x004965FC  51                     push ecx
+     0x004965FD  A1D4DEBE00             mov eax, dword ptr [0xbeded4]
+     0x00496602  56                     push esi
+     0x00496603  57                     push edi
+     0x00496604  8BF9                   mov edi, ecx
+  -- kCreateAnimLayer @ 0x0043EA3E
+     0x0043EA3E  B877A9A700             mov eax, 0xa7a977
+     0x0043EA43  E850216200             call 0xa60b98
+     0x0043EA48  83EC4C                 sub esp, 0x4c
+     0x0043EA4B  53                     push ebx
+     0x0043EA4C  56                     push esi
+     0x0043EA4D  33DB                   xor ebx, ebx
+     0x0043EA4F  57                     push edi
+     0x0043EA50  895DEC                 mov dword ptr [ebp - 0x14], ebx
+  -- kSetFont @ 0x0046341A
+     0x0046341A  B85CCFA700             mov eax, 0xa7cf5c
+     0x0046341F  E874D75F00             call 0xa60b98
+     0x00463424  53                     push ebx
+     0x00463425  56                     push esi
+     0x00463426  57                     push edi
+     0x00463427  8BD9                   mov ebx, ecx
+     0x00463429  8B4508                 mov eax, dword ptr [ebp + 8]
+     0x0046342C  8365FC00               and dword ptr [ebp - 4], 0
+  -- kUserGetVecCtrl @ 0x004AD42B
+     0x004AD42B  55                     push ebp
+     0x004AD42C  8BEC                   mov ebp, esp
+     0x004AD42E  51                     push ecx
+     0x004AD42F  8B81A4110000           mov eax, dword ptr [ecx + 0x11a4]
+     0x004AD435  8365FC00               and dword ptr [ebp - 4], 0
+     0x004AD439  85C0                   test eax, eax
+     0x004AD43B  56                     push esi
+     0x004AD43C  8B7508                 mov esi, dword ptr [ebp + 8]
+  -- kUserPoolGetUser @ 0x009716ED
+     0x009716ED  8B4108                 mov eax, dword ptr [ecx + 8]
+     0x009716F0  85C0                   test eax, eax
+     0x009716F2  8B542404               mov edx, dword ptr [esp + 4]
+     0x009716F6  7408                   je 0x971700
+     0x009716F8  3990A8110000           cmp dword ptr [eax + 0x11a8], edx
+     0x009716FE  7406                   je 0x971706
+     0x00971700  52                     push edx
+     0x00971701  E803000000             call 0x971709
+  -- kPlayUiSound @ 0x00989588
+     0x00989588  B89C10AE00             mov eax, 0xae109c
+     0x0098958D  E806760D00             call 0xa60b98
+     0x00989592  51                     push ecx
+     0x00989593  8D45F0                 lea eax, [ebp - 0x10]
+     0x00989596  6891080000             push 0x891
+     0x0098959B  50                     push eax
+     0x0098959C  E86452E1FF             call 0x79e805
+     0x009895A1  8BC8                   mov ecx, eax
+
+== 3. 全局地址交叉引用（.text 中的 32 位立即数引用数）
+  kClientSocketInstance  0x00BE7914 -> 0x00423EAE, 0x004242B6, 0x00424C12, 0x00427F13, 0x0046BCDF, 0x0046BD43, 0x0046BFA7, 0x0046C352
+  kUserLocalInstance     0x00BEBF98 -> 0x0043A914, 0x0043A94F, 0x0043AA06, 0x00451796, 0x004517BD, 0x0045BA55, 0x0045BA8D, 0x004CA063
+  kUserPoolInstance      0x00BEBFA8 -> 0x0044170D, 0x005293D2, 0x0052CB53, 0x0052FB65, 0x00531532, 0x00531D28, 0x005386B1, 0x00538CA5
+  kStatusBarInstance     0x00BEC208 -> 0x0045B78A, 0x0045BAE9, 0x004906C4, 0x004C613F, 0x004EFB61, 0x004F3AAF, 0x004F3D8B, 0x004F9276
