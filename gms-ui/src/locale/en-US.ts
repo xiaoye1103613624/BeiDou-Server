@@ -29,6 +29,8 @@ import clientPath from '@/views/client/path/locale/en-US';
 import clientWindowCashShopSync from '@/views/client/windowCashShopSync/locale/en-US';
 import clientAssetHub from '@/views/client/assetHub/locale/en-US';
 import clientSkillResources from '@/views/client/skillResources/locale/en-US';
+import clientChairPose from '@/views/client/chairPose/locale/en-US';
+import clientDoll from '@/views/client/doll/locale/en-US';
 import quest from '@/views/game/quest/locale/en-US';
 import base from './en-US/base';
 
@@ -47,6 +49,8 @@ export default {
   'menu.client.windowCashShopSync': 'New Cash Shop Client Sync',
   'menu.client.assetHub': 'Game Asset Hub',
   'menu.client.skillResources': 'Skill Resources',
+  'menu.client.chairPose': 'Chair Pose',
+  'menu.client.doll': 'Character Doll',
   // Legacy group keys for residual DB / bookmarks
   'menu.daily': 'System',
   'menu.growth': 'Enhancement',
@@ -158,5 +162,7 @@ export default {
   ...clientWindowCashShopSync,
   ...clientAssetHub,
   ...clientSkillResources,
+  ...clientChairPose,
+  ...clientDoll,
   ...quest,
 };

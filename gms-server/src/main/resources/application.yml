@@ -48,9 +48,12 @@ spring:
 
 gms:
   # 技能 Web 编辑器（写 XML / reloadSkills）；生产请保持 false。也可在 game_config 开 allow_skill_editor_write。
+  # 座椅/骑宠姿态编辑器（写 Install / TamingMob XML）；生产请保持 false。也可开 allow_chair_editor_write。
   dev:
     skill-editor:
-      enabled: false
+      enabled: true
+    chair-editor:
+      enabled: true
   # Admin UI icon cache: local game-assets → client PNG dirs → CDN → booklet
   assets:
     http-timeout-seconds: 15

@@ -1,5 +1,6 @@
 package org.gms.service.skill;
 
+import org.gms.model.dto.SkillEffectFrameDTO;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -9,6 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,6 +52,37 @@ class SkillWzXmlStoreLookupTest {
         Element el = store.findStringSkillElement(doc.getDocumentElement(), 1001);
         assertNotNull(el);
         assertEquals("0001001", el.getAttribute("name"));
+    }
+
+    /** 扁平 effect/{i}：元数据含 origin/delay/nodePath。 */
+    @Test
+    void readEffectFrames_flatEffect() throws Exception {
+        SkillWzXmlStore store = new SkillWzXmlStore();
+        Document doc = parse(Path.of("wz", "Skill.wz", "112.img.xml"));
+        // 1121000 Maple Warrior：扁平 effect canvas 序列
+        Element skill = store.findSkillElement(doc, 1121000);
+        assertNotNull(skill);
+        List<SkillEffectFrameDTO> frames = store.readEffectFrames(skill, 1121000);
+        assertFalse(frames.isEmpty(), "扁平 effect 应解析出帧");
+        assertEquals("effect", frames.get(0).getLayer());
+        assertTrue(frames.get(0).getNodePath().startsWith("1121000/effect/"));
+        assertNotNull(frames.get(0).getDelay());
+        assertTrue(frames.get(0).getDelay() > 0);
+    }
+
+    /** 嵌套 effect/{v}/{i}：取第一个含 canvas 的变体。 */
+    @Test
+    void readEffectFrames_nestedVariant() throws Exception {
+        SkillWzXmlStore store = new SkillWzXmlStore();
+        Document doc = parse(Path.of("wz", "Skill.wz", "112.img.xml"));
+        // 1121008 Brandish：effect/0/{frames}
+        Element skill = store.findSkillElement(doc, 1121008);
+        assertNotNull(skill);
+        List<SkillEffectFrameDTO> frames = store.readEffectFrames(skill, 1121008);
+        assertFalse(frames.isEmpty(), "嵌套 effect 变体应解析出帧");
+        assertEquals("effect_0", frames.get(0).getLayer());
+        assertTrue(frames.get(0).getNodePath().startsWith("1121008/effect/0/"));
+        assertEquals(120, frames.get(0).getDelay());
     }
 
     private static Document parse(Path file) throws Exception {

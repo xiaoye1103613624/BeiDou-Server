@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TamingMobPosePreviewRtnDTO {
-    /** CLIENT_PNG | ICON_FALLBACK | NONE */
+    /** EFFECT_PNG | ICON_FALLBACK | NONE — ICON_FALLBACK 不带 imageUrl（禁止背包图标入舞台） */
     private String mode;
     private String imageUrl;
     private String iconUrl;

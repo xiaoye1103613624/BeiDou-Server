@@ -121,6 +121,7 @@ export interface SkillEnsureIconsResult {
   cached?: number;
   failed?: number;
   urls?: Record<string, string>;
+  sources?: Record<string, string>;
 }
 
 export function ensureSkillIcons(skillIds: number[], force = false) {
@@ -130,6 +131,35 @@ export function ensureSkillIcons(skillIds: number[], force = false) {
       skillIds,
       force,
     }
+  );
+}
+
+export interface SkillEffectFrame {
+  index?: number;
+  nodePath?: string;
+  layer?: string;
+  originX?: number;
+  originY?: number;
+  delay?: number;
+  width?: number;
+  height?: number;
+  imageUrl?: string;
+}
+
+export interface SkillEffectPreview {
+  skillId?: number;
+  hasEffect?: boolean;
+  layer?: string;
+  frames?: SkillEffectFrame[];
+  dumped?: number;
+  failed?: number;
+  message?: string;
+}
+
+export function fetchSkillEffectPreview(skillId: number, refresh = false) {
+  return axios.post<any, { data: SkillEffectPreview }>(
+    '/clientSkill/v1/effectPreview',
+    { skillId, refresh }
   );
 }
 

@@ -97,6 +97,7 @@ import org.gms.server.maps.Door;
 import org.gms.server.maps.DoorObject;
 import org.gms.server.maps.Dragon;
 import org.gms.server.maps.HiredMerchant;
+import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniGame;
@@ -116,6 +117,7 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -1906,6 +1908,7 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeBool(!drop.isPlayerDrop());
+        p.writeByte(getDropItemGrade(drop)); // 掉落特效档位：0=无，1..4=Rare..Legendary
         return p;
     }
 
@@ -1933,7 +1936,54 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeByte(drop.isPlayerDrop() ? 0 : 1); //pet EQP pickup
+        p.writeByte(getDropItemGrade(drop)); // 掉落特效档位：0=无，1..4=Rare..Legendary
         return p;
+    }
+
+    /**
+     * 掉落特效档位：0=无（非装备 / 开关关闭），1..4=Rare/Epic/Unique/Legendary。
+     * 决策 A：资源仅 4 档（无 Mythic），服务端统一削到 4 档。
+     * 协议：作为掉落封包（DROP_ITEM_FROM_MAPOBJECT）的**包尾**追加字节，客户端按包尾读取，与既有字段解耦。
+     */
+    public static byte getDropItemGrade(MapItem drop) {
+        if (!GameConfig.getServerBoolean("DROP_AURA_ENABLED")) {
+            return 0;
+        }
+        Item item = drop.getItem();
+        if (item == null || item.getItemType() != 1) { // 仅装备有光环
+            return 0;
+        }
+        int score = computeEquipScore(item.getItemId());
+        // 档位阈值（内置默认占位，需用本服装备属性分布校准；可用 DROP_AURA_T1/T2/T3 覆盖）
+        int t1 = GameConfig.getServerInt("DROP_AURA_T1"); // Epic 起点
+        int t2 = GameConfig.getServerInt("DROP_AURA_T2"); // Unique 起点
+        int t3 = GameConfig.getServerInt("DROP_AURA_T3"); // Legendary 起点
+        if (t1 <= 0) t1 = 40;
+        if (t2 <= 0) t2 = 90;
+        if (t3 <= 0) t3 = 160;
+        if (score >= t3) return 4;
+        if (score >= t2) return 3;
+        if (score >= t1) return 2;
+        return 1;
+    }
+
+    // 装备加成属性（inc*，已去掉前缀）总分，用于档位划分。getEquipStats 已按 itemId 缓存，O(1)。
+    private static int computeEquipScore(int itemId) {
+        Map<String, Integer> stats = ItemInformationProvider.getInstance().getEquipStats(itemId);
+        if (stats == null) {
+            return 0;
+        }
+        int sum = 0;
+        for (Map.Entry<String, Integer> e : stats.entrySet()) {
+            String k = e.getKey();
+            if (k.startsWith("req") || k.equals("cash") || k.equals("tuc") || k.equals("cursed")
+                    || k.equals("success") || k.equals("fs") || k.equals("onlyEquip")) {
+                continue; // 跳过需求与元数据，只累计加成属性
+            }
+            Integer v = e.getValue();
+            if (v != null) sum += v;
+        }
+        return sum;
     }
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {

@@ -56,6 +56,42 @@ export function getCdnIconUrl(
   return `https://maplestory.io/api/${location}/${version}/${cat}/${id}/icon`;
 }
 
+/**
+ * 固定默认人偶外观（皮肤 + 裸身发型/脸型 + 基础衣物）。
+ * navelCenter：渲染图以肚脐为中心；GMS/83 sit 实测约 49×91，与 WZ 1:1 effect/stand 同像素单位。
+ * 座椅预览唯一复用入口，见 posePreviewLayout.ts。
+ */
+export const DEFAULT_DOLL_SKIN_ID = 2000;
+export const DEFAULT_DOLL_ITEM_IDS = [
+  2000, 12000, 30000, 1040036, 1060026, 1070003,
+] as const;
+
+export type CharacterRenderPose = 'sit' | 'stand1' | 'walk1' | string;
+
+/**
+ * maplestory.io 角色渲染（GMS/83）。
+ * 椅子/骑宠预览用 sit：CDN 无独立 ride 动作时，骑宠也用 sit 挂到 navel。
+ */
+export function getCharacterRenderUrl(options?: {
+  pose?: CharacterRenderPose;
+  frame?: number;
+  skinId?: number;
+  itemIds?: readonly number[] | number[];
+  location?: string;
+  version?: string;
+  /** compact | center | navelCenter | feetCenter；锚点预览默认 navelCenter */
+  align?: 'compact' | 'center' | 'navelCenter' | 'feetCenter';
+}): string {
+  const location = options?.location || 'GMS';
+  const version = options?.version || '83';
+  const skinId = options?.skinId ?? DEFAULT_DOLL_SKIN_ID;
+  const items = (options?.itemIds || DEFAULT_DOLL_ITEM_IDS).join(',');
+  const pose = options?.pose || 'sit';
+  const frame = options?.frame ?? 0;
+  const align = options?.align || 'navelCenter';
+  return `https://maplestory.io/api/${location}/${version}/Character/${align}/${skinId}/${items}/${pose}/${frame}`;
+}
+
 /** 本地统一静态路径 /game-assets/{type}/{id}.png */
 export function getLocalIconUrl(category: string, id: string | number): string {
   if (!id || Number(id) <= 0) return '';

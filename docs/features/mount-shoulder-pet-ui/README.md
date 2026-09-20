@@ -4,7 +4,8 @@
 > 适用客户端/协议版本：GMS v083 / BeiDou S9  
 > 项目：BeiDou-Server_s9 + BeiDou-ijl15  
 > 日期：2026-09-16  
-> 产物目录：`docs/features/mount-shoulder-pet-ui/`
+> 产物目录：`docs/features/mount-shoulder-pet-ui/`  
+> 相关（个人情报 `CUIUserInfo` 坐骑页）：[`../userinfo-mount-shoulder/`](../userinfo-mount-shoulder/) — 本目录只覆盖装备栏 `CUIEquip`。
 
 ## 1. 背景与目标
 

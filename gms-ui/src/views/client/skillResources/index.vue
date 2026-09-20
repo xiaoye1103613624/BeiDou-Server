@@ -93,9 +93,16 @@
               <a-button
                 size="small"
                 :loading="iconLoading"
-                @click="runEnsureIcons"
+                @click="runEnsureIcons(false)"
               >
                 {{ $t('clientSkill.ensureIcons') }}
+              </a-button>
+              <a-button
+                size="small"
+                :loading="iconLoading"
+                @click="runEnsureIcons(true)"
+              >
+                {{ $t('clientSkill.ensureIconsForce') }}
               </a-button>
               <a-button
                 v-if="status?.editorEnabled"
@@ -146,14 +153,23 @@
 
     <a-drawer
       :visible="drawerVisible"
-      :width="480"
+      :width="620"
       unmount-on-close
-      @cancel="drawerVisible = false"
+      @cancel="closeDrawer"
     >
       <template #title>{{ $t('clientSkill.detail.title') }}</template>
       <a-spin :loading="detailLoading">
         <template v-if="detail">
           <a-form :model="editForm" layout="vertical">
+            <a-form-item :label="$t('clientSkill.detail.icon')">
+              <img
+                v-if="detail.iconUrl"
+                class="detail-icon"
+                :src="detail.iconUrl"
+                alt=""
+              />
+              <div v-else class="detail-icon detail-icon-placeholder" />
+            </a-form-item>
             <a-form-item :label="$t('clientSkill.detail.id')">
               <a-input :model-value="String(detail.skillId)" disabled />
             </a-form-item>
@@ -179,6 +195,54 @@
             </a-form-item>
             <a-form-item :label="$t('clientSkill.detail.invisible')">
               <a-switch v-model="editForm.invisible" :disabled="!canEdit" />
+            </a-form-item>
+            <a-form-item :label="$t('clientSkill.preview.title')">
+              <a-spin :loading="previewLoading" style="width: 100%">
+                <div class="preview-toolbar">
+                  <a-button
+                    size="mini"
+                    :loading="previewLoading"
+                    @click="loadEffectPreview(true)"
+                  >
+                    {{ $t('clientSkill.preview.refresh') }}
+                  </a-button>
+                  <span v-if="effectFrames.length" class="preview-meta">
+                    {{
+                      t('clientSkill.preview.frameInfo', [
+                        currentFrameIndex + 1,
+                        effectFrames.length,
+                        currentFrameDelay,
+                      ])
+                    }}
+                  </span>
+                </div>
+                <DollStage
+                  v-if="effectFrames.length"
+                  :item-image-url="currentFrameUrl"
+                  :item-origin-x="currentFrameOriginX"
+                  :item-origin-y="currentFrameOriginY"
+                  :item-z-index="3"
+                  :item-id="String(detail.skillId)"
+                  :doll="doll"
+                  anchor-mode="bodyOrigin"
+                  :zoom="previewZoom"
+                  :zoom-step="0.25"
+                  :anchor-label="previewReadout"
+                  @zoom-step-change="onPreviewZoomStep"
+                />
+                <a-empty
+                  v-else
+                  :description="
+                    effectMessage || $t('clientSkill.preview.empty')
+                  "
+                />
+                <div
+                  v-if="effectMessage && effectFrames.length"
+                  class="preview-msg"
+                >
+                  {{ effectMessage }}
+                </div>
+              </a-spin>
             </a-form-item>
             <a-form-item :label="$t('clientSkill.detail.req')">
               <a-textarea
@@ -217,7 +281,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, markRaw, nextTick, onMounted, reactive, ref } from 'vue';
+  import {
+    computed,
+    markRaw,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    reactive,
+    ref,
+    watch,
+  } from 'vue';
   import { useRouter } from 'vue-router';
   import { useI18n } from 'vue-i18n';
   import { Message, Modal } from '@arco-design/web-vue';
@@ -237,6 +310,7 @@
     fetchSkillBook,
     fetchSkillDetail,
     fetchSkillEditorStatus,
+    fetchSkillEffectPreview,
     fetchSkillJobLines,
     fetchSkillLineages,
     patchSkillApply,
@@ -246,10 +320,16 @@
     writeSkillString,
     type SkillDetail,
     type SkillEditorStatus,
+    type SkillEffectFrame,
     type SkillJobLine,
     type SkillJobStage,
     type SkillLineage,
   } from '@/api/clientSkill';
+  import {
+    renderDefaultCharacterDoll,
+    type CharacterDollResult,
+  } from '@/api/characterDoll';
+  import DollStage from '@/components/pose/DollStage.vue';
   import SkillNode from './SkillNode.vue';
 
   const { t, te } = useI18n();
@@ -270,11 +350,18 @@
   const patching = ref(false);
   const detailLoading = ref(false);
   const saving = ref(false);
+  const previewLoading = ref(false);
   const status = ref<SkillEditorStatus | null>(null);
   const nodes = ref<Node[]>([]);
   const edges = ref<Edge[]>([]);
   const drawerVisible = ref(false);
   const detail = ref<SkillDetail | null>(null);
+  const doll = ref<CharacterDollResult | null>(null);
+  const effectFrames = ref<SkillEffectFrame[]>([]);
+  const effectMessage = ref('');
+  const currentFrameIndex = ref(0);
+  const previewZoom = ref(1);
+  let effectTimer: ReturnType<typeof setTimeout> | null = null;
 
   const editForm = reactive({
     name: '',
@@ -290,6 +377,28 @@
     jobLines.value.find((l) => l.lineId === selectedLineId.value)
   );
   const canEdit = computed(() => !!status.value?.editorEnabled);
+
+  const currentFrame = computed(
+    () => effectFrames.value[currentFrameIndex.value] || null
+  );
+  const currentFrameUrl = computed(() => currentFrame.value?.imageUrl || '');
+  const currentFrameOriginX = computed(() =>
+    Number(currentFrame.value?.originX || 0)
+  );
+  const currentFrameOriginY = computed(() =>
+    Number(currentFrame.value?.originY || 0)
+  );
+  const currentFrameDelay = computed(() => {
+    const d = Number(currentFrame.value?.delay || 120);
+    return d > 0 ? d : 120;
+  });
+  const previewReadout = computed(() => {
+    const f = currentFrame.value;
+    if (!f) return '';
+    return `WZ ${f.width || '?'}×${f.height || '?'} · origin(${
+      f.originX ?? 0
+    }, ${f.originY ?? 0})`;
+  });
 
   const lineageTitle = (l: SkillLineage) => {
     const name = l.name || (te(l.nameKey) ? t(l.nameKey) : l.code);
@@ -391,6 +500,13 @@
           data: { ...n.data, iconUrl: url },
         };
       });
+      const failed = Number(res.data?.failed || 0);
+      const cached = Number(res.data?.cached || 0);
+      if (failed > 0 && cached > 0) {
+        Message.warning(t('clientSkill.msg.iconsPartial', [cached, failed]));
+      } else if (failed > 0 && cached === 0) {
+        Message.warning(t('clientSkill.msg.iconsFail'));
+      }
     } catch {
       // ignore: keep CDN/empty; SkillNode handles @error
     }
@@ -463,11 +579,92 @@
 
   const fitView = () => vfFitView({ padding: 0.2 });
 
+  const stopEffectLoop = () => {
+    if (effectTimer != null) {
+      clearTimeout(effectTimer);
+      effectTimer = null;
+    }
+  };
+
+  const scheduleNextFrame = () => {
+    stopEffectLoop();
+    if (!effectFrames.value.length || !drawerVisible.value) return;
+    effectTimer = setTimeout(() => {
+      if (!effectFrames.value.length) return;
+      currentFrameIndex.value =
+        (currentFrameIndex.value + 1) % effectFrames.value.length;
+      scheduleNextFrame();
+    }, currentFrameDelay.value);
+  };
+
+  watch(
+    () => [effectFrames.value.length, drawerVisible.value] as const,
+    () => {
+      currentFrameIndex.value = 0;
+      if (effectFrames.value.length && drawerVisible.value) {
+        scheduleNextFrame();
+      } else {
+        stopEffectLoop();
+      }
+    }
+  );
+
+  const onPreviewZoomStep = (delta: number) => {
+    const next = previewZoom.value + delta;
+    previewZoom.value = Math.min(4, Math.max(0.5, next));
+  };
+
+  const ensureDollStand1 = async () => {
+    if (doll.value?.mode === 'DOLL' && doll.value?.imageUrl) return;
+    try {
+      const res = await renderDefaultCharacterDoll('stand1');
+      doll.value = res.data;
+    } catch {
+      doll.value = null;
+    }
+  };
+
+  const loadEffectPreview = async (refresh = false) => {
+    if (!detail.value?.skillId) return;
+    previewLoading.value = true;
+    try {
+      await ensureDollStand1();
+      const res = await fetchSkillEffectPreview(detail.value.skillId, refresh);
+      effectFrames.value = res.data?.frames || [];
+      effectMessage.value = res.data?.message || '';
+      currentFrameIndex.value = 0;
+      stopEffectLoop();
+      if (effectFrames.value.length && drawerVisible.value) {
+        scheduleNextFrame();
+      }
+    } catch {
+      effectFrames.value = [];
+      effectMessage.value = t('clientSkill.msg.loadFail');
+      stopEffectLoop();
+    } finally {
+      previewLoading.value = false;
+    }
+  };
+
+  const resetPreviewState = () => {
+    stopEffectLoop();
+    effectFrames.value = [];
+    effectMessage.value = '';
+    currentFrameIndex.value = 0;
+    previewZoom.value = 1;
+  };
+
+  const closeDrawer = () => {
+    drawerVisible.value = false;
+    resetPreviewState();
+  };
+
   const onNodeClick = async ({ node }: { node: Node }) => {
     const skillId = Number(node.data?.skillId || node.id);
     if (!skillId) return;
     drawerVisible.value = true;
     detailLoading.value = true;
+    resetPreviewState();
     try {
       const res = await fetchSkillDetail(skillId);
       detail.value = res.data;
@@ -478,6 +675,7 @@
       editForm.reqJson = JSON.stringify(res.data.req || {}, null, 2);
       editForm.levelsJson = JSON.stringify(res.data.levels || [], null, 2);
       editForm.hsJson = JSON.stringify(res.data.hs || {}, null, 2);
+      await loadEffectPreview(false);
     } catch {
       Message.error(t('clientSkill.msg.loadFail'));
     } finally {
@@ -540,16 +738,24 @@
     }
   };
 
-  const runEnsureIcons = async () => {
+  const runEnsureIcons = async (force = false) => {
     const ids = nodes.value
       .map((n) => Number(n.data?.skillId || n.id))
       .filter((id) => id > 0);
     if (!ids.length) return;
     iconLoading.value = true;
     try {
-      await ensureSkillIcons(ids, false);
+      const res = await ensureSkillIcons(ids, force);
       await loadBook();
-      Message.success(t('clientSkill.msg.saved'));
+      const cached = Number(res.data?.cached || 0);
+      const failed = Number(res.data?.failed || 0);
+      if (failed <= 0) {
+        Message.success(t('clientSkill.msg.iconsOk', [cached]));
+      } else if (cached > 0) {
+        Message.warning(t('clientSkill.msg.iconsPartial', [cached, failed]));
+      } else {
+        Message.warning(t('clientSkill.msg.iconsFail'));
+      }
     } catch {
       Message.error(t('clientSkill.msg.loadFail'));
     } finally {
@@ -609,6 +815,10 @@
     await loadStatus();
     await loadLineages();
   });
+
+  onBeforeUnmount(() => {
+    stopEffectLoop();
+  });
 </script>
 
 <style scoped lang="less">
@@ -641,5 +851,29 @@
     border: 1px solid var(--color-border-2);
     border-radius: 4px;
     overflow: hidden;
+  }
+  .detail-icon {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    border-radius: 4px;
+  }
+  .detail-icon-placeholder {
+    background: var(--color-fill-2);
+  }
+  .preview-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .preview-meta {
+    font-size: 12px;
+    color: var(--color-text-3);
+  }
+  .preview-msg {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--color-text-3);
   }
 </style>

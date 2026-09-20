@@ -16,4 +16,6 @@ public class SkillEnsureIconsRtnDTO {
     private Integer cached;
     private Integer failed;
     private Map<Integer, String> urls;
+    /** skillId → local|client|cdn|booklet|none，便于排障。 */
+    private Map<Integer, String> sources;
 }

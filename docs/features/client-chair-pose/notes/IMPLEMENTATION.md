@@ -5,7 +5,7 @@
 | 项 | 选择 |
 | --- | --- |
 | A1 | 改 wz XML + wz-patch 打客户端 img |
-| B1 | 娃娃 = 椅子图 + 坐姿剪影/十字线（非完整换装） |
+| B1→3A | 娃娃 = **本地 Character.wz 合成**（`/characterDoll/v1`，见人偶系统）：`CharacterWzPartStore` 读 WZ 部位节点+origin+z，`PoseFrameExtractService.ensureCharacterPartFrame` 抽客户端 `.img` 像素，`DollCompositor` 按 `zmap` 叠合成 WZ 1:1 透明人偶，返回 `bodyOrigin`/`navel` 锚点；`posePreviewLayout`/`DollStage` 据此精确挂载；禁止 inventory icon 入舞台；失败回退剪影（坐标/比例仍正确）；预览可缩放、可拖拽 |
 | C123 | Install 301xxxx + effect2/特殊椅 + Character.wz/TamingMob 坐姿锚点 |
 | D1 | 无插件 |
 | E1 | 读+调+写+同步客户端全闭环 |
@@ -37,3 +37,14 @@
 ## Patcher
 
 优先 `xml-img-patcher.exe`；缺失时降级导出到 `docs/features/client-chair-pose/patches/`（与 Quest/Skill 一致）。
+
+## 迁移
+
+`V1.11.59__chair_pose_config.sql`（文档早期写的 V1.11.57 已被商城占用，以 59 为准）。
+
+## 预览链路（2026-09-17 修复）
+
+1. `ChairPosePreviewService` → `PoseFrameExtractService.ensureChairEffectFrame` / `ensureTamingFrame`
+2. 成功 → mode=`EFFECT_PNG`，`imageUrl=/game-assets/pose-frame/...`（尺寸须等于 XML canvas）
+3. 失败 → mode=`ICON_FALLBACK`，**不返回 imageUrl**（避免 34×33 icon + 122×105 origin）
+4. 前端 `resolveEffectStageUrl` + `isWzScaleImage` 双重门禁；人偶走 `DollStage`（组件内 `posePreviewLayout` 几何：椅子=bodyOrigin 对齐 effect attach，坐骑=navel 对齐 map/navel）

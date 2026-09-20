@@ -133,6 +133,48 @@ public class ChairWzXmlStore {
         }
     }
 
+    private volatile Document installDocumentCache;
+    private volatile Path installDocumentPath;
+    private volatile long installDocumentMtime = Long.MIN_VALUE;
+
+    /**
+     * 列表/详情共用：按路径 + mtime 缓存 Install DOM，避免每次搜索重 parse。
+     */
+    public Document loadInstallDocumentCached(boolean languagePreferred) {
+        Path file = resolveInstallXml(languagePreferred);
+        long mtime;
+        try {
+            mtime = Files.getLastModifiedTime(file).toMillis();
+        } catch (Exception e) {
+            mtime = -1L;
+        }
+        Document cached = installDocumentCache;
+        if (cached != null
+                && Objects.equals(installDocumentPath, file)
+                && installDocumentMtime == mtime) {
+            return cached;
+        }
+        synchronized (this) {
+            if (installDocumentCache != null
+                    && Objects.equals(installDocumentPath, file)
+                    && installDocumentMtime == mtime) {
+                return installDocumentCache;
+            }
+            Document doc = loadDocument(file);
+            installDocumentCache = doc;
+            installDocumentPath = file;
+            installDocumentMtime = mtime;
+            return doc;
+        }
+    }
+
+    /** 写盘后丢弃 Install 缓存，下次读到新内容。 */
+    public void invalidateInstallCache() {
+        installDocumentCache = null;
+        installDocumentPath = null;
+        installDocumentMtime = Long.MIN_VALUE;
+    }
+
     public void saveDocument(Path file, Document doc) {
         try {
             Files.createDirectories(file.getParent());
@@ -303,9 +345,14 @@ public class ChairWzXmlStore {
     }
 
     public Map<String, String> readInsString(int itemId) {
+        Map<String, String> names = loadInsNameIndex();
         Map<String, String> out = new LinkedHashMap<>();
-        Path file = resolveStringInsXml(true);
-        Document doc = loadDocument(file);
+        String name = names.get(String.valueOf(itemId));
+        if (name != null) {
+            out.put("name", name);
+        }
+        // 详情仍可能需要 desc：按需从已缓存 Document 取
+        Document doc = loadInsDocumentCached();
         Element el = childByName(doc.getDocumentElement(), String.valueOf(itemId));
         if (el == null) {
             return out;
@@ -316,6 +363,60 @@ public class ChairWzXmlStore {
             }
         }
         return out;
+    }
+
+    /**
+     * 一次解析 Ins.img.xml，供列表按 ID/名称过滤。避免每个椅子重复 parse。
+     */
+    public Map<String, String> loadInsNameIndex() {
+        ensureInsCache();
+        return insNameIndex;
+    }
+
+    private volatile Document insDocumentCache;
+    private volatile Path insDocumentPath;
+    private volatile long insDocumentMtime = Long.MIN_VALUE;
+    private volatile Map<String, String> insNameIndex = Map.of();
+
+    private Document loadInsDocumentCached() {
+        ensureInsCache();
+        return insDocumentCache;
+    }
+
+    private synchronized void ensureInsCache() {
+        Path file = resolveStringInsXml(true);
+        long mtime;
+        try {
+            mtime = Files.getLastModifiedTime(file).toMillis();
+        } catch (Exception e) {
+            mtime = -1L;
+        }
+        if (insDocumentCache != null
+                && Objects.equals(insDocumentPath, file)
+                && insDocumentMtime == mtime) {
+            return;
+        }
+        Document doc = loadDocument(file);
+        Map<String, String> index = new LinkedHashMap<>();
+        for (Element el : elementChildren(doc.getDocumentElement())) {
+            if (!"imgdir".equals(el.getTagName())) {
+                continue;
+            }
+            String id = el.getAttribute("name");
+            if (id == null || id.isBlank()) {
+                continue;
+            }
+            for (Element child : elementChildren(el)) {
+                if ("string".equals(child.getTagName()) && "name".equals(child.getAttribute("name"))) {
+                    index.put(id, child.getAttribute("value"));
+                    break;
+                }
+            }
+        }
+        insDocumentCache = doc;
+        insDocumentPath = file;
+        insDocumentMtime = mtime;
+        insNameIndex = index;
     }
 
     /**

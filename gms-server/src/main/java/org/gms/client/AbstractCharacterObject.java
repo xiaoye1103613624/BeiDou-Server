@@ -59,9 +59,33 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     protected transient int clientMaxHp;
     @Getter
     protected transient int clientMaxMp;
+    // ADDON_SERVER_STATS_20260802: 客户端显示口径最大 HP/MP（剔除客户端会自行叠加的经典槽装备血/潜能base），
+    // 统一用于登录/升级/穿脱/池更新/forceSync 下发，避免装备血被双重计数导致药水无法加满。
+    protected transient int clientDisplayMaxHp;
+    protected transient int clientDisplayMaxMp;
     protected transient int localMaxHp = 50;
     protected transient int localMaxMp = 5;
     protected float transientHp = Float.NEGATIVE_INFINITY;
+
+    /**
+     * 客户端显示口径最大 HP：剔除客户端会自行叠加的经典槽装备 incMHP 与潜能 base，
+     * 使服务端下发的 MAXHP 与客户端自算装备血相加后恰等于 localMaxHp（避免双重计数致药水加不满）。
+     * 默认开启修正；设 use_client_display_maxhp_legacy=true 回退为旧基础值口径（clientMaxHp）。
+     */
+    public int getClientDisplayMaxHp() {
+        if (GameConfig.getServerBoolean("use_client_display_maxhp_legacy")) {
+            return clientMaxHp;
+        }
+        // 登录重算前 clientDisplayMaxHp 可能尚未计算，回退为旧基础值口径避免下发 0。
+        return clientDisplayMaxHp > 0 ? clientDisplayMaxHp : clientMaxHp;
+    }
+
+    public int getClientDisplayMaxMp() {
+        if (GameConfig.getServerBoolean("use_client_display_maxhp_legacy")) {
+            return clientMaxMp;
+        }
+        return clientDisplayMaxMp > 0 ? clientDisplayMaxMp : clientMaxMp;
+    }
     protected float transientMp = Float.NEGATIVE_INFINITY;
 
     private AbstractCharacterListener listener = null;

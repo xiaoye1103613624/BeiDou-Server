@@ -67,8 +67,16 @@ public enum ItemFactory {
             "INSERT INTO `inventoryequipment` (`inventoryitemid`,`upgradeslots`,`level`,`str`,`dex`,`int`,`luk`,"
                     + "`hp`,`mp`,`watk`,`matk`,`wdef`,`mdef`,`acc`,`avoid`,`hands`,`speed`,`jump`,`locked`,"
                     + "`vicious`,`itemlevel`,`itemexp`,`ringid`,`anvilItemId`,`tinthue`,`tintchroma`,`tintbright`,"
-                    + "`tintfxhue`,`tintfxchroma`,`tintfxbright`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "`tintfxhue`,`tintfxchroma`,`tintfxbright`,`reforge1`,`reforge2`,`reforge3`,`reforgeLock`,"
+                    // 灵韵觉醒（V1.11.60）
+                    + "`equipSkillId`,`equipSkillLevel`,`equipSkillExpire`,"
+                    // 潜能 / Hyper（V1.11.61）
+                    + "`enhance`,`potentialGrade`,`potential1`,`potential2`,`potential3`,"
+                    + "`bonusPotentialGrade`,`bonusPotential1`,`bonusPotential2`,`bonusPotential3`,"
+                    + "`soulId`,`soulOption`,`socket1`,`socket2`,`socket3`) "
+                    // 共 51 列，须与 bindEquipColumns 下标 1..51 一一对应
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"
+                    + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     static {
         for (int i = 0; i < lockCount; i++) {
@@ -158,6 +166,29 @@ public enum ItemFactory {
         } catch (SQLException ignored) {
             // migration 前兼容
         }
+        try {
+            // 灵韵觉醒
+            equip.setEquipSkillId(rs.getInt("equipSkillId"));
+            equip.setEquipSkillLevel(rs.getInt("equipSkillLevel"));
+            equip.setEquipSkillExpire(rs.getLong("equipSkillExpire"));
+            // 潜能 / Hyper
+            equip.setEnhance(rs.getByte("enhance"));
+            equip.setPotentialGrade(rs.getByte("potentialGrade"));
+            equip.setPotential1(rs.getInt("potential1"));
+            equip.setPotential2(rs.getInt("potential2"));
+            equip.setPotential3(rs.getInt("potential3"));
+            equip.setBonusPotentialGrade(rs.getByte("bonusPotentialGrade"));
+            equip.setBonusPotential1(rs.getInt("bonusPotential1"));
+            equip.setBonusPotential2(rs.getInt("bonusPotential2"));
+            equip.setBonusPotential3(rs.getInt("bonusPotential3"));
+            equip.setSoulId(rs.getInt("soulId"));
+            equip.setSoulOption(rs.getInt("soulOption"));
+            equip.setSocket1(rs.getInt("socket1"));
+            equip.setSocket2(rs.getInt("socket2"));
+            equip.setSocket3(rs.getInt("socket3"));
+        } catch (SQLException ignored) {
+            // migration 前兼容
+        }
 
         return equip;
     }
@@ -224,6 +255,25 @@ public enum ItemFactory {
         psEquip.setInt(32, equip.getReforge2());
         psEquip.setInt(33, equip.getReforge3());
         psEquip.setByte(34, equip.getReforgeLock());
+        // 灵韵觉醒
+        psEquip.setInt(35, equip.getEquipSkillId());
+        psEquip.setInt(36, equip.getEquipSkillLevel());
+        psEquip.setLong(37, equip.getEquipSkillExpire());
+        // 潜能 / Hyper
+        psEquip.setByte(38, equip.getEnhance());
+        psEquip.setByte(39, equip.getPotentialGrade());
+        psEquip.setInt(40, equip.getPotential1());
+        psEquip.setInt(41, equip.getPotential2());
+        psEquip.setInt(42, equip.getPotential3());
+        psEquip.setByte(43, equip.getBonusPotentialGrade());
+        psEquip.setInt(44, equip.getBonusPotential1());
+        psEquip.setInt(45, equip.getBonusPotential2());
+        psEquip.setInt(46, equip.getBonusPotential3());
+        psEquip.setInt(47, equip.getSoulId());
+        psEquip.setInt(48, equip.getSoulOption());
+        psEquip.setInt(49, equip.getSocket1());
+        psEquip.setInt(50, equip.getSocket2());
+        psEquip.setInt(51, equip.getSocket3());
     }
 
     public static List<Pair<Item, Integer>> loadEquippedItems(int id, boolean isAccount, boolean login) throws SQLException {

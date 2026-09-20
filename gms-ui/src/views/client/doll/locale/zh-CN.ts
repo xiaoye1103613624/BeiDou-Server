@@ -1,0 +1,33 @@
+export default {
+  'clientDoll.page.desc':
+    '用服务端 Character.wz 合成 WZ 1:1 人偶：可配置皮肤/发型/脸型/装备做试穿预览，座椅设置与坐骑设置复用同一套人偶与锚点。',
+  'clientDoll.page.hint':
+    '人偶像素来自客户端 Data/Character/*.img：请先在「客户端路径」配置 Data 根目录；首次合成会抽取部位像素并缓存，之后秒开。缺像素时舞台只显示剪影挂点，比例与对齐仍保持正确。',
+  'clientDoll.appearance.title': '外观',
+  'clientDoll.form.skin': '皮肤',
+  'clientDoll.form.pose': '姿势',
+  'clientDoll.form.frame': '帧',
+  'clientDoll.form.hair': '发型 itemId',
+  'clientDoll.form.face': '脸型 itemId',
+  'clientDoll.form.equips': '装备',
+  'clientDoll.form.equipPlaceholder': '输入装备 itemId',
+  'clientDoll.form.add': '添加',
+  'clientDoll.form.noEquip': '暂未穿戴装备（仅显示裸身人偶）',
+  'clientDoll.action.render': '合成人偶',
+  'clientDoll.action.rebuild': '重新合成（清缓存）',
+  'clientDoll.action.reset': '恢复默认外观',
+  'clientDoll.stage.title': '人偶舞台',
+  'clientDoll.stage.hint':
+    '棋盘格即透明通道：人偶与坐标均为 WZ 1:1 像素；十字线为角色身体原点（座椅挂载点）。滚轮可缩放。',
+  'clientDoll.stage.zoomIn': '放大',
+  'clientDoll.stage.zoomOut': '缩小',
+  'clientDoll.stage.zoomReset': '重置',
+  'clientDoll.info.title': '合成信息',
+  'clientDoll.info.size': '画布尺寸',
+  'clientDoll.info.lookKey': '外观键',
+  'clientDoll.info.bodyOrigin': '身体原点',
+  'clientDoll.info.navel': '肚脐锚点',
+  'clientDoll.info.missing': '缺像素部位（{n}）',
+  'clientDoll.info.zOrder': '叠加层序',
+  'clientDoll.msg.invalidEquip': '请输入有效的装备 itemId',
+};

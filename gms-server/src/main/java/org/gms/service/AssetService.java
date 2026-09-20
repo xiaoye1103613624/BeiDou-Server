@@ -15,6 +15,7 @@ import org.gms.server.icon.SharedIconFiles;
 import org.gms.service.asset.BookletIconProvider;
 import org.gms.service.asset.IconProvider;
 import org.gms.service.asset.MapleStoryIoIconProvider;
+import org.gms.service.chair.PoseFrameExtractService;
 import org.gms.util.I18nUtil;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AssetService {
     public static final String CATEGORY_ITEM = "item";
+    public static final String CATEGORY_SKILL = "skill";
     public static final String SOURCE_LOCAL = "local";
     public static final String SOURCE_CDN = "cdn";
     public static final String SOURCE_BOOKLET = "booklet";
@@ -51,25 +53,41 @@ public class AssetService {
     private final MapleStoryIoIconProvider mapleStoryIoIconProvider;
     private final BookletIconProvider bookletIconProvider;
     private final XyCashShopItemMapper cashShopItemMapper;
+    private final PoseFrameExtractService poseFrameExtractService;
 
     public Optional<byte[]> ensureItemIconBytes(int itemId, boolean force) {
         return ensureIconBytes(CATEGORY_ITEM, itemId, force);
     }
 
     public Optional<byte[]> ensureIconBytes(String category, int objectId, boolean force) {
+        return ensureIconBytesWithSource(category, objectId, force).bytes();
+    }
+
+    /**
+     * 统一补图标并带回 source 标签（local / client / cdn / booklet / none）。
+     * skill：本地 → DumpPoseFrame 抽客户端 Skill.img/icon → CDN → booklet。
+     */
+    public EnsureIconResult ensureIconBytesWithSource(String category, int objectId, boolean force) {
         if (objectId <= 0) {
-            return Optional.empty();
+            return EnsureIconResult.empty();
         }
         String cat = SharedIconFiles.normalizeCategory(category);
         if (!force) {
             SharedIconFiles.promoteLegacyIfPresent(cat, objectId);
             Optional<byte[]> cached = SharedIconFiles.readPng(cat, objectId);
             if (cached.isPresent()) {
-                return cached;
+                return new EnsureIconResult(cached, SOURCE_LOCAL);
             }
-            Optional<byte[]> fromClient = tryCopyClientPng(cat, objectId);
-            if (fromClient.isPresent()) {
-                return fromClient;
+            Optional<byte[]> fromClientPng = tryCopyClientPng(cat, objectId);
+            if (fromClientPng.isPresent()) {
+                return new EnsureIconResult(fromClientPng, SOURCE_CLIENT);
+            }
+        }
+        if (CATEGORY_SKILL.equals(cat)) {
+            Optional<byte[]> fromSkillImg = poseFrameExtractService.ensureSkillIconBytes(objectId, force);
+            if (fromSkillImg.isPresent()) {
+                log.debug(I18nUtil.getLogMessage("GameIcon.cache.ok"), cat, objectId);
+                return new EnsureIconResult(fromSkillImg, SOURCE_CLIENT);
             }
         }
         for (IconProvider provider : iconProviders) {
@@ -79,10 +97,27 @@ public class AssetService {
             Optional<byte[]> downloaded = provider.fetchPng(cat, objectId);
             if (downloaded.isPresent() && SharedIconFiles.writePng(cat, objectId, downloaded.get())) {
                 log.debug(I18nUtil.getLogMessage("GameIcon.cache.ok"), cat, objectId);
-                return downloaded;
+                String src = "cdn".equals(provider.name()) ? SOURCE_CDN
+                        : ("booklet".equals(provider.name()) ? SOURCE_BOOKLET : provider.name());
+                return new EnsureIconResult(downloaded, src);
             }
         }
-        return SharedIconFiles.readPng(cat, objectId);
+        Optional<byte[]> leftover = SharedIconFiles.readPng(cat, objectId);
+        if (leftover.isPresent()) {
+            return new EnsureIconResult(leftover, SOURCE_LOCAL);
+        }
+        return EnsureIconResult.empty();
+    }
+
+    /** 补图标结果：字节 + 来源标签。 */
+    public record EnsureIconResult(Optional<byte[]> bytes, String source) {
+        public static EnsureIconResult empty() {
+            return new EnsureIconResult(Optional.empty(), SOURCE_NONE);
+        }
+
+        public boolean present() {
+            return bytes != null && bytes.isPresent();
+        }
     }
 
     /**
@@ -202,14 +237,14 @@ public class AssetService {
                     .message("already local")
                     .build();
         }
-        Optional<byte[]> bytes = ensureIconBytes(cat, objectId, force);
-        if (bytes.isPresent() && SharedIconFiles.pngExists(cat, objectId)) {
+        EnsureIconResult ensured = ensureIconBytesWithSource(cat, objectId, force);
+        if (ensured.present() && SharedIconFiles.pngExists(cat, objectId)) {
             return IconCacheRtnDTO.builder()
                     .category(cat)
                     .id(objectId)
                     .cached(true)
                     .url(SharedIconFiles.webUrl(cat, objectId))
-                    .source(SOURCE_LOCAL)
+                    .source(ensured.source() == null ? SOURCE_LOCAL : ensured.source())
                     .message("cached")
                     .build();
         }

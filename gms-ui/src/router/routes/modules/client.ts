@@ -58,6 +58,26 @@ const CLIENT: AppRouteRecordRaw = {
         roles: ['admin', 'operator'],
       },
     },
+    {
+      path: 'chairPose',
+      name: 'ClientChairPose',
+      component: () => import('@/views/client/chairPose/index.vue'),
+      meta: {
+        locale: 'menu.client.chairPose',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
+    {
+      path: 'doll',
+      name: 'ClientDoll',
+      component: () => import('@/views/client/doll/index.vue'),
+      meta: {
+        locale: 'menu.client.doll',
+        requiresAuth: true,
+        roles: ['admin', 'operator'],
+      },
+    },
   ],
 };
 

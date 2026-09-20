@@ -10,6 +10,8 @@ import org.gms.model.dto.SkillBookRtnDTO;
 import org.gms.model.dto.SkillDetailReqDTO;
 import org.gms.model.dto.SkillDetailRtnDTO;
 import org.gms.model.dto.SkillEditorStatusRtnDTO;
+import org.gms.model.dto.SkillEffectPreviewReqDTO;
+import org.gms.model.dto.SkillEffectPreviewRtnDTO;
 import org.gms.model.dto.SkillEnsureIconsReqDTO;
 import org.gms.model.dto.SkillEnsureIconsRtnDTO;
 import org.gms.model.dto.SkillJobLineDTO;
@@ -80,6 +82,14 @@ public class ClientSkillController {
     @PostMapping("/" + ApiConstant.LATEST + "/ensureIcons")
     public ResultBody<SkillEnsureIconsRtnDTO> ensureIcons(@RequestBody SubmitBody<SkillEnsureIconsReqDTO> request) {
         return ResultBody.success(request, clientSkillService.ensureIcons(request.getData()));
+    }
+
+    @Tag(name = "/clientSkill/" + ApiConstant.LATEST)
+    @Operation(summary = "技能 effect 多帧预览（WZ 元数据 + 客户端像素）")
+    @PostMapping("/" + ApiConstant.LATEST + "/effectPreview")
+    public ResultBody<SkillEffectPreviewRtnDTO> effectPreview(
+            @RequestBody SubmitBody<SkillEffectPreviewReqDTO> request) {
+        return ResultBody.success(request, clientSkillService.effectPreview(request.getData()));
     }
 
     @Tag(name = "/clientSkill/" + ApiConstant.LATEST)

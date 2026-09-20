@@ -2,6 +2,7 @@ package org.gms.service.skill;
 
 import lombok.extern.slf4j.Slf4j;
 import org.gms.exception.BizException;
+import org.gms.model.dto.SkillEffectFrameDTO;
 import org.gms.model.dto.SkillLevelDTO;
 import org.gms.model.dto.SkillStringWriteReqDTO;
 import org.gms.model.dto.SkillWriteReqDTO;
@@ -285,6 +286,120 @@ public class SkillWzXmlStore {
             levels.add(SkillLevelDTO.builder().level(lv).attrs(attrs).build());
         }
         return levels;
+    }
+
+    /**
+     * 解析技能 {@code effect} 帧列表（仅元数据，不含 PNG）。
+     * <p>
+     * 支持扁平 {@code effect/{i}} 与一层变体 {@code effect/{v}/{i}}（取第一个含 canvas 的变体）。
+     *
+     * @param skillEl 技能节点
+     * @param skillId 技能 ID（用于拼 DumpPoseFrame 节点路径）
+     */
+    public List<SkillEffectFrameDTO> readEffectFrames(Element skillEl, int skillId) {
+        List<SkillEffectFrameDTO> frames = new ArrayList<>();
+        if (skillEl == null) {
+            return frames;
+        }
+        Element effectEl = childByName(skillEl, "effect");
+        if (effectEl == null) {
+            return frames;
+        }
+        String skillKey = resolveSkillNodeKey(skillEl, skillId);
+        List<Element> flatCanvases = canvasChildren(effectEl);
+        if (!flatCanvases.isEmpty()) {
+            return buildEffectFrames(flatCanvases, skillKey + "/effect", "effect");
+        }
+        for (Element variant : elementChildren(effectEl)) {
+            if (!"imgdir".equals(variant.getTagName())) {
+                continue;
+            }
+            List<Element> nested = canvasChildren(variant);
+            if (nested.isEmpty()) {
+                continue;
+            }
+            String variantName = variant.getAttribute("name");
+            if (variantName == null || variantName.isBlank()) {
+                continue;
+            }
+            String layer = "effect_" + variantName.replaceAll("[^a-zA-Z0-9._-]", "_");
+            return buildEffectFrames(nested, skillKey + "/effect/" + variantName, layer);
+        }
+        return frames;
+    }
+
+    private String resolveSkillNodeKey(Element skillEl, int skillId) {
+        String name = skillEl.getAttribute("name");
+        if (name != null && !name.isBlank()) {
+            return name.trim();
+        }
+        return String.valueOf(skillId);
+    }
+
+    private List<Element> canvasChildren(Element parent) {
+        List<Element> list = new ArrayList<>();
+        if (parent == null) {
+            return list;
+        }
+        for (Element child : elementChildren(parent)) {
+            if ("canvas".equals(child.getTagName())) {
+                list.add(child);
+            }
+        }
+        return list;
+    }
+
+    private List<SkillEffectFrameDTO> buildEffectFrames(List<Element> canvases, String nodePrefix, String layer) {
+        List<SkillEffectFrameDTO> frames = new ArrayList<>();
+        int seq = 0;
+        for (Element canvas : canvases) {
+            String frameName = canvas.getAttribute("name");
+            int index;
+            try {
+                index = Integer.parseInt(frameName);
+            } catch (NumberFormatException e) {
+                index = seq;
+            }
+            Integer originX = 0;
+            Integer originY = 0;
+            Element origin = childByName(canvas, "origin");
+            if (origin != null) {
+                originX = parseAttrInt(origin.getAttribute("x"), 0);
+                originY = parseAttrInt(origin.getAttribute("y"), 0);
+            }
+            Integer delay = getIntAttr(canvas, "delay");
+            if (delay == null || delay <= 0) {
+                delay = 120;
+            }
+            int width = parseAttrInt(canvas.getAttribute("width"), 0);
+            int height = parseAttrInt(canvas.getAttribute("height"), 0);
+            frames.add(SkillEffectFrameDTO.builder()
+                    .index(index)
+                    .nodePath(nodePrefix + "/" + frameName)
+                    .layer(layer)
+                    .originX(originX)
+                    .originY(originY)
+                    .delay(delay)
+                    .width(width > 0 ? width : null)
+                    .height(height > 0 ? height : null)
+                    .build());
+            seq++;
+        }
+        frames.sort((a, b) -> Integer.compare(
+                a.getIndex() == null ? 0 : a.getIndex(),
+                b.getIndex() == null ? 0 : b.getIndex()));
+        return frames;
+    }
+
+    private static int parseAttrInt(String raw, int fallback) {
+        if (raw == null || raw.isBlank()) {
+            return fallback;
+        }
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
     }
 
     /**

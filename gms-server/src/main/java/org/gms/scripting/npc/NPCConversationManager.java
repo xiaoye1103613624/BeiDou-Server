@@ -27,6 +27,8 @@ import org.gms.client.*;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.Pet;
+import org.gms.talent.TalentService;
+import org.gms.talent.TalentTier;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.game.NextLevelType;
@@ -1321,6 +1323,36 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendNext(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_NEXT);
         nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    // ===== 天赋系统（npc/9031014.js 调用）=====
+    public String talentTierStatus() {
+        return TalentService.tierStatusText(getPlayer());
+    }
+
+    public boolean isTalentTierUnlocked(int tierOrder) {
+        TalentTier tier = TalentTier.fromOrder(tierOrder);
+        return tier != null && TalentService.isTierUnlocked(getPlayer(), tier);
+    }
+
+    public int getTalentLevel(int talentId) {
+        return TalentService.getLevel(getPlayer(), talentId);
+    }
+
+    public String learnTalent(int talentId) {
+        return TalentService.learn(getPlayer(), talentId).message();
+    }
+
+    public String exchangeTalentBook(int itemId) {
+        return TalentService.exchangeTalentBook(getPlayer(), itemId);
+    }
+
+    public String buyTalentBook(int itemId) {
+        return TalentService.buyTalentBook(getPlayer(), itemId);
+    }
+
+    public int ultimateLearnRate(int talentId) {
+        return TalentService.ultimateLearnRate(getPlayer(), talentId);
     }
 
     /**

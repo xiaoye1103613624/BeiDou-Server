@@ -32,7 +32,7 @@ function showMenu() {
     text += "#L173#精美时装  #d换装展示个人风格#k#l\r\n";
     text += "#L178#阿尔泰皮肤  #d111款二次元帽子皮肤#k#l\r\n";
     text += "#L177#发色选择  #d选择心仪的发色#k#l\r\n";
-    text += "#L180#七彩棱镜染色  #d现金装备HSL调色#k#l\r\n";
+    text += "#L180#七彩棱镜染色  #d双击现金栏七彩棱镜#k#l\r\n";
     text += "\r\n━━━ 娱乐互动 ━━━\r\n";
     text += "#L176#益智答题  #d答对题目赢奖励#k#l\r\n";
     text += "#L175#物品查询  #d查询物品详细信息#k#l\r\n";
@@ -90,9 +90,8 @@ function openBeautySalon() {
     cm.dispose();
 }
 
-// 七彩棱镜：直接发送 OPEN 封包打开客户端染色窗口
+// weapontint：窗口由客户端双击现金栏七彩棱镜(5782000)打开
 function openColoringPrism() {
+    cm.sendOk("请在#b现金栏#k双击#i5782000##t5782000#打开染色窗口。\r\n可染色装备本体/特效、发型、眼睛、皮肤与技能。");
     cm.dispose();
-    cm.getPlayer().getClient().sendPacket(
-        Java.type('org.gms.server.coloring.ColoringPrismPackets').open());
 }

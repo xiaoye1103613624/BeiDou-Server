@@ -2679,8 +2679,6 @@ public class MapleMap {
         chr.receivePartyMemberHP();
         announcePlayerDiseases(chr.getClient());
 
-        broadcastColoringPrism(chr);
-        broadcastColoringPrismToNewer(chr);
         org.gms.server.colorprism.ColorPrismPackets.broadcastMapTable(this);
 
         // 天气：进图立即同步昼夜/天空（snap，避免淡入）
@@ -2690,31 +2688,6 @@ public class MapleMap {
 
     private static void announcePlayerDiseases(final Client c) {
         Server.getInstance().registerAnnouncePlayerDiseases(c);
-    }
-
-    public void broadcastColoringPrism(Character entering) {
-        List<org.gms.server.coloring.ColoringPrismDye> dyes =
-                org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(entering.getId());
-        if (dyes.isEmpty()) {
-            return;
-        }
-        broadcastMessage(entering,
-                org.gms.server.coloring.ColoringPrismPackets.dyeMerge(entering.getId(), dyes), false);
-    }
-
-    public void broadcastColoringPrismToNewer(Character entering) {
-        for (Character other : getAllPlayers()) {
-            if (other == entering) {
-                continue;
-            }
-            List<org.gms.server.coloring.ColoringPrismDye> dyes =
-                    org.gms.server.coloring.ColoringPrismStorage.loadByCharacter(other.getId());
-            if (dyes.isEmpty()) {
-                continue;
-            }
-            entering.sendPacket(
-                    org.gms.server.coloring.ColoringPrismPackets.dyeMerge(other.getId(), dyes));
-        }
     }
 
     public Portal getRandomPlayerSpawnpoint() {

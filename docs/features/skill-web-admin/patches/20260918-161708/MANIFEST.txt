@@ -1,0 +1,16 @@
+# Skill client sync export
+time=2026-09-18T16:17:08.441775200
+jobIds=[100, 110, 111, 112]
+clientData=E:\MXD\BeiDou-Client_S9\Data
+clientEn=E:\MXD\BeiDou-Client_S9\EN
+patcher=
+
+# Mapping (CLAUDE.md)
+# server wz/          -> client EN/
+# server wz-zh-CN/    -> client Data/
+# Skill.wz/X.img.xml  -> Skill/X.img
+# String.wz/Skill.img.xml -> String/Skill.img
+
+# Manual (when patcher missing):
+#   xml-img-patcher.exe batch --full-xml-dir=<export>/server-wz-zh-CN/Skill.wz --target=<Data>/Skill
+#   xml-img-patcher.exe batch --full-xml-dir=<export>/server-wz/Skill.wz --target=<EN>/Skill

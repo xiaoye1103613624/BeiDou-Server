@@ -13,6 +13,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.colorprism.ColorPrismPackets;
+import org.gms.util.I18nUtil;
 
 /**
  * Handles {@code RecvOpcode.WEAPON_TINT_ACTION} (0x372E), emitted by the client DLL
@@ -154,12 +155,12 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
     private void handleApplySkill(Client c, Character player, int skillId, int hue, int chroma,
                                   int bright, short prismPos) {
         if (!knowsSkill(player, skillId)) {
-            fail(player, ColorPrismPackets.RESULT_FAILED, "You haven't learned that skill.");
+            fail(player, ColorPrismPackets.RESULT_FAILED, I18nUtil.getMessage("ColorPrism.fail.skillNotLearned"));
             return;
         }
         short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
         if (slot == 0) {
-            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
             return;
         }
         player.setSkillTint(skillId, hue, chroma, bright);
@@ -172,7 +173,7 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
 
     private void handleRestoreSkill(Client c, Character player, int skillId, short prismPos) {
         if (!knowsSkill(player, skillId)) {
-            fail(player, ColorPrismPackets.RESULT_FAILED, "You haven't learned that skill.");
+            fail(player, ColorPrismPackets.RESULT_FAILED, I18nUtil.getMessage("ColorPrism.fail.skillNotLearned"));
             return;
         }
         if (!player.isSkillTinted(skillId)) {
@@ -180,12 +181,12 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
             // Confirm takes on a skill that was never dyed, and burning the item for a no-op
             // would be a trap.
             fail(player, ColorPrismPackets.RESULT_NOT_TINTED,
-                    "That skill is already its original color.");
+                    I18nUtil.getMessage("ColorPrism.fail.skillOriginal"));
             return;
         }
         short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
         if (slot == 0) {
-            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
             return;
         }
         player.clearSkillTint(skillId);
@@ -203,12 +204,12 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
     private void handleApplyLook(Client c, Character player, int kind, int hue, int chroma, int bright,
                                  short prismPos) {
         if (!isLookKind(kind)) {
-            fail(player, ColorPrismPackets.RESULT_FAILED, "That can't be dyed with a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_FAILED, I18nUtil.getMessage("ColorPrism.fail.cantDyeLook"));
             return;
         }
         short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
         if (slot == 0) {
-            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
             return;
         }
         if (kind == ColorPrismPackets.TINT_KEY_HAIR) {
@@ -225,7 +226,7 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
 
     private void handleRestoreLook(Client c, Character player, int kind, short prismPos) {
         if (!isLookKind(kind)) {
-            fail(player, ColorPrismPackets.RESULT_FAILED, "That can't be dyed with a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_FAILED, I18nUtil.getMessage("ColorPrism.fail.cantDyeLook"));
             return;
         }
         final boolean tinted = (kind == ColorPrismPackets.TINT_KEY_HAIR) ? player.isHairTinted()
@@ -235,17 +236,17 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
             // Nothing to undo. Refuse WITHOUT consuming the prism -- this is the path a player
             // takes by pressing Reset then Confirm on an already-vanilla colour, and burning
             // their item for a no-op would be a trap.
-            fail(player, ColorPrismPackets.RESULT_NOT_TINTED,
-                    kind == ColorPrismPackets.TINT_KEY_HAIR
-                            ? "Your hair is already its original color."
-                            : kind == ColorPrismPackets.TINT_KEY_SKIN
-                            ? "Your skin is already its original color."
-                            : "Your eyes are already their original color.");
+            String alreadyKey = kind == ColorPrismPackets.TINT_KEY_HAIR
+                    ? "ColorPrism.fail.hairOriginal"
+                    : kind == ColorPrismPackets.TINT_KEY_SKIN
+                    ? "ColorPrism.fail.skinOriginal"
+                    : "ColorPrism.fail.eyesOriginal";
+            fail(player, ColorPrismPackets.RESULT_NOT_TINTED, I18nUtil.getMessage(alreadyKey));
             return;
         }
         short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
         if (slot == 0) {
-            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
             return;
         }
         if (kind == ColorPrismPackets.TINT_KEY_HAIR) {
@@ -275,7 +276,7 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
         if (cashEffect != null) {
             short effSlot = findItem(player, ItemId.COLORING_PRISM, prismPos);
             if (effSlot == 0) {
-                fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+                fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
                 return;
             }
             cashEffect.setEffTint(hue, chroma, bright);
@@ -287,12 +288,12 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
         Equip equip = resolve(player, target);
         if (equip == null) {
             fail(player, ColorPrismPackets.RESULT_NO_CASH_WEAPON,
-                    "That item can't be dyed with a Coloring Prism.");
+                    I18nUtil.getMessage("ColorPrism.fail.cantDye"));
             return;
         }
         short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
         if (slot == 0) {
-            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
             return;
         }
 
@@ -317,12 +318,12 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
                 // Nothing to undo. Refuse WITHOUT consuming the prism, the same as every other
                 // restore path: this is what Reset then Confirm on an undyed item hits.
                 fail(player, ColorPrismPackets.RESULT_NOT_TINTED,
-                        "That item is already its original color.");
+                        I18nUtil.getMessage("ColorPrism.fail.itemOriginal"));
                 return;
             }
             short effSlot = findItem(player, ItemId.COLORING_PRISM, prismPos);
             if (effSlot == 0) {
-                fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+                fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
                 return;
             }
             cashEffect.clearEffTint();
@@ -334,18 +335,18 @@ public final class WeaponTintHandler extends AbstractPacketHandler {
         Equip equip = resolve(player, target);
         if (equip == null) {
             fail(player, ColorPrismPackets.RESULT_NO_CASH_WEAPON,
-                    "That item can't be dyed with a Coloring Prism.");
+                    I18nUtil.getMessage("ColorPrism.fail.cantDye"));
             return;
         }
         final boolean fx = layer == ColorPrismPackets.LAYER_EFFECTS;
         if (fx ? !equip.isFxTinted() : !equip.isTinted()) {
             // Nothing to undo: report it and leave the item alone rather than burning it for no effect.
-            fail(player, ColorPrismPackets.RESULT_NOT_TINTED, "That item is already its original color.");
+            fail(player, ColorPrismPackets.RESULT_NOT_TINTED, I18nUtil.getMessage("ColorPrism.fail.itemOriginal"));
             return;
         }
         short slot = findItem(player, ItemId.COLORING_PRISM, prismPos);
         if (slot == 0) {
-            fail(player, ColorPrismPackets.RESULT_NO_ITEM, "You don't have a Coloring Prism.");
+            fail(player, ColorPrismPackets.RESULT_NO_ITEM, I18nUtil.getMessage("ColorPrism.fail.noItem"));
             return;
         }
 

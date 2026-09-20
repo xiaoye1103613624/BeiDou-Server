@@ -36,8 +36,11 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.potential.PotentialHyperConfig;
+import org.gms.potential.PotentialHyperService;
 import org.gms.server.ItemInformationProvider;
 import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +80,14 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 Inventory useInventory = chr.getInventory(InventoryType.USE); // 获取玩家的使用栏库存
                 Item scroll = useInventory.getItem(scrollSlot); // 获取使用的卷轴
                 Item wscroll = null;
+
+                // 潜能 / Hyper / 放大镜 卷族分发（不走经典砸卷逻辑）
+                if (scroll != null && (PotentialHyperConfig.isHyperScroll(scroll.getItemId())
+                        || PotentialHyperConfig.isMagnifier(scroll.getItemId())
+                        || PotentialHyperConfig.isCube(scroll.getItemId()))) {
+                    handlePotentialScroll(c, chr, scroll, toScroll, legendarySpirit);
+                    return;
+                }
 
                 if (ItemConstants.isCleanSlate(scroll.getItemId()) && !ii.canUseCleanSlate(toScroll)) {
                     announceCannotScroll(c, legendarySpirit); // 如果清洁卷轴不能用于该装备，通知客户端无法使用
@@ -205,5 +216,58 @@ public final class ScrollHandler extends AbstractPacketHandler {
             default:
                 return (scrollid / 100) % 100 == (itemid / 10000) % 100;
         }
+    }
+
+    /** 潜能 / Hyper / 放大镜 卷的处理（独立于经典砸卷逻辑）。 */
+    private static void handlePotentialScroll(Client c, Character chr, Item scroll, Equip toScroll, boolean legendarySpirit) {
+        int scrollId = scroll.getItemId();
+        Integer req = ItemInformationProvider.getInstance().getEquipLevelReq(toScroll.getItemId());
+        int reqLevel = req != null ? req : 0;
+
+        if (PotentialHyperConfig.isMagnifier(scrollId)) {
+            int grade = toScroll.getPotentialGrade() > 0 ? toScroll.getPotentialGrade() : 1;
+            int[] lines = PotentialHyperService.rollBonusPotential(reqLevel, grade);
+            toScroll.setBonusPotential1(lines[0]);
+            toScroll.setBonusPotential2(lines[1]);
+            toScroll.setBonusPotential3(lines[2]);
+            toScroll.setBonusPotentialGrade((byte) grade);
+            consumeScroll(c, scroll, legendarySpirit);
+            chr.forceUpdateItem(toScroll);
+            chr.equipChanged();
+            chr.markCombatStatsDirty();
+            chr.dropMessage(5, "放大镜：附加潜能已揭示。");
+            return;
+        }
+        if (PotentialHyperConfig.isCube(scrollId)) {
+            int grade = toScroll.getPotentialGrade() > 0 ? toScroll.getPotentialGrade() : 1;
+            int[] lines = PotentialHyperService.rollMainPotential(reqLevel, grade);
+            toScroll.setPotential1(lines[0]);
+            toScroll.setPotential2(lines[1]);
+            toScroll.setPotential3(lines[2]);
+            toScroll.setPotentialGrade((byte) grade);
+            consumeScroll(c, scroll, legendarySpirit);
+            chr.forceUpdateItem(toScroll);
+            chr.equipChanged();
+            chr.markCombatStatsDirty();
+            chr.dropMessage(5, "魔方：主潜能已重铸。");
+            return;
+        }
+        if (PotentialHyperConfig.isHyperScroll(scrollId)) {
+            int add = (scrollId == PotentialHyperConfig.HYPER_SCROLL_100_ID) ? 1
+                    : (Randomizer.nextInt(100) < 70 ? 1 : 0);
+            if (add > 0) {
+                int next = Math.min(PotentialHyperConfig.MAX_ENHANCE, toScroll.getEnhance() + 1);
+                toScroll.setEnhance((byte) next);
+            }
+            consumeScroll(c, scroll, legendarySpirit);
+            chr.forceUpdateItem(toScroll);
+            chr.equipChanged();
+            chr.markCombatStatsDirty();
+            chr.dropMessage(5, add > 0 ? "Hyper 强化成功，当前 " + toScroll.getEnhance() + " 星。" : "Hyper 强化失败。");
+        }
+    }
+
+    private static void consumeScroll(Client c, Item scroll, boolean legendarySpirit) {
+        InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false, false);
     }
 }

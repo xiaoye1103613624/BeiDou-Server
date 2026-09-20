@@ -419,6 +419,8 @@ public class Character extends AbstractCharacterObject {
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
     private transient int localwdef, localmdef, localacc, localeva, localspeed, localjump;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
+    // ADDON_SERVER_STATS_20260802: 客户端会自行叠加的经典槽装备血累计，用于 clientDisplayMaxHp/Mp 剔除双重计数。
+    private transient int classicEquipMaxHp, classicEquipMaxMp;
     /** 潜能百分比合计（recalcEquipStats 缓存；095 percent_*） */
     private transient int potStrR, potDexR, potIntR, potLukR, potHpR, potMpR, potPadR, potMadR;
     private transient int setBonusStr, setBonusDex, setBonusLuk, setBonusInt_, setBonusPad, setBonusMad, setBonusMhp, setBonusMmp;
@@ -439,6 +441,8 @@ public class Character extends AbstractCharacterObject {
     private transient Map<Integer, Byte> setActiveSkillBackup = new HashMap<>();
     /** 灵韵穿戴前的本技等级备份（与套装 activeSkill 隔离）。 */
     private transient Map<Integer, Byte> spiritSkillBackup = new HashMap<>();
+    /** 天赋运行时管理（懒加载，首次访问时从 DB 读取一次）。 */
+    private transient org.gms.talent.TalentManager talentManager;
     private int localchairrate;
     @Getter
     private boolean hidden;
@@ -1490,8 +1494,8 @@ public class Character extends AbstractCharacterObject {
             List<Pair<Stat, Long>> statup = new ArrayList<>(7);
             statup.add(new Pair<>(Stat.HP, (long) (hp)));
             statup.add(new Pair<>(Stat.MP, (long) (mp)));
-            statup.add(new Pair<>(Stat.MAXHP, (long) (clientMaxHp)));
-            statup.add(new Pair<>(Stat.MAXMP, (long) (clientMaxMp)));
+            statup.add(new Pair<>(Stat.MAXHP, (long) (getClientDisplayMaxHp())));
+            statup.add(new Pair<>(Stat.MAXMP, (long) (getClientDisplayMaxMp())));
             statup.add(new Pair<>(Stat.AVAILABLEAP, (long) (remainingAp)));
             statup.add(new Pair<>(Stat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job.getId())]));
             statup.add(new Pair<>(Stat.JOB, (long) (job.getId())));
@@ -2102,6 +2106,15 @@ public class Character extends AbstractCharacterObject {
 
     public Map<Integer, Byte> getSpiritSkillBackup() {
         return spiritSkillBackup;
+    }
+
+    /** 懒加载天赋管理（首次访问从 DB 读取一次并缓存）。 */
+    public org.gms.talent.TalentManager getTalentManager() {
+        if (talentManager == null) {
+            talentManager = new org.gms.talent.TalentManager(this);
+            talentManager.load();
+        }
+        return talentManager;
     }
 
     public void changeSkillLevel(Skill skill, byte newLevel, int newMasterlevel, long expiration) {
@@ -3192,8 +3205,8 @@ public class Character extends AbstractCharacterObject {
             // 勿开 Addon Combat/MainStat Occ（进图 AV @535351）；Si −10 走原生不盲。
             List<Pair<Stat, Long>> statup = new ArrayList<>(6);
             appendClientDisplayBaseFourStats(statup);
-            statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
-            statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
+            statup.add(new Pair<>(Stat.MAXHP, (long) (getClientDisplayMaxHp())));
+            statup.add(new Pair<>(Stat.MAXMP, (long) (getClientDisplayMaxMp())));
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
             sendSetBonusPackets();
             syncCombatPower();
@@ -3263,8 +3276,8 @@ public class Character extends AbstractCharacterObject {
         updateLocalStats();
         List<Pair<Stat, Long>> statup = new ArrayList<>(6);
         appendClientDisplayBaseFourStats(statup);
-        statup.add(new Pair<>(Stat.MAXHP, (long) (localMaxHp)));
-        statup.add(new Pair<>(Stat.MAXMP, (long) (localMaxMp)));
+        statup.add(new Pair<>(Stat.MAXHP, (long) (getClientDisplayMaxHp())));
+        statup.add(new Pair<>(Stat.MAXMP, (long) (getClientDisplayMaxMp())));
         sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
     }
 
@@ -7312,8 +7325,8 @@ public class Character extends AbstractCharacterObject {
             statup.add(new Pair<>(Stat.MP, (long) (mp)));
             statup.add(new Pair<>(Stat.EXP, (long) (exp.get())));
             statup.add(new Pair<>(Stat.LEVEL, (long) (level)));
-            statup.add(new Pair<>(Stat.MAXHP, (long) (clientMaxHp)));
-            statup.add(new Pair<>(Stat.MAXMP, (long) (clientMaxMp)));
+            statup.add(new Pair<>(Stat.MAXHP, (long) (getClientDisplayMaxHp())));
+            statup.add(new Pair<>(Stat.MAXMP, (long) (getClientDisplayMaxMp())));
             // ADDON_SERVER_STATS_20260802: level-up STR/DEX 用 display-base（含盲区槽）
             int[] four = computeClientDisplayBaseFourStats();
             statup.add(new Pair<>(Stat.STR, (long) four[0]));
@@ -8342,6 +8355,8 @@ public class Character extends AbstractCharacterObject {
         if (equipchanged) {
             equipmaxhp = 0;
             equipmaxmp = 0;
+            classicEquipMaxHp = 0;
+            classicEquipMaxMp = 0;
             equipdex = 0;
             equipint_ = 0;
             equipstr = 0;
@@ -8358,6 +8373,13 @@ public class Character extends AbstractCharacterObject {
                 Equip equip = (Equip) item;
                 equipmaxhp += equip.getHp();
                 equipmaxmp += equip.getMp();
+                // 经典槽（客户端会自行叠加 incMHP/潜能base）单独累计，供 clientDisplayMaxHp/Mp 剔除。
+                if (!isClientBlindEquipSlot(equip.getPosition())) {
+                    org.gms.potential.PotentialHyperService.StatBonus base =
+                            org.gms.potential.PotentialHyperService.computeBonus(equip, 0);
+                    classicEquipMaxHp += equip.getHp() + base.hp;
+                    classicEquipMaxMp += equip.getMp() + base.mp;
+                }
                 equipdex += equip.getDex();
                 equipint_ += equip.getInt();
                 equipstr += equip.getStr();
@@ -8483,6 +8505,9 @@ public class Character extends AbstractCharacterObject {
 
             localMaxHp = Math.min(MAX_CLIENT_HP_MP, localMaxHp);
             localMaxMp = Math.min(MAX_CLIENT_HP_MP, localMaxMp);
+            // 客户端显示口径：剔除以客户端会自行叠加的经典槽装备血/潜能base，避免与 localMaxHp(已含装备血) 双重计数。
+            clientDisplayMaxHp = localMaxHp - classicEquipMaxHp;
+            clientDisplayMaxMp = localMaxMp - classicEquipMaxMp;
 
             StatEffect combo = getBuffEffect(BuffStat.ARAN_COMBO);
             if (combo != null) {

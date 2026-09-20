@@ -1,0 +1,33 @@
+export default {
+  'clientDoll.page.desc':
+    'Composite a WZ 1:1 character doll from server-side Character.wz: configure skin/hair/face/equips for try-on preview. Chair and mount editors reuse the same doll and anchors.',
+  'clientDoll.page.hint':
+    'Doll pixels come from the client Data/Character/*.img files — configure the client Data root first. Part pixels are extracted once and cached; a missing part only loses its image, never the alignment or scale.',
+  'clientDoll.appearance.title': 'Appearance',
+  'clientDoll.form.skin': 'Skin',
+  'clientDoll.form.pose': 'Pose',
+  'clientDoll.form.frame': 'Frame',
+  'clientDoll.form.hair': 'Hair itemId',
+  'clientDoll.form.face': 'Face itemId',
+  'clientDoll.form.equips': 'Equips',
+  'clientDoll.form.equipPlaceholder': 'Equip itemId',
+  'clientDoll.form.add': 'Add',
+  'clientDoll.form.noEquip': 'No equips (bare character)',
+  'clientDoll.action.render': 'Composite',
+  'clientDoll.action.rebuild': 'Rebuild (bypass cache)',
+  'clientDoll.action.reset': 'Reset look',
+  'clientDoll.stage.title': 'Doll stage',
+  'clientDoll.stage.hint':
+    'Checkerboard = transparent channel. Doll and coordinates are WZ 1:1 pixels; the crosshair marks the character body origin (chair attach point). Scroll to zoom.',
+  'clientDoll.stage.zoomIn': 'Zoom in',
+  'clientDoll.stage.zoomOut': 'Zoom out',
+  'clientDoll.stage.zoomReset': 'Reset',
+  'clientDoll.info.title': 'Composite info',
+  'clientDoll.info.size': 'Canvas',
+  'clientDoll.info.lookKey': 'Look key',
+  'clientDoll.info.bodyOrigin': 'Body origin',
+  'clientDoll.info.navel': 'Navel anchor',
+  'clientDoll.info.missing': 'Missing pixels ({n})',
+  'clientDoll.info.zOrder': 'Layer order',
+  'clientDoll.msg.invalidEquip': 'Enter a valid equip itemId',
+};

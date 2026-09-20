@@ -833,6 +833,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
     /**
      * 融合外观生效/还原后刷新客户端：先删后加让本地缓存重建，并广播新的角色外观
      * （v83 原生包无 anvil 字段，外观由 addCharEquips 直接替换 itemId 下发）。
+     * broadcastUpdateCharLook 跳过自己，故再补发 updateCharLook 给本端，立即看到幻化/还原。
      */
     private static void refreshAnvilEquip(Client c, Character player, Equip equip) {
         List<ModifyInventory> mods = new ArrayList<>();
@@ -840,5 +841,6 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         mods.add(new ModifyInventory(0, equip));
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
         player.equipChanged();
+        c.sendPacket(PacketCreator.updateCharLook(c, player));
     }
 }

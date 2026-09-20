@@ -29,6 +29,8 @@ import clientPath from '@/views/client/path/locale/zh-CN';
 import clientWindowCashShopSync from '@/views/client/windowCashShopSync/locale/zh-CN';
 import clientAssetHub from '@/views/client/assetHub/locale/zh-CN';
 import clientSkillResources from '@/views/client/skillResources/locale/zh-CN';
+import clientChairPose from '@/views/client/chairPose/locale/zh-CN';
+import clientDoll from '@/views/client/doll/locale/zh-CN';
 import quest from '@/views/game/quest/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
@@ -48,6 +50,8 @@ export default {
   'menu.client.windowCashShopSync': '新商城客户端同步',
   'menu.client.assetHub': '游戏资源中心',
   'menu.client.skillResources': '技能资源',
+  'menu.client.chairPose': '座椅设置',
+  'menu.client.doll': '人偶 / 外观预览',
   // 旧分组 key 保留，避免历史 DB / 书签残留报缺文案
   'menu.daily': '系统管理',
   'menu.growth': '强化',
@@ -160,5 +164,7 @@ export default {
   ...clientWindowCashShopSync,
   ...clientAssetHub,
   ...clientSkillResources,
+  ...clientChairPose,
+  ...clientDoll,
   ...quest,
 };

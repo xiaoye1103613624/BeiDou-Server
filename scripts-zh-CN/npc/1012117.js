@@ -59,7 +59,7 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendSimple("嗨，我是#p1012117#，最迷人、最时尚的造型师。如果你正在寻找最漂亮的发型，那就不用再找了！\r\n#L0##i5150040##t5150040##l\r\n#L1##i5150044##t5150044##l\r\n#L8#打开美容院（存档栏）#l\r\n#L7#七彩棱镜染色#l");
+            cm.sendSimple("嗨，我是#p1012117#，最迷人、最时尚的造型师。如果你正在寻找最漂亮的发型，那就不用再找了！\r\n#L0##i5150040##t5150040##l\r\n#L1##i5150044##t5150044##l\r\n#L8#打开美容院（存档栏）#l\r\n#L7#七彩棱镜染色说明#l");
         } else if (status == 1) {
             if (selection == 8) {
                 try {
@@ -83,10 +83,9 @@ function action(mode, type, selection) {
                 }
                 cm.dispose();
             } else if (selection == 7) {
-                // 七彩棱镜染色入口
+                // weapontint：窗口由客户端双击现金栏七彩棱镜(5782000)打开，服务端不再发 OPEN 包
+                cm.sendOk("请在#b现金栏#k双击#i5782000##t5782000#打开染色窗口。\r\n可染色装备本体/特效、发型、眼睛、皮肤与技能。");
                 cm.dispose();
-                cm.getPlayer().getClient().sendPacket(
-                    Java.type('org.gms.server.coloring.ColoringPrismPackets').open());
             } else if (selection == 0) {
                 beauty = 1;
                 cm.sendYesNo("如果你使用这张普通优惠券，你的头发可能会变成一个随机的新造型……你还想用 #b#t5150040##k 来做吗？我会帮你做。但别忘了，结果会是随机的！");
