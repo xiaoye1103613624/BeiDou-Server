@@ -55,6 +55,9 @@ public final class MessengerHandler extends AbstractPacketHandler {
                                 messenger = world.createMessenger(messengerplayer);
                                 player.setMessenger(messenger);
                                 player.setMessengerPosition(0);
+                                // 与 join 路径对齐：回 joinMessenger(pos)，客户端用本机 CharLook 填立绘。
+                                // 历史 create 静默导致开窗后无座位/无立绘（见 softkey-tails Messenger）。
+                                c.sendPacket(PacketCreator.joinMessenger(0));
                             } else {
                                 messenger = world.getMessenger(messengerid);
                                 if (messenger != null) {
