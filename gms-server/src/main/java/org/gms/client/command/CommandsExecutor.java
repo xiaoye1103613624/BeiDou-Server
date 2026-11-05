@@ -70,16 +70,19 @@ public class CommandsExecutor {
     }
 
     public void loadCommandsExecutor() {
-//        registeredCommands.clear();
-//        commandsNameDesc.clear();
-//        registerLv0Commands();
-//        registerLv1Commands();
-//        registerLv2Commands();
-//        registerLv3Commands();
-//        registerLv4Commands();
-//        registerLv5Commands();
-//        registerLv6Commands();
+        // W0 冒烟解锁：恢复内置 Lv0–Lv6 命令表（!warp / !lvl 等）。
+        // 此前整段注释导致 registeredCommands 仅依赖 DB 配置，空表时聊天 GM 命令全灭。
+        registeredCommands.clear();
+        commandsNameDesc.clear();
+        registerLv0Commands();
+        registerLv1Commands();
+        registerLv2Commands();
+        registerLv3Commands();
+        registerLv4Commands();
+        registerLv5Commands();
+        registerLv6Commands();
 
+        // 管理端/库内自定义命令在内置表之上叠加（同名以库配置覆盖）
         commandService.loadCommands(registeredCommands, commandsNameDesc);
     }
 
@@ -210,6 +213,7 @@ public class CommandsExecutor {
         addCommand("enableauth", EnableAuthCommand.class);
         addCommand("toggleexp", ToggleExpCommand.class);
         addCommand("mylawn", MapOwnerClaimCommand.class);
+        addCommand("mapwarp", MapWarpCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }

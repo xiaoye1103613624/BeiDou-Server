@@ -36,14 +36,15 @@ public class CommandService {
 
     public void loadCommands(final HashMap<String, Command> registeredCommands,
                              final List<Pair<List<String>, List<String>>> commandsNameDesc) {
-        registeredCommands.clear();
-        commandsNameDesc.clear();
-
         List<CommandInfoDO> commandInfoList = commandInfoMapper.selectAll();
         if (commandInfoList == null || commandInfoList.isEmpty()) {
+            // 库内无命令配置时保留调用方已注册的内置表（CommandsExecutor.registerLv*），
+            // 禁止 clear 后留下空 HashMap（冒烟实测 !warp 全灭的根因）。
             log.warn(I18nUtil.getLogMessage("CommandService.loadCommands.warn1"));
             return;
         }
+        registeredCommands.clear();
+        commandsNameDesc.clear();
         // 根据level对指令分组
         Map<Integer, List<CommandInfoDO>> levelMap = commandInfoList.stream()
                 .collect(Collectors.groupingBy(CommandInfoDO::getLevel));
