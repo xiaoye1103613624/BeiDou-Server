@@ -28,6 +28,7 @@ import org.gms.client.Job;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.config.GameConfig;
+import org.gms.config.DamageLinesConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import org.gms.constants.skills.Crusader;
@@ -144,13 +145,17 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             }
         }
         if (attack.numAttacked > 0 && attack.skill == DragonKnight.SACRIFICE) {
-            int totDamageToOneMonster = 0; // sacrifice attacks only 1 mob with 1 attack
-            final Iterator<List<Integer>> dmgIt = attack.allDamage.values().iterator();
+            long totDamageToOneMonster = 0L; // sacrifice attacks only 1 mob with 1 attack
+            final Iterator<List<Long>> dmgIt = attack.allDamage.values().iterator();
             if (dmgIt.hasNext()) {
-                totDamageToOneMonster = dmgIt.next().get(0);
+                List<Long> lines = dmgIt.next();
+                if (lines != null && !lines.isEmpty() && lines.get(0) != null) {
+                    // 负值只是暴击标志，真实伤害取绝对值。
+                    totDamageToOneMonster = Math.abs(lines.get(0));
+                }
             }
 
-            chr.safeAddHP(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100);
+            chr.safeAddHP(DamageLinesConfig.clampToInt(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100));
         }
         if (attack.numAttacked > 0 && attack.skill == 1211002) {
             boolean advcharge_prob = false;

@@ -1456,10 +1456,10 @@ public class EventInstanceManager {
         }
     }
 
-    public void addDamage(Character chr, int damage) {
+    public void addDamage(Character chr, long damage) {
         if (!recordDamage || chr == null || damage <= 0) return;
 
-        long newValue = playerDamage.merge(chr.getId(), (long) damage, Long::sum);
+        long newValue = playerDamage.merge(chr.getId(), damage, Long::sum);
         playerNames.putIfAbsent(chr.getId(), chr.getName()); //保存角色名
         // 防止溢出
         if (newValue < 0) {

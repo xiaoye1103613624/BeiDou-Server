@@ -147,7 +147,7 @@ public class MonsterAggroCoordinator {
         }
     }
 
-    public void addAggroDamage(Monster mob, int cid, int damage) { // assumption: should not trigger after dispose()
+    public void addAggroDamage(Monster mob, int cid, long damage) { // assumption: should not trigger after dispose()
         if (!mob.isAlive()) {
             return;
         }
@@ -195,7 +195,8 @@ public class MonsterAggroCoordinator {
             return;
         }
 
-        insertEntryDamage(aggroEntry, damage);
+        // aggro 表仍是 int 统计；超 int 的伤害按 INT_MAX 计入，避免溢出成负仇恨。
+        insertEntryDamage(aggroEntry, (int) Math.min(Math.max(0L, damage), Integer.MAX_VALUE));
     }
 
     private void runAggroUpdate(int deltaTime) {

@@ -250,6 +250,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
+            // 破功值（单段伤害上限）同步：客户端 0x3730 handler 同时写标题与 clamp。
+            // 值 = 角色属性 characters.limitBreak（装载自 DB，默认 199999、上限 2.1e9）。
+            c.sendPacket(PacketCreator.limitBreakSync(player.getLimitBreak()));
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);

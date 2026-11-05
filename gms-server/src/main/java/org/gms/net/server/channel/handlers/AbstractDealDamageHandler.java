@@ -30,6 +30,7 @@ import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
+import org.gms.config.DamageLinesConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
@@ -74,7 +75,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     public static class AttackInfo {
 
         public int numAttacked, numDamage, numAttackedAndDamage, skill, skilllevel, stance, direction, rangedirection, charge, display;
-        public Map<Integer, List<Integer>> allDamage;
+        // 伤害行类型统一为 long；数值用符号编码暴击：
+        //   > 0 普通伤害，< 0 暴击（绝对值即真实伤害），0 = miss / 免疫。
+        // legacy 4 字节/行与 12 字节/行都归一到这个表示，applyAttack 不再做
+        // Integer.MAX_VALUE 补偿（旧实现会让广播伤害少 1 点）。
+        public Map<Integer, List<Long>> allDamage;
         public boolean ranged, magic;
         public int speed = 4;
         public Point position = new Point();
@@ -195,7 +200,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 return;
             }*/
 
-            int totDamage = 0;
+            long totDamage = 0L;
             long dptAttackDamage = 0L;
             Monster distanceHackWorstMonster = null;
             double distanceHackWorstDistance = Double.NEGATIVE_INFINITY;
@@ -307,40 +312,45 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
 
-                    int totDamageToOneMonster = 0;
-                    List<Integer> onedList = attack.allDamage.get(oned);
+                    long totDamageToOneMonster = 0L;
+                    List<Long> onedList = attack.allDamage.get(oned);
+
+                    if (onedList == null) {
+                        continue;
+                    }
 
                     if (attack.magic) { // thanks BHB, Alex (CanIGetaPR) for noticing no immunity status check here
                         if (monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
-                            Collections.fill(onedList, 1);
+                            Collections.fill(onedList, 1L);
                         }
                     } else {
                         if (monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
-                            Collections.fill(onedList, 1);
+                            Collections.fill(onedList, 1L);
                         }
                     }
 
                     if (MobId.isDojoBoss(monster.getId())) {
                         if (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009) {
-                            int dmgLimit = (int) Math.ceil(0.3 * monster.getMaxHp());
-                            List<Integer> _onedList = new LinkedList<>();
-                            for (Integer i : onedList) {
-                                _onedList.add(i < dmgLimit ? i : dmgLimit);
+                            long dmgLimit = (long) Math.ceil(0.3 * monster.getMaxHp());
+                            List<Long> _onedList = new LinkedList<>();
+                            for (Long i : onedList) {
+                                long value = i == null ? 0L : Math.abs(i);
+                                _onedList.add(Math.min(value, dmgLimit));
                             }
 
                             onedList = _onedList;
                         }
                     }
 
-                    for (Integer eachd : onedList) {
-                        if (eachd != null && eachd > 0) {
-                            dptAttackDamage += (long) eachd;
+                    for (Long eachd : onedList) {
+                        if (eachd == null) {
+                            continue;
                         }
 
-                        if (eachd < 0) {
-                            eachd += Integer.MAX_VALUE;
-                        }
-                        totDamageToOneMonster += eachd;
+                        // 负数只是暴击标志；真实伤害恒为非负绝对值。
+                        long real = Math.abs(eachd);
+                        dptAttackDamage += real;
+                        totDamageToOneMonster += real;
                     }
                     totDamage += totDamageToOneMonster;
                     monster.aggroMonsterDamage(player, totDamageToOneMonster);
@@ -350,16 +360,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         if (picklv > 0) {
                             int delay = 0;
                             final int maxmeso = player.getBuffedValue(BuffStat.PICKPOCKET);
-                            for (Integer eachd : onedList) {
-                                eachd += Integer.MAX_VALUE;
+                            for (Long eachd : onedList) {
+                                if (eachd == null) {
+                                    continue;
+                                }
 
                                 if (pickpocket.getEffect(picklv).makeChanceResult()) {
-                                    final int eachdf;
-                                    if (eachd < 0) {
-                                        eachdf = eachd + Integer.MAX_VALUE;
-                                    } else {
-                                        eachdf = eachd;
-                                    }
+                                    final long eachdf = Math.abs(eachd);
 
                                     TimerManager.getInstance().schedule(() -> map.spawnMesoDrop(Math.min((int) Math.max(((double) eachdf / (double) 20000) * (double) maxmeso, 1), maxmeso), new Point((int) (monster.getPosition().getX() + Randomizer.nextInt(100) - 50), (int) (monster.getPosition().getY())), monster, player, true, (byte) 2), delay);
                                     delay += 100;
@@ -481,7 +488,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         Skill skill;
                         if (player.getBuffedValue(BuffStat.COMBO_DRAIN) != null) {
                             skill = SkillFactory.getSkill(21100005);
-                            player.addHP(((totDamage * skill.getEffect(player.getSkillLevel(skill)).getX()) / 100));
+                            player.addHP(DamageLinesConfig.clampToInt((totDamage * skill.getEffect(player.getSkillLevel(skill)).getX()) / 100));
                         }
                     } else if (job == 412 || job == 422 || job == 1411) {
                         Skill type = SkillFactory.getSkill(player.getJob().getId() == 412 ? 4120005 : (player.getJob().getId() == 1411 ? 14110004 : 4220005));
@@ -561,7 +568,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                     if (attack.skill == Paladin.HEAVENS_HAMMER) {
                         if (!monster.isBoss()) {
-                            int trackerDamage = monster.getHp() - 1;
+                            long trackerDamage = monster.getHp() - 1;
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
@@ -576,7 +583,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     } else if (attack.skill == Aran.COMBO_TEMPEST) {
                         if (!monster.isBoss()) {
-                            int trackerDamage = monster.getHp();
+                            long trackerDamage = monster.getHp();
                             if (trackerDamage > 0) {
                                 dptAttackDamage += trackerDamage;
                             }
@@ -658,7 +665,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
-    private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final int damage, int skillid, int fixedTime) {
+    private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final long damage, int skillid, int fixedTime) {
         int animationTime;
 
         if (fixedTime == 0) {
@@ -676,6 +683,34 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
             map.damageMonster(attacker, monster, damage);
         }
+    }
+
+    /**
+     * 读一条伤害行并归一成「符号编码暴击的 long」：
+     * 正值=普通，负值=暴击（绝对值为真实伤害）。
+     *
+     * <p>legacy 4 字节/行：int 负数沿用旧服务端 -Integer.MAX_VALUE + d - 1 编码，
+     * 这里用低 31 位还原成精确真实值（旧 applyAttack 的 +MAX_VALUE 会少 1 点）。
+     * 12 字节/行：int32 vanillaLine（含 0x80000000 暴击位与 INT_MAX 哨兵）
+     * + int64 真实值；真实值恒非负，异常包回退到 vanilla 的低 31 位。
+     */
+    private static Long readDamageLine(InPacket p) {
+        int vanilla = p.readInt();
+        boolean critical = vanilla < 0;
+        long real;
+
+        if (DamageLinesConfig.isLongLines()) {
+            long raw = p.readLong();
+            real = DamageLinesConfig.clampDamage(raw);
+
+            if (real <= 0) {
+                real = DamageLinesConfig.clampDamage(vanilla & 0x7FFFFFFFL);
+            }
+        } else {
+            real = critical ? (vanilla & 0x7FFFFFFFL) : (long) Math.max(0, vanilla);
+        }
+
+        return critical ? -real : real;
     }
 
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {
@@ -730,10 +765,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 if (i < ret.numAttacked) {
                     p.skip(12);
                     int bullets = p.readByte();
-                    List<Integer> allDamageNumbers = new ArrayList<>();
+                    List<Long> allDamageNumbers = new ArrayList<>();
                     for (int j = 0; j < bullets; j++) {
-                        int damage = p.readInt();
-                        allDamageNumbers.add(damage);
+                        allDamageNumbers.add(readDamageLine(p));
                     }
                     ret.allDamage.put(oid, allDamageNumbers);
                     p.skip(4);
@@ -906,7 +940,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         for (int i = 0; i < ret.numAttacked; i++) {
             int oid = p.readInt();
             p.skip(14);
-            List<Integer> allDamageNumbers = new ArrayList<>();
+            List<Long> allDamageNumbers = new ArrayList<>();
             Monster monster = chr.getMap().getMonsterByOid(oid);
 
             if (chr.getBuffEffect(BuffStat.WK_CHARGE) != null) {
@@ -979,7 +1013,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             }
 
             for (int j = 0; j < ret.numDamage; j++) {
-                int damage = p.readInt();
+                Long parsedLine = readDamageLine(p);
+                long damage = parsedLine == null ? 0L : Math.abs(parsedLine);
+                boolean critical = parsedLine != null && parsedLine < 0;
+                final boolean longLines = DamageLinesConfig.isLongLines();
                 long hitDmgMax = calcDmgMax;
                 if (ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                     if (j > 3) {
@@ -994,9 +1031,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                 }
 
-                if (ret.skill == Marksman.SNIPE) {
+                if (!longLines && ret.skill == Marksman.SNIPE) {
+                    // legacy 下 SNIPE 仍保持服务端固定 195000~199999 的技能语义；
+                    // 12 字节模式下按用户决议不再把它当封顶值，采信客户端真实伤害。
                     damage = 195000 + Randomizer.nextInt(5000);
                     hitDmgMax = 200000;
+                    critical = true;
                 } else if (ret.skill == Beginner.BAMBOO_RAIN || ret.skill == Noblesse.BAMBOO_RAIN || ret.skill == Evan.BAMBOO_THRUST || ret.skill == Legend.BAMBOO_THRUST) {
                     hitDmgMax = 82569000; // 30% of Max HP of strongest Dojo boss
                 }
@@ -1007,19 +1047,24 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     maxWithCrit *= 2;
                 }
 
-                // Warn if the damage is over 1.5x what we calculated above.
-                if (damage > maxWithCrit * 1.5) {
-                    AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
-                }
+                // 12 字节模式下按用户决议移除「幅度 DAMAGE_HACK」：伤害上限由
+                // 客户端 2^53 与服务端 cap 共同约束，旧的 calcDmgMax 只作为
+                // 遗留校验参考；legacy 模式保留原有反外挂行为不变。
+                if (!longLines) {
+                    // Warn if the damage is over 1.5x what we calculated above.
+                    if (damage > maxWithCrit * 1.5) {
+                        AutobanFactory.DAMAGE_HACK.alert(chr, "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    }
 
-                // Add a ab point if its over 5x what we calculated.
-                if (damage > maxWithCrit * 5) {
-                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
-                }
+                    // Add a ab point if its over 5x what we calculated.
+                    if (damage > maxWithCrit * 5) {
+                        AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    }
 
-                if (ret.skill == Marksman.SNIPE || (canCrit && damage > hitDmgMax)) {
-                    // If the skill is a crit, inverse the damage to make it show up on clients.
-                    damage = -Integer.MAX_VALUE + damage - 1;
+                    if (canCrit && damage > hitDmgMax) {
+                        // legacy 暴击由服务端按阈值反推，广播时用负数编码。
+                        critical = true;
+                    }
                 }
 
                 if (effect != null) {
@@ -1032,7 +1077,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                 }
 
-                allDamageNumbers.add(damage);
+                allDamageNumbers.add(critical ? -damage : damage);
             }
             if (ret.skill != Corsair.RAPID_FIRE || ret.skill != Aran.HIDDEN_FULL_DOUBLE || ret.skill != Aran.HIDDEN_FULL_TRIPLE || ret.skill != Aran.HIDDEN_OVER_DOUBLE || ret.skill != Aran.HIDDEN_OVER_TRIPLE) {
                 p.skip(4);

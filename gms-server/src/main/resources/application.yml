@@ -67,3 +67,10 @@ gms:
     localhost: 127.0.0.1
     # 客户端登录端口
     login-port: 8484
+    damage:
+      # 12 字节/行伤害封包（int32 vanillaLine + int64 真实值）。
+      # 必须与客户端 xy-config.yaml 的 damage.long_lines 同时为 true/false，
+      # 双端不一致会导致攻击包整体读错位。回滚时双端同时改回 false。
+      long-lines: false
+      # 单段伤害上限，默认 2^53（double 可精确表示的最大整数）。
+      cap: 9007199254740992

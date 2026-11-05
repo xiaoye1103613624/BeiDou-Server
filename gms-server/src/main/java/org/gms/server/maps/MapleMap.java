@@ -1343,7 +1343,7 @@ public class MapleMap {
         return count;
     }
 
-    public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
+    public boolean damageMonster(final Character chr, final Monster monster, final long damage) {
         if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
                 Monster mons = chr.getMap().getMonsterByOid(object.getObjectId());

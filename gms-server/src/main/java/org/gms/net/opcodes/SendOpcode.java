@@ -356,8 +356,10 @@ public enum SendOpcode implements Opcode {
     VICIOUS_HAMMER(0x162), // 恶毒锤子
     VEGA_SCROLL(0x166), // VEGA卷轴
     DPT_TRACKER(0x3714), // 个人伤害统计
+    LIMIT_BREAK_SYNC(0x3730), // 角色破功伤害上限同步（与客户端既有 opcode 一致）
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复
+    WORLD_MAP_DROP_RESULT(0x179), // 世界地图掉落查询回复（服务端→客户端）
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
     ;
     private int code = -2;

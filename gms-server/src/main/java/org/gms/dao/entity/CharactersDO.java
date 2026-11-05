@@ -202,4 +202,8 @@ public class CharactersDO implements Serializable {
 
     private Long jailexpire;
 
+    /** 破功值（单段伤害上限），与 Character.limitBreak 对应；NULL 时装载侧回退默认。 */
+    @Column("limitBreak")
+    private Long limitBreak;
+
 }

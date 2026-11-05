@@ -691,6 +691,32 @@ public class AbstractPlayerInteraction {
         getPlayer().dropMessage(type, message);
     }
 
+    // 破功值脚本接口（对齐参考端）：任务/道具脚本用它读写角色的单段伤害上限。
+    public long getLimitBreak() {
+        return getPlayer().getLimitBreak();
+    }
+
+    /** 脚本兼容：破功伤害上限。 */
+    public long getDamage() {
+        return getPlayer().getLimitBreak();
+    }
+
+    public long getPGSXDJ() {
+        return getPlayer().getLimitBreak();
+    }
+
+    public void setLimitBreak(long value) {
+        getPlayer().setLimitBreak(value);
+    }
+
+    public void gainLimitBreak(long amount) {
+        getPlayer().gainLimitBreak(amount);
+    }
+
+    public void gainPGSXDJ(long amount) {
+        getPlayer().gainLimitBreak(amount);
+    }
+
     public void mapMessage(int type, String message) {
         getPlayer().getMap().broadcastMessage(PacketCreator.serverNotice(type, message));
     }

@@ -78,7 +78,7 @@ public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         }
 
         monster.applyAndGetHpDamage(damage, false);
-        int remainingHp = monster.getHp();
+        int remainingHp = (int) Math.max(Integer.MIN_VALUE, Math.min(monster.getHp(), Integer.MAX_VALUE));
         if (remainingHp <= 0) {
             remainingHp = 0;
             map.removeMapObject(monster);

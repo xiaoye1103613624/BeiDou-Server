@@ -51,6 +51,7 @@ import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
+import org.gms.config.DamageLinesConfig;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -2356,20 +2357,20 @@ public class PacketCreator {
         }
         */
 
-    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Long>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.CLOSE_RANGE_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         return p;
     }
 
-    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Long>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.RANGED_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction, display);
         p.writeInt(0);
         return p;
     }
 
-    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
+    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Long>> damage, int charge, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.MAGIC_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         if (charge != -1) {
@@ -2378,7 +2379,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Long>> damage, int speed, int direction, int display) {
         p.writeInt(chr.getId());
         p.writeByte(numAttackedAndDamage);
         p.writeByte(0x5B);//?
@@ -2392,16 +2393,29 @@ public class PacketCreator {
         p.writeByte(speed);
         p.writeByte(0x0A);
         p.writeInt(projectile);
+        final boolean longLines = DamageLinesConfig.isLongLines();
+
         for (Integer oned : damage.keySet()) {
-            List<Integer> onedList = damage.get(oned);
+            List<Long> onedList = damage.get(oned);
             if (onedList != null) {
                 p.writeInt(oned);
                 p.writeByte(0x0);
                 if (skill == 4211006) {
                     p.writeByte(onedList.size());
                 }
-                for (Integer eachd : onedList) {
-                    p.writeInt(eachd);
+                for (Long eachd : onedList) {
+                    // allDamage 用符号编码暴击：负值=暴击，绝对值为真实伤害。
+                    boolean critical = eachd != null && eachd < 0;
+                    long real = eachd == null ? 0L : Math.abs(eachd);
+
+                    if (longLines) {
+                        // 12 字节/行：int32 vanillaLine + int64 真实值。
+                        p.writeInt(DamageLinesConfig.vanillaLine(real, critical));
+                        p.writeLong(real);
+                    } else {
+                        // legacy 4 字节/行：暴击仍用服务端旧负数编码。
+                        p.writeInt(DamageLinesConfig.legacyBroadcastLine(real, critical));
+                    }
                 }
             }
         }
@@ -4108,8 +4122,25 @@ public class PacketCreator {
         return damageMonster(oid, damage, 0, 0);
     }
 
+    /** long 伤害的兼容入口：HP 弹字包仍是 int，统一收窄避免溢出成负数。 */
+    public static Packet damageMonster(int oid, long damage) {
+        return damageMonster(oid, DamageLinesConfig.clampToInt(damage));
+    }
+
     public static Packet healMonster(int oid, int heal, int curhp, int maxhp) {
         return damageMonster(oid, -heal, curhp, maxhp);
+    }
+
+    /** Monster.hp 改 AtomicLong 后的兼容入口。 */
+    public static Packet healMonster(int oid, int heal, long curhp, int maxhp) {
+        return damageMonster(oid, -heal, DamageLinesConfig.clampToInt(curhp), maxhp);
+    }
+
+    /** 同步角色破功伤害上限到客户端（0x3730，布局与 BeiDou-Server 一致）。 */
+    public static Packet limitBreakSync(long limitBreak) {
+        final OutPacket p = OutPacket.create(SendOpcode.LIMIT_BREAK_SYNC);
+        p.writeLong(limitBreak);
+        return p;
     }
 
     private static Packet damageMonster(int oid, int damage, int curhp, int maxhp) {
