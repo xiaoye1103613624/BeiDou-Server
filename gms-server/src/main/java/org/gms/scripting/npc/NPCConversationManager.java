@@ -286,7 +286,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
-     * SpeedQuiz（msgtype 6）。客户端本轮仍吞包预留 UI；协议已对齐。
+     * SpeedQuiz（msgtype 6）。客户端 UISpeedQuiz 已接；type 0=Npc / 1=Mob / ≥2=道具图标。
      */
     public void sendAskSpeedQuiz(int type, int answer, int correct, int remain, int remainSec) {
         nextLevelContext.clear();
