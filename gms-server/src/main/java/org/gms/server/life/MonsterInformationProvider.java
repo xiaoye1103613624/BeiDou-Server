@@ -45,6 +45,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MonsterInformationProvider {
     private static final Logger log = LoggerFactory.getLogger(MonsterInformationProvider.class);
@@ -56,13 +59,26 @@ public class MonsterInformationProvider {
         return instance;
     }
 
-    private final Map<Integer, List<MonsterDropEntry>> drops = new HashMap<>();
-    private final List<MonsterGlobalDropEntry> globaldrops = new ArrayList<>();
-    private final Map<Integer, List<MonsterGlobalDropEntry>> continentdrops = new HashMap<>();
+    // Thread-safe caches. Reads vastly outnumber writes, and the new client
+    // drop-query interface adds many concurrent readers, so these must not be
+    // plain HashMaps (concurrent get/put => CME / repeated DB hits).
+    private final Map<Integer, List<MonsterDropEntry>> drops = new ConcurrentHashMap<>();
+    // Global drops are swapped atomically on reload so readers never observe a
+    // half-cleared list (the old clearDrops() used to wipe then repopulate in place).
+    private final AtomicReference<List<MonsterGlobalDropEntry>> globaldrops = new AtomicReference<>(new ArrayList<>());
+    private final Map<Integer, List<MonsterGlobalDropEntry>> continentdrops = new ConcurrentHashMap<>();
 
-    private final Map<Integer, List<Integer>> dropsChancePool = new HashMap<>();    // thanks to ronan
-    private final Set<Integer> hasNoMultiEquipDrops = new HashSet<>();
-    private final Map<Integer, List<MonsterDropEntry>> extraMultiEquipDrops = new HashMap<>();
+    private final Map<Integer, List<Integer>> dropsChancePool = new ConcurrentHashMap<>();    // thanks to ronan
+    private final Set<Integer> hasNoMultiEquipDrops = ConcurrentHashMap.newKeySet();
+    private final Map<Integer, List<MonsterDropEntry>> extraMultiEquipDrops = new ConcurrentHashMap<>();
+
+    // Bumped on every reload (clearDrops). Clients cache drops keyed by this
+    // version so they refetch only when the server's drop tables actually change.
+    private final AtomicLong dropDataVersion = new AtomicLong(0);
+
+    public long getDropDataVersion() {
+        return dropDataVersion.get();
+    }
 
     private final Map<Pair<Integer, Integer>, Integer> mobAttackAnimationTime = new HashMap<>();
     private final Map<MobSkill, Integer> mobSkillAnimationTime = new HashMap<>();
@@ -79,28 +95,26 @@ public class MonsterInformationProvider {
     public final List<MonsterGlobalDropEntry> getRelevantGlobalDrops(int mapid) {
         int continentid = mapid / 100000000;
 
-        List<MonsterGlobalDropEntry> contiItems = continentdrops.get(continentid);
-        if (contiItems == null) {   // continent separated global drops found thanks to marcuswoon
-            contiItems = new ArrayList<>();
+        return continentdrops.computeIfAbsent(continentid, cid -> {   // continent separated global drops found thanks to marcuswoon
+            List<MonsterGlobalDropEntry> contiItems = new ArrayList<>();
 
-            for (MonsterGlobalDropEntry e : globaldrops) {
-                if (e.continentid < 0 || e.continentid == continentid) {
+            for (MonsterGlobalDropEntry e : globaldrops.get()) {
+                if (e.continentid < 0 || e.continentid == cid) {
                     contiItems.add(e);
                 }
             }
 
-            continentdrops.put(continentid, contiItems);
-        }
-
-        return contiItems;
+            return contiItems;
+        });
     }
 
     private void retrieveGlobal() {
+        List<MonsterGlobalDropEntry> loaded = new ArrayList<>();
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                globaldrops.add(new MonsterGlobalDropEntry(
+                loaded.add(new MonsterGlobalDropEntry(
                         rs.getInt("itemid"),
                         rs.getInt("chance"),
                         rs.getByte("continent"),
@@ -111,6 +125,7 @@ public class MonsterInformationProvider {
         } catch (SQLException e) {
             log.error("Error retrieving global drops", e);
         }
+        globaldrops.set(loaded);
     }
 
     public List<MonsterDropEntry> retrieveEffectiveDrop(final int monsterId) {
@@ -157,55 +172,51 @@ public class MonsterInformationProvider {
     }
 
     public final List<MonsterDropEntry> retrieveDrop(final int monsterId) {
-        if (drops.containsKey(monsterId)) {
-            return drops.get(monsterId);
-        }
-        final List<MonsterDropEntry> ret = new LinkedList<>();
+        // computeIfAbsent guarantees a single DB hit per mob even under heavy
+        // concurrent access (gameplay kills + the new client drop-query path).
+        return drops.computeIfAbsent(monsterId, id -> {
+            List<MonsterDropEntry> ret = new LinkedList<>();
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT itemid, chance, minimum_quantity, maximum_quantity, questid FROM drop_data WHERE dropperid = ?")) {
-            ps.setInt(1, monsterId);
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("SELECT itemid, chance, minimum_quantity, maximum_quantity, questid FROM drop_data WHERE dropperid = ?")) {
+                ps.setInt(1, id);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    ret.add(new MonsterDropEntry(rs.getInt("itemid"), rs.getInt("chance"), rs.getInt("minimum_quantity"), rs.getInt("maximum_quantity"), rs.getShort("questid")));
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        ret.add(new MonsterDropEntry(rs.getInt("itemid"), rs.getInt("chance"), rs.getInt("minimum_quantity"), rs.getInt("maximum_quantity"), rs.getShort("questid")));
+                    }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return ret;
-        }
 
-        drops.put(monsterId, ret);
-        return ret;
+            return ret;
+        });
     }
 
     public final List<Integer> retrieveDropPool(final int monsterId) {  // ignores Quest and Party Quest items
-        if (dropsChancePool.containsKey(monsterId)) {
-            return dropsChancePool.get(monsterId);
-        }
+        return dropsChancePool.computeIfAbsent(monsterId, id -> {
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+            List<MonsterDropEntry> dropList = retrieveDrop(id);
+            List<Integer> ret = new ArrayList<>();
 
-        List<MonsterDropEntry> dropList = retrieveDrop(monsterId);
-        List<Integer> ret = new ArrayList<>();
-
-        int accProp = 0;
-        for (MonsterDropEntry mde : dropList) {
-            if (
-                  GameConfig.getServerBoolean("allow_steal_quest_item") ||
-                  !ii.isQuestItem(mde.itemId) && !ii.isPartyQuestItem(mde.itemId)
-            ) {
-                accProp += mde.chance;
+            int accProp = 0;
+            for (MonsterDropEntry mde : dropList) {
+                if (
+                      GameConfig.getServerBoolean("allow_steal_quest_item") ||
+                      !ii.isQuestItem(mde.itemId) && !ii.isPartyQuestItem(mde.itemId)
+                ) {
+                    accProp += mde.chance;
+                }
+                ret.add(accProp);
             }
-            ret.add(accProp);
-        }
 
-        if (accProp == 0) {
-            ret.clear();    // don't accept mobs dropping no relevant items
-        }
-        dropsChancePool.put(monsterId, ret);
-        return ret;
+            if (accProp == 0) {
+                ret.clear();    // don't accept mobs dropping no relevant items
+            }
+            return ret;
+        });
     }
 
     public final void setMobAttackAnimationTime(int monsterId, int attackPos, int animationTime) {
@@ -292,8 +303,8 @@ public class MonsterInformationProvider {
         hasNoMultiEquipDrops.clear();
         extraMultiEquipDrops.clear();
         dropsChancePool.clear();
-        globaldrops.clear();
         continentdrops.clear();
-        retrieveGlobal();
+        retrieveGlobal(); // atomically swaps the globaldrops reference
+        dropDataVersion.incrementAndGet();
     }
 }

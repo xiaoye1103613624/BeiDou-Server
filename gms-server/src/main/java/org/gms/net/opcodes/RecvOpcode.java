@@ -206,6 +206,7 @@ public enum RecvOpcode implements Opcode {
     USE_HAMMER(0x104), // 使用锤子
 
     WORLD_MAP_PLAYERS(0x115), // 世界地图 tooltip 玩家列表请求
+    WORLD_MAP_DROP_REQUEST(0x116), // 世界地图掉落查询请求（客户端→服务端）
     SET_HPMPALERT(0x1000), // 设置HP/MP警报
     ;
 
