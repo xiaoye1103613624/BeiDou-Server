@@ -271,6 +271,32 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void askBoxText(String text, String def, short cols, short rows) {
         sendAskBoxText(text, def, cols, rows);
     }
+
+    /**
+     * InitialQuiz（msgtype 5）。nSpeakerTypeID=4（NPC），nResCode=0 开窗。
+     * 回程文本经 getText()；空串表示超时/放弃。
+     */
+    public void sendAskQuiz(String title, String problem, String hint, int minInput, int maxInput, int remainSec) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.OnAskQuiz(4, npc, 0, title, problem, hint, minInput, maxInput, remainSec));
+    }
+
+    public void askQuiz(String title, String problem, String hint, int minInput, int maxInput, int remainSec) {
+        sendAskQuiz(title, problem, hint, minInput, maxInput, remainSec);
+    }
+
+    /**
+     * SpeedQuiz（msgtype 6）。客户端本轮仍吞包预留 UI；协议已对齐。
+     */
+    public void sendAskSpeedQuiz(int type, int answer, int correct, int remain, int remainSec) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.OnAskSpeedQuiz(4, npc, 0, type, answer, correct, remain, remainSec));
+    }
+
+    public void askSpeedQuiz(int type, int answer, int correct, int remain, int remainSec) {
+        sendAskSpeedQuiz(type, answer, correct, remain, remainSec);
+    }
+
     /*
      * 0 = ariant colliseum
      * 1 = Dojo

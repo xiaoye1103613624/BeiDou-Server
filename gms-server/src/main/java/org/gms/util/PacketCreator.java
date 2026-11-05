@@ -3480,30 +3480,38 @@ public class PacketCreator {
     public static Packet getNPCTalkBoxText(int npc, String talk, String def, short cols, short rows) {
         return getNPCTalkBoxText(npc, talk, def, cols, rows, (byte) 0);
     }
-    // NPC Quiz packets thanks to Eric
+    /**
+     * InitialQuiz（msgtype 5）。对齐客户端 IDA sub_74660A→A26B09：
+     * res==0 → 3×string(title/problem/hint) + 3×int(min/max/remainSec)。
+     * 出站回程为 lastMsg=5 + maple string（无 action），见 NPCMoreTalkHandler。
+     */
     public static Packet OnAskQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, String sTitle, String sProblemText, String sHintText, int nMinInput, int nMaxInput, int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
         p.writeInt(nSpeakerTemplateID);
-        p.writeByte(0x6);
+        p.writeByte(0x5);
         p.writeByte(0);
         p.writeByte(nResCode);
         if (nResCode == 0x0) {//fail has no bytes <3
             p.writeString(sTitle);
             p.writeString(sProblemText);
             p.writeString(sHintText);
-            p.writeShort(nMinInput);
-            p.writeShort(nMaxInput);
+            p.writeInt(nMinInput);
+            p.writeInt(nMaxInput);
             p.writeInt(tRemainInitialQuiz);
         }
         return p;
     }
 
+    /**
+     * SpeedQuiz（msgtype 6）。对齐 IDA A26C66：res==0 → 5×int。
+     * Avatar 仍为 msgtype 7，本包不得再写 0x7。
+     */
     public static Packet OnAskSpeedQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, int nType, int dwAnswer, int nCorrect, int nRemain, int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
         p.writeInt(nSpeakerTemplateID);
-        p.writeByte(0x7);
+        p.writeByte(0x6);
         p.writeByte(0);
         p.writeByte(nResCode);
         if (nResCode == 0x0) {//fail has no bytes <3

@@ -34,6 +34,23 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte lastMsg = p.readByte(); // 00 (last msg type I think)
+        // lastMsg==5 InitialQuiz / 6 SpeedQuiz（IDA 7EB276 / 7EC934）：无 action，直接 maple string；空串=超时/放弃
+        if (lastMsg == 5 || lastMsg == 6) {
+            String returnText = p.readString();
+            final byte action = 1; // 脚本侧视为确认前进；空串由脚本 getText() 判空
+            if (c.getQM() != null) {
+                c.getQM().setGetText(returnText);
+                if (c.getQM().isStart()) {
+                    QuestScriptManager.getInstance().start(c, action, lastMsg, -1);
+                } else {
+                    QuestScriptManager.getInstance().end(c, action, lastMsg, -1);
+                }
+            } else if (c.getCM() != null) {
+                c.getCM().setGetText(returnText);
+                cmRouting(c, action, lastMsg, -1);
+            }
+            return;
+        }
         byte action = p.readByte(); // 00 = end chat, 01 == follow
         // lastMsg==2 GetText；lastMsg==13 AskBoxText（IDA sub_746C46 出站同形：action+string）
         if (lastMsg == 2 || lastMsg == 13) {
