@@ -72,6 +72,23 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
             } else {
                 c.getCM().dispose();
             }
+        } else if (lastMsg == 9 || lastMsg == 10) {
+            // AskPet / AskPetAll（IDA 7474A2 / 74775C）：action=1 后跟 int64 uniqueId；
+            // action=0 取消；action=2 空列表早退。selection 取 uniqueId 低 32 位供脚本。
+            int selection = -1;
+            if (action == 1 && p.available() >= 8) {
+                long petUniqueId = p.readLong();
+                selection = (int) petUniqueId;
+            }
+            if (c.getQM() != null) {
+                if (c.getQM().isStart()) {
+                    QuestScriptManager.getInstance().start(c, action, lastMsg, selection);
+                } else {
+                    QuestScriptManager.getInstance().end(c, action, lastMsg, selection);
+                }
+            } else if (c.getCM() != null) {
+                cmRouting(c, action, lastMsg, selection);
+            }
         } else {
             int selection = -1;
             if (p.available() >= 4) {
