@@ -254,6 +254,23 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "",speaker));
     }
+
+    /**
+     * AskBoxText（msgtype 13）：多行输入。cols/rows 决定客户端编辑框宽高（IDA 6*cols / 12*rows）。
+     */
+    public void sendAskBoxText(String text, String def, short cols, short rows) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalkBoxText(npc, text, def, cols, rows));
+    }
+
+    public void sendAskBoxText(String text, String def, short cols, short rows, byte speaker) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalkBoxText(npc, text, def, cols, rows, speaker));
+    }
+
+    public void askBoxText(String text, String def, short cols, short rows) {
+        sendAskBoxText(text, def, cols, rows);
+    }
     /*
      * 0 = ariant colliseum
      * 1 = Dojo

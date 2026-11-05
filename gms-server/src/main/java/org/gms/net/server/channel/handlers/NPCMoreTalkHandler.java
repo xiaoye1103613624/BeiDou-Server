@@ -35,8 +35,8 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         byte lastMsg = p.readByte(); // 00 (last msg type I think)
         byte action = p.readByte(); // 00 = end chat, 01 == follow
-        // lastMsg等于2有returnText，不等于则没有
-        if (lastMsg == 2) {
+        // lastMsg==2 GetText；lastMsg==13 AskBoxText（IDA sub_746C46 出站同形：action+string）
+        if (lastMsg == 2 || lastMsg == 13) {
             if (action != 0) {
                 String returnText = p.readString();
                 if (c.getQM() != null) {

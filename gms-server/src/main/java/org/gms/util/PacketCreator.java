@@ -3459,6 +3459,27 @@ public class PacketCreator {
         p.writeInt(0);
         return p;
     }
+
+    /**
+     * AskBoxText（客户端 IDA msgtype=13 / dlgType=8）：多行文本框。
+     * 字段：talk + def + short cols + short rows（与 GetText 同形，尾两 short 非 int pad）。
+     */
+    public static Packet getNPCTalkBoxText(int npc, String talk, String def, short cols, short rows, byte speaker) {
+        final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
+        p.writeByte(4);
+        p.writeInt(npc);
+        p.writeByte(13);
+        p.writeByte(speaker);
+        p.writeString(talk);
+        p.writeString(def != null ? def : "");
+        p.writeShort(cols);
+        p.writeShort(rows);
+        return p;
+    }
+
+    public static Packet getNPCTalkBoxText(int npc, String talk, String def, short cols, short rows) {
+        return getNPCTalkBoxText(npc, talk, def, cols, rows, (byte) 0);
+    }
     // NPC Quiz packets thanks to Eric
     public static Packet OnAskQuiz(int nSpeakerTypeID, int nSpeakerTemplateID, int nResCode, String sTitle, String sProblemText, String sHintText, int nMinInput, int nMaxInput, int tRemainInitialQuiz) {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
