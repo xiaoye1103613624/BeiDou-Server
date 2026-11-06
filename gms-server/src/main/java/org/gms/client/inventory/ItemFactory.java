@@ -123,6 +123,11 @@ public enum ItemFactory {
         equip.setLevel(rs.getByte("level"));
         equip.setItemExp(rs.getInt("itemexp"));
         equip.setItemLevel(rs.getByte("itemlevel"));
+        equip.setPotential1(rs.getInt("potential1"));
+        equip.setPotential2(rs.getInt("potential2"));
+        equip.setPotential3(rs.getInt("potential3"));
+        equip.setBonusPotential1(rs.getInt("bonusPotential1"));
+        equip.setBonusPotential2(rs.getInt("bonusPotential2"));
         equip.setExpiration(rs.getLong("expiration"));
         equip.setGiftFrom(rs.getString("giftFrom"));
         equip.setRingId(rs.getInt("ringid"));
@@ -244,7 +249,7 @@ public enum ItemFactory {
                             psItem.executeUpdate();
 
                             if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                                try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                                try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                                     try (ResultSet rs = psItem.getGeneratedKeys()) {
                                         if (!rs.next()) {
                                             throw new RuntimeException("Inserting item failed.");
@@ -276,6 +281,11 @@ public enum ItemFactory {
                                     psEquip.setInt(21, equip.getItemLevel());
                                     psEquip.setInt(22, equip.getItemExp());
                                     psEquip.setInt(23, equip.getRingId());
+                                    psEquip.setInt(24, equip.getPotential1());
+                                    psEquip.setInt(25, equip.getPotential2());
+                                    psEquip.setInt(26, equip.getPotential3());
+                                    psEquip.setInt(27, equip.getBonusPotential1());
+                                    psEquip.setInt(28, equip.getBonusPotential2());
                                     psEquip.executeUpdate();
                                 }
                             }

@@ -27,8 +27,15 @@ public final class ExpTable {
     private static final int[] pet = {1, 1, 3, 6, 14, 31, 60, 108, 181, 287, 434, 632, 891, 1224, 1642, 2161, 2793, 3557, 4467, 5542, 6801, 8263, 9950, 11882, 14084, 16578, 19391, 22547, 26074, 30000, 2147483647};
     private static final int[] mount = {1, 24, 50, 105, 134, 196, 254, 263, 315, 367, 430, 543, 587, 679, 725, 897, 1146, 1394, 1701, 2247, 2543, 2898, 3156, 3313, 3584, 3923, 4150, 4305, 4550, 5600};
 
-    public static int getExpNeededForLevel(int level) {
-        return level > 200 ? 2000000000 : exp[level];
+    public static long getExpNeededForLevel(int level) {
+        if (level < 200) {
+            return exp[level];
+        }
+        // 200 级之后按 1.06 增长曲线扩展至等级上限 999：每级所需经验持续增长（不再平铺 20 亿）。
+        // 999 级所需经验约 2.1e12，仍在 long 范围内（远小于 int64 上限 9.2e18）。
+        double base = 2000000000.0;
+        double factor = Math.pow(1.06, (level - 200) / 10.0);
+        return Math.round(base * factor);
     }
 
     public static int getTamenessNeededForLevel(int level) {

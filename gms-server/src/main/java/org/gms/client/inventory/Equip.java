@@ -75,6 +75,8 @@ public class Equip extends Item {
     private byte level, itemLevel;
     private short flag;
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
+    // 095 潜能/魔方：3 条主潜能 + 2 条 bonus 潜能（值为 PotentialOption 行 id，0 = 空）。
+    private short potential1, potential2, potential3, bonusPotential1, bonusPotential2;
     private float itemExp;
     private int ringid = -1;
     private boolean wear = false;
@@ -786,6 +788,46 @@ public class Equip extends Item {
 
     public void setRingId(int id) {
         this.ringid = id;
+    }
+
+    public int getPotential1() {
+        return potential1;
+    }
+
+    public void setPotential1(int v) {
+        this.potential1 = (short) v;
+    }
+
+    public int getPotential2() {
+        return potential2;
+    }
+
+    public void setPotential2(int v) {
+        this.potential2 = (short) v;
+    }
+
+    public int getPotential3() {
+        return potential3;
+    }
+
+    public void setPotential3(int v) {
+        this.potential3 = (short) v;
+    }
+
+    public int getBonusPotential1() {
+        return bonusPotential1;
+    }
+
+    public void setBonusPotential1(int v) {
+        this.bonusPotential1 = (short) v;
+    }
+
+    public int getBonusPotential2() {
+        return bonusPotential2;
+    }
+
+    public void setBonusPotential2(int v) {
+        this.bonusPotential2 = (short) v;
     }
 
     public boolean isWearing() {

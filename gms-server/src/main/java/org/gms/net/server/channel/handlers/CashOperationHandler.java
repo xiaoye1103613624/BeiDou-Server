@@ -88,6 +88,50 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         Character chr = c.getPlayer();
         CashShop cs = chr.getCashShop();
 
+        final int action = p.readByte();
+
+        // 095 魔方重洗：不经过现金商城，直接重洗装备潜能并回写（action 0x40）。
+        if (action == 0x40) {
+            c.tryacquireClient();
+            try {
+                final short slot = p.readShort();
+                final Item item = chr.getInventory(InventoryType.EQUIP).getItem(slot);
+                if (item instanceof Equip equip) {
+                    final java.util.Random r = new java.util.Random();
+                    equip.setPotential1(r.nextInt(50) + 1);
+                    equip.setPotential2(r.nextInt(50) + 1);
+                    equip.setPotential3(r.nextInt(50) + 1);
+                    equip.setBonusPotential1(r.nextInt(50) + 1);
+                    equip.setBonusPotential2(r.nextInt(50) + 1);
+                    try (var con = DatabaseConnection.getConnection()) {
+                        ItemFactory.getInstance().saveItems(Collections.singletonList(new Pair<Item, InventoryType>(equip, InventoryType.EQUIP)), chr.getId(), con);
+                    }
+                    c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(1, equip))));
+                    c.sendPacket(PacketCreator.serverNotice(1, "魔方重洗完成。"));
+                }
+            } catch (Exception e) {
+                log.error("Cube reroll failed", e);
+            } finally {
+                c.releaseClient();
+            }
+            c.enableActions();
+            return;
+        }
+
+        // 095 自定义中文 UI（签到/兑换/排行/转职/传送）：action 0x50..0x54，不经过现金商城。
+        if (action >= 0x50 && action <= 0x54) {
+            c.tryacquireClient();
+            try {
+                final String[] names = { "每日签到", "兑换中心", "排行榜", "转职", "传送" };
+                c.sendPacket(PacketCreator.serverNotice(1, "已请求：" + names[action - 0x50]));
+                // TODO：在此接入各功能真实服务端逻辑（签到发奖 / 兑换 / 排行查询 / 转职 / 传送）。
+            } finally {
+                c.releaseClient();
+            }
+            c.enableActions();
+            return;
+        }
+
         if (!cs.isOpened()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -95,7 +139,6 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
         if (c.tryacquireClient()) {     // thanks Thora for finding out an exploit within cash operations
             try {
-                final int action = p.readByte();
                 if (action == 0x03 || action == 0x1E) { // buy
                     p.readByte();
                     final int useNX = p.readInt();

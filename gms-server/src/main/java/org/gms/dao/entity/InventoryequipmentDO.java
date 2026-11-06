@@ -76,6 +76,17 @@ public class InventoryequipmentDO implements Serializable  {
 
     private Integer itemexp;
 
+    // 095 潜能/魔方：3 条主潜能 + 2 条 bonus 潜能（值为 PotentialOption 行 id，0 = 空）。
+    private Integer potential1;
+
+    private Integer potential2;
+
+    private Integer potential3;
+
+    private Integer bonusPotential1;
+
+    private Integer bonusPotential2;
+
     private Integer ringid;
 
 }

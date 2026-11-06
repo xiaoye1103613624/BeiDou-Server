@@ -120,7 +120,7 @@ import java.util.stream.Collectors;
  */
 public class PacketCreator {
 
-    public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
+    public static final List<Pair<Stat, Long>> EMPTY_STATUPDATE = Collections.emptyList();
     private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
@@ -189,7 +189,7 @@ public class PacketCreator {
             }
         }
 
-        p.writeByte(chr.getLevel()); // level
+        p.writeShort(chr.getLevel()); // level（等级上限提到 999 需 2 字节，原 writeByte 在 >255 时溢出）
         p.writeShort(chr.getJob().getId()); // job
         p.writeShort(chr.getStr()); // str
         p.writeShort(chr.getDex()); // dex
@@ -205,9 +205,9 @@ public class PacketCreator {
         } else {
             p.writeShort(chr.getRemainingSp()); // remaining sp
         }
-        p.writeInt(chr.getExp()); // current exp
+        p.writeLong(chr.getExp()); // current exp（999 级累积经验远超 int32，必须 8 字节）
         p.writeShort(chr.getFame()); // fame
-        p.writeInt(chr.getGachaExp()); //Gacha Exp
+        p.writeInt((int) chr.getGachaExp()); //Gacha Exp（addCharStats 维持 4 字节协议，parse_stats 的 skip(4) 对应）
         p.writeInt(chr.getMapId()); // current map id
         p.writeByte(chr.getInitialSpawnPoint()); // spawnpoint
         p.writeInt(0);
@@ -508,6 +508,13 @@ public class PacketCreator {
         }
         p.writeLong(getTime(-2));
         p.writeInt(-1);
+
+        // 095 潜能/魔方：equip 包尾部追加 5 个 int16 潜能行（3 主 + 2 bonus），与客户端 ItemParser.add_equip 严格对齐。
+        p.writeShort(equip.getPotential1());
+        p.writeShort(equip.getPotential2());
+        p.writeShort(equip.getPotential3());
+        p.writeShort(equip.getBonusPotential1());
+        p.writeShort(equip.getBonusPotential2());
 
     }
 
@@ -1022,14 +1029,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
+    public static Packet updatePlayerStats(List<Pair<Stat, Long>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<Stat, Integer> statupdate : stats) {
+        for (Pair<Stat, Long> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<Stat, Integer>> mystats = stats;
+        List<Pair<Stat, Long>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -1038,26 +1045,34 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<Stat, Integer> statupdate : mystats) {
-            if (statupdate.getLeft().getValue() >= 1) {
-                if (statupdate.getLeft().getValue() == 0x1) {
-                    p.writeByte(statupdate.getRight().byteValue());
-                } else if (statupdate.getLeft().getValue() <= 0x4) {
-                    p.writeInt(statupdate.getRight());
-                } else if (statupdate.getLeft().getValue() < 0x20) {
-                    p.writeByte(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x8000) {
+        for (Pair<Stat, Long> statupdate : mystats) {
+            int v = statupdate.getLeft().getValue();
+            long val = statupdate.getRight();
+            if (v >= 1) {
+                if (v == 0x1) {
+                    p.writeByte((byte) val);
+                } else if (v <= 0x4) {
+                    p.writeInt((int) val);
+                } else if (v == 0x10) {
+                    // LEVEL：等级上限提到 999 需 2 字节（原 writeByte 在 >255 时溢出）
+                    p.writeShort((int) val);
+                } else if (v < 0x20) {
+                    p.writeByte((short) val);
+                } else if (v == 0x8000) {
                     if (GameConstants.hasSPTable(chr.getJob())) {
                         addRemainingSkillInfo(p, chr);
                     } else {
-                        p.writeShort(statupdate.getRight().shortValue());
+                        p.writeShort((int) val);
                     }
-                } else if (statupdate.getLeft().getValue() < 0xFFFF) {
-                    p.writeShort(statupdate.getRight().shortValue());
-                } else if (statupdate.getLeft().getValue() == 0x20000) {
-                    p.writeShort(statupdate.getRight().shortValue());
+                } else if (v < 0xFFFF) {
+                    p.writeShort((int) val);
+                } else if (v == 0x10000) {
+                    // EXP：角色累积经验在 999 级远超 int32，必须 8 字节
+                    p.writeLong(val);
+                } else if (v == 0x20000) {
+                    p.writeShort((int) val);
                 } else {
-                    p.writeInt(statupdate.getRight());
+                    p.writeInt((int) val);
                 }
             }
         }
@@ -1958,7 +1973,7 @@ public class PacketCreator {
     public static Packet spawnPlayerMapObject(Client target, Character chr, boolean enteringField) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PLAYER);
         p.writeInt(chr.getId());
-        p.writeByte(chr.getLevel()); //v83
+        p.writeShort(chr.getLevel()); //v83（等级上限 999 需 2 字节，原 writeByte 在 >255 时溢出）
         p.writeString(chr.getName());
         if (chr.getGuildId() < 1) {
             p.writeString("");
@@ -2754,7 +2769,7 @@ public class PacketCreator {
         //3D 00 0A 43 01 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
         final OutPacket p = OutPacket.create(SendOpcode.CHAR_INFO);
         p.writeInt(chr.getId());
-        p.writeByte(chr.getLevel());
+        p.writeShort(chr.getLevel());
         p.writeShort(chr.getJob().getId());
         p.writeShort(chr.getFame());
         p.writeByte(chr.getMarriageRing() != null ? 1 : 0);

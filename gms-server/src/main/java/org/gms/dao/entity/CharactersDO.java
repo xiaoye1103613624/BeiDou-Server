@@ -40,9 +40,9 @@ public class CharactersDO implements Serializable {
 
     private Integer level;
 
-    private Integer exp;
+    private Long exp;
 
-    private Integer gachaexp;
+    private Long gachaexp;
 
     @Column("str")
     private Integer attrStr;

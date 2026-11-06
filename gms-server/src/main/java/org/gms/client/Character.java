@@ -252,11 +252,11 @@ public class Character extends AbstractCharacterObject {
     private long lastExpression = 0;
     @Setter
     private long jailExpiration = -1;
-    // ÆÆ¹¦Öµ£¨µ¥¶ÎÉËº¦ÉÏÏŞ£©£º½ÇÉ«ÊôĞÔ£¬¶ÔÆë²Î¿¼¶Ë BeiDou-Server ¿Ú¾¶ ¡ª¡ª
-    // ´´½ÇÄ¬ÈÏ 199999¡¢ÉÏÏŞ 2.1e9¡¢characters.limitBreak ³Ö¾Ã»¯¡¢±ä¸ü¼´Ê± 0x3730 ÏÂ·¢¡£
-    // ÉÏÏßÊ± PlayerLoggedinHandler ÏÂ·¢£»¿Í»§¶ËÈ¡ min(ÅäÖÃ cap, ±¾Öµ, 2^53)¡£
-    // £¨ÀúÊ·×¢¼Ç£º±¾°üÔø°ÑËüÕ¼Î»³É DamageLinesConfig.EXACT_INT_CAP È«¾Ö cap£¬
-    // µ¼ÖÂ±êÌâÏÔÊ¾ 2^53 ¾ŞÖµ ¡ª¡ª 2026-11-05 °´ÓÃ»§²Ã¾ö A ·½°¸¸Ä»Ø½ÇÉ«ÊôĞÔ¡££©
+    // ç ´åŠŸå€¼ï¼ˆå•æ®µä¼¤å®³ä¸Šé™ï¼‰ï¼šè§’è‰²å±æ€§ï¼Œå¯¹é½å‚è€ƒç«¯ BeiDou-Server å£å¾„ â€”â€”
+    // åˆ›è§’é»˜è®¤ 199999ã€ä¸Šé™ 2.1e9ã€characters.limitBreak æŒä¹…åŒ–ã€å˜æ›´å³æ—¶ 0x3730 ä¸‹å‘ã€‚
+    // ä¸Šçº¿æ—¶ PlayerLoggedinHandler ä¸‹å‘ï¼›å®¢æˆ·ç«¯å– min(é…ç½® cap, æœ¬å€¼, 2^53)ã€‚
+    // ï¼ˆå†å²æ³¨è®°ï¼šæœ¬åŒ…æ›¾æŠŠå®ƒå ä½æˆ DamageLinesConfig.EXACT_INT_CAP å…¨å±€ capï¼Œ
+    // å¯¼è‡´æ ‡é¢˜æ˜¾ç¤º 2^53 å·¨å€¼ â€”â€” 2026-11-05 æŒ‰ç”¨æˆ·è£å†³ A æ–¹æ¡ˆæ”¹å›è§’è‰²å±æ€§ã€‚ï¼‰
     public static final long DEFAULT_LIMIT_BREAK = 199999L;
     public static final long MAX_LIMIT_BREAK = 2_100_000_000L;
     @Getter
@@ -290,10 +290,10 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private String search = null;
-    private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map //Íæ¼Ò¿Í»§¶Ëµ±Ç°ÕıÔÚ³¢ÊÔ¸ü¸ÄµØÍ¼»òµÇÂ¼ÓÎÏ·µØÍ¼
+    private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map //ç©å®¶å®¢æˆ·ç«¯å½“å‰æ­£åœ¨å°è¯•æ›´æ”¹åœ°å›¾æˆ–ç™»å½•æ¸¸æˆåœ°å›¾
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
-    private final AtomicInteger exp = new AtomicInteger();
-    private final AtomicInteger gachaExp = new AtomicInteger();
+    private final AtomicLong exp = new AtomicLong();
+    private final AtomicLong gachaExp = new AtomicLong();
     private final AtomicInteger meso = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
@@ -408,25 +408,25 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
     private long portaldelay = 0;
-    // ¼ÇÂ¼×î½üÒ»´Î¡°Ë²ÒÆÀàÎ»ÒÆ¡±·¢ÉúÊ±¼ä£¨µ¥µ÷Ê±ÖÓÄÉÃë£¬ÓÃÓÚ¶ÌÊ±¼äÄÚµÄ¾àÀë¼ì²â·ÀÎóÅĞ£©
+    // è®°å½•æœ€è¿‘ä¸€æ¬¡â€œç¬ç§»ç±»ä½ç§»â€å‘ç”Ÿæ—¶é—´ï¼ˆå•è°ƒæ—¶é’Ÿçº³ç§’ï¼Œç”¨äºçŸ­æ—¶é—´å†…çš„è·ç¦»æ£€æµ‹é˜²è¯¯åˆ¤ï¼‰
     private volatile long lastTeleportLikeMoveTime = 0;
-    // ´«ËÍ¾àÀëÎóÅĞĞŞÕıÉÏÏÂÎÄ£ºÓÃÓÚ¡°´«ËÍÇ°×ø±ê + µ±Ç°×ø±ê¡±Ë«×ø±êĞ£Ñé
-    private static final long TELEPORT_DISTANCE_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(1200L); // ±£»¤´°¿Ú£¬¹ı³¤»áÔö¼Ó¿ÉÀûÓÃÃæ
-    private static final byte TELEPORT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS = 2; // ×î¶à±£»¤ 2 ´Î¹¥»÷°ü
-    private static final double TELEPORT_DISTANCE_CONTEXT_MIN_SHIFT_SQ = 1600.0; // ÖÁÉÙ 40px Î»ÒÆ²Å½¨Á¢ÉÏÏÂÎÄ
-    private Point teleportBeforePos = null; // ´«ËÍÇ°·şÎñ¶Ë×ø±ê£¨ÓÃÓÚË«×ø±ê¾àÀë¸´ºË£©
-    private Point teleportAfterPos = null; // ´«ËÍºó·şÎñ¶Ë×ø±ê£¨ÓÃÓÚÈ·ÈÏÈ·Êµ·¢ÉúÁË´«ËÍÎ»ÒÆ£©
-    private int teleportContextMapId = MapId.NONE; // ´«ËÍÉÏÏÂÎÄËùÊôµØÍ¼£¬¿çÍ¼ºó×Ô¶¯Ê§Ğ§
-    private long teleportContextExpireTime = 0L; // ´«ËÍÉÏÏÂÎÄ¹ıÆÚÊ±¼ä´Á£¨µ¥µ÷Ê±ÖÓÄÉÃë£©
-    private byte teleportContextRemainingChecks = 0; // ´«ËÍÉÏÏÂÎÄÊ£Óà¿ÉÓÃ¹¥»÷Ğ£Ñé´ÎÊı
-    // ³èÎïÊ°È¡´«ËÍ²¹³¥£ºÄÚ´«ËÍÃÅºó¼ÇÂ¼´«ËÍÇ°Íæ¼Ò×ø±ê£¬ÓÃÓÚ³èÎï¾ÉÎ»ÖÃÎïÆ·¼ñÈ¡·ÀÎóÅĞ
+    // ä¼ é€è·ç¦»è¯¯åˆ¤ä¿®æ­£ä¸Šä¸‹æ–‡ï¼šç”¨äºâ€œä¼ é€å‰åæ ‡ + å½“å‰åæ ‡â€åŒåæ ‡æ ¡éªŒ
+    private static final long TELEPORT_DISTANCE_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(1200L); // ä¿æŠ¤çª—å£ï¼Œè¿‡é•¿ä¼šå¢åŠ å¯åˆ©ç”¨é¢
+    private static final byte TELEPORT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS = 2; // æœ€å¤šä¿æŠ¤ 2 æ¬¡æ”»å‡»åŒ…
+    private static final double TELEPORT_DISTANCE_CONTEXT_MIN_SHIFT_SQ = 1600.0; // è‡³å°‘ 40px ä½ç§»æ‰å»ºç«‹ä¸Šä¸‹æ–‡
+    private Point teleportBeforePos = null; // ä¼ é€å‰æœåŠ¡ç«¯åæ ‡ï¼ˆç”¨äºåŒåæ ‡è·ç¦»å¤æ ¸ï¼‰
+    private Point teleportAfterPos = null; // ä¼ é€åæœåŠ¡ç«¯åæ ‡ï¼ˆç”¨äºç¡®è®¤ç¡®å®å‘ç”Ÿäº†ä¼ é€ä½ç§»ï¼‰
+    private int teleportContextMapId = MapId.NONE; // ä¼ é€ä¸Šä¸‹æ–‡æ‰€å±åœ°å›¾ï¼Œè·¨å›¾åè‡ªåŠ¨å¤±æ•ˆ
+    private long teleportContextExpireTime = 0L; // ä¼ é€ä¸Šä¸‹æ–‡è¿‡æœŸæ—¶é—´æˆ³ï¼ˆå•è°ƒæ—¶é’Ÿçº³ç§’ï¼‰
+    private byte teleportContextRemainingChecks = 0; // ä¼ é€ä¸Šä¸‹æ–‡å‰©ä½™å¯ç”¨æ”»å‡»æ ¡éªŒæ¬¡æ•°
+    // å® ç‰©æ‹¾å–ä¼ é€è¡¥å¿ï¼šå†…ä¼ é€é—¨åè®°å½•ä¼ é€å‰ç©å®¶åæ ‡ï¼Œç”¨äºå® ç‰©æ—§ä½ç½®ç‰©å“æ¡å–é˜²è¯¯åˆ¤
     private Point petLootTeleportBeforePos = null;
     private long petLootTeleportBeforePosTime = 0;
     private static final long PET_LOOT_TELEPORT_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(1500L);
-    // ÆÕÍ¨ÒÆ¶¯¾àÀëÎóÅĞĞŞÕıÉÏÏÂÎÄ£ºÖ»¸²¸Ç¡°ÒÆ¶¯°üºó½ô¸ú¹¥»÷°ü¡±µÄ¼«¶ÌÊ±¼ä´°
+    // æ™®é€šç§»åŠ¨è·ç¦»è¯¯åˆ¤ä¿®æ­£ä¸Šä¸‹æ–‡ï¼šåªè¦†ç›–â€œç§»åŠ¨åŒ…åç´§è·Ÿæ”»å‡»åŒ…â€çš„æçŸ­æ—¶é—´çª—
     private static final long MOVEMENT_DISTANCE_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(350L);
     private static final byte MOVEMENT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS = 1;
-    private static final double MOVEMENT_DISTANCE_CONTEXT_MIN_SHIFT_SQ = 400.0; // ÖÁÉÙ 20px Î»ÒÆ²Å½¨Á¢ÉÏÏÂÎÄ
+    private static final double MOVEMENT_DISTANCE_CONTEXT_MIN_SHIFT_SQ = 400.0; // è‡³å°‘ 20px ä½ç§»æ‰å»ºç«‹ä¸Šä¸‹æ–‡
     private Point movementBeforePos = null;
     private Point movementAfterPos = null;
     private int movementContextMapId = MapId.NONE;
@@ -535,7 +535,7 @@ public class Character extends AbstractCharacterObject {
     private boolean familyBuff = false;
     private boolean familyParty = false;
 
-    // »ñÈ¡ FamilyExp µÄÖµ
+    // è·å– FamilyExp çš„å€¼
     @Getter
     private float familyExp = 1;
     @Getter
@@ -547,13 +547,13 @@ public class Character extends AbstractCharacterObject {
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
     private static final InventoryService inventoryService = ServerManager.getApplicationContext().getBean(InventoryService.class);
 
-    /** ¸÷¼¼ÄÜÔ­Ê¼Ê±¼ä´Á£¬½ö±» >= MIN_INTERVAL µÄÕı³£°ü¸üĞÂ£¬±©·¢°üÍ¸Ã÷Í¨¹ı */
+    /** å„æŠ€èƒ½åŸå§‹æ—¶é—´æˆ³ï¼Œä»…è¢« >= MIN_INTERVAL çš„æ­£å¸¸åŒ…æ›´æ–°ï¼Œæš´å‘åŒ…é€æ˜é€šè¿‡ */
     private final ConcurrentHashMap<Integer, Long> normalAttackTimes = new ConcurrentHashMap<>();
 
     /**
-     * »ñÈ¡Ö¸¶¨¼¼ÄÜ¾àÉÏ´Î¹¥»÷µÄ¼ä¸ôºÁÃëÊı£¬²¢¸üĞÂ×îºó¹¥»÷Ê±¼ä¡£
-     * ¼ä¸ô < MIN_INTERVAL Ê±²»¸üĞÂÊ±¼ä´Á£¬ÊÓÎªÍøÂç¶¶¶¯Í¸Ã÷Ìø¹ı¡£
-     * Ê×´Îµ÷ÓÃ»òÊ±ÖÓ»ØÍËÊ±·µ»Ø Long.MAX_VALUE£¬±¾´Î²»²ÎÓë¼ä¸ôÅĞ¶¨¡£
+     * è·å–æŒ‡å®šæŠ€èƒ½è·ä¸Šæ¬¡æ”»å‡»çš„é—´éš”æ¯«ç§’æ•°ï¼Œå¹¶æ›´æ–°æœ€åæ”»å‡»æ—¶é—´ã€‚
+     * é—´éš” < MIN_INTERVAL æ—¶ä¸æ›´æ–°æ—¶é—´æˆ³ï¼Œè§†ä¸ºç½‘ç»œæŠ–åŠ¨é€æ˜è·³è¿‡ã€‚
+     * é¦–æ¬¡è°ƒç”¨æˆ–æ—¶é’Ÿå›é€€æ—¶è¿”å› Long.MAX_VALUEï¼Œæœ¬æ¬¡ä¸å‚ä¸é—´éš”åˆ¤å®šã€‚
      */
     public long getAttackInterval(int skillId, long now) {
         AtomicLong intervalRef = new AtomicLong(Long.MAX_VALUE);
@@ -1010,7 +1010,7 @@ public class Character extends AbstractCharacterObject {
                 return false;
             }
         }
-        return !existName(name) && Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{2,12}").matcher(name).matches(); // ¼ÓÈë¶ÔÖĞÎÄ±àÂëµÄ¼ì²â
+        return !existName(name) && Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{2,12}").matcher(name).matches(); // åŠ å…¥å¯¹ä¸­æ–‡ç¼–ç çš„æ£€æµ‹
     }
 
     public static boolean existName(String name) {
@@ -1151,7 +1151,7 @@ public class Character extends AbstractCharacterObject {
             }
         }
 
-        // need to delay to ensure clientside has finished reloading character data     //ĞèÒªÑÓ³ÙÒÔÈ·±£¿Í»§¶ËÒÑÍê³ÉÖØĞÂ¼ÓÔØ½ÇÉ«Êı¾İ
+        // need to delay to ensure clientside has finished reloading character data     //éœ€è¦å»¶è¿Ÿä»¥ç¡®ä¿å®¢æˆ·ç«¯å·²å®Œæˆé‡æ–°åŠ è½½è§’è‰²æ•°æ®
         TimerManager.getInstance().schedule(() -> {
             Character thisChr = Character.this;
             MapleMap map = thisChr.getMap();
@@ -1426,8 +1426,8 @@ public class Character extends AbstractCharacterObject {
 
 
     /**
-     * Íæ¼Ò½ÇÉ«¸ü¸ÄµØÍ¼
-     * @param map   µØÍ¼ID
+     * ç©å®¶è§’è‰²æ›´æ”¹åœ°å›¾
+     * @param map   åœ°å›¾ID
      */
     public void changeMap(int map, Object pt) {
         MapleMap warpMap;
@@ -1437,7 +1437,7 @@ public class Character extends AbstractCharacterObject {
             warpMap = eim.getMapInstance(map);
         } else {
             warpMap = getMap(map, true);
-            if (warpMap == null) return; //ÅĞ¶ÏµØÍ¼²»´æÔÚÔòÖ±½Ó·µ»Ø²¢·¢ËÍÌáÊ¾ÏûÏ¢¡£
+            if (warpMap == null) return; //åˆ¤æ–­åœ°å›¾ä¸å­˜åœ¨åˆ™ç›´æ¥è¿”å›å¹¶å‘é€æç¤ºæ¶ˆæ¯ã€‚
         }
 
         Portal portal = switch (pt) {
@@ -1461,7 +1461,7 @@ public class Character extends AbstractCharacterObject {
     public void changeMap(final MapleMap target, Portal pto) {
         canWarpCounter++;
 
-        eventChangedMap(target.getId());    // player can be dropped from an event here, hence the new warping target.  //Íæ¼Ò¿ÉÒÔ´ÓÕâÀïµÄÊÂ¼şÖĞÍË³ö£¬Òò´Ë³ÉÎªĞÂµÄÅ¤ÇúÄ¿±ê¡£
+        eventChangedMap(target.getId());    // player can be dropped from an event here, hence the new warping target.  //ç©å®¶å¯ä»¥ä»è¿™é‡Œçš„äº‹ä»¶ä¸­é€€å‡ºï¼Œå› æ­¤æˆä¸ºæ–°çš„æ‰­æ›²ç›®æ ‡ã€‚
         MapleMap to = getWarpMap(target.getId());
         if (pto == null) {
             pto = to.getPortal(0);
@@ -1494,7 +1494,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void forceChangeMap(final MapleMap target, Portal pto) {
-        // will actually enter the map given as parameter, regardless of being an eventmap or whatnot       //½«Êµ¼ÊÊäÈë×÷Îª²ÎÊı¸ø³öµÄÓ³Éä£¬ÎŞÂÛÊÇÊÂ¼şÓ³Éä»¹ÊÇÆäËûÊ²Ã´
+        // will actually enter the map given as parameter, regardless of being an eventmap or whatnot       //å°†å®é™…è¾“å…¥ä½œä¸ºå‚æ•°ç»™å‡ºçš„æ˜ å°„ï¼Œæ— è®ºæ˜¯äº‹ä»¶æ˜ å°„è¿˜æ˜¯å…¶ä»–ä»€ä¹ˆ
 
         canWarpCounter++;
         eventChangedMap(MapId.NONE);
@@ -1510,7 +1510,7 @@ public class Character extends AbstractCharacterObject {
             }
 
             // thanks Thora for finding an issue with players not being actually warped into the target event map (rather sent to the event starting map)
-            //¸ĞĞ»Thora·¢ÏÖÍæ¼ÒÊµ¼ÊÉÏÃ»ÓĞ±»Å¤Çúµ½Ä¿±êÊÂ¼şµØÍ¼ÖĞ£¨¶øÊÇ±»·¢ËÍµ½ÊÂ¼ş¿ªÊ¼µØÍ¼£©µÄÎÊÌâ
+            //æ„Ÿè°¢Thoraå‘ç°ç©å®¶å®é™…ä¸Šæ²¡æœ‰è¢«æ‰­æ›²åˆ°ç›®æ ‡äº‹ä»¶åœ°å›¾ä¸­ï¼ˆè€Œæ˜¯è¢«å‘é€åˆ°äº‹ä»¶å¼€å§‹åœ°å›¾ï¼‰çš„é—®é¢˜
             mapEim.registerPlayer(this, false);
         }
 
@@ -1770,7 +1770,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * Íæ¼Ò¸ü¸ÄµØÍ¼ ÄÚ²¿·½·¨
+     * ç©å®¶æ›´æ”¹åœ°å›¾ å†…éƒ¨æ–¹æ³•
      * @param to
      * @param pos
      * @param warpPacket
@@ -1779,10 +1779,10 @@ public class Character extends AbstractCharacterObject {
         if (!canWarpMap) {
             return;
         }
-        if (getMap(to.getId(), true) == null) return; //ÅĞ¶ÏµØÍ¼²»´æÔÚÔòÖ±½Ó·µ»Ø²¢·¢ËÍÌáÊ¾ÏûÏ¢¡£
+        if (getMap(to.getId(), true) == null) return; //åˆ¤æ–­åœ°å›¾ä¸å­˜åœ¨åˆ™ç›´æ¥è¿”å›å¹¶å‘é€æç¤ºæ¶ˆæ¯ã€‚
 
         this.mapTransitioning.set(true);
-        // ÏÔÊ½Çå¿Õ¡°´«ËÍ¾àÀëĞ£ÑéÉÏÏÂÎÄ¡±£¬±ÜÃâ¿çÍ¼ºó¾ÉÉÏÏÂÎÄ²ĞÁô
+        // æ˜¾å¼æ¸…ç©ºâ€œä¼ é€è·ç¦»æ ¡éªŒä¸Šä¸‹æ–‡â€ï¼Œé¿å…è·¨å›¾åæ—§ä¸Šä¸‹æ–‡æ®‹ç•™
         clearTeleportDistanceContext();
 
         this.unregisterChairBuff();
@@ -1818,7 +1818,7 @@ public class Character extends AbstractCharacterObject {
                 Character.this.getParty().setEnemy(k);
             }
             silentPartyUpdateInternal(getParty());  // EIM script calls inside
-        } else {    //ÇĞ»»µØÍ¼Ê±¿¨×¡ÁË
+        } else {    //åˆ‡æ¢åœ°å›¾æ—¶å¡ä½äº†
             log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn2"), getName(), map.getMapName(), map.getId());
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here
             return;
@@ -1846,7 +1846,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * Íæ¼Ò½ÇÉ«ÊÇ·ñ´¦ÓÚÇĞ»»µØÍ¼µÄ×´Ì¬
+     * ç©å®¶è§’è‰²æ˜¯å¦å¤„äºåˆ‡æ¢åœ°å›¾çš„çŠ¶æ€
      * @return boolean
      */
     public boolean isChangingMaps() {
@@ -1854,7 +1854,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     *  ÉèÖÃµØÍ¼×ª»»Íê³É
+     *  è®¾ç½®åœ°å›¾è½¬æ¢å®Œæˆ
      */
     public void setMapTransitionComplete() {
         this.mapTransitioning.set(false);
@@ -1974,81 +1974,81 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ´¦ÀíÊ°È¡ºóÁ¢¼´ÏûºÄµÄµÀ¾ßÂß¼­
+     * å¤„ç†æ‹¾å–åç«‹å³æ¶ˆè€—çš„é“å…·é€»è¾‘
      *
-     * @param itemId ÎïÆ·µÄÎ¨Ò»±êÊ¶ID£¬Ó¦·ûºÏÓÎÏ·ÎïÆ·ID¹æ·¶£¨ÏûºÄÆ·ÀàIDÒÔ2¿ªÍ·£©
-     * @return boolean ÏûºÄÊÇ·ñ³É¹¦Ó¦ÓÃ£º
-     *                 - true: µÀ¾ßĞ§¹ûÒÑÓ¦ÓÃ/´¦ÀíÍê³É
-     *                 - false: ·ÇÏûºÄÆ·»òÎŞĞèÁ¢¼´Ê¹ÓÃ
-     * @throws NullPointerException Èç¹ûÎŞ·¨»ñÈ¡ÎïÆ·ĞÅÏ¢»òĞ§¹û¶ÔÏó¿ÉÄÜÅ×³ö
+     * @param itemId ç‰©å“çš„å”¯ä¸€æ ‡è¯†IDï¼Œåº”ç¬¦åˆæ¸¸æˆç‰©å“IDè§„èŒƒï¼ˆæ¶ˆè€—å“ç±»IDä»¥2å¼€å¤´ï¼‰
+     * @return boolean æ¶ˆè€—æ˜¯å¦æˆåŠŸåº”ç”¨ï¼š
+     *                 - true: é“å…·æ•ˆæœå·²åº”ç”¨/å¤„ç†å®Œæˆ
+     *                 - false: éæ¶ˆè€—å“æˆ–æ— éœ€ç«‹å³ä½¿ç”¨
+     * @throws NullPointerException å¦‚æœæ— æ³•è·å–ç‰©å“ä¿¡æ¯æˆ–æ•ˆæœå¯¹è±¡å¯èƒ½æŠ›å‡º
      *
      * @description
-     * ÊµÏÖÒÔÏÂºËĞÄÂß¼­£º
-     * 1. ÑéÖ¤ÎïÆ·ÊÇ·ñÎª¿ÉÏûºÄÀàĞÍ£¨IDÊ×Êı×ÖÎª2£©
-     * 2. ¼ì²éÎïÆ·µÄ"Ê°È¡¼´ÓÃ"±ê¼Ç
-     * 3. ´¦Àí¶ÓÎéµÀ¾ßµÄÌØÊâ³¡¾°£º
-     *    - ÆÕÍ¨¶ÓÎéµÀ¾ß£º¶ÔÍ¬µØÍ¼´æ»î¶ÓÓÑÓ¦ÓÃĞ§¹û
-     *    - È«ÌåÖÎÁÆµÀ¾ß£º½â³ı¶ÓÓÑÒì³£×´Ì¬
-     * 4. ´¦Àí¹ÖÎï¿¨Æ¬ÊÕ¼¯£¨ID 238xxxxÀàĞÍ£©
+     * å®ç°ä»¥ä¸‹æ ¸å¿ƒé€»è¾‘ï¼š
+     * 1. éªŒè¯ç‰©å“æ˜¯å¦ä¸ºå¯æ¶ˆè€—ç±»å‹ï¼ˆIDé¦–æ•°å­—ä¸º2ï¼‰
+     * 2. æ£€æŸ¥ç‰©å“çš„"æ‹¾å–å³ç”¨"æ ‡è®°
+     * 3. å¤„ç†é˜Ÿä¼é“å…·çš„ç‰¹æ®Šåœºæ™¯ï¼š
+     *    - æ™®é€šé˜Ÿä¼é“å…·ï¼šå¯¹åŒåœ°å›¾å­˜æ´»é˜Ÿå‹åº”ç”¨æ•ˆæœ
+     *    - å…¨ä½“æ²»ç–—é“å…·ï¼šè§£é™¤é˜Ÿå‹å¼‚å¸¸çŠ¶æ€
+     * 4. å¤„ç†æ€ªç‰©å¡ç‰‡æ”¶é›†ï¼ˆID 238xxxxç±»å‹ï¼‰
      *
      * @example
-     * // µäĞÍÊ¹ÓÃ³¡¾°
+     * // å…¸å‹ä½¿ç”¨åœºæ™¯
      * if(applyConsumeOnPickup(2001000)) {
-     *     removeFromInventory(item); // ÏûºÄºóÒÆ³ıÎïÆ·
+     *     removeFromInventory(item); // æ¶ˆè€—åç§»é™¤ç‰©å“
      * }
      *
      * @note
-     * - ÎïÆ·ID¸ñÊ½Ô¼¶¨£º
-     *   - µÚ1Î»£ºÎïÆ·´óÀà£¨2=ÏûºÄÆ·£©
-     *   - µÚ2-4Î»£ºÎïÆ·×ÓÀà£¨238=¹ÖÎï¿¨Æ¬£©
-     * - ¶ÓÎéµÀ¾ßĞ§¹ûÖ»»áÓ°ÏìÍ¬µØÍ¼µÄ´æ»î¶ÓÓÑ
+     * - ç‰©å“IDæ ¼å¼çº¦å®šï¼š
+     *   - ç¬¬1ä½ï¼šç‰©å“å¤§ç±»ï¼ˆ2=æ¶ˆè€—å“ï¼‰
+     *   - ç¬¬2-4ä½ï¼šç‰©å“å­ç±»ï¼ˆ238=æ€ªç‰©å¡ç‰‡ï¼‰
+     * - é˜Ÿä¼é“å…·æ•ˆæœåªä¼šå½±å“åŒåœ°å›¾çš„å­˜æ´»é˜Ÿå‹
      */
-    public boolean applyConsumeOnPickup(final int itemId) {// ÅĞ¶ÏÊ°È¡ºóÊÇ·ñÁ¢¼´ÏûºÄµÀ¾ßµÄ·½·¨
-        if (itemId / 1000000 != 2) {// ¼ì²éÎïÆ·IDÊÇ·ñÊôÓÚÏûºÄÆ·Àà£¨¼ÙÉèIDÒÔ2¿ªÍ·£©
-            return false; // ·ÇÏûºÄÆ·Ö±½Ó·µ»Ø²»´¦Àí
+    public boolean applyConsumeOnPickup(final int itemId) {// åˆ¤æ–­æ‹¾å–åæ˜¯å¦ç«‹å³æ¶ˆè€—é“å…·çš„æ–¹æ³•
+        if (itemId / 1000000 != 2) {// æ£€æŸ¥ç‰©å“IDæ˜¯å¦å±äºæ¶ˆè€—å“ç±»ï¼ˆå‡è®¾IDä»¥2å¼€å¤´ï¼‰
+            return false; // éæ¶ˆè€—å“ç›´æ¥è¿”å›ä¸å¤„ç†
         }
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();// »ñÈ¡ÎïÆ·ĞÅÏ¢Ìá¹©Æ÷ÊµÀı
-        if (!ii.isConsumeOnPickup(itemId)) {// ¼ì²é¸ÃÎïÆ·ÊÇ·ñ±ê¼ÇÎª"Ê°È¡ºóÁ¢¼´Ê¹ÓÃ"
-            return false; // ÎŞĞèÁ¢¼´Ê¹ÓÃÔò·µ»Ø
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();// è·å–ç‰©å“ä¿¡æ¯æä¾›å™¨å®ä¾‹
+        if (!ii.isConsumeOnPickup(itemId)) {// æ£€æŸ¥è¯¥ç‰©å“æ˜¯å¦æ ‡è®°ä¸º"æ‹¾å–åç«‹å³ä½¿ç”¨"
+            return false; // æ— éœ€ç«‹å³ä½¿ç”¨åˆ™è¿”å›
         }
-        if (ItemConstants.isPartyItem(itemId)) {// ÅĞ¶ÏÊÇ·ñÎª¶ÓÎé¹²ÏíÀàµÀ¾ß
-            List<Character> partyMembers = this.getPartyMembersOnSameMap();// »ñÈ¡Í¬Ò»µØÍ¼ÄÚµÄ¶ÓÎé³ÉÔ±ÁĞ±í
-            if (!ItemId.isPartyAllCure(itemId)) {// ´¦Àí·ÇÈ«ÌåÖÎÁÆÀàµÀ¾ß
-                StatEffect mse = ii.getItemEffect(itemId);// »ñÈ¡µÀ¾ßĞ§¹û¶ÔÏó
+        if (ItemConstants.isPartyItem(itemId)) {// åˆ¤æ–­æ˜¯å¦ä¸ºé˜Ÿä¼å…±äº«ç±»é“å…·
+            List<Character> partyMembers = this.getPartyMembersOnSameMap();// è·å–åŒä¸€åœ°å›¾å†…çš„é˜Ÿä¼æˆå‘˜åˆ—è¡¨
+            if (!ItemId.isPartyAllCure(itemId)) {// å¤„ç†éå…¨ä½“æ²»ç–—ç±»é“å…·
+                StatEffect mse = ii.getItemEffect(itemId);// è·å–é“å…·æ•ˆæœå¯¹è±¡
                 if (!partyMembers.isEmpty()) {
-                    for (Character mc : partyMembers) {// ±éÀú´æ»î¶ÓÓÑ²¢Ê©¼ÓĞ§¹û
+                    for (Character mc : partyMembers) {// éå†å­˜æ´»é˜Ÿå‹å¹¶æ–½åŠ æ•ˆæœ
                         if (mc.isAlive()) {
                             mse.applyTo(mc);
                         }
                     }
                 } else if (this.isAlive()) {
-                    mse.applyTo(this);// ÎŞ¶ÓÓÑÊ±¶Ô×Ô¼ºÉúĞ§
+                    mse.applyTo(this);// æ— é˜Ÿå‹æ—¶å¯¹è‡ªå·±ç”Ÿæ•ˆ
                 }
             } else {
-                if (!partyMembers.isEmpty()) {// ´¦ÀíÈ«ÌåÖÎÁÆÀàµÀ¾ß£¨Èç½â³ıÒì³£×´Ì¬£©
+                if (!partyMembers.isEmpty()) {// å¤„ç†å…¨ä½“æ²»ç–—ç±»é“å…·ï¼ˆå¦‚è§£é™¤å¼‚å¸¸çŠ¶æ€ï¼‰
                     for (Character mc : partyMembers) {
-                        mc.dispelDebuffs(); // ½â³ı¶ÓÓÑdebuff
+                        mc.dispelDebuffs(); // è§£é™¤é˜Ÿå‹debuff
                     }
                 } else {
-                    this.dispelDebuffs(); // ÎŞ¶ÓÓÑÊ±½â³ı×ÔÉí
+                    this.dispelDebuffs(); // æ— é˜Ÿå‹æ—¶è§£é™¤è‡ªèº«
                 }
             }
         } else {
-            ii.getItemEffect(itemId).applyTo(this);// ·Ç¶ÓÎéµÀ¾ßÖ±½Ó¶Ô×ÔÉíÉúĞ§
+            ii.getItemEffect(itemId).applyTo(this);// éé˜Ÿä¼é“å…·ç›´æ¥å¯¹è‡ªèº«ç”Ÿæ•ˆ
         }
 
-        if (itemId / 10000 == 238) {// ÌØÊâ´¦Àí¹ÖÎï¿¨Æ¬ÊÕ¼¯£¨ID¸ñÊ½238xxxx£©
-            this.getMonsterBook().addCard(client, itemId); // Ìí¼Óµ½¹ÖÎïÍ¼¼ø
+        if (itemId / 10000 == 238) {// ç‰¹æ®Šå¤„ç†æ€ªç‰©å¡ç‰‡æ”¶é›†ï¼ˆIDæ ¼å¼238xxxxï¼‰
+            this.getMonsterBook().addCard(client, itemId); // æ·»åŠ åˆ°æ€ªç‰©å›¾é‰´
         }
-        return true; // ³É¹¦Ö´ĞĞÏûºÄ²Ù×÷
+        return true; // æˆåŠŸæ‰§è¡Œæ¶ˆè€—æ“ä½œ
     }
 
     public final void pickupItem(MapObject ob) {
         pickupItem(ob, -1);
     }
 
-    public final void pickupItem(MapObject ob, int petIndex) {     // yes, one picks the MapObject, not the MapItem     //ÊÇµÄ£¬Ñ¡ÔñMapObject£¬¶ø²»ÊÇMapItem
-        if (ob == null) {                                               // pet index refers to the one picking up the item      //³èÎïÖ¸ÊıÊÇÖ¸¼ñÆğÎïÆ·µÄÈË
+    public final void pickupItem(MapObject ob, int petIndex) {     // yes, one picks the MapObject, not the MapItem     //æ˜¯çš„ï¼Œé€‰æ‹©MapObjectï¼Œè€Œä¸æ˜¯MapItem
+        if (ob == null) {                                               // pet index refers to the one picking up the item      //å® ç‰©æŒ‡æ•°æ˜¯æŒ‡æ¡èµ·ç‰©å“çš„äºº
             return;
         }
 
@@ -2058,7 +2058,7 @@ public class Character extends AbstractCharacterObject {
                 return;
             }
 
-            // canBePickedBy ¶Á/Ğ´ owner ×Ö¶Î,±ØĞë³Ö itemLock
+            // canBePickedBy è¯»/å†™ owner å­—æ®µ,å¿…é¡»æŒ itemLock
             mapitem.lockItem();
             try {
                 if (!mapitem.canBePickedBy(this)) {
@@ -2108,13 +2108,13 @@ public class Character extends AbstractCharacterObject {
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else if (ItemId.isNxCard(mapitem.getItemId())) {
-                                // Add NX to account, show effect and make item disappear   //Ìí¼ÓµãÈ¯µ½ÕË»§£¬ÊÇ·ñÕ¹Ê¾¼ñµ½µãÈ¯£¬²¢ÒÆ³ıÎïÆ·
-                                int nxGain = (mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250) * mItem.getQuantity(); //Ê¹µãÈ¯Ö§³Ö°´ÊıÁ¿Ïà³Ë
+                                // Add NX to account, show effect and make item disappear   //æ·»åŠ ç‚¹åˆ¸åˆ°è´¦æˆ·ï¼Œæ˜¯å¦å±•ç¤ºæ¡åˆ°ç‚¹åˆ¸ï¼Œå¹¶ç§»é™¤ç‰©å“
+                                int nxGain = (mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250) * mItem.getQuantity(); //ä½¿ç‚¹åˆ¸æ”¯æŒæŒ‰æ•°é‡ç›¸ä¹˜
                                 this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
-                                if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //¼ñµ½µãÈ¯ÊÇ·ñÕ¹Ê¾
+                                if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //æ¡åˆ°ç‚¹åˆ¸æ˜¯å¦å±•ç¤º
                                     showHint(I18nUtil.getMessage("Character.pickupItem.message1", nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)), 300);
-                                    //showHint("¼ñµ½ #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
+                                    //showHint("æ¡åˆ° #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                                 }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
@@ -2162,14 +2162,14 @@ public class Character extends AbstractCharacterObject {
                         }
                     } else if (ItemId.isNxCard(mapitem.getItemId())) {
                         // Add NX to account, show effect and make item disappear
-                        int nxGain = (mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250) * mItem.getQuantity(); //Ê¹µãÈ¯Ö§³Ö°´ÊıÁ¿Ïà³Ë
+                        int nxGain = (mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250) * mItem.getQuantity(); //ä½¿ç‚¹åˆ¸æ”¯æŒæŒ‰æ•°é‡ç›¸ä¹˜
                         this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
-                        if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //¼ñµ½µãÈ¯ÊÇ·ñÕ¹Ê¾
+                        if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //æ¡åˆ°ç‚¹åˆ¸æ˜¯å¦å±•ç¤º
                             showHint(I18nUtil.getMessage("Character.pickupItem.message1", nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)), 300);
-                            //showHint("¼ñµ½ #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
+                            //showHint("æ¡åˆ° #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
-                    } else if (applyConsumeOnPickup(mItem.getItemId())) {//´Ë¶ÎÅĞ¶ÏÎª´¦Àí¼ñÈ¡ÖÎÁÆµÀ¾ßºÍ¹ÖÎï¿¨¼ÓÈëÍ¼¼ø
+                    } else if (applyConsumeOnPickup(mItem.getItemId())) {//æ­¤æ®µåˆ¤æ–­ä¸ºå¤„ç†æ¡å–æ²»ç–—é“å…·å’Œæ€ªç‰©å¡åŠ å…¥å›¾é‰´
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
                         if (mItem.getItemId() == ItemId.ARPQ_SPIRIT_JEWEL) {
                             updateAriantScore();
@@ -2279,7 +2279,7 @@ public class Character extends AbstractCharacterObject {
     public static boolean deleteCharFromDB(Character player, int senderAccId) {
         try {
             characterService.deleteCharFromDB(player, senderAccId);
-            // NOTE: É¾³ı»º´æ,·ÀÖ¹½ÇÉ«²ÛÂúºóÎŞ·¨ÔÙ´Î½¨Á¢½ÇÉ«
+            // NOTE: åˆ é™¤ç¼“å­˜,é˜²æ­¢è§’è‰²æ§½æ»¡åæ— æ³•å†æ¬¡å»ºç«‹è§’è‰²
             Server.getInstance().deleteCharacterEntry(senderAccId, player.getId());
             return true;
         } catch (Exception e) {
@@ -2326,13 +2326,13 @@ public class Character extends AbstractCharacterObject {
 
     private static Pair<Integer, Pair<Integer, Integer>> getChairTaskIntervalRate(int maxhp, int maxmp) {
         /*
-        ´Ë´¦2¸ö²ÎÊıCHAIR_EXTRA_HEAL_MULTIPLIERºÍCHAIR_EXTRA_HEAL_MAX_DELAYÒÑ±»ÎÒÉ¾³ı
-        1.ÔÚ±¶ÂÊ¹Ì¶¨µÄÇé¿öÏÂ£¬¼È²»Ï£Íû¶¨Ê±ÈÎÎñÖ´ĞĞÌ«¿ì£¬ÓÖ²»Ï£Íû¶¨Ê±ÈÎÎñÖ´ĞĞÌ«Âı
-        2.ÔÚ¹Ì¶¨×î´óÊ±¼äµÄÇé¿öÏÂ£¬¼È²»Ï£Íû»Ö¸´Á¿Ì«´ó£¬ÓÖ²»Ï£Íû»Ö¸´Á¿Ì«Ğ¡
-        3.¹Ø¼üÊÇÕâ2¸ö²ÎÊıÓÖ¶¼ÄÜÅäÖÃ£¬ÔÚÄ³Ğ©³¡¾°ÏÂ£¬¾Í»á´òÆÆÉÏÊöËû×Ô¼ºÉèÖÃµÄÏŞÖÆ
-        4.ËùÒÔ£¬Õâ¸ö²ÎÊıĞèÒª¸öÈË½øĞĞ¸´ÔÓµÄ¼ÆËã²ÅÄÜÅäÖÃ£¬²»ÄÜÂÒÅä£¬µ«ËûÓÖ·Å¿ªÈÃÄã¶¼ÔÊĞíÅäÖÃ
-        5.×ÛÉÏ£¬ÕâÖÖÊôÓÚ¼ÈÒªÓÖÒª£¬Ê²Ã´¶¼ÒªÖ»»áº¦ÁËÄã£¬ËùÒÔÎÒ°ÑÕâ2¸ö²ÎÊı¶¼¸ÉµôÁË
-        6.Èç¹ûÈ·ÊµÒª·Å¿ªÔÊĞíÅäÖÃ£¬×î¶à°ÑCHAIR_EXTRA_HEAL_MAX_DELAY·Å¿ª¼´¿É£¬Õâ¸ö²ÎÊı»¹ËãÓĞµãÒâÒå£¬µ«Ò²ĞèÒª¼òµ¥¼ÆËãÒ»ÏÂµÃµ½ËûºÏÊÊµÄÖµ
+        æ­¤å¤„2ä¸ªå‚æ•°CHAIR_EXTRA_HEAL_MULTIPLIERå’ŒCHAIR_EXTRA_HEAL_MAX_DELAYå·²è¢«æˆ‘åˆ é™¤
+        1.åœ¨å€ç‡å›ºå®šçš„æƒ…å†µä¸‹ï¼Œæ—¢ä¸å¸Œæœ›å®šæ—¶ä»»åŠ¡æ‰§è¡Œå¤ªå¿«ï¼Œåˆä¸å¸Œæœ›å®šæ—¶ä»»åŠ¡æ‰§è¡Œå¤ªæ…¢
+        2.åœ¨å›ºå®šæœ€å¤§æ—¶é—´çš„æƒ…å†µä¸‹ï¼Œæ—¢ä¸å¸Œæœ›æ¢å¤é‡å¤ªå¤§ï¼Œåˆä¸å¸Œæœ›æ¢å¤é‡å¤ªå°
+        3.å…³é”®æ˜¯è¿™2ä¸ªå‚æ•°åˆéƒ½èƒ½é…ç½®ï¼Œåœ¨æŸäº›åœºæ™¯ä¸‹ï¼Œå°±ä¼šæ‰“ç ´ä¸Šè¿°ä»–è‡ªå·±è®¾ç½®çš„é™åˆ¶
+        4.æ‰€ä»¥ï¼Œè¿™ä¸ªå‚æ•°éœ€è¦ä¸ªäººè¿›è¡Œå¤æ‚çš„è®¡ç®—æ‰èƒ½é…ç½®ï¼Œä¸èƒ½ä¹±é…ï¼Œä½†ä»–åˆæ”¾å¼€è®©ä½ éƒ½å…è®¸é…ç½®
+        5.ç»¼ä¸Šï¼Œè¿™ç§å±äºæ—¢è¦åˆè¦ï¼Œä»€ä¹ˆéƒ½è¦åªä¼šå®³äº†ä½ ï¼Œæ‰€ä»¥æˆ‘æŠŠè¿™2ä¸ªå‚æ•°éƒ½å¹²æ‰äº†
+        6.å¦‚æœç¡®å®è¦æ”¾å¼€å…è®¸é…ç½®ï¼Œæœ€å¤šæŠŠCHAIR_EXTRA_HEAL_MAX_DELAYæ”¾å¼€å³å¯ï¼Œè¿™ä¸ªå‚æ•°è¿˜ç®—æœ‰ç‚¹æ„ä¹‰ï¼Œä½†ä¹Ÿéœ€è¦ç®€å•è®¡ç®—ä¸€ä¸‹å¾—åˆ°ä»–åˆé€‚çš„å€¼
          */
         float toHeal = Math.max(maxhp, maxmp);
         float maxDuration = SECONDS.toMillis(21);
@@ -2718,8 +2718,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ¸øÍæ¼Ò½ÇÉ«·¢ËÍÏûÏ¢
-     * @param type  0=ÁÄÌì´°[note]À¶É«ÏûÏ¢£»1=ÖĞ¼äµ¯´°£»2=£¿£»3=£¿£»4=£¿£»5=ÁÄÌì´°ºìÉ«ÏûÏ¢£»6=ÁÄÌì´°»ÆÉ«ÏûÏ¢
+     * ç»™ç©å®¶è§’è‰²å‘é€æ¶ˆæ¯
+     * @param type  0=èŠå¤©çª—[note]è“è‰²æ¶ˆæ¯ï¼›1=ä¸­é—´å¼¹çª—ï¼›2=ï¼Ÿï¼›3=ï¼Ÿï¼›4=ï¼Ÿï¼›5=èŠå¤©çª—çº¢è‰²æ¶ˆæ¯ï¼›6=èŠå¤©çª—é»„è‰²æ¶ˆæ¯
      * @param message
      */
     public void dropMessage(int type, String message) {
@@ -2727,8 +2727,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ÉèÖÃÆÆ¹¦Öµ£¨µ¥¶ÎÉËº¦ÉÏÏŞ£©¡£¼Ğµ½ [0, MAX_LIMIT_BREAK] ºóÁ¢¼´ 0x3730 ÏÂ·¢£¬
-     * ÓÚÊÇ¿Í»§¶Ë±êÌâÓë clamp ÔÚÍ¬Ò»Ê±¿Ì¸úÉÏ£¬²»ĞèÒªµÈÏÂÒ»´ÎÉÏÏß¡£
+     * è®¾ç½®ç ´åŠŸå€¼ï¼ˆå•æ®µä¼¤å®³ä¸Šé™ï¼‰ã€‚å¤¹åˆ° [0, MAX_LIMIT_BREAK] åç«‹å³ 0x3730 ä¸‹å‘ï¼Œ
+     * äºæ˜¯å®¢æˆ·ç«¯æ ‡é¢˜ä¸ clamp åœ¨åŒä¸€æ—¶åˆ»è·Ÿä¸Šï¼Œä¸éœ€è¦ç­‰ä¸‹ä¸€æ¬¡ä¸Šçº¿ã€‚
      */
     public void setLimitBreak(long value) {
         long clamped = Math.max(0L, Math.min(value, MAX_LIMIT_BREAK));
@@ -2740,12 +2740,12 @@ public class Character extends AbstractCharacterObject {
         setLimitBreak(limitBreak + amount);
     }
 
-    /** ½Å±¾¼æÈİ±ğÃû£ºÆÆ¹¦ÉËº¦ÉÏÏŞ¡£ */
+    /** è„šæœ¬å…¼å®¹åˆ«åï¼šç ´åŠŸä¼¤å®³ä¸Šé™ã€‚ */
     public long getDamage() {
         return limitBreak;
     }
 
-    /** ½Å±¾¼æÈİ±ğÃû£ºÆÆ¹¦ÉËº¦ÉÏÏŞ¡£ */
+    /** è„šæœ¬å…¼å®¹åˆ«åï¼šç ´åŠŸä¼¤å®³ä¸Šé™ã€‚ */
     public long getPGSXDJ() {
         return limitBreak;
     }
@@ -2754,7 +2754,7 @@ public class Character extends AbstractCharacterObject {
         gainLimitBreak(amount);
     }
 
-    /** ÆÆ¹¦ÖµÏÂĞĞ£¨0x3730£©£º¿Í»§¶ËÍ¬Ê±Ğ´±êÌâÓëÉúĞ§ clamp¡£ */
+    /** ç ´åŠŸå€¼ä¸‹è¡Œï¼ˆ0x3730ï¼‰ï¼šå®¢æˆ·ç«¯åŒæ—¶å†™æ ‡é¢˜ä¸ç”Ÿæ•ˆ clampã€‚ */
     public void syncLimitBreak() {
         if (client != null) {
             sendPacket(PacketCreator.limitBreakSync(limitBreak));
@@ -2925,7 +2925,7 @@ public class Character extends AbstractCharacterObject {
 
                                 if (ItemConstants.isExpirablePet(item.getItemId())) {
                                     if (item.getPetId() > -1) {
-                                        // ³èÎïµÀ¾ßÕæÕı¹ıÆÚÏú»ÙÊ±£¬Í¬Ê±ÇåÀí pets/petignores£¬±ÜÃâÊı¾İ¿â²ĞÁô¹Â¶ùÊı¾İ¡£
+                                        // å® ç‰©é“å…·çœŸæ­£è¿‡æœŸé”€æ¯æ—¶ï¼ŒåŒæ—¶æ¸…ç† pets/petignoresï¼Œé¿å…æ•°æ®åº“æ®‹ç•™å­¤å„¿æ•°æ®ã€‚
                                         Pet.deleteFromDb(this, item.getPetId());
                                     }
                                     sendPacket(PacketCreator.itemExpired(item.getItemId()));
@@ -2984,12 +2984,12 @@ public class Character extends AbstractCharacterObject {
         if (currentgexp >= levelUpNeed) {
             expgain += Math.max(0, levelUpNeed);
 
-            int nextneed = ExpTable.getExpNeededForLevel(level + 1);
+            long nextneed = ExpTable.getExpNeededForLevel(level + 1);
             if (currentgexp - expgain >= nextneed) {
                 expgain += nextneed;
             }
 
-            this.gachaExp.set((int) (currentgexp - expgain));
+            this.gachaExp.set(currentgexp - expgain);
         } else {
             expgain = this.gachaExp.getAndSet(0);
         }
@@ -3032,11 +3032,11 @@ public class Character extends AbstractCharacterObject {
         gainExpInternal(gain, equip, party, show, inChat, white);
     }
 
-    public void loseExp(int loss, boolean show, boolean inChat) {
+    public void loseExp(long loss, boolean show, boolean inChat) {
         loseExp(loss, show, inChat, true);
     }
 
-    public void loseExp(int loss, boolean show, boolean inChat, boolean white) {
+    public void loseExp(long loss, boolean show, boolean inChat, boolean white) {
         gainExpInternal(-loss, 0, 0, show, inChat, white);
     }
 
@@ -3059,14 +3059,7 @@ public class Character extends AbstractCharacterObject {
         long total = Math.max(gain + equip + party, -exp.get());
 
         if (level < getMaxLevel() && (allowExpGain || this.getEventInstance() != null)) {
-            long leftover = 0;
-            long nextExp = exp.get() + total;
-
-            if (nextExp > (long) Integer.MAX_VALUE) {
-                total = Integer.MAX_VALUE - exp.get();
-                leftover = nextExp - Integer.MAX_VALUE;
-            }
-            updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
+            updateSingleStat(Stat.EXP, exp.addAndGet(total));
             totalExpGained += total;
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
@@ -3077,7 +3070,7 @@ public class Character extends AbstractCharacterObject {
                 String msg = I18nUtil.getMessage("Character.levelUp.globalNotice", getName(), getMap().getMapName(), getLevel());
                 if (GameConfig.getServerBoolean("use_announce_global_level_up") && !isGM()) {
                     for (Character player : getWorldServer().getPlayerStorage().getAllCharacters()) {
-                        // Èç¹ûÍæ¼ÒÔÚÉÌ³Ç£¬½«»áÒÔµ¯´°µÄĞÎÊ½·¢ËÍ£¬Ò»¶Ñµ¯´°»á°ÑÍæ¼Ò±Æ·è£¡
+                        // å¦‚æœç©å®¶åœ¨å•†åŸï¼Œå°†ä¼šä»¥å¼¹çª—çš„å½¢å¼å‘é€ï¼Œä¸€å †å¼¹çª—ä¼šæŠŠç©å®¶é€¼ç–¯ï¼
                         if (player.getCashShop().isOpened()) {
                             continue;
                         }
@@ -3093,25 +3086,21 @@ public class Character extends AbstractCharacterObject {
                 if (GameConfig.getServerBoolean("use_level_up_protect")) break;
             }
 
-            if (leftover > 0) {
-                gainExpInternal(leftover, equip, party, false, inChat, white);
-            } else {
-                lastExpGainTime = System.currentTimeMillis();
+            lastExpGainTime = System.currentTimeMillis();
 
-                if (GameConfig.getServerBoolean("use_exp_gain_log")) {
-                    ExpLogRecord expLogRecord = new ExpLogger.ExpLogRecord(
-                            getWorldServer().getExpRate(),
-                            expCoupon,
-                            totalExpGained,
-                            exp.get(),
-                            new Timestamp(lastExpGainTime),
-                            id
-                    );
-                    ExpLogger.putExpLogRecord(expLogRecord);
-                }
-
-                totalExpGained = 0;
+            if (GameConfig.getServerBoolean("use_exp_gain_log")) {
+                ExpLogRecord expLogRecord = new ExpLogger.ExpLogRecord(
+                        getWorldServer().getExpRate(),
+                        expCoupon,
+                        totalExpGained,
+                        exp.get(),
+                        new Timestamp(lastExpGainTime),
+                        id
+                );
+                ExpLogger.putExpLogRecord(expLogRecord);
             }
+
+            totalExpGained = 0;
         }
     }
 
@@ -3195,13 +3184,13 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ½«½ğ±Ò¿Û³ıÓëµ÷ÓÃ·½µÄÊı¾İ¿âÊÂÎñ°ó¶¨¡£
-     * ½ÇÉ«±£´æÓëÆäËû½ğ±Ò±ä¸üÔÚÊÂÎñÍê³ÉÇ°¶¼»áµÈ´ı£¬
-     * Ö»ÓĞ³Ö¾Ã»¯³É¹¦ºó²Å·¢²¼ĞÂµÄÄÚ´æÓà¶î¡£
+     * å°†é‡‘å¸æ‰£é™¤ä¸è°ƒç”¨æ–¹çš„æ•°æ®åº“äº‹åŠ¡ç»‘å®šã€‚
+     * è§’è‰²ä¿å­˜ä¸å…¶ä»–é‡‘å¸å˜æ›´åœ¨äº‹åŠ¡å®Œæˆå‰éƒ½ä¼šç­‰å¾…ï¼Œ
+     * åªæœ‰æŒä¹…åŒ–æˆåŠŸåæ‰å‘å¸ƒæ–°çš„å†…å­˜ä½™é¢ã€‚
      *
-     * @param cost        ĞèÒª¿Û³ıµÄÕıÕûÊı½ğ±Ò
-     * @param persistence ½ÓÊÕ¿Û·ÑºóÓà¶î£¬²¢ÔÚÍ¬Ò»ÊÂÎñÖĞ³Ö¾Ã»¯ÒµÎñÓë½ğ±Ò
-     * @return ÊÂÎñºÍÄÚ´æ¿Û·ÑÊÇ·ñ¾ù³É¹¦
+     * @param cost        éœ€è¦æ‰£é™¤çš„æ­£æ•´æ•°é‡‘å¸
+     * @param persistence æ¥æ”¶æ‰£è´¹åä½™é¢ï¼Œå¹¶åœ¨åŒä¸€äº‹åŠ¡ä¸­æŒä¹…åŒ–ä¸šåŠ¡ä¸é‡‘å¸
+     * @return äº‹åŠ¡å’Œå†…å­˜æ‰£è´¹æ˜¯å¦å‡æˆåŠŸ
      */
     public synchronized boolean spendMesoTransactionally(int cost, IntPredicate persistence) {
         if (cost <= 0) {
@@ -4596,7 +4585,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * Í³Ò»´ÓÊı¾İ¿â¼ÓÔØµ¥Ö»³èÎïµÄ¹ıÂËÅäÖÃ£¬È·±£ÕÙ»½Ê±ÄÚ´æ×´Ì¬ÓëÊı¾İ¿â±£³ÖÒ»ÖÂ¡£
+     * ç»Ÿä¸€ä»æ•°æ®åº“åŠ è½½å•åªå® ç‰©çš„è¿‡æ»¤é…ç½®ï¼Œç¡®ä¿å¬å”¤æ—¶å†…å­˜çŠ¶æ€ä¸æ•°æ®åº“ä¿æŒä¸€è‡´ã€‚
      */
     public void loadPetExcludedItems(int petId) {
         List<Integer> excludedItemIds = inventoryService.getPetIgnoreByPetId(petId).stream()
@@ -4607,7 +4596,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ¿Í»§¶ËÌá½»¹ıÂËÉèÖÃÊ±£¬Ö±½Ó°´²îÒìÔöÁ¿¸üĞÂÊı¾İ¿â£¬±ÜÃâ½ÇÉ«±£´æÊ±ÔÙ×öÎ£ÏÕµÄÈ«Á¿É¾Ğ´¡£
+     * å®¢æˆ·ç«¯æäº¤è¿‡æ»¤è®¾ç½®æ—¶ï¼Œç›´æ¥æŒ‰å·®å¼‚å¢é‡æ›´æ–°æ•°æ®åº“ï¼Œé¿å…è§’è‰²ä¿å­˜æ—¶å†åšå±é™©çš„å…¨é‡åˆ å†™ã€‚
      */
     public void updatePetExcludedItems(int petId, Set<Integer> newExcludedItems) {
         Set<Integer> currentExcludedItems = getExcludedForPet(petId);
@@ -4625,7 +4614,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ³èÎï±»ÓÀ¾ÃÉ¾³ıÊ±Í¬²½ÇåÀíÊı¾İ¿âºÍ½ÇÉ«ÄÚ´æÖĞµÄ¹ıÂËÅäÖÃ£¬±ÜÃâ²ĞÁôÔàÊı¾İ¡£
+     * å® ç‰©è¢«æ°¸ä¹…åˆ é™¤æ—¶åŒæ­¥æ¸…ç†æ•°æ®åº“å’Œè§’è‰²å†…å­˜ä¸­çš„è¿‡æ»¤é…ç½®ï¼Œé¿å…æ®‹ç•™è„æ•°æ®ã€‚
      */
     public void deletePetExcludedData(int petId) {
         inventoryService.deletePetData(petId);
@@ -4734,8 +4723,8 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public int getExp() {
-        return exp.get();
+    public long getExp() {
+    	return exp.get();
     }
 
     public int getGachaExp() {
@@ -4755,13 +4744,13 @@ public class Character extends AbstractCharacterObject {
     }
 
     public float getLevelExpRate() {
-        if (hasNoviceExpRate()) return 1; // ĞÂÊÖ¾­Ñé±£»¤
+        if (hasNoviceExpRate()) return 1; // æ–°æ‰‹ç»éªŒä¿æŠ¤
 
         return 1f + GameConfig.getWorldFloat(getWorld(), "level_exp_rate") * level;
     }
 
     public float getQuickLevelExpRate() {
-        if (hasNoviceExpRate()) return 1; // ĞÂÊÖ¾­Ñé±£»¤
+        if (hasNoviceExpRate()) return 1; // æ–°æ‰‹ç»éªŒä¿æŠ¤
 
         int quickLv = GameConfig.getWorldInt(getWorld(), "quick_level");
         if (level >= quickLv) return 1;
@@ -5052,7 +5041,12 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getMaxClassLevel() {
-        return isCygnus() ? 120 : 200;
+        if (isCygnus()) {
+            return 120;
+        }
+        // ç­‰çº§ä¸Šé™æ”¯æŒé…ç½®åŒ–ï¼ˆå¦‚ 999ï¼‰ã€‚æœªé…ç½® max_level æ—¶å›é€€ 255ï¼Œä¿æŒåŸè¡Œä¸ºã€‚
+        int maxLevel = GameConfig.getServerInt("max_level");
+        return maxLevel > 0 ? maxLevel : 255;
     }
 
     public int getMaxLevel() {
@@ -6578,9 +6572,9 @@ public class Character extends AbstractCharacterObject {
             ret.setMaxMp(rs.getInt("maxmp"));
             ret.remainingAp = rs.getInt("ap");
             ret.loadCharSkillPoints(rs.getString("sp").split(","));
-            ret.exp.set(rs.getInt("exp"));
+            ret.exp.set(rs.getLong("exp"));
             ret.fame = rs.getInt("fame");
-            ret.gachaExp.set(rs.getInt("gachaexp"));
+            ret.gachaExp.set(rs.getLong("gachaexp"));
             ret.mapId = rs.getInt("map");
             ret.initialSpawnPoint = rs.getInt("spawnpoint");
             ret.setGMLevel(rs.getInt("gm"));
@@ -6714,7 +6708,7 @@ public class Character extends AbstractCharacterObject {
         chr.setAccountId(charactersDO.getAccountid());
         chr.setMapId(charactersDO.getMap());
         chr.setJailExpiration(charactersDO.getJailexpire());
-        // ÆÆ¹¦Öµ£ºDB ¿ÕÖµ£¨ÀúÊ·½ÇÉ«/ĞÂÁĞÎ´»ØÌî£©»ØÍË´´½ÇÄ¬ÈÏ£»Ô½½ç¼Ğµ½ [0, MAX]¡£
+        // ç ´åŠŸå€¼ï¼šDB ç©ºå€¼ï¼ˆå†å²è§’è‰²/æ–°åˆ—æœªå›å¡«ï¼‰å›é€€åˆ›è§’é»˜è®¤ï¼›è¶Šç•Œå¤¹åˆ° [0, MAX]ã€‚
         {
             long lb = charactersDO.getLimitBreak() != null ? charactersDO.getLimitBreak() : DEFAULT_LIMIT_BREAK;
             chr.limitBreak = Math.max(0L, Math.min(lb, MAX_LIMIT_BREAK));
@@ -6758,7 +6752,7 @@ public class Character extends AbstractCharacterObject {
                     Pet pet = item.getPet();
                     if (pet != null && pet.isSummoned()) {
                         chr.addPet(pet);
-                        // µÇÂ¼Ê±¶ÔÒÑÕÙ»½³èÎïÍ³Ò»×ßÍ¬Ò»Ì×¹ıÂËÅäÖÃ¼ÓÔØÂß¼­£¬±ÜÃâºóĞøÈë¿ÚĞĞÎª²»Ò»ÖÂ¡£
+                        // ç™»å½•æ—¶å¯¹å·²å¬å”¤å® ç‰©ç»Ÿä¸€èµ°åŒä¸€å¥—è¿‡æ»¤é…ç½®åŠ è½½é€»è¾‘ï¼Œé¿å…åç»­å…¥å£è¡Œä¸ºä¸ä¸€è‡´ã€‚
                         chr.loadPetExcludedItems(item.getPetId());
                     }
                     continue;
@@ -6863,7 +6857,7 @@ public class Character extends AbstractCharacterObject {
         chr.effLock.lock();
         chr.statWlock.lock();
         try {
-            // ´Ë´¦ËäÈ»ÊÇ¿ÉÖØÈëËø£¬µ«ÈÔ²»½¨ÒéËø2´Î£¬ËùÒÔ²»Ê¹ÓÃget·½·¨
+            // æ­¤å¤„è™½ç„¶æ˜¯å¯é‡å…¥é”ï¼Œä½†ä»ä¸å»ºè®®é”2æ¬¡ï¼Œæ‰€ä»¥ä¸ä½¿ç”¨getæ–¹æ³•
             cdo.setAttrStr(chr.attrStr);
             cdo.setAttrDex(chr.attrDex);
             cdo.setAttrInt(chr.attrInt);
@@ -6936,7 +6930,7 @@ public class Character extends AbstractCharacterObject {
         cdo.setUseslots((int) chr.getSlots(1));
         cdo.setSetupslots((int) chr.getSlots(2));
         cdo.setEtcslots((int) chr.getSlots(3));
-        // todo Î´Íê³É
+        // todo æœªå®Œæˆ
         return cdo;
     }
 
@@ -7072,12 +7066,12 @@ public class Character extends AbstractCharacterObject {
         }
         usedSafetyCharm = false;
         if (possesed > 0 && !MapId.isDojo(getMapId())) {
-            message(I18nUtil.getMessage("Character.useItem.message1"));  //Ê¹ÓÃ°²È«»¤·û£¬²»¿Û¾­Ñé
+            message(I18nUtil.getMessage("Character.useItem.message1"));  //ä½¿ç”¨å®‰å…¨æŠ¤ç¬¦ï¼Œä¸æ‰£ç»éªŒ
             InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
             usedSafetyCharm = true;
         } else if (getJob() != Job.BEGINNER) { //Hmm...
             if (!FieldLimit.NO_EXP_DECREASE.check(getMap().getFieldLimit())) {  // thanks Conrad for noticing missing FieldLimit check
-                int XPdummy = ExpTable.getExpNeededForLevel(getLevel());
+                long XPdummy = ExpTable.getExpNeededForLevel(getLevel());
 
                 if (getMap().isTown()) {    // thanks MindLove, SIayerMonkey, HaItsNotOver for noting players only lose 1% on town maps
                     XPdummy /= 100;
@@ -7089,7 +7083,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
 
-                int curExp = getExp();
+                long curExp = getExp();
                 if (curExp > XPdummy) {
                     loseExp(XPdummy, false, false);
                 } else {
@@ -7428,10 +7422,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void receivePartyMemberHP() {
-        // ²»ÔÚ´Ë´¦°üÒ»²ã prtLock:getPartyMembersOnSameMap ÄÚ²¿ÒÑ³Ö prtLock ±£»¤ party ÒıÓÃ¡£
-        // ÈôÔÙ°üÒ»²ã,»áÔÚ³Ö prtLock µÄÍ¬Ê±¶ÔÍ¬Í¼¶ÓÓÑÖğ¸öÈ¡ getHp()(¶Ô·½ statRlock),
-        // Óë updateLocalStats(±¾½ÇÉ« statWlock ºóÔÙ updatePartyMemberHP È¡ prtLock)ĞÎ³É
-        // ¿ç½ÇÉ«·´ÏòËøË³Ğò,´æÔÚËÀËø´°¿Ú¡£
+        // ä¸åœ¨æ­¤å¤„åŒ…ä¸€å±‚ prtLock:getPartyMembersOnSameMap å†…éƒ¨å·²æŒ prtLock ä¿æŠ¤ party å¼•ç”¨ã€‚
+        // è‹¥å†åŒ…ä¸€å±‚,ä¼šåœ¨æŒ prtLock çš„åŒæ—¶å¯¹åŒå›¾é˜Ÿå‹é€ä¸ªå– getHp()(å¯¹æ–¹ statRlock),
+        // ä¸ updateLocalStats(æœ¬è§’è‰² statWlock åå† updatePartyMemberHP å– prtLock)å½¢æˆ
+        // è·¨è§’è‰²åå‘é”é¡ºåº,å­˜åœ¨æ­»é”çª—å£ã€‚
         for (Character partychar : this.getPartyMembersOnSameMap()) {
             sendPacket(PacketCreator.updatePartyMemberHP(partychar.getId(), partychar.getHp(), partychar.getCurrentMaxHp()));
         }
@@ -7831,7 +7825,7 @@ public class Character extends AbstractCharacterObject {
     //ItemFactory saveItems and monsterbook.saveCards are the most time consuming here.
     public synchronized void saveCharToDB(boolean notAutosave) {
         if (!loggedIn) {
-            // Èç¹ûÒÑ¾­ÍË³öµÇÂ¼£¬È¡Ïû×Ô¶¯±£´æµ±Ç°½ÇÉ«ÈÎÎñ
+            // å¦‚æœå·²ç»é€€å‡ºç™»å½•ï¼Œå–æ¶ˆè‡ªåŠ¨ä¿å­˜å½“å‰è§’è‰²ä»»åŠ¡
             CharacterSaveService service = getCharacterSaveService();
             service.unregisterSaveCharacter(this.getId());
             return;
@@ -7857,8 +7851,8 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(4, attrDex);
                         ps.setInt(5, attrLuk);
                         ps.setInt(6, attrInt);
-                        ps.setInt(7, Math.abs(exp.get()));
-                        ps.setInt(8, Math.abs(gachaExp.get()));
+                        ps.setLong(7, Math.abs(exp.get()));
+                        ps.setLong(8, Math.abs(gachaExp.get()));
                         ps.setInt(9, hp);
                         ps.setInt(10, mp);
                         ps.setInt(11, maxHp);
@@ -7960,7 +7954,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setTimestamp(53, new Timestamp(lastExpGainTime));
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
-                    ps.setLong(56, limitBreak);   // ÆÆ¹¦Öµ³Ö¾Ã»¯£¨½ÇÉ«ÊôĞÔ£¬·ÇÈ«¾Ö cap£©
+                    ps.setLong(56, limitBreak);   // ç ´åŠŸå€¼æŒä¹…åŒ–ï¼ˆè§’è‰²å±æ€§ï¼Œéå…¨å±€ capï¼‰
                     ps.setInt(57, id);
 
                     int updateRows = ps.executeUpdate();
@@ -8302,12 +8296,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setExp(int amount) {
-        this.exp.set(amount);
+    public void setExp(long amount) {
+    	this.exp.set(amount);
     }
 
-    public void setGachaExp(int exp) {
-        this.gachaExp.set(exp);
+    public void setGachaExp(long exp) {
+    	this.gachaExp.set(exp);
     }
 
     public void finishDojoTutorial() {
@@ -9264,12 +9258,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void updateSingleStat(Stat stat, int newval) {
+    public void updateSingleStat(Stat stat, long newval) {
         updateSingleStat(stat, newval, false);
     }
 
-    private void updateSingleStat(Stat stat, int newval, boolean itemReaction) {
-        sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Integer.valueOf(newval))), itemReaction, this));
+    private void updateSingleStat(Stat stat, long newval, boolean itemReaction) {
+        sendPacket(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Long.valueOf(newval))), itemReaction, this));
     }
 
     public void sendPacket(Packet packet) {
@@ -9361,16 +9355,16 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ±ê¼ÇÒ»´ÎË²ÒÆÀàÎ»ÒÆ£¨ÀıÈçÊ÷¶´/´«ËÍ¶¯×÷£©¡£
+     * æ ‡è®°ä¸€æ¬¡ç¬ç§»ç±»ä½ç§»ï¼ˆä¾‹å¦‚æ ‘æ´/ä¼ é€åŠ¨ä½œï¼‰ã€‚
      */
     public void markTeleportLikeMove() {
         this.lastTeleportLikeMoveTime = monotonicNow();
     }
 
     /**
-     * ±ê¼ÇÒ»´ÎË²ÒÆÀàÎ»ÒÆ£¬²¢¼ÇÂ¼´«ËÍÇ°ºó×ø±êÓÃÓÚºóĞø¹¥»÷¾àÀëË«×ø±êĞ£Ñé¡£
+     * æ ‡è®°ä¸€æ¬¡ç¬ç§»ç±»ä½ç§»ï¼Œå¹¶è®°å½•ä¼ é€å‰ååæ ‡ç”¨äºåç»­æ”»å‡»è·ç¦»åŒåæ ‡æ ¡éªŒã€‚
      *
-     * <p>Ö»ÔÚÎ»ÒÆÃ÷ÏÔÊ±½¨Á¢ÉÏÏÂÎÄ£¬±ÜÃâÆÕÍ¨Ğ¡²½ÒÆ¶¯ÎóÈë´«ËÍ±£»¤Âß¼­¡£</p>
+     * <p>åªåœ¨ä½ç§»æ˜æ˜¾æ—¶å»ºç«‹ä¸Šä¸‹æ–‡ï¼Œé¿å…æ™®é€šå°æ­¥ç§»åŠ¨è¯¯å…¥ä¼ é€ä¿æŠ¤é€»è¾‘ã€‚</p>
      */
     public synchronized void markTeleportLikeMove(Point beforePos, Point afterPos) {
         long now = monotonicNow();
@@ -9389,7 +9383,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ¼ÇÂ¼Ò»´ÎÆÕÍ¨ÒÆ¶¯Ç°ºó×ø±ê£¬ÓÃÓÚ¼«¶ÌÊ±¼ä´°ÄÚµÄ¹¥»÷¾àÀëË«×ø±êĞ£Ñé¡£
+     * è®°å½•ä¸€æ¬¡æ™®é€šç§»åŠ¨å‰ååæ ‡ï¼Œç”¨äºæçŸ­æ—¶é—´çª—å†…çš„æ”»å‡»è·ç¦»åŒåæ ‡æ ¡éªŒã€‚
      */
     public synchronized void markRegularMove(Point beforePos, Point afterPos) {
         long now = monotonicNow();
@@ -9406,16 +9400,16 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * »ñÈ¡×î½üÒ»´ÎË²ÒÆÀàÎ»ÒÆÊ±¼ä´Á£¨µ¥µ÷Ê±ÖÓÄÉÃë£©¡£
+     * è·å–æœ€è¿‘ä¸€æ¬¡ç¬ç§»ç±»ä½ç§»æ—¶é—´æˆ³ï¼ˆå•è°ƒæ—¶é’Ÿçº³ç§’ï¼‰ã€‚
      */
     public long getLastTeleportLikeMoveTime() {
         return lastTeleportLikeMoveTime;
     }
 
     /**
-     * »ñÈ¡ÓÃÓÚ¹¥»÷¾àÀëĞ£ÑéµÄ¡°´«ËÍÇ°×ø±ê¡±¡£
+     * è·å–ç”¨äºæ”»å‡»è·ç¦»æ ¡éªŒçš„â€œä¼ é€å‰åæ ‡â€ã€‚
      *
-     * <p>½öÔÚÉÏÏÂÎÄÈÔÓĞĞ§Ê±·µ»Ø£¬³¬Ê±/¿çÍ¼/´ÎÊıºÄ¾¡»á×Ô¶¯ÇåÀí¡£</p>
+     * <p>ä»…åœ¨ä¸Šä¸‹æ–‡ä»æœ‰æ•ˆæ—¶è¿”å›ï¼Œè¶…æ—¶/è·¨å›¾/æ¬¡æ•°è€—å°½ä¼šè‡ªåŠ¨æ¸…ç†ã€‚</p>
      */
     public synchronized Point getTeleportBeforePositionForDistanceCheck() {
         if (!isTeleportDistanceContextActiveLocked(monotonicNow())) {
@@ -9426,7 +9420,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * »ñÈ¡ÓÃÓÚ¹¥»÷¾àÀëĞ£ÑéµÄ¡°ÆÕÍ¨ÒÆ¶¯Ç°×ø±ê¡±¡£
+     * è·å–ç”¨äºæ”»å‡»è·ç¦»æ ¡éªŒçš„â€œæ™®é€šç§»åŠ¨å‰åæ ‡â€ã€‚
      */
     public synchronized Point getMovementBeforePositionForDistanceCheck() {
         if (!isMovementDistanceContextActiveLocked(monotonicNow())) {
@@ -9437,8 +9431,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ¼ÇÂ¼´«ËÍÇ°Íæ¼Ò×ø±ê£¬¹©³èÎïÊ°È¡·´×÷±×¾ÉÎ»ÖÃÎïÆ·²¹³¥Ê¹ÓÃ¡£
-     * Ã¿´ÎÄÚ´«ËÍÃÅ´¥·¢Ê±ÓÉ InnerPortalHandler µ÷ÓÃ¡£
+     * è®°å½•ä¼ é€å‰ç©å®¶åæ ‡ï¼Œä¾›å® ç‰©æ‹¾å–åä½œå¼Šæ—§ä½ç½®ç‰©å“è¡¥å¿ä½¿ç”¨ã€‚
+     * æ¯æ¬¡å†…ä¼ é€é—¨è§¦å‘æ—¶ç”± InnerPortalHandler è°ƒç”¨ã€‚
      */
     public void setPetLootTeleportBeforePos(Point pos) {
         this.petLootTeleportBeforePos = pos;
@@ -9446,8 +9440,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * »ñÈ¡³èÎïÊ°È¡²¹³¥ÓÃµÄ´«ËÍÇ°×ø±ê¡£
-     * 1.5s ÄÚÓĞĞ§£¬³¬Ê±×Ô¶¯Ê§Ğ§£¬±ÜÃâ¾É×ø±ê²ĞÁôÏÂÒ»´Î¼ñ°üÎóÅĞ¡£
+     * è·å–å® ç‰©æ‹¾å–è¡¥å¿ç”¨çš„ä¼ é€å‰åæ ‡ã€‚
+     * 1.5s å†…æœ‰æ•ˆï¼Œè¶…æ—¶è‡ªåŠ¨å¤±æ•ˆï¼Œé¿å…æ—§åæ ‡æ®‹ç•™ä¸‹ä¸€æ¬¡æ¡åŒ…è¯¯åˆ¤ã€‚
      */
     public Point getPetLootTeleportBeforePos() {
         if (petLootTeleportBeforePos == null) {
@@ -9461,7 +9455,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * Ïû·ÑÒ»´Î´«ËÍ¾àÀë±£»¤Ğ£Ñé´ÎÊı£¨°´¹¥»÷°üÎ¬¶ÈÏû·Ñ£©¡£
+     * æ¶ˆè´¹ä¸€æ¬¡ä¼ é€è·ç¦»ä¿æŠ¤æ ¡éªŒæ¬¡æ•°ï¼ˆæŒ‰æ”»å‡»åŒ…ç»´åº¦æ¶ˆè´¹ï¼‰ã€‚
      */
     public synchronized void consumeTeleportDistanceCheckContext() {
         if (!isTeleportDistanceContextActiveLocked(monotonicNow())) {
@@ -9476,7 +9470,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * Ïû·ÑÒ»´ÎÆÕÍ¨ÒÆ¶¯¾àÀë±£»¤Ğ£Ñé´ÎÊı¡£
+     * æ¶ˆè´¹ä¸€æ¬¡æ™®é€šç§»åŠ¨è·ç¦»ä¿æŠ¤æ ¡éªŒæ¬¡æ•°ã€‚
      */
     public synchronized void consumeMovementDistanceCheckContext() {
         if (!isMovementDistanceContextActiveLocked(monotonicNow())) {
@@ -9491,9 +9485,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ÏÔÊ½Çå¿Õ¡°´«ËÍ¾àÀëĞ£ÑéÉÏÏÂÎÄ¡±¡£
+     * æ˜¾å¼æ¸…ç©ºâ€œä¼ é€è·ç¦»æ ¡éªŒä¸Šä¸‹æ–‡â€ã€‚
      *
-     * <p>ÓÃÓÚ¿çÍ¼ÇĞ»»µÈ¹Ø¼ü×´Ì¬±ä¸üµã£¬È·±£²»»áĞ¯´ø¾ÉµØÍ¼ÉÏÏÂÎÄ²ÎÓëºóĞøÅĞ¶¨¡£</p>
+     * <p>ç”¨äºè·¨å›¾åˆ‡æ¢ç­‰å…³é”®çŠ¶æ€å˜æ›´ç‚¹ï¼Œç¡®ä¿ä¸ä¼šæºå¸¦æ—§åœ°å›¾ä¸Šä¸‹æ–‡å‚ä¸åç»­åˆ¤å®šã€‚</p>
      */
     public synchronized void clearTeleportDistanceContext() {
         clearTeleportDistanceContextLocked();
@@ -9534,7 +9528,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ½öµ±´«ËÍÇ°ºó×ø±êÓĞĞ§ÇÒÎ»ÒÆ·ù¶È×ã¹»´óÊ±£¬²Å½¨Á¢¾àÀëĞ£ÑéÉÏÏÂÎÄ¡£
+     * ä»…å½“ä¼ é€å‰ååæ ‡æœ‰æ•ˆä¸”ä½ç§»å¹…åº¦è¶³å¤Ÿå¤§æ—¶ï¼Œæ‰å»ºç«‹è·ç¦»æ ¡éªŒä¸Šä¸‹æ–‡ã€‚
      */
     private static boolean shouldBuildTeleportDistanceContext(Point beforePos, Point afterPos) {
         return beforePos != null
@@ -9591,7 +9585,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
         this.ban(reason);
-        sendPacket(PacketCreator.sendPolice(I18nUtil.getMessage("Character.autoBan.message1")));  //·¢ËÍ×Ô¶¯·â½ûÌáÊ¾
+        sendPacket(PacketCreator.sendPolice(I18nUtil.getMessage("Character.autoBan.message1")));  //å‘é€è‡ªåŠ¨å°ç¦æç¤º
         TimerManager.getInstance().schedule(() -> client.disconnect(false, false), 5000);
 
         Server.getInstance().broadcastGMMessage(this.getWorld(), PacketCreator.serverNotice(6, Character.makeMapleReadable(this.name) + " was autobanned for " + reason));
@@ -9697,12 +9691,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void equipPendantOfSpirit() {   //¾«Áéµõ×¹×°±¸Ê±³¤¾­Ñé¼ÆËã
+    private void equipPendantOfSpirit() {   //ç²¾çµåŠå è£…å¤‡æ—¶é•¿ç»éªŒè®¡ç®—
         if (pendantOfSpirit == null) {
             pendantOfSpirit = TimerManager.getInstance().register(() -> {
                 if (pendantExp < 3) {
                     pendantExp++;
-                    //ÓÃÓÚ×¼È·ÌáÊ¾×°±¸1Ğ¡Ê±ÄÚ»¹ÊÇ×°±¸¾­¹ı¼¸Ğ¡Ê±
+                    //ç”¨äºå‡†ç¡®æç¤ºè£…å¤‡1å°æ—¶å†…è¿˜æ˜¯è£…å¤‡ç»è¿‡å‡ å°æ—¶
                     message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp == 3 ? 2 : pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
@@ -10047,7 +10041,7 @@ public class Character extends AbstractCharacterObject {
 
     public void setReborns(int value) {
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //ÖØÉúÏµÍ³Î´ÆôÓÃ
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //é‡ç”Ÿç³»ç»Ÿæœªå¯ç”¨
             throw new NotEnabledException();
         }
 
@@ -10063,7 +10057,7 @@ public class Character extends AbstractCharacterObject {
 
     public int getReborns() {
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //ÖØÉúÏµÍ³Î´ÆôÓÃ
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //é‡ç”Ÿç³»ç»Ÿæœªå¯ç”¨
             throw new NotEnabledException();
         }
 
@@ -10077,7 +10071,7 @@ public class Character extends AbstractCharacterObject {
 
     public void executeRebornAs(Job job) {
         if (!GameConfig.getServerBoolean("use_rebirth_system")) {
-            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //ÖØÉúÏµÍ³Î´ÆôÓÃ
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //é‡ç”Ÿç³»ç»Ÿæœªå¯ç”¨
             throw new NotEnabledException();
         }
         if (getLevel() != getMaxClassLevel()) {
@@ -10186,26 +10180,26 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ·¢×°±¸£¬³ıidÍâ¶¼¿ÉÒÔ´«null£¬´«nullÈ¡×°±¸Ä¬ÈÏÊôĞÔ
+     * å‘è£…å¤‡ï¼Œé™¤idå¤–éƒ½å¯ä»¥ä¼ nullï¼Œä¼ nullå–è£…å¤‡é»˜è®¤å±æ€§
      *
-     * @param itemId      ×°±¸id
-     * @param attStr      Á¦Á¿
-     * @param attDex      Ãô½İ
-     * @param attInt      ÖÇÁ¦
-     * @param attLuk      ÔËÆø
-     * @param attHp       ÑªÁ¿
-     * @param attMp       À¶Á¿
-     * @param pAtk        ÎïÀí¹¥»÷
-     * @param mAtk        Ä§·¨¹¥»÷
-     * @param pDef        ÎïÀí·ÀÓù
-     * @param mDef        Ä§·¨·ÀÓù
-     * @param acc         ÃüÖĞ
-     * @param avoid       »Ø±Ü
-     * @param hands       ¹¥»÷ËÙ¶È
-     * @param speed       ÒÆ¶¯ËÙ¶È
-     * @param jump        ÌøÔ¾
-     * @param upgradeSlot ¿ÉÉı¼¶´ÎÊı
-     * @param expireTime  Ê§Ğ§Ê±¼ä£¬-1Îª²»Ê§Ğ§ À´×Ô @leevccc µÄ½¨Òé£¬´«ÖµÔòÎª·ÖÖÓ
+     * @param itemId      è£…å¤‡id
+     * @param attStr      åŠ›é‡
+     * @param attDex      æ•æ·
+     * @param attInt      æ™ºåŠ›
+     * @param attLuk      è¿æ°”
+     * @param attHp       è¡€é‡
+     * @param attMp       è“é‡
+     * @param pAtk        ç‰©ç†æ”»å‡»
+     * @param mAtk        é­”æ³•æ”»å‡»
+     * @param pDef        ç‰©ç†é˜²å¾¡
+     * @param mDef        é­”æ³•é˜²å¾¡
+     * @param acc         å‘½ä¸­
+     * @param avoid       å›é¿
+     * @param hands       æ”»å‡»é€Ÿåº¦
+     * @param speed       ç§»åŠ¨é€Ÿåº¦
+     * @param jump        è·³è·ƒ
+     * @param upgradeSlot å¯å‡çº§æ¬¡æ•°
+     * @param expireTime  å¤±æ•ˆæ—¶é—´ï¼Œ-1ä¸ºä¸å¤±æ•ˆ æ¥è‡ª @leevccc çš„å»ºè®®ï¼Œä¼ å€¼åˆ™ä¸ºåˆ†é’Ÿ
      */
     public void gainEquip(int itemId, Short attStr, Short attDex, Short attInt, Short attLuk, Short attHp, Short attMp,
                           Short pAtk, Short mAtk, Short pDef, Short mDef, Short acc, Short avoid, Short hands, Short speed,
@@ -10272,8 +10266,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-    //module: ½ÇÉ«ÔÚÏßÊ±¼ä
-    private int m_iCurrentOnlineTime = -1;//-1ÓÃÓÚ·şÎñÆ÷ÖØÆôÊ±½ÇÉ«³õÊ¼±äÁ¿Ê±¼ä
+    //module: è§’è‰²åœ¨çº¿æ—¶é—´
+    private int m_iCurrentOnlineTime = -1;//-1ç”¨äºæœåŠ¡å™¨é‡å¯æ—¶è§’è‰²åˆå§‹å˜é‡æ—¶é—´
     private AtomicBoolean timeUpdating = new AtomicBoolean(false);
 
     public int getCurrentOnlineTime() {
@@ -10293,9 +10287,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * »ñÈ¡µØÍ¼Àà
-     * @param mapid µØÍ¼ID
-     * @param showMsg   true = µØÍ¼²»´æÔÚµ¯³öÌáÊ¾£¬false = ²»ÌáÊ¾
+     * è·å–åœ°å›¾ç±»
+     * @param mapid åœ°å›¾ID
+     * @param showMsg   true = åœ°å›¾ä¸å­˜åœ¨å¼¹å‡ºæç¤ºï¼Œfalse = ä¸æç¤º
      * @return
      */
     public MapleMap getMap(int mapid, boolean showMsg) {
@@ -10309,47 +10303,47 @@ public class Character extends AbstractCharacterObject {
             log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn1"), getName(), getMap().getMapName(), getMapId(),
                     I18nUtil.getLogMessage("SystemRescue.info.map.message1"),
                     mapid);
-            dropMessage(5, msg);                 //ÁÄÌì´°ºìÉ«ÏûÏ¢ÌáÊ¾
-            dropMessage(1, msg);                 //µ¯´°ÏûÏ¢
+            dropMessage(5, msg);                 //èŠå¤©çª—çº¢è‰²æ¶ˆæ¯æç¤º
+            dropMessage(1, msg);                 //å¼¹çª—æ¶ˆæ¯
             enableActions();
         }
         return map;
     }
 
     /**
-     * Í¨Öª¿Í»§¶ËÆôÓÃ²Ù×÷£¬½â³ı¼ÙËÀ
+     * é€šçŸ¥å®¢æˆ·ç«¯å¯ç”¨æ“ä½œï¼Œè§£é™¤å‡æ­»
      */
     public void enableActions() {
         sendPacket(PacketCreator.enableActions());
     }
 
-    // ==================== ¹¥»÷¼ä¸ô»¬¶¯´°¿Ú£¨ÎÈ¶¨¶ÈÊ¶±ğ£© ====================
+    // ==================== æ”»å‡»é—´éš”æ»‘åŠ¨çª—å£ï¼ˆç¨³å®šåº¦è¯†åˆ«ï¼‰ ====================
 
-    /** ´°¿Ú´óĞ¡£º×î½ü N ´Î¹¥»÷¼ä¸ô */
+    /** çª—å£å¤§å°ï¼šæœ€è¿‘ N æ¬¡æ”»å‡»é—´éš” */
     public static final int WINDOW_SIZE = 10;
-    /** ±äÒìÏµÊıãĞÖµ£ºCV < ´ËÖµÅĞ¶¨ÎªÎÈ¶¨¸ßËÙ */
+    /** å˜å¼‚ç³»æ•°é˜ˆå€¼ï¼šCV < æ­¤å€¼åˆ¤å®šä¸ºç¨³å®šé«˜é€Ÿ */
     public static final double STABLE_CV = 0.3;
-    /** ÍøÂç¶¶¶¯Í¸Ã÷ÉÏÏŞ£º< ´ËÖµµÄ¼ä¸ô²»¸üĞÂ×´Ì¬¡¢²»Èë´°¿Ú */
+    /** ç½‘ç»œæŠ–åŠ¨é€æ˜ä¸Šé™ï¼š< æ­¤å€¼çš„é—´éš”ä¸æ›´æ–°çŠ¶æ€ã€ä¸å…¥çª—å£ */
     public static final long MIN_INTERVAL = 50;
-    /** Æ½¾ùãĞÖµ£º´°¿Ú avg >= ´ËÖµÅĞ¶¨ÎªÕı³£ÆµÂÊ */
+    /** å¹³å‡é˜ˆå€¼ï¼šçª—å£ avg >= æ­¤å€¼åˆ¤å®šä¸ºæ­£å¸¸é¢‘ç‡ */
     public static final long NORMAL_AVG = 250;
-    /** ´°¿Ú×Ô¶¯¹ıÆÚÊ±¼ä£º60s ÎŞĞ´Èë×Ô¶¯ÖØÖÃ */
+    /** çª—å£è‡ªåŠ¨è¿‡æœŸæ—¶é—´ï¼š60s æ— å†™å…¥è‡ªåŠ¨é‡ç½® */
     private static final long CLEANUP_MS = 60_000;
 
-    /** ¸÷¼¼ÄÜ¹¥»÷¼ä¸ô»¬¶¯´°¿Ú */
+    /** å„æŠ€èƒ½æ”»å‡»é—´éš”æ»‘åŠ¨çª—å£ */
     private final ConcurrentHashMap<Integer, AttackWindow> skillWindows = new ConcurrentHashMap<>();
 
-    /** È«¾Ö×îºó¹¥»÷Ê±¼ä´Á£¬Ö»±»Õı³£Ö÷¶¯¼¼ÄÜ¸üĞÂ */
+    /** å…¨å±€æœ€åæ”»å‡»æ—¶é—´æˆ³ï¼Œåªè¢«æ­£å¸¸ä¸»åŠ¨æŠ€èƒ½æ›´æ–° */
     private volatile long globalAttackTime;
 
-    /** »¬¶¯´°¿ÚÅĞ¶¨½á¹û */
+    /** æ»‘åŠ¨çª—å£åˆ¤å®šç»“æœ */
     public enum SkillWindowResult {
-        PASS,          // Êı¾İ²»×ã / avg >= 250 ¡ú Õı³£
-        STABLE_HACK,   // avg < 250 ÇÒ CV < STABLE_CV ¡ú ÎÈ¶¨¸ßËÙ
-        BURST          // avg < 250 µ« CV >= STABLE_CV ¡ú ÍøÂç±©·¢
+        PASS,          // æ•°æ®ä¸è¶³ / avg >= 250 â†’ æ­£å¸¸
+        STABLE_HACK,   // avg < 250 ä¸” CV < STABLE_CV â†’ ç¨³å®šé«˜é€Ÿ
+        BURST          // avg < 250 ä½† CV >= STABLE_CV â†’ ç½‘ç»œæš´å‘
     }
 
-    /** »·ĞÎ»º³å£¬±£´æ×î½ü N ´Î¹¥»÷¼ä¸ô£¬Âúºó×Ô¶¯¼ÆËã avg + CV */
+    /** ç¯å½¢ç¼“å†²ï¼Œä¿å­˜æœ€è¿‘ N æ¬¡æ”»å‡»é—´éš”ï¼Œæ»¡åè‡ªåŠ¨è®¡ç®— avg + CV */
     static final class AttackWindow {
         private final long[] buf = new long[WINDOW_SIZE];
         private int idx;
@@ -10394,10 +10388,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
-     * ÍÆÈë¼ä¸ôµ½»¬¶¯´°¿Ú£¬·µ»Ø´°¿ÚÅĞ¶¨½á¹û¡£
-     * ´°¿Ú²»Âú»ò avg >= 250 ·µ»Ø PASS£»
-     * avg < 250 ÇÒ CV < STABLE_CV ·µ»Ø STABLE_HACK£»
-     * avg < 250 µ« CV >= STABLE_CV ·µ»Ø BURST¡£
+     * æ¨å…¥é—´éš”åˆ°æ»‘åŠ¨çª—å£ï¼Œè¿”å›çª—å£åˆ¤å®šç»“æœã€‚
+     * çª—å£ä¸æ»¡æˆ– avg >= 250 è¿”å› PASSï¼›
+     * avg < 250 ä¸” CV < STABLE_CV è¿”å› STABLE_HACKï¼›
+     * avg < 250 ä½† CV >= STABLE_CV è¿”å› BURSTã€‚
      */
     public SkillWindowResult checkSkillWindow(int skillId, long interval) {
         AttackWindow w = skillWindows.computeIfAbsent(skillId, k -> new AttackWindow());
@@ -10409,18 +10403,18 @@ public class Character extends AbstractCharacterObject {
         return cv < STABLE_CV ? SkillWindowResult.STABLE_HACK : SkillWindowResult.BURST;
     }
 
-    /** »ñÈ¡Ö¸¶¨¼¼ÄÜµÄ»¬¶¯´°¿Ú£¨Íâ²¿Ö»¶Á avg / isFull£©£¬ÎŞÔò·µ»Ø null */
+    /** è·å–æŒ‡å®šæŠ€èƒ½çš„æ»‘åŠ¨çª—å£ï¼ˆå¤–éƒ¨åªè¯» avg / isFullï¼‰ï¼Œæ— åˆ™è¿”å› null */
     public AttackWindow getSkillWindow(int skillId) {
         return skillWindows.get(skillId);
     }
 
-    /** »ñÈ¡È«¾Ö¹¥»÷¼ä¸ô¡£Ê×´Î»òÎ´ÉèÊ±·µ»Ø Long.MAX_VALUE */
+    /** è·å–å…¨å±€æ”»å‡»é—´éš”ã€‚é¦–æ¬¡æˆ–æœªè®¾æ—¶è¿”å› Long.MAX_VALUE */
     public long getGlobalInterval(long now) {
         long last = globalAttackTime;
         return last == 0 ? Long.MAX_VALUE : now - last;
     }
 
-    /** ¸üĞÂÈ«¾Ö¹¥»÷Ê±¼ä´Á£¬Ö»±»Õı³£Ö÷¶¯¼¼ÄÜµ÷ÓÃ */
+    /** æ›´æ–°å…¨å±€æ”»å‡»æ—¶é—´æˆ³ï¼Œåªè¢«æ­£å¸¸ä¸»åŠ¨æŠ€èƒ½è°ƒç”¨ */
     public void updateGlobalTime(long now) {
         globalAttackTime = now;
     }
