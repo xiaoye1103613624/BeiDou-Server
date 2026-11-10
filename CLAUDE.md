@@ -88,6 +88,7 @@ BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端
 5. 日志框架 log4j2（spring-boot-starter-logging 已排除）。日志里不要拼字符串字面量做展示文案，见第 2 条。
 6. 遗留 OdinMS/Cosmic 代码改动时，匹配周边代码风格与注释密度，保留 AGPL 版权头。
 7. 提交信息：后端历史多为中文简述（如「修复雇佣商店重复实例与关闭竞态」「格式化代码」）或「合并拉取请求 #N」；前端 commitlint 强制 conventional（`feat:`/`fix:` 等）。
+8. **DDL SQL 必须带备注**：所有 Flyway 迁移脚本（`db/migration/V<主>.<次>.<修>__<snake_case>.sql`）和临时 DDL 脚本，表级用 `COMMENT = '...'`（建表时 `) comment '...'`），每个 `CREATE TABLE` / `ADD COLUMN` / `MODIFY COLUMN` 的列都要内联 `COMMENT '中文业务说明'`，按实际业务写明字段语义、取值范围、`0` 的含义、来源类/方法与上下游读写，禁止虚构不存在的表或枚举。`MODIFY COLUMN` 补备注时必须重复完整列定义（类型 / `NOT NULL` / `DEFAULT` / `AUTO_INCREMENT`）避免丢约束，但要**剥离原建表脚本内联在列定义里的 `PRIMARY KEY` / `UNIQUE`**（主键/唯一索引已存在，重复声明会触发 MySQL 1068 `Multiple primary key defined`）；`DROP` / `RENAME` / `TRUNCATE` 等无法挂 `COMMENT` 的语句，在脚本头部用 `--` 写明表名、业务背景、影响与备份提示。存量脚本不追溯修改，除非明确要求。
 
 ## 非显而易见的实现细节
 
