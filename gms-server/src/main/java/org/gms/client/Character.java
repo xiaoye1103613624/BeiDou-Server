@@ -2977,10 +2977,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void gainGachaExp() {
-        int expgain = 0;
+        long expgain = 0;
         long currentgexp = gachaExp.get();
 
-        int levelUpNeed = ExpTable.getExpNeededForLevel(level) - exp.get();
+        long levelUpNeed = ExpTable.getExpNeededForLevel(level) - exp.get();
         if (currentgexp >= levelUpNeed) {
             expgain += Math.max(0, levelUpNeed);
 
@@ -2993,7 +2993,7 @@ public class Character extends AbstractCharacterObject {
         } else {
             expgain = this.gachaExp.getAndSet(0);
         }
-        gainExp(expgain, false, true);
+        gainExp((int) expgain, false, true);
         updateSingleStat(Stat.GACHAEXP, this.gachaExp.get());
     }
 
@@ -3001,19 +3001,19 @@ public class Character extends AbstractCharacterObject {
         updateSingleStat(Stat.GACHAEXP, gachaExp.addAndGet(gain));
     }
 
-    public void gainExp(int gain) {
+    public void gainExp(long gain) {
         gainExp(gain, true, true);
     }
 
-    public void gainExp(int gain, boolean show, boolean inChat) {
+    public void gainExp(long gain, boolean show, boolean inChat) {
         gainExp(gain, show, inChat, true);
     }
 
-    public void gainExp(int gain, boolean show, boolean inChat, boolean white) {
+    public void gainExp(long gain, boolean show, boolean inChat, boolean white) {
         gainExp(gain, 0, show, inChat, white);
     }
 
-    public void gainExp(int gain, int party, boolean show, boolean inChat, boolean white) {
+    public void gainExp(long gain, int party, boolean show, boolean inChat, boolean white) {
         if (hasDisease(Disease.CURSE)) {
             gain *= 0.5;
             party *= 0.5;
@@ -3041,6 +3041,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void announceExpGain(long gain, int equip, int party, boolean inChat, boolean white) {
+        // Only the 4-byte exp-gain *display* packet is clamped here.
+        // Accumulated EXP uses AtomicLong (exp.addAndGet) and stays int64 for level 999.
         gain = Math.min(gain, Integer.MAX_VALUE);
         if (gain == 0) {
             if (party == 0) {
@@ -4727,7 +4729,7 @@ public class Character extends AbstractCharacterObject {
     	return exp.get();
     }
 
-    public int getGachaExp() {
+    public long getGachaExp() {
         return gachaExp.get();
     }
 
@@ -6205,17 +6207,17 @@ public class Character extends AbstractCharacterObject {
             recalcLocalStats();
             changeHpMp(localMaxHp, localMaxMp, true);
 
-            List<Pair<Stat, Integer>> statup = new ArrayList<>(10);
-            statup.add(new Pair<>(Stat.AVAILABLEAP, remainingAp));
-            statup.add(new Pair<>(Stat.AVAILABLESP, remainingSp[GameConstants.getSkillBook(job.getId())]));
-            statup.add(new Pair<>(Stat.HP, hp));
-            statup.add(new Pair<>(Stat.MP, mp));
-            statup.add(new Pair<>(Stat.EXP, exp.get()));
-            statup.add(new Pair<>(Stat.LEVEL, level));
-            statup.add(new Pair<>(Stat.MAXHP, clientMaxHp));
-            statup.add(new Pair<>(Stat.MAXMP, clientMaxMp));
-            statup.add(new Pair<>(Stat.STR, attrStr));
-            statup.add(new Pair<>(Stat.DEX, attrDex));
+            List<Pair<Stat, Number>> statup = new ArrayList<>(10);
+            statup.add(new Pair<Stat, Number>(Stat.AVAILABLEAP, remainingAp));
+            statup.add(new Pair<Stat, Number>(Stat.AVAILABLESP, remainingSp[GameConstants.getSkillBook(job.getId())]));
+            statup.add(new Pair<Stat, Number>(Stat.HP, hp));
+            statup.add(new Pair<Stat, Number>(Stat.MP, mp));
+            statup.add(new Pair<Stat, Number>(Stat.EXP, exp.get()));
+            statup.add(new Pair<Stat, Number>(Stat.LEVEL, level));
+            statup.add(new Pair<Stat, Number>(Stat.MAXHP, clientMaxHp));
+            statup.add(new Pair<Stat, Number>(Stat.MAXMP, clientMaxMp));
+            statup.add(new Pair<Stat, Number>(Stat.STR, attrStr));
+            statup.add(new Pair<Stat, Number>(Stat.DEX, attrDex));
 
             sendPacket(PacketCreator.updatePlayerStats(statup, true, this));
         } finally {

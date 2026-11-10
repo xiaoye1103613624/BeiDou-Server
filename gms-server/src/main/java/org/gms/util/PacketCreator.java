@@ -1029,14 +1029,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<Stat, Long>> stats, boolean enableActions, Character chr) {
+    public static Packet updatePlayerStats(List<? extends Pair<Stat, ? extends Number>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<Stat, Long> statupdate : stats) {
+        for (Pair<Stat, ? extends Number> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<Stat, Long>> mystats = stats;
+        List<? extends Pair<Stat, ? extends Number>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -1045,9 +1045,9 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<Stat, Long> statupdate : mystats) {
+        for (Pair<Stat, ? extends Number> statupdate : mystats) {
             int v = statupdate.getLeft().getValue();
-            long val = statupdate.getRight();
+            long val = statupdate.getRight().longValue();
             if (v >= 1) {
                 if (v == 0x1) {
                     p.writeByte((byte) val);

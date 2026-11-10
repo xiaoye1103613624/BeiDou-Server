@@ -175,7 +175,7 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Mesos.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
 
-    private void giveExpAllOnlineChr(int quantity) {
+    private void giveExpAllOnlineChr(long quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             doGainExp(chr, quantity);
             chr.message(I18nUtil.getMessage("Give.Exp.All", quantity));
@@ -183,7 +183,7 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Exp.All.info1", quantity));
     }
 
-    private void giveExpChr(Character chr, int quantity) {
+    private void giveExpChr(Character chr, long quantity) {
         doGainExp(chr, quantity);
         chr.message(I18nUtil.getMessage("Give.Exp.Chr", quantity));
         log.info(I18nUtil.getLogMessage("Give.Exp.Chr.info1", chr.getId(), chr.getName(), quantity));
@@ -444,7 +444,7 @@ public class GiveService {
         chr.getCashShop().gainCash(type, quantity);
     }
 
-    private void doGainExp(Character chr, int quantity) {
+    private void doGainExp(Character chr, long quantity) {
         long exp = chr.getExp();
         long sum = (long) exp + (long) quantity;
         // 最低只能把经验清0
@@ -453,7 +453,7 @@ public class GiveService {
         } else {
             sum = quantity;
         }
-        chr.gainExp((int) sum);
+        chr.gainExp(sum);
     }
 
     private void doGainMeso(Character chr, int quantity) {
