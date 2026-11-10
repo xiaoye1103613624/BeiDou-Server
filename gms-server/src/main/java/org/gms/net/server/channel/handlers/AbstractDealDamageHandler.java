@@ -598,7 +598,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     } else {
                         if (attack.skill == Aran.BODY_PRESSURE) {
-                            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), totDamageToOneMonster));
+                            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), totDamageToOneMonster, player.getDamageSkin()));
                         }
 
                         map.damageMonster(player, monster, totDamageToOneMonster);
@@ -676,7 +676,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
         if (animationTime > 0) { // be sure to only use LIMITED ATTACKS with animation time here
             TimerManager.getInstance().schedule(() -> {
-                map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
+                map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage, attacker.getDamageSkin()), monster.getPosition());
                 map.damageMonster(attacker, monster, damage);
             }, animationTime);
         } else {

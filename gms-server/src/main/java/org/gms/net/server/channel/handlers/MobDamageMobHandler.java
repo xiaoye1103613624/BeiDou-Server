@@ -105,7 +105,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
             if (map.damageMonster(damageChr, damaged, dmg) && dmg > 0) {
                 damageChr.dptOnDamage(Corsair.HYPNOTIZE, dmg);
             }
-            map.broadcastMessage(damageChr, PacketCreator.damageMonster(to, dmg), false);
+            map.broadcastMessage(damageChr, PacketCreator.damageMonster(to, dmg, damageChr.getDamageSkin()), false);
         }
     }
 

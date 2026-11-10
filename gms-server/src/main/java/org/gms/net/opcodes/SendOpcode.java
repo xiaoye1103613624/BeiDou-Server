@@ -360,6 +360,7 @@ public enum SendOpcode implements Opcode {
 
     WORLD_MAP_PLAYERS(0x178), // 世界地图 tooltip 玩家列表回复
     WORLD_MAP_DROP_RESULT(0x179), // 世界地图掉落查询回复（服务端→客户端）
+    DAMAGE_SKIN(0xF7), // 登录下发玩家选择的伤害皮肤ID（0=默认BasicEff）
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
     ;
     private int code = -2;

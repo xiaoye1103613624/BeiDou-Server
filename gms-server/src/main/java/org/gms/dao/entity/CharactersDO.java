@@ -79,6 +79,9 @@ public class CharactersDO implements Serializable {
 
     private Integer fquest;
 
+    @Column("damage_skin")
+    private Integer damageSkin;
+
     private Integer hair;
 
     private Integer face;

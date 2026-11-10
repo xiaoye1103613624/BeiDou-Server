@@ -149,6 +149,11 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int fame;
+
+    @Getter
+    @Setter
+    private int damageSkin;
+
     @Getter
     @Setter
     private int questFame;
@@ -6676,6 +6681,7 @@ public class Character extends AbstractCharacterObject {
         chr.setName(charactersDO.getName());
         chr.setLevel(charactersDO.getLevel());
         chr.setFame(charactersDO.getFame());
+        chr.setDamageSkin(charactersDO.getDamageSkin() != null ? charactersDO.getDamageSkin() : 0);
         chr.setQuestFame(charactersDO.getFquest());
         chr.setStr(charactersDO.getAttrStr());
         chr.setDex(charactersDO.getAttrDex());
@@ -6865,6 +6871,7 @@ public class Character extends AbstractCharacterObject {
         CharactersDO cdo = new CharactersDO();
         cdo.setLevel(chr.getLevel());
         cdo.setFame(chr.getFame());
+        cdo.setDamageSkin(chr.getDamageSkin());
 
         chr.effLock.lock();
         chr.statWlock.lock();

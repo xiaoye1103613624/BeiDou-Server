@@ -4163,21 +4163,21 @@ public class PacketCreator {
     }
 
     public static Packet damageMonster(int oid, int damage) {
-        return damageMonster(oid, damage, 0, 0);
+        return damageMonster(oid, damage, 0, 0, 0);
     }
 
     /** long 伤害的兼容入口：HP 弹字包仍是 int，统一收窄避免溢出成负数。 */
     public static Packet damageMonster(int oid, long damage) {
-        return damageMonster(oid, DamageLinesConfig.clampToInt(damage));
+        return damageMonster(oid, DamageLinesConfig.clampToInt(damage), 0);
     }
 
     public static Packet healMonster(int oid, int heal, int curhp, int maxhp) {
-        return damageMonster(oid, -heal, curhp, maxhp);
+        return damageMonster(oid, -heal, curhp, maxhp, 0);
     }
 
     /** Monster.hp 改 AtomicLong 后的兼容入口。 */
     public static Packet healMonster(int oid, int heal, long curhp, int maxhp) {
-        return damageMonster(oid, -heal, DamageLinesConfig.clampToInt(curhp), maxhp);
+        return damageMonster(oid, -heal, DamageLinesConfig.clampToInt(curhp), maxhp, 0);
     }
 
     /** 同步角色破功伤害上限到客户端（0x3730，布局与 BeiDou-Server 一致）。 */
@@ -4187,13 +4187,31 @@ public class PacketCreator {
         return p;
     }
 
-    private static Packet damageMonster(int oid, int damage, int curhp, int maxhp) {
+    private static Packet damageMonster(int oid, int damage, int curhp, int maxhp, int skinId) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(oid);
         p.writeByte(0);
         p.writeInt(damage);
         p.writeInt(curhp);
         p.writeInt(maxhp);
+        p.writeInt(skinId);
+        return p;
+    }
+
+    /** 攻击广播带上的伤害皮肤 id（0=默认 BasicEff）。 */
+    public static Packet damageMonster(int oid, int damage, int skinId) {
+        return damageMonster(oid, damage, 0, 0, skinId);
+    }
+
+    /** 攻击广播带上的伤害皮肤 id（0=默认 BasicEff）；long 伤害收窄为 int。 */
+    public static Packet damageMonster(int oid, long damage, int skinId) {
+        return damageMonster(oid, DamageLinesConfig.clampToInt(damage), 0, 0, skinId);
+    }
+
+    /** 登录时下发玩家选择的伤害皮肤 id（0=默认 BasicEff）。 */
+    public static Packet damageSkin(int skinId) {
+        final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN);
+        p.writeInt(skinId);
         return p;
     }
 
