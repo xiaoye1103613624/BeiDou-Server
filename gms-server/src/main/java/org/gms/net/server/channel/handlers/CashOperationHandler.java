@@ -24,10 +24,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Ring;
-import org.gms.client.inventory.Equip;
-import org.gms.client.inventory.Inventory;
-import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
+import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
@@ -39,6 +36,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.service.CharacterService;
+import org.gms.util.DatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
@@ -48,10 +46,7 @@ import org.gms.service.NoteService;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
@@ -104,7 +99,20 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     equip.setBonusPotential1(r.nextInt(50) + 1);
                     equip.setBonusPotential2(r.nextInt(50) + 1);
                     try (var con = DatabaseConnection.getConnection()) {
-                        ItemFactory.getInstance().saveItems(Collections.singletonList(new Pair<Item, InventoryType>(equip, InventoryType.EQUIP)), chr.getId(), con);
+                        // 按项目原有方式经 ItemFactory.INVENTORY.saveItems 回写：
+                        // 该方法先清空角色背包再按传入列表重建，因此必须传全量物品，
+                        // 不能只传当前这一件装备，否则其它物品会被删除。
+                        List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
+                        for (InventoryType invType : InventoryType.values()) {
+                            Inventory inv = chr.getInventory(invType);
+                            if (inv == null) {
+                                continue;
+                            }
+                            for (Item invItem : inv.list()) {
+                                itemsWithType.add(new Pair<>(invItem, invType));
+                            }
+                        }
+                        ItemFactory.INVENTORY.saveItems(itemsWithType, chr.getId(), con);
                     }
                     c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(1, equip))));
                     c.sendPacket(PacketCreator.serverNotice(1, "魔方重洗完成。"));
