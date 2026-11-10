@@ -6674,10 +6674,11 @@ public class Character extends AbstractCharacterObject {
         chr.setLuk(charactersDO.getAttrLuk());
         chr.setExp(charactersDO.getExp());
         chr.setGachaExp(charactersDO.getGachaexp());
-        chr.setHp(charactersDO.getHp());
-        chr.setMaxHp(charactersDO.getMaxhp());
-        chr.setMp(charactersDO.getMp());
-        chr.setMaxMp(charactersDO.getMaxmp());
+        // 必须先按 DB 的 maxhp/maxmp 初始化上限再写当前 hp/mp：setHp/setMp 会把
+        // 当前值 clamp 到默认 localMaxHp=50 / localMaxMp=5，导致 CHARLIST 下发 50/5
+        // 而进游戏 SET_FIELD 下发 3622/2820（后者有 reapplyLocalStats 修正）。
+        chr.loadHpMpPoolsFromDb(charactersDO.getHp(), charactersDO.getMp(),
+                charactersDO.getMaxhp(), charactersDO.getMaxmp());
         chr.setHpMpApUsed(charactersDO.getHpMpUsed());
         chr.setHasMerchant(charactersDO.getHasmerchant());
         chr.setRemainingAp(charactersDO.getAp());

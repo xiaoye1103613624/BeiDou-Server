@@ -274,6 +274,38 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         this.clientMaxMp = Math.min(30000, mp_);
     }
 
+    /**
+     * 从 DB 一次性装载 HP/MP 池（供 Character.fromCharactersDO 使用）。
+     *
+     * 不能走 setHp/setMp：它们会把当前值 clamp 到 localMaxHp/localMaxMp，
+     * 而新建对象的这两个 local 值仍是默认 50/5，DB 里的 3622/2820 会被截成 50/5。
+     * CHARLIST 走 CharacterService.loadCharFromDB 的非 channelServer 早退分支，
+     * 没有后面的 reapplyLocalStats + changeHpMp 修正，于是选角包一直下发新手血量；
+     * 进游戏分支有修正，所以 SET_FIELD 反而是正确的。这里让两条路径同源。
+     */
+    public void loadHpMpPoolsFromDb(Integer hp, Integer mp, Integer maxHp, Integer maxMp) {
+        int mhp = maxHp == null ? 50 : maxHp;
+        int mmp = maxMp == null ? 5 : maxMp;
+        int chp = hp == null ? 0 : hp;
+        int cmp = mp == null ? 0 : mp;
+
+        statWlock.lock();
+        try {
+            this.maxHp = mhp;
+            this.maxMp = mmp;
+            this.clientMaxHp = Math.min(30000, mhp);
+            this.clientMaxMp = Math.min(30000, mmp);
+            this.localMaxHp = mhp;
+            this.localMaxMp = mmp;
+            this.hp = Math.max(0, Math.min(chp, this.localMaxHp));
+            this.mp = Math.max(0, Math.min(cmp, this.localMaxMp));
+            this.transientHp = Float.NEGATIVE_INFINITY;
+            this.transientMp = Float.NEGATIVE_INFINITY;
+        } finally {
+            statWlock.unlock();
+        }
+    }
+
     private static long clampStat(int v, int min, int max) {
         return (v < min) ? min : ((v > max) ? max : v);
     }
