@@ -252,6 +252,15 @@ public class Character extends AbstractCharacterObject {
     private long lastExpression = 0;
     @Setter
     private long jailExpiration = -1;
+    @Getter
+    @Setter
+    private long muteUntil = 0;   // D2：玩家禁言到期时间戳(ms)；0 = 未禁言
+
+    // D2：玩家是否处于禁言期（原生 CHATLOG_ADD type:8 系统通道对应的禁言状态）。
+    public boolean isMuted() {
+        return System.currentTimeMillis() < muteUntil;
+    }
+
     // 破功值（单段伤害上限）：角色属性，对齐参考端 BeiDou-Server 口径 ——
     // 创角默认 199999、上限 2.1e9、characters.limitBreak 持久化、变更即时 0x3730 下发。
     // 上线时 PlayerLoggedinHandler 下发；客户端取 min(配置 cap, 本值, 2^53)。

@@ -286,6 +286,8 @@ public class CommandsExecutor {
         addCommand("fly", 3, FlyCommand.class);
         addCommand("spawn", 3, SpawnCommand.class);
         addCommand("mutemap", 3, MuteMapCommand.class);
+        addCommand("mute", 3, MuteCommand.class);
+        addCommand("unmute", 3, UnMuteCommand.class);
         addCommand("checkdmg", 3, CheckDmgCommand.class);
         addCommand("inmap", 3, InMapCommand.class);
         addCommand("reloadevents", 3, ReloadEventsCommand.class);

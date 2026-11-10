@@ -25,6 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.command.CommandsExecutor;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
@@ -53,11 +54,20 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
         if (CommandsExecutor.isCommand(c, s)) {
             CommandsExecutor.getInstance().handle(c, s);
         } else if (heading != '/') {
+            // D2：玩家禁言（原生 CHATLOG_ADD type:8 系统通道对应的禁言状态）。
+            if (chr.isMuted() && !chr.isGM()) {
+                chr.dropMessage(5, "你目前被禁止发言。");
+                return;
+            }
+
             int show = p.readByte();
             if (chr.getMap().isMuted() && !chr.isGM()) {
                 chr.dropMessage(5, "The map you are in is currently muted. Please try again later.");
                 return;
             }
+
+            // D2：脏词过滤（原生 CCurseProcess::ProcessString），命中子串整段打星。
+            s = filterCurseWords(s);
 
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
@@ -69,5 +79,37 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
 
             chr.getAutoBanManager().spam(7);
         }
+    }
+
+    // D2：脏词过滤（原生 CCurseProcess::ProcessString）。词表取自服务端配置 chat_curse_words
+    // （逗号分隔，大小写不敏感），命中子串整段打星；列表为空则不处理。
+    private static String filterCurseWords(String text) {
+        String cfg = GameConfig.getServerString("chat_curse_words");
+        if (cfg == null || cfg.isEmpty()) {
+            return text;
+        }
+        String lower = text.toLowerCase();
+        for (String raw : cfg.split(",")) {
+            String word = raw.trim().toLowerCase();
+            if (word.isEmpty()) {
+                continue;
+            }
+            int pos = 0;
+            while ((pos = lower.indexOf(word, pos)) != -1) {
+                int end = pos + word.length();
+                text = text.substring(0, pos) + repeat('*', word.length()) + text.substring(end);
+                lower = text.toLowerCase();
+                pos = end;
+            }
+        }
+        return text;
+    }
+
+    private static String repeat(char ch, int n) {
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i < n; i++) {
+            sb.append(ch);
+        }
+        return sb.toString();
     }
 }
