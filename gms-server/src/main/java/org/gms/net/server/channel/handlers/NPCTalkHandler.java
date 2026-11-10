@@ -71,6 +71,18 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     return;
                 }
 
+                // 雇佣商店 / 仓库类 NPC（storebank / trunk）由服务端内置逻辑处理，无需脚本
+                // 以 NPC id 为主（服务端 Npc.wz 未必带 storebank 标志），WZ 标志为辅
+                log.info("NPC talk routed: id={} name={} storebank={} trunk={}", npc.getId(), npc.getName(), npc.hasStoreBank(), npc.hasTrunk());
+                if (npc.getId() == NpcId.FREDRICK || npc.hasStoreBank()) {
+                    c.sendPacket(PacketCreator.getFredrick(c.getPlayer()));
+                    return;
+                }
+                if (npc.hasTrunk() || npc.getId() == NpcId.TRUNK) {
+                    c.getPlayer().getStorage().sendStorage(c, npc.getId());
+                    return;
+                }
+
                 // Custom handling to reduce the amount of scripts needed.
                 if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "gachapon", null);

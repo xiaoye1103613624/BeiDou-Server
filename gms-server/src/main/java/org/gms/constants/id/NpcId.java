@@ -11,6 +11,7 @@ public class NpcId {
     public static final int RPS_ADMIN = 9000019;
     public static final int GRANDPA_MOON_BUNNY = 9001105;
     public static final int FREDRICK = 9030000;
+    public static final int TRUNK = 9030100; // 仓库(trunk) NPC：点击开仓库
     public static final int MAR_THE_FAIRY = 1032102;
     public static final int HERACLE = 2010007;
     public static final int MIMO = 1101008;

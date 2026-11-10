@@ -22,6 +22,11 @@
 package org.gms.server.life;
 
 import org.gms.client.Client;
+import org.gms.provider.Data;
+import org.gms.provider.DataProvider;
+import org.gms.provider.DataProviderFactory;
+import org.gms.provider.DataTool;
+import org.gms.provider.wz.WZFiles;
 import org.gms.server.ShopFactory;
 import org.gms.server.maps.MapObjectType;
 import org.gms.util.PacketCreator;
@@ -40,6 +45,27 @@ public class NPC extends AbstractLoadedLife {
 
     public void sendShop(Client c) {
         ShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
+    }
+
+    // 雇佣商店/卖场设置 NPC（WZ info/storebank=1，如 Fredrick 9030000）
+    public boolean hasStoreBank() {
+        DataProvider npc = DataProviderFactory.getDataProvider(WZFiles.NPC);
+        Data npcData = npc.getData(getId() + ".img");
+        if (npcData == null) {
+            return false;
+        }
+        return DataTool.getIntConvert("info/storebank", npcData, 0) == 1;
+    }
+
+    // 仓库 NPC（WZ info/trunkGet 或 info/trunkPut 存在，如 9030100）
+    public boolean hasTrunk() {
+        DataProvider npc = DataProviderFactory.getDataProvider(WZFiles.NPC);
+        Data npcData = npc.getData(getId() + ".img");
+        if (npcData == null) {
+            return false;
+        }
+        return DataTool.getIntConvert("info/trunkGet", npcData, 0) > 0
+                || DataTool.getIntConvert("info/trunkPut", npcData, 0) > 0;
     }
 
     @Override
