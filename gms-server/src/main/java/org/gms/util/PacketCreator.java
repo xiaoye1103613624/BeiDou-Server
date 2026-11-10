@@ -6106,7 +6106,7 @@ public class PacketCreator {
         p.writeInt(entry.getChrId()); //ID
         p.writeInt(entry.getSenior() != null ? entry.getSenior().getChrId() : 0); //parent ID
         p.writeShort(entry.getJob().getId()); //job id
-        p.writeByte(entry.getLevel()); //level
+        p.writeShort(entry.getLevel()); //level: 999 cap needs 2 bytes, client FamilyChartHandler reads read_short
         p.writeBool(isOnline); //isOnline
         p.writeInt(entry.getReputation()); //current rep
         p.writeInt(entry.getTotalReputation()); //total rep

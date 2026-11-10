@@ -28,7 +28,7 @@ var isPq = true;
 /** minPlayers - 队伍最小人数 , maxPlayers - 队伍最大人数 */
 var minPlayers = 6, maxPlayers = 6;
 /** minLevel - 最低等级限制 , maxLevel - 最高等级限制 */
-var minLevel = 50, maxLevel = 255;
+var minLevel = 50, maxLevel = 999;
 /** entryMap - 入口地图ID , exitMap - 退出地图ID */
 var entryMap = 280010000, exitMap = 211042300;
 /** recruitMap - 招募地图ID , clearMap - 清除地图ID */

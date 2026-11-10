@@ -1,7 +1,7 @@
 // 事件实例化变量
 var isPq = false; // 是否为PQ（Party Quest）类型事件。
 var minPlayers = 1, maxPlayers = 6; // 该事件实例允许的队伍成员数量范围。
-var minLevel = 120, maxLevel = 255;     // 合格队伍成员的等级范围。
+var minLevel = 120, maxLevel = 999;     // 合格队伍成员的等级范围。
 var entryMap = 702060000;               // 事件启动时玩家进入的初始地图。
 var exitMap = 702070400;                // 玩家未能完成事件时被传送至此地图。
 var recruitMap = exitMap;             // 玩家必须在此地图上才能开始此事件。

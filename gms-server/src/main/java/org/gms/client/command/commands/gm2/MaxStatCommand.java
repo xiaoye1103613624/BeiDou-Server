@@ -39,7 +39,7 @@ public class MaxStatCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         player.loseExp(player.getExp(), false, false);
-        player.setLevel(255);
+        player.setLevel(player.getMaxClassLevel());
         player.resetPlayerRates();
         if (GameConfig.getServerBoolean("use_add_rates_by_level")) {
             player.setPlayerRates();
@@ -48,7 +48,7 @@ public class MaxStatCommand extends Command {
         player.updateStrDexIntLuk(Short.MAX_VALUE);
         player.setFame(13337);
         player.updateMaxHpMaxMp(30000, 30000);
-        player.updateSingleStat(Stat.LEVEL, 255);
+        player.updateSingleStat(Stat.LEVEL, player.getMaxClassLevel());
         player.updateSingleStat(Stat.FAME, 13337);
         player.yellowMessage(I18nUtil.getMessage("MaxStatCommand.message2"));
     }
