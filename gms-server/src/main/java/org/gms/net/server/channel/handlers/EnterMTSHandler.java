@@ -123,30 +123,30 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                  ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     if (rs.getInt("type") != 1) {
-                        Item i = new Item(rs.getInt("itemid"), (short) 0, rs.getInt("quantity"));
+                        Item i = new Item(rs.getInt("itemid"), (short) 0, (short) rs.getInt("quantity"));
                         i.setOwner(rs.getString("owner"));
                         items.add(new MTSItemInfo(i, rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
                     } else {
                         Equip equip = new Equip(rs.getInt("itemid"), (byte) rs.getInt("position"), -1);
                         equip.setOwner(rs.getString("owner"));
                         equip.setQuantity((short) 1);
-                        equip.setAcc(rs.getInt("acc"));
-                        equip.setAvoid(rs.getInt("avoid"));
-                        equip.setDex(rs.getInt("dex"));
-                        equip.setHands(rs.getInt("hands"));
-                        equip.setHp(rs.getInt("hp"));
-                        equip.setInt(rs.getInt("int"));
-                        equip.setJump(rs.getInt("jump"));
-                        equip.setVicious(rs.getInt("vicious"));
-                        equip.setFlag(rs.getInt("flag"));
-                        equip.setLuk(rs.getInt("luk"));
+                        equip.setAcc((short) rs.getInt("acc"));
+                        equip.setAvoid((short) rs.getInt("avoid"));
+                        equip.setDex((short) rs.getInt("dex"));
+                        equip.setHands((short) rs.getInt("hands"));
+                        equip.setHp((short) rs.getInt("hp"));
+                        equip.setInt((short) rs.getInt("int"));
+                        equip.setJump((short) rs.getInt("jump"));
+                        equip.setVicious((short) rs.getInt("vicious"));
+                        equip.setFlag((short) rs.getInt("flag"));
+                        equip.setLuk((short) rs.getInt("luk"));
                         equip.setMatk((short) rs.getInt("matk"));
-                        equip.setMdef(rs.getInt("mdef"));
-                        equip.setMp(rs.getInt("mp"));
-                        equip.setSpeed(rs.getInt("speed"));
-                        equip.setStr(rs.getInt("str"));
+                        equip.setMdef((short) rs.getInt("mdef"));
+                        equip.setMp((short) rs.getInt("mp"));
+                        equip.setSpeed((short) rs.getInt("speed"));
+                        equip.setStr((short) rs.getInt("str"));
                         equip.setWatk((short) rs.getInt("watk"));
-                        equip.setWdef(rs.getInt("wdef"));
+                        equip.setWdef((short) rs.getInt("wdef"));
                         equip.setUpgradeSlots((byte) rs.getInt("upgradeslots"));
                         equip.setLevel((byte) rs.getInt("level"));
                         equip.setItemLevel(rs.getByte("itemlevel"));
@@ -183,35 +183,35 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     if (rs.getInt("type") != 1) {
-                        Item i = new Item(rs.getInt("itemid"), (short) 0, rs.getInt("quantity"));
+                        Item i = new Item(rs.getInt("itemid"), (short) 0, (short) rs.getInt("quantity"));
                         i.setOwner(rs.getString("owner"));
                         items.add(new MTSItemInfo(i, rs.getInt("price"), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
                     } else {
                         Equip equip = new Equip(rs.getInt("itemid"), (byte) rs.getInt("position"), -1);
                         equip.setOwner(rs.getString("owner"));
                         equip.setQuantity((short) 1);
-                        equip.setAcc(rs.getInt("acc"));
-                        equip.setAvoid(rs.getInt("avoid"));
-                        equip.setDex(rs.getInt("dex"));
-                        equip.setHands(rs.getInt("hands"));
-                        equip.setHp(rs.getInt("hp"));
-                        equip.setInt(rs.getInt("int"));
-                        equip.setJump(rs.getInt("jump"));
-                        equip.setVicious(rs.getInt("vicious"));
-                        equip.setLuk(rs.getInt("luk"));
+                        equip.setAcc((short) rs.getInt("acc"));
+                        equip.setAvoid((short) rs.getInt("avoid"));
+                        equip.setDex((short) rs.getInt("dex"));
+                        equip.setHands((short) rs.getInt("hands"));
+                        equip.setHp((short) rs.getInt("hp"));
+                        equip.setInt((short) rs.getInt("int"));
+                        equip.setJump((short) rs.getInt("jump"));
+                        equip.setVicious((short) rs.getInt("vicious"));
+                        equip.setLuk((short) rs.getInt("luk"));
                         equip.setMatk((short) rs.getInt("matk"));
-                        equip.setMdef(rs.getInt("mdef"));
-                        equip.setMp(rs.getInt("mp"));
-                        equip.setSpeed(rs.getInt("speed"));
-                        equip.setStr(rs.getInt("str"));
+                        equip.setMdef((short) rs.getInt("mdef"));
+                        equip.setMp((short) rs.getInt("mp"));
+                        equip.setSpeed((short) rs.getInt("speed"));
+                        equip.setStr((short) rs.getInt("str"));
                         equip.setWatk((short) rs.getInt("watk"));
-                        equip.setWdef(rs.getInt("wdef"));
+                        equip.setWdef((short) rs.getInt("wdef"));
                         equip.setUpgradeSlots((byte) rs.getInt("upgradeslots"));
                         equip.setLevel((byte) rs.getInt("level"));
                         equip.setItemLevel(rs.getByte("itemlevel"));
                         equip.setItemExp(rs.getInt("itemexp"));
                         equip.setRingId(rs.getInt("ringid"));
-                        equip.setFlag(rs.getInt("flag"));
+                        equip.setFlag((short) rs.getInt("flag"));
                         equip.setExpiration(rs.getLong("expiration"));
                         equip.setGiftFrom(rs.getString("giftFrom"));
                         items.add(new MTSItemInfo(equip, rs.getInt("price"), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
@@ -233,35 +233,35 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     if (rs.getInt("type") != 1) {
-                        Item i = new Item(rs.getInt("itemid"), (short) 0, rs.getInt("quantity"));
+                        Item i = new Item(rs.getInt("itemid"), (short) 0, (short) rs.getInt("quantity"));
                         i.setOwner(rs.getString("owner"));
                         items.add(new MTSItemInfo(i, rs.getInt("price"), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
                     } else {
                         Equip equip = new Equip(rs.getInt("itemid"), (byte) rs.getInt("position"), -1);
                         equip.setOwner(rs.getString("owner"));
                         equip.setQuantity((short) 1);
-                        equip.setAcc(rs.getInt("acc"));
-                        equip.setAvoid(rs.getInt("avoid"));
-                        equip.setDex(rs.getInt("dex"));
-                        equip.setHands(rs.getInt("hands"));
-                        equip.setHp(rs.getInt("hp"));
-                        equip.setInt(rs.getInt("int"));
-                        equip.setJump(rs.getInt("jump"));
-                        equip.setVicious(rs.getInt("vicious"));
-                        equip.setLuk(rs.getInt("luk"));
+                        equip.setAcc((short) rs.getInt("acc"));
+                        equip.setAvoid((short) rs.getInt("avoid"));
+                        equip.setDex((short) rs.getInt("dex"));
+                        equip.setHands((short) rs.getInt("hands"));
+                        equip.setHp((short) rs.getInt("hp"));
+                        equip.setInt((short) rs.getInt("int"));
+                        equip.setJump((short) rs.getInt("jump"));
+                        equip.setVicious((short) rs.getInt("vicious"));
+                        equip.setLuk((short) rs.getInt("luk"));
                         equip.setMatk((short) rs.getInt("matk"));
-                        equip.setMdef(rs.getInt("mdef"));
-                        equip.setMp(rs.getInt("mp"));
-                        equip.setSpeed(rs.getInt("speed"));
-                        equip.setStr(rs.getInt("str"));
+                        equip.setMdef((short) rs.getInt("mdef"));
+                        equip.setMp((short) rs.getInt("mp"));
+                        equip.setSpeed((short) rs.getInt("speed"));
+                        equip.setStr((short) rs.getInt("str"));
                         equip.setWatk((short) rs.getInt("watk"));
-                        equip.setWdef(rs.getInt("wdef"));
+                        equip.setWdef((short) rs.getInt("wdef"));
                         equip.setUpgradeSlots((byte) rs.getInt("upgradeslots"));
                         equip.setLevel((byte) rs.getInt("level"));
                         equip.setItemLevel(rs.getByte("itemlevel"));
                         equip.setItemExp(rs.getInt("itemexp"));
                         equip.setRingId(rs.getInt("ringid"));
-                        equip.setFlag(rs.getInt("flag"));
+                        equip.setFlag((short) rs.getInt("flag"));
                         equip.setExpiration(rs.getLong("expiration"));
                         equip.setGiftFrom(rs.getString("giftFrom"));
                         items.add(new MTSItemInfo(equip, rs.getInt("price"), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
