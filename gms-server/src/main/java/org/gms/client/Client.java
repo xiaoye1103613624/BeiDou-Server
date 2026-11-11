@@ -1400,7 +1400,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean canGainCharacterSlot() {
-        return characterSlots < 15;
+        return characterSlots < GameConstants.MAX_CHARACTER_SLOTS;
     }
 
     public synchronized boolean gainCharacterSlot() {

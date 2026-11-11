@@ -28,6 +28,7 @@ import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.ModifiedCashItemDO;
@@ -335,7 +336,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         return;
                     }
                     if (!c.canGainCharacterSlot()) {
-                        chr.dropMessage(1, "You have already used up all 12 extra character slots.");
+                        chr.dropMessage(1, "You have already reached the maximum of " + GameConstants.MAX_CHARACTER_SLOTS + " character slots.");
                         c.enableCSActions();
                         return;
                     }

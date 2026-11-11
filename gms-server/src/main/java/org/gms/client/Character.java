@@ -6832,7 +6832,9 @@ public class Character extends AbstractCharacterObject {
 
         AccountsDO accountsDO = accountService.findById(charactersDO.getAccountid());
         chr.getClient().setAccountName(accountsDO.getName());
-        chr.getClient().setCharacterSlots(Optional.ofNullable(accountsDO.getCharacterslots()).map(Integer::byteValue).orElse((byte) 0));
+        Integer slotCap = Optional.ofNullable(accountsDO.getCharacterslots())
+                .map(v -> Math.max(0, Math.min(GameConstants.MAX_CHARACTER_SLOTS, v))).orElse(0);
+        chr.getClient().setCharacterSlots(slotCap.byteValue());
         chr.getClient().setLanguage(accountsDO.getLanguage());
 
         List<AreaInfoDO> areaInfoDOList = characterService.getAreaInfoByCharacter(charactersDO.getId());

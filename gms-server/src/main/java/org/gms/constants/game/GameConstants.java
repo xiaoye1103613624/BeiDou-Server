@@ -24,6 +24,14 @@ public class GameConstants {
     public static String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
     /**
+     * 角色槽硬上限。
+     * 受三重字节上限约束：服务端 {@code characterSlots} 为 Java {@code byte}、客户端以 {@code int8_t} 读取 CHARLIST 角色数、
+     * DB 列 {@code accounts.characterslots} 为 {@code TINYINT(2)}（有符号，最大 127）。
+     * 任意一处超过 127 都会令 {@code writeByte}/{@code read_byte} 有符号回绕，导致 CHARLIST 解析失败，故统一封顶 127。
+     */
+    public static final int MAX_CHARACTER_SLOTS = 127;
+
+    /**
      * 好友默认分组名。
      * <p>BeiDou 客户端未本地化该 C++ 字面量，加好友时发来的默认分组即为此值 {@code "Default Group"}，
      * 而非可翻译的 UI 文案。服务端内存项与 buddies 表落库需统一引用本常量，避免与客户端发来的分组名

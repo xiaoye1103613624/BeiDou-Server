@@ -7,6 +7,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.DefaultDates;
 import org.gms.config.GameConfig;
+import org.gms.constants.game.GameConstants;
 import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
 import org.gms.model.dto.AddAccountDTO;
@@ -132,7 +133,10 @@ public class AccountService {
         account.setNxCredit(submitData.getNxCredit());
         account.setMaplePoint(submitData.getMaplePoint());
         account.setNxPrepaid(submitData.getNxPrepaid());
-        account.setCharacterslots(submitData.getCharacterslots());
+        if (submitData.getCharacterslots() != null) {
+            // 后台 GM 修改角色槽时钳制到 [0, MAX_CHARACTER_SLOTS]，避免越过字节天花板导致 CHARLIST 解析失败
+            account.setCharacterslots(Math.max(0, Math.min(GameConstants.MAX_CHARACTER_SLOTS, submitData.getCharacterslots())));
+        }
         account.setGender(submitData.getGender());
         account.setWebadmin(submitData.getWebadmin());
         account.setNick(submitData.getNick());
