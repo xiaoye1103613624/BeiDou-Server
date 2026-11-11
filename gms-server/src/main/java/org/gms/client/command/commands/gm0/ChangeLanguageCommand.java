@@ -25,9 +25,18 @@ package org.gms.client.command.commands.gm0;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.DatabaseConnection;
 import org.gms.util.I18nUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class ChangeLanguageCommand extends Command {
+    private static final Logger log = LoggerFactory.getLogger(ChangeLanguageCommand.class);
+
     {
         setDescription(I18nUtil.getMessage("ChangeLanguageCommand.message1"));
     }
@@ -38,6 +47,27 @@ public class ChangeLanguageCommand extends Command {
             c.getPlayer().yellowMessage(I18nUtil.getMessage("ChangeLanguageCommand.message2"));
             return;
         }
-        c.setLanguage(Integer.parseInt(params[0]));
+        int lang;
+        try {
+            lang = Integer.parseInt(params[0]);
+        } catch (NumberFormatException e) {
+            c.getPlayer().yellowMessage(I18nUtil.getMessage("ChangeLanguageCommand.message2"));
+            return;
+        }
+        c.setLanguage(lang);
+        persistLanguage(c.getAccID(), lang);
+        c.getPlayer().yellowMessage(I18nUtil.getMessage("ChangeLanguageCommand.message3"));
+    }
+
+    // 把语言偏好回写 accounts.language，避免重连复位，使运行时切换真正闭环
+    private void persistLanguage(int accountId, int lang) {
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET language = ? WHERE id = ?")) {
+            ps.setInt(1, lang);
+            ps.setInt(2, accountId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to persist language for account {}", accountId, e);
+        }
     }
 }

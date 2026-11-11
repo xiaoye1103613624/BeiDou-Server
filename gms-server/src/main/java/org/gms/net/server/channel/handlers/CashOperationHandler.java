@@ -38,6 +38,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.service.CharacterService;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
@@ -336,7 +337,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         return;
                     }
                     if (!c.canGainCharacterSlot()) {
-                        chr.dropMessage(1, "You have already reached the maximum of " + GameConstants.MAX_CHARACTER_SLOTS + " character slots.");
+                        chr.dropMessage(1, I18nUtil.getMessage("CashOperationHandler.characterSlot.maxReached", GameConstants.MAX_CHARACTER_SLOTS));
                         c.enableCSActions();
                         return;
                     }
