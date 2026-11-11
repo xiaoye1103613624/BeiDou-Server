@@ -191,14 +191,18 @@ public class PacketCreator {
 
         p.writeShort(chr.getLevel()); // level（等级上限提到 999 需 2 字节，原 writeByte 在 >255 时溢出）
         p.writeShort(chr.getJob().getId()); // job
-        p.writeShort(chr.getStr()); // str
-        p.writeShort(chr.getDex()); // dex
-        p.writeShort(chr.getInt()); // int
-        p.writeShort(chr.getLuk()); // luk
-        p.writeShort(chr.getHp()); // hp (?)
-        p.writeShort(chr.getClientMaxHp()); // maxhp
-        p.writeShort(chr.getMp()); // mp (?)
-        p.writeShort(chr.getClientMaxMp()); // maxmp
+        // 四维 STR/DEX/INT/LUK 提到 int：AP 分配+装备%+后期玩法会超 short，服务端按 int 下发（客户端对应 read_int）
+        p.writeInt(chr.getStr()); // str
+        p.writeInt(chr.getDex()); // dex
+        p.writeInt(chr.getInt()); // int
+        p.writeInt(chr.getLuk()); // luk
+        // HP/MP/MAXHP/MAXMP 改为 writeInt：血量上限提到 99999 后这些值会超过 short 上限（65535），
+        // 否则客户端 read_int（同 Layout）会截成低 16 位。getWarpToMap 里的 writeShort(chr.getHp())
+        // 由客户端 recv.skip(23) 跳过、不参与 CharData，故不改。
+        p.writeInt(chr.getHp()); // hp
+        p.writeInt(chr.getClientMaxHp()); // maxhp
+        p.writeInt(chr.getMp()); // mp
+        p.writeInt(chr.getClientMaxMp()); // maxmp
         p.writeShort(chr.getRemainingAp()); // remaining ap
         if (GameConstants.hasSPTable(chr.getJob())) {
             addRemainingSkillInfo(p, chr);
@@ -1065,7 +1069,14 @@ public class PacketCreator {
                         p.writeShort((int) val);
                     }
                 } else if (v < 0xFFFF) {
-                    p.writeShort((int) val);
+                    // HP/MP/MAXHP/MAXMP 与四维 STR/DEX/INT/LUK 超过 short 上限，需按 int 写（客户端对应 read_int）；
+                    // 其余 stat（JOB/AP/SP）保持 writeShort。
+                    if (v == 0x40 || v == 0x80 || v == 0x100 || v == 0x200
+                            || v == 0x400 || v == 0x800 || v == 0x1000 || v == 0x2000) {
+                        p.writeInt((int) val);
+                    } else {
+                        p.writeShort((int) val);
+                    }
                 } else if (v == 0x10000) {
                     // EXP：角色累积经验在 999 级远超 int32，必须 8 字节
                     p.writeLong(val);

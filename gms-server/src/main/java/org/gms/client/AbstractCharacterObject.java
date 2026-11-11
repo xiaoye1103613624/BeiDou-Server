@@ -263,7 +263,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             this.transientHp = Float.NEGATIVE_INFINITY;
         }
         this.maxHp = hp_;
-        this.clientMaxHp = Math.min(30000, hp_);
+        this.clientMaxHp = Math.min(99999, hp_);
     }
 
     protected void setMaxMp(int mp_) {
@@ -271,7 +271,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             this.transientMp = Float.NEGATIVE_INFINITY;
         }
         this.maxMp = mp_;
-        this.clientMaxMp = Math.min(30000, mp_);
+        this.clientMaxMp = Math.min(99999, mp_);
     }
 
     /**
@@ -293,8 +293,8 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         try {
             this.maxHp = mhp;
             this.maxMp = mmp;
-            this.clientMaxHp = Math.min(30000, mhp);
-            this.clientMaxMp = Math.min(30000, mmp);
+            this.clientMaxHp = Math.min(99999, mhp);
+            this.clientMaxMp = Math.min(99999, mmp);
             this.localMaxHp = mhp;
             this.localMaxMp = mmp;
             this.hp = Math.max(0, Math.min(chp, this.localMaxHp));

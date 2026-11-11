@@ -5056,13 +5056,19 @@ public class Character extends AbstractCharacterObject {
         return localwatk;
     }
 
+    // 等级上限硬性上限：即使 game_config.max_level 误配更大值，也以代码钳制兜底，
+    // 防止按现有 1.06 递增曲线时累计经验在 ~3135 级溢出 int64（9.2e18）。
+    private static final int MAX_LEVEL_CAP = 3000;
+
     public int getMaxClassLevel() {
         if (isCygnus()) {
             return 120;
         }
-        // 等级上限支持配置化（如 999）。未配置 max_level 时回退 255，保持原行为。
+        // 等级上限支持配置化（如 3000）。未配置 max_level 时回退 255，保持原行为；
+        // 配置值无论多大都被钳制到 MAX_LEVEL_CAP，防止运行异常。
         int maxLevel = GameConfig.getServerInt("max_level");
-        return maxLevel > 0 ? maxLevel : 255;
+        int capped = maxLevel > 0 ? maxLevel : 255;
+        return Math.min(capped, MAX_LEVEL_CAP);
     }
 
     public int getMaxLevel() {
