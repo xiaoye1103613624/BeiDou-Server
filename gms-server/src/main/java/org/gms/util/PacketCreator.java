@@ -239,7 +239,7 @@ public class PacketCreator {
             p.writeString(chr.getLinkedName());
         }
 
-        p.writeInt(chr.getMeso());
+        p.writeLong(chr.getMeso());
         addInventoryInfo(p, chr);
         addSkillInfo(p, chr);
         addQuestInfo(p, chr);
@@ -1082,6 +1082,9 @@ public class PacketCreator {
                     p.writeLong(val);
                 } else if (v == 0x20000) {
                     p.writeShort((int) val);
+                } else if (v == 0x40000) {
+                    // MESO：金币上限放宽到 long
+                    p.writeLong(val);
                 } else {
                     p.writeInt((int) val);
                 }
@@ -3254,11 +3257,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeMesoSet(byte number, int meso) {
+    public static Packet getTradeMesoSet(byte number, long meso) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SET_MESO.getCode());
         p.writeByte(number);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -3667,7 +3670,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, int meso) {
+    public static Packet getStorage(int npcId, byte slots, Collection<Item> items, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x16);
         p.writeInt(npcId);
@@ -3675,7 +3678,7 @@ public class PacketCreator {
         p.writeShort(0x7E);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         p.writeShort(0);
         p.writeByte((byte) items.size());
         for (Item item : items) {
@@ -3697,14 +3700,14 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet mesoStorage(byte slots, int meso) {
+    public static Packet mesoStorage(byte slots, long meso) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x13);
         p.writeByte(slots);
         p.writeShort(2);
         p.writeShort(0);
         p.writeInt(0);
-        p.writeInt(meso);
+        p.writeLong(meso);
         return p;
     }
 
@@ -5132,7 +5135,7 @@ public class PacketCreator {
         p.writeInt(NpcId.FREDRICK);
         p.writeInt(32272); //id
         p.skip(5);
-        p.writeInt(chr.getMerchantNetMeso());
+        p.writeLong(chr.getMerchantNetMeso());
         p.writeByte(0);
         try {
             List<Pair<Item, InventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
@@ -5327,11 +5330,11 @@ public class PacketCreator {
                 p.writeInt(s.getMesos());
                 p.writeString(s.getBuyer());
             }
-            p.writeInt(chr.getMerchantMeso());//:D?
+            p.writeLong(chr.getMerchantMeso());//:D?
         }
         p.writeString(hm.getDescription());
         p.writeByte(0x10); //TODO SLOTS, which is 16 for most stores...slotMax
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         if (hm.getItems().isEmpty()) {
             p.writeByte(0);//Hmm??
@@ -5349,7 +5352,7 @@ public class PacketCreator {
     public static Packet updateHiredMerchant(HiredMerchant hm, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
-        p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
+        p.writeLong(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
         for (PlayerShopItem item : hm.getItems()) {
             p.writeShort(item.getBundles());
@@ -5826,7 +5829,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showCouponRedeemedItems(int accountId, int maplePoints, int mesos, List<Item> cashItems, List<Pair<Integer, Integer>> items) {
+    public static Packet showCouponRedeemedItems(int accountId, int maplePoints, long mesos, List<Item> cashItems, List<Pair<Integer, Integer>> items) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
         p.writeByte(0x59);
         p.writeByte((byte) cashItems.size());
@@ -5841,7 +5844,7 @@ public class PacketCreator {
             p.writeShort(0x1F); //0 = ?, >=0x20 = ?, <0x20 = ? (does nothing?)
             p.writeInt(itemPair.getRight());
         }
-        p.writeInt(mesos);
+        p.writeLong(mesos);
         return p;
     }
 
@@ -6691,7 +6694,7 @@ public class PacketCreator {
             for (DueyPackage dp : packages) {
                 p.writeInt(dp.getPackageId());
                 p.writeFixedString(dp.getSender());
-                p.writeInt(dp.getMesos());
+                p.writeLong(dp.getMesos());
                 p.writeLong(getTime(dp.sentTimeInMilliseconds()));
 
                 String msg = dp.getMessage();

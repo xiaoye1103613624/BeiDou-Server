@@ -32,7 +32,7 @@ import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.server.maps.Portal;
 import org.gms.util.I18nUtil;
 
-import java.util.function.IntPredicate;
+import java.util.function.LongPredicate;
 
 public class MapWarpCommand extends Command {
     private static final int COST = 100000;
@@ -89,7 +89,7 @@ public class MapWarpCommand extends Command {
             portal = target.getRandomPlayerSpawnpoint();
         }
 
-        IntPredicate commit = balanceAfter -> true;
+        LongPredicate commit = balanceAfter -> true;
         boolean ok = player.spendMesoTransactionally(COST, commit);
         if (!ok) {
             player.dropMessage(1, I18nUtil.getMessage("MapWarpCommand.message8"));

@@ -76,8 +76,8 @@ public class Trade {
     private Trade partner = null;
     private final List<Item> items = new ArrayList<>();
     private List<Item> exchangeItems;
-    private int meso = 0;
-    private int exchangeMeso;
+    private long meso = 0;
+    private long exchangeMeso;
     private final AtomicBoolean locked = new AtomicBoolean(false);
     private final Character chr;
     private final byte number;
@@ -190,11 +190,11 @@ public class Trade {
         return locked.get();
     }
 
-    private int getMeso() {
+    private long getMeso() {
         return meso;
     }
 
-    public void setMeso(int meso) {
+    public void setMeso(long meso) {
         if (locked.get()) {
             throw new RuntimeException(I18nUtil.getLogMessage("Trade.info.setMeso.msg1"));
         }
@@ -257,7 +257,7 @@ public class Trade {
         return new LinkedList<>(items);
     }
 
-    public int getExchangeMesos() {
+    public long getExchangeMesos() {
         return exchangeMeso;
     }
 

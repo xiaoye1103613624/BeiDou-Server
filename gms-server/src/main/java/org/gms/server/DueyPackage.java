@@ -31,7 +31,7 @@ import static java.util.concurrent.TimeUnit.DAYS;
 public class DueyPackage {
     private String sender = null;
     private Item item = null;
-    private int mesos = 0;
+    private long mesos = 0;
     private String message = null;
     private Calendar timestamp;
     private int packageId = 0;
@@ -58,11 +58,11 @@ public class DueyPackage {
         return item;
     }
 
-    public int getMesos() {
+    public long getMesos() {
         return mesos;
     }
 
-    public void setMesos(int set) {
+    public void setMesos(long set) {
         mesos = set;
     }
 

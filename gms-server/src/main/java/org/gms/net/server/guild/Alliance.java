@@ -177,7 +177,7 @@ public class Alliance {
     }
 
     private static int createAllianceOnDb(List<Character> guildMasters, List<Integer> guildIds,
-                                          String name, int payerId, int balanceAfter) {
+                                          String name, int payerId, long balanceAfter) {
         if (guildMasters.size() != 2 || guildIds.size() != 2 ||
                 guildIds.get(0).equals(guildIds.get(1))) {
             return -1;
@@ -1025,7 +1025,7 @@ public class Alliance {
         return true;
     }
 
-    private boolean saveCapacityPurchase(int buyerId, int balanceAfter,
+    private boolean saveCapacityPurchase(int buyerId, long balanceAfter,
                                          int expectedCapacity, int newCapacity,
                                          int maxCapacity) {
         try (Connection con = DatabaseConnection.getConnection()) {
@@ -1080,10 +1080,10 @@ public class Alliance {
     }
 
     private static void updateCharacterMeso(Connection con, int characterId,
-                                            int balanceAfter) throws SQLException {
+                                            long balanceAfter) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement(
                 "UPDATE characters SET meso = ? WHERE id = ?")) {
-            ps.setInt(1, balanceAfter);
+            ps.setLong(1, balanceAfter);
             ps.setInt(2, characterId);
             if (ps.executeUpdate() != 1) {
                 throw new SQLException("Character does not exist: " + characterId);

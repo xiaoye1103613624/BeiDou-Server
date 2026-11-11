@@ -44,7 +44,7 @@ public final class DueyHandler extends AbstractPacketHandler {
             byte inventId = p.readByte();
             short itemPos = p.readShort();
             short amount = p.readShort();
-            int mesos = p.readInt();
+            long mesos = p.readLong();
             String recipient = p.readString();
             boolean quick = p.readByte() != 0;
             String message = quick ? p.readString() : null;

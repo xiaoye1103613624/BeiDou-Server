@@ -64,7 +64,7 @@ public class CharactersDO implements Serializable {
 
     private Integer maxmp;
 
-    private Integer meso;
+    private Long meso;
 
     @Column("hpMpUsed")
     private Integer hpMpUsed;
@@ -140,7 +140,7 @@ public class CharactersDO implements Serializable {
 
     private Integer matchcardties;
 
-    private Integer merchantmesos;
+    private Long merchantmesos;
 
     private Boolean hasmerchant;
 

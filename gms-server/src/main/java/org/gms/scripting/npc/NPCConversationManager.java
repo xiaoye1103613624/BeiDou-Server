@@ -349,7 +349,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return completeQuest(id, npc);
     }
 
-    public int getMeso() {
+    public long getMeso() {
         return getPlayer().getMeso();
     }
 

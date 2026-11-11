@@ -198,12 +198,12 @@ public class DueyProcessor {
         return packages;
     }
 
-    private static int createPackage(int mesos, String message, String sender, int toCid, boolean quick) {
+    private static int createPackage(long mesos, String message, String sender, int toCid, boolean quick) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO `dueypackages` (ReceiverId, SenderName, Mesos, TimeStamp, Message, Type, Checked) VALUES (?, ?, ?, ?, ?, ?, 1)", Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, toCid);
             ps.setString(2, sender);
-            ps.setInt(3, mesos);
+            ps.setLong(3, mesos);
             ps.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             ps.setString(5, message);
             ps.setInt(6, quick ? 1 : 0);
@@ -285,7 +285,7 @@ public class DueyProcessor {
         return 0;
     }
 
-    public static void dueySendItem(Client c, byte invTypeId, short itemPos, short amount, int sendMesos, String sendMessage, String recipient, boolean quick) {
+    public static void dueySendItem(Client c, byte invTypeId, short itemPos, short amount, long sendMesos, String sendMessage, String recipient, boolean quick) {
         if (c.tryacquireClient()) {
             try {
                 if (c.getPlayer().isGM() && c.getPlayer().gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_use_duey")) {
@@ -354,7 +354,7 @@ public class DueyProcessor {
                     c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_ENABLE_ACTIONS.getCode()));
                     return;
                 }
-                c.getPlayer().gainMeso((int) -finalcost, false);
+                c.getPlayer().gainMeso(-finalcost, false);
 
                 int res = addPackageItemFromInventory(packageId, c, invTypeId, itemPos, amount);
                 if (res == 0) {
@@ -481,7 +481,7 @@ public class DueyProcessor {
         }
     }
 
-    public static void dueyCreatePackage(Item item, int mesos, String sender, int recipientCid) {
+    public static void dueyCreatePackage(Item item, long mesos, String sender, int recipientCid) {
         int packageId = createPackage(mesos, null, sender, recipientCid, false);
         if (packageId != -1) {
             insertPackageItem(packageId, item);

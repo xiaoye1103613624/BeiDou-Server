@@ -102,9 +102,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.IntPredicate;
+import java.util.function.LongPredicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -201,7 +203,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private int battleshipHp = 0;
     @Getter
-    private int mesosTraded = 0;
+    private long mesosTraded = 0;
     @Getter
     private int possibleReports = 10;
     @Getter
@@ -308,10 +310,10 @@ public class Character extends AbstractCharacterObject {
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicLong exp = new AtomicLong();
     private final AtomicLong gachaExp = new AtomicLong();
-    private final AtomicInteger meso = new AtomicInteger();
+    private final AtomicLong meso = new AtomicLong();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
-    private int merchantmeso;
+    private long merchantmeso;
     @Getter
     @Setter
     private BuddyList buddylist;
@@ -806,7 +808,7 @@ public class Character extends AbstractCharacterObject {
         return pts;
     }
 
-    public void addMesosTraded(int gain) {
+    public void addMesosTraded(long gain) {
         this.mesosTraded += gain;
     }
 
@@ -3161,27 +3163,24 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public boolean canHoldMeso(int gain) {  // thanks lucasziron for pointing out a need to check space availability for mesos on player transactions
-        long nextMeso = (long) meso.get() + gain;
-        return nextMeso <= Integer.MAX_VALUE;
+    public boolean canHoldMeso(long gain) {  // meso 已支持 long，不再有 int 上限
+        return true;
     }
 
-    public void gainMeso(int gain) {
+    public void gainMeso(long gain) {
         gainMeso(gain, true, false, true);
     }
 
-    public void gainMeso(int gain, boolean show) {
+    public void gainMeso(long gain, boolean show) {
         gainMeso(gain, show, false, false);
     }
 
-    public void gainMeso(int gain, boolean show, boolean enableActions, boolean inChat) {
+    public void gainMeso(long gain, boolean show, boolean enableActions, boolean inChat) {
         long nextMeso;
         petLock.lock();
         try {
             nextMeso = (long) meso.get() + gain;  // thanks Thora for pointing integer overflow here
-            if (nextMeso > Integer.MAX_VALUE) {
-                gain -= (int) (nextMeso - Integer.MAX_VALUE);
-            } else if (nextMeso < 0) {
+            if (nextMeso < 0) {
                 gain = -meso.get();
             }
             nextMeso = meso.addAndGet(gain);
@@ -3190,9 +3189,9 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (gain != 0) {
-            updateSingleStat(Stat.MESO, (int) nextMeso, enableActions);
+            updateSingleStat(Stat.MESO, (long) nextMeso, enableActions);
             if (show) {
-                sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
+                sendPacket(PacketCreator.getShowMesoGain((int) gain, inChat));
             }
         } else {
             enableActions();
@@ -3208,15 +3207,15 @@ public class Character extends AbstractCharacterObject {
      * @param persistence 接收扣费后余额，并在同一事务中持久化业务与金币
      * @return 事务和内存扣费是否均成功
      */
-    public synchronized boolean spendMesoTransactionally(int cost, IntPredicate persistence) {
+    public synchronized boolean spendMesoTransactionally(long cost, LongPredicate persistence) {
         if (cost <= 0) {
             return false;
         }
 
-        int balanceAfter;
+        long balanceAfter;
         petLock.lock();
         try {
-            int currentBalance = meso.get();
+            long currentBalance = meso.get();
             if (currentBalance < cost) {
                 return false;
             }
@@ -3240,7 +3239,7 @@ public class Character extends AbstractCharacterObject {
 
         try {
             updateSingleStat(Stat.MESO, balanceAfter, false);
-            sendPacket(PacketCreator.getShowMesoGain(-cost, true));
+            sendPacket(PacketCreator.getShowMesoGain((int) -cost, true));
         } catch (RuntimeException e) {
             log.error(I18nUtil.getLogMessage("Character.spendMesoTransactionally.error2"),
                     id, cost, e);
@@ -5079,19 +5078,19 @@ public class Character extends AbstractCharacterObject {
         return GameConstants.getJobMaxLevel(job);
     }
 
-    public int getMeso() {
+    public long getMeso() {
         return meso.get();
     }
 
-    public void setMeso(int meso) {
+    public void setMeso(long meso) {
         this.meso.set(meso);
     }
 
-    public int getMerchantMeso() {
+    public long getMerchantMeso() {
         return merchantmeso;
     }
 
-    public int getMerchantNetMeso() {
+    public long getMerchantNetMeso() {
         int elapsedDays = 0;
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -5113,7 +5112,7 @@ public class Character extends AbstractCharacterObject {
 
         long netMeso = merchantmeso; // negative mesos issues found thanks to Flash, Vcoc
         netMeso = (netMeso * (100 - elapsedDays)) / 100;
-        return (int) netMeso;
+        return netMeso;
     }
 
     public GuildCharacter getMGC() {
@@ -7716,7 +7715,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(9, hair);
                     ps.setInt(10, face);
                     ps.setInt(11, mapId);
-                    ps.setInt(12, Math.abs(meso.get()));
+                    ps.setLong(12, Math.abs(meso.get()));
                     ps.setInt(13, 0);
                     ps.setInt(14, accountId);
                     ps.setString(15, name);
@@ -7912,7 +7911,7 @@ public class Character extends AbstractCharacterObject {
                             ps.setInt(21, getHp() < 1 ? map.getReturnMapId() : map.getId());
                         }
                     }
-                    ps.setInt(22, meso.get());
+                    ps.setLong(22, meso.get());
                     ps.setInt(23, hpMpApUsed);
                     if (map == null || map.getId() == MapId.CRIMSONWOOD_VALLEY_1 || map.getId() == MapId.CRIMSONWOOD_VALLEY_2) {  // reset to first spawnpoint on those maps
                         ps.setInt(24, 0);
@@ -8345,12 +8344,11 @@ public class Character extends AbstractCharacterObject {
         hasMerchant = set;
     }
 
-    public void addMerchantMesos(int add) {
-        final int newAmount = (int) Math.min((long) merchantmeso + add, Integer.MAX_VALUE);
-        setMerchantMeso(newAmount);
+    public void addMerchantMesos(long add) {
+        setMerchantMeso(merchantmeso + add);
     }
 
-    public void setMerchantMeso(int set) {
+    public void setMerchantMeso(long set) {
         characterService.update(CharactersDO.builder()
                 .id(id)
                 .merchantmesos(set)
@@ -8359,23 +8357,14 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void withdrawMerchantMesos() {
-        int merchantMeso = this.getMerchantNetMeso();
-        int playerMeso = this.getMeso();
+        long merchantMeso = this.getMerchantNetMeso();
+        long playerMeso = this.getMeso();
 
         if (merchantMeso > 0) {
-            int possible = Integer.MAX_VALUE - playerMeso;
-
-            if (possible > 0) {
-                if (possible < merchantMeso) {
-                    this.gainMeso(possible, false);
-                    this.setMerchantMeso(merchantMeso - possible);
-                } else {
-                    this.gainMeso(merchantMeso, false);
-                    this.setMerchantMeso(0);
-                }
-            }
+            this.gainMeso(merchantMeso, false);
+            this.setMerchantMeso(0);
         } else {
-            int nextMeso = playerMeso + merchantMeso;
+            long nextMeso = playerMeso + merchantMeso;
 
             if (nextMeso < 0) {
                 this.gainMeso(-playerMeso, false);

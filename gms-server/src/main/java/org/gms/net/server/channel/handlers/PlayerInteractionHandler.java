@@ -502,7 +502,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     game.broadcast(PacketCreator.getMatchCardSelect(game, turn, slot, firstslot, 1));
                 }
             } else if (mode == Action.SET_MESO.getCode()) {
-                chr.getTrade().setMeso(p.readInt());
+                chr.getTrade().setMeso(p.readLong());
             } else if (mode == Action.SET_ITEMS.getCode()) {
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 InventoryType ivType = InventoryType.getByType(p.readByte());

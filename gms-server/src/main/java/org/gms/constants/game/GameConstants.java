@@ -640,7 +640,7 @@ public class GameConstants {
         }
     }
 
-    public synchronized static String numberWithCommas(int i) {
+    public synchronized static String numberWithCommas(long i) {
         return NumberFormat.getNumberInstance(Locale.UK).format(i);
     }
 
