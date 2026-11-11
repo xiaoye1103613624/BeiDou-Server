@@ -43,5 +43,6 @@ public class LevelProCommand extends Command {
         while (player.getLevel() < Math.min(player.getMaxClassLevel(), Integer.parseInt(params[0]))) {
             player.levelUp(false);
         }
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

@@ -41,5 +41,6 @@ public class EmpowerMeCommand extends Command {
         for (int i : array) {
             SkillFactory.getSkill(i).getEffect(SkillFactory.getSkill(i).getMaxLevel()).applyTo(player);
         }
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

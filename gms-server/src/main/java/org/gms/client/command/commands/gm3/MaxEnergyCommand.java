@@ -39,5 +39,6 @@ public class MaxEnergyCommand extends Command {
         Character player = c.getPlayer();
         c.getPlayer().setDojoEnergy(10000);
         c.sendPacket(PacketCreator.getEnergy("energy", 10000));
+        c.getPlayer().dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

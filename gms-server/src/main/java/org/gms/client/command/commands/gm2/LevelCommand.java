@@ -52,5 +52,6 @@ public class LevelCommand extends Command {
         player.setWorldRates();
 
         player.levelUp(false);
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

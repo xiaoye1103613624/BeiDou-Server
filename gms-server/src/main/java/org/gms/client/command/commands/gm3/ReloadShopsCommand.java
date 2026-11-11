@@ -37,5 +37,6 @@ public class ReloadShopsCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         ShopFactory.getInstance().reloadShops();
+        c.getPlayer().dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

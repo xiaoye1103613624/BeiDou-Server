@@ -38,5 +38,6 @@ public class SetCommand extends Command {
         for (int i = 0; i < params.length; i++) {
             ServerConstants.DEBUG_VALUES[i] = Integer.parseInt(params[i]);
         }
+        c.getPlayer().dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

@@ -65,6 +65,7 @@ public class ProItemCommand extends Command {
 
             hardsetItemStats((Equip) it, stat, spdjmp);
             InventoryManipulator.addFromDrop(c, it);
+            player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         } else {
             player.dropMessage(6, I18nUtil.getMessage("ProItemCommand.message4"));
         }

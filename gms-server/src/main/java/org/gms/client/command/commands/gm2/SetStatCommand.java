@@ -51,6 +51,7 @@ public class SetStatCommand extends Command {
             }
 
             player.updateStrDexIntLuk(x);
+            player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         } catch (NumberFormatException nfe) {
         }
     }

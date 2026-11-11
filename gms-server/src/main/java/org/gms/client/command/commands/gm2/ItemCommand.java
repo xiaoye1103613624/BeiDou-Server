@@ -75,6 +75,7 @@ public class ItemCommand extends Command {
                 int petid = Pet.createPet(itemId);
 
                 InventoryManipulator.addById(c, itemId, quantity, player.getName(), petid, expiration);
+                player.dropMessage(5, I18nUtil.getMessage("ItemCommand.message7", ii.getName(itemId), days));
                 return;
             } else {
                 player.yellowMessage(I18nUtil.getMessage("ItemCommand.message5"));
@@ -89,5 +90,6 @@ public class ItemCommand extends Command {
         }
 
         InventoryManipulator.addById(c, itemId, quantity, player.getName(), -1, flag, -1);
+        player.dropMessage(5, I18nUtil.getMessage("ItemCommand.message6", ii.getName(itemId), quantity));
     }
 }

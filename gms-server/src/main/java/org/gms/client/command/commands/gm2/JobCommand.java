@@ -47,6 +47,7 @@ public class JobCommand extends Command {
 
             player.changeJob(Job.getById(jobid));
             player.equipChanged();
+            player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         } else if (params.length == 2) {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim == null && StringUtil.isNumeric(params[0])) {
@@ -61,6 +62,7 @@ public class JobCommand extends Command {
 
                 victim.changeJob(Job.getById(jobid));
                 player.equipChanged();
+                player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
             } else {
                 player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             }

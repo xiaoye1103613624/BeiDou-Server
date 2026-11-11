@@ -90,6 +90,7 @@ public class ItemDropCommand extends Command {
                 }
 
                 c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true);
+                player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
 
                 return;
             } else {
@@ -117,5 +118,6 @@ public class ItemDropCommand extends Command {
         }
 
         c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true);
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

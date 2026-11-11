@@ -80,5 +80,6 @@ public class SetEqStatCommand extends Command {
                 e.printStackTrace();
             }
         }
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

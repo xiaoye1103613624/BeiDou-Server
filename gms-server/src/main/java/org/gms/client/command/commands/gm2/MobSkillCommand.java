@@ -38,5 +38,6 @@ public class MobSkillCommand extends Command {
         chr.getMap().getAllMonsters().forEach(
                 monster -> mobSkill.applyEffect(chr, monster, false, Collections.emptyList())
         );
+        chr.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

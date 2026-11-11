@@ -43,5 +43,6 @@ public class BuffMeCommand extends Command {
         SkillFactory.getSkill(2301004).getEffect(SkillFactory.getSkill(2301004).getMaxLevel()).applyTo(player);
         SkillFactory.getSkill(1005).getEffect(SkillFactory.getSkill(1005).getMaxLevel()).applyTo(player);
         player.healHpMp();
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

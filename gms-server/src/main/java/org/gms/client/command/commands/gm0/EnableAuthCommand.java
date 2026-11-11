@@ -41,6 +41,7 @@ public class EnableAuthCommand extends Command {
             } finally {
                 c.releaseClient();
             }
+            c.getPlayer().dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         }
     }
 }

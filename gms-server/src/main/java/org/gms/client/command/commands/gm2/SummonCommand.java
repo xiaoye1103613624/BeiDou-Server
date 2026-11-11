@@ -73,6 +73,7 @@ public class SummonCommand extends Command {
             MapleMap map = player.getMap();
             victim.saveLocationOnWarp();
             victim.forceChangeMap(map, map.findClosestPortal(player.getPosition()));
+            player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         } else {
             player.dropMessage(6, I18nUtil.getMessage("BombCommand.message3", params[0]));
         }

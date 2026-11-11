@@ -43,5 +43,6 @@ public class BuffMapCommand extends Command {
         SkillFactory.getSkill(9101008).getEffect(SkillFactory.getSkill(9101008).getMaxLevel()).applyTo(player, true);
         SkillFactory.getSkill(1005).getEffect(SkillFactory.getSkill(1005).getMaxLevel()).applyTo(player, true);
 
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

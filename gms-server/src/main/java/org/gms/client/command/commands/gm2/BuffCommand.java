@@ -47,6 +47,7 @@ public class BuffCommand extends Command {
         Skill skill = SkillFactory.getSkill(skillid);
         if (skill != null) {
             skill.getEffect(skill.getMaxLevel()).applyTo(player);
+            player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         }
     }
 }

@@ -51,6 +51,7 @@ public class ApCommand extends Command {
             }
 
             player.changeRemainingAp(newAp, false);
+            player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
         } else {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim != null) {

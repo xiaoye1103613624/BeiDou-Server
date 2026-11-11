@@ -55,5 +55,6 @@ public class SpawnCommand extends Command {
         } else {
             player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
         }
+        player.dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }

@@ -36,5 +36,6 @@ public class EraseAllPNpcsCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         PlayerNPC.removeAllPlayerNPC();
+        c.getPlayer().dropMessage(5, I18nUtil.getMessage("Command.success", getDescription()));
     }
 }
