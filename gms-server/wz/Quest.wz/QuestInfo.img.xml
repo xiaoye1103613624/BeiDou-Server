@@ -23808,4 +23808,966 @@ Able to proceed to &apos;Merry-go-round in Kampung&apos; as next quest.
     <string name="2" value="Umi&apos;s spiced vegetables sure sound enticing. I should go get some later~!"/>
     <int name="area" value="48"/>
   </imgdir>
+<imgdir name="2360">
+        <string name="name" value="西瓦的故事"/>
+        <string name="parent" value="访问飞花院"/>
+        <int name="order" value="1"/>
+        <int name="blocked" value="1"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="重新从消失的红雅那里收到了消息。时候终于到了吗？"/>
+        <string name="1" value="红雅说终于到了去飞花院的时候了，并告诉了我去飞花院的路。他让我到了飞花院之后，先去见见#b西瓦#k……"/>
+        <string name="2" value="红雅说终于到了去飞花院的时候了，并告诉了我去飞花院的路。他让我到了飞花院之后，先去见见#b西瓦#k……在飞花院1层见到了红雅所说的#b西瓦#k。"/>
+    </imgdir>
+<imgdir name="2361">
+        <string name="name" value="延友的故事"/>
+        <string name="parent" value="访问飞花院"/>
+        <int name="order" value="2"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <string name="1" value="在飞花院，西瓦告诉了我暗影双刀的故事。说完之后，他让我去见见上层的#b延友#k，了解其他的情况。"/>
+        <string name="2" value="在飞花院，西瓦告诉了我暗影双刀的故事。说完之后，他让我去见见上层的#b延友#k，了解其他的情况。利用台阶到达了上层，见到了站在猫头鹰身上的#b延友#k。"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2362">
+        <string name="name" value="拜见雪姬小姐"/>
+        <string name="parent" value="访问飞花院"/>
+        <int name="order" value="3"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <string name="1" value="飞花院上层的延友告诉了我雪姬和现在的达克鲁“阵”，以及先代黑暗领主的故事。他说希望我能帮助雪姬，并让我去见见她。到雪姬的房间里去吧。\r\n#i3800009#"/>
+        <string name="2" value="飞花院上层的延友告诉了我雪姬和现在的达克鲁“阵”，以及先代黑暗领主的故事，并让我帮助雪姬。\r\n听完延友的话之后，进入雪姬的房间去拜见雪姬。雪姬看起来是一个具有奇妙魅力的女人……"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2363">
+        <string name="name" value="暗影双刀 - 觉醒的时刻"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="飞花院的主人雪姬说时候到了。时候？"/>
+        <string name="1" value="飞花院的主人雪姬说时候终于到了，她想考验一下我，看看我是否已经准备好踏上暗影双刀之路。她说在飞花院上层的珠房里，击打并获得浑浊的玻璃珠之后，双击将其打碎，具有资格的人就可以得到慧眼……"/>
+        <string name="2" value="飞花院的主人雪姬说时候终于到了，她想考验一下我，看看我是否已经准备好踏上暗影双刀之路。她说在飞花院上层的珠房里，击打并获得浑浊的玻璃珠之后，双击将其打碎，具有资格的人就可以得到慧眼……获得慧眼之后，回到了雪姬那里。雪姬对我表示祝贺，说我终于觉醒成了暗影双刀。"/>
+        <string name="demandSummary" value="#i4032616:# #t4032616:# #c4032616# / 1
+"/>
+        <string name="rewardSummary" value="可以执行“猫头鹰秀丽”任务\n可以执行“第七项任务 - 目击者”任务\n"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2364">
+        <string name="name" value="猫头鹰秀丽"/>
+        <int name="area" value="30"/>
+        <string name="0" value="雪姬说我刚刚转职，她有一个提议。"/>
+        <string name="1" value="雪姬说我刚刚转职，愿不愿意磨练一下自己的技能。修炼一下，试验一下刚学会的新技能，好像不是什么坏事。于是接受了提议，她让我去找飞花院地下的猫头鹰秀丽。她说它虽然不会说话，但可以通过单词卡片和人沟通，在暗影双刀的训练方面很有一套。让猫头鹰训练人？"/>
+        <string name="2" value="雪姬说我刚刚转职，愿不愿意磨练一下自己的技能。修炼一下，试验一下刚学会的新技能，好像不是什么坏事。于是接受了提议，她让我去找飞花院地下的猫头鹰秀丽。虽然不会说话，但可以通过单词卡片和人沟通的猫头鹰秀丽，第一印象好像没什么特别……"/>
+        <string name="demandSummary" value="和飞花院的猫头鹰#b秀丽#k对话"/>
+        <string name="rewardSummary" value="经验值700\n可以执行“秀丽的初级修炼1”任务\n"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2365">
+        <string name="name" value="秀丽的初级修炼1"/>
+        <int name="area" value="30"/>
+        <string name="0" value="去见见猫头鹰秀丽吧。"/>
+        <string name="1" value="猫头鹰秀丽大叫了几声，叼出了三张单词卡片。\r\n\r\n#b#e[修炼场1]，[影子刀客]，[50个]"/>
+        <string name="2" value="猫头鹰秀丽大叫了几声，叼出了三张单词卡片。\r\n\r\n#b#e[修炼场1]，[影子刀客]，[50个]\r\n\r\n#k#n去修炼场1消灭了50个影子刀客，然后回到了秀丽那里。"/>
+        <string name="demandSummary" value="#o9001015# #a23651#
+"/>
+        <string name="rewardSummary" value="经验值700\n可以执行“秀丽的初级修炼2”任务\n"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2366">
+        <string name="name" value="秀丽的初级修炼2"/>
+        <int name="area" value="30"/>
+        <string name="0" value="去见见猫头鹰秀丽。"/>
+        <string name="1" value="猫头鹰秀丽大叫了几声，叼出了三张单词卡片。\r\n\r\n#b#e[修炼场2]，[强壮影子刀客]，[60个]"/>
+        <string name="2" value="猫头鹰秀丽大叫了几声，叼出了三张单词卡片。\r\n\r\n#b#e[修炼场2]，[强壮影子刀客]，[60个]#k#n\r\n\r\n去修炼场2消灭了60个强壮影子刀客，然后回到了秀丽那里。"/>
+        <string name="demandSummary" value="#o9001016# #a23661#
+"/>
+        <string name="rewardSummary" value="经验值1,400"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2367">
+        <string name="name" value="第七项任务 - 目击者"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="从飞花院的西瓦那里收到了紧急联络。到底是什么事呢？"/>
+        <string name="1" value="暗影双刀的传说#b西瓦#k交给了我第7项任务。任务的内容是寻找先代黑暗领主失踪时的目击者。因为事情已经过去很久，所以寻找目击者好像会非常困难……应该去问谁呢？先去问问上次和我提到过先代黑暗领主的权达开吧。"/>
+        <string name="2" value="暗影双刀的传说#b西瓦#k交给了我第7项任务。任务的内容是寻找先代黑暗领主失踪时的目击者。因为事情已经过去很久，所以寻找目击者好像会非常困难。得知先代黑暗领主和崔斯坦是莫逆之交。去见见当时的目击者麦吉，问问到底看到了什么。"/>
+        <string name="demandSummary" value="#b“拿着钥匙的目击者”#k完成"/>
+        <int name="blocked" value="1"/>
+        <string name="rewardSummary" value="经验值2,100\n可以执行“暗影双刀 - 达克鲁的日记”任务\n"/>
+    </imgdir>
+<imgdir name="2368">
+        <string name="name" value="拿着钥匙的目击者"/>
+        <int name="area" value="30"/>
+        <string name="0" value="权达开好像知道些什么，去见见他吧。"/>
+        <string name="1" value="向权达开询问了有关先代黑暗领主的事情。他说自己什么都不知道，但据说英雄崔斯坦和他是莫逆之交，让我去问很了解崔斯坦的#b勇士部落的麦吉#k。"/>
+        <string name="2" value="向权达开询问了有关先代黑暗领主的事情。他说自己什么都不知道，但据说英雄崔斯坦和他是莫逆之交，让我去问很了解崔斯坦的#b勇士部落的麦吉#k。麦吉好像非常惜字如金。他告诉了我他知道的有关先代黑暗领主的事情。"/>
+        <string name="demandSummary" value="和#b“麦吉”#k对话"/>
+        <string name="rewardSummary" value="经验值2,200"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2369">
+        <string name="name" value="暗影双刀 - 达克鲁的日记"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="雪姬小姐直接和我联系，说有急事要找我。"/>
+        <string name="1" value="雪姬小姐说听了麦吉的话之后非常愤怒，连觉都睡不着。她决心和达克鲁开战，在正式开战之前，让我到达克鲁所在的酒吧的密室中，取回先代黑暗领主留下的遗物——一本日记。她说达克鲁也许设置了什么陷阱，但务必要把它拿回来……让我拿到日记并达到30级之后再去找她。"/>
+        <string name="2" value="雪姬小姐说听了麦吉的话之后非常愤怒，连觉都睡不着。她决心和达克鲁开战，在正式开战之前，让我到达克鲁所在的酒吧的秘密房间中，取回先代黑暗领主留下的遗物——一本日记。\r\n在废都酒吧的秘密房间里找到了先代黑暗领主的日记，但达克鲁的手下出现，向我发动攻击。好不容易消灭了他们，成功地偷到了日记。达到30级之后，拿着日记见到了雪姬小姐。她让我转职成了双刀客。"/>
+        <string name="demandSummary" value="#i4032617:# #t4032617:# #c4032617# / 1
+"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2370">
+        <string name="name" value="秀丽的中级修炼"/>
+        <int name="area" value="30"/>
+        <string name="0" value="既然刚完成转职，应该去见见训练教官秀丽。"/>
+        <string name="1" value="猫头鹰秀丽大叫了几声，叼出了三张单词卡片。\r\n\r\n#b#e[修炼场3]，[影子双刀]，[70个]"/>
+        <string name="2" value="猫头鹰秀丽大叫了几声，叼出了三张单词卡片。\r\n\r\n#b#e[修炼场3]，[影子双刀]，[70个]\r\n\r\n#k#n去修炼场3消灭了70个影子双刀，然后回到了秀丽那里。"/>
+        <string name="demandSummary" value="#o9001017# #a23701#
+"/>
+        <string name="rewardSummary" value="经验值2,200"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2371">
+        <string name="name" value="延友的担忧"/>
+        <int name="area" value="30"/>
+        <string name="0" value="延友说他非常担心雪姬小姐，去见见延友吧。"/>
+        <string name="1" value="延友说雪姬小姐看了先代黑暗领主的日记之后，对所有事情都失去了欲望，因此他想送雪姬小姐一件礼物。搜集一支火野猪身上的郁金香，交给延友吧。"/>
+        <string name="2" value="延友说雪姬小姐看了先代黑暗领主的日记之后，对所有事情都失去了欲望，因此他想送雪姬小姐一件礼物。搜集了一支火野猪身上的郁金香，交给了延友。"/>
+        <string name="demandSummary" value="#i4032629:# #t4032629:# #c4032629# / 20
+"/>
+        <string name="rewardSummary" value="经验值2,500"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2372">
+        <string name="name" value="第八项任务 - 拜见"/>
+        <string name="parent" value="第八项任务 - 拜见"/>
+        <int name="order" value="1"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="雪姬说有事要找我……"/>
+        <string name="1" value="好不容易摆脱了冲击，打起精神的雪姬说现在到了确定暗影双刀的未来之路的时候了。她说在黑暗中长大的暗影双刀必须获得冰峰雪域的飞侠长老#b艾瑞克#k的认可，成为被所有人认可的人。她让我作为她的使者，去拜见冰峰雪域的艾瑞克，寻找暗影双刀可以获得正式认可的道路……"/>
+        <string name="2" value="好不容易摆脱了冲击，打起精神的雪姬说现在到了确定暗影双刀的未来之路的时候了。她说在黑暗中长大的暗影双刀必须获得冰峰雪域的飞侠长老#b艾瑞克#k的认可，成为被所有人认可的人。她让我作为她的使者，去拜见冰峰雪域的艾瑞克，寻找暗影双刀可以获得正式认可的道路……让暗影双刀得到艾瑞克的认可的方法到底是什么呢？"/>
+        <string name="rewardSummary" value="经验值14,000\n可以执行“艾瑞克的考验”任务\n"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2373">
+        <string name="name" value="艾瑞克的考验"/>
+        <string name="parent" value="第八项任务 - 拜见"/>
+        <int name="order" value="2"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <string name="1" value="艾瑞克答应如果能通过他的考试，就正式地认可暗影双刀。他的考试内容，是打猎雪原上的白色猎人#b白狼#k，然后把战利品交给他……"/>
+        <string name="2" value="艾瑞克答应如果能通过他的考试，就正式地认可暗影双刀。他的考试内容，是打猎雪原上的白色猎人#b白狼#k，然后把战利品交给他……打猎了白狼#b100头#k，将#b50个白狼之尾#k交给了艾瑞克，通过了考试。"/>
+        <string name="demandSummary" value="#i4000052:# #t4000052:# #c4000052# / 50
+#o5140000# #a23731#
+"/>
+        <string name="rewardSummary" value="经验值12,000\n可以执行“艾瑞克的密信”任务\n"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2374">
+        <string name="name" value="艾瑞克的密信"/>
+        <string name="parent" value="第八项任务 - 拜见"/>
+        <int name="order" value="3"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <string name="1" value="艾瑞克说他认可了暗影双刀，并写了一封密信，让我交给雪姬。不知道密信的内容是什么，这样就认可我们了吗？让我达到55级之后再去见雪姬，是什么意思呢？"/>
+        <string name="2" value="把艾瑞克的密信交给了雪姬。雪姬说我们终于成功地获得了认可，今后就能堂堂正正地出现在别人面前了。现在获得了艾瑞克的认可，达到70级、120级之后，就能和其他飞侠一样转职了。"/>
+        <string name="demandSummary" value="#i4032619:# #t4032619:# #c4032619# / 1
+"/>
+        <int name="blocked" value="1"/>
+        <string name="rewardSummary" value="经验值40,000\r\n"/>
+    </imgdir>
+<imgdir name="2377">
+        <string name="name" value="达克鲁的小小烦恼2"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <string name="0" value="听说达克鲁还有一个小小的烦恼……"/>
+        <string name="1" value="为了获得达克鲁的信任……接受达克鲁消灭#b木妖#k的委托吧。"/>
+        <string name="2" value="解决了达克鲁的烦恼，好像获得了他的信任。"/>
+        <string name="summary" value="通过#b坠落危险区#k的NPC#b炎海#k进入飞侠修炼场，消灭木妖。"/>
+        <int name="blocked" value="1"/>
+        <string name="demandSummary" value="#o130100# #a23771#
+"/>
+        <string name="rewardSummary" value="经验值200"/>
+    </imgdir>
+<imgdir name="2378">
+        <string name="name" value="第六项任务 - 清除痕迹2"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="为了暗影双刀，必须按照红雅的指示行动。"/>
+        <string name="1" value="为了彻底地消灭证据，执行#b红雅#k的计划吧。\r\n消灭蓝水灵，回收5个#b#t4032621:##k。"/>
+        <string name="2" value="为了消灭证据，把#b#t4032621:##k交给了红雅。下一个任务又是什么呢……"/>
+        <string name="summary" value="去#b魔法森林大木林#k等地，消灭蓝水灵，回收#b#t4032621:##k"/>
+        <int name="blocked" value="1"/>
+        <string name="demandSummary" value="#i4032621:# #t4032621:# #c4032621# / 5
+"/>
+        <string name="rewardSummary" value="经验值480\n可以执行“第六项任务 - 清除痕迹3”任务\n"/>
+    </imgdir>
+<imgdir name="2379">
+        <string name="name" value="第六项任务 - 清除痕迹3"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+        <string name="showEffect" value="0"/>
+        <string name="0" value="为了暗影双刀，必须按照红雅的指示行动。"/>
+        <string name="1" value="清除痕迹第3步……\r\n消灭#b蝙蝠#k，回收#b#t4032623:##k，然后交给红雅。"/>
+        <string name="2" value="消灭蝙蝠，回收了另一个证据。为了暗影双刀……"/>
+        <string name="summary" value="消灭废都地铁环乘区等地的蝙蝠，回收#b#t4032623##k"/>
+        <int name="blocked" value="1"/>
+        <string name="demandSummary" value="#i4032623:# #t4032623:# #c4032623# / 5
+"/>
+        <string name="rewardSummary" value="经验值480\n可以执行“第六项任务 - 清除痕迹4”任务\n"/>
+    </imgdir>
+<imgdir name="2620">
+        <string name="name" value="调查沼泽地带的棚屋"/>
+        <string name="0" value="调查特快包裹的结果不太尽人意。红雅好像要开始其他的调查……会是什么调查呢？"/>
+        <string name="1" value="根据红雅获得的情报，在#b#m103030100##k附近监视，发现达克鲁在沼泽地带的棚屋中和某人接触。好像是在交换什么情报……
+
+他说达克鲁好像正在和某人联手策划阴谋，让我去对#b沼泽地带的棚屋#k进行调查。尤其是要仔细调查#b棚屋中的垃圾桶#k。
+\n#i4033182##t4033182#  #b#c4033182#/1#k
+"/>
+        <string name="2" value="在棚屋里撞见了达克鲁的手下，不过幸运地打退了他。将找到的文件交给红雅后，他生气地说达克鲁正在调查雪姬……！"/>
+        <string name="showLayerTag" value="2620"/>
+        <int name="area" value="77"/>
+        <int name="startNavi" value="1"/>
+        <int name="returnMapID" value="103050000"/>
+        <string name="returnPN" value="1057001"/>
+        <int name="targetType" value="-1"/>
+        <int name="returnType" value="1"/>
+        <int name="resignBlocked" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2621">
+        <string name="name" value="调查酒吧"/>
+        <string name="0" value="红雅似乎想给我下一个任务。"/>
+        <string name="1" value="红雅说干脆再果断一点。他会把达克鲁叫出来，让我趁机进入#b爵士酒吧里#k，找找里面有没有什么藏起来的东西。"/>
+        <string name="2" value="找到了达克鲁的日志。"/>
+        <string name="showLayerTag" value="2621"/>
+        <int name="area" value="77"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="103000000"/>
+        <string name="targetPN" value="in03"/>
+        <int name="returnType" value="1"/>
+        <int name="returnMapID" value="103050000"/>
+        <string name="returnPN" value="1057001"/>
+        <string name="type" value="[必需]"/>
+        <int name="autoStart" value="1"/>
+    </imgdir>
+<imgdir name="2622">
+        <string name="name" value="双刀"/>
+        <string name="0" value="升到了20级，与雪姬进行对话。"/>
+        <string name="1" value="雪姬说现在可以开始学习真正的双刀技能，让返回飞花院。"/>
+        <string name="2" value="在飞花院见到了雪姬。真正的双刀之路……真让人期待。"/>
+        <string name="type" value="[转职]"/>
+        <int name="area" value="77"/>
+        <int name="selfStart" value="1"/>
+    </imgdir>
+<imgdir name="2623">
+        <string name="name" value="见习刀客"/>
+        <string name="0" value="双刀之路必不可少的东西。是什么呢？"/>
+        <string name="1" value="双刀之路必不可少的是一双敏锐的慧眼。听说，#b前往珠房打下浑浊的玻璃珠后，双击打破#k，就能获得只有具备主人资格的人才能看到的慧眼。
+
+
+\n#i4032616##t4032616#  #b#c4032616#/1#k
+
+#r小贴士 ：如果走出珠房，将无法完成任务。只能放弃任务后，重新开始该任务。"/>
+        <string name="2" value="暗影双刀的开始，觉醒为见习刀客。"/>
+        <string name="type" value="[转职]"/>
+        <int name="area" value="77"/>
+    </imgdir>
+<imgdir name="2624">
+        <string name="name" value="猫头鹰秀丽"/>
+        <string name="0" value="雪姬说对刚转职的我有个提议。"/>
+        <string name="1" value="试验一下刚转职后学会的双刀技能吧。去找#b飞花院地下#k的猫头鹰秀丽就能进行修炼了……秀丽虽然不会说人话，可是会用单词卡进行交流。猫头鹰的修炼会是怎样的……"/>
+        <string name="2" value="见到了一眼看去就不同寻常的猫头鹰秀丽。"/>
+        <string name="showLayerTag" value="2624"/>
+        <int name="area" value="77"/>
+        <int name="autoStart" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2625">
+        <string name="name" value="秀丽的修炼1"/>
+        <string name="0" value="去见猫头鹰秀丽吧。"/>
+        <string name="1" value="猫头鹰秀丽一边大声啼叫，一边拿起三张单词卡。\r\n\r\n#b#e[修炼场1]、[影子刀客]、[50只]"/>
+        <string name="2" value="猫头鹰秀丽大声叫着，挑出了三张单词卡。\r\n\r\n#b#e[修炼场1]、[影子刀客]、[50只]\r\n\r\n#k#n前往修炼场1，消灭50只影子刀客后，回到了秀丽那里。"/>
+        <string name="demandSummary" value="#o9001015# #a26251#
+"/>
+        <string name="showLayerTag" value="2625"/>
+        <int name="area" value="77"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="103050310"/>
+        <int name="returnMapID" value="103050300"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2626">
+        <string name="name" value="秀丽的修炼2"/>
+        <string name="0" value="去见猫头鹰秀丽吧。"/>
+        <string name="1" value="猫头鹰秀丽一边大声啼叫，一边拿起三张单词卡。\r\n\r\n#b#e[修炼场2]、[强壮影子刀客]、[70只]"/>
+        <string name="2" value="猫头鹰秀丽大声叫着，挑出了三张单词卡。\r\n\r\n#b#e[修炼场2]、[强壮影子刀客]、[70只]#k#n\r\n\r\n前往修炼场2，消灭70只强壮影子刀客后，回到了秀丽那里。"/>
+        <string name="demandSummary" value="#o9001016# #a26261#
+"/>
+        <string name="showLayerTag" value="2626"/>
+        <int name="area" value="77"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="103050340"/>
+        <int name="returnMapID" value="103050300"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2627">
+        <string name="name" value="延友的担心1"/>
+        <int name="area" value="14"/>
+        <string name="0" value="完成修炼正想离开飞花院时，延友好像有什么事。会是什么事情呢？跟延友对话吧。"/>
+        <string name="1" value="延友说随着对达克鲁的调查的进行，雪姬的心情变得越来越差，他很担心她。为了想要让雪姬重拾笑容的延友，去#b沼泽地带#k搜集些#b紫色小花#k吧。
+
+#i3800279#
+
+\n#i4033184##t4033184#  #b#c4033184#/10#k"/>
+        <string name="2" value="延友手巧地将花朵做成了花束。"/>
+        <int name="autoStart" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2628">
+        <string name="name" value="延友的担心"/>
+        <string name="0" value="飞花院的延友说有事相托。"/>
+        <string name="1" value="延友说最近雪姬的心情好像很差，他很担心雪姬。
+延友说想让雪姬开心一点，为了他去跟#b雪姬聊聊吧。"/>
+        <string name="2" value="雪姬的脸上似乎露出了一点喜色。从刚刚听说的雪姬过去的事情看来，她好像失去了小时候的部分记忆。难道是先代达克鲁死的时候，她受到的刺激太大了？"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="selfStart" value="1"/>
+    </imgdir>
+<imgdir name="2629">
+        <string name="name" value="达克鲁的日志"/>
+        <string name="0" value="从爵士酒吧里拿来的达克鲁的日志里有什么内容？"/>
+        <string name="1" value="达克鲁的日志里提到过废弃都市的书店老板杰比。杰比是被达克鲁赶出来的。那他会不会知道达克鲁的非法行为呢？权达开应该知道关于杰比的事。"/>
+        <string name="2" value="见到了权达开。"/>
+        <int name="area" value="77"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="103000000"/>
+        <string name="targetPN" value="9000008"/>
+        <int name="targetType" value="1"/>
+        <int name="returnType" value="-1"/>
+        <string name="type" value="[必需]"/>
+    </imgdir>
+<imgdir name="2630">
+        <string name="name" value="废都的书店老板1"/>
+        <string name="0" value="向权达开打听曾做过废弃都市书店老板的杰比。"/>
+        <string name="1" value="权达开说不能白白告诉我，让我去#b魔法密林#k消灭#r火独眼兽#k，搜集#b70个火独眼兽之尾#k。他一定知道些什么……"/>
+        <string name="2" value="收到火独眼兽之尾之后，权达开告诉我说杰比搬到了魔法密林。据说他好像正在追踪什么，连行李都没有收拾，就匆忙地消失了……"/>
+        <string name="demandSummary" value="#questorder1##i4000007:# #t4000007:# #c4000007# / 70
+"/>
+        <int name="area" value="77"/>
+        <int name="resignBlocked" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2631">
+        <string name="name" value="废都的书店老板2"/>
+        <string name="0" value="权达开说杰比在魔法密林……"/>
+        <string name="1" value="杰比独自生活在与魔法密林村庄有些距离的树林中的#b巨大的树#k下。跟杰比见面吧。"/>
+        <string name="2" value="见到了杰比……他家正被达克鲁的手续围了个水泄不通。达克鲁想除掉杰比？可是看杰比的反应，又不太像是那样……"/>
+        <string name="demandSummary" value="#o9300526# #a26311#
+"/>
+        <string name="showLayerTag" value="2631"/>
+        <int name="area" value="77"/>
+        <int name="selfStart" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2632">
+        <string name="name" value="和杰比见面"/>
+        <string name="0" value="按权达开所说，杰比就在巨大的树里。去巨大的树看看吧。"/>
+        <string name="1" value="杰比好像藏在巨大的树附近。利用#b巨大的树#k的#b隐藏传送口#k去见杰比吧。"/>
+        <string name="2" value="从杰比那里听到了一个很长的故事……那是关于废弃都市的历代达克鲁经年累月对抗的未知的敌人的故事。#r在冒险岛世界的阴影中捏造历史的人#k。
+
+如果杰比所说属实，那#b雪姬就大大地误会了现任达克鲁#k。因为现任达克鲁不但不是杀害先代达克鲁的凶手，还是为了冒险岛世界，在黑暗中抗争的勇者！把从杰比那里听到的事情告诉#b红雅#k吧！"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="selfStart" value="1"/>
+    </imgdir>
+<imgdir name="2633">
+        <string name="name" value="崔斯坦的弟子"/>
+        <string name="0" value="把杰比的话转告给红雅吧。"/>
+        <string name="1" value="红雅说林中之城深处住着崔斯坦的弟子，让我去见见他。他也失去了师父，说不定知道些什么。去找崔斯坦的弟子无影吧！"/>
+        <string name="2" value="结束了与崔斯坦的对话。向无影讨要崔斯坦的遗物吧。"/>
+        <string name="showLayerTag" value="2633"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="selfStart" value="1"/>
+    </imgdir>
+<imgdir name="2634">
+        <string name="name" value="崔斯坦的灵魂"/>
+        <string name="0" value="刚进入神殿的底层，就突然传来了奇妙的声音。"/>
+        <string name="1" value="随着声音的牵引行动吧。"/>
+        <string name="2" value="在魔王蝙蝠怪的地盘……崔斯坦的墓地见到了崔斯坦。他说现任达克鲁是清白的。"/>
+        <string name="showLayerTag" value="2634"/>
+        <int name="area" value="77"/>
+        <int name="selfStart" value="1"/>
+        <string name="type" value="[必需]"/>
+    </imgdir>
+<imgdir name="2635">
+        <string name="name" value="崔斯坦的遗物"/>
+        <string name="0" value="向无影讨要崔斯坦的遗物吧。"/>
+        <string name="1" value="无影说崔斯坦的遗物在仓库里，让自己去拿。去仓库里寻找遗物吧。"/>
+        <string name="2" value="遭到了未知的敌人的攻击！幸亏找到了崔斯坦的遗物，可是到底是怎么回事呢？……难道真如崔斯坦所说，有个身份不明的敌人吗？"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+    </imgdir>
+<imgdir name="2636">
+        <string name="name" value="无法揭示的真相"/>
+        <string name="0" value="从无影那里获得崔斯坦的遗物。"/>
+        <string name="1" value="把崔斯坦的遗物交给#b红雅#k吧。还有，把谋害了先代达克鲁，捏造了冒险岛世界的历史的敌人，以及他们造成的误会和现任达克鲁的真相都全部告诉他。"/>
+        <string name="2" value="拿到崔斯坦的遗物的红雅陷入了沉默。一直以来雪姬为了扳倒达克鲁倾注了所有心力，要怎样把这个残酷的真相告诉她。"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+    </imgdir>
+<imgdir name="2637">
+        <string name="name" value="双刀客之路1"/>
+        <string name="0" value="升到30级，接到了雪姬的召唤。"/>
+        <string name="1" value="拥有慧眼之人，将唤醒新的力量，蜕变为双刀客……去#b飞花院#k见雪姬吧。"/>
+        <string name="2" value="见到了雪姬。"/>
+        <string name="type" value="[转职]"/>
+        <int name="area" value="77"/>
+        <int name="selfStart" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="2638">
+        <string name="name" value="双刀客之路"/>
+        <string name="0" value="和雪姬商量一下听到可疑的声音一事吧。"/>
+        <string name="1" value="再次与雪姬对话，转职成双刀客吧。"/>
+        <string name="2" value="蜕变为双刀客。"/>
+        <string name="type" value="[转职]"/>
+        <int name="area" value="77"/>
+    </imgdir>
+<imgdir name="2639">
+        <string name="name" value="无处可藏"/>
+        <string name="0" value="红雅似乎考虑好了。"/>
+        <string name="1" value="红雅的声音变得很低哑……按照他的吩咐前往#b废弃都市的爵士酒吧#k吧。得去那里见个人。"/>
+        <string name="2" value="达克鲁对之前隐瞒真相的事表示了歉意。这一切都是为了保护雪姬而不得不做出的选择……却没想到这样的选择反而给雪姬带来了更大的伤害。"/>
+        <string name="showLayerTag" value="2639"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+    </imgdir>
+<imgdir name="2640">
+        <string name="name" value="混乱"/>
+        <string name="0" value="跟表情阴郁的红雅对话。"/>
+        <string name="1" value="雪姬既是飞花院的主人，又是先代黑暗领主的女儿，她有义务知道真相。照红雅的吩咐，把所有真相告诉#b雪姬#k吧。"/>
+        <string name="2" value="雪姬似乎有些混乱。耐心修炼，等待雪姬的召唤吧。"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+    </imgdir>
+<imgdir name="2641">
+        <string name="name" value="双刀侠之路1"/>
+        <string name="0" value="达到45级之后，雪姬突然和我说话。"/>
+        <string name="1" value="雪姬似乎还没从混乱中解脱出来。她的声音有些不太平静，她说为了向双刀侠之路前进，得去一趟#b飞花院#k。"/>
+        <string name="2" value="我见到了雪姬。她的脸比之前消瘦了些，却还没忘记自己的工作。不愧是飞花院的主人。听她讲解成为双刀侠的必经之路吧。"/>
+        <string name="type" value="[转职]"/>
+        <int name="area" value="77"/>
+        <int name="selfStart" value="1"/>
+    </imgdir>
+<imgdir name="2642">
+        <string name="name" value="双刀侠之路2"/>
+        <string name="0" value="雪姬比想象的要冷静，看来她并没有忘记自己该做的事情。"/>
+        <string name="1" value="再次与雪姬对话，转职成双刀侠吧。"/>
+        <string name="2" value="我证明双刀侠之路……双刀的力量。
+雪姬似乎还没有考虑好。继续修炼，等她再次召唤吧。"/>
+        <string name="type" value="[转职]"/>
+        <int name="area" value="77"/>
+    </imgdir>
+<imgdir name="2643">
+        <string name="name" value="她的决心"/>
+        <string name="0" value="得知真相后，雪姬一度陷入了混乱……她究竟会做出什么样的决定呢？"/>
+        <string name="1" value="经过深思熟虑后，雪姬决定主动与达克鲁重归于好。不过，在此之前，她希望我能先向达克鲁证明她雪姬和飞花院的所有人都不是弱者。说完这些话，雪姬显得格外畅快……去#b爵士酒吧跟达克鲁见面吧#k。"/>
+        <string name="2" value="达克鲁对之前欺骗大家的事情表达了歉意。并彻底认可双刀也是飞侠的一个分支，今后大家要以同伴的身份，并肩作战。"/>
+        <int name="area" value="77"/>
+        <string name="type" value="[必需]"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="910350240"/>
+        <string name="targetPN" value="inmob"/>
+        <int name="returnType" value="-1"/>
+        <int name="selfStart" value="1"/>
+    </imgdir>
+<imgdir name="2645">
+        <string name="name" value="黑暗猫头鹰"/>
+        <int name="area" value="77"/>
+        <string name="0" value="接受暗影双刀4转的象征，#b黑暗猫头鹰#k骑宠吧。"/>
+        <string name="1" value="接受暗影双刀4转的象征，#b黑暗猫头鹰#k骑宠吧。"/>
+        <string name="2" value="获得了暗影双刀4转的象征，#b黑暗猫头鹰#k骑宠。"/>
+        <int name="autoStart" value="1"/>
+    </imgdir>
+<imgdir name="2646">
+        <string name="name" value="冒险之书和枫叶"/>
+        <string name="0" value="冒险岛世界！现在要去哪里去冒险呢？\r\n#b赫丽娜#k说有东西要给我。"/>
+        <string name="1" value="冒险岛世界！现在要去哪里去冒险呢？\r\n#b赫丽娜#k说有东西要给我。"/>
+        <string name="2" value="从赫丽娜那里获得了#b冒险之书#k！\r\n此外还发现了熟悉的枫叶。这片枫叶是从冒险岛跟着我来到了这里吗？把它夹在冒险之书中好好保存下来吧。"/>
+        <int name="selfStart" value="1"/>
+        <int name="selfComplete" value="1"/>
+        <int name="area" value="77"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="1447">
+        <string name="name" value="血刀"/>
+        <string name="type" value="[转职]"/>
+        <string name="0" value="去艾瑞克那里听听转职成血刀的方法吧。"/>
+        <string name="1" value="要转职为血刀，就去雪原圣地问问神圣的石头吧。听说在#r尖锐峭壁1#k能找到去雪原圣地的路……\n\n#i4031059##t4031059# #b#c4031059# / 1#k"/>
+        <string name="2" value="转职成了血刀！"/>
+        <int name="area" value="77"/>
+        <int name="autoComplete" value="1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="1457">
+        <string name="name" value="真正的冒险家"/>
+        <string name="type" value="[转职]"/>
+        <string name="0" value="去祭司之林见见飞侠转职官哈林。"/>
+        <string name="1" value="哈林说真正的冒险家和英雄没什么不同，嘱咐我背负起所有的命运。"/>
+        <string name="2" value="真正的冒险家就是英雄。作为英雄，到冒险岛世界去冒险吧。"/>
+        <int name="area" value="77"/>
+    </imgdir>
+<imgdir name="22000">
+        <string name="name" value=" 奇怪的梦"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="showLayerTag" value="22000"/>
+        <string name="0" value=" 在充满迷雾的森林里沉睡的龙……真是个奇怪的梦。\r\n\r\n不知道为什么做了个和龙有关的梦，感觉有点累。不过还是先去#b和家人们道声早安吧#k。"/>
+        <string name="1" value=" 妈妈听了我的梦之后，说真是个有趣的梦，让我去说给#b#m100030102##k的#b#p1013101##k听。嗯……#p1013101#说不定会嘲笑我的。不过还是去见见#p1013101#吧。"/>
+        <string name="2" value=" #p1013101#嘲笑我，说我做的什么乱七八糟的梦。早就知道他会是这种反应……"/>
+    </imgdir>
+<imgdir name="22001">
+        <string name="name" value=" 喂猎犬"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="showLayerTag" value="22001"/>
+        <string name="0" value=" 去向#b#p1013101##k问好。"/>
+        <string name="1" value=" #p1013101#嘲笑了我一会儿之后，让我别乱说了，还是去给#p1013102#喂食吧。代替胆小鬼#p1013101#给#b左边#k的#b#p1013102##k喂了食。"/>
+        <string name="2" value=" 给#p1013102#喂了食。"/>
+    </imgdir>
+<imgdir name="22002">
+        <string name="name" value=" 早餐是三明治"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="0" value=" 给#p1013102#喂了食。我也好像有点饿了……去#b#p1013101##k那里看看早饭吃什么吧。"/>
+        <string name="1" value=" #p1013101#给了我一块三明治做早饭，让我#b吃了三明治之后再到屋里去找她#k。妈妈好像要让我去做什么事……先把三明治吃掉吧。"/>
+        <string name="2" value=" 妈妈突然给了我一个#t1003028#。嗯？为什么要给我这个呢？"/>
+        <string name="showLayerTag" value="22002"/>
+        <int name="startNavi" value="1"/>
+        <int name="returnMapID" value="100030101"/>
+        <string name="returnPN" value="1013100"/>
+        <int name="targetType" value="-1"/>
+        <int name="returnType" value="1"/>
+    </imgdir>
+<imgdir name="22003">
+        <string name="name" value=" 送便当"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="showLayerTag" value="22003"/>
+        <string name="0" value=" #b妈妈#k好像要让我去做什么事情。快去和她说话吧。"/>
+        <string name="1" value=" 妈妈让我去给在#b#m100030300##k干活的#b爸爸#k送#t4032448#，并给了我一个便当。快到#m100030300#去吧。从家里出来之后，#b往左边一直#k走就行了。"/>
+        <string name="2" value=" 把#t4032448#交给了爸爸。"/>
+    </imgdir>
+<imgdir name="22004">
+        <string name="name" value=" 修理篱笆"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="0" value=" #b爸爸#k好像有事要让我去做。和爸爸格里德说话吧。"/>
+        <string name="1" value=" 爸爸说有几只#o1210100#逃了出去，把农场的篱笆弄了一个洞，让我去搜集修篱笆用的#t4032498#。去捕捉周围的#r#o0130100##k，搜集#b#t4032498##k吧。\r\n\r\n#i4032498# #t4032498# #b#c4032498# / 3#k"/>
+        <string name="2" value=" 搜集到了#t4032498#。爸爸用修篱笆剩下的木头给我做了一把椅子。"/>
+    </imgdir>
+<imgdir name="22005">
+        <string name="name" value=" 救小猪"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="0" value=" #b爸爸#k好像还有事情要去做。去和爸爸说话吧。"/>
+        <string name="1" value=" 趁着篱笆坏掉的时候，好像有一只#p1013200#逃走了。去#b#m900020100##k把迷路的#p1013200#找回来吧。#r不小心的话可能会迷路，一定要小心一点#k。\r\n\r\n\r\n#i4032449# #t4032449# #b#c4032449# / 1#k"/>
+        <string name="2" value=" 在寻找#p1013200#的时候找到了一个蛋。怎样才能保护好蛋呢？"/>
+        <string name="showLayerTag" value="22005"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="100030300"/>
+        <string name="targetPN" value="in00"/>
+        <int name="returnMapID" value="900020110"/>
+        <string name="returnPN" value="out00"/>
+    </imgdir>
+<imgdir name="22006">
+        <string name="name" value=" 把空饭盒送回家"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="1" value=" 爸爸说妈妈应该知道怎么孵蛋，让我#b回到家里问问妈妈#k，回去的时候，顺便把#t4032450#带回去。 "/>
+        <string name="2" value=" 把#t4032450#交给了妈妈，并向她询问了孵蛋的方法。她说只要用孵化器把蛋孵化就行了……#p1013101#好像知道孵化器的事情。"/>
+        <string name="showLayerTag" value="22006"/>
+        <string name="0" value=" 爸爸好像有话要跟我说……"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="100030101"/>
+        <string name="targetPN" value="1013100"/>
+        <int name="targetType" value="1"/>
+        <int name="returnType" value="-1"/>
+    </imgdir>
+<imgdir name="22007">
+        <string name="name" value=" 收鸡蛋"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="0" value=" #p1013101#好像有可以孵蛋的孵化器。去和#b#p1013101##k说话吧。"/>
+        <string name="1" value=" #p1013101#说如果我能帮他搜集#t4032451#，就把孵化器给我。帮#p1013101#去#b右边#k的#p1013104#收#t4032451#吧。#b#t4032451##k可以点击#b#p1013104##k获得。\r\n\r\n#i4032451# #t4032451# #b#c4032451# / 1#k"/>
+        <string name="2" value=" 收完了所有的#t4032451#，从#p1013101#那里拿到了孵化器。 "/>
+        <string name="showLayerTag" value="22007"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetType" value="1"/>
+        <int name="returnType" value="1"/>
+        <int name="targetMapID" value="100030102"/>
+        <int name="returnMapID" value="100030102"/>
+        <string name="targetPN" value="1013104"/>
+        <string name="returnPN" value="1013101"/>
+    </imgdir>
+<imgdir name="22008">
+        <string name="name" value=" 驱赶后院的狐狸"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="0" value=" #b#p1013101##k好像有话要和我说。 "/>
+        <string name="1" value=" #p1013101#说最近#b#m100030103##k的狐狸好像多了起来，让我去试着消灭#r#o9300385##k。#p1013101#说自己会跟着去的，让我先去消灭#m100030103#……\r\n\r\n#o9300385##r #a220081##k"/>
+        <string name="2" value=" #p1013101#结果没来帮我。虽然消灭10只#o9300385#很简单……但看来还是不能相信#p1013101#。 "/>
+        <string name="showLayerTag" value="22008"/>
+        <int name="startNavi" value="1"/>
+        <int name="returnMapID" value="100030102"/>
+        <string name="returnPN" value="1013101"/>
+        <int name="targetType" value="-1"/>
+        <int name="returnType" value="1"/>
+    </imgdir>
+<imgdir name="22009">
+        <string name="name" value=" 确认农场的情况"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="showLayerTag" value="22009"/>
+        <string name="0" value=" #p1013101#好像对#o9300385#数量的增多很担心。去和#p1013101#说话吧。"/>
+        <string name="1" value=" #p1013101#说#b#m100030300##k那边的狐狸也增加了，他对此很担心。他说#b爸爸#k让我去确认一下农场的情况。狐狸的数量增多的话，看来得好好地教训教训它们才行……"/>
+        <string name="2" value=" 爸爸好像不是为#o9300385#，而是在为#o1210100#的事情而头疼。"/>
+    </imgdir>
+<imgdir name="22010">
+        <string name="name" value=" 奇怪的农场"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [必需]"/>
+        <string name="0" value=" 爸爸好像有事要让我去做。去和爸爸说话吧。"/>
+        <string name="1" value=" 爸爸让我帮助他让暴躁的#o1210100#安静下来。消灭几只#r#o1210100##k的话，它们应该就会安静下来了吧？#b去左边的#m100030310##k教训教训猪猪吧。\r\n\r\n\r\n#o1210100##r #a220101##k"/>
+        <string name="2" value=" 教训了#o1210100#。"/>
+        <string name="showLayerTag" value="22010"/>
+        <int name="startNavi" value="1"/>
+        <int name="targetMapID" value="100030310"/>
+        <string name="targetPN" value="east00"/>
+        <int name="returnType" value="1"/>
+        <int name="returnMapID" value="100030300"/>
+        <string name="returnPN" value="1013103"/>
+    </imgdir>
+<imgdir name="22100">
+        <string name="name" value=" 龙神第1次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第1次转职"/>
+        <string name="1" value=" 龙神第1次转职"/>
+        <string name="2" value=" 梦中见到的龙，在之后获得的龙蛋中，孵化出了幼龙米乐。"/>
+    </imgdir>
+<imgdir name="22101">
+        <string name="name" value=" 龙神第2次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第2次转职"/>
+        <string name="1" value=" 龙神第2次转职"/>
+        <string name="2" value=" 米乐长大了？！好不容易从蛋中爬了出来，稍微长大了一些的米乐……看来龙也会生长啊。\"/>
+    </imgdir>
+<imgdir name="22102">
+        <string name="name" value=" 龙神第3次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第3次转职"/>
+        <string name="1" value=" 龙神第3次转职"/>
+        <string name="2" value=" 米乐又长大了！随着米乐逐渐长大，我感到自己也在成长。"/>
+    </imgdir>
+<imgdir name="22103">
+        <string name="name" value=" 龙神第4次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value=" 龙神第4次转职"/>
+        <string name="1" value=" 龙神第4次转职"/>
+        <string name="2" value=" 米乐又长大了，学会了新的技能。"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22104">
+        <string name="name" value=" 龙神第5次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第5次转职"/>
+        <string name="1" value=" 龙神第5次转职"/>
+        <string name="2" value=" 米乐又长大了。体型逐渐变得巨大……好像有点可怕。"/>
+    </imgdir>
+<imgdir name="22105">
+        <string name="name" value=" 龙神第6次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="blocked" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value=" 龙神第6次转职"/>
+        <string name="1" value=" 龙神第6次转职"/>
+        <string name="2" value=" 米乐又长大了，又学会了新的技能。到底什么时候才能长大呢？"/>
+    </imgdir>
+<imgdir name="22106">
+        <string name="name" value=" 龙神第7次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第7次转职"/>
+        <string name="1" value=" 龙神第7次转职"/>
+        <string name="2" value=" 米乐又长大了。现在几乎已经看不见原来可爱的面貌了。但是却变得很漂亮……"/>
+    </imgdir>
+<imgdir name="22107">
+        <string name="name" value=" 龙神第8次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第8次转职"/>
+        <string name="1" value=" 龙神第8次转职"/>
+        <string name="2" value=" 米乐又长大了，学会了更强的技能。 "/>
+    </imgdir>
+<imgdir name="22108">
+        <string name="name" value=" 龙神第9次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value=" 龙神第9次转职"/>
+        <string name="1" value=" 龙神第9次转职"/>
+        <string name="2" value=" 米乐又长大了。长出了金色的角，外表看上去更强，实际也变得更强了……我也感到自己和米乐一同变强了。"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22109">
+        <string name="name" value=" 龙神第10次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value=" [转职]"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="blocked" value="1"/>
+        <string name="0" value=" 龙神第10次转职"/>
+        <string name="1" value=" 龙神第10次转职"/>
+        <string name="2" value=" 米乐完全长大了。这就是玛瑙龙真正的样子吗？看上去就感觉很有压迫感，但同时也能感觉到一种亲近感。这也许就是龙神的特权。"/>
+    </imgdir>
+<imgdir name="22110">
+        <string name="name" value="发放额外SP1"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP1"/>
+        <string name="1" value="发放额外SP1"/>
+        <string name="2" value="发放额外SP1"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22111">
+        <string name="name" value="发放额外SP2"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP2"/>
+        <string name="1" value="发放额外SP2"/>
+        <string name="2" value="发放额外SP2"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22112">
+        <string name="name" value="发放额外SP3"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP3"/>
+        <string name="1" value="发放额外SP3"/>
+        <string name="2" value="发放额外SP3"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22113">
+        <string name="name" value="发放额外SP4"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP4"/>
+        <string name="1" value="发放额外SP4
+"/>
+        <string name="2" value="发放额外SP4"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22114">
+        <string name="name" value="发放额外SP5"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP5"/>
+        <string name="1" value="发放额外SP5"/>
+        <string name="2" value="发放额外SP5"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22115">
+        <string name="name" value="发放额外SP6"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP6"/>
+        <string name="1" value="发放额外SP6"/>
+        <string name="2" value="发放额外SP6"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22116">
+        <string name="name" value="发放额外SP7"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP7"/>
+        <string name="1" value="发放额外SP7"/>
+        <string name="2" value="发放额外SP7"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22117">
+        <string name="name" value="发放额外SP8"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP8"/>
+        <string name="1" value="发放额外SP8"/>
+        <string name="2" value="发放额外SP8"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22118">
+        <string name="name" value="发放额外SP9"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP9"/>
+        <string name="1" value="发放额外SP9"/>
+        <string name="2" value="发放额外SP9"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22119">
+        <string name="name" value="发放额外SP10"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP10"/>
+        <string name="1" value="发放额外SP10"/>
+        <string name="2" value="发放额外SP10"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22120">
+        <string name="name" value="发放额外SP11"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[技能]"/>
+        <int name="disableAtStartTab" value="1"/>
+        <int name="disableAtPerformTab" value="1"/>
+        <int name="disableAtCompleteTab" value="1"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="发放额外SP11"/>
+        <string name="1" value="发放额外SP11"/>
+        <string name="2" value="发放额外SP11"/>
+        <int name="blocked" value="1"/>
+    </imgdir>
+<imgdir name="22130">
+        <string name="name" value="龙神1次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[转职]"/>
+        <string name="0" value="龙神1次转职"/>
+        <string name="1" value="龙神1次转职"/>
+        <string name="2" value="在梦中见到的龙，它交给自己的龙蛋中孵出了小龙米乐。"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="disableAtCompleteBalloon" value="1"/>
+    </imgdir>
+<imgdir name="22131">
+        <string name="name" value="龙神2次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[转职]"/>
+        <string name="0" value="龙神2次转职"/>
+        <string name="1" value="龙神2次转职"/>
+        <string name="2" value="米乐长大了？！脱离了戴在头上像帽子一样的蛋壳，已经有些长大的米乐……看样子龙也成长了。"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="disableAtCompleteBalloon" value="1"/>
+    </imgdir>
+<imgdir name="22132">
+        <string name="name" value="龙神3次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[转职]"/>
+        <string name="0" value="龙神3次转职"/>
+        <string name="1" value="龙神3次转职"/>
+        <string name="2" value="米乐又长大了！米乐自己也可以感觉到成长。"/>
+        <int name="autoStart" value="1"/>
+        <int name="disableAtCompleteBalloon" value="1"/>
+    </imgdir>
+<imgdir name="22133">
+        <string name="name" value="龙神4次转职"/>
+        <int name="area" value="7"/>
+        <string name="type" value="[转职]"/>
+        <string name="0" value="龙神4次转职"/>
+        <string name="1" value="龙神4次转职"/>
+        <string name="2" value="米乐已经完全长大了。这就是玛瑙龙的真正样子？看上去就给人一种威严感，但同时又让人感到一种亲切的氛围，可能这就是龙神的特权吧。"/>
+        <int name="autoStart" value="1"/>
+        <int name="disableAtCompleteBalloon" value="1"/>
+    </imgdir>
 </imgdir>
