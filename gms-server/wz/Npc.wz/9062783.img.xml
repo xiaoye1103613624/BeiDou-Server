@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9062783.img">
+  <imgdir name="info">
+    <int name="scriptNpcShop" value="1"/>
+    <int name="shop" value="1"/>
+    <int name="noDiscountPrice" value="1"/>
+    <int name="notRecommend" value="1"/>
+  </imgdir>
+  <imgdir name="stand">
+    <canvas name="0" width="64" height="49">
+      <vector name="origin" x="25" y="49"/>
+      <int name="delay" value="1000"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="say">
+    <imgdir name="speak">
+      <string name="0" value="s0"/>
+    </imgdir>
+    <canvas name="0" width="68" height="66">
+      <vector name="origin" x="25" y="66"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="1" width="76" height="59">
+      <vector name="origin" x="28" y="59"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="2" width="77" height="53">
+      <vector name="origin" x="29" y="53"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="3" width="76" height="59">
+      <vector name="origin" x="28" y="59"/>
+      <int name="delay" value="120"/>
+    </canvas>
+    <canvas name="4" width="68" height="66">
+      <vector name="origin" x="25" y="66"/>
+      <int name="delay" value="120"/>
+    </canvas>
+  </imgdir>
+</imgdir>
