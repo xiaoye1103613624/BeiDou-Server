@@ -12827,4 +12827,2970 @@
     <string name="desc" value="[Master Level : 1]\nBonus recovery gain from using map chairs throughout the world."/>
     <string name="h1" value="Passively recover extra amounts of HP and MP by resting on map chairs."/>
   </imgdir>
+    <imgdir name="1112">
+        <string name="bookName" value="终极魂骑士"/>
+    </imgdir>
+    <imgdir name="1212">
+        <string name="bookName" value="最高级火焰魔法"/>
+    </imgdir>
+    <imgdir name="1312">
+        <string name="bookName" value="终极风灵使者"/>
+    </imgdir>
+    <imgdir name="1412">
+        <string name="bookName" value="夜行者秘技"/>
+    </imgdir>
+    <imgdir name="1512">
+        <string name="bookName" value="终极奇袭者"/>
+    </imgdir>
+    <imgdir name="11120006">
+        <string name="desc" value="通过和古代灵魂的誓约，在战斗中成为绝不会后退的模范战士。"/>
+        <string name="h" value="所有能力值增加#strX、爆击率增加#cr%，稳如泰山率增加#stanceProp%。"/>
+        <string name="name" value="灵魂誓约"/>
+    </imgdir>
+    <imgdir name="11120007">
+        <string name="name" value="长剑专家"/>
+        <string name="desc" value="提升单手剑和双手剑的熟练度、攻击力和爆击伤害。\n所需技能：#c精准剑10级以上#"/>
+        <string name="h" value="单手剑和双手剑的熟练度增加量提高至#mastery%。攻击力提高#x，暴击伤害提高#criticaldamage%"/>
+    </imgdir>
+    <imgdir name="11120008">
+        <string name="desc" value="以幻千之刃的攻击削弱敌人的防御。"/>
+        <string name="h" value="怪物防御率无视#ignoreMobpdpR%，攻击首领怪物时的伤害提高#bdR%"/>
+        <string name="name" value="幻千之刃"/>
+    </imgdir>
+    <imgdir name="11120009">
+        <string name="name" value="人剑合一"/>
+        <string name="desc" value="达到剑术的巅峰，无招胜有招。\n需要技能：#c月光洒落20级，旭日 20级以上#"/>
+        <string name="h" value="[月光洒落]暴击率提高#indieCr%\n 1~4转/神圣技能/部分5转技能的攻击次数增加#x倍，最终伤害减少#y%\n[旭日]最终伤害提高#v%，攻击速度提升2个阶段，攻击力增加#s"/>
+    </imgdir>
+    <imgdir name="11120010">
+        <string name="name" value="人剑合一"/>
+    </imgdir>
+    <imgdir name="11120030">
+        <string name="desc" value="永久提升力量。"/>
+        <string name="h" value="力量提升#strX点"/>
+        <string name="name" value="神圣之力"/>
+    </imgdir>
+    <imgdir name="11120031">
+        <string name="desc" value="永久提升敏捷。"/>
+        <string name="h" value="敏捷提升#dexX点"/>
+        <string name="name" value="神圣敏捷"/>
+    </imgdir>
+    <imgdir name="11120032">
+        <string name="desc" value="永久提升智力。"/>
+        <string name="h" value="智力提升#intX点"/>
+        <string name="name" value="神圣智力"/>
+    </imgdir>
+    <imgdir name="11120033">
+        <string name="desc" value="永久提升幸运。"/>
+        <string name="h" value="幸运提升#lukX点"/>
+        <string name="name" value="神圣幸运"/>
+    </imgdir>
+    <imgdir name="11120034">
+        <string name="desc" value="永久提升爆击率。"/>
+        <string name="h" value="爆击率提升#cr%"/>
+        <string name="name" value="神圣爆击"/>
+    </imgdir>
+    <imgdir name="11120035">
+        <string name="desc" value="永久提升命中率。"/>
+        <string name="h" value="命中率提升#ar%"/>
+        <string name="name" value="神圣精准"/>
+    </imgdir>
+    <imgdir name="11120036">
+        <string name="desc" value="永久提升最大血量。"/>
+        <string name="h" value="最大血量提升#mhpR%"/>
+        <string name="name" value="神圣最大生命"/>
+    </imgdir>
+    <imgdir name="11120037">
+        <string name="desc" value="永久提升最大魔量。"/>
+        <string name="h" value="最大魔量提升#mmpR%"/>
+        <string name="name" value="神圣最大魔法"/>
+    </imgdir>
+    <imgdir name="11120038">
+        <string name="desc" value="永久提升最大DF。"/>
+        <string name="h" value="最大DF提升50点"/>
+        <string name="name" value="神圣最大恶魔精气"/>
+    </imgdir>
+    <imgdir name="11120039">
+        <string name="desc" value="永久性提升防御力。"/>
+        <string name="h" value="防御力增加#pddX"/>
+        <string name="name" value="神圣物理防御"/>
+    </imgdir>
+    <imgdir name="11120040">
+        <string name="desc" value="永久提升魔法防御力。"/>
+        <string name="h" value="魔法防御力提升#mddX"/>
+        <string name="name" value="神圣魔法防御"/>
+    </imgdir>
+    <imgdir name="11120041">
+        <string name="desc" value="永久提升移动速度。"/>
+        <string name="h" value="移动速度提升#psdSpeed"/>
+        <string name="name" value="神圣移动"/>
+    </imgdir>
+    <imgdir name="11120042">
+        <string name="desc" value="永久提升跳跃力。"/>
+        <string name="h" value="跳跃力提升#psdJump"/>
+        <string name="name" value="神圣跳跃"/>
+    </imgdir>
+    <imgdir name="11120043">
+        <string name="desc" value="增加灵魂之眼的持续时间。"/>
+        <string name="h" value="持续时间增加#time秒"/>
+        <string name="name" value="灵魂之眼-坚持"/>
+    </imgdir>
+    <imgdir name="11120044">
+        <string name="desc" value="灵魂之眼可以降低属性抗性。炎术士的&lt;火焰化身&gt;可以应用于队员，无法和唤灵斗师&lt;减益灵气-自然力重置&gt;的属性抗性降低效果叠加。"/>
+        <string name="h" value="属性抗性降低#w%"/>
+        <string name="name" value="灵魂之眼-增强"/>
+    </imgdir>
+    <imgdir name="11120045">
+        <string name="name" value="灵魂之眼-无视防御"/>
+        <string name="desc" value="提升灵魂之眼的防御率减少量。"/>
+        <string name="h" value="防御力额外减少#w%"/>
+    </imgdir>
+    <imgdir name="11120046">
+        <string name="desc" value="提升新月斩和烈日之刺的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="斩刺-强化"/>
+    </imgdir>
+    <imgdir name="11120047">
+        <string name="desc" value="增加新月斩和烈日之刺的可攻击的怪物数量上限。"/>
+        <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+        <string name="name" value="斩刺-额外目标"/>
+    </imgdir>
+    <imgdir name="11120048">
+        <string name="desc" value="增加新月斩和烈日之刺的攻击次数。"/>
+        <string name="h" value="攻击次数增加#attackCount次"/>
+        <string name="name" value="斩刺-额外攻击"/>
+    </imgdir>
+    <imgdir name="11120049">
+        <string name="desc" value="增加月光之舞和极速霞光的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="极速之舞-强化"/>
+    </imgdir>
+    <imgdir name="11120050">
+        <string name="desc" value="增加月光之舞和极速霞光的无视怪物防御数值。"/>
+        <string name="h" value="无视怪物防御力提升#ignoreMobpdpR%"/>
+        <string name="name" value="极速之舞-无视防御"/>
+    </imgdir>
+    <imgdir name="11120051">
+        <string name="desc" value="用月光之舞和极速霞光攻击首领怪物时，提高伤害。"/>
+        <string name="h" value="攻击首领怪物时，伤害增加#bdR%"/>
+        <string name="name" value="极速之舞-首领怪征服者"/>
+    </imgdir>
+    <imgdir name="11121000">
+        <string name="name" value="希纳斯骑士"/>
+        <string name="desc" value="获得觉醒的女皇祝福，在一定时间内提高包括自身在内的队员的所有能力值。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+    </imgdir>
+    <imgdir name="11121004">
+        <string name="desc" value="用灵魂力量召唤的剑像流星一样落到地上，穿透敌人，并把他们固定在地面上。落魂剑对首领怪同样有效。"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击#mobCount名敌人#attackCount次。被攻击的敌人有#prop%的概率在#time秒内无法移动。\n根据落魂剑对敌人造成伤害的不同，无法行动的持续时间最多可增加100%\n减益解除时增加#x%的额外伤害\n冷却时间#cooltime秒"/>
+        <string name="name" value="落魂剑"/>
+    </imgdir>
+    <imgdir name="11121005">
+        <string name="desc" value="随着太阳和月亮的周期，体会时间的流转。\n需要技能：#c月光洒落20级，旭日20级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内每次使用技能时变换姿态，同时发动月光洒落和旭日效果"/>
+        <string name="name" value="日月轮转"/>
+    </imgdir>
+    <imgdir name="11121011">
+        <string name="desc" value="根据太阳和月亮的周期，体会时间的流转。"/>
+        <string name="h" value="爆击率提高#indieCr%，所有技能的攻击次数增加#x倍，最终伤害减少#y%"/>
+        <string name="name" value="日月轮转"/>
+    </imgdir>
+    <imgdir name="11121012">
+        <string name="desc" value="根据太阳和月亮的周期，体会时间的流转。"/>
+        <string name="h" value="伤害提高#indiePMdR%、攻击速度提升1阶段"/>
+        <string name="name" value="日月轮转"/>
+    </imgdir>
+    <imgdir name="11121013">
+        <string name="desc" value="用灵魂力量召唤的剑像流星一样落到地上，穿透敌人，并把他们固定在地面上。落魂剑对首领怪同样有效。"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击#mobCount名敌人#attackCount次。被攻击的敌人有#prop%的概率在#time秒内无法移动。\n根据落魂剑对敌人造成伤害的不同，无法行动的持续时间最多可增加100%\n减益解除时增加#x%的额外伤害\n冷却时间#cooltime秒"/>
+        <string name="name" value="落魂剑"/>
+    </imgdir>
+    <imgdir name="11121014">
+        <string name="name" value="日月斩"/>
+        <string name="desc" value="向前猛冲后砍破敌人，在使用日月轮转途中只能在空中使用，#c自身技能使用过程中也可以使用。#\n该技能无需SP，#c学会日月轮转技能后便可以使用#。"/>
+        <string name="h" value="魔量消耗#mpCon，以#damage%的伤害对#mobCount个敌人发动#attackCount次攻击。\n冷却时间：#cooltime秒"/>
+    </imgdir>
+    <imgdir name="11121015">
+        <string name="name" value="冒险骑士团的意志"/>
+        <string name="desc" value="集中精神，摆脱状态异常。使用后3秒内对状态异常免疫。但对部分状态异常效果无效，且不适用战斗命令。"/>
+        <string name="h" value="消耗#mpCon魔量，冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="11121052">
+        <string name="name" value="冥河破"/>
+        <string name="desc" value="将自己拥有的灵魂力量聚集到一处，发出判定生死的破世一击。冷却时间从充能开始时适用，充能过程中进入无敌状态。"/>
+        <string name="h" value="消耗#mpCon魔量，发动#z次斩击，每次斩击对最多#mobCount个敌人以#damage%的伤害攻击#attackCount次\n当蓄力达到最大值时，会以#x%的伤害发动攻击，对无视攻击以及处于攻击反射状态的敌人也可造成伤害\n蓄力过程中可以移动和跳跃，蓄力过程中使用除元素跃动之外其他技能时，取消蓄力\n冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="11121053">
+        <string name="name" value="守护者之荣誉"/>
+        <string name="desc" value="举行赞颂守护女皇希纳斯的骑士们荣誉的崇高仪式。"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内伤害增加#indieDamR%。\n冷却时间：#cooltime秒。只对队员中的骑士团职业和米哈尔有效"/>
+    </imgdir>
+    <imgdir name="11121054">
+        <string name="name" value="灵魂之剑"/>
+        <string name="desc" value="将灵魂的力量化为一柄剑。"/>
+        <string name="h" value="消耗#mpCon魔量，在#time秒内，攻击力增加#indiePad，最终伤害增加#indiePMdR%"/>
+    </imgdir>
+    <imgdir name="11121055">
+        <string name="desc" value="将自己拥有的灵魂力量聚集到一处，发出判定生死的破世一击。"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人\n冷却时间：#cooltime秒"/>
+        <string name="name" value="冥河破"/>
+    </imgdir>
+    <imgdir name="11121056">
+        <string name="name" value="冥河破"/>
+        <string name="desc" value="将自己拥有的灵魂力量聚集到一处，发出一决生死的破世一击。"/>
+        <string name="h" value="消耗#mpCon点 MP，发动#attackCount次攻击，给#mobCount名敌人造成#damage%伤害\n冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="11121101">
+        <string name="name" value="月光之舞"/>
+        <string name="desc" value="用蕴含圆月之力的剑斩击眼前的敌人。施展月光之舞期间，不会被敌人的任何攻击击退。\n需要技能 : #c月光洒落1级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人"/>
+    </imgdir>
+    <imgdir name="11121102">
+        <string name="name" value="月光之舞"/>
+        <string name="desc" value="用蕴含圆月之力的剑斩击眼前的敌人。施展月光之舞期间，不会被敌人的任何攻击击退。\n需要技能 : #c月光洒落1级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人"/>
+    </imgdir>
+    <imgdir name="11121103">
+        <string name="desc" value="用月光潮水般的剑光，笼罩周围的敌人。\n需要技能：#c月光洒落1级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人"/>
+        <string name="name" value="新月斩"/>
+    </imgdir>
+    <imgdir name="11121201">
+        <string name="name" value="极速霞光"/>
+        <string name="desc" value="用可以劈开太阳的剑将目标对象一劈两断。施展极速霞光期间，不会被敌人的任何攻击击退。\n需要技能：#c旭日1级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人"/>
+    </imgdir>
+    <imgdir name="11121202">
+        <string name="name" value="极速霞光"/>
+        <string name="desc" value="用可以劈开太阳的剑将目标对象一劈两断。施展极速霞光期间，不会被敌人的任何攻击击退。\n需要技能：#c旭日1级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人"/>
+    </imgdir>
+    <imgdir name="11121203">
+        <string name="desc" value="用蕴含了耀眼日光的剑气砍破敌人。\n需要技能：#c旭日 1级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%伤害攻击#attackCount次#mobCount个敌人"/>
+        <string name="name" value="烈日之刺"/>
+    </imgdir>
+    <imgdir name="12120006">
+        <string name="desc" value="强化轨道烈焰的#c伤害，并且可以最多同时使用4个#。\n需要技能：#c轨道烈焰III 20级#"/>
+        <string name="h" value="消耗魔量#mpCon，以#y%的伤害攻击前方的#mobCount个敌人#attackCount次. 攻击普通怪物时增加伤害 #nbdR% ."/>
+        <string name="name" value="轨道烈焰IV"/>
+        <string name="pdesc" value="强化轨道烈焰的伤害，#c最多可以同时使用4个#。\n需要技能：#c轨道烈焰III 20级#"/>
+        <string name="ph" value="消耗魔量#mpCon，以#y%的伤害攻击前方的#mobCount个敌人#attackCount次"/>
+    </imgdir>
+    <imgdir name="12120007">
+        <string name="desc" value="强化元素：火焰 III。\n前置技能：#c元素火焰III 10级#"/>
+        <string name="h" value="#time秒内魔力提高#x"/>
+        <string name="name" value="元素：火焰 IV"/>
+    </imgdir>
+    <imgdir name="12120008">
+        <string name="name" value="不灭火焰"/>
+        <string name="desc" value="使火焰更猛烈地燃烧，不会熄灭。"/>
+        <string name="h" value="引燃持续最终伤害增加#y%，状态异常及所有属性抗性增加#asrR%，稳如泰山提高#stanceProp%"/>
+    </imgdir>
+    <imgdir name="12120009">
+        <string name="name" value="魔法真理"/>
+        <string name="desc" value="领悟魔法真理，释放出体内隐藏的力量。\n需要技能：#c咒语修炼 10级#"/>
+        <string name="h" value="魔力提高#x、最终伤害提高#mdR%、魔法熟练度增加量提高#mastery"/>
+    </imgdir>
+    <imgdir name="12120010">
+        <string name="desc" value="强化轨道烈焰的伤害，最多可以同时使用4个。#c和上下左右方向键同时使用，可以向指定方向发射。#\n需要技能：#c轨道烈焰III 20级#"/>
+        <string name="h" value="消耗魔量#mpCon，以#y%的伤害攻击前方的#mobCount个敌人#attackCount次"/>
+        <string name="name" value="轨道烈焰IV"/>
+        <string name="pdesc" value="强化轨道烈焰的伤害，最多可以同时使用4个。#c和上下左右方向键同时使用，可以向指定方向发射。#\n需要技能：#c轨道烈焰III 20级#"/>
+        <string name="ph" value="消耗魔量#mpCon，以#y%的伤害攻击前方的#mobCount个敌人#attackCount次"/>
+    </imgdir>
+    <imgdir name="12120011">
+        <string name="desc" value="将高热量的火焰压缩成球体，发射出去。火球向前方移动，#c向射程内的敌人发射火焰环，将其烧为灰烬。#"/>
+        <string name="h" value="消耗魔量#mpCon，在#v秒内以#z%的伤害攻击球体周围最多#mobCount个敌人#attackCount次"/>
+        <string name="name" value="灭绝之焰"/>
+    </imgdir>
+    <imgdir name="12120012">
+        <string name="desc" value="用火焰屏障包围自己，在一定时间内保护自己不受致命伤害。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内无视所有伤害。在一定时间后爆炸，给最多#mobCount个敌人造成#damage%的伤害\n冷却时间#cooltime秒"/>
+        <string name="name" value="火焰屏障"/>
+    </imgdir>
+    <imgdir name="12120013">
+        <string name="desc" value="以元素作为媒介，从元素界召唤火焰的化身。获得化身庇护，在一定时间内魔量消耗量增加，但#c自己的所有攻击在一定程度上无视敌人的防御#，#c降低[引燃]状态的敌人的属性抗性#。\n自己和队员降低的属性抗性比例各不相同。#"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内魔量消耗量提高#v%，无视敌人防御率提高#y%，[引燃]的敌人的属性抗性降低#z%，队员只应用效果的#w%\n冷却时间为#cooltime秒"/>
+        <string name="name" value="火焰化身"/>
+    </imgdir>
+    <imgdir name="12120014">
+        <string name="desc" value="以元素作为媒介，从元素界召唤火焰的化身。获得化身庇护，在一定时间内魔量消耗量增加，但#c自己的所有攻击在一定程度上无视敌人的防御#，#c降低[引燃]状态的敌人的属性抗性#。\n自己和队员降低的属性抗性比例各不相同。#"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内魔量消耗量提高#v%，[引燃]使敌人的属性抗性降低#z%，无视敌人防御率提高#y%\n冷却时间为#cooltime秒"/>
+        <string name="name" value="火焰化身"/>
+    </imgdir>
+    <imgdir name="12120030">
+        <string name="desc" value="永久提升力量。"/>
+        <string name="h" value="力量增加#strX点"/>
+        <string name="name" value="神圣之力"/>
+    </imgdir>
+    <imgdir name="12120031">
+        <string name="desc" value="永久提升敏捷。"/>
+        <string name="h" value="敏捷增加#dexX点"/>
+        <string name="name" value="神圣敏捷"/>
+    </imgdir>
+    <imgdir name="12120032">
+        <string name="desc" value="永久提升智力。"/>
+        <string name="h" value="智力增加#intX点"/>
+        <string name="name" value="神圣智力"/>
+    </imgdir>
+    <imgdir name="12120033">
+        <string name="desc" value="永久提升运气。"/>
+        <string name="h" value="运气增加#lukX点"/>
+        <string name="name" value="神圣幸运"/>
+    </imgdir>
+    <imgdir name="12120034">
+        <string name="desc" value="永久提升爆击率。"/>
+        <string name="h" value="爆击率增加#cr%"/>
+        <string name="name" value="神圣爆击"/>
+    </imgdir>
+    <imgdir name="12120035">
+        <string name="desc" value="永久提升命中率。"/>
+        <string name="h" value="命中率增加#ar%"/>
+        <string name="name" value="神圣精准"/>
+    </imgdir>
+    <imgdir name="12120036">
+        <string name="desc" value="永久提升最大血量。"/>
+        <string name="h" value="最大血量增加#mhpR%"/>
+        <string name="name" value="神圣最大生命"/>
+    </imgdir>
+    <imgdir name="12120037">
+        <string name="desc" value="永久提升最大魔量。"/>
+        <string name="h" value="最大魔量增加#mmpR%"/>
+        <string name="name" value="神圣最大魔法"/>
+    </imgdir>
+    <imgdir name="12120038">
+        <string name="desc" value="永久提升最大恶魔精气"/>
+        <string name="h" value="恶魔最大精气增加50"/>
+        <string name="name" value="神圣最大恶魔精气"/>
+    </imgdir>
+    <imgdir name="12120039">
+        <string name="desc" value="永久性地提升防御力。"/>
+        <string name="h" value="防御力增加#pddX"/>
+        <string name="name" value="神圣物理防御"/>
+    </imgdir>
+    <imgdir name="12120040">
+        <string name="desc" value="永久提升魔法防御力。"/>
+        <string name="h" value="魔法防御力增加#mddX"/>
+        <string name="name" value="神圣魔法防御"/>
+    </imgdir>
+    <imgdir name="12120041">
+        <string name="desc" value="永久提升移动速度。"/>
+        <string name="h" value="移动速度增加#psdSpeed"/>
+        <string name="name" value="神圣移动"/>
+    </imgdir>
+    <imgdir name="12120042">
+        <string name="desc" value="永久提升跳跃力。"/>
+        <string name="h" value="跳跃力增加#psdJump"/>
+        <string name="name" value="神圣跳跃"/>
+    </imgdir>
+    <imgdir name="12120043">
+        <string name="desc" value="增加轨道烈焰的移动距离。"/>
+        <string name="h" value="移动距离增加100"/>
+        <string name="name" value="轨道烈焰-范围提升"/>
+    </imgdir>
+    <imgdir name="12120044">
+        <string name="name" value="轨道烈焰-无视防御"/>
+        <string name="desc" value="轨道烈焰获得无视防御率效果。"/>
+        <string name="h" value="无视怪物防御率增加#ignoreMobpdpR%"/>
+    </imgdir>
+    <imgdir name="12120045">
+        <string name="desc" value="轨道烈焰IV的伤害减少，但攻击次数增加。"/>
+        <string name="h" value="伤害减少#y%p，攻击次数增加#attackCount次"/>
+        <string name="name" value="轨道烈焰-灵魂攻击"/>
+    </imgdir>
+    <imgdir name="12120046">
+        <string name="desc" value="增加灭绝之焰的攻击次数。"/>
+        <string name="h" value="攻击次数增加#attackCount次"/>
+        <string name="name" value="灭绝之焰-额外攻击"/>
+    </imgdir>
+    <imgdir name="12120047">
+        <string name="desc" value="增加灭绝之焰的伤害。"/>
+        <string name="h" value="灭绝之焰的伤害增加#damR%"/>
+        <string name="name" value="灭绝之焰-强化"/>
+    </imgdir>
+    <imgdir name="12120048">
+        <string name="desc" value="提高灭绝之焰的可攻击的怪物数量上限。"/>
+        <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+        <string name="name" value="灭绝之焰-额外目标"/>
+    </imgdir>
+    <imgdir name="12120049">
+        <string name="desc" value="缩短引燃的持续伤害周期。"/>
+        <string name="h" value="持续伤害的周期减少为0.5秒"/>
+        <string name="name" value="引燃-最大引燃"/>
+    </imgdir>
+    <imgdir name="12120050">
+        <string name="desc" value="增加引燃的持续伤害。"/>
+        <string name="h" value="伤害增加#dot%"/>
+        <string name="name" value="引燃-强化"/>
+    </imgdir>
+    <imgdir name="12120051">
+        <string name="desc" value="增加引燃的爆炸伤害。"/>
+        <string name="h" value="伤害增加#damR%"/>
+        <string name="name" value="引燃-最大爆炸"/>
+    </imgdir>
+    <imgdir name="12121000">
+        <string name="name" value="希纳斯的骑士"/>
+        <string name="desc" value="获得觉醒的女皇祝福，在一定时间内提高包括自身在内的队员的所有能力值。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+    </imgdir>
+    <imgdir name="12121001">
+        <string name="desc" value="将高热量的火焰压缩成球体，发射出去。火球向前方移动，#c向射程内的敌人发射火焰环，将其烧为灰烬。#"/>
+        <string name="h" value="消耗魔量#mpCon，在#v秒内以#z%的伤害攻击球体周围最多#mobCount个敌人#attackCount次\n冷却时间#cooltime秒"/>
+        <string name="name" value="灭绝之焰"/>
+    </imgdir>
+    <imgdir name="12121002">
+        <string name="desc" value="将周围的火焰气息聚集到一处，在地面上喷出巨大的火焰。#c对于已经获得引燃效果的敌人，使火焰暴走，造成更大的伤害。# "/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，给受到引燃影响的敌人造成#x%的额外伤害\n冷却时间#cooltime秒"/>
+        <string name="name" value="地狱火海"/>
+    </imgdir>
+    <imgdir name="12121003">
+        <string name="desc" value="用火焰屏障包围自己，在短时间内#c减少部分伤害，保护自己。#"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内受到的伤害减少#x%。时间结束后造成爆炸，给最多#mobCount个敌人造成#damage%的伤害\n冷却时间#cooltime秒"/>
+        <string name="name" value="火焰屏障"/>
+    </imgdir>
+    <imgdir name="12121004">
+        <string name="name" value="火焰化身"/>
+        <string name="desc" value="以元素作为媒介，召唤火焰的化身。使用技能后召唤火狮，按住下方向键使用后召唤火狐。\n获得化身庇护，在一定时间内MP消耗量增加，但#c自己的所有攻击在一定程度上无视敌人的防御#，同时#c[引燃]可以降低敌人的属性抗性#。\n降低属性抗性时，队员无法与魂骑士的&lt;灵魂之眼-增强&gt;、唤灵斗师的&lt;减益灵气-自然力重置&gt;效果叠加，但炎术士自己可以叠加。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内魔量消耗量增至#v%，无视防御力增加#y%，[引燃]使攻击属性抗性降低#z%\n冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="12121005">
+        <string name="name" value="燃烧领域"/>
+        <string name="desc" value="在地面上设置火焰魔法阵，包括自己在内的队员#c位于该魔法阵中时，伤害和攻击速度提高。#自己处于魔法阵外时，也可获得魔法阵的效果。该效果不会因根据首次获得效果的燃烧领域更新。"/>
+        <string name="h" value="消耗#mpCon魔量，处于持续#time秒的魔法阵上方时，伤害增加#indieDamR%，攻击速度提高#indieBooster阶段\n自己在魔法阵外时，也可获得相同的效果，队员只在魔法阵上时适用效果\n冷却时间#cooltime秒, 魔法阵先于可持续时间消失时，持续时间每剩余1秒，冷却时间减少#w秒，最多可减少#s秒"/>
+    </imgdir>
+    <imgdir name="12121016">
+        <string name="name" value="燃烧领域"/>
+        <string name="desc" value="在地面设置火焰魔法阵，自己与队员#c位于该魔法阵内时，伤害与攻击速度提升。# 自己位于魔法阵外时，也会受到魔法阵效果影响。该效果不受第一个应用效果的斗燃领域影响。"/>
+    </imgdir>
+    <imgdir name="12121015">
+        <string name="name" value="冒险骑士团的意志"/>
+        <string name="desc" value="集中精神，摆脱状态异常。使用后3秒内对状态异常免疫。但对部分状态异常效果无效，且不适用战斗命令。"/>
+        <string name="h" value="消耗#mpCon魔量，冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="12121043">
+        <string name="desc" value="增加轨道烈焰的移动距离。\n使用技能时效果激活，再次使用时关闭的#c开关技能#"/>
+        <string name="h" value="移动距离增加100"/>
+        <string name="name" value="轨道烈焰-范围提升"/>
+    </imgdir>
+    <imgdir name="12121052">
+        <string name="desc" value="从元素界召唤巨大的火焰召唤体，落向地面。碰到地面时火焰爆炸，#c将施展者的敌人全部烧成灰烬。#"/>
+        <string name="h" value="消耗魔量 #mpCon， 最多对#mobCount个敌人以#damage%的伤害攻击#attackCount次。技能施展过程中处于无敌状态。可以立刻引爆中了引燃的敌人，但不能应用效果.\n冷却时间 #cooltime秒"/>
+        <string name="name" value="大灾难"/>
+    </imgdir>
+    <imgdir name="12121053">
+        <string name="name" value="守护者之荣誉"/>
+        <string name="desc" value="举行赞颂守护女皇希纳斯的骑士们荣誉的崇高仪式。"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内伤害增加#indieDamR%。\n冷却时间：#cooltime秒。只对队员中的骑士团职业和米哈尔有效"/>
+    </imgdir>
+    <imgdir name="12121054">
+        <string name="desc" value="最大程度地释放施展者所拥有的火焰，在短时间内对前方的单一对象造成强大的火焰爆击之后，将力量汇聚在一处发动最后一击。#c最多通过长按键可以将技能保持2秒。#"/>
+        <string name="h" value="消耗魔量#mpCon，按住按键不放，2秒内以#damage%的伤害对前方1名敌人发动#attackCount次攻击，松开按键，或到达按键最大持续时间时，将以#z%的伤害攻击10次\n冷却时间#cooltime秒"/>
+        <string name="name" value="龙奴"/>
+    </imgdir>
+    <imgdir name="12121055">
+        <string name="desc" value="最大程度地释放施展者所拥有的火焰，在短时间内对前方的单一对象造成强大的火焰爆击之后，将力量汇聚在一处发动最后一击。#c最多通过长按键可以将技能保持2秒。#"/>
+        <string name="h" value="消耗魔量 #mpCon，按住按键不放，最多在2秒内对前方的一个敌人以#damage%的伤害攻击#attackCount次，松开按键，或到达按键最大持续时间时，将以#z%的伤害攻击10次\n冷却时间 #cooltime秒"/>
+        <string name="name" value="龙奴"/>
+    </imgdir>
+    <imgdir name="13120003">
+        <string name="name" value="狂风肆虐III"/>
+        <string name="desc" value="风精灵变得勃然大怒，使敌人的肉体和精神崩溃。精灵气息在风灵使者视线方向的一定领域生成。不过，在用部分技能攻击时，其生成不受视线方向影响。\n需要技能：#c狂风肆虐II 20级以上#"/>
+        <string name="h" value="攻击敌人时，有#prop%的概率释放出最多#x个精灵气息，以#damage%伤害随机攻击周围的敌人。有#subProp%的概率释放出可造成#y%伤害的强化精灵气息。"/>
+    </imgdir>
+    <imgdir name="13120006">
+        <string name="name" value="神箭手"/>
+        <string name="desc" value="增加弓的熟练度、攻击力和暴击伤害，在攻击首领怪时增加伤害。\n所需技能：#c精准弓10级以上#"/>
+        <string name="h" value="弓的熟练度增加量提高#mastery%，攻击力提高#x，最终伤害提高#pdR%，暴击伤害提高#criticaldamage%，攻击首领怪物时伤害提高#bdR%"/>
+    </imgdir>
+    <imgdir name="13120007">
+        <string name="name" value="绿水晶花绽放"/>
+        <string name="desc" value="强化绿水晶花，提高战斗效率。\n需要技能：#绿水晶花10级以上#"/>
+        <string name="h" value="水晶花的最大血量提高至#x，周围怪物的防御率降低#q%，被攻击时的伤害降低#y%"/>
+    </imgdir>
+    <imgdir name="13120008">
+        <string name="name" value="极限信天翁"/>
+        <string name="desc" value="将传说中的名弓信天翁的力量发挥到极限，和自己化为一体。使用技能，可披上信天翁披风，被动效果与信天翁相加。\n需要技能 : #c信天翁20级以上#"/>
+        <string name="h" value="消耗#mpCon魔量，#time秒内装备信天翁披风\n[被动效果：攻击力增加#padX，伤害提高#damR% , 无视怪物防御率提高#ignoreMobpdpR%，暴击率提高#cr%，状态异常抗性增加#asrR，所有属性抗性提高#terR% ，攻击速度增加1阶段]"/>
+    </imgdir>
+    <imgdir name="13120010">
+        <string name="desc" value="风精灵变得勃然大怒，使敌人的肉体和精神崩溃。\n需要技能：#c狂风肆虐II 20级以上#"/>
+        <string name="h" value="有一定概率释放出更强力的精灵气息，以#damage%伤害随机攻击周围的敌人"/>
+        <string name="name" value="狂风肆虐III"/>
+    </imgdir>
+    <imgdir name="13120030">
+        <string name="desc" value="永久提升力量。"/>
+        <string name="h" value="力量提升#strX点"/>
+        <string name="name" value="神圣之力"/>
+    </imgdir>
+    <imgdir name="13120031">
+        <string name="desc" value="永久提升敏捷。"/>
+        <string name="h" value="敏捷提升#dexX点"/>
+        <string name="name" value="神圣敏捷"/>
+    </imgdir>
+    <imgdir name="13120032">
+        <string name="desc" value="永久提升智力。"/>
+        <string name="h" value="智力提升#intX点"/>
+        <string name="name" value="神圣智力"/>
+    </imgdir>
+    <imgdir name="13120033">
+        <string name="desc" value="永久提升幸运。"/>
+        <string name="h" value="幸运提升#lukX点"/>
+        <string name="name" value="神圣幸运"/>
+    </imgdir>
+    <imgdir name="13120034">
+        <string name="desc" value="永久提升爆击率。"/>
+        <string name="h" value="爆击率提升#cr%"/>
+        <string name="name" value="神圣爆击"/>
+    </imgdir>
+    <imgdir name="13120035">
+        <string name="desc" value="永久提升命中率。"/>
+        <string name="h" value="命中率提升#ar%"/>
+        <string name="name" value="神圣精准"/>
+    </imgdir>
+    <imgdir name="13120036">
+        <string name="desc" value="永久提升最大血量。"/>
+        <string name="h" value="最大血量提升#mhpR%"/>
+        <string name="name" value="神圣最大生命"/>
+    </imgdir>
+    <imgdir name="13120037">
+        <string name="desc" value="永久提升最大魔量。"/>
+        <string name="h" value="最大魔量提升#mmpR%"/>
+        <string name="name" value="神圣最大魔法"/>
+    </imgdir>
+    <imgdir name="13120038">
+        <string name="desc" value="永久提升最大DF。"/>
+        <string name="h" value="最大DF提升50点"/>
+        <string name="name" value="神圣最大恶魔精气"/>
+    </imgdir>
+    <imgdir name="13120039">
+        <string name="desc" value="永久性地提升防御力。"/>
+        <string name="h" value="防御力增加#pddX"/>
+        <string name="name" value="神圣物理防御"/>
+    </imgdir>
+    <imgdir name="13120040">
+        <string name="desc" value="永久提升魔法防御力。"/>
+        <string name="h" value="魔法防御力提升#mddX"/>
+        <string name="name" value="神圣魔法防御"/>
+    </imgdir>
+    <imgdir name="13120041">
+        <string name="desc" value="永久提升移动速度。"/>
+        <string name="h" value="移动速度提升#psdSpeed"/>
+        <string name="name" value="神圣移动"/>
+    </imgdir>
+    <imgdir name="13120042">
+        <string name="desc" value="永久提升跳跃力。"/>
+        <string name="h" value="跳跃力提升#psdJump"/>
+        <string name="name" value="神圣跳跃"/>
+    </imgdir>
+    <imgdir name="13120043">
+        <string name="desc" value="增加狂风肆虐的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="狂风肆虐-强化"/>
+    </imgdir>
+    <imgdir name="13120044">
+        <string name="desc" value="提升狂风肆虐的触发概率。"/>
+        <string name="h" value="触发概率提升#prop%"/>
+        <string name="name" value="狂风肆虐-增强"/>
+    </imgdir>
+    <imgdir name="13120045">
+        <string name="desc" value="生成2倍狂风肆虐，命中一个对象。"/>
+        <string name="h" value="生成2倍精灵气息，每个对象最多可以命中2个"/>
+        <string name="name" value="狂风肆虐-二次机会"/>
+    </imgdir>
+    <imgdir name="13120046">
+        <string name="desc" value="增加旋风箭的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="旋风箭-强化"/>
+    </imgdir>
+    <imgdir name="13120047">
+        <string name="desc" value="提高旋风箭的可攻击的怪物数量上限。"/>
+        <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+        <string name="name" value="旋风箭-额外目标"/>
+    </imgdir>
+    <imgdir name="13120048">
+        <string name="desc" value="增加旋风箭的攻击次数。"/>
+        <string name="h" value="攻击次数增加#attackCount次"/>
+        <string name="name" value="旋风箭-额外攻击"/>
+    </imgdir>
+    <imgdir name="13120049">
+        <string name="desc" value="增加天空之歌的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="天空之歌-强化"/>
+    </imgdir>
+    <imgdir name="13120050">
+        <string name="desc" value="提升天空之歌的无视怪物防御数值。"/>
+        <string name="h" value="无视怪物防御力提升#ignoreMobpdpR%"/>
+        <string name="name" value="天空之歌-无视防御"/>
+    </imgdir>
+    <imgdir name="13120051">
+        <string name="desc" value="天空之歌攻击首领怪物时，提高伤害。"/>
+        <string name="h" value="攻击首领怪物时，伤害增加#bdR%"/>
+        <string name="name" value="天空之歌-首领怪征服者"/>
+    </imgdir>
+    <imgdir name="13121000">
+        <string name="name" value="希纳斯的骑士"/>
+        <string name="desc" value="获得觉醒的女皇祝福，在一定时间内提高包括自身在内的队员的所有能力值。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+    </imgdir>
+    <imgdir name="13121001">
+        <string name="name" value="天空之歌"/>
+        <string name="desc" value="演奏出在天空中回响的风之歌，席卷敌人。"/>
+        <string name="h" value="每次攻击消耗#mpConMP， 最多对#mobCount个敌人以每击#damage%的伤害进行攻击。\n使用技能时，若受击敌人数量少于技能可攻击怪物数量上限，则每1个怪物将提高#y%伤害，增加的伤害应用累乘效果。"/>
+    </imgdir>
+    <imgdir name="13121002">
+        <string name="desc" value="射出随风旋转的箭矢，贯穿并击退前方的敌人。部分怪物会进行抵抗，不会被击退。"/>
+        <string name="h" value="消耗魔量#mpCon，击退#mobCount个敌人并以#damage%的伤害攻击#attackCount次。此时，造成以#x%的伤害攻击#y次的溅射伤害\n[被动效果：风霜雪舞伤害增加#damPlus%p]"/>
+        <string name="name" value="旋风箭"/>
+    </imgdir>
+    <imgdir name="13120004">
+        <string name="name" value="风之祝福"/>
+        <string name="desc" value="获得风之祝福，学会与风合为一体的方法。"/>
+        <string name="h" value="攻击力增加#padR%，敏捷提高#dexR%，最大血量增加#mhpR%，额外回避率提高#prop%，稳如泰山提高#stanceProp%"/>
+    </imgdir>
+    <imgdir name="13121005">
+        <string name="desc" value="在一定时间内赋予全体队员寻找敌人的弱点并造成致命伤害的能力。"/>
+        <string name="h" value="魔量消耗#mpCon，#time秒内爆击率增加#x%、爆击伤害增加#y%"/>
+        <string name="name" value="火眼晶晶"/>
+    </imgdir>
+    <imgdir name="13121009">
+        <string name="desc" value="射出随风旋转的箭矢，贯穿前方的敌人。"/>
+        <string name="h" value="消耗魔量#mpCon，击退#mobCount个敌人并以#damage%的伤害发动#attackCount次溅射攻击"/>
+        <string name="name" value="旋风箭"/>
+    </imgdir>
+    <imgdir name="13121015">
+        <string name="name" value="冒险骑士团的意志"/>
+        <string name="desc" value="集中精神，摆脱状态异常。使用后3秒内对状态异常免疫。但对部分状态异常效果无效，且不适用战斗命令。"/>
+        <string name="h" value="消耗#mpCon魔量，冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="13121052">
+        <string name="desc" value="召唤出席卷天地的季候风。"/>
+        <string name="h" value="消耗MP #mpCon，对#mobCount个敌人以#damage%伤害攻击#attackCount次。在敌人身上产生#dotTime秒内每#dotInterval秒造成#dot%持续伤害的减益\n冷却时间#cooltime秒"/>
+        <string name="name" value="季候风"/>
+    </imgdir>
+    <imgdir name="13121053">
+        <string name="name" value="守护者之荣誉"/>
+        <string name="desc" value="举行赞颂守护女皇希纳斯的骑士们荣誉的崇高仪式。"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内伤害增加#indieDamR%。\n冷却时间：#cooltime秒。只对队员中的骑士团职业和米哈尔有效"/>
+    </imgdir>
+    <imgdir name="13121054">
+        <string name="desc" value="召唤出暴风之力，获得惩治敌人的力量。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内攻击时有#prop%的概率召唤巨大的箭矢，以#damage%的伤害发动额外攻击"/>
+        <string name="name" value="暴风灭世"/>
+    </imgdir>
+    <imgdir name="14120005">
+        <string name="name" value="投掷专家"/>
+        <string name="desc" value="增加拳套的熟练度、攻击力和暴击伤害。\n所需技能：#c投掷精通10级以上#"/>
+        <string name="h" value="拳套的熟练度增加量提高至#mastery%，攻击力提高#x，暴击伤害提高#criticaldamage%"/>
+    </imgdir>
+    <imgdir name="14120006">
+        <string name="name" value="黑暗祝福"/>
+        <string name="desc" value="获得黑暗的祝福，能力强化。"/>
+        <string name="h" value="攻击力增加#padX，无视怪物防御率增加#ignoreMobpdpR%，稳如泰山提高#stanceProp%"/>
+    </imgdir>
+    <imgdir name="14120007">
+        <string name="desc" value="获得更多黑暗力量，强化黑暗标识。\n需要技能：#黑暗进化Ⅱ10级以上#"/>
+        <string name="h" value="刻印黑暗标识的概率增加#prop%，最大叠加次数增加#x，每叠加一次持续伤害增加#dot%，每叠加一次无视防御力增加#y%"/>
+        <string name="name" value="黑暗进化Ⅲ"/>
+    </imgdir>
+    <imgdir name="14120008">
+        <string name="desc" value="通过通灵强化影子蝙蝠。\n需要技能：#蝙蝠掌控Ⅱ20级以上#\n#为了掌握c5转技能 '影子自噬'需要达到30级以上"/>
+        <string name="h" value="影子蝙蝠的攻击概率提高#prop%，最大召唤限制增加#y，伤害增加#damage%，弹射次数增加#mobCount次"/>
+        <string name="name" value="蝙蝠掌控Ⅲ"/>
+    </imgdir>
+    <imgdir name="14120009">
+        <string name="name" value="体力汲取"/>
+        <string name="desc" value="刻印黑暗标识时，可以吸收敌人的生机，生成保护自己的保护膜。保护膜不受增益持续时间增加的影响"/>
+        <string name="h" value="用元素：黑暗刻印黑暗标识时，吸收生机，吸收的生机达到#x个后，全部消耗，生成持续#subTime秒，最多吸收#y伤害的保护膜\n吸收的生气保持#time秒，刻下黑暗标识时，持续时间初始化"/>
+    </imgdir>
+    <imgdir name="14120011">
+        <string name="name" value="体力汲取"/>
+        <string name="desc" value="消耗吸收的敌人生机，生成了守卫自己的保护膜。"/>
+    </imgdir>
+    <imgdir name="14120010">
+        <string name="name" value="影子同化"/>
+        <string name="desc" value="有一定概率和影子同化，回避敌人的攻击，减少伤害。"/>
+        <string name="h" value="有#prop%的概率额外回避，受到的伤害降低#ignoreMobDamR%"/>
+    </imgdir>
+    <imgdir name="14120030">
+        <string name="desc" value="永久提升力量。"/>
+        <string name="h" value="力量增加#strX点"/>
+        <string name="name" value="神圣之力"/>
+    </imgdir>
+    <imgdir name="14120031">
+        <string name="desc" value="永久提升敏捷。"/>
+        <string name="h" value="敏捷增加#dexX点"/>
+        <string name="name" value="神圣敏捷"/>
+    </imgdir>
+    <imgdir name="14120032">
+        <string name="desc" value="永久提升智力。"/>
+        <string name="h" value="智力增加#intX点"/>
+        <string name="name" value="神圣智力"/>
+    </imgdir>
+    <imgdir name="14120033">
+        <string name="desc" value="永久提升运气。"/>
+        <string name="h" value="运气增加#lukX点"/>
+        <string name="name" value="神圣幸运"/>
+    </imgdir>
+    <imgdir name="14120034">
+        <string name="desc" value="永久提升爆击率。"/>
+        <string name="h" value="爆击率增加#cr%"/>
+        <string name="name" value="神圣爆击"/>
+    </imgdir>
+    <imgdir name="14120035">
+        <string name="desc" value="永久提升命中率。"/>
+        <string name="h" value="命中率增加#ar%"/>
+        <string name="name" value="神圣精准"/>
+    </imgdir>
+    <imgdir name="14120036">
+        <string name="desc" value="永久提升最大血量。"/>
+        <string name="h" value="最大血量增加#mhpR%"/>
+        <string name="name" value="神圣最大生命"/>
+    </imgdir>
+    <imgdir name="14120037">
+        <string name="desc" value="永久提升最大魔量。"/>
+        <string name="h" value="最大魔量增加#mmpR%"/>
+        <string name="name" value="神圣最大魔法"/>
+    </imgdir>
+    <imgdir name="14120038">
+        <string name="desc" value="永久提升最大恶魔精气"/>
+        <string name="h" value="恶魔最大精气增加50"/>
+        <string name="name" value="神圣最大恶魔精气"/>
+    </imgdir>
+    <imgdir name="14120039">
+        <string name="desc" value="永久性地提升防御力。"/>
+        <string name="h" value="防御力增加#pddX"/>
+        <string name="name" value="神圣物理防御"/>
+    </imgdir>
+    <imgdir name="14120040">
+        <string name="desc" value="永久提升魔法防御力。"/>
+        <string name="h" value="魔法防御力增加#mddX"/>
+        <string name="name" value="神圣魔法防御"/>
+    </imgdir>
+    <imgdir name="14120041">
+        <string name="desc" value="永久提升移动速度。"/>
+        <string name="h" value="移动速度增加#psdSpeed"/>
+        <string name="name" value="神圣移动"/>
+    </imgdir>
+    <imgdir name="14120042">
+        <string name="desc" value="永久提升跳跃力。"/>
+        <string name="h" value="跳跃力增加#psdJump"/>
+        <string name="name" value="神圣跳跃"/>
+    </imgdir>
+    <imgdir name="14120043">
+        <string name="desc" value="增加五倍投掷的伤害。"/>
+        <string name="h" value="伤害增加#damR%"/>
+        <string name="name" value="五倍投掷-强化"/>
+    </imgdir>
+    <imgdir name="14120044">
+        <string name="desc" value="提高五倍投掷攻击首领怪物时的伤害。"/>
+        <string name="h" value="攻击首领怪物时，伤害增加#bdR%"/>
+        <string name="name" value="五倍投掷-首领怪征服者"/>
+    </imgdir>
+    <imgdir name="14120045">
+        <string name="desc" value="增加五倍投掷的爆击率。"/>
+        <string name="h" value="爆击率增加#cr%"/>
+        <string name="name" value="五倍投掷-爆击率"/>
+    </imgdir>
+    <imgdir name="14120046">
+        <string name="desc" value="减少黑暗预兆的冷却时间。"/>
+        <string name="h" value="冷却时间减少#coolTimeR%"/>
+        <string name="name" value="黑暗预兆-缩短冷却时间"/>
+    </imgdir>
+    <imgdir name="14120047">
+        <string name="desc" value="提高黑暗预兆的可攻击的怪物数量上限。"/>
+        <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+        <string name="name" value="黑暗预兆-额外目标"/>
+    </imgdir>
+    <imgdir name="14120048">
+        <string name="desc" value="增加黑暗预兆的伤害。"/>
+        <string name="h" value="伤害增加#damR%"/>
+        <string name="name" value="黑暗预兆-强化"/>
+    </imgdir>
+    <imgdir name="14120049">
+        <string name="desc" value="增加通过体力汲取生成的保护膜。"/>
+        <string name="h" value="保护膜增加#x"/>
+        <string name="name" value="体力汲取-额外点数"/>
+    </imgdir>
+    <imgdir name="14120050">
+        <string name="desc" value="通过体力汲取生成的保护膜存在时，提高攻击力。"/>
+        <string name="h" value="攻击力增加#x"/>
+        <string name="name" value="体力汲取-强化"/>
+    </imgdir>
+    <imgdir name="14120051">
+        <string name="desc" value="通过体力汲取生成的保护膜存在时，提高状态异常抗性。"/>
+        <string name="h" value="状态异常抗性增加#x"/>
+        <string name="name" value="体力汲取-身体抗性"/>
+    </imgdir>
+    <imgdir name="14121000">
+        <string name="name" value="希纳斯的骑士"/>
+        <string name="desc" value="获得觉醒的女皇祝福，在一定时间内提高包括自身在内的队员的所有能力值。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+    </imgdir>
+    <imgdir name="14121001">
+        <string name="desc" value="向对象连续投掷5个飞镖。最后一次攻击中注入黑暗力量，造成更强的伤害。"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击4次，以#x%的伤害攻击1次"/>
+        <string name="name" value="五倍投掷"/>
+    </imgdir>
+    <imgdir name="14121002">
+        <string name="name" value="五倍投掷"/>
+    </imgdir>
+    <imgdir name="14121003">
+        <string name="desc" value="召唤黑暗的象征--影子蝙蝠群，在一定时间内攻击敌人。将根据被影子蝙蝠群攻击的敌人数量，按比例召唤影子蝙蝠。进行除了影子蝙蝠、黑暗预兆的暗属性的攻击时，减少冷却时间。黑暗预兆即使攻击在攻击反射状态下的敌人也不会受到伤害，在施展时不会被敌人的攻击击退。"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内每0.3秒对最多#mobCount名敌人造成#damage%的伤害。每击中#x名敌人就召唤1只影子蝙蝠。最多可召唤#z个。\n#c冷却时间：#cooltime秒#，使用除了影子蝙蝠、黑暗预兆之外的暗属性攻击时，冷却时间减少0.5秒。"/>
+        <string name="name" value="黑暗预兆"/>
+    </imgdir>
+    <imgdir name="14121004">
+        <string name="name" value="影缝之术"/>
+        <string name="desc" value="用自己的影子束缚住敌人，固定在地面上。影子延展期间不会被任何攻击击退，影缝之术攻击反射状态的敌人时不会受到伤害。"/>
+        <string name="h" value="消耗#mpCon MP，按住技能键时最多在#x秒内伸展影子，在松开技能键时发动。以#damage%的伤害攻击影子上的最多#mobCount个敌人。受到攻击的敌人在#time秒内无法行动。每命中#y个敌人，冷却时间减少1秒。最多增加至#s秒。\n根据影缝之术对敌人造成的伤害，无法行动持续时间最多增加100%\n#c冷却时间#cooltime秒#"/>
+    </imgdir>
+    <imgdir name="14121015">
+        <string name="name" value="冒险骑士团的意志"/>
+        <string name="desc" value="集中精神，摆脱状态异常。使用后3秒内对状态异常免疫。但对部分状态异常效果无效，且不适用战斗命令。"/>
+        <string name="h" value="消耗#mpCon魔量，冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="14121052">
+        <string name="name" value="黑暗领地"/>
+        <string name="desc" value="使黑暗力量最大化，制造属于自己的领地。\n#c灰色演出开关 : 鼠标右击#"/>
+        <string name="h" value="消耗#mpCon魔量， 以#damage%的伤害对最多#mobCount个敌人发动#attackCount次攻击。施展动作中无敌。攻击后，在#time秒内使用投掷飞镖的技能时，将以最大叠加状态刻下黑暗标识，持续召唤出影子蝙蝠，最终伤害增加#indiePMdR%，所有攻击均造成暴击。\n冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="14121053">
+        <string name="desc" value="举行赞颂守护女皇希纳斯的骑士们荣誉的崇高仪式。"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内伤害增加#indieDamR%。\n冷却时间：#cooltime秒。只对队员中的骑士团职业有效"/>
+        <string name="name" value="守护者之荣誉"/>
+    </imgdir>
+    <imgdir name="14121054">
+        <string name="desc" value="在一定时间内召唤模仿自己行动的3个影子。模仿的行动仅限投掷飞镖的技能和移动技能。影子没有血量，在召唤时间结束后消失。影子即使攻击反射状态的敌人，也不会受到伤害，可以发动黑暗标识及影子蝙蝠。\n需要技能：#影子侍从20级以上#"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内召唤3个影子。影子分别以最终伤害的#x%、#z%、#w%发动额外打击。\n#c冷却时间: #cooltime秒#"/>
+        <string name="name" value="黑暗幻影"/>
+    </imgdir>
+    <imgdir name="14121055">
+        <string name="name" value="黑暗幻影"/>
+    </imgdir>
+    <imgdir name="14121056">
+        <string name="name" value="黑暗幻影"/>
+    </imgdir>
+    <imgdir name="15120003">
+        <string name="desc" value="把进行连锁攻击时累积的力量冲到极限后，将其转化为可以席卷一切的强力旋风。强化疾风后获得的被动技能\n前置技能：#c疾风20级以上#"/>
+        <string name="h" value="魔量消耗#mpCon，最多以#damage%的伤害对#mobCount个敌人发起 #attackCount次攻击。雷电增益累积#x个以上时可以使用，1个雷电增益的伤害增加#y%增益持续#time秒，只不过，相应技能不会触发雷电增益。\n冷却时间#cooltime秒"/>
+        <string name="name" value="台风"/>
+    </imgdir>
+    <imgdir name="15120006">
+        <string name="name" value="拳甲专家"/>
+        <string name="desc" value="增加拳甲的熟练度、攻击力和暴击伤害。\n所需技能：#c精准拳10级以上#"/>
+        <string name="h" value="拳甲的熟练度增加至#mastery%，攻击力增加 #x, 暴击伤害增加#criticaldamage%"/>
+    </imgdir>
+    <imgdir name="15120007">
+        <string name="name" value="刺激"/>
+        <string name="desc" value="利用电气刺激全身的神经，形成比任何人都更强韧的肉体。"/>
+        <string name="h" value="最大血量增加#mhpR%，回避率增加#er%，所受伤害减少#ignoreMobDamR%，稳如泰山提高#stanceProp%"/>
+    </imgdir>
+    <imgdir name="15120008">
+        <string name="name" value="雷神"/>
+        <string name="desc" value="精通闪电力量，领悟其中蕴含的精髓。无法使用战斗命令。"/>
+        <string name="h" value="雷电增益触发概率增加#prop%，最大累积#v次，爆击率增加#cr%、爆击伤害增加#criticaldamage%"/>
+    </imgdir>
+    <imgdir name="15120030">
+        <string name="desc" value="永久提升力量。"/>
+        <string name="h" value="力量提升#strX点"/>
+        <string name="name" value="神圣之力"/>
+    </imgdir>
+    <imgdir name="15120031">
+        <string name="desc" value="永久提升敏捷。"/>
+        <string name="h" value="敏捷提升#dexX点"/>
+        <string name="name" value="神圣敏捷"/>
+    </imgdir>
+    <imgdir name="15120032">
+        <string name="desc" value="永久提升智力。"/>
+        <string name="h" value="智力提升#intX点"/>
+        <string name="name" value="神圣智力"/>
+    </imgdir>
+    <imgdir name="15120033">
+        <string name="desc" value="永久提升幸运。"/>
+        <string name="h" value="幸运提升#lukX点"/>
+        <string name="name" value="神圣幸运"/>
+    </imgdir>
+    <imgdir name="15120034">
+        <string name="desc" value="永久提升爆击率。"/>
+        <string name="h" value="爆击率提升#cr%"/>
+        <string name="name" value="神圣爆击"/>
+    </imgdir>
+    <imgdir name="15120035">
+        <string name="desc" value="永久提升命中率。"/>
+        <string name="h" value="命中率提升#ar%"/>
+        <string name="name" value="神圣精准"/>
+    </imgdir>
+    <imgdir name="15120036">
+        <string name="desc" value="永久提升最大血量。"/>
+        <string name="h" value="最大血量提升#mhpR%"/>
+        <string name="name" value="神圣最大生命"/>
+    </imgdir>
+    <imgdir name="15120037">
+        <string name="desc" value="永久提升最大魔量。"/>
+        <string name="h" value="最大魔量提升#mmpR%"/>
+        <string name="name" value="神圣最大魔法"/>
+    </imgdir>
+    <imgdir name="15120038">
+        <string name="desc" value="永久提升最大DF。"/>
+        <string name="h" value="最大DF提升50点"/>
+        <string name="name" value="神圣最大恶魔精气"/>
+    </imgdir>
+    <imgdir name="15120039">
+        <string name="desc" value="永久性地提升防御力。"/>
+        <string name="h" value="防御力增加#pddX"/>
+        <string name="name" value="神圣物理防御"/>
+    </imgdir>
+    <imgdir name="15120040">
+        <string name="desc" value="永久提升魔法防御力。"/>
+        <string name="h" value="魔法防御力提升#mddX"/>
+        <string name="name" value="神圣魔法防御"/>
+    </imgdir>
+    <imgdir name="15120041">
+        <string name="desc" value="永久提升移动速度。"/>
+        <string name="h" value="移动速度提升#psdSpeed"/>
+        <string name="name" value="神圣移动"/>
+    </imgdir>
+    <imgdir name="15120042">
+        <string name="desc" value="永久提升跳跃力。"/>
+        <string name="h" value="跳跃力提升#psdJump"/>
+        <string name="name" value="神圣跳跃"/>
+    </imgdir>
+    <imgdir name="15120043">
+        <string name="desc" value="提升疾风技能的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="疾风-强化"/>
+    </imgdir>
+    <imgdir name="15120044">
+        <string name="desc" value="提高疾风的可攻击的怪物数量上限。"/>
+        <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+        <string name="name" value="疾风-额外目标"/>
+    </imgdir>
+    <imgdir name="15120045">
+        <string name="desc" value="增加疾风技能的攻击次数。"/>
+        <string name="h" value="攻击次数增加#attackCount次"/>
+        <string name="name" value="疾风-额外攻击"/>
+    </imgdir>
+    <imgdir name="15120046">
+        <string name="desc" value="提升霹雳技能的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="霹雳-强化"/>
+    </imgdir>
+    <imgdir name="15120047">
+        <string name="desc" value="提高霹雳的可攻击的怪物数量上限。"/>
+        <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+        <string name="name" value="霹雳-额外目标"/>
+    </imgdir>
+    <imgdir name="15120048">
+        <string name="desc" value="增加霹雳技能的攻击次数。"/>
+        <string name="h" value="攻击次数增加#attackCount次"/>
+        <string name="name" value="霹雳-额外攻击"/>
+    </imgdir>
+    <imgdir name="15120049">
+        <string name="desc" value="提升毁灭技能的伤害。"/>
+        <string name="h" value="伤害提升#damR%"/>
+        <string name="name" value="毁灭-强化"/>
+    </imgdir>
+    <imgdir name="15120050">
+        <string name="desc" value="提升毁灭技能的怪物防御率无视数值。"/>
+        <string name="h" value="无视怪物防御力提升#ignoreMobpdpR%"/>
+        <string name="name" value="毁灭-无视防御"/>
+    </imgdir>
+    <imgdir name="15120051">
+        <string name="desc" value="提高毁灭攻击首领怪物时的伤害。"/>
+        <string name="h" value="攻击首领怪物时，伤害增加#bdR%"/>
+        <string name="name" value="毁灭-首领怪征服者"/>
+    </imgdir>
+    <imgdir name="15121000">
+        <string name="desc" value="获得觉醒的女皇的祝福，在一定时间内提高包括自己在内的队员的所有能力值。冒险岛勇士、希纳斯骑士、诺巴的勇士、翼人的勇士、异界勇士、伦娜之庇护的效果不会叠加。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+        <string name="name" value="希纳斯骑士"/>
+    </imgdir>
+    <imgdir name="15121001">
+        <string name="name" value="毁灭"/>
+        <string name="desc" value="将闪电力量化作实体，给眼前的敌人造成致命的一击。不发动雷电增益，可以与除了雷鸣和自我之外的所有技能连锁。"/>
+        <string name="h" value="消耗MP#mpCon, 对#mobCount名敌人以#damage%伤害进行#attackCount次攻击。"/>
+    </imgdir>
+    <imgdir name="15121002">
+        <string name="desc" value="召唤出可以扫荡四周的霹雳之力，攻击前方的敌人。该技能可以与除了雷鸣和自我之外的所有技能连锁。"/>
+        <string name="h" value="消耗魔量#mpCon，最多给#mobCount个敌人造成#damage%的伤害，攻击#attackCount次"/>
+        <string name="name" value="霹雳"/>
+    </imgdir>
+    <imgdir name="15121004">
+        <string name="name" value="聚雷"/>
+        <string name="desc" value="凝聚周围散布的闪电力量，给自己的所有攻击赋予额外打击。不适用于召唤技能、全职业通用5转技能和部分技能。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内在所有攻击中以最终伤害的#x%发动额外打击。\n冷却时间#cooltime秒，每次积累雷电增益时，剩余的冷却时间减少#y秒"/>
+    </imgdir>
+    <imgdir name="15121005">
+        <string name="desc" value="消耗血量，魔量，在一定时间内使所有队员的攻击速度提升2个阶段。可与现有加速技能重复使用。\n前置技能：#c急速拳10级以上#"/>
+        <string name="h" value="消耗血量#hpCon，魔量#mpCon，#time秒内提高攻击速度"/>
+        <string name="name" value="极速领域"/>
+    </imgdir>
+    <imgdir name="15121015">
+        <string name="name" value="冒险骑士团的意志"/>
+        <string name="desc" value="集中精神，摆脱状态异常。使用后3秒内对状态异常免疫。但对部分状态异常效果无效，且不适用战斗命令。"/>
+        <string name="h" value="消耗#mpCon魔量，冷却时间#cooltime秒"/>
+    </imgdir>
+    <imgdir name="15121052">
+        <string name="desc" value="巨大的海神现身，以威严震慑地面上的敌人。可以衔接除了雷鸣和自我之外的所有技能。"/>
+        <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击#mobCount个敌人#attackCount次，技能施展动作时处于无敌状态\n冷却时间#cooltime秒"/>
+        <string name="name" value="海神降临"/>
+    </imgdir>
+    <imgdir name="15121053">
+        <string name="name" value="守护者之荣誉"/>
+        <string name="desc" value="举行赞颂守护女皇希纳斯的骑士们荣誉的崇高仪式。"/>
+        <string name="h" value="消耗魔量#mpCon，#time秒内伤害增加#indieDamR%。\n冷却时间：#cooltime秒。只对队员中的骑士团职业和米哈尔有效"/>
+    </imgdir>
+    <imgdir name="15121054">
+        <string name="name" value="开天辟地"/>
+        <string name="desc" value="向下发射出太古时期开天辟地的巨大闪电，释放根源的力量。"/>
+        <string name="h" value="消耗MP#mpCon, #time秒内使用技能时，不消耗雷电增益。不适用疾风的冷却时间及无视所需雷电增益\n冷却时间：#cooltime秒\n被动效果：1个雷电增益造成的无视怪物防御率数值变为#x%，伤害提高#pdR%"/>
+    </imgdir>
+    <imgdir name="11121006">
+        <string name="desc" value="通过和古代灵魂间订立誓约，在战斗中成为决不会退缩的战士楷模。"/>
+        <string name="h" value="消耗魔量#mpCon，在#time秒内所有能力值增加#indieAllStat，爆击率提高#indieCr%，稳如泰山概率提高#prop%"/>
+        <string name="name" value="灵魂誓约"/>
+    </imgdir>
+  <imgdir name="2001">
+    <string name="bookName" value="龙初心"/>
+  </imgdir>
+  <imgdir name="20010012">
+    <string name="desc" value="将其他角色培养到10级以上时，技能点数提高1。但精灵的祝福和女皇的祝福只发动更好的效果。"/>
+    <string name="h" value="攻击力增加#x、魔力增加#y"/>
+    <string name="name" value="精灵的祝福"/>
+  </imgdir>
+  <imgdir name="20010022">
+    <string name="desc" value="和龙一起滑降到远处。"/>
+    <string name="h" value="滑降到远处。跳跃键(按住)，只有在学会骑龙技能，在没有搭乘骑宠的状态下可以使用。"/>
+    <string name="name" value="龙飞行"/>
+  </imgdir>
+  <imgdir name="20010073">
+    <string name="desc" value="将其他冒险骑士团角色和米哈尔角色带到5级以上，技能点数增加1。但精灵的祝福和女皇的祝福中，发动效果更好的一种。\r\n在其他冒险骑士团的高贵精神的影响下，最高可以提高到30级。"/>
+    <string name="h" value="攻击力增加#x、魔力增加#y"/>
+    <string name="name" value="女皇的祝福"/>
+  </imgdir>
+  <imgdir name="2001008">
+    <string name="name" value="魔法弹"/>
+    <string name="desc" value="碰到敌人后，发射爆炸的能量凝聚球。"/>
+    <string name="h" value="消耗#mpCon魔量，对最多#mobCount名敌人发动#attackCount次攻击，造成#damage%伤害"/>
+    <string name="pdesc" value="消耗魔量，碰到敌人后，发射爆炸的能量凝聚球。"/>
+    <string name="ph" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害"/>
+  </imgdir>
+  <imgdir name="20010086">
+    <string name="desc" value="[最高等级：1]\n获得了大天使的祝福。"/>
+    <string name="h1" value="攻击力5，魔力5，持续时间10分钟"/>
+    <string name="name" value="大天使的祝福"/>
+  </imgdir>
+  <imgdir name="20010088">
+    <string name="desc" value="[最高等级：1]\n获得了黑天使的祝福。"/>
+    <string name="h1" value="攻击力10，魔力10，持续时间10分钟"/>
+    <string name="name" value="黑天使的祝福"/>
+  </imgdir>
+  <imgdir name="2001009">
+    <string name="name" value="快速移动"/>
+    <string name="desc" value="瞬间移动一定距离。同时按住上、下、左、右方向键时，可向相应方向移动。\n#c需要达到5级以上，才可学习3转技能“快速移动精通”、“快速移动增幅”#"/>
+    <string name="h" value="消耗魔量#mpCon，往左右瞬间移动#x，往上下瞬间移动#y"/>
+  </imgdir>
+  <imgdir name="20010091">
+    <string name="desc" value="[最高等级：1]\n获得了大天使的祝福。"/>
+    <string name="h1" value="攻击力5，魔力5，持续时间10分钟"/>
+    <string name="name" value="大天使的祝福"/>
+  </imgdir>
+  <imgdir name="20010093">
+    <string name="name" value="潜力解放(龙神)"/>
+    <string name="pdesc" value="解放潜力，瞬间发挥出最大的能力。"/>
+    <string name="ph" value="血量在#z%以下时，攻击力、防御力增加#x%"/>
+  </imgdir>
+  <imgdir name="20010097">
+    <string name="name" value="寒冰突击"/>
+    <string name="pdesc" value="攻击前方的多个敌人。\n[发动命令：#c攻击键#]"/>
+    <string name="ph" value="造成#damage%的伤害，最多攻击#mobCount个敌人"/>
+  </imgdir>
+  <imgdir name="20010099">
+    <string name="name" value="破冰巨剑"/>
+    <string name="pdesc" value="将斧子变成巨大的剑，同时攻击前方的多个敌人，并在一定时间内将其冻结。#c寒气值20以上#才能使用。\n[发动命令：#c↑↑+ 攻击键#]"/>
+    <string name="ph" value="消耗寒气值#iceGageCon，造成伤害#damage%，最多攻击#mobCount个敌人，有#prop%的概率冻结#time秒"/>
+  </imgdir>
+  <imgdir name="20010100">
+    <string name="name" value="冰封暴雪"/>
+    <string name="pdesc" value="以强烈的寒气同时攻击周围的多个敌人，在一定时间内造成持续伤害。#c只有在#c寒气值达到40以上#时才能使用。\n[发动命令：#c↓→+攻击键#]"/>
+    <string name="ph" value="消耗寒气值#iceGageCon，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，#dotTime秒内每秒产生#dot%的持续伤害"/>
+  </imgdir>
+  <imgdir name="20010103">
+    <string name="name" value="霸天斧"/>
+    <string name="pdesc" value="用力挥舞斧子，同时攻击前方的多个敌人，有一定概率使其眩晕。只有在#c寒气值聚集到5以上#时才能使用。\n[发动命令：#c↓+ 攻击键#]"/>
+    <string name="ph" value="消耗寒气#iceGageCon，造成#damage%伤害，最多攻击#mobCount个敌人，有#prop%的概率在#time秒内眩晕"/>
+  </imgdir>
+  <imgdir name="20010104">
+    <string name="name" value="蜗居诅咒"/>
+    <string name="pdesc" value="施加强力诅咒，在一定时间内将所有敌人变成冰蜗牛。只有在#c寒气值达到160以上#时才能使用。\n[发动命令：#c↓↑+攻击键#]"/>
+    <string name="ph" value="消耗#iceGageCon寒气值，有#prop%概率#time秒把全部挑战者变成冰蜗牛。"/>
+  </imgdir>
+  <imgdir name="2001011">
+    <string name="name" value="魔力波"/>
+    <string name="desc" value="向地面发射魔力波动，并向上跃起。可同时使用上方向键和跳跃键发动，使用后按下跳跃键，一定时间内缓慢落向地面。"/>
+    <string name="h" value="消耗#mpCon魔量，跳跃一定距离\n使用技能后，按下跳跃键，消耗#u魔量，可缓慢下降，下降最多需要#x秒"/>
+  </imgdir>
+  <imgdir name="2001012">
+    <string name="name" value="魔力波"/>
+    <string name="desc" value="向地面发射魔力波动，并向上跃起。可同时使用上方向键和跳跃键发动，使用后按下跳跃键，一定时间内缓慢落向地面。"/>
+  </imgdir>
+  <imgdir name="20010180">
+    <string name="desc" value="[最高等级：1]\n获得白天使的祝福。"/>
+    <string name="h1" value="攻击力增加12，魔法攻击力增加12，持续时间10分钟"/>
+    <string name="name" value="白天使的祝福"/>
+  </imgdir>
+  <imgdir name="20010190">
+    <string name="desc" value="继承联盟的意志，发挥出强大的力量。"/>
+    <string name="h" value="永久力量提高#strX，敏捷提高#dexX，智力提高#intX，运气提高#lukX，攻击力提高#padX，魔法攻击力提高#madX"/>
+    <string name="name" value="联盟的意志"/>
+  </imgdir>
+  <imgdir name="20010194">
+    <string name="name" value="继承的意志"/>
+    <string name="desc" value="继承玛瑙龙之王阿弗利埃的意志，领悟龙骑士的真正力量。"/>
+    <string name="h" value="永久性魔力提高#madX，全属性提高#strX"/>
+  </imgdir>
+  <imgdir name="20010294">
+    <string name="name" value="符文延续"/>
+    <string name="desc" value="提高符文的魔力，增加所有符文解放的持续时间。"/>
+    <string name="h" value="符文解放的持续时间提高#x%"/>
+  </imgdir>
+  <imgdir name="20011000">
+    <string name="desc" value="[最高等级：3]\n投掷蜗牛壳来攻击远距离的怪物。"/>
+    <string name="h1" value="消耗魔量3，造成伤害10"/>
+    <string name="h2" value="消耗魔量5，造成伤害25"/>
+    <string name="h3" value="消耗魔量7，造成伤害40"/>
+    <string name="name" value="蜗牛投掷术"/>
+  </imgdir>
+  <imgdir name="20011001">
+    <string name="desc" value="[最高等级：3]\n30秒内持续恢复自己的血量。\n#c冷却时间：2分钟#"/>
+    <string name="h1" value="消耗5魔量，30秒内恢复24血量"/>
+    <string name="h2" value="消耗10魔量，30秒内恢复48血量"/>
+    <string name="h3" value="消耗15魔量，30秒内恢复72血量"/>
+    <string name="name" value="团队治疗"/>
+  </imgdir>
+  <imgdir name="20011002">
+    <string name="desc" value="[最高等级：3]\n瞬间迅速的移动。 \n#c冷却时间：1分钟#"/>
+    <string name="h1" value="消耗4魔量，4秒内移动速度增加10"/>
+    <string name="h2" value="消耗7魔量，8秒内移动速度增加15"/>
+    <string name="h3" value="消耗魔量10，12秒内移动速度增加20"/>
+    <string name="name" value="疾风步"/>
+  </imgdir>
+  <imgdir name="20011003">
+    <string name="name" value="匠人之魂"/>
+    <string name="desc" value="[最高等级：1]\n借助匠人之魂，使不能装备的道具也能使用卷轴。"/>
+  </imgdir>
+  <imgdir name="20011004">
+    <string name="desc" value="[最高等级：1]\n能够坐骑怪物并移动"/>
+    <string name="name" value="骑兽技能"/>
+  </imgdir>
+  <imgdir name="20011005">
+    <string name="desc" value="[最高等级：1]\n提高周围所有角色的攻击力和魔法攻击力。\n#c冷却时间：2小时#"/>
+    <string name="h1" value="消耗30魔量，40分钟内攻击力、魔力提高4%"/>
+    <string name="name" value="英雄之回声"/>
+  </imgdir>
+  <imgdir name="20011006">
+    <string name="desc" value="测试"/>
+    <string name="h1" value="测试"/>
+    <string name="name" value="测试"/>
+  </imgdir>
+  <imgdir name="20011007">
+    <string name="desc" value="[最高等级：3]\n可以使用炼金术制作物品。根据自身角色等级的不同，可制作的物品不同。"/>
+    <string name="h1" value="可以制作75级及以下的物品"/>
+    <string name="h2" value="可以制作105级及以下的物品"/>
+    <string name="h3" value="可以制作135级及以下的物品"/>
+    <string name="name" value="锻造"/>
+  </imgdir>
+  <imgdir name="20011009">
+    <string name="desc" value="使用千万个竹子攻击敌人"/>
+    <string name="h1" value="首领怪的血量减少30%"/>
+    <string name="name" value="流星竹雨"/>
+  </imgdir>
+  <imgdir name="20011010">
+    <string name="desc" value="一定时间内变成无敌状态"/>
+    <string name="h1" value="30秒内无敌"/>
+    <string name="name" value="金刚霸体"/>
+  </imgdir>
+  <imgdir name="20011011">
+    <string name="desc" value="一定时间内增加伤害值"/>
+    <string name="h1" value="30秒内伤害增加100%"/>
+    <string name="name" value="狂暴战魂"/>
+  </imgdir>
+  <imgdir name="20011018">
+    <string name="desc" value="[最高等级：1]\n可以骑着白雪人移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="白雪人骑宠"/>
+  </imgdir>
+  <imgdir name="20011019">
+    <string name="desc" value="[最高等级：1]\n可以骑着魔女的扫把移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="魔女的扫把"/>
+  </imgdir>
+  <imgdir name="20011020">
+    <string name="desc" value="[最高等级：1]\n利用法老的愤怒进行攻击。"/>
+    <string name="h1" value="金字塔内的所有怪物一击必杀"/>
+    <string name="name" value="法老王的愤怒"/>
+  </imgdir>
+  <imgdir name="20011024">
+    <string name="desc" value="[最高等级：1]可携带多只宠物，最多携带3只。"/>
+    <string name="name" value="群宠"/>
+  </imgdir>
+  <imgdir name="20011025">
+    <string name="desc" value="[最高等级：1]\n可以骑着玩具木马移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="玩具木马"/>
+  </imgdir>
+  <imgdir name="20011026">
+    <string name="desc" value="[最高等级：1]\n使用龙族的神秘力量，飞向天空。不过，坠落时受到的下落伤害非常大。\n发动时消耗魔量90"/>
+    <string name="h1" value="消耗90魔量，使用飞行技能。"/>
+    <string name="name" value="飞翔"/>
+  </imgdir>
+  <imgdir name="20011027">
+    <string name="desc" value="[最高等级：1]\n可以骑着鳄鱼王移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="鳄鱼王"/>
+  </imgdir>
+  <imgdir name="20011028">
+    <string name="desc" value="[最高等级：1]\n可以骑着蓝色机车移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="蓝色机车"/>
+  </imgdir>
+  <imgdir name="20011029">
+    <string name="desc" value="[最高等级：1]\n可以骑着女女机车移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="女女机车"/>
+  </imgdir>
+  <imgdir name="20011030">
+    <string name="desc" value="[最高等级：1]\n可以骑着筋斗云移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="筋斗云"/>
+  </imgdir>
+  <imgdir name="20011031">
+    <string name="desc" value="[最高等级：1]\n可以骑着蝙蝠怪移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="蝙蝠怪"/>
+  </imgdir>
+  <imgdir name="20011033">
+    <string name="desc" value="[最高等级：1]\n可以开着赛车移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="赛车"/>
+  </imgdir>
+  <imgdir name="20011034">
+    <string name="desc" value="[最高等级：1]\n可以骑着传说之虎移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="老虎只是传说"/>
+  </imgdir>
+  <imgdir name="20011035">
+    <string name="desc" value="[最高等级：1]\n可以骑着蝙蝠魔先生移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="蝙蝠魔先生"/>
+  </imgdir>
+  <imgdir name="20011036">
+    <string name="desc" value="[最高等级：1]\n可以骑着狮子王自由移动."/>
+    <string name="h1" value="消耗魔量10, 物理防御力,魔法防御力 +10, 移动速度 140, 跳跃力 120"/>
+    <string name="name" value="狮子王"/>
+  </imgdir>
+  <imgdir name="20011037">
+    <string name="desc" value="[最高等级：1]\n可骑着特别的独角兽移动。"/>
+    <string name="h1" value="消耗魔量10，物理、魔法防御力 +10，移动速度 80， 跳跃力 100"/>
+    <string name="name" value="独角兽"/>
+  </imgdir>
+  <imgdir name="20011039">
+    <string name="desc" value="[最高等级：1]\n可以坐在田园红卡车自由移动."/>
+    <string name="h1" value="消耗魔量10, 物理防御力,魔法防御力 +10, 移动速度 140, 跳跃力 120"/>
+    <string name="name" value="田园红卡车"/>
+  </imgdir>
+  <imgdir name="20011040">
+    <string name="desc" value="[最高等级：1]\n可以骑着恶魔石像自由移动."/>
+    <string name="h1" value="消耗魔量10, 物理防御力,魔法防御力 +10, 移动速度 140, 跳跃力 120"/>
+    <string name="name" value="恶魔石像"/>
+  </imgdir>
+  <imgdir name="20011042">
+    <string name="desc" value="[最高等级：1]\n可以骑着圣兽神鸟移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="圣兽 提拉奥斯"/>
+  </imgdir>
+  <imgdir name="20011044">
+    <string name="desc" value="[最高等级：1]\n可骑着花蘑菇移动."/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="花蘑菇"/>
+  </imgdir>
+  <imgdir name="20011046">
+    <string name="desc" value="[最高等级：2]\n搭乘宇宙船。#c有效时间：20XX年XX月XX日00时#"/>
+    <string name="h1" value="消耗魔量10，物理、魔法防御力增加10，移动速度150，跳跃力120"/>
+    <string name="h2" value="消耗魔量10，物理、魔法防御力增加20，移动速度170，跳跃力120"/>
+    <string name="name" value="宇宙船"/>
+  </imgdir>
+  <imgdir name="20011049">
+    <string name="desc" value="[最高等级：1]\n可以骑着梦魇移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度170，跳跃力120"/>
+    <string name="name" value="梦魇"/>
+  </imgdir>
+  <imgdir name="20011050">
+    <string name="desc" value="[最高等级：1]\n可以骑着白雪人移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度170，跳跃力120"/>
+    <string name="name" value="白雪人"/>
+  </imgdir>
+  <imgdir name="20011051">
+    <string name="desc" value="[最高等级：1]\n可以骑着鸵鸟移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度170，跳跃力120"/>
+    <string name="name" value="鸵鸟"/>
+  </imgdir>
+  <imgdir name="20011052">
+    <string name="desc" value="[最高等级：1]\n可以乘坐粉红熊热气球移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度170，跳跃力120"/>
+    <string name="name" value="粉红熊热气球"/>
+  </imgdir>
+  <imgdir name="20011053">
+    <string name="desc" value="[最高等级：1]\n可以乘坐钢铁变形侠移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度170，跳跃力120"/>
+    <string name="name" value="钢铁变形侠"/>
+  </imgdir>
+  <imgdir name="20011054">
+    <string name="desc" value="[最高等级：1]\n可以骑着走路鸡移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="走路鸡"/>
+  </imgdir>
+  <imgdir name="20011063">
+    <string name="desc" value="[最高等级：1]\n可以骑着暴风摩托移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="暴风摩托"/>
+  </imgdir>
+  <imgdir name="20011064">
+    <string name="desc" value="[最高等级 : 1]\n可穿上动力服移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="动力服"/>
+  </imgdir>
+  <imgdir name="20011066">
+    <string name="desc" value="Visitor Melee Attack"/>
+    <string name="h1" value="Visitor Melee Attack"/>
+    <string name="name" value="Visitor Melee Attack"/>
+  </imgdir>
+  <imgdir name="20011067">
+    <string name="desc" value="Visitor Range Attack"/>
+    <string name="h1" value="Visitor Range Attack"/>
+    <string name="name" value="Visitor Range Attack"/>
+  </imgdir>
+  <imgdir name="20011069">
+    <string name="desc" value="[最高等级：1]\n可以骑猫头鹰移动."/>
+    <string name="h1" value="消耗魔量 10,物理,魔法防御力提高10,移动速度140,跳跃力120."/>
+    <string name="name" value="猫头鹰"/>
+  </imgdir>
+  <imgdir name="20011072">
+    <string name="desc" value="[最高等级：1]\n可以骑着雄狮雷昂纳多移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="雄狮骑宠"/>
+  </imgdir>
+  <imgdir name="20011081">
+    <string name="desc" value="[最高等级：1]\n可以骑着魔女的扫把移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="魔女的扫把"/>
+  </imgdir>
+  <imgdir name="20011084">
+    <string name="desc" value="[最高等级：1]\n可以骑着蓝色机车移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="蓝色机车"/>
+  </imgdir>
+  <imgdir name="20011085">
+    <string name="desc" value="[最高等级：1]\n召唤封印在大天使的祝福中的大天使。"/>
+    <string name="h1" value="消耗魔量100"/>
+    <string name="name" value="大天使"/>
+  </imgdir>
+  <imgdir name="20011087">
+    <string name="desc" value="[最高等级：1]\n召唤封印在黑天使的祝福中的黑天使。"/>
+    <string name="h1" value="消耗魔量100"/>
+    <string name="name" value="黑天使"/>
+  </imgdir>
+  <imgdir name="20011089">
+    <string name="desc" value="[最高等级：1]\n可以乘坐圣诞雪橇移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="圣诞雪橇"/>
+  </imgdir>
+  <imgdir name="20011090">
+    <string name="desc" value="[最高等级：1]\n召唤封印在大天使的祝福中的大天使。"/>
+    <string name="h1" value="消耗魔量100"/>
+    <string name="name" value="大天使"/>
+  </imgdir>
+  <imgdir name="20011092">
+    <string name="name" value="巨人秘药"/>
+  </imgdir>
+  <imgdir name="20011094">
+    <string name="name" value="巨人秘药"/>
+  </imgdir>
+  <imgdir name="20011095">
+    <string name="name" value="巨人秘药"/>
+  </imgdir>
+  <imgdir name="20011096">
+    <string name="desc" value="[最高等级：1]\n可以骑着巨无霸兔子移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="h2" value="消耗魔量 10, 提高物理,魔法防御力10, 移动速度140, 跳跃力120"/>
+    <string name="name" value="巨无霸兔子"/>
+  </imgdir>
+  <imgdir name="20011098">
+    <string name="name" value="炫冰二段跳"/>
+    <string name="pdesc" value="跳跃过程中再次跳跃，移动较远距离。"/>
+    <string name="ph" value="消耗魔量，跳跃一定距离\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="20011101">
+    <string name="desc" value="[最高等级：1]\n可以骑着小兔子移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="兔兔加油"/>
+  </imgdir>
+  <imgdir name="20011102">
+    <string name="desc" value="[最高等级：1]\n可以骑着兔子车夫移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="兔子车夫"/>
+  </imgdir>
+  <imgdir name="20011105">
+    <string name="name" value="冰骑士"/>
+    <string name="pdesc" value="在未知力量的影响下变成了冰骑士。请在限定时间内打倒敌人，活下来。"/>
+    <string name="ph" value="在未知力量的影响下变成了冰骑士。请在限定时间内打倒敌人，活下来。"/>
+  </imgdir>
+  <imgdir name="20011106">
+    <string name="desc" value="[最高等级：1]\n可以坐着福袋移动。"/>
+    <string name="h1" value="魔量消耗10，防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="福袋"/>
+  </imgdir>
+  <imgdir name="20011113">
+    <string name="desc" value="[最高等级: 1]\n可以发动7周年庆套装效果."/>
+    <string name="name" value="7周年快乐"/>
+  </imgdir>
+  <imgdir name="20011114">
+    <string name="desc" value="[最高等级: 1]\n可以发动7周年庆套装效果."/>
+    <string name="name" value="7周年快乐"/>
+  </imgdir>
+  <imgdir name="20011115">
+    <string name="desc" value="[最高等级: 1]\n可以驾驶警车自由移动。"/>
+    <string name="name" value="警车"/>
+  </imgdir>
+  <imgdir name="20011118">
+    <string name="desc" value="[最高等级：1]\n可以通过妮娜的魔法阵移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="妮娜的魔法阵"/>
+  </imgdir>
+  <imgdir name="20011121">
+    <string name="desc" value="[最高等级：1]\n可以骑着青蛙移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="青蛙"/>
+  </imgdir>
+  <imgdir name="20011122">
+    <string name="desc" value="[最高等级：1]\n可以骑着小龟龟移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="小龟龟"/>
+  </imgdir>
+  <imgdir name="20011123">
+    <string name="desc" value="[最高等级：1]\n可以骑着无辜水牛移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="无辜水牛"/>
+  </imgdir>
+  <imgdir name="20011124">
+    <string name="desc" value="[最高等级：1]\n可以骑着玩具坦克移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="玩具坦克"/>
+  </imgdir>
+  <imgdir name="20011129">
+    <string name="desc" value="[最高等级：1]\n可以乘坐维京战车移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="维京战车"/>
+  </imgdir>
+  <imgdir name="20011130">
+    <string name="desc" value="[最高等级：1]\n可以骑着打豆豆机器人移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="打豆豆机器人"/>
+  </imgdir>
+  <imgdir name="20011136">
+    <string name="desc" value="[最高等级：1]\n可以骑着莱格斯的豺犬移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="莱格斯的豺犬"/>
+  </imgdir>
+  <imgdir name="20011138">
+    <string name="desc" value="[最高等级：1]\n可以开着跑车移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="跑车"/>
+  </imgdir>
+  <imgdir name="20011139">
+    <string name="desc" value="[最高等级：1]\n可以骑着拿破仑的白马移动。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="拿破仑的白马"/>
+  </imgdir>
+  <imgdir name="20011142">
+    <string name="desc" value="有可以飞行的骑宠技能的话，可以在天上飞。\n使用飞行骑宠技能后，骑着骑宠，同时按方向键上和跳跃键，就可以飞行。"/>
+    <string name="h1" value="消耗魔量10"/>
+    <string name="name" value="飞行骑乘"/>
+  </imgdir>
+  <imgdir name="20011143">
+    <string name="desc" value="[最高等级：1]\n可以骑着赤羚龙移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="赤羚龙"/>
+  </imgdir>
+  <imgdir name="20011144">
+    <string name="desc" value="[最高等级：1]\n可以骑着提拉奥斯移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="提拉奥斯"/>
+  </imgdir>
+  <imgdir name="20011145">
+    <string name="desc" value="[最高等级：1]\n可以乘坐热气球移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="热气球"/>
+  </imgdir>
+  <imgdir name="20011146">
+    <string name="desc" value="[最高等级：1]\n可以乘坐飞船移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="飞船"/>
+  </imgdir>
+  <imgdir name="20011147">
+    <string name="desc" value="[最高等级：1]\n可以骑着天马移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="天马"/>
+  </imgdir>
+  <imgdir name="20011148">
+    <string name="desc" value="[最高等级：1]\n可以骑着暗光龙移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="暗光龙"/>
+  </imgdir>
+  <imgdir name="20011149">
+    <string name="desc" value="[最高等级：1]\n可以骑着魔法扫帚移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="魔法扫帚"/>
+  </imgdir>
+  <imgdir name="20011150">
+    <string name="desc" value="[最高等级：1]\n可以乘坐筋斗云移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="筋斗云"/>
+  </imgdir>
+  <imgdir name="20011151">
+    <string name="desc" value="[最高等级：1]\n可以乘坐骑士团战车移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="骑士团战车"/>
+  </imgdir>
+  <imgdir name="20011152">
+    <string name="desc" value="[最高等级：1]\n可以骑着梦魇移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="梦魇"/>
+  </imgdir>
+  <imgdir name="20011153">
+    <string name="desc" value="[最高等级：1]\n可以骑着蝙蝠怪移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="蝙蝠怪"/>
+  </imgdir>
+  <imgdir name="20011154">
+    <string name="desc" value="[最高等级：1]\n可以骑着透明蝙蝠怪移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="透明蝙蝠怪"/>
+  </imgdir>
+  <imgdir name="20011155">
+    <string name="desc" value="[最高等级：1]\n可以骑着玛瑙龙（3阶）移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="玛瑙龙（3阶）"/>
+  </imgdir>
+  <imgdir name="20011156">
+    <string name="desc" value="[最高等级：1]\n可以骑着猫头鹰移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="猫头鹰"/>
+  </imgdir>
+  <imgdir name="20011157">
+    <string name="desc" value="[最高等级：1]\n可以乘坐直升机移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="直升机"/>
+  </imgdir>
+  <imgdir name="20011158">
+    <string name="desc" value="[最高等级：1]\n可以乘坐机动巡逻车移动。\n鼠标右键点击可以搭乘其他玩家。\n需要技能：#骑兽技能1级以上#"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度140，跳跃力120"/>
+    <string name="name" value="机动巡逻车"/>
+  </imgdir>
+  <imgdir name="20011162">
+    <string name="desc" value="召唤出蝙蝠怪的灵魂，用强烈的火焰攻击画面内的敌人。\n以2500%的伤害攻击15只怪物， 爆击概率+20%, 冷却时间5分钟"/>
+    <string name="h1" value="召唤出蝙蝠怪的灵魂，用强烈的火焰攻击画面内的敌人。"/>
+    <string name="name" value="蝙蝠怪之地狱火"/>
+  </imgdir>
+  <imgdir name="20011163">
+    <string name="desc" value="召唤出暗黑龙王的灵魂，对两边的敌人进行强烈的火焰攻击。被攻击的对象会在一定时间内受到持续的火焰伤害。\n以3500%的伤害攻击15只怪物， 爆击概率+20%, 持续10秒钟，每秒伤害300%，冷却时间5分钟"/>
+    <string name="h1" value="召唤出暗黑龙王的灵魂，对两边的敌人进行强烈的火焰攻击。被攻击的对象会在一定时间内受到持续的火焰伤害。"/>
+    <string name="name" value="暗黑龙王之火焰喷射"/>
+  </imgdir>
+  <imgdir name="20011164">
+    <string name="desc" value="召唤出莱格斯的灵魂，使前方的敌人一击毙命。对于首领怪相当于普通伤害。\n普通怪物一击毙命，首领怪所受伤害1500%, 冷却时间5分钟"/>
+    <string name="h1" value="召唤出莱格斯的灵魂，使前方的敌人一击毙命。对于首领怪相当于普通伤害。"/>
+    <string name="name" value="莱格斯的突击"/>
+  </imgdir>
+  <imgdir name="20011165">
+    <string name="desc" value="召唤出阿尼的灵魂，对敌人进行强力的重锤攻击。 \n以4000%的伤害攻击1只怪物。 爆击概率+40%,无视对方的防御力，冷却时间5分钟"/>
+    <string name="h1" value="召唤出阿尼的灵魂，对敌人进行强力的重锤攻击。 "/>
+    <string name="name" value="阿尼之审判"/>
+  </imgdir>
+  <imgdir name="20011171">
+    <string name="desc" value="召唤出御龙魔的灵魂，对前方的敌人进行强大的能量攻击，被攻击的对象会在一定时间内受到持续的伤害。\n以3000%的伤害攻击15只怪物， 爆击概率+40%, 持续10秒钟，每秒伤害300%， 冷却时间5分钟"/>
+    <string name="h1" value="召唤出御龙魔的灵魂，对前方的敌人进行强大的能量攻击，被攻击的对象会在一定时间内受到持续的伤害。"/>
+    <string name="name" value="御龙魔之能量波"/>
+  </imgdir>
+  <imgdir name="20011172">
+    <string name="desc" value="召唤出班·雷昂的灵魂，给对方加以强力的一击。\n以5000%的伤害攻击1只怪物， 爆击概率+30%,无视对方的防御力，冷却时间5分钟"/>
+    <string name="h1" value="召唤出班·雷昂的灵魂，给对方加以强力的一击。"/>
+    <string name="name" value="班·雷昂之雄狮斩"/>
+  </imgdir>
+  <imgdir name="20011173">
+    <string name="desc" value="召唤出扎昆的灵魂，用炽烈的火焰塔攻击两边的敌人。被攻击的对象会在一定时间内受到持续的火焰伤害。\n以3500%的伤害攻击15只怪物， 爆击概率+20%, 持续10秒钟，每秒伤害300%，冷却时间10分钟"/>
+    <string name="h1" value="召唤出扎昆的灵魂，用炽烈的火焰塔攻击两边的敌人。"/>
+    <string name="name" value="扎昆之火焰塔"/>
+  </imgdir>
+  <imgdir name="20011174">
+    <string name="desc" value="召唤出摇滚之魂的灵魂。被召唤的摇滚之魂会停留2分钟，对周围的敌人进行眩晕攻击。\n以500%的伤害对15只怪物进行眩晕攻击，持续时间2分钟， 冷却时间5分钟"/>
+    <string name="h1" value="召唤出摇滚之魂的灵魂。被召唤的摇滚之魂会停留2分钟，对周围的敌人进行眩晕攻击。"/>
+    <string name="name" value="摇滚之魂之死亡弹射"/>
+  </imgdir>
+  <imgdir name="20011175">
+    <string name="desc" value="被武公之魂赋予强大的力量，能在60秒内造成平时2倍的伤害。\n冷却时间5分钟"/>
+    <string name="h1" value="被武公之魂赋予强大的力量，能在60秒内造成平时2倍的伤害。"/>
+    <string name="name" value="武公之绝对攻击"/>
+  </imgdir>
+  <imgdir name="20011176">
+    <string name="desc" value="召唤出品克缤的灵魂。被召唤的品克缤会停留2分钟，对周围的敌人进行强力的攻击。\n以1500%的伤害攻击15只怪物，持续时间1分钟，冷却时间5分钟"/>
+    <string name="h1" value="召唤出品克缤的灵魂。被召唤的品克缤会停留2分钟，对周围的敌人进行强力的攻击。"/>
+    <string name="name" value="品克缤之来者必死！"/>
+  </imgdir>
+  <imgdir name="20011179">
+    <string name="desc" value="[最高等级：1]\n召唤封印在白天使的祝福中的白天使。"/>
+    <string name="h1" value="消耗魔量100"/>
+    <string name="name" value="白天使"/>
+  </imgdir>
+  <imgdir name="20011182">
+    <string name="desc" value="[最高等级：1]\n可以乘坐国庆纪念热气球移动。\n学会#飞行骑乘#技能后，同时按住方向键上和跳跃键，就可以飞行。"/>
+    <string name="h1" value="消耗魔量10，物理防御力、魔法防御力增加10，移动速度120，跳跃力120"/>
+    <string name="name" value="国庆纪念热气球"/>
+  </imgdir>
+  <imgdir name="20011187">
+    <string name="desc" value="[最高等级：1]\n可以骑着赤兔马移动。"/>
+    <string name="h1" value="消耗魔量10"/>
+    <string name="name" value="赤兔马"/>
+  </imgdir>
+  <imgdir name="20011188">
+    <string name="desc" value="象征着在擂台赛中获胜的人。使地图上所有角色的血量提高一定量。"/>
+    <string name="h1" value="给地图上的所有怪物造成一定量的伤害。冷却时间1分钟"/>
+    <string name="name" value="胜利者的漩涡"/>
+  </imgdir>
+  <imgdir name="20011189">
+    <string name="desc" value="象征着在擂台赛中获胜的人。"/>
+    <string name="h1" value="使地图上所有角色的血量提高一定量。冷却时间1.5分钟"/>
+    <string name="name" value="胜利者的祝福"/>
+  </imgdir>
+  <imgdir name="20011251">
+    <string name="desc" value="接受世界内其他角色链接技能的传授或可以解除正在传授的链接技能。"/>
+    <string name="h" value="管理自身链接技能的传授状态"/>
+    <string name="name" value="技能链"/>
+  </imgdir>
+  <imgdir name="20011293">
+    <string name="desc" value="利用魔法的力量，回到我思念的故乡。"/>
+    <string name="h" value="消耗魔量#mpCon，前往农场前院\n#c冷却时间为#cooltime秒"/>
+    <string name="name" value="回家"/>
+  </imgdir>
+  <imgdir name="20018000">
+    <string name="name" value="好用的轻功"/>
+    <string name="desc" value="[物品潜在技能]\n一定时间内提升自身的移动速度和跳跃力"/>
+    <string name="h1" value="消耗50魔量，200秒内移动速度增加20，跳跃力增加10"/>
+  </imgdir>
+  <imgdir name="20018001">
+    <string name="desc" value="[物品潜在技能]\n制造通向最近村落的时空门，使自己可以通过时空门回到最近的村落。在传送点按↑键可以移动。"/>
+    <string name="h1" value="消耗120魔量，2个魔法石，传送口持续120秒"/>
+    <string name="name" value="好用的时空门"/>
+  </imgdir>
+  <imgdir name="20018002">
+    <string name="desc" value="[物品潜在技能]\n找到敌人的弱点,赋予自己添加致命伤的能力."/>
+    <string name="h1" value="消耗80魔量，240秒内暴击率提高10%，暴击伤害增加8%"/>
+    <string name="name" value="好用的火眼晶晶"/>
+  </imgdir>
+  <imgdir name="20018003">
+    <string name="desc" value="[道具潜在技能]\n最大血量和最大魔量的量增加。"/>
+    <string name="h1" value="消耗80魔量，240秒内最大血量和最大魔量增加40%"/>
+    <string name="name" value="好用的神圣之火"/>
+  </imgdir>
+  <imgdir name="20018004">
+    <string name="desc" value="[物品潜在技能]\n在一定时间内提升自己所有技能的等级。#c4转技能可提升到最高等级以上#，除此之外的技能只能提升到最高等级。\n作为例外，无法提升部分特殊技能和新手技能、战斗命令、强化战斗命令、神圣技能、5转技能的技能等级。(技能等级最高只能突破到+4)"/>
+    <string name="h1" value="消耗64魔量，240秒内所有技能等级提高1级"/>
+    <string name="name" value="强化战斗命令"/>
+  </imgdir>
+  <imgdir name="20018005">
+    <string name="desc" value="[物品潜在技能]\n一定时间内大幅度提升自己的攻击力、魔力、防御力、最大血量、最大魔量。可以与了祝福、进阶祝福之外的所有其他增益技能叠加使用。"/>
+    <string name="h1" value="消耗120魔量，240秒内攻击力增加20，魔力增加20，防御力增加425，最大血量增加475，最大魔量增加475"/>
+    <string name="name" value="强化进阶祝福"/>
+  </imgdir>
+  <imgdir name="20018006">
+    <string name="desc" value="[物品潜在技能]\n消耗血量、魔量，在一定时间内使自己的攻击速度提高1个阶段。可与其他武器速度提高技能重叠，但无法和极速领域重叠。"/>
+    <string name="h1" value="消耗120血量，120魔量，240秒内提高攻击速度"/>
+    <string name="name" value="强化极速领域"/>
+  </imgdir>
+  <imgdir name="20019000">
+    <string name="desc" value="[最高等级：1]\n对猪系列的怪造成的伤害增加10%"/>
+    <string name="name" value="猪猪的弱点"/>
+  </imgdir>
+  <imgdir name="20019001">
+    <string name="desc" value="[最高等级：1]\n对木妖列的怪造成的伤害增加10%"/>
+    <string name="name" value="木妖的弱点"/>
+  </imgdir>
+  <imgdir name="20019002">
+    <string name="name" value="绿水灵的弱点"/>
+    <string name="desc" value="[最高等级：1]\n 攻击名字中含有绿水灵的怪物时，伤害提高10%。不适用于以下怪物。\r\n- 守护天使绿水灵\r\n- 闯祸精绿水灵\r\n- 浪漫人士绿水灵\r\n- 炸弹绿水灵\r\n- 金水灵\r\n- 光轮绿水灵"/>
+  </imgdir>
+  <imgdir name="2200">
+    <string name="bookName" value="龙神第一次"/>
+  </imgdir>
+  <imgdir name="22000000">
+    <string name="desc" value="通过和龙交感，提高攻击速度、魔法攻击力、防御力和移动速度。"/>
+    <string name="h" value="攻击速度增加2级、魔力增加#mad、防御力增加#pddX，移动速度增加#psdSpeed"/>
+    <string name="name" value="龙魂"/>
+  </imgdir>
+  <imgdir name="22000002">
+    <string name="name" value="精灵弱化"/>
+    <string name="pdesc" value="攻击时，有一定概率使对象陷入虚弱状态。用魔法技能攻击虚弱状态的对象时，可以造成更多的伤害。"/>
+    <string name="ph" value="攻击时有#prop%的概率使对象陷入#time秒内对魔法攻击虚弱的状态，对对象使用魔法技能时，伤害提高#x%"/>
+  </imgdir>
+  <imgdir name="22000013">
+    <string name="desc" value="通过龙之契约增加防御力，移动速度。"/>
+    <string name="h" value="防御力永久性地增加#pddX，移动速度增加#psdSpeed"/>
+    <string name="name" value="龙魂"/>
+  </imgdir>
+  <imgdir name="22000014">
+    <string name="name" value="链接魔力"/>
+    <string name="desc" value="通过和米乐共享魔力，提高龙神潜在的魔法力量。"/>
+    <string name="h" value="永久性最大MP提高#mmpR%，每一级MP提高#lv2mmp，魔力提高#madX"/>
+  </imgdir>
+  <imgdir name="22000015">
+    <string name="name" value="飞龙闪"/>
+    <string name="desc" value="使用龙神的直接攻击技能后，米乐将有一定概率进行额外攻击。"/>
+    <string name="h" value="#c[终极攻击类技能]# 有#prop%概率发动#damage%伤害的飞龙闪"/>
+  </imgdir>
+  <imgdir name="2200006">
+    <string name="name" value="咒语精通"/>
+    <string name="desc" value="提高魔法熟练度和魔力。\n#c需要达到10级以上，才能学习4转技能“冰破魔兽”#"/>
+    <string name="h" value="魔法熟练度增加#mastery%，魔力增加#x"/>
+  </imgdir>
+  <imgdir name="2200007">
+    <string name="desc" value="通过精神修养，永久性增加智力。"/>
+    <string name="h" value="永久性地使智力增加#intX"/>
+    <string name="name" value="智慧激发"/>
+  </imgdir>
+  <imgdir name="2200011">
+    <string name="desc" value="攻击冻结状态的敌人时，每叠加一层冻结状态，#c爆击伤害就会提高一分#。若使用雷电属性攻击，则每叠加一层冻结状态，#c伤害会再额外提高一些#，冻结状态的叠加将会减少。"/>
+    <string name="h" value="攻击冻结状态的敌人时，每叠加一层冻结状态， #c爆击伤害提高#x%#，若使用雷电属性攻击，则每叠加一层冻结状态，#c伤害将额外提高#y%#，之后减少冻结状态的叠加"/>
+    <string name="name" value="极冻效果"/>
+  </imgdir>
+  <imgdir name="2200012">
+    <string name="name" value="魔法加速"/>
+    <string name="desc" value="提升攻击力和智力。"/>
+    <string name="h" value="攻击速度提升2个阶段，智力增加#intX"/>
+  </imgdir>
+  <imgdir name="22001001">
+    <string name="desc" value="消耗魔量，向敌人发动连续攻击。"/>
+    <string name="h" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#attackCount次"/>
+    <string name="name" value="魔法导弹"/>
+    <string name="pdesc" value="消耗魔量，向敌人发动连续攻击。"/>
+    <string name="ph" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="22001010">
+    <string name="desc" value="通过2个凝结的魔力体攻击前方的敌人。根据转职次数，最多可强化至#c第4阶段#。\n#c为了学习2转技能“魔力之环Ⅱ”，需要10级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，造成#damage%的伤害，最多攻击#mobCount个敌人#attackCount次"/>
+    <string name="name" value="魔力之环Ⅰ"/>
+  </imgdir>
+  <imgdir name="22001011">
+    <string name="name" value="快速移动"/>
+    <string name="desc" value="瞬间移动一定距离。和上下左右方向键一起使用，可以向对应方向移动。"/>
+    <string name="h" value="消耗#mpCon魔量，向左右瞬移 #range，上下瞬移#y"/>
+  </imgdir>
+  <imgdir name="22001012">
+    <string name="desc" value="通过魔法的力量，减少受到的伤害，用魔量来代替部分伤害。\n在激活的状态下，魔量在0以上时，自动发动。魔量为0时将正常消耗血量。使用技能时，效果激活，重新使用时，效果关闭的#c开关技能#"/>
+    <string name="h" value="消耗魔量#mpCon，激活的期间受到的伤害降低#y%，伤害的#x%用魔量代替"/>
+    <string name="name" value="魔法盾"/>
+  </imgdir>
+  <imgdir name="2210">
+    <string name="bookName" value="龙神第二次"/>
+  </imgdir>
+  <imgdir name="2210009">
+    <string name="name" value="魔法爆击"/>
+    <string name="desc" value="永久性地增加爆击率和爆击伤害。"/>
+    <string name="h" value="爆击率增加#cr%、爆击伤害增加#criticaldamage%"/>
+  </imgdir>
+  <imgdir name="2210013">
+    <string name="desc" value="攻击冻结状态的敌人时，有一定的几率无视敌人一定比率的防御。"/>
+    <string name="h" value="攻击冰冻状态的敌人时，有#subProp%的概率使冰冻每叠加一层即无视防御率#prop%"/>
+    <string name="name" value="寒霜破裂"/>
+  </imgdir>
+  <imgdir name="2210016">
+    <string name="name" value="自然力重置"/>
+    <string name="desc" value="降低自己使用的所有攻击魔法的属性抗性。此外，最终伤害永久增加。"/>
+    <string name="h" value="攻击属性抗性减少#u%，最终伤害增加#mdR%"/>
+  </imgdir>
+  <imgdir name="22101000">
+    <string name="desc" value="发射火焰，攻击多个敌人。"/>
+    <string name="h" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害"/>
+    <string name="name" value="火焰环"/>
+    <string name="pdesc" value="发射火焰，攻击多个敌人。"/>
+    <string name="ph" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害"/>
+  </imgdir>
+  <imgdir name="22101001">
+    <string name="desc" value="瞬间移动一定距离。与上、下、左、右方向键一同使用，可往相应方向移动。\n#c需要达到20级以上，才能掌握8转技能‘快速移动精通’#"/>
+    <string name="h" value="消耗魔量#mpCon，瞬间移动#range距离，向下方的移动距离增加#y"/>
+    <string name="name" value="快速移动"/>
+  </imgdir>
+  <imgdir name="2211">
+    <string name="bookName" value="龙神第三次"/>
+  </imgdir>
+  <imgdir name="22110010">
+    <string name="desc" value="通过3个凝结的魔力体攻击前方的敌人。根据转职次数，最多可强化至#c第4阶段#。\n#c为了学习3转技能“魔力之环Ⅲ”，需要10级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害#"/>
+    <string name="name" value="魔力之环Ⅱ"/>
+  </imgdir>
+  <imgdir name="22110013">
+    <string name="name" value="迅捷 - 回来！"/>
+    <string name="desc" value="#c[融合技能]# 米乐立刻中断攻击，回到龙神身边。通过纹章的力量对周围的敌人施加诅咒。被诅咒的敌人在一定时间内将受到更多的伤害。\n迅捷-回来！将随着巨龙迅捷技能等级一起成长。\n\c 米乐在施展#c巨龙迅捷、风之迅捷、雷之迅捷#时，龙神使用#c[回来]#就会发动。"/>
+    <string name="h" value="对范围内最多#mobCount个敌人施加诅咒，诅咒可在#time秒内使所受攻击魔法技能的最终伤害增加#x%"/>
+  </imgdir>
+  <imgdir name="22110014">
+    <string name="desc" value="#c[融合技能]# 米乐在进行#c巨龙迅捷#攻击时，和龙神的魔法产生共鸣，在一定时间内引起气流暴走，发射凌冽的风刃。风之迅捷将随着巨龙迅捷的技能等级一起成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n\c 米乐在使用#c巨龙迅捷#时，龙神使用#c狂风之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，发射以#damage%的伤害攻击最多#mobCount个敌人#attackCount次的风之刃#x个，持续3.5秒\n多个风之刃命中1个敌人时，风之刃的最终伤害减少#y%。"/>
+    <string name="name" value="风之迅捷"/>
+  </imgdir>
+  <imgdir name="22110015">
+    <string name="desc" value="通过精神修养，永久增加智力。"/>
+    <string name="h" value="永久地使智力增加#intX"/>
+    <string name="name" value="智慧激发"/>
+  </imgdir>
+  <imgdir name="22110016">
+    <string name="name" value="交流情感"/>
+    <string name="desc" value="通过和米乐的深入交流，强化战斗能力。"/>
+    <string name="h" value="米乐使用技能时，#time秒内龙神的伤害提高#indieDamR%\n[被动效果 : 稳如泰山提高#stanceProp%]"/>
+  </imgdir>
+  <imgdir name="22110018">
+    <string name="desc" value="提高魔法熟练度和魔力，提高暴击率。\n#c为了学习4转技能“魔法精通”，需要10级以上#"/>
+    <string name="h" value="魔法熟练度提高#mastery%，暴击率提高#cr%，魔力提高#x，#c装备短杖时#，暴击率额外提高5%"/>
+    <string name="name" value="咒语精通"/>
+  </imgdir>
+  <imgdir name="22110019">
+    <string name="name" value="乘风跳跃"/>
+    <string name="desc" value="引发气流，再跳高一次。在跳跃时，同时按上方向键和跳跃键就能跳得更高。"/>
+    <string name="h" value="消耗#mpCon MP，跳跃中向上再跳跃一次"/>
+  </imgdir>
+  <imgdir name="22110021">
+    <string name="name" value="进阶飞龙闪"/>
+    <string name="desc" value="使用龙神的直接攻击技能后，米乐的魔力有一定概率进行更加强化的额外攻击。"/>
+    <string name="h" value="#c[终极攻击类技能]# 有#prop%概率发动#damage%伤害的飞龙闪"/>
+  </imgdir>
+  <imgdir name="22110022">
+    <string name="desc" value="#c[米乐技能]#米乐在前方快速来回并攻击路过的敌人。巨龙迅捷即使攻击在攻击反射状态的敌人也不会受到伤害。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，持续3.5秒\n冷却时间#cooltime秒"/>
+    <string name="name" value="巨龙迅捷"/>
+  </imgdir>
+  <imgdir name="22110023">
+    <string name="desc" value="#c[米乐技能]#米乐在前方快速来回并攻击路过的敌人。巨龙迅捷即使攻击在攻击反射状态的敌人也不会受到伤害。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，持续3.5秒\n冷却时间#cooltime秒"/>
+    <string name="name" value="巨龙迅捷"/>
+  </imgdir>
+  <imgdir name="22110024">
+    <string name="desc" value="#c[融合技能]# 米乐在进行#c巨龙迅捷#攻击时，和龙神的魔法产生共鸣，在一定时间内引起气流暴走，发射凌冽的风刃。风之迅捷将随着巨龙迅捷的技能等级一起成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n\c 米乐在使用#c巨龙迅捷#时，龙神使用#c狂风之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，发射以#damage%的伤害攻击最多#mobCount个敌人#attackCount次的风之刃#x个，持续3.5秒\n多个风之刃命中1个敌人时，风之刃的伤害减少#y%。"/>
+    <string name="name" value="风之迅捷"/>
+  </imgdir>
+  <imgdir name="22110025">
+    <string name="desc" value="#c[融合技能]# 米乐在进行#c巨龙迅捷#攻击时，和龙神的魔法产生共鸣，在一定时间内引起气流暴走，发射凌冽的风刃。风之迅捷将随着巨龙迅捷的技能等级一起成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n\c 米乐在使用#c巨龙迅捷#时，龙神使用#c狂风之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，发射以#damage%的伤害攻击最多#mobCount个敌人#attackCount次的风之刃#x个，持续3.5秒\n多个风之刃命中1个敌人时，风之刃的伤害减少#y%。"/>
+    <string name="name" value="风之迅捷"/>
+  </imgdir>
+  <imgdir name="22110026">
+    <string name="name" value="魔法加速"/>
+    <string name="desc" value="提升攻击力和智力。"/>
+    <string name="h" value="攻击速度提升2个阶段，智力增加#intX"/>
+  </imgdir>
+  <imgdir name="2211007">
+    <string name="name" value="快速移动精通"/>
+    <string name="desc" value="激活技能后，不额外消耗魔量，并会对快速移动地点的敌人造成眩晕和持续伤害效果，另外会永久性提高稳如泰山。\n使用技能时效果激活，再次使用时效果关闭的#c开关技能#\n需要技能：#c快速移动5级以上#"/>
+    <string name="h" value="额外消耗#y魔量，对最多#mobCount个敌人造成#damage%的伤害，有#subProp%的概率使其眩晕#time秒\n[被动效果 : 稳如泰山提高#stanceProp%]"/>
+  </imgdir>
+  <imgdir name="2211008">
+    <string name="desc" value="在一定时间内降低自己使用的所有攻击魔法的属性抗性。此外，最终伤害永久增加。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内攻击属性抗性降低#x%\n[被动效果：最终伤害增加#mdR%]"/>
+    <string name="name" value="自然力重置"/>
+  </imgdir>
+  <imgdir name="2211010">
+    <string name="name" value="冰河壁"/>
+    <string name="desc" value="在前方生成锋利的冰墙，推出并攻击敌人。命中的敌人会陷入冻结状态，移动速度变慢，对火属性敌人可以造成巨大的伤害。"/>
+    <string name="h" value="消耗#mpCon魔量，造成#damage%的伤害，最多攻击#mobCount个敌人#attackCount次"/>
+  </imgdir>
+  <imgdir name="2211011">
+    <string name="name" value="落雷枪"/>
+    <string name="desc" value="召唤雷霆凝聚成的球体。球体向周围的敌人发射高压电流，发动雷属性攻击。 按住下方向键并再次使用技能时，可将球体固定在原地。固定在原地的球体在一定时间内被召唤，攻击更广范围内的敌人。球体攻击不会减少冻结状态的叠加。"/>
+    <string name="h" value="消耗#mpCon魔量， 召唤持续#time秒的雷电球，雷电球对最多#mobCount个敌人以#damage%的伤害攻击#attackCount次\n#c按住下方向键再次使用时，在# #y秒内将球体固定在原地，被固定的球体对最多#s个敌人以#w%的伤害攻击#q次\n攻击普通怪物时，伤害增加#u2%p\n球体固定冷却时间#q2秒"/>
+  </imgdir>
+  <imgdir name="2211012">
+    <string name="name" value="元素配合(冰雷)"/>
+    <string name="desc" value="展开冰雷保护罩。遭受致命的状态异常攻击时，保护罩立即发动，在一定时间内抵挡致命的状态异常。此外，永久性增加状态异常抗性及所有属性抗性。"/>
+    <string name="h" value="消耗#mpCon魔量，防御致命的状态异常攻击时，在#time秒内生成抵挡所有状态异常的保护罩，保护罩生成后，冷却时间适用#cooltime秒\n[被动效果 : 所有属性及状态异常抗性增加#asrR%]"/>
+  </imgdir>
+  <imgdir name="2211014">
+    <string name="name" value="冰河壁"/>
+    <string name="desc" value="在前方生成锋利的冰壁、逼退敌人，并使用冰属性攻击。命中的敌人陷入冰冻状态、移动速度下降，可以给火属性的敌人造成巨大伤害。"/>
+    <string name="h" value="消耗#mpCon魔量，造成#damage%的伤害，最多攻击#mobCount个敌人#attackCount次"/>
+  </imgdir>
+  <imgdir name="2211015">
+    <string name="name" value="迅雷冲刺"/>
+    <string name="desc" value="召唤闪电凝聚的球体。"/>
+  </imgdir>
+  <imgdir name="2211017">
+    <string name="name" value="快速移动增幅"/>
+    <string name="desc" value="强化快速移动的威力，移动距离增加。无法与快速移动精通-范围提升一起使用。\n#c开关技能#，使用技能时，效果激活，再次使用时关闭\n所需技能：#c快速移动5级以上#"/>
+    <string name="h" value="消耗#mpCon魔量，快速移动左右移动距离增加#x，上下移动距离增加#y"/>
+  </imgdir>
+  <imgdir name="22111000">
+    <string name="desc" value="向最多8个敌人降下闪电。"/>
+    <string name="h" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#mobCount个敌人"/>
+    <string name="name" value="闪电箭"/>
+    <string name="pdesc" value="向最多#mobCount个敌人降下闪电。"/>
+    <string name="ph" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#mobCount个敌人"/>
+  </imgdir>
+  <imgdir name="22111001">
+    <string name="desc" value="在一定时间内减少受到的伤害，用魔量承受部分伤害。但魔量为0时，直接消耗血量。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内受到的伤害减少#y%，伤害的#x%用魔量承受。"/>
+    <string name="hch" value="消耗魔量#mpCon，在#time秒内用1/300的魔量代替所受伤害的#x%。"/>
+    <string name="name" value="魔法盾"/>
+    <string name="pdesc" value="一定时间内，损血量以魔量代替。但魔量达到0时消耗血量。"/>
+    <string name="ph" value="消耗魔量#mpCon，在#time秒内受到的伤害的#x%用魔量承受。"/>
+  </imgdir>
+  <imgdir name="22111011">
+    <string name="name" value="狂风之环"/>
+    <string name="desc" value="在前方制造旋风，击退敌人并造成伤害。部分怪物会抵抗，无法击退。"/>
+    <string name="h" value="消耗#mpCon MP，以#damage%的伤害对#mobCount个敌人发动#attackCount次攻击，并将其击退\n使用米乐技能后，如果在使用魔力之环过程中，或在伏倒状态下使用狂风之环，可不发动狂风之环，而发动融合技能，但消耗的MP将增至3倍"/>
+  </imgdir>
+  <imgdir name="22111012">
+    <string name="name" value="巨龙迅捷"/>
+    <string name="desc" value="#c[米乐技能]#米乐在前方快速来回并攻击沿途的敌人。用巨龙迅捷攻击带有攻击反射状态的敌人时不会受到伤害。\n#c米乐技能和融合技能不受攻击速度提升的影响。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，持续3.5秒\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="22111017">
+    <string name="name" value="回来！"/>
+    <string name="desc" value="利用纹章的力量，将米乐立刻召唤到龙神的身边。根据当前米乐正在进行的攻击，将发动各种额外效果。"/>
+    <string name="h" value="立刻召唤正在攻击的米乐"/>
+  </imgdir>
+  <imgdir name="22111020">
+    <string name="desc" value="消耗魔量，在一定时间内使龙神的魔法攻击速度提升2个阶段。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内魔法攻击速度提高#y级"/>
+    <string name="name" value="魔法狂暴"/>
+  </imgdir>
+  <imgdir name="2212">
+    <string name="bookName" value="龙神第四次"/>
+  </imgdir>
+  <imgdir name="22120001">
+    <string name="desc" value="通过精神修养，永久性地提高智力。"/>
+    <string name="h" value="智力永久性增加#intX"/>
+    <string name="name" value="智慧激发"/>
+  </imgdir>
+  <imgdir name="22120002">
+    <string name="name" value="咒语精通"/>
+    <string name="desc" value="提高魔法熟练度和魔力，提高暴击率。\n#c为了学习9转技能“魔法精通”，需要10级以上#"/>
+    <string name="h" value="魔法熟练度增加量提高#mastery%，魔力提高#x，暴击率提高#cr%\n装备短杖时， 暴击率提高3%"/>
+  </imgdir>
+  <imgdir name="22121000">
+    <string name="desc" value="聚集寒气，攻击多个敌人。"/>
+    <string name="h" value="消耗魔量#mpCon，造成#damage%的伤害，最多攻击#mobCount个敌人，有#prop%的概率在#time秒内冻结"/>
+    <string name="hch" value="消耗魔量#mpCon，对最多#mobCount个敌人造成#damage%的攻击伤害，有#hcProp%的概率结冰#hcTime秒"/>
+    <string name="name" value="冰点寒气"/>
+    <string name="pdesc" value="聚集寒气，攻击多个敌人。"/>
+    <string name="ph" value="消耗魔量#mpCon，造成#damage%的伤害，最多攻击#mobCount个敌人，有#prop%的概率冻结#time秒"/>
+  </imgdir>
+  <imgdir name="22121001">
+    <string name="desc" value="一定时间内减少自己使用的所有攻击魔法属性。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内攻击魔法属性减少#x%"/>
+    <string name="name" value="自然力重置"/>
+  </imgdir>
+  <imgdir name="2213">
+    <string name="bookName" value="龙神第五次"/>
+  </imgdir>
+  <imgdir name="22131000">
+    <string name="desc" value="用通过魔法阵生成的光柱包围敌人，造成伤害，并使其在一定时间内眩晕。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多#mobCount个敌人，有#prop%的概率在#time秒内眩晕"/>
+    <string name="hch" value="消耗魔量#mpCon，对最多#mobCount个敌人造成#damage%的攻击伤害，有#hcProp%的概率眩晕#hcTime秒"/>
+    <string name="name" value="魔力闪爆"/>
+    <string name="pdesc" value="用通过魔法阵生成的光柱包围1名敌人，造成伤害，并使其在一定时间内眩晕。"/>
+    <string name="ph" value="消耗魔量#mpCon，造成#damage%的伤害，有#prop%的概率眩晕#time秒"/>
+  </imgdir>
+  <imgdir name="22131001">
+    <string name="name" value="魔法屏障"/>
+    <string name="desc" value="生成在一定时间内减少队员所受伤害一定量的保护罩。"/>
+    <string name="h" value="消耗MP#mpCon, 在#time秒内所受伤害降低#x%，自身防御力提升#pdd \n冷却时间#cooltime秒\n[被动效果 : 自身最大HP增加#mhpR%]"/>
+  </imgdir>
+  <imgdir name="22131002">
+    <string name="desc" value="在一定时间内降低自己使用的所有攻击魔法的属性抗性。此外，最终伤害永久增加。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内攻击属性抗性降低#x%\n[被动效果：最终伤害增加#mdR%]"/>
+    <string name="name" value="自然力重置"/>
+  </imgdir>
+  <imgdir name="2214">
+    <string name="bookName" value="龙神第六次"/>
+  </imgdir>
+  <imgdir name="22140000">
+    <string name="desc" value="增加爆击率和爆击伤害。"/>
+    <string name="h" value="爆击率增加#prop%、爆击伤害增加#criticaldamage%"/>
+    <string name="name" value="魔法爆击"/>
+  </imgdir>
+  <imgdir name="22140010">
+    <string name="desc" value="通过强化的4个凝聚的魔力体攻击前方的敌人。根据转职次数，最多可强化至#c第4阶段#。\n#c为了学习4转技能“魔力之环Ⅳ”，需要20级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害#"/>
+    <string name="name" value="魔力之环Ⅲ"/>
+  </imgdir>
+  <imgdir name="22140013">
+    <string name="name" value="俯冲 - 回来！"/>
+    <string name="desc" value="#c[融合技能]#米乐立刻中断攻击，回到龙神的身边。利用纹章的力量，使包括自己在内周围我方的攻击速度提高1个阶段。俯冲-回来！将根据巨龙俯冲的技能等级一起成长。\c米乐在施展#巨龙俯冲，雷电俯冲，大地俯冲#时，龙神使用#c[回来]#就能发动。"/>
+    <string name="h" value="在#time秒内，包括自己在内周围我方的攻击速度提高1个阶段。"/>
+  </imgdir>
+  <imgdir name="22140014">
+    <string name="desc" value="#c[融合技能]#米乐在进行#c巨龙迅捷#攻击时，和龙神的魔法共鸣，在五个地方画出雷电魔法阵。雷之迅捷将随着巨龙迅捷的技能等级成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n 米乐在使用#c巨龙迅捷#时，龙神使用#c雷电之环#魔法就能发动。"/>
+    <string name="h" value="消耗魔量#mpCon，在不同地点碰撞时，对最多#mobCount名敌人造成#attackCount次#damage%的伤害"/>
+    <string name="name" value="雷之迅捷"/>
+  </imgdir>
+  <imgdir name="22140015">
+    <string name="desc" value="#c[融合技能]# 米乐在进行#c巨龙俯冲#攻击时，和龙神的魔法产生共鸣，在一定时间内从全身发射出能够让地面烧焦的雷电球。雷电俯冲将随着巨龙俯冲的技能等级一起成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n\c米乐使用#c巨龙俯冲#时，龙神使用#c雷电之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，生成#z雷电球，对最多#mobCount名敌人#attackCount次#damage%的伤害，持续4秒，雷电球在攻击敌人或经过一定时间之后就会消失。"/>
+    <string name="name" value="雷电俯冲"/>
+  </imgdir>
+  <imgdir name="22140018">
+    <string name="desc" value="增加爆击率和爆击伤害。"/>
+    <string name="h" value="爆击率增加#prop%、爆击伤害增加#criticaldamage%"/>
+    <string name="name" value="魔法暴击"/>
+  </imgdir>
+  <imgdir name="22140019">
+    <string name="desc" value="增加自身的状态异常抗性及属性抗性。"/>
+    <string name="h" value="状态异常抗性永久增加#asrR，属性抗性增加#terR%"/>
+    <string name="name" value="抗魔领域"/>
+  </imgdir>
+  <imgdir name="22140020">
+    <string name="desc" value="消耗更多的魔量，提高所有攻击魔法的伤害。"/>
+    <string name="h" value="消耗魔量提高至#x%，攻击魔法的最终伤害提高#z%"/>
+    <string name="name" value="法术激化"/>
+  </imgdir>
+  <imgdir name="22140021">
+    <string name="desc" value="激发米乐的潜在能力，发现隐藏的能力。"/>
+    <string name="h" value="无视防御率永久提高#ignoreMobpdpR%"/>
+    <string name="name" value="龙潜于渊"/>
+  </imgdir>
+  <imgdir name="22140022">
+    <string name="desc" value="#c[米乐技能]#米乐冲向龙神的前方后，挥舞翅膀，产生冲击波。巨龙俯冲即使攻击在攻击反射状态的敌人也不会受到伤害。"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害，持续3.5秒\n冷却时间为#cooltime秒\n\c#c[狂风之环]的伤害提高#s%p\n\c#c[巨龙迅捷]的伤害提高#s2%p\n\c#c[风之迅捷]的伤害提高#u%p\n\c#c[雷之迅捷]的伤害提高#u2%p"/>
+    <string name="name" value="巨龙俯冲"/>
+  </imgdir>
+  <imgdir name="22140023">
+    <string name="desc" value="#c[融合技能]#米乐在进行#c巨龙迅捷#攻击时，和龙神的魔法共鸣，在五个地方画出雷电魔法阵。雷之迅捷将随着巨龙迅捷的技能等级成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n 米乐在使用#c巨龙迅捷#时，龙神使用#c雷电之环#魔法就能发动。"/>
+    <string name="h" value="消耗魔量#mpCon，冲撞5个地点，在每次冲撞时对最多#mobCount名敌人造成#attackCount次#damage%的伤害"/>
+    <string name="name" value="雷之迅捷"/>
+  </imgdir>
+  <imgdir name="22140024">
+    <string name="desc" value="#c[融合技能]# 米乐在进行#c巨龙俯冲#攻击时，和龙神的魔法产生共鸣，在一定时间内从全身发射出能够让地面烧焦的雷电球。雷电俯冲将随着巨龙俯冲的技能等级一起成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n\c米乐使用#c巨龙俯冲#时，龙神使用#c雷电之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，生成#z雷电球，对最多#mobCount名敌人#attackCount次#damage%的伤害，持续4秒，雷电球在攻击敌人或经过一定时间之后就会消失。"/>
+    <string name="name" value="雷电俯冲"/>
+  </imgdir>
+  <imgdir name="22141001">
+    <string name="desc" value="龙发动连续攻击，击退前方的敌人。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，有#prop%的概率击退"/>
+    <string name="hch" value="消耗魔量#mpCon，以#damage%的伤害攻击#attackCount次最多#mobCount个敌人，有#hcProp%概率击退"/>
+    <string name="name" value="龙推力"/>
+    <string name="pdesc" value="龙发动连续攻击，击退前方的敌人。"/>
+    <string name="ph" value="消耗魔量#mpCon，最多对#mobCount名敌人造成#damage%的伤害，攻击#attackCount次，有#prop%概率击退\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="22141002">
+    <string name="desc" value="消耗魔量，在一定时间内使魔法攻击速度提升2个阶段。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内魔法攻击速度提高#y级"/>
+    <string name="name" value="魔法狂暴"/>
+  </imgdir>
+  <imgdir name="22141004">
+    <string name="desc" value="瞬间移动到地图上的随机位置。技能等级越高，魔量消耗量和冷却时间越少。"/>
+    <string name="h" value="消耗魔量#mpCon，瞬间移动。冷却时间#cooltime秒"/>
+    <string name="hch" value="消耗魔量#mpCon，瞬间移动。冷却时间#hcCooltime秒"/>
+    <string name="name" value="飞龙传动"/>
+    <string name="pdesc" value="瞬间移动到地图上的随机位置。技能等级越高，魔量消耗量和冷却时间越少。"/>
+    <string name="ph" value="消耗魔量#mpCon，瞬间移动。冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="22141011">
+    <string name="name" value="雷电之环"/>
+    <string name="desc" value="生成雷电魔法阵，消灭周围的敌人。"/>
+    <string name="h" value="消耗#mpCon MP，最多对#mobCount个敌人以#damage%的伤害发动#attackCount次攻击#\n使用米乐技能后，如果在使用魔力之环过程中，或在伏倒状态下使用狂风之环，可不发动狂风之环，而发动融合技能，但消耗的MP将增至3倍"/>
+  </imgdir>
+  <imgdir name="22141012">
+    <string name="name" value="巨龙俯冲"/>
+    <string name="desc" value="#c[米乐技能]#米乐猛冲向龙神的前方后，挥舞翅膀产生冲击波。用巨龙俯冲攻击带有攻击反射状态的敌人时不会受到伤害。\n#c米乐技能和融合技能不受攻击速度提升的影响。\n需要达到20级以上，才能学习4转技能‘巨龙吐息’#"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害，持续3.5秒\n冷却时间为#cooltime秒\n\c#c[狂风之环]的伤害提高#s%p\n\c#c[巨龙迅捷]的伤害提高#s2%p\n\c#c[风之迅捷]的伤害提高#u%p\n\c#c[雷之迅捷]的伤害提高#u2%p"/>
+  </imgdir>
+  <imgdir name="22141016">
+    <string name="desc" value="在一定时间内降低自己使用的所有攻击魔法的属性抗性。此外，最终伤害永久增加。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内攻击属性抗性降低#x%\n[被动效果：最终伤害增加#mdR%]"/>
+    <string name="name" value="自然力重置"/>
+  </imgdir>
+  <imgdir name="22141017">
+    <string name="name" value="魔法残骸"/>
+    <string name="desc" value="在被融合技能攻击的敌人周围生成魔法残骸。发动生成的魔法残骸可以对龙神周围的敌人造成伤害，一次发动的魔法残骸数量越多，就能造成越多伤害。\n#c为了学习4转技能“强化的魔法残骸”，需要10级以上#"/>
+    <string name="h" value="在受到融合技能攻击的敌人附近生成#v个魔法残骸，冷却时间0.6秒，最大生成上限为#x个，发动时消耗魔量#mpCon，可对最多#mobCount名敌人分散发射，造成#attackCount次#damage%的伤害，每5个魔法残骸伤害提高#w%p，生成的魔法残骸如果不使用，在经过一定时间后就将消失"/>
+  </imgdir>
+  <imgdir name="2215">
+    <string name="bookName" value="龙神第七次"/>
+  </imgdir>
+  <imgdir name="22150000">
+    <string name="desc" value="消耗更多的魔量，提高所有攻击魔法的伤害。"/>
+    <string name="h" value="消耗魔量增加#x%，攻击魔法的最终伤害增加#y%"/>
+    <string name="name" value="法术激化"/>
+    <string name="pdesc" value="消耗更多的魔量，提高所有攻击魔法的伤害。"/>
+    <string name="ph" value="消耗魔量增加#x%，攻击魔法伤害增加#y%"/>
+  </imgdir>
+  <imgdir name="22150004">
+    <string name="name" value="飞龙闪"/>
+    <string name="desc" value="有一定概率使用攻击技能后，发动额外攻击。"/>
+    <string name="h" value="发动有#prop%的概率造成#damage%伤害的飞龙闪"/>
+  </imgdir>
+  <imgdir name="22151001">
+    <string name="desc" value="聚集火焰，攻击多个怪物。给对象造成眩晕效果。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害#attackCount次攻击最多#mobCount名敌人，有#prop%的概率造成#time秒眩晕"/>
+    <string name="hch" value="消耗魔量#mpCon，以#damage%的伤害#attackCount次攻击最多#mobCount名敌人，有#prop%的概率造成#time秒眩晕"/>
+    <string name="name" value="火焰喷射"/>
+    <string name="pdesc" value="聚集火焰，攻击多个怪物。给对象造成眩晕效果。"/>
+    <string name="ph" value="消耗魔量#mpCon，以#damage%的伤害#attackCount次攻击最多#mobCount名敌人，有#prop%的概率造成#time秒眩晕"/>
+  </imgdir>
+  <imgdir name="22151002">
+    <string name="desc" value="攻击一个敌人，刻印龙的印记。之后自己的所有攻击都集中于该对象，在一定时间内造成持续伤害。"/>
+    <string name="h" value="魔量消耗#mpCon，造成#damage%的伤害，#dotTime秒内每#dotInterval秒伤害为#dot%"/>
+    <string name="name" value="魔翼痛击"/>
+    <string name="pdesc" value="攻击一个敌人，刻印龙的印记。之后自己的所有攻击都集中于该对象，在一定时间内造成持续伤害。"/>
+    <string name="ph" value="魔量消耗#mpCon，造成#damage%的伤害，#dotTime秒内每#dotInterval秒伤害为#dot%"/>
+  </imgdir>
+  <imgdir name="22151003">
+    <string name="desc" value="一定时间内增加周围队员的属性抗性。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内属性抗性增加#x%"/>
+    <string name="name" value="抗魔领域"/>
+  </imgdir>
+  <imgdir name="2216">
+    <string name="bookName" value="龙神第八次"/>
+  </imgdir>
+  <imgdir name="22160000">
+    <string name="desc" value="自己的魔量维持在一定范围内时，增强龙的集中力，提高魔力。魔量超出有效范围时，效果消失。"/>
+    <string name="h" value="最大魔量与当前魔量的比例在#x%以上#y%以下时，魔力提高#damage%"/>
+    <string name="name" value="龙的愤怒"/>
+    <string name="pdesc" value="自己的魔量维持在一定范围内时，增强龙的集中力，提高魔力。魔量超出有效范围时，效果消失。"/>
+    <string name="ph" value="最大魔量与当前魔量的比例在#x%以上#y%以下时，魔力提高#damage%"/>
+  </imgdir>
+  <imgdir name="22161001">
+    <string name="desc" value="震动大地，同时攻击多个敌人。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害#attackCount次攻击最多#mobCount名敌人"/>
+    <string name="name" value="地震"/>
+    <string name="pdesc" value="震动大地，同时攻击多个敌人。"/>
+    <string name="ph" value="消耗魔量#mpCon，最多对#mobCount名敌人造成#damage%的伤害\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="22161002">
+    <string name="desc" value="生成魔法阵，对对象施加诅咒。受到诅咒的对象在一定时间内受到更多伤害。"/>
+    <string name="h" value="消耗魔量#mpCon，造成#damage%伤害，在#time秒内最终伤害提高#x%."/>
+    <string name="name" value="鬼刻符"/>
+  </imgdir>
+  <imgdir name="22161003">
+    <string name="desc" value="一定时间内在自己周围展开恢复灵气。灵气范围内的队员持续恢复血量和魔量。"/>
+    <string name="h" value="消耗血量#hpCon，消耗魔量#mpCon，在#time秒内恢复力#x%\n冷却时间：1分钟"/>
+    <string name="name" value="极光恢复"/>
+    <string name="pdesc" value="一定时间内在自己周围展开恢复灵气。灵气范围内的队员持续恢复魔量。"/>
+    <string name="ph" value="消耗血量#hpCon，消耗魔量#mpCon，在#time秒内恢复力#x%\n冷却时间：1分钟"/>
+  </imgdir>
+  <imgdir name="22161004">
+    <string name="name" value="玛瑙的保佑"/>
+    <string name="desc" value="使用后，一定时间内提高包括自身在内所有队员的回避率。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内有#x%的概率额外回避\n[被动效果：状态异常抗性增加#asrR]"/>
+  </imgdir>
+  <imgdir name="22161005">
+    <string name="desc" value="激活技能后，额外消耗魔量，但可对瞬间移动地点上的敌人造成伤害并使其陷入眩晕效果。此外，瞬间移动的移动距离永久增加。\n使用一次会激活，再使用一次就会关闭效果的#cON/OFF技能#需要技能：#c瞬间移动20级以上"/>
+    <string name="h" value="魔量额外消耗#y，给最多#mobCount个敌人造成#damage%的伤害, 有#subProp%的概率在#time秒内昏迷，传送距离永久增加#x"/>
+    <string name="hch" value="额外消耗魔量#y，给最多#mobCount个敌人造成#damage%的伤害,有#hcSubProp%的概率使其眩晕#time秒。传送距离永久增加#x"/>
+    <string name="name" value="快速移动精通"/>
+    <string name="pdesc" value="技能激活后，魔量消耗量增加，但可以给传送地点的敌人造成伤害和昏迷效果。此外，可以永久增加传送距离。\n使用技能时效果激活，再次使用时技能关闭的#c开关技能#。\n需要技能：#c快速移动20级以上#"/>
+    <string name="ph" value="魔量额外消耗#y，给最多#mobCount个敌人造成#damage%的伤害, 有#subProp%的概率在#time秒内昏迷，传送距离永久增加#x"/>
+  </imgdir>
+  <imgdir name="2217">
+    <string name="bookName" value="龙神第九次"/>
+  </imgdir>
+  <imgdir name="22170001">
+    <string name="desc" value="增加魔法熟练度、魔力和爆击伤害。\n所需技能：#c咒语精通10级以上#"/>
+    <string name="h" value="魔法熟练度增加为#mastery%，魔力增加#x、爆击伤害增加#criticaldamage%"/>
+    <string name="name" value="魔法精通"/>
+  </imgdir>
+  <imgdir name="22170030">
+    <string name="desc" value="永久提升力量。"/>
+    <string name="h" value="力量增加#strX"/>
+    <string name="name" value="神圣之力"/>
+  </imgdir>
+  <imgdir name="22170031">
+    <string name="desc" value="永久提升敏捷。"/>
+    <string name="h" value="敏捷增加#dexX"/>
+    <string name="name" value="神圣敏捷"/>
+  </imgdir>
+  <imgdir name="22170032">
+    <string name="desc" value="永久提升智力。"/>
+    <string name="h" value="智力增加#intX"/>
+    <string name="name" value="神圣智力"/>
+  </imgdir>
+  <imgdir name="22170033">
+    <string name="desc" value="永久提升幸运。"/>
+    <string name="h" value="幸运增加#lukX"/>
+    <string name="name" value="神圣幸运"/>
+  </imgdir>
+  <imgdir name="22170034">
+    <string name="desc" value="永久提升爆击率。"/>
+    <string name="h" value="爆击率增加#cr%"/>
+    <string name="name" value="神圣爆击"/>
+  </imgdir>
+  <imgdir name="22170035">
+    <string name="desc" value="永久提升命中率。"/>
+    <string name="h" value="命中率增加#ar%"/>
+    <string name="name" value="神圣精准"/>
+  </imgdir>
+  <imgdir name="22170036">
+    <string name="desc" value="永久提升最大血量。"/>
+    <string name="h" value="最大血量增加#mhpR%"/>
+    <string name="name" value="神圣最大生命"/>
+  </imgdir>
+  <imgdir name="22170037">
+    <string name="desc" value="永久提升最大魔量。"/>
+    <string name="h" value="最大魔量增加#mmpR%"/>
+    <string name="name" value="神圣最大魔法"/>
+  </imgdir>
+  <imgdir name="22170038">
+    <string name="desc" value="永久提升最大恶魔精气"/>
+    <string name="h" value="恶魔最大精气增加50点"/>
+    <string name="name" value="神圣最大恶魔精气"/>
+  </imgdir>
+  <imgdir name="22170039">
+    <string name="desc" value="永久性地提升防御力。"/>
+    <string name="h" value="防御力增加#pddX"/>
+    <string name="name" value="神圣物理防御"/>
+  </imgdir>
+  <imgdir name="22170040">
+    <string name="desc" value="永久提升魔法防御力。"/>
+    <string name="h" value="魔法防御力提升#mddX"/>
+    <string name="name" value="神圣魔法防御"/>
+  </imgdir>
+  <imgdir name="22170041">
+    <string name="desc" value="永久提升移动速度。"/>
+    <string name="h" value="移动速度增加#psdSpeed"/>
+    <string name="name" value="神圣移动"/>
+  </imgdir>
+  <imgdir name="22170042">
+    <string name="desc" value="永久提升跳跃力。"/>
+    <string name="h" value="跳跃力提升#psdJump"/>
+    <string name="name" value="神圣跳跃"/>
+  </imgdir>
+  <imgdir name="22170043">
+    <string name="desc" value="提升魔龙分身的伤害。"/>
+    <string name="h" value="伤害提升#damR%"/>
+    <string name="name" value="魔龙分身-强化"/>
+  </imgdir>
+  <imgdir name="22170044">
+    <string name="desc" value="提升魔龙分身的射程。"/>
+    <string name="h" value="射程增加50"/>
+    <string name="name" value="魔龙分身-范围提升"/>
+  </imgdir>
+  <imgdir name="22170045">
+    <string name="name" value="魔龙分身-无视防御"/>
+    <string name="desc" value="提高魔龙分身的无视防御率。"/>
+    <string name="h" value="无视怪物防御率增加#ignoreMobpdpR%"/>
+  </imgdir>
+  <imgdir name="22170046">
+    <string name="desc" value="提升黑暗迷雾的伤害。"/>
+    <string name="h" value="伤害提升#damR%"/>
+    <string name="name" value="黑暗迷雾-强化"/>
+  </imgdir>
+  <imgdir name="22170047">
+    <string name="desc" value="黑暗迷雾的冷却时间缩短。"/>
+    <string name="h" value="冷却时间缩短#coolTimeR%"/>
+    <string name="name" value="黑暗迷雾-缩短冷却时间"/>
+  </imgdir>
+  <imgdir name="22170048">
+    <string name="desc" value="黑暗迷雾的伤害减少为原来的30%，但攻击次数增加。"/>
+    <string name="h" value="攻击次数增加3次，最终伤害减少为原来的#x%"/>
+    <string name="name" value="黑暗迷雾-分裂伤害"/>
+  </imgdir>
+  <imgdir name="22170049">
+    <string name="desc" value="提升熊熊烈火的伤害。"/>
+    <string name="h" value="伤害提升#damR%"/>
+    <string name="name" value="熊熊烈火-强化"/>
+  </imgdir>
+  <imgdir name="22170050">
+    <string name="name" value="熊熊烈火-无视防御"/>
+    <string name="desc" value="提高熊熊烈火的无视防御率。"/>
+    <string name="h" value="无视怪物防御率增加#ignoreMobpdpR%"/>
+  </imgdir>
+  <imgdir name="22170051">
+    <string name="desc" value="增加熊熊烈火的眩晕时间。"/>
+    <string name="h" value="眩晕时间增加#time秒"/>
+    <string name="name" value="熊熊烈火-坚持"/>
+  </imgdir>
+  <imgdir name="22170060">
+    <string name="name" value="魔力之环Ⅳ"/>
+    <string name="desc" value="魔力之环的最终阶段。#c连续两次#发射高密度凝结的强大魔力体。\n#c为学习5转技能 “魔力漩涡”，需要达到30级以上#"/>
+    <string name="h" value="消耗魔量#mpCon \n[第1击]：对最多#mobCount名敌人造成#attackCount次#damage%的伤害\n[第2击]：对最多#x名敌人造成#z次#y%的伤害\n"/>
+  </imgdir>
+  <imgdir name="22170061">
+    <string name="name" value="魔力之环Ⅳ"/>
+  </imgdir>
+  <imgdir name="22170064">
+    <string name="name" value="吐息 - 回来！"/>
+    <string name="desc" value="#c[融合技能]#米乐立刻中断攻击，回到龙神身边。通过纹章的力量，生成燃烧的火焰屏障。吐息 - 回来！将随着巨龙吐息的技能等级成长。米乐在施展#巨龙吐息，风之吐息，大地吐息#时，龙神使用#c[回来]#就能发动。"/>
+    <string name="h" value="施展对最多#mobCount名敌人造成#damage%的伤害的火焰屏障，持续#time秒"/>
+  </imgdir>
+  <imgdir name="22170065">
+    <string name="desc" value="#c[融合技能]#米乐在进行#c巨龙吐息#攻击时和龙神的魔法共鸣， 脚踩大地，对多个敌人发射火焰吐息。大地吐息将随着巨龙吐息的技能等级成长，即使攻击在攻击反射状态的敌人也不会受到伤害。米乐使用#c巨龙吐息#时，龙神使用#c大地之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon点，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次，除#z%的伤害之外，按照攻击对象的数量分散伤害，持续3.5秒"/>
+    <string name="name" value="大地吐息"/>
+  </imgdir>
+  <imgdir name="22170066">
+    <string name="desc" value="#c[融合技能]#米乐在进行#c巨龙吐息#攻击时和龙神的魔法共鸣，发出能让敌人毙命的强烈火焰旋风吐息。风之吐息将随着巨龙吐息的技能等级成长，即使攻击在攻击反射状态的敌人也不会受到伤害。\n米乐使用#c巨龙吐息#时，龙神使用#c狂风之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害，持续3.5秒，对血量在#x%以下的敌人伤害提高#z%p"/>
+    <string name="name" value="风之吐息"/>
+  </imgdir>
+  <imgdir name="22170067">
+    <string name="desc" value="#c[融合技能]#米乐在进行#c巨龙俯冲#攻击时和龙神的魔法共鸣，粉碎前方冒出的石头，对周围造成最大伤害。大地俯冲将随着巨龙俯冲的技能等级一起成长，即使攻击在攻击反射状态的敌人也不会受到伤害。米乐使用#c巨龙俯冲#时，龙神使用#c大地之环#魔法就会发动。"/>
+    <string name="h" value="消耗魔量#mpCon，生成岩石攻击敌人，在三个地点发生碰撞攻击。每次攻击时，以#damage%的伤害攻击最多#mobCount个敌人#attackCount次"/>
+    <string name="name" value="大地俯冲"/>
+  </imgdir>
+  <imgdir name="22170070">
+    <string name="name" value="强化魔法残骸"/>
+    <string name="desc" value="生成更加强化的魔法残骸。发动生成的魔法残骸就能对龙神周围的敌人造成伤害，一次发动的魔法残骸数量越多，就能造成更多伤害。"/>
+    <string name="h" value="在受到融合技能攻击的敌人附近生成#v个魔法残骸，冷却时间0.4秒，最大生成上限为#x个，发动时消耗魔量#mpCon，可对最多#mobCount名敌人分散发射，造成#attackCount次#damage%的伤害，每5个魔法残骸伤害提高#w%p，生成的魔法残骸如果不使用，在经过一定时间后就将消失"/>
+  </imgdir>
+  <imgdir name="22170071">
+    <string name="name" value="魔法精通"/>
+    <string name="desc" value="增加魔法熟练度、魔力和爆击伤害。\n所需技能：#c咒语精通10级以上#"/>
+    <string name="h" value="魔法熟练度增加量提高#mastery%，魔力提高#x，暴击伤害提高#criticaldamage% "/>
+  </imgdir>
+  <imgdir name="22170072">
+    <string name="name" value="玛瑙的意志"/>
+    <string name="desc" value="通过玛瑙的意志强化感应能力，增加身体能力，减少部分所受伤害，永久增加稳如泰山。"/>
+    <string name="h" value="永久使所受伤害减少#ignoreMobDamR%，稳如泰山提高#stanceProp%"/>
+  </imgdir>
+  <imgdir name="22170074">
+    <string name="desc" value="自己的魔量维持在一定范围内时，增强龙的集中力，提高魔力。魔量超出有效范围时，效果消失。"/>
+    <string name="h" value="最大魔量与当前魔量的比例在#x%以上#y%以下时，魔力提高#damage%"/>
+    <string name="name" value="龙的愤怒"/>
+    <string name="pdesc" value="自己的魔量维持在一定范围内时，增强龙的集中力，提高魔力。魔量超出有效范围时，效果消失。"/>
+    <string name="ph" value="最大魔量与当前魔量的比例在#x%以上#y%以下时，魔力提高#damage%"/>
+  </imgdir>
+  <imgdir name="22170075">
+    <string name="desc" value="将米乐的潜在能力提高至极限，发挥隐藏的能力。"/>
+    <string name="h" value="攻击首领怪时伤害永久提高#bdR%。"/>
+    <string name="name" value="高级龙潜于渊"/>
+  </imgdir>
+  <imgdir name="22170084">
+    <string name="name" value="巨龙迅捷 - 缩短冷却时间"/>
+    <string name="desc" value="减少巨龙迅捷的冷却时间。"/>
+    <string name="h" value="冷却时间减少#coolTimeR%"/>
+  </imgdir>
+  <imgdir name="22170085">
+    <string name="name" value="巨龙迅捷 - 狂风设置"/>
+    <string name="desc" value="增加风之迅捷的风刃的发射个数。"/>
+    <string name="h" value="风刃增加#x个"/>
+  </imgdir>
+  <imgdir name="22170086">
+    <string name="name" value="巨龙迅捷 - 雷电额外攻击"/>
+    <string name="desc" value="增加雷之迅捷的在不同地点冲撞时的攻击次数。"/>
+    <string name="h" value="不同地点的攻击次数增加#attackCount次"/>
+  </imgdir>
+  <imgdir name="22170087">
+    <string name="name" value="巨龙俯冲 - 缩短冷却时间"/>
+    <string name="desc" value="减少巨龙俯冲的冷却时间。"/>
+    <string name="h" value="冷却时间减少#coolTimeR%"/>
+  </imgdir>
+  <imgdir name="22170088">
+    <string name="name" value="巨龙俯冲 - 雷电设置"/>
+    <string name="desc" value="增加雷电俯冲的雷电球的生成个数。"/>
+    <string name="h" value="雷电球增加#x个"/>
+  </imgdir>
+  <imgdir name="22170089">
+    <string name="name" value="巨龙俯冲 - 强化大地"/>
+    <string name="desc" value="提高大地俯冲的伤害。"/>
+    <string name="h" value="伤害增加#damR%"/>
+  </imgdir>
+  <imgdir name="22170090">
+    <string name="name" value="巨龙吐息 - 缩短冷却时间"/>
+    <string name="desc" value="减少巨龙吐息的冷却时间。"/>
+    <string name="h" value="冷却时间减少#coolTimeR%"/>
+  </imgdir>
+  <imgdir name="22170091">
+    <string name="name" value="巨龙吐息 - 大地设置"/>
+    <string name="desc" value="增加大地吐息的吐息分支的个数。"/>
+    <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+  </imgdir>
+  <imgdir name="22170092">
+    <string name="name" value="巨龙吐息 - 风之额外机会"/>
+    <string name="desc" value="增加风之吐息的特殊效果体力条件和伤害增加量。"/>
+    <string name="h" value="对象的最低血量范围条件提高#x%，伤害增加量额外提高#z%p"/>
+  </imgdir>
+  <imgdir name="22170093">
+    <string name="name" value="吐息 - 回来！"/>
+  </imgdir>
+  <imgdir name="22170094">
+    <string name="name" value="大地吐息"/>
+  </imgdir>
+  <imgdir name="22171000">
+    <string name="name" value="冒险岛勇士"/>
+    <string name="desc" value="在一定时间内， 使队员的所有能力值提升一定百分比。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+  </imgdir>
+  <imgdir name="22171002">
+    <string name="desc" value="龙的分身向对象发动连续攻击。一定程度上无视怪物的防御力，攻击首领怪时伤害增加。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击#attackCount次，无视怪物#ignoreMobpdpR%防御率，有#prop%的概率造成眩晕效果。攻击首领怪时，伤害增加#bdR%。"/>
+    <string name="hch" value="消耗魔量#mpCon，以#damage%的伤害攻击#attackCount次，无视怪物防御力#ignoreMobpdpR%，有#prop%的概率造成眩晕效果，攻击首领怪时造成#bdR%额外伤害"/>
+    <string name="name" value="魔龙分身"/>
+    <string name="pdesc" value="龙的分身向对象发动连续攻击。"/>
+    <string name="ph" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="22171003">
+    <string name="desc" value="制造车轮形状的火球，给前方的多个敌人造成火属性伤害。对象受到持续伤害。"/>
+    <string name="h" value="魔量消耗#mpCon，以#damage%的伤害最多对#mobCount个敌人发动#attackCount次攻击，#dotTime秒内每秒伤害#dot%"/>
+    <string name="hch" value="魔量消耗#mpCon，以#damage%的伤害最多对#mobCount个敌人发动#attackCount次攻击，#dotTime秒内每秒伤害#dot%\n冷却时间#hcCooltime秒"/>
+    <string name="name" value="火焰轮"/>
+    <string name="pdesc" value="制造车轮形状的火球，给前方的多个敌人造成火属性伤害。"/>
+    <string name="ph" value="消耗魔量#mpCon，最多对#mobCount名敌人造成#damage%的伤害，攻击#attackCount次\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="22171004">
+    <string name="desc" value="集中精神摆脱状态异常。使用后3秒内免疫状态异常，但不适用于部分状态异常效果。"/>
+    <string name="h" value="消耗魔量#mpCon，冷却时间#cooltime秒"/>
+    <string name="name" value="勇士的意志"/>
+  </imgdir>
+  <imgdir name="22171052">
+    <string name="desc" value="召唤古代玛瑙龙来帮助战斗。古代玛瑙龙的攻击即使攻击在攻击反射状态的敌人也不会受到伤害。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内以#damage%的伤害对古代玛瑙龙周围的#mobCount个敌人发动攻击，在召唤古代玛瑙龙期间，自己的状态异常抗性增加#asrR\n冷却时间#cooltime秒"/>
+    <string name="name" value="召唤玛瑙龙"/>
+  </imgdir>
+  <imgdir name="22171053">
+    <string name="desc" value="重温冒险岛英雄们的誓言，提升伤害。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内伤害增加#indieDamR%\n冷却时间#cooltime秒。队员中只对英雄职业有效"/>
+    <string name="name" value="英雄奥斯"/>
+  </imgdir>
+  <imgdir name="22171054">
+    <string name="desc" value="提升包括自身在内的队员的伤害。"/>
+    <string name="h" value="消耗魔量#mpCon，#time秒内提升#indieDamR%伤害。\n冷却时间#cooltime秒"/>
+    <string name="name" value="狂怒灵魂"/>
+  </imgdir>
+  <imgdir name="22171062">
+    <string name="name" value="大地之环"/>
+    <string name="desc" value="生成不规则的魔法阵，将前方的地面提高，对敌人进行重击。"/>
+    <string name="h" value="消耗#mpCon MP，最多对#mobCount个敌人以#damage%的伤害发动#attackCount次攻击\n使用米乐技能后，在使用魔力之环过程中，或在伏倒状态使用大地之环的话，可不发动大地之环，而发动融合技能，但消耗的MP将增至3倍"/>
+  </imgdir>
+  <imgdir name="22171063">
+    <string name="name" value="巨龙吐息"/>
+    <string name="desc" value="#c[米乐技能]#米乐向前方喷射火焰，焚烧所有敌人。用巨龙吐息攻击带有攻击反射状态的敌人时不会受到伤害。\n作为巨龙吐息的被动效果应用的技能伤害增加量会覆盖巨龙俯冲的伤害增加量。\n#c米乐技能和融合技能不受攻击速度提升的影响。\n需要技能：巨龙俯冲20级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害，持续3秒\n冷却时间为#cooltime秒\n\c #c[狂风之环]的伤害提高#s%p\n\c#c[巨龙迅捷]的伤害提高#s2%p\n\c#c[风之迅捷]的伤害提高#u%p\n\c#c[雷之迅捷]的伤害提高#u2%p\n\c#c[雷电之环]的伤害提高#w%p\n\c#c[巨龙俯冲]的伤害提高#w2%p\n\c#c[雷电俯冲]的伤害提高#q%p\n\c#c[大地俯冲]的伤害提高#q2%p"/>
+  </imgdir>
+  <imgdir name="22171068">
+    <string name="name" value="冒险岛勇士"/>
+    <string name="desc" value="在一定时间内， 使队员的所有能力值提升一定百分比。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+  </imgdir>
+  <imgdir name="22171069">
+    <string name="desc" value="集中精神摆脱状态异常。使用后3秒内免疫状态异常，但不适用于部分状态异常效果。"/>
+    <string name="h" value="消耗魔量#mpCon，冷却时间#cooltime秒"/>
+    <string name="name" value="勇士的意志"/>
+  </imgdir>
+  <imgdir name="22171073">
+    <string name="desc" value="通过玛瑙的祝福提高自己的防御力和魔法攻击力。无法和光照精神力叠加。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内防御力增加#epdd、魔力增加#emad"/>
+    <string name="name" value="玛瑙的祝福"/>
+  </imgdir>
+  <imgdir name="22171080">
+    <string name="desc" value=" 搭乘米乐自由飞行，发出强大的吐息。在搭乘状态下，按下龙神技能键就能发出吐息。"/>
+    <string name="h" value="#time秒内骑上米勒,骑乘中处于无敌状态,以0.3秒间隙对#mobCount名敌人造成#damage%的伤害,攻击#attackCount次, 每次攻击时都会消耗魔量 #q\n冷却时间 #cooltime秒"/>
+    <string name="name" value="龙神"/>
+  </imgdir>
+  <imgdir name="22171081">
+    <string name="desc" value="召唤古代玛瑙龙来帮助战斗。召唤玛瑙龙即使攻击在攻击反射状态的敌人也不会受到伤害。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内古代玛瑙龙以#damage%的伤害对古代玛瑙龙周围的#mobCount个敌人发动#attackCount次攻击，在召唤古代玛瑙龙期间，自己的状态异常抗性增加#asrR\n冷却时间#cooltime秒"/>
+    <string name="name" value="召唤玛瑙龙"/>
+  </imgdir>
+  <imgdir name="22171082">
+    <string name="desc" value="重温冒险岛英雄们的誓言，提升伤害。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内伤害增加#indieDamR%\n冷却时间#cooltime秒。队员中只对英雄职业有效"/>
+    <string name="name" value="英雄奥斯"/>
+  </imgdir>
+  <imgdir name="22171083">
+    <string name="name" value="龙神"/>
+  </imgdir>
+  <imgdir name="22171095">
+    <string name="desc" value="制造寒冷黑暗的武器，同时攻击多个敌人。额外应用暴击率，在冷却时间时提高魔法残骸的伤害。"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害，暴击率额外提高#cr%，冷却时间为#cooltime秒\n冷却时间时魔法残骸的伤害提高#x%"/>
+    <string name="name" value="黑暗迷雾"/>
+  </imgdir>
+  <imgdir name="2218">
+    <string name="bookName" value="龙神第十次"/>
+  </imgdir>
+  <imgdir name="22181000">
+    <string name="desc" value="用玛瑙的祝福的祝福提升自己的防御力、魔力。"/>
+    <string name="h" value="魔量消耗#mpCon，#time秒内防御力增加#epdd、魔力增加#emad"/>
+    <string name="name" value="玛瑙的祝福"/>
+  </imgdir>
+  <imgdir name="22181001">
+    <string name="desc" value="向对方喷射火焰，造成巨大伤害，并使其在一定时间内昏迷。可以在一定程度上无视怪物的防御力。"/>
+    <string name="h" value="消耗魔量#mpCon，以最多#damage%的伤害#attackCount次攻击#mobCount名敌人，有#prop%的概率造成#time秒眩晕，无视怪物#ignoreMobpdpR%的防御力"/>
+    <string name="hch" value="消耗魔量#mpCon，以最大#damage%的伤害攻击#attackCount次，有#hcProp%的概率眩晕#hcTime秒，无视怪物#ignoreMobpdpR%的防御力"/>
+    <string name="name" value="熊熊烈火"/>
+    <string name="pdesc" value="向对方喷射火焰，造成巨大伤害，并使其在一定时间内昏迷。"/>
+    <string name="ph" value="消耗魔量#mpCon，最多造成#damage%的伤害，攻击#attackCount次，有#prop%的概率昏迷#time秒"/>
+  </imgdir>
+  <imgdir name="22181002">
+    <string name="desc" value="召唤冰冷黑暗的雾，同时攻击多个敌人。爆击概率增加。"/>
+    <string name="h" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害，爆击概率增加#cr%，冷却时间#cooltime秒"/>
+    <string name="name" value="黑暗迷雾"/>
+    <string name="pdesc" value="召唤冰冷黑暗的雾，同时攻击多个敌人。爆击概率增加。"/>
+    <string name="ph" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害，爆击概率增加#cr%，冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="22181003">
+    <string name="desc" value="施展保护对象灵魂的增益技能。增益效果随机应用于队员，在灵魂之石增益状态下死亡时，可以原地复活。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内为#y个队员附加灵魂之石效果，死亡时可以以#x%的血量原地复活\n冷却时间#cooltime秒"/>
+    <string name="name" value="灵魂之石"/>
+  </imgdir>
+  <imgdir name="22181004">
+    <string name="desc" value="一定时间内减少部分被攻击伤害，增加稳如泰山率。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内受到的攻击减少#x%。受到敌人的攻击时，有#prop%的概率不被击退。"/>
+    <string name="name" value="玛瑙的意志"/>
+  </imgdir>
+  <imgdir name="430">
+    <string name="bookName" value="见习刀客的基础"/>
+  </imgdir>
+  <imgdir name="4300000">
+    <string name="name" value="精准双刀"/>
+    <string name="desc" value="增加短刀和刀的熟练度。\n#c要学习2转技能“双刀加速”，需要5级以上，要学习4转技能“双刀专家”，需要10级以上#"/>
+    <string name="h" value="短刀和刀的熟练度增加#mastery%"/>
+  </imgdir>
+  <imgdir name="4300008">
+    <string name="name" value="快刀斩强化"/>
+    <string name="desc" value="强化快刀斩。\n所需技能：#c快刀斩10级以上#"/>
+    <string name="h" value="消耗#x魔量，对最多#z名敌人以#y%伤害攻击#u次"/>
+  </imgdir>
+  <imgdir name="4300009">
+    <string name="name" value="暗影轻功"/>
+    <string name="desc" value="永久提升本人的移动速度、跳跃力和最大移动速度。"/>
+    <string name="h" value="移动速度永久提升#psdSpeed，跳跃力增加#psdJump，最多移动速度提升#speedMax"/>
+  </imgdir>
+  <imgdir name="4301001">
+    <string name="desc" value="向最多2个敌人快速攻击3次。\n需要技能：#c二连击10级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，给最多2个敌人造成#damage%的伤害，攻击3次"/>
+    <string name="name" value="三连击"/>
+    <string name="pdesc" value="向最多2个敌人快速攻击3次。\n需要技能：#c二连击10级以上#"/>
+    <string name="ph" value="消耗魔量#mpCon，给最多2个敌人造成#damage%的伤害，攻击3次"/>
+  </imgdir>
+  <imgdir name="4301002">
+    <string name="desc" value="消耗魔量，在一定时间内使攻击速度提升2个阶段。\n前置技能：#c精准双刀5级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内提高攻击速度"/>
+    <string name="name" value="快速双刀"/>
+  </imgdir>
+  <imgdir name="4301003">
+    <string name="name" value="暗影轻功"/>
+    <string name="desc" value="在一定时间内提高自己的移动速度和跳跃力，永久提高移动速度。"/>
+    <string name="h" value="消耗#mpConMP，#time秒内移动速度增加#indieSpeed，跳跃力增加#indieJump\n[被动效果：最大移动速度增加#speedMax]"/>
+  </imgdir>
+  <imgdir name="4301004">
+    <string name="desc" value="快速冲击，向前方多个敌人施展强大的旋转攻击。\n可以连接奔腾之刃。"/>
+    <string name="h" value="消耗魔量#mpCon，向最多#mobCount个敌人施加#damage%伤害的旋转攻击"/>
+    <string name="name" value="龙卷风"/>
+    <string name="pdesc" value="快速冲击，向前方多个敌人施展强大的旋转攻击。\n15级效果 : 可以和10级以上的奔腾之刃组合起来使用。"/>
+    <string name="ph" value="消耗魔量#mpCon，向最多#mobCount个敌人施加#damage%伤害的旋转攻击"/>
+  </imgdir>
+  <imgdir name="4301005">
+    <string name="name" value="龙卷风"/>
+  </imgdir>
+  <imgdir name="4301007">
+    <string name="name" value="快刀斩强化"/>
+    <string name="desc" value="对前方的多个敌人交叉刀刃快速斩击。\n需要技能：#c快刀斩10级以上#"/>
+    <string name="h" value="消耗#mpCon魔量，对最多#mobCount名敌人以#damage%伤害攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="431">
+    <string name="bookName" value="双刀客教程"/>
+  </imgdir>
+  <imgdir name="4310004">
+    <string name="desc" value="和黑暗融为一体，永久增加最大血量、状态异常抗性和所有属性抗性。"/>
+    <string name="h" value="最大血量增加#mhpR%，状态异常抗性增加#asrR，所有属性抗性增加#terR%"/>
+    <string name="name" value="暗影抵抗"/>
+    <string name="pdesc" value="和黑暗融为一体，永久增加最大血量、状态异常抗性、所有属性抗性。"/>
+    <string name="ph" value="最大血量增加#mhpR%，状态异常抗性增加#asrR%，所有属性抗性增加#terR%"/>
+  </imgdir>
+  <imgdir name="4310005">
+    <string name="name" value="命运"/>
+    <string name="desc" value="增加自己的攻击力，即使受到敌人的攻击，也不会被击退。"/>
+    <string name="h" value="攻击力增加#padX，稳如泰山率提高#stanceProp%"/>
+  </imgdir>
+  <imgdir name="4310006">
+    <string name="desc" value="通过锻炼身体，永久提高运气和敏捷。"/>
+    <string name="h" value="永久性地使运气增加#lukX，敏捷增加#dexX"/>
+    <string name="name" value="物理训练"/>
+  </imgdir>
+  <imgdir name="4310010">
+    <string name="name" value="双刀加速"/>
+    <string name="desc" value="攻击速度与运气增加。\n所需技能：#c精准双刀5级以上#"/>
+    <string name="h" value="攻击速度提升2阶段，运气提高#lukX"/>
+  </imgdir>
+  <imgdir name="4311001">
+    <string name="desc" value="在一定时间内增加自己的移动速度和跳跃力。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内移动速度增加#speed，跳跃力增加#jump"/>
+    <string name="name" value="暗影轻功"/>
+  </imgdir>
+  <imgdir name="4311002">
+    <string name="desc" value="以非常快的速度发动连续攻击。"/>
+    <string name="h" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#attackCount次"/>
+    <string name="name" value="流云斩"/>
+    <string name="pdesc" value="以非常快的速度发动连续攻击。"/>
+    <string name="ph" value="消耗魔量#mpCon，造成#damage%的伤害，攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="4311003">
+    <string name="name" value="双刀风暴"/>
+    <string name="desc" value="向前方移动，攻击多个敌人。\n#c6级以上：需要能手册#\n#c需要达到20级以上，才能掌握3转技能‘血雨腥风’#"/>
+    <string name="h" value="消耗#mpCon魔量，对最多#mobCount名敌人以#damage%伤害攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="4311005">
+    <string name="desc" value="在一定时间内提高自己的攻击力。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内攻击力增加#indiePad"/>
+    <string name="name" value="命运"/>
+    <string name="pdesc" value="在一定时间内提高自己的攻击力。"/>
+    <string name="ph" value="消耗魔量#mpCon，在#time秒内攻击力增加#PVPdamage"/>
+  </imgdir>
+  <imgdir name="4311007">
+    <string name="name" value="暗影二段跳"/>
+    <string name="desc" value="在跳跃中使用，可以向前进方向再跳跃一次。技能等级越高，跳跃距离越远。可以用作跳跃键。"/>
+    <string name="h" value="消耗魔量#mpCon，跳跃一定距离"/>
+  </imgdir>
+  <imgdir name="4311009">
+    <string name="desc" value="消耗魔量，在一定时间内使攻击速度提升2个阶段。\n前置技能：#c精准双刀5级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内提高攻击速度"/>
+    <string name="name" value="快速双刀"/>
+  </imgdir>
+  <imgdir name="432">
+    <string name="bookName" value="双刀侠之路"/>
+  </imgdir>
+  <imgdir name="4320005">
+    <string name="name" value="武器用毒液"/>
+    <string name="desc" value="在短刀和双刀上涂上永不消失的毒。有一定概率使对象中毒，持续受到伤害。中毒效果无法叠加，也无法让对象的血量降到1以下。\n#c需要达到20级以上，才可学习4转技能“致命毒液”#"/>
+    <string name="h" value="攻击时有#prop%的概率追加#dotTime秒的持续伤害，每#dotInterval秒伤害为#dot%"/>
+    <string name="pdesc" value="永久性地在短刀上涂毒。有一定几率使对象中毒，持续受到毒素伤害。中毒效果无法重复，对象的血量不会下降到1以下。"/>
+    <string name="ph" value="攻击时有#prop%的概率追加#dotTime秒的持续伤害，每#dotInterval秒伤害为#dot%"/>
+  </imgdir>
+  <imgdir name="4320008">
+    <string name="name" value="双刀风暴强化"/>
+    <string name="desc" value="强化双刀风暴。\n所需技能：#c双刀风暴20级以上"/>
+    <string name="h" value="消耗#x魔量，对最多#z名敌人以#u%伤害攻击#y次"/>
+  </imgdir>
+  <imgdir name="4321000">
+    <string name="desc" value="快速冲锋，给前方的多个敌人施加强力的旋转攻击。\n[发动冲锋：方向键#c→→#以及#c←←#，旋转攻击：#c冲锋过程中输入攻击键#]\n20级效果：可接在10级以上的暗影飞跃斩后作为连续技使用\n#c6级以上：需要能手册#"/>
+    <string name="h" value="消耗魔量#mpCon，以#x%的速度冲锋，额外消耗魔量#z，给最多#v个敌人造成#u%伤害"/>
+    <string name="name" value="龙卷风"/>
+    <string name="pdesc" value="快速冲锋，给前方的多个敌人施加强力的旋转攻击。\n[发动冲锋：方向键#c→→#以及#c←←#，旋转攻击：#c冲锋过程中输入攻击键#]\n20级效果：可接在10级以上的暗影飞跃斩后作为连续技使用\n#c6级以上：需要能手册#"/>
+    <string name="ph" value="消耗魔量#mpCon，以#x%速度冲锋，额外消耗魔量 #z，向最多#v个敌人施加#u%伤害的旋转攻击\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4321001">
+    <string name="name" value="龙卷风"/>
+  </imgdir>
+  <imgdir name="4321002">
+    <string name="name" value="闪光弹"/>
+    <string name="desc" value="投掷闪光弹，在一定时间内隔绝多个敌人的视野。可以降低对象的命中率，并给该敌人造成额外伤害。对首领怪同样有效，但持续时间减半。"/>
+    <string name="h" value="消耗MP#mpCon，对最多#mobCount人造成#damage%伤害，有#prop%的概率在#time秒内使命中值降低#x%，对于该敌人，自己所有技能的伤害提高10%。 冷却时间 #cooltime秒"/>
+  </imgdir>
+  <imgdir name="4321004">
+    <string name="desc" value="发动强力的剑气，将敌人打到空中。攻击半空中的敌人，可以造成额外伤害。部分怪物会进行抵抗，不会眩晕。"/>
+    <string name="h" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害。在浮空状态下攻击时，技能伤害增加#x%。"/>
+    <string name="name" value="悬浮地刺"/>
+    <string name="pdesc" value="发动强力的剑气，有一定概率将敌人打到空中。攻击半空中的敌人，可以造成额外伤害。"/>
+    <string name="ph" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害，有#prop%的概率打到空中，在半空状态下攻击时，造成额外伤害#x%"/>
+  </imgdir>
+  <imgdir name="4321006">
+    <string name="name" value="暗影飞跃斩"/>
+    <string name="desc" value="从空中向对角线下方下降，同时攻击多个敌人，有一定概率使对方陷入晕眩状态。\n可以连接龙卷风和血雨腥风。\n#c6级以上：需要能手册#"/>
+    <string name="h" value="消耗魔量#mpCon，最多对#mobCount名敌人造成#damage%的伤害，攻击#attackCount次， 在#time秒内有#prop%概率晕眩"/>
+  </imgdir>
+  <imgdir name="4321007">
+    <string name="name" value="双刀风暴强化"/>
+    <string name="desc" value="攻击前方多个敌人。\n需要技能：#c双刀风暴20级以上"/>
+    <string name="h" value="消耗#mpCon魔量，对最多#mobCount名敌人以#damage%伤害攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="433">
+    <string name="bookName" value="血刀之路"/>
+  </imgdir>
+  <imgdir name="4330001">
+    <string name="name" value="进阶隐身术"/>
+    <string name="desc" value="修炼隐身术，在隐身状态下进行攻击或使用技能时，隐身状态有一定概率不会解除。此外，受到攻击时，隐身有一定概率自动发动，在隐身术状态下进行攻击时，最终伤害增加。\n但是，通过被攻击时发动的隐身术回避造成最大血量一定比例伤害的攻击时，无冷却时间，但隐身术的持续时间减少。\n需要技能：#c隐身术10级以上#"/>
+    <string name="h" value="在隐身术状态下使用攻击和技能时，有#prop%的概率不解除隐身。受到攻击时，有#x%的概率自动发动隐身术。在隐身术状态下攻击时，最终伤害增加#y%\n通过被攻击时发动的隐身术回避造成最大血量一定比例伤害的攻击时，隐身剩余持续时间减少最大值的#z%"/>
+  </imgdir>
+  <imgdir name="4330007">
+    <string name="desc" value="攻击时，有一定概率恢复血量。"/>
+    <string name="h" value="攻击时，有#prop%的概率恢复最大血量的#x%。"/>
+    <string name="name" value="生命偷取"/>
+    <string name="pdesc" value="攻击时有一定概率恢复血量。但一次恢复的血量不能超过最大值的20%。"/>
+    <string name="ph" value="攻击时有#prop%的概率将攻击伤害的#x%转化为血量"/>
+  </imgdir>
+  <imgdir name="4330008">
+    <string name="desc" value="和黑暗融为一体，永久增加最大血量、状态异常抗性和所有属性抗性。"/>
+    <string name="h" value="最大血量增加#mhpR%，状态异常抗性增加#asrR，所有属性抗性增加#terR%"/>
+    <string name="name" value="永恒黑暗"/>
+    <string name="pdesc" value="和黑暗融为一体，永久增加最大血量、状态异常抗性、所有属性抗性。"/>
+    <string name="ph" value="最大血量增加#mhpR%，状态异常抗性增加#asrR%，所有属性抗性增加#terR%"/>
+  </imgdir>
+  <imgdir name="4330009">
+    <string name="name" value="影子闪避"/>
+    <string name="desc" value="有一定概率回避敌人的攻击。回避成功后，在7秒内攻击力提高，下一次攻击百分之百造成暴击。\n#c11级以上：需要能手册#"/>
+    <string name="h" value="有#er%的概率回避，回避成功后在#time秒内攻击力提高#indiePad，而且之后的所有攻击判定为暴击。回避成功时，接下来5秒内不发动。"/>
+    <string name="pdesc" value="有一定概率回避敌人的攻击。回避成功后，在7秒内攻击力提高，下一次攻击百分之百造成暴击。\n#c11级以上：需要能手册#"/>
+    <string name="ph" value="有#er%的概率回避，回避成功后在#time秒内攻击力提高#indiePad，而且之后的所有攻击判定为暴击。回避成功时，接下来5秒内不发动。"/>
+  </imgdir>
+  <imgdir name="4331000">
+    <string name="name" value="血雨腥风"/>
+    <string name="desc" value="飞花院乱舞秘籍，以华丽的动作快速攻击两侧的敌人。被动效果：永久增加龙卷风和暗影飞跃斩的伤害。\n可衔接使用龙卷风、奔腾之刃。\n需要技能：#c双刀风暴20级以上#"/>
+    <string name="h" value="消耗魔量#mpCon，对最多#mobCount名敌人造成#attackCount次#damage%的伤害\n[被动效果：龙卷风和和暗影飞跃斩的伤害提高#damR%]"/>
+  </imgdir>
+  <imgdir name="4331002">
+    <string name="name" value="镜像分身"/>
+    <string name="desc" value="在一定时间内召唤出和自己一模一样的分身。分身没有HP，起到辅助攻击的作用。部分技能中不会召唤出分身，变换面貌或受到限制行动的攻击时，分身就会消失。不适用于召唤技能，全职业通用5转技能和部分技能。\n#c11级以上：需要能手册#\n#c需要达到20级以上，才能学习4转技能“傀儡召唤”#"/>
+    <string name="h" value="消耗魔量#mpCon点，#time秒内在除了闪光弹之外的所有攻击中，召唤出可造成最终伤害#x%的额外打击的影子"/>
+  </imgdir>
+  <imgdir name="4331003">
+    <string name="desc" value="召唤猫头鹰的精灵，对1个敌人发动必杀攻击。必杀成功时，一定次数以内的攻击力提高。但部分技能的攻击力无法提高。"/>
+    <string name="h" value="消耗魔量#mpCon，有#prop%的几率一击必杀，一击必杀时伤害#y%，奖励#x次，冷却时间#cooltime秒"/>
+    <string name="name" value="死亡猫头鹰"/>
+    <string name="pdesc" value="召唤猫头鹰的精灵，对一个敌人发动攻击。可以造成致命伤害。"/>
+    <string name="ph" value="消耗魔量#mpCon，攻击造成#damage%伤害\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4331005">
+    <string name="desc" value="从空中向对角线方向下降，攻击范围内的多个敌人，有一定几率造成昏迷。为了使用技能，需要120以上的跳跃力。\n10级以上效果：发动后可接20级龙卷风或10级血雨腥风，作为连续技使用\n#c6级以上：需要能手册#\n需要技能：#c暗影轻功20级#"/>
+    <string name="h" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害，攻击2次,有#prop%的几率昏迷#time秒"/>
+    <string name="name" value="暗影飞跃斩"/>
+    <string name="pdesc" value="从空中向对角线方向下降，攻击范围内的多个敌人，有一定几率造成昏迷。为了使用技能，需要120以上的跳跃力。\n10级以上效果：发动后可接20级龙卷风或10级血雨腥风，作为连续技使用\n#c6级以上：需要能手册#\n需要技能：#c暗影轻功20级#"/>
+    <string name="ph" value="消耗魔量#mpCon，最多对#mobCount名敌人造成#damage%的伤害，攻击2次， 在#time秒内有#prop%概率晕眩\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4331006">
+    <string name="name" value="地狱锁链"/>
+    <string name="desc" value="将1个敌人拉近后发动连续攻击，并有一定概率使其眩晕。发动和攻击途中进入无敌状态，可在使用其他技能的过程中使用。地狱锁链的所有攻击均造成暴击，对无法动弹的固定型怪物的使用范围有限。"/>
+    <string name="h" value="消耗#mpCon魔量，使用后#t秒内适用无敌效果\n锁链对命中的敌人以#u2%的伤害攻击#w2次后，发动连击时，以#damage%的伤害攻击#attackCount次，并有#prop%的概率使敌人眩晕#time秒，额外暴击率#cr%，攻击期间无敌\\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4331011">
+    <string name="name" value="奔腾之刃"/>
+    <string name="desc" value="飞花院冲天秘籍。升到空中后，斩击前方的敌人。\n与上方向键同时使用时，可再上升一些高度，仅限1次。该命令技能只能在空中使用1次，若在地面上使用命令技能上升后，则无法在空中使用命令技能。\n可以连接暗影飞跃斩。"/>
+    <string name="h" value="消耗#mpConMP，以#damage%的伤害攻击前方#mobCount个敌人#attackCount次，并使其浮空。"/>
+  </imgdir>
+  <imgdir name="4331012">
+    <string name="name" value="地狱锁链"/>
+  </imgdir>
+  <imgdir name="434">
+    <string name="bookName" value="暗影双刀的秘籍"/>
+  </imgdir>
+  <imgdir name="4340001">
+    <string name="name" value="武器用毒液"/>
+    <string name="desc" value="永久性地在短刀上涂毒。有一定几率使对象中毒，持续受到毒素伤害。中毒效果无法重复，对象的血量不会下降到1以下。"/>
+    <string name="h" value="攻击时有#prop%的概率追加#dotTime秒的持续伤害，每#dotInterval秒伤害为#dot%"/>
+    <string name="pdesc" value="永久性地在短刀上涂毒。有一定概率使对象中毒，持续受到毒素伤害。中毒效果无法重复，对象的血量不会下降到1以下。"/>
+    <string name="ph" value="攻击时有#prop%的概率追加#dotTime秒的持续伤害，每#dotInterval秒伤害为#dot%"/>
+  </imgdir>
+  <imgdir name="4340007">
+    <string name="name" value="荆棘"/>
+    <string name="desc" value="提高自己的攻击力，受到敌人的攻击也不会被击退。\n#c11级以上：需要能手册#"/>
+    <string name="h" value="攻击力增加#padX，稳如泰山率增加#stanceProp%。"/>
+  </imgdir>
+  <imgdir name="4340010">
+    <string name="name" value="锋利"/>
+    <string name="desc" value="增加爆击率和爆击伤害。"/>
+    <string name="h" value="暴击率提高#cr%，暴击伤害增加#criticaldamage%"/>
+  </imgdir>
+  <imgdir name="4340012">
+    <string name="name" value="致命毒液"/>
+    <string name="desc" value="永久性地提高武器用毒液的中毒概率和毒素伤害，增加毒素重叠次数。\n需要技能：#c武器用毒液20级以上#"/>
+    <string name="h" value="攻击时有#prop%的概率追加#dotTime秒的持续伤害，每#dotInterval秒造成#dot%伤害，可叠加#dotSuperpos次"/>
+    <string name="pdesc" value="永久性地提高武器用毒液的中毒概率和毒素伤害，增加毒素重叠次数。\n需要技能：#c武器用毒液20级以上#"/>
+    <string name="ph" value="攻击时有#prop%的概率追加#dotTime秒的持续伤害，每#dotInterval秒伤害为#dot%，可叠加#dotSuperpos次"/>
+  </imgdir>
+  <imgdir name="4340013">
+    <string name="name" value="双刀专家"/>
+    <string name="desc" value="增加短刀和刀的熟练度、攻击力以及最终伤害。\n#c11级以上：需要能手册#\n所需技能：#c精准双刀10级以上#"/>
+    <string name="h" value="短刀和刀的熟练度增加量提高至#mastery%，攻击力提高#x, 最终伤害提高#pdR%"/>
+  </imgdir>
+  <imgdir name="4340030">
+    <string name="desc" value="永久提升力量。"/>
+    <string name="h" value="力量增加#strX点"/>
+    <string name="name" value="神圣之力"/>
+  </imgdir>
+  <imgdir name="4340031">
+    <string name="desc" value="永久提升敏捷。"/>
+    <string name="h" value="敏捷增加#dexX点"/>
+    <string name="name" value="神圣敏捷"/>
+  </imgdir>
+  <imgdir name="4340032">
+    <string name="desc" value="永久提升智力。"/>
+    <string name="h" value="智力增加#intX点"/>
+    <string name="name" value="神圣智力"/>
+  </imgdir>
+  <imgdir name="4340033">
+    <string name="desc" value="永久提升运气。"/>
+    <string name="h" value="运气增加#lukX点"/>
+    <string name="name" value="神圣幸运"/>
+  </imgdir>
+  <imgdir name="4340034">
+    <string name="desc" value="永久提升爆击率。"/>
+    <string name="h" value="爆击率增加#cr%"/>
+    <string name="name" value="神圣爆击"/>
+  </imgdir>
+  <imgdir name="4340035">
+    <string name="desc" value="永久提升命中率。"/>
+    <string name="h" value="命中率增加#ar%"/>
+    <string name="name" value="神圣精准"/>
+  </imgdir>
+  <imgdir name="4340036">
+    <string name="desc" value="永久提升最大血量。"/>
+    <string name="h" value="最大血量增加#mhpR%"/>
+    <string name="name" value="神圣最大生命"/>
+  </imgdir>
+  <imgdir name="4340037">
+    <string name="desc" value="永久提升最大魔量。"/>
+    <string name="h" value="最大魔量增加#mmpR%"/>
+    <string name="name" value="神圣最大魔法"/>
+  </imgdir>
+  <imgdir name="4340038">
+    <string name="desc" value="永久提升最大恶魔精气"/>
+    <string name="h" value="恶魔最大精气增加50点"/>
+    <string name="name" value="神圣最大恶魔精气"/>
+  </imgdir>
+  <imgdir name="4340039">
+    <string name="desc" value="永久性地提升防御力。"/>
+    <string name="h" value="防御力增加#pddX"/>
+    <string name="name" value="神圣物理防御"/>
+  </imgdir>
+  <imgdir name="4340040">
+    <string name="desc" value="永久提升魔法防御力。"/>
+    <string name="h" value="魔法防御力增加#mddX点"/>
+    <string name="name" value="神圣魔法防御"/>
+  </imgdir>
+  <imgdir name="4340041">
+    <string name="desc" value="永久提升移动速度。"/>
+    <string name="h" value="移动速度增加#psdSpeed点"/>
+    <string name="name" value="神圣移动"/>
+  </imgdir>
+  <imgdir name="4340042">
+    <string name="desc" value="永久提升跳跃力。"/>
+    <string name="h" value="跳跃力增加#psdJump点"/>
+    <string name="name" value="神圣跳跃"/>
+  </imgdir>
+  <imgdir name="4340043">
+    <string name="name" value="奔腾之刃-无视防御"/>
+    <string name="desc" value="增加奔腾之刃的无视防御率。"/>
+    <string name="h" value="无视怪物防御力增加#ignoreMobpdpR%"/>
+  </imgdir>
+  <imgdir name="4340044">
+    <string name="name" value="奔腾之刃-强化"/>
+    <string name="desc" value="增加奔腾之刃的伤害。"/>
+    <string name="h" value="伤害增加#damR%"/>
+  </imgdir>
+  <imgdir name="4340045">
+    <string name="name" value="奔腾之刃-额外攻击"/>
+    <string name="desc" value="增加奔腾之刃的攻击次数。"/>
+    <string name="h" value="攻击次数增加#attackCount次"/>
+  </imgdir>
+  <imgdir name="4340046">
+    <string name="desc" value="增加幽灵一击的伤害。"/>
+    <string name="h" value="伤害增加#damR%"/>
+    <string name="name" value="幽灵一击-强化"/>
+  </imgdir>
+  <imgdir name="4340047">
+    <string name="desc" value="增加幽灵一击的无视怪物防御力数值。"/>
+    <string name="h" value="无视防御力增加#ignoreMobpdpR%"/>
+    <string name="name" value="幽灵一击-无视防御"/>
+  </imgdir>
+  <imgdir name="4340048">
+    <string name="desc" value="增加幽灵一击的攻击次数。"/>
+    <string name="h" value="攻击次数增加#attackCount次"/>
+    <string name="name" value="幽灵一击-额外攻击"/>
+  </imgdir>
+  <imgdir name="4340049">
+    <string name="desc" value="增加突然袭击的伤害。"/>
+    <string name="h" value="伤害增加#damR%"/>
+    <string name="name" value="突然袭击-强化"/>
+  </imgdir>
+  <imgdir name="4340050">
+    <string name="desc" value="增加突然袭击的持续伤害。"/>
+    <string name="h" value="伤害增加#dot%"/>
+    <string name="name" value="突然袭击-持续伤害强化"/>
+  </imgdir>
+  <imgdir name="4340051">
+    <string name="desc" value="减少突然袭击的冷却时间。"/>
+    <string name="h" value="冷却时间减少#coolTimeR%"/>
+    <string name="name" value="突然袭击-缩短冷却时间"/>
+  </imgdir>
+  <imgdir name="4340055">
+    <string name="desc" value="增加暴怒刀阵的伤害。"/>
+    <string name="h" value="伤害增加#damR%"/>
+    <string name="name" value="暴怒刀阵-强化"/>
+  </imgdir>
+  <imgdir name="4340056">
+    <string name="desc" value="暴怒刀阵的无视防御率。"/>
+    <string name="h" value="无视怪物防御力增加#ignoreMobpdpR%"/>
+    <string name="name" value="暴怒刀阵-无视防御"/>
+  </imgdir>
+  <imgdir name="4340057">
+    <string name="desc" value="提高暴怒刀阵的可攻击的怪物数量上限。"/>
+    <string name="h" value="可攻击的怪物数量上限增加#targetPlus"/>
+    <string name="name" value="暴怒刀阵-额外目标"/>
+  </imgdir>
+  <imgdir name="4341000">
+    <string name="name" value="冒险岛勇士"/>
+    <string name="desc" value="在一定时间内， 使队员的所有能力值提升一定百分比。不与冒险岛勇士、希纳斯骑士、诺巴勇士、翼人勇士、异界勇士、阿尼玛勇士、伦娜之庇护的效果叠加。"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒内，通过手动加能力点的所有能力值增加#x%"/>
+  </imgdir>
+  <imgdir name="4341002">
+    <string name="name" value="终极斩"/>
+    <string name="desc" value="消耗大量血量，对多个敌人发动非常强的攻击。使用时，在一定时间内可以造成更高伤害。"/>
+    <string name="h" value="消耗#mpCon魔量，最大血量的#x%，以#damage%的伤害攻击最多#mobCount个敌人。蓄力时间较短时，伤害减少\n。使用时，#time秒内最终伤害提高#w%，使用后在#v秒内应用无敌效果。冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4341003">
+    <string name="name" value="怪物炸弹"/>
+    <string name="desc" value="在1个怪物身上贴上爆炸符，爆炸符在贴上后经过一定时间后爆炸，给范围内的怪物及施展者造成伤害。\n#c11级以上：需要能手册#"/>
+    <string name="h" value="消耗魔量#mpCon，在#time秒后造成#damage%的伤害，爆炸，冷却时间#cooltime秒"/>
+    <string name="pdesc" value="在1个怪物身上贴上爆炸符，爆炸符在贴上后经过一定时间后爆炸，给范围内的怪物及施展者造成伤害。\n#c11级以上：需要能手册#"/>
+    <string name="ph" value="消耗魔量#mpCon，在#time秒后造成#damage%的伤害，爆炸，冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4341004">
+    <string name="name" value="暴怒刀阵"/>
+    <string name="desc" value="运用飞花院的旋风秘籍，双手持剑快速旋转，并斩击周围敌人。有一定概率无视怪物的防御力。#c11级以上：需要能手册##\n#c学习5转技能“潜行利刃“需要达到30级以上"/>
+    <string name="h" value="消耗魔量#mpCon，最多对#mobCount名敌人造成#damage%的伤害，攻击#attackCount次， 无视怪物#ignoreMobpdpR%防御率"/>
+    <string name="pdesc" value="利用飞花院的旋风秘籍，手持双剑快速旋转，斩击周围的敌人。无视怪物一定量的防御力\n#c11级以上：需要能手册#"/>
+    <string name="ph" value="消耗魔量#mpCon，给最多#mobCount个敌人造成#damage%的伤害，攻击#attackCount次"/>
+  </imgdir>
+  <imgdir name="4341006">
+    <string name="name" value="傀儡召唤"/>
+    <string name="desc" value="将作为镜像召唤出来的自己的影子分离出来。分身起到吸引敌人的攻击，保护自己不受敌人攻击的作用，在受到攻击的时候发动影子闪避。只能在使用镜像分身技能过程中使用。此外，永久增加暗影双刀的防御力和回避率。\n#c11级以上 : 需要能手册#\n需要技能：#c镜像分身20级以上#"/>
+    <string name="h" value="主动效果：魔量消耗#mpCon，#time秒内召唤血量为#x的暗影，影子召唤期间受到的伤害减少 #y%, 受到攻击时触发影子闪避\n部分攻击不会对影子造成伤害\n[被动效果：有#er%的概率回避敌人的攻击，防御力增加#pddR%]"/>
+  </imgdir>
+  <imgdir name="4341007">
+    <string name="desc" value="在一定时间内提高自己的攻击力，即使受到敌人的攻击也不会被击退。\n#c11级以上 : 需要能手册#"/>
+    <string name="h" value="消耗魔量#mpCon，#time秒内攻击力增加#epad，有#prop%概率不被击退。"/>
+    <string name="name" value="荆棘"/>
+    <string name="pdesc" value="在一定时间内提高自己的大乱斗攻击力，即使受到敌人的攻击也不会被击退。\n#c11级以上 : 需要能手册#"/>
+    <string name="ph" value="消耗魔量#mpCon，#time秒内大乱斗攻击力增加#PVPdamage，有#prop%概率不被击退。"/>
+  </imgdir>
+  <imgdir name="4341008">
+    <string name="desc" value="集中精神摆脱状态异常。使用后3秒内免疫状态异常，但不适用于部分状态异常效果。"/>
+    <string name="h" value="消耗魔量#mpCon，冷却时间#cooltime秒"/>
+    <string name="name" value="勇士的意志"/>
+  </imgdir>
+  <imgdir name="4341009">
+    <string name="name" value="幽灵一击"/>
+    <string name="desc" value="运用飞花院的激怒秘籍，对前方的敌人发动致命性的连续攻击。可以无视一定水平的怪物防御力。\n#c需要达到30级以上，才可学习5转技能“潜行利刃“"/>
+    <string name="h" value="消耗#mpCon魔量， 以#damage%的伤害攻击#mobCount个敌人#attackCount次，无视怪物的防御率#ignoreMobpdpR%"/>
+  </imgdir>
+  <imgdir name="4341011">
+    <string name="name" value="突然袭击"/>
+    <string name="desc" value="动员隐藏起来的同伴，攻击敌人。突然袭击即使攻击处于反射状态的敌人，也不会反射伤害。使用时，使终极斩的冷却时间减少一定比例。"/>
+    <string name="h" value="消耗魔量#mpCon，以#damage%的伤害攻击最多15个敌人#attackCount次，#dotTime秒内每#dotInterval秒产生#dot%的持续伤害\n使用时，终极斩剩余的冷却时间减少#x%\n冷却时间#cooltime秒"/>
+    <string name="pdesc" value="动员隐藏起来的同伴，将整个战场变成一片血海。"/>
+    <string name="ph" value="消耗魔量#mpCon，以#damage%的伤害攻击最多15个敌人#attackCount次，#dotTime秒内每#dotInterval秒产生#dot%的持续伤害。冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4341052">
+    <string name="name" value="阿修罗"/>
+    <string name="desc" value="用快速旋转的看不见的真空刀刃，消灭周围的敌人。即使是攻击反射状态的敌人，也无法反射阿修罗的伤害，并且不会被任何攻击击退。"/>
+    <string name="h" value="消耗#mpCon魔量，在#time秒内，无视对方#x%的防御率，并对#mobCount个敌人以#damage%的伤害攻击#attackCount次，持续时间内可以移动及跳跃，再次使用技能时，立即取消\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4341053">
+    <string name="name" value="传说冒险家"/>
+    <string name="desc" value="只有游历冒险岛世界各地的传说冒险家可以使用的增益，会增加伤害。"/>
+    <string name="h" value="消耗#mpCon魔量，#time秒内伤害增加#indieDamR%\n队员中只对冒险家职业群有效\n冷却时间#cooltime秒"/>
+  </imgdir>
+  <imgdir name="4341054">
+    <string name="name" value="隐形剑"/>
+    <string name="desc" value="召唤飞花院秘籍中的神秘剑，使自己的所有攻击附加强力的攻击。额外提高伤害。"/>
+    <string name="h" value="MP消耗#mpCon，#c[终极攻击类技能]# #time秒内有#prop%概率在直接攻击的攻击技能中产生#damage%的追加攻击。伤害提高10% \n冷却时间#cooltime秒"/>
+  </imgdir>
 </imgdir>
