@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9601379.img">
+  <imgdir name="info">
+    <int name="level" value="149"/>
+    <int name="maxHP" value="9200000"/>
+    <int name="maxMP" value="400000"/>
+    <int name="speed" value="10"/>
+    <int name="PADamage" value="5105"/>
+    <int name="MADamage" value="4995"/>
+    <int name="PDDamage" value="900"/>
+    <int name="PDRate" value="30"/>
+    <int name="MDRate" value="30"/>
+    <int name="MDDamage" value="850"/>
+    <int name="acc" value="423"/>
+    <int name="eva" value="115"/>
+    <int name="pushed" value="1000000000"/>
+    <float name="fs" value="10.0"/>
+    <int name="exp" value="0"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="firstAttack" value="1"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="6"/>
+    <string name="mobType" value="1N"/>
+    <int name="boss" value="1"/>
+    <int name="hpTagColor" value="1"/>
+    <int name="hpTagBgcolor" value="5"/>
+    <int name="undead" value="1"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="conMP" value="10"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="action" value="2"/>
+        <int name="attackRatio" value="150"/>
+        <int name="type" value="0"/>
+        <int name="conMP" value="10"/>
+        <int name="knockback" value="1"/>
+        <int name="tremble" value="1"/>
+        <int name="ignoreStance" value="1"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="action" value="3"/>
+        <int name="attackRatio" value="120"/>
+        <int name="type" value="2"/>
+        <int name="conMP" value="10"/>
+        <int name="bulletSpeed" value="180"/>
+        <int name="knockback" value="1"/>
+        <int name="bulletNumber" value="3"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="speak">
+      <imgdir name="0">
+        <int name="hp" value="31725000"/>
+        <string name="0" value="Who dare awakens me?"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="hp" value="21725000"/>
+        <string name="0" value="The endless night has come..."/>
+      </imgdir>
+    </imgdir>
+    <string name="link" value="9600318"/>
+    <int name="partyBonusMob" value="1"/>
+  </imgdir>
+</imgdir>

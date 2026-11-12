@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9834452.img">
+  <imgdir name="info">
+    <int name="level" value="1"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="maxHP" value="15"/>
+    <int name="speed" value="-65"/>
+    <int name="PADamage" value="2"/>
+    <int name="PDRate" value="10"/>
+    <int name="MADamage" value="1"/>
+    <int name="MDRate" value="10"/>
+    <int name="acc" value="10"/>
+    <int name="pushed" value="5"/>
+    <float name="fs" value="10.0"/>
+    <int name="exp" value="3"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="1"/>
+    <string name="mobType" value="1N"/>
+    <int name="collabo" value="1"/>
+    <int name="PDDamage" value="0"/>
+    <int name="MDDamage" value="0"/>
+    <int name="eva" value="0"/>
+  </imgdir>
+  <imgdir name="stand">
+    <canvas name="0" width="56" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="hit1">
+    <canvas name="0" width="53" height="34">
+      <vector name="origin" x="25" y="35"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="die1">
+    <canvas name="0" width="56" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="1" width="53" height="34">
+      <vector name="origin" x="25" y="35"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="2" width="51" height="33">
+      <vector name="origin" x="24" y="34"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="3" width="51" height="25">
+      <vector name="origin" x="23" y="26"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="4" width="51" height="25">
+      <vector name="origin" x="23" y="25"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="5" width="51" height="25">
+      <vector name="origin" x="23" y="24"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="attack1">
+    <canvas name="0" width="62" height="72">
+      <vector name="origin" x="33" y="70"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="1" width="73" height="79">
+      <vector name="origin" x="34" y="77"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="2" width="73" height="80">
+      <vector name="origin" x="35" y="78"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="3" width="73" height="85">
+      <vector name="origin" x="53" y="85"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="4" width="78" height="82">
+      <vector name="origin" x="8" y="80"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="5" width="81" height="71">
+      <vector name="origin" x="8" y="69"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="regen">
+    <canvas name="0" width="56" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="1" width="57" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="3" width="56" height="20">
+      <vector name="origin" x="27" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="4" width="57" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="move">
+    <uol name="0" value="../stand/0"/>
+    <canvas name="1" width="57" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="2" width="56" height="20">
+      <vector name="origin" x="27" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="3" width="57" height="20">
+      <vector name="origin" x="28" y="20"/>
+      <int name="z" value="0"/>
+    </canvas>
+  </imgdir>
+</imgdir>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9601582.img">
+  <imgdir name="info">
+    <int name="level" value="220"/>
+    <int name="firstAttack" value="1"/>
+    <int name="maxHP" value="100"/>
+    <int name="maxMP" value="4000"/>
+    <int name="speed" value="-10"/>
+    <int name="PDDamage" value="15075"/>
+    <int name="PDRate" value="10"/>
+    <int name="MDDamage" value="14963"/>
+    <int name="MDRate" value="10"/>
+    <int name="acc" value="832"/>
+    <int name="eva" value="240"/>
+    <int name="pushed" value="15000"/>
+    <float name="fs" value="10.0"/>
+    <int name="exp" value="309470"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="6"/>
+    <string name="mobType" value="1N"/>
+    <int name="mobJobCategory" value="0"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="fixDamage" value="1"/>
+      </imgdir>
+    </imgdir>
+    <string name="link" value="9601578"/>
+    <canvas name="thumbnail" width="85" height="94">
+      <vector name="origin" x="43" y="90"/>
+      <vector name="lt" x="-35" y="-58"/>
+      <vector name="rb" x="21" y="-4"/>
+      <vector name="head" x="-21" y="-54"/>
+      <int name="delay" value="150"/>
+    </canvas>
+    <int name="fixedDamage" value="6666"/>
+    <int name="PADamage" value="1200"/>
+    <int name="MADamage" value="1250"/>
+  </imgdir>
+</imgdir>

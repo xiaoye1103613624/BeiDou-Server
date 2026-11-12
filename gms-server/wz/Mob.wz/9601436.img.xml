@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9601436.img">
+  <imgdir name="info">
+    <int name="level" value="160"/>
+    <int name="bodyAttack" value="1"/>
+    <float name="fs" value="10.0"/>
+    <int name="firstAttack" value="1"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="1"/>
+    <int name="hpTagColor" value="1"/>
+    <int name="hpTagBgcolor" value="5"/>
+    <int name="ignoreFieldOut" value="1"/>
+    <int name="boss" value="1"/>
+    <string name="mobType" value="7N"/>
+    <int name="ignoreMoveImpact" value="1"/>
+    <int name="eva" value="300"/>
+    <imgdir name="skill">
+      <imgdir name="0">
+        <int name="skill" value="128"/>
+        <int name="action" value="1"/>
+        <int name="level" value="39"/>
+        <int name="effectAfter" value="0"/>
+        <int name="skillAfter" value="2400"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="skill" value="186"/>
+        <int name="action" value="2"/>
+        <int name="level" value="10"/>
+        <int name="effectAfter" value="0"/>
+        <int name="skillAfter" value="720"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="skill" value="201"/>
+        <int name="action" value="3"/>
+        <int name="level" value="163"/>
+        <int name="effectAfter" value="0"/>
+        <int name="skillAfter" value="1920"/>
+      </imgdir>
+      <imgdir name="3">
+        <int name="skill" value="176"/>
+        <int name="action" value="4"/>
+        <int name="level" value="32"/>
+        <int name="effectAfter" value="0"/>
+        <int name="skillAfter" value="2800"/>
+        <int name="priority" value="2"/>
+      </imgdir>
+    </imgdir>
+    <int name="maxHP" value="12400000"/>
+    <int name="maxMP" value="560000"/>
+    <int name="speed" value="-60"/>
+    <int name="PADamage" value="6267"/>
+    <int name="MADamage" value="6310"/>
+    <int name="PDRate" value="30"/>
+    <int name="MDRate" value="30"/>
+    <int name="acc" value="350"/>
+    <int name="pushed" value="1000000000"/>
+    <int name="exp" value="0"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="conMP" value="1"/>
+        <int name="knockback" value="1"/>
+        <int name="ignoreStance" value="1"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="action" value="2"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="3"/>
+        <int name="conMP" value="5"/>
+        <int name="magic" value="1"/>
+        <int name="fixDamR" value="30"/>
+        <int name="fixDamRType" value="1"/>
+        <int name="tremble" value="1"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="action" value="3"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="conMP" value="1"/>
+        <int name="magic" value="1"/>
+        <int name="tremble" value="1"/>
+      </imgdir>
+    </imgdir>
+    <int name="charismaEXP" value="0"/>
+    <int name="explosiveReward" value="1"/>
+    <string name="link" value="9601068"/>
+    <int name="PDDamage" value="180"/>
+    <int name="MDDamage" value="190"/>
+    <int name="partyBonusMob" value="1"/>
+  </imgdir>
+</imgdir>

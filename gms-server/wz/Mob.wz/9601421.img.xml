@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9601421.img">
+  <imgdir name="info">
+    <int name="firstAttack" value="1"/>
+    <int name="summonType" value="1"/>
+    <string name="mobType" value="1H"/>
+    <int name="level" value="203"/>
+    <int name="maxHP" value="48945600"/>
+    <int name="maxMP" value="35000"/>
+    <int name="hpRecovery" value="50"/>
+    <int name="acc" value="640"/>
+    <int name="eva" value="180"/>
+    <int name="PADamage" value="13163"/>
+    <int name="MADamage" value="13050"/>
+    <int name="PDRate" value="10"/>
+    <int name="MDRate" value="10"/>
+    <int name="pushed" value="6000"/>
+    <int name="exp" value="0"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="type" value="0"/>
+        <int name="attackRatio" value="100"/>
+        <imgdir name="callSkillWithData">
+          <int name="skill" value="227"/>
+          <int name="level" value="10"/>
+          <int name="delay" value="600"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="skill">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="skill" value="227"/>
+        <int name="level" value="10"/>
+        <int name="onlyFsm" value="1"/>
+      </imgdir>
+    </imgdir>
+    <string name="link" value="9400548"/>
+    <int name="PDDamage" value="170"/>
+    <int name="MDDamage" value="210"/>
+    <int name="boss" value="1"/>
+    <int name="partyBonusMob" value="1"/>
+  </imgdir>
+</imgdir>

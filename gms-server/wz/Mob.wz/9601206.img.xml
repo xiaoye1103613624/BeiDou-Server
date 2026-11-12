@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9601206.img">
+  <imgdir name="info">
+    <int name="maxHP" value="500"/>
+    <int name="maxMP" value="0"/>
+    <int name="PDRate" value="0"/>
+    <int name="MDRate" value="0"/>
+    <int name="PADamage" value="0"/>
+    <int name="MADamage" value="0"/>
+    <int name="speed" value="0"/>
+    <int name="acc" value="0"/>
+    <int name="eva" value="0"/>
+    <int name="pushed" value="1000000000"/>
+    <float name="fs" value="10.0"/>
+    <int name="summonType" value="1"/>
+    <int name="category" value="8"/>
+    <string name="mobType" value="1N"/>
+    <int name="isRemoteRange" value="1"/>
+    <int name="ignoreFieldOut" value="1"/>
+    <int name="ignoreMoveImpact" value="1"/>
+    <int name="ignoreMovable" value="1"/>
+    <int name="fixedDamage" value="100"/>
+    <int name="hideName" value="1"/>
+    <int name="notLevelPenalty" value="1"/>
+    <int name="boss" value="1"/>
+    <int name="level" value="100"/>
+    <int name="PDDamage" value="0"/>
+    <int name="MDDamage" value="0"/>
+  </imgdir>
+  <imgdir name="die1">
+    <canvas name="0" width="132" height="63">
+      <vector name="origin" x="60" y="63"/>
+      <int name="z" value="0"/>
+      <int name="delay" value="120"/>
+      <vector name="lt" x="-54" y="-73"/>
+      <vector name="rb" x="64" y="-3"/>
+      <vector name="head" x="-12" y="-69"/>
+    </canvas>
+    <canvas name="1" width="236" height="184">
+      <vector name="origin" x="119" y="184"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="2" width="230" height="183">
+      <vector name="origin" x="116" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="3" width="219" height="183">
+      <vector name="origin" x="105" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="4" width="212" height="183">
+      <vector name="origin" x="100" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="5" width="230" height="183">
+      <vector name="origin" x="100" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="6" width="223" height="183">
+      <vector name="origin" x="93" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="7" width="246" height="183">
+      <vector name="origin" x="116" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="8" width="246" height="183">
+      <vector name="origin" x="116" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="9" width="246" height="183">
+      <vector name="origin" x="116" y="183"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <uol name="10" value="3"/>
+    <uol name="11" value="4"/>
+    <uol name="12" value="5"/>
+    <uol name="13" value="6"/>
+    <uol name="14" value="7"/>
+    <uol name="15" value="8"/>
+    <uol name="16" value="9"/>
+    <canvas name="17" width="219" height="183">
+      <vector name="origin" x="105" y="183"/>
+      <int name="z" value="0"/>
+      <int name="a0" value="255"/>
+      <int name="a1" value="0"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="stand">
+    <uol name="0" value="../die1/0"/>
+  </imgdir>
+  <imgdir name="hit1">
+    <uol name="0" value="../die1/0"/>
+  </imgdir>
+</imgdir>

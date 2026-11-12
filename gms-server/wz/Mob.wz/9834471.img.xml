@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9834471.img">
+  <imgdir name="info">
+    <imgdir name="revive">
+      <string name="0" value="9834440"/>
+    </imgdir>
+    <int name="level" value="260"/>
+    <int name="maxHP" value="2147483647"/>
+    <int name="bodyAttack" value="1"/>
+    <int name="PDRate" value="300"/>
+    <int name="MDRate" value="300"/>
+    <int name="maxMP" value="100000"/>
+    <int name="PADamage" value="10"/>
+    <int name="PDDamage" value="0"/>
+    <int name="MADamage" value="10"/>
+    <int name="MDDamage" value="10"/>
+    <int name="acc" value="10"/>
+    <int name="eva" value="10"/>
+    <int name="exp" value="0"/>
+    <int name="pushed" value="1000000000"/>
+    <float name="fs" value="10.0"/>
+    <int name="summonType" value="-2"/>
+    <int name="ignoreFieldOut" value="1"/>
+    <string name="mobType" value="1N"/>
+    <int name="firstAttack" value="1"/>
+    <int name="hpTagColor" value="17"/>
+    <int name="hpTagBgcolor" value="18"/>
+    <int name="miniGameMobPointOffsetX" value="0"/>
+    <int name="miniGameMobPointOffsetY" value="0"/>
+    <int name="miniGameMobPointMoveTime" value="3500"/>
+    <int name="miniGameMobPointMoveY" value="-150"/>
+    <int name="speed" value="-40"/>
+    <int name="ignoreMoveImpact" value="1"/>
+    <int name="hideHP" value="1"/>
+    <int name="1UserDamageFake" value="1"/>
+    <int name="showNotRemoteDam" value="1"/>
+    <string name="elemAttr" value="P2H2F2I2S2L2D2"/>
+    <int name="notSeperateSoul" value="1"/>
+    <int name="activeStopAttackExceptFirstAttackRange" value="1"/>
+    <int name="activeStopAttackExceptMob" value="1"/>
+    <int name="noFlip" value="1"/>
+    <int name="hideName" value="1"/>
+    <int name="boss" value="1"/>
+    <int name="HPFieldGaugeHide" value="1"/>
+  </imgdir>
+  <imgdir name="stand">
+    <canvas name="0" width="508" height="600">
+      <vector name="origin" x="257" y="532"/>
+      <int name="z" value="0"/>
+      <vector name="lt" x="-198" y="-465"/>
+      <vector name="rb" x="199" y="-1"/>
+      <vector name="head" x="1" y="-400"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="hit1">
+    <uol name="0" value="../stand/0"/>
+  </imgdir>
+  <imgdir name="die1">
+    <uol name="0" value="../stand/0"/>
+  </imgdir>
+</imgdir>

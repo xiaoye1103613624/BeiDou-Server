@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="9601430.img">
+  <imgdir name="info">
+    <int name="bodyAttack" value="1"/>
+    <int name="level" value="129"/>
+    <int name="maxHP" value="5200000"/>
+    <int name="maxMP" value="160000"/>
+    <int name="speed" value="-15"/>
+    <int name="PADamage" value="3486"/>
+    <int name="PDDamage" value="150"/>
+    <int name="PDRate" value="30"/>
+    <int name="MADamage" value="3427"/>
+    <int name="MDDamage" value="150"/>
+    <int name="MDRate" value="30"/>
+    <int name="acc" value="203"/>
+    <int name="eva" value="51"/>
+    <int name="exp" value="0"/>
+    <int name="pushed" value="900"/>
+    <float name="fs" value="10.0"/>
+    <int name="hpRecovery" value="500"/>
+    <int name="mpRecovery" value="50"/>
+    <int name="summonType" value="1"/>
+    <int name="boss" value="1"/>
+    <int name="firstAttack" value="1"/>
+    <imgdir name="speak">
+      <imgdir name="0">
+        <string name="hp" value="100000"/>
+        <string name="0" value="Why are you interefereing with my business?!"/>
+      </imgdir>
+      <int name="chatBalloon" value="0"/>
+    </imgdir>
+    <int name="charismaEXP" value="0"/>
+    <int name="category" value="8"/>
+    <string name="mobType" value="7N"/>
+    <imgdir name="attack">
+      <imgdir name="0">
+        <int name="action" value="1"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="jumpAttack" value="1"/>
+      </imgdir>
+      <imgdir name="1">
+        <int name="action" value="2"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="conMP" value="2"/>
+        <int name="magic" value="1"/>
+        <string name="elemAttr" value="F"/>
+      </imgdir>
+      <imgdir name="2">
+        <int name="action" value="3"/>
+        <int name="attackRatio" value="100"/>
+        <int name="type" value="0"/>
+        <int name="conMP" value="2"/>
+        <int name="magic" value="1"/>
+      </imgdir>
+    </imgdir>
+    <string name="link" value="8220009"/>
+    <int name="partyBonusMob" value="1"/>
+  </imgdir>
+</imgdir>
